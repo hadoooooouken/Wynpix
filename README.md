@@ -262,7 +262,7 @@ Wynpix is optimized exclusively for **Windows (64-bit)** to deliver maximum perf
 
 * **Installer (.exe)**: Run the installer to automatically set up the application, configure file associations, and create shortcuts.
 * **Portable Version**: Download the portable ZIP archive to run the application from any folder (all configuration is stored in the app folder).
-* **SSE2 Version for Older PCs**: The standard build requires a processor with AVX2 (Intel Haswell / AMD Excavator, 2013–2015 or newer), and its installer refuses to run without it. For older processors, download the files with the `-sse2` suffix (for example, `wynpix-setup-sse2.exe`) from the same release.
+* **SSE2 Version for Older PCs**: The standard build requires a processor with AVX2 (Intel Haswell / AMD Excavator, 2013–2015 or newer), and its installer refuses to run without it. For older processors, download the files with the `-sse2` suffix (for example, `wynpix-setup-sse2.exe`) from the same release. The SSE2 build needs at least an Intel Core 2 or an AMD FX (SSSE3); earlier AMD processors such as Athlon 64 and Phenom are not supported.
 
 Grab the latest version from the [latest release](https://github.com/hadoooooouken/wynpix/releases/latest) or browse the [releases page](https://github.com/hadoooooouken/wynpix/releases).
 
