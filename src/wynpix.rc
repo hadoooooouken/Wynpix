@@ -20,7 +20,7 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", "hadoooooouken"
-            VALUE "FileDescription", "Wynpix - Fast, easy to use, and beautiful image viewer"
+            VALUE "FileDescription", "Wynpix"
             VALUE "FileVersion", "1.0.0.0"
             VALUE "InternalName", "wynpix.exe"
             VALUE "LegalCopyright", "Copyright (C) 2026 hadooooouken"
