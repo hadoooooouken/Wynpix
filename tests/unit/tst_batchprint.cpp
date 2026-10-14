@@ -99,6 +99,23 @@ private slots:
         QCOMPARE(outputFormats().size(), 8);
     }
 
+    void batchConvertibleRejectsUnsupportedTypes() {
+        QVERIFY(isBatchConvertible(u"photo.jpg"_s));
+        QVERIFY(isBatchConvertible(u"image.png"_s));
+        QVERIFY(isBatchConvertible(u"scan.webp"_s));
+        QVERIFY(!isBatchConvertible(u"archive.zip"_s));
+        QVERIFY(!isBatchConvertible(u"comic.cbz"_s));
+        QVERIFY(!isBatchConvertible(u"bundle.7z"_s));
+        QVERIFY(!isBatchConvertible(u"archive.rar"_s));
+        QVERIFY(!isBatchConvertible(u"doc.pdf"_s));
+        QVERIFY(!isBatchConvertible(u"book.djvu"_s));
+        QVERIFY(!isBatchConvertible(u"book.djv"_s));
+        QVERIFY(!isBatchConvertible(u"font.ttf"_s));
+        QVERIFY(!isBatchConvertible(u"font.otf"_s));
+        QVERIFY(!isBatchConvertible(u"font.ttc"_s));
+        QVERIFY(!isBatchConvertible(u"model.blend"_s));
+    }
+
     void percentTargetsAreTruncatedAndKeptInRange() {
         QCOMPARE(percentTarget(QSize(1001, 501), kHalf), QSize(500, 250));
         QCOMPARE(percentTarget(QSize(50, 50), kMinimumPercent), QSize(kMinimumSide, kMinimumSide));
