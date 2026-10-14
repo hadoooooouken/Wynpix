@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/github/v/tag/hadoooooouken/wynpix?color=blue\&label=Version)](https://github.com/hadoooooouken/wynpix/releases/latest) ![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows\&logoColor=white) ![C++](https://img.shields.io/badge/C%2B%2B-26-00599C?logo=c%2B%2B\&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6.12-41CD52?logo=qt\&logoColor=white) ![CPU](https://img.shields.io/badge/CPU-AVX2-orange) ![GPU](https://img.shields.io/badge/GPU-Direct3D%2011%20%7C%2012%20%7C%20Vulkan-0696D7) ![AI Upscaling](https://img.shields.io/badge/AI_Upscaling-Upscayl%20\(Vulkan\)-8A2BE2)
 
-A fast, Windows-optimized image viewer featuring high-quality CPU and GPU scaling, real-time AI upscaling (Upscayl), shader-based color adjustments, 360° spherical panorama viewing, HDR tone-mapping, and native support for modern image formats.
+A fast, Windows-optimized image viewer featuring high-quality GPU scaling, real-time AI upscaling (Upscayl), shader-based color adjustments, 360° spherical panorama viewing, HDR tone-mapping, and native support for modern image formats.
 
 **[Download Latest Release](https://github.com/hadoooooouken/wynpix/releases/latest)**
 
@@ -10,15 +10,15 @@ A fast, Windows-optimized image viewer featuring high-quality CPU and GPU scalin
 
 * **Simple UI & Fast**: Lightweight and highly responsive interface.
 
-* **High-Quality Image Scaling**: MKS2021 (Magic Kernel Sharp 2021) is the default scaling and sharpening filter, rendered on the GPU. FidelityFX CAS and Smart sharpen are available as GPU alternatives; the batch converter and the resize dialog scale on the CPU with AVX2.
+* **High-Quality Image Scaling**: Every viewer filter runs on the GPU: MKS2021 (Magic Kernel Sharp 2021, the default), FidelityFX CAS, Smart sharpen, Bilinear and Nearest. The batch converter and the resize dialog scale on the CPU with an AVX2-optimized MKS2021.
 
 * **Real-Time AI Upscaling (Upscayl)**: Real-time AI image upscaling powered by **[upscayl-ncnn](https://github.com/upscayl/upscayl-ncnn) (NCNN/Vulkan & RealESRGAN)**. Upscales only the visible viewport crop to conserve VRAM, using background threads to keep the UI fully responsive. Includes an optional preloading mechanism to warm up Vulkan shader pipelines and eliminate startup latency.
 
-* **Real-Time Color Adjustments**: Instant, lag-free adjustments of Brightness, Contrast, Saturation, Hue, Exposure, Temperature, and Tint calculated on the graphics card via shaders. Features an interactive overlay with a "Compare" button (press and hold to view the original) and double-click slider resets.
+* **Real-Time Color Adjustments**: Instant, lag-free adjustments of Brightness, Contrast, Saturation, Hue, Exposure, Temperature, and Tint calculated on the graphics card via shaders. Features an interactive overlay with a "Compare" button (press and hold to view the original), Apply and Reset buttons, and double-click slider resets.
 
-* **360-Degree Spherical Panorama View**: Interactive drag-and-look viewer for spherical panoramic photos, featuring exposure, temperature, and tint adjustments.
+* **360-Degree Spherical Panorama View**: Interactive drag-and-look viewer for spherical panoramic photos, with the same real-time color adjustments as the regular view.
 
-* **Native Support for Modern Formats**: Out-of-the-box support for AVIF, HEIF/HEIC, JPEG XL (JXL), JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph), PSD, DDS, RAW, KRA, ORA, and QOI.
+* **Native Support for Modern Formats**: Out-of-the-box support for AVIF, HEIF/HEIC, JPEG XL (JXL), JPEG XR, JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph), PSD, XCF, DDS, RAW, KRA, ORA, QOI, DjVu, and images inside ZIP/CBZ, 7z and RAR archives.
 
 * **Modern CPU Optimization**: Compiled with AVX2 support for high-speed image processing on modern processors. A separate SSE2 build is available for older PCs (see [Installation](#installation)).
 
@@ -40,26 +40,28 @@ A fast, Windows-optimized image viewer featuring high-quality CPU and GPU scalin
 
 * **Open with**: Launch the current image in an external application or custom command.
 
-* **Multilingual UI**: Interface available in 8 languages — English, German, French, Spanish, Ukrainian, Japanese, Turkish, and Simplified Chinese.
+* **Multilingual UI**: Interface available in 9 languages — English, German, French, Spanish, Ukrainian, Russian, Japanese, Turkish, and Simplified Chinese.
 
 ## Default control scheme
 
 | Action                                       | Shortcut                                    |
 | -------------------------------------------- | ------------------------------------------- |
-| Next image                                   | Right arrow / MouseWheel                    |
-| Previous image                               | Left arrow / MouseWheel                     |
+| Next image                                   | Right arrow / Mouse forward button          |
+| Previous image                               | Left arrow / Mouse back button              |
 | Goto first image                             | Home                                        |
 | Goto last image                              | End                                         |
-| Zoom in                                      | Ctrl+MouseWheel / Ctrl+Up                   |
-| Zoom out                                     | Ctrl+MouseWheel / Ctrl+Down                 |
+| Zoom in                                      | MouseWheel / Ctrl+Up / + / =                |
+| Zoom out                                     | MouseWheel / Ctrl+Down / -                  |
+| Zoom at cursor                               | Ctrl+MouseWheel                             |
 | Zoom (alt. method)                           | Hold right mouse button & move up / down    |
 | Next / Previous image (gesture)              | Hold right mouse button & move left / right |
-| Fit mode: window                             | 1                                           |
+| Fit mode: window                             | 1 / Down                                    |
 | Fit mode: width                              | 2                                           |
-| Fit mode: 1:1 (no scaling)                   | 3                                           |
-| Fit mode: window stretch                     | 4                                           |
+| Fit mode: 1:1 (no scaling)                   | 3 / Up / DoubleClick                        |
+| Fit mode: height                             | 4                                           |
 | Switch fit modes                             | Space                                       |
-| Toggle fullscreen mode                       | DoubleClick / F / F11                       |
+| Toggle fullscreen mode                       | F / Enter                                   |
+| Toggle fullscreen info bar                   | Shift+F                                     |
 | Show Image Info panel                        | I                                           |
 | Crop image                                   | X                                           |
 | Resize image                                 | R                                           |
@@ -68,8 +70,8 @@ A fast, Windows-optimized image viewer featuring high-quality CPU and GPU scalin
 | Rotate left                                  | Ctrl+L                                      |
 | Rotate Right                                 | Ctrl+R                                      |
 | Open containing directory                    | Ctrl+D                                      |
-| Slideshow mode                               | ~                                           |
-| Shuffle mode                                 | Ctrl+~                                      |
+| Slideshow mode                               | `` ` `` (backtick)                          |
+| Shuffle mode                                 | `` Ctrl+` ``                                |
 | Quick copy                                   | C                                           |
 | Quick move                                   | M                                           |
 | Move to trash                                | Delete                                      |
@@ -80,6 +82,8 @@ A fast, Windows-optimized image viewer featuring high-quality CPU and GPU scalin
 | Copy image to clipboard                      | Ctrl+C                                      |
 | Copy viewport to clipboard                   | Shift+C                                     |
 | Copy path to clipboard                       | Ctrl+Shift+C                                |
+| Paste file from clipboard                    | Ctrl+V                                      |
+| Set as wallpaper                             | Ctrl+W                                      |
 | Rename file                                  | F2                                          |
 | Reload image                                 | F5                                          |
 | Next directory                               | Shift+Right                                 |
@@ -150,17 +154,19 @@ Wynpix offers modern options to personalize your image viewing experience:
 
 ## Scaling and Sharpening Filters
 
-The viewer renders every image on the GPU through Qt Quick (Direct3D 11 by default, Direct3D 12 or Vulkan selectable) and offers these scaling filters:
+The viewer renders every image on the GPU through Qt Quick (Direct3D 11 by default; Direct3D 12 or Vulkan can be selected with the `quickGraphicsApi` key in the configuration file). All viewer filters run on the GPU; choose one under **Settings > View > Scaling quality**, toggle between Nearest and the configured filter with **N**, or cycle through them with **Shift+N**:
 
-* **Magic Kernel Sharp 2021 (GPU, Default)**: The default high-quality scaling and sharpening filter. While the view moves, the image is shown with trilinear filtering; once it rests, the MKS2021 resampling kernel draws the final frame. When zoomed in, the kernel also runs while the view moves.
+* **Magic Kernel Sharp 2021 (Default)**: The default high-quality scaling and sharpening filter. While the view moves, the image is shown with trilinear filtering; once it rests, the MKS2021 resampling kernel draws the final frame. When zoomed in, the kernel also runs while the view moves.
 
-* **FidelityFX Contrast Adaptive Sharpening (CAS)**: A GPU scaling and sharpening filter based on AMD's Contrast Adaptive Sharpening.
+* **FidelityFX Contrast Adaptive Sharpening (CAS)**: Trilinear scaling with AMD's Contrast Adaptive Sharpening.
 
-* **Smart sharpen (GPU)**: Trilinear scaling with an adaptive sharpening pass.
+* **Smart sharpen**: Trilinear scaling with an adaptive sharpening pass.
 
-* **Standard Filters**: Nearest and Bilinear scaling.
+* **Bilinear**: Smooth, mipmapped scaling without sharpening.
 
-The batch converter and the resize dialog scale on the CPU (Nearest, Bilinear, Smart sharpen and an AVX2-optimized MKS2021).
+* **Nearest**: Pixel-exact nearest-neighbor scaling.
+
+The batch converter and the resize dialog scale on the CPU (Nearest, Bilinear, Smart sharpen and an AVX2-optimized MKS2021, the default).
 
 ## Real-Time AI Upscaling
 
@@ -177,9 +183,11 @@ Wynpix integrates **[upscayl-ncnn](https://github.com/upscayl/upscayl-ncnn)** (N
 
 * **VRAM Safety & Limits**: Auto-tile detection and input limits prevent out-of-memory errors on a wide range of GPUs.
 
-* **Vulkan Preloading**: An optional pre-warm feature processes a dummy texture at startup to pre-allocate memory and eliminate initial rendering lag.
+* **Vulkan Preloading**: The optional "Load engine at startup and keep ready in video memory" setting pre-warms the engine at startup to pre-allocate memory and eliminate initial rendering lag.
 
-* **Hotkey**: Press **`Alt + I`** to instantly toggle AI upscaling.
+* **Zoom Threshold**: Upscaling can be limited to zoom levels above a configurable value.
+
+* **Settings & Hotkeys**: Configure everything under **Settings > AI Upscale**. Press **`Alt + I`** to instantly toggle AI upscaling and **`Alt + Shift + I`** to cycle through the installed models.
 
 ## Batch Image Converter
 
@@ -193,7 +201,7 @@ Multi-threaded background queue processor:
 
 * **Resizing**: Scaling by percentage or custom resolution, presets, aspect ratio lock, and quick enforcers ("Fit Desktop" / "Fill Desktop").
 
-* **Scaling Filters**: Supports standard filters (Nearest, Bilinear, MKS2021) and **Vulkan-accelerated AI Upscaling (Upscayl)** using customizable models such as `4xLSDIRCompactC3`.
+* **Scaling Filters**: Supports CPU filters (Nearest, Bilinear, Smart sharpen, and MKS2021, the default) and **Vulkan-accelerated AI Upscaling (Upscayl)** using customizable models such as `4xLSDIRCompactC3`.
 
 * **Color Correction**: Applies Exposure, Contrast, Brightness, Saturation, Hue, Temperature, and Tint adjustments. Includes a one-click reset button to clear all sliders.
 
@@ -241,7 +249,9 @@ Wynpix natively supports standard formats as well as modern and professional ima
 
 * **Modern formats**: JPEG XL (JXL), AVIF, HEIF / HEIC, JPEG XR (JXR / HDP), JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph).
 * **Game Textures & Formats**: DDS (DirectDraw Surface), TGA (Targa), QOI (Quite OK Image Format).
-* **Digital Art & Projects**: PSD (Photoshop), AI (Adobe Illustrator), PDF, KRA (Krita), ORA (OpenRaster).
+* **Digital Art & Projects**: PSD (Photoshop), XCF (GIMP), AI (Adobe Illustrator), PDF, KRA (Krita), ORA (OpenRaster).
+* **Documents & Archives**: DjVu, and images inside ZIP/CBZ, 7z and RAR archives.
+* **Legacy & Niche formats**: PCX, IFF/ILBM, SGI RGB, Sun Raster, PIC, PXR, SCT, PFM, farbfeld, PSX TIM, and animated ANI cursors.
 * **Professional & HDR**: OpenEXR (EXR), Radiance HDR (HDR).
 * **Camera RAW**: RAW (including CR2, NEF, ARW, DNG, RAF, etc. powered by LibRaw).
 * **Web & Standard formats**: WebP, APNG, ICO (Icons with smart size-matching frame selection), JPEG, PNG, GIF, BMP, SVG.
