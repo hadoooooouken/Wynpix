@@ -1,0 +1,23 @@
+#pragma once
+
+#include "image.h"
+
+class ImageAnimated : public Image {
+public:
+    ImageAnimated(QString _path);
+    ImageAnimated(std::unique_ptr<DocumentInfo> _info);
+    ~ImageAnimated();
+
+    std::shared_ptr<const QImage> getImage();
+    std::shared_ptr<const QImage> getDisplayImage() override;
+    int height();
+    int width();
+    QSize size();
+
+    int frameCount() const override;
+
+private:
+    void load();
+    QSize mSize;
+    int mFrameCount;
+};

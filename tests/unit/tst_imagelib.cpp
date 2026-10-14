@@ -1,0 +1,129 @@
+#include <QImage>
+#include <QTest>
+
+#include <memory>
+
+#include "testsuites.h"
+#include "utils/coloradjustments.h"
+#include "utils/imagelib.h"
+
+// CPU image operations of ImageLib (utils/imagelib.cpp). The SSE2 build runs
+// their non-AVX2 paths, so these tests also run under Intel SDE (-mrm) there.
+//
+// Every float-to-8-bit conversion must round exactly once. A flat image keeps
+// its level through any resampling whose weights sum to one, and a neutral
+// colour adjustment is the identity, so any rounding bias shows up as a level
+// change. The widths cover the 8-pixel AVX2 loops and their scalar tails.
+
+namespace {
+
+// Wider than two 8-pixel AVX2 blocks, with a remainder for the scalar tail.
+constexpr int kOddWidth = 37;
+constexpr int kOddHeight = 23;
+// Upscale and downscale targets for kOddWidth x kOddHeight.
+constexpr QSize kUpscaledSize(83, 51);
+constexpr QSize kDownscaledSize(17, 11);
+// A one-pixel-wide column and its vertical upscale (the sharpen pass of
+// scaled_Smart then has no right neighbour at x = 0).
+constexpr QSize kColumnSize(1, 9);
+constexpr QSize kColumnUpscaledSize(1, 21);
+
+constexpr int kMaxLevel = 255;
+constexpr int kOpaque = 255;
+
+// Odd channel levels: a +0.5 bias before round-to-nearest moves an exact odd
+// level up by one (ties to even), so the bias cannot hide behind an even one.
+constexpr int kFlatRed = 101;
+constexpr int kFlatGreen = 37;
+constexpr int kFlatBlue = 201;
+
+enum class Scaler { Smart, Mks2021 };
+
+QImage flatImage(QSize size) {
+  QImage image(size, QImage::Format_ARGB32);
+  image.fill(qRgba(kFlatRed, kFlatGreen, kFlatBlue, kOpaque));
+  return image;
+}
+
+// Every 8-bit level in every channel at least once.
+QImage levelRamp() {
+  QImage image(kOddWidth, kOddHeight, QImage::Format_ARGB32);
+  int level = 0;
+  for (int y = 0; y < image.height(); ++y) {
+    for (int x = 0; x < image.width(); ++x) {
+      const int red = level % (kMaxLevel + 1);
+      const int green = (level * 3) % (kMaxLevel + 1);
+      const int blue = (kMaxLevel - level % (kMaxLevel + 1));
+      image.setPixel(x, y, qRgba(red, green, blue, kOpaque));
+      ++level;
+    }
+  }
+  return image;
+}
+
+QImage scaledWith(Scaler scaler, const QImage &source, QSize target) {
+  auto shared = std::make_shared<const QImage>(source);
+  const QImage result = (scaler == Scaler::Smart)
+                            ? ImageLib::scaled_Smart(shared, target)
+                            : ImageLib::scaled_MKS2021(shared, target);
+  return result.convertToFormat(QImage::Format_ARGB32);
+}
+
+// Index of the first pixel that differs from expected, or -1.
+int firstMismatch(const QImage &image, QRgb expected) {
+  for (int y = 0; y < image.height(); ++y)
+    for (int x = 0; x < image.width(); ++x)
+      if (image.pixel(x, y) != expected)
+        return y * image.width() + x;
+  return -1;
+}
+} // namespace
+
+Q_DECLARE_METATYPE(Scaler)
+
+class ImageLibTests : public QObject {
+  Q_OBJECT
+
+private slots:
+  void scalersKeepFlatLevels_data() {
+    QTest::addColumn<Scaler>("scaler");
+    QTest::addColumn<QSize>("target");
+
+    QTest::newRow("smart upscale") << Scaler::Smart << kUpscaledSize;
+    QTest::newRow("smart downscale") << Scaler::Smart << kDownscaledSize;
+    QTest::newRow("mks2021 upscale") << Scaler::Mks2021 << kUpscaledSize;
+    QTest::newRow("mks2021 downscale") << Scaler::Mks2021 << kDownscaledSize;
+  }
+
+  void scalersKeepFlatLevels() {
+    QFETCH(Scaler, scaler);
+    QFETCH(QSize, target);
+
+    const QImage result = scaledWith(scaler, flatImage(QSize(kOddWidth, kOddHeight)), target);
+    QCOMPARE(result.size(), target);
+    QCOMPARE(firstMismatch(result, qRgba(kFlatRed, kFlatGreen, kFlatBlue, kOpaque)), -1);
+  }
+
+  void smartUpscalesOnePixelWideColumn() {
+    const QImage result = scaledWith(Scaler::Smart, flatImage(kColumnSize), kColumnUpscaledSize);
+    QCOMPARE(result.size(), kColumnUpscaledSize);
+    QCOMPARE(firstMismatch(result, qRgba(kFlatRed, kFlatGreen, kFlatBlue, kOpaque)), -1);
+  }
+
+  void neutralColorAdjustmentKeepsPixels() {
+    const QImage source = levelRamp();
+    const QImage result = ImageLib::applyColorAdjustments(
+        std::make_shared<const QImage>(source), ColorAdjustments{});
+    QCOMPARE(result.size(), source.size());
+    for (int y = 0; y < source.height(); ++y)
+      for (int x = 0; x < source.width(); ++x)
+        QCOMPARE(result.pixel(x, y), source.pixel(x, y));
+  }
+};
+
+int runImageLibTests(int argc, char **argv) {
+  ImageLibTests tests;
+  return QTest::qExec(&tests, argc, argv);
+}
+
+#include "tst_imagelib.moc"

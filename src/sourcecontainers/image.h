@@ -1,0 +1,47 @@
+#pragma once
+
+#include <QString>
+#include <QDebug>
+#include <QPixmap>
+#include <memory>
+#include "utils/imagelib.h"
+#include "utils/stuff.h"
+#include "sourcecontainers/documentinfo.h"
+
+class Image {
+public:
+    Image(QString);
+    Image(std::unique_ptr<DocumentInfo>);
+    virtual ~Image() = 0;
+    virtual std::shared_ptr<const QImage> getImage() = 0;
+    virtual std::shared_ptr<const QImage> getDisplayImage() = 0;
+    // The current pixels before display processing: for an HDR image, the
+    // HDR source (its metadata and colour space); otherwise the same as
+    // getImage(). Does not trigger an SDR conversion.
+    virtual std::shared_ptr<const QImage> getDecodedImage() { return getImage(); }
+    DocumentType type() const;
+    QString filePath() const;
+    virtual int height() = 0;
+    virtual int width() = 0;
+    virtual QSize size() = 0;
+    bool isLoaded() const;
+    QString fileName() const;
+    QString baseName() const;
+    QString format() const;
+    bool isEdited() const;
+    qint64 fileSize() const;
+    QDateTime lastModified() const;
+    QMap<QString, QString> getExifTags();
+    QList<QPair<QString, QString>> getGenerationInfo();
+    virtual int frameCount() const { return 1; }
+    // Bytes of decoded pixels this object keeps in memory; images decoded on
+    // demand keep none.
+    [[nodiscard]] virtual qint64 decodedBytes() const { return 0; }
+
+protected:
+    virtual void load() = 0;
+    std::unique_ptr<DocumentInfo> mDocInfo;
+    bool mLoaded, mEdited;
+    QString mPath;
+    QSize resolution;
+};

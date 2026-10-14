@@ -1,0 +1,100 @@
+# deploy-plugins.ps1
+# Copies built kimageformats plugins to release/imageformats/
+# Run from project root (E:\wynpix)
+# -Isa SSE2 deploys the wynpix-x64-release-sse2 build into release-sse2/ and
+# takes the dependency DLLs from the install-sse2 trees.
+
+param(
+    [ValidateSet("AVX2", "SSE2")]
+    [string] $Isa = "AVX2"
+)
+
+$ErrorActionPreference = "Stop"
+
+. (Join-Path $PSScriptRoot "MsvcPolicy.ps1")
+
+$installName    = Get-IsaFolderName -BaseName "install" -Isa $Isa
+$projectRoot    = Split-Path $PSScriptRoot -Parent
+$buildDir       = Join-Path $projectRoot "out\build\$(Get-IsaFolderName -BaseName "wynpix-x64-release" -Isa $Isa)\imageformats"
+$mainReleaseDir = Join-Path $projectRoot (Get-IsaFolderName -BaseName "release" -Isa $Isa)
+$releaseDir     = Join-Path $mainReleaseDir "imageformats"
+
+if (-not (Test-Path $buildDir)) {
+    Write-Host "Build directory not found: $buildDir" -ForegroundColor Red
+    Write-Host "Make sure you've built the project first." -ForegroundColor Yellow
+    exit 1
+}
+
+# Create destination if missing
+if (-not (Test-Path $releaseDir)) {
+    New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
+}
+
+$dlls = Get-ChildItem -Path $buildDir -Filter "kimg_*.dll"
+
+if ($dlls.Count -eq 0) {
+    Write-Host "No kimg_*.dll files found in: $buildDir" -ForegroundColor Yellow
+    exit 1
+}
+
+$copied = 0
+foreach ($dll in $dlls) {
+    $dest = Join-Path $releaseDir $dll.Name
+    $needsCopy = (-not (Test-Path $dest)) -or ($dll.LastWriteTime -gt (Get-Item $dest).LastWriteTime)
+
+    if ($needsCopy) {
+        Copy-Item $dll.FullName -Destination $dest -Force
+        Write-Host "  Copied: $($dll.Name)" -ForegroundColor Green
+        $copied++
+    }
+}
+
+if ($copied -eq 0) {
+    Write-Host "All $($dlls.Count) plugins are up to date." -ForegroundColor Cyan
+} else {
+    Write-Host "Deployed $copied / $($dlls.Count) plugins." -ForegroundColor Green
+}
+
+# Copy dependency DLLs to the main release directory
+if (-not (Test-Path $mainReleaseDir)) {
+    New-Item -ItemType Directory -Path $mainReleaseDir -Force | Out-Null
+}
+
+$depDlls = @(
+    "formats\zlib-ng\$installName\bin\zlib1.dll"
+    "formats\libdeflate\$installName\bin\deflate.dll"
+    "formats\zstd\$installName\bin\zstd.dll"
+)
+
+# libjpeg-turbo's shared DLL is versioned (e.g. jpeg62.dll) by SO_MAJOR_VERSION,
+# so resolve it by pattern instead of hardcoding the name (unlike the fixed-name
+# DLLs above). Shared by qtiff.dll (via libtiff) and qjpeg.dll.
+$jpegBinDir = "formats\libjpeg-turbo\$installName\bin"
+$jpegDll = Get-ChildItem -Path (Join-Path $projectRoot $jpegBinDir) `
+    -Filter "jpeg*.dll" -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -notmatch "^turbojpeg" } | Select-Object -First 1
+if ($jpegDll) {
+    $depDlls += "$jpegBinDir\$($jpegDll.Name)"
+} else {
+    Write-Warning "Shared libjpeg-turbo DLL not found under $jpegBinDir"
+}
+
+Write-Host "Deploying EXR dependency DLLs..." -ForegroundColor Cyan
+foreach ($relPath in $depDlls) {
+    $srcPath = Join-Path $projectRoot $relPath
+    if (Test-Path $srcPath) {
+        $dllFile = Get-Item $srcPath
+        $destPath = Join-Path $mainReleaseDir $dllFile.Name
+        
+        $needsDepCopy = (-not (Test-Path $destPath)) -or ($dllFile.LastWriteTime -gt (Get-Item $destPath).LastWriteTime)
+        if ($needsDepCopy) {
+            Copy-Item $srcPath -Destination $destPath -Force
+            Write-Host "  Copied Dependency: $($dllFile.Name)" -ForegroundColor Green
+        } else {
+            Write-Host "  Up to date: $($dllFile.Name)" -ForegroundColor DarkGreen
+        }
+    } else {
+        Write-Warning "Dependency DLL not found: $srcPath"
+    }
+}
+

@@ -1,0 +1,313 @@
+# kimageformats for wynpix
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+# NO_EHCONT_LINK: the plugin links a prebuilt C++ library that was not compiled
+# with /guard:ehcont, which makes a /guard:ehcont link fail with LNK1386.
+# Dependencies rebuilt by build_scripts (msvc-release-policy.json) do carry
+# EH continuation metadata, so no plugin currently needs it.
+function(kimageformats_add_plugin plugin)
+    set(options NO_EHCONT_LINK)
+    set(oneValueArgs)
+    set(multiValueArgs SOURCES)
+    cmake_parse_arguments(KIF_ADD_PLUGIN "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    qt_add_plugin(${plugin} PLUGIN_TYPE imageformats)
+
+    target_sources(${plugin} PRIVATE ${KIF_ADD_PLUGIN_SOURCES})
+    target_link_libraries(${plugin} PRIVATE Qt6::Gui)
+
+    # Output to imageformats/ folder next to the executable
+    set_target_properties(${plugin} PROPERTIES 
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/imageformats"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/imageformats"
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/imageformats"
+    )
+
+    if(KIF_ADD_PLUGIN_NO_EHCONT_LINK)
+        wynpix_apply_msvc_profile(${plugin} NO_EHCONT_LINK)
+    else()
+        wynpix_apply_msvc_profile(${plugin})
+    endif()
+    wynpix_suppress_crt_deprecation(${plugin})
+endfunction()
+
+# Standalone plugins
+kimageformats_add_plugin(kimg_ani SOURCES ani.cpp)
+kimageformats_add_plugin(kimg_dds SOURCES dds.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_ff SOURCES ff.cpp)
+kimageformats_add_plugin(kimg_hdr SOURCES hdr.cpp)
+kimageformats_add_plugin(kimg_iff SOURCES iff.cpp chunks.cpp microexif.cpp)
+kimageformats_add_plugin(kimg_pcx SOURCES pcx.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_pic SOURCES pic.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_pfm SOURCES pfm.cpp)
+kimageformats_add_plugin(kimg_psd SOURCES psd.cpp microexif.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_pxr SOURCES pxr.cpp)
+kimageformats_add_plugin(kimg_qoi SOURCES qoi.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_ras SOURCES ras.cpp)
+kimageformats_add_plugin(kimg_rgb SOURCES rgb.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_sct SOURCES sct.cpp)
+kimageformats_add_plugin(kimg_tim SOURCES tim.cpp)
+kimageformats_add_plugin(kimg_tga SOURCES tga.cpp microexif.cpp scanlineconverter.cpp)
+kimageformats_add_plugin(kimg_xcf SOURCES xcf.cpp)
+kimageformats_add_plugin(kimg_kra SOURCES kra.cpp)
+target_link_libraries(kimg_kra PRIVATE wynpix_miniz)
+kimageformats_add_plugin(kimg_ora SOURCES ora.cpp)
+target_link_libraries(kimg_ora PRIVATE wynpix_miniz)
+kimageformats_add_plugin(kimg_cbz SOURCES cbz.cpp)
+target_link_libraries(kimg_cbz PRIVATE wynpix_miniz)
+
+# 7z (LZMA SDK ANSI-C extraction backend)
+set(LZMA_C_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/lzma/C")
+add_library(wynpix_7z_sdk STATIC
+    "${LZMA_C_DIR}/7zAlloc.c"
+    "${LZMA_C_DIR}/7zArcIn.c"
+    "${LZMA_C_DIR}/7zBuf.c"
+    "${LZMA_C_DIR}/7zCrc.c"
+    "${LZMA_C_DIR}/7zCrcOpt.c"
+    "${LZMA_C_DIR}/7zDec.c"
+    "${LZMA_C_DIR}/7zStream.c"
+    "${LZMA_C_DIR}/Bcj2.c"
+    "${LZMA_C_DIR}/Bra.c"
+    "${LZMA_C_DIR}/Bra86.c"
+    "${LZMA_C_DIR}/BraIA64.c"
+    "${LZMA_C_DIR}/CpuArch.c"
+    "${LZMA_C_DIR}/Delta.c"
+    "${LZMA_C_DIR}/LzmaDec.c"
+    "${LZMA_C_DIR}/Lzma2Dec.c"
+    "${LZMA_C_DIR}/Ppmd7.c"
+    "${LZMA_C_DIR}/Ppmd7Dec.c"
+)
+target_include_directories(wynpix_7z_sdk PUBLIC "${LZMA_C_DIR}")
+target_compile_definitions(wynpix_7z_sdk PRIVATE Z7_PPMD_SUPPORT Z7_EXTRACT_ONLY)
+wynpix_apply_msvc_profile(wynpix_7z_sdk)
+wynpix_suppress_crt_deprecation(wynpix_7z_sdk)
+
+kimageformats_add_plugin(kimg_7z SOURCES 7z.cpp sevenzipreader_p.cpp)
+target_link_libraries(kimg_7z PRIVATE wynpix_7z_sdk)
+
+# UnRAR (RARDLL embedded read-only backend for RAR4 + RAR5)
+set(UNRAR_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/unrar")
+# NOTE: UnRAR is not a one-file-per-TU code base. The following sources are
+# #included by a parent .cpp and MUST NOT be listed here (compiling them standalone
+# fails: they rely on rar.hpp being in scope, and listing them would duplicate symbols):
+#   blake2s.cpp  <- blake2sp.cpp
+#   crypt.cpp    <- crypt1.cpp crypt2.cpp crypt3.cpp crypt5.cpp
+#   extinfo.cpp  <- hardlinks.cpp
+#   unpack.cpp   <- coder.cpp model.cpp unpackinline.cpp unpack15.cpp unpack20.cpp
+#                   unpack30.cpp unpack50.cpp unpack50frag.cpp unpack50mt.cpp
+# consio.cpp, filcreat.cpp, rs.cpp and rs16.cpp are standalone units taken from the
+# official UnRARDll.vcxproj (rs/rs16 are required by recvol.cpp).
+add_library(wynpix_unrar_sdk STATIC
+    "${UNRAR_SRC_DIR}/archive.cpp"
+    "${UNRAR_SRC_DIR}/arcread.cpp"
+    "${UNRAR_SRC_DIR}/blake2s.cpp"
+    "${UNRAR_SRC_DIR}/cmddata.cpp"
+    "${UNRAR_SRC_DIR}/consio.cpp"
+    "${UNRAR_SRC_DIR}/crc.cpp"
+    "${UNRAR_SRC_DIR}/crypt.cpp"
+    "${UNRAR_SRC_DIR}/dll.cpp"
+    "${UNRAR_SRC_DIR}/encname.cpp"
+    "${UNRAR_SRC_DIR}/errhnd.cpp"
+    "${UNRAR_SRC_DIR}/extinfo.cpp"
+    "${UNRAR_SRC_DIR}/extract.cpp"
+    "${UNRAR_SRC_DIR}/filcreat.cpp"
+    "${UNRAR_SRC_DIR}/file.cpp"
+    "${UNRAR_SRC_DIR}/filefn.cpp"
+    "${UNRAR_SRC_DIR}/filestr.cpp"
+    "${UNRAR_SRC_DIR}/find.cpp"
+    "${UNRAR_SRC_DIR}/getbits.cpp"
+    "${UNRAR_SRC_DIR}/global.cpp"
+    "${UNRAR_SRC_DIR}/hash.cpp"
+    "${UNRAR_SRC_DIR}/headers.cpp"
+    "${UNRAR_SRC_DIR}/isnt.cpp"
+    "${UNRAR_SRC_DIR}/largepage.cpp"
+    "${UNRAR_SRC_DIR}/match.cpp"
+    "${UNRAR_SRC_DIR}/motw.cpp"
+    "${UNRAR_SRC_DIR}/options.cpp"
+    "${UNRAR_SRC_DIR}/pathfn.cpp"
+    "${UNRAR_SRC_DIR}/qopen.cpp"
+    "${UNRAR_SRC_DIR}/rar.cpp"
+    "${UNRAR_SRC_DIR}/rarvm.cpp"
+    "${UNRAR_SRC_DIR}/rawread.cpp"
+    "${UNRAR_SRC_DIR}/rdwrfn.cpp"
+    "${UNRAR_SRC_DIR}/recvol.cpp"
+    "${UNRAR_SRC_DIR}/rijndael.cpp"
+    "${UNRAR_SRC_DIR}/rs.cpp"
+    "${UNRAR_SRC_DIR}/rs16.cpp"
+    "${UNRAR_SRC_DIR}/resource.cpp"
+    "${UNRAR_SRC_DIR}/scantree.cpp"
+    "${UNRAR_SRC_DIR}/secpassword.cpp"
+    "${UNRAR_SRC_DIR}/sha1.cpp"
+    "${UNRAR_SRC_DIR}/sha256.cpp"
+    "${UNRAR_SRC_DIR}/smallfn.cpp"
+    "${UNRAR_SRC_DIR}/strfn.cpp"
+    "${UNRAR_SRC_DIR}/strlist.cpp"
+    "${UNRAR_SRC_DIR}/system.cpp"
+    "${UNRAR_SRC_DIR}/threadpool.cpp"
+    "${UNRAR_SRC_DIR}/timefn.cpp"
+    "${UNRAR_SRC_DIR}/ui.cpp"
+    "${UNRAR_SRC_DIR}/unicode.cpp"
+    "${UNRAR_SRC_DIR}/unpack.cpp"
+    "${UNRAR_SRC_DIR}/volume.cpp"
+)
+target_include_directories(wynpix_unrar_sdk PUBLIC "${UNRAR_SRC_DIR}")
+target_compile_definitions(wynpix_unrar_sdk PRIVATE
+    RARDLL      # Embedded library API (not CLI)
+    UNRAR       # Extraction only — no archive creation
+    SILENT      # Suppress internal console output
+    # _WIN_ALL and USE_QOPEN are defined by raros.hpp / rardefs.hpp themselves;
+    # repeating them here only produced C4005 macro redefinition warnings.
+)
+wynpix_apply_msvc_profile(wynpix_unrar_sdk)
+wynpix_suppress_crt_deprecation(wynpix_unrar_sdk)
+if(MSVC)
+    target_compile_options(wynpix_unrar_sdk PRIVATE
+        /wd4007   # PASCAL calling-convention specifier in dll.hpp
+        /wd4996   # Deprecated POSIX/CRT function names
+        /wd4267   # size_t narrowed to int (internal UnRAR)
+        /wd4244   # Narrowing integer conversions (internal UnRAR)
+    )
+endif()
+
+kimageformats_add_plugin(kimg_rar
+    SOURCES
+        rar.cpp
+        unrarreader_p.cpp
+)
+target_link_libraries(kimg_rar PRIVATE wynpix_unrar_sdk)
+if(MSVC)
+    target_compile_options(kimg_rar PRIVATE /wd4244 /wd4267)
+endif()
+# OpenEXR (Enabled with local build)
+set(OPENEXR_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/openexr/${WYNPIX_DEPS_INSTALL_NAME}")
+set(IMATH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/Imath/${WYNPIX_DEPS_INSTALL_NAME}")
+# ZSTD_INSTALL_DIR comes from src/CMakeLists.txt.
+kimageformats_add_plugin(kimg_exr SOURCES exr.cpp scanlineconverter.cpp)
+target_include_directories(kimg_exr SYSTEM PRIVATE 
+    "${OPENEXR_ROOT}/include"
+    "${OPENEXR_ROOT}/include/OpenEXR"
+    "${IMATH_ROOT}/include"
+    "${IMATH_ROOT}/include/Imath"
+)
+target_link_libraries(kimg_exr PRIVATE 
+    "${OPENEXR_ROOT}/lib/OpenEXR-3_5.lib"
+    "${OPENEXR_ROOT}/lib/OpenEXRCore-3_5.lib"
+    "${OPENEXR_ROOT}/lib/Iex-3_5.lib"
+    "${OPENEXR_ROOT}/lib/IlmThread-3_5.lib"
+    "${IMATH_ROOT}/lib/Imath-3_2.lib"
+    "${ZSTD_INSTALL_DIR}/lib/zstd.lib"
+)
+
+# LibRaw (Enabled with local build)
+set(LIBRAW_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/LibRaw")
+kimageformats_add_plugin(kimg_raw SOURCES raw.cpp scanlineconverter.cpp)
+target_include_directories(kimg_raw PRIVATE "${LIBRAW_ROOT}")
+target_link_libraries(kimg_raw PRIVATE "${LIBRAW_ROOT}/buildfiles/release-x86_64${WYNPIX_DEPS_SUFFIX}/libraw_static.lib")
+target_compile_definitions(kimg_raw PRIVATE LIBRAW_NODLL)
+
+# JXR (Enabled with local build using jxrlib)
+set(JXR_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/jxrlib/${WYNPIX_DEPS_INSTALL_NAME}")
+if(EXISTS "${JXR_ROOT}/lib/jxrglue.lib")
+    kimageformats_add_plugin(kimg_jxr SOURCES jxr.cpp microexif.cpp)
+    target_include_directories(kimg_jxr SYSTEM PRIVATE "${JXR_ROOT}/include/jxrlib")
+    target_link_libraries(kimg_jxr PRIVATE 
+        "${JXR_ROOT}/lib/jxrglue.lib"
+        "${JXR_ROOT}/lib/jpegxr.lib"
+    )
+endif()
+
+if(MSVC)
+    target_compile_options(kimg_exr PRIVATE /wd4996)
+    if(TARGET kimg_jxr)
+        target_compile_options(kimg_jxr PRIVATE /wd4828)
+    endif()
+endif()
+
+message(STATUS "Plugins configured: ani dds ff hdr iff pcx pic pfm psd pxr qoi ras rgb sct tim tga xcf exr raw kra ora cbz 7z rar jxr")
+
+# Advanced formats (AVIF, HEIF, JXL)
+
+# HEIF (using external FFmpeg)
+set(FFMPEG_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/ffmpeg/ffmpeg-build-msvc${WYNPIX_DEPS_SUFFIX}")
+set(FFMPEG_INCLUDE_DIR "${FFMPEG_ROOT}/include")
+set(FFMPEG_LIB_DIR "${FFMPEG_ROOT}/lib")
+
+kimageformats_add_plugin(kimg_heif SOURCES heif.cpp)
+target_include_directories(kimg_heif PRIVATE "${FFMPEG_INCLUDE_DIR}")
+# Link required FFmpeg libraries (adjust lib names if different)
+target_link_libraries(kimg_heif PRIVATE
+    "${FFMPEG_LIB_DIR}/avcodec.lib"
+    "${FFMPEG_LIB_DIR}/avformat.lib"
+    "${FFMPEG_LIB_DIR}/avutil.lib"
+    "${FFMPEG_LIB_DIR}/swscale.lib"
+    bcrypt.lib
+)
+
+# libavif
+set(AVIF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libavif/include")
+set(AVIF_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libavif/${WYNPIX_DEPS_BUILD_NAME}/Release/avif.lib")
+if(EXISTS "${AVIF_LIBRARY}")
+    kimageformats_add_plugin(kimg_avif SOURCES avif.cpp microexif.cpp)
+    target_include_directories(kimg_avif PRIVATE ${AVIF_INCLUDE_DIR})
+    target_link_libraries(kimg_avif PRIVATE ${AVIF_LIBRARY})
+endif()
+
+
+# libjxl
+set(JXL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/lib/include")
+set(JXL_BUILD_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/lib/include")
+set(JXL_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/lib/Release/jxl.lib")
+set(JXL_THREADS_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/lib/Release/jxl_threads.lib")
+set(JXL_CMS_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/lib/Release/jxl_cms.lib")
+set(BROTLI_COMMON_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/third_party/brotli/Release/brotlicommon.lib")
+set(BROTLI_DEC_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/third_party/brotli/Release/brotlidec.lib")
+set(BROTLI_ENC_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/third_party/brotli/Release/brotlienc.lib")
+set(HWY_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/third_party/highway/Release/hwy.lib")
+
+if(EXISTS "${JXL_LIBRARY}")
+    kimageformats_add_plugin(kimg_jxl SOURCES jxl.cpp microexif.cpp)
+    target_include_directories(kimg_jxl PRIVATE ${JXL_INCLUDE_DIR} ${JXL_BUILD_INCLUDE_DIR})
+    target_link_libraries(kimg_jxl PRIVATE
+        ${JXL_LIBRARY}
+        ${JXL_THREADS_LIBRARY}
+        ${JXL_CMS_LIBRARY}
+        ${BROTLI_DEC_LIBRARY}
+        ${BROTLI_ENC_LIBRARY}
+        ${BROTLI_COMMON_LIBRARY}
+        ${HWY_LIBRARY}
+    )
+    target_compile_definitions(kimg_jxl PRIVATE JXL_STATIC_DEFINE JXL_THREADS_STATIC_DEFINE JXL_CMS_STATIC_DEFINE)
+endif()
+
+# OpenJPEG (Enabled with local build)
+set(OPENJPEG_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/openjpeg/${WYNPIX_DEPS_INSTALL_NAME}")
+if(EXISTS "${OPENJPEG_ROOT}/lib/openjp2.lib")
+    kimageformats_add_plugin(kimg_jp2 SOURCES jp2.cpp scanlineconverter.cpp)
+    target_include_directories(kimg_jp2 SYSTEM PRIVATE "${OPENJPEG_ROOT}/include/openjpeg-2.5")
+    target_link_libraries(kimg_jp2 PRIVATE "${OPENJPEG_ROOT}/lib/openjp2.lib")
+    target_compile_definitions(kimg_jp2 PRIVATE OPJ_STATIC)
+endif()
+
+# OpenJPH (Enabled with local build)
+set(OPENJPH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/OpenJPH/${WYNPIX_DEPS_INSTALL_NAME}")
+if(EXISTS "${OPENJPH_ROOT}/lib/openjph.0.32.lib")
+    kimageformats_add_plugin(kimg_jph SOURCES jph.cpp)
+    target_include_directories(kimg_jph SYSTEM PRIVATE "${OPENJPH_ROOT}/include")
+    target_link_libraries(kimg_jph PRIVATE "${OPENJPH_ROOT}/lib/openjph.0.32.lib")
+endif()
+
+# PNG (Enabled with local build using libspng, read-only decoder)
+# ZLIB_IMPORT_LIB / ZLIB_INCLUDE_DIR are the root CMakeLists.txt's single
+# source of truth for the zlib-ng install path (set() there before
+# add_subdirectory(3rdparty/kimageformats), so they're already in scope
+# here -- no need to re-derive the path a second time).
+set(SPNG_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libspng/${WYNPIX_DEPS_INSTALL_NAME}")
+if(EXISTS "${SPNG_ROOT}/lib/spng_static.lib")
+    kimageformats_add_plugin(kimg_png SOURCES png.cpp)
+    target_include_directories(kimg_png SYSTEM PRIVATE "${SPNG_ROOT}/include" "${ZLIB_INCLUDE_DIR}")
+    target_link_libraries(kimg_png PRIVATE "${SPNG_ROOT}/lib/spng_static.lib" "${ZLIB_IMPORT_LIB}")
+    target_compile_definitions(kimg_png PRIVATE SPNG_STATIC)
+endif()

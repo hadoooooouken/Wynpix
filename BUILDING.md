@@ -1,0 +1,522 @@
+# Building Wynpix from Source
+
+This guide walks you through building Wynpix and all its dependencies on Windows.
+
+## Prerequisites
+
+| Tool | Version | Download | Notes |
+|------|---------|----------|-------|
+| **Visual Studio** | 2022 (17.x+) | [visualstudio.microsoft.com](https://visualstudio.microsoft.com/) | "Desktop development with C++" workload |
+| **CMake** | 3.25+ | Included with VS or [cmake.org](https://cmake.org/download/) | |
+| **Git** | Latest | [git-scm.com](https://git-scm.com/) | |
+| **Qt SDK** | 6.12+ | [qt.io](https://www.qt.io/download-qt-installer) | Components: Core, Gui, Network, Svg, PrintSupport, Sql, Pdf, Qml, Quick, QuickControls2, QuickDialogs2, ShaderTools, LinguistTools; Test and QuickTest for the tests |
+| **Vulkan SDK** | Latest | [vulkan.lunarg.com](https://vulkan.lunarg.com/sdk/home) | Required for upscayl-ncnn (AI upscaling) |
+| **MSYS2** | Latest | [msys2.org](https://www.msys2.org/) | Only needed for building FFmpeg (provides bash/make) |
+| **Python 3** | 3.10+ | [python.org](https://www.python.org/) | Only needed for building FFmpeg |
+| **Inno Setup** | 6.x | [jrsoftware.org](https://jrsoftware.org/isdl.php) | Required for packaging release installers (`iscc`) |
+| **Intel SDE** | 9.x+ | [intel.com](https://www.intel.com/content/www/us/en/developer/articles/tool/software-development-emulator.html) | Optional; for SSE2 CPU emulation and smoke testing |
+
+### Minimum Hardware
+
+- **CPU**: x86-64 with AVX2 support (for default build) or Intel Core 2 / SSSE3 and newer (for SSE2 build)
+- **RAM**: 16 GB
+- **GPU VRAM**: 8 GB
+- **Storage**: SSD
+- **OS**: Windows 10 64-bit or newer
+
+---
+
+## Quick Start (Automated)
+
+```powershell
+# 1. Clone the main repository
+git clone https://github.com/hadoooooouken/wynpix.git
+cd wynpix
+
+# 2. Run setup (clones kimageformats v6.26.0 + applies its required patches)
+.\build_scripts\setup-deps.ps1
+
+# 3. Manually download NASM (see "Manual Downloads" below)
+
+# 4. Build format libraries (from a VS Developer Command Prompt)
+cd build_scripts
+.\build_qtiff_jpeg.ps1          # zlib-ng -> libjpeg-turbo -> libtiff -> qtiff.dll
+.\build_qpng_spng.ps1           # libspng
+.\build_qjpeg_jpeg.ps1          # qjpeg.dll
+.\build_exiv2.ps1               # exiv2 (static, linked into wynpix.exe)
+.\rebuild-all.ps1               # zstd, Imath, OpenEXR, libavif, libjxl, jxrlib, libdeflate, LibRaw
+python build_ffmpeg_msvc.py     # FFmpeg HEVC decoder (optional, requires MSYS2)
+cd ..
+
+# 5. Configure and build
+cmake --preset wynpix-x64-release
+cmake --build out/build/wynpix-x64-release --config Release
+```
+
+### kimageformats source requirement
+
+The required upstream baseline is **KDE kimageformats v6.26.0**. Wynpix's patch series in `patches/kimageformats/` is made for this exact baseline; do not replace it with `v6.30.0` or another upstream version unless the patches have been rebased and validated. The dependency setup command above clones `v6.26.0` into `formats/kimageformats` and applies the local patches. This source is not vendored in the repository, and no separate download or manual patching is needed.
+
+### UnRAR source requirement
+
+The RAR image plugin requires the UnRAR source, available from the [RARLAB UnRAR source download page](https://www.rarlab.com/rar_add.htm). Download the latest source archive and extract it so the source files are directly in `formats/unrar/` (for example, `formats/unrar/archive.cpp`). The version metadata for the currently used source identifies it as UnRAR 7.30 beta 1 in `formats/unrar/version.hpp`. The main CMake build compiles these sources into the static `wynpix_unrar_sdk` library and links it into `kimg_rar`; the embedded `RARDLL` backend is configured for read-only extraction of RAR4 and RAR5 archives. `setup-deps.ps1` prints the download page and expected location but does not download the archive automatically.
+
+UnRAR is not included in `build_scripts/check_deps.py`'s upstream Git-tag checks because it is downloaded as a source archive, not cloned from a Git repository. The license in `formats/unrar/license.txt` permits software to handle RAR archives, but prohibits using the source to create a RAR-compatible archiver or recreate the proprietary RAR compression algorithm. Keep the license with distributed source and binaries. When redistributing modified UnRAR source, the license also requires its notice in the documentation and source-code comments; see `formats/unrar/license.txt` for the full terms.
+
+> [!NOTE]
+> Steps 4-5 require a **Visual Studio Developer Command Prompt** (or running `vcvarsall.bat x64` first) so that `cl.exe`, `link.exe`, and related tools are on PATH.
+
+---
+
+## Manual Downloads
+
+These components must be downloaded manually and placed into `formats/`:
+
+### NASM (assembler)
+
+Required by libjpeg-turbo for SIMD optimizations.
+
+1. Download from [nasm.us](https://www.nasm.us/pub/nasm/releasebuilds/) (Windows 64-bit ZIP)
+2. Place `nasm.exe` into `formats/nasm/`
+
+### Ninja (build tool)
+
+Used by CMake presets for the main build.
+
+1. Download from [Ninja releases](https://github.com/ninja-build/ninja/releases)
+2. Place `ninja.exe` into `formats/ninja/`
+
+### LZMA SDK (source code)
+
+Required by the `kimg_7z` plugin for direct `.7z` image archive extraction.
+
+1. Download LZMA SDK from [7-zip.org](https://www.7-zip.org/sdk.html)
+2. Extract to `formats/lzma/` so that `formats/lzma/C/` is present
+
+### UnRAR (source code)
+
+Required by the `kimg_rar` plugin for reading RAR4 and RAR5 archives.
+
+1. Download the latest UnRAR source archive from the [RARLAB UnRAR source download page](https://www.rarlab.com/rar_add.htm)
+2. Extract the source files directly into `formats/unrar/` so that `formats/unrar/archive.cpp` and `formats/unrar/version.hpp` are present
+
+---
+
+## Repository Layout
+
+```
+wynpix/
+├── src/                     # Application source code
+├── shellex/                   # Windows shell extension
+├── upscayl-ncnn/              # AI upscaling engine (separate repo)
+├── formats/                   # Third-party dependency sources
+│   ├── Imath/                 # OpenEXR math library
+│   ├── openexr/               # OpenEXR image format
+│   ├── libavif/               # AVIF codec (with aom + dav1d)
+│   ├── libjxl/                # JPEG XL codec
+│   ├── jxrlib/                # JPEG XR codec
+│   ├── libdeflate/            # Fast DEFLATE compression
+│   ├── zstd/                  # Zstandard compression
+│   ├── LibRaw/                # RAW image decoder
+│   ├── zlib-ng/               # zlib replacement (shared DLL)
+│   ├── libjpeg-turbo/         # JPEG codec with SIMD (shared DLL)
+│   ├── libtiff/               # TIFF codec (static, links libjpeg-turbo)
+│   ├── libspng/               # PNG codec (static, links zlib-ng)
+│   ├── ffmpeg/                # FFmpeg (HEVC decoder only)
+│   ├── kimageformats/         # KDE image format plugins
+│   ├── unrar/                 # UnRAR source for the RAR image plugin
+│   ├── lzma/                  # LZMA SDK (7z archive decoder)
+│   ├── openjpeg/              # JPEG 2000 codec
+│   ├── OpenJPH/               # HTJ2K codec
+│   ├── exiv2/                 # EXIF metadata (static, linked into the exe)
+│   ├── nasm/                  # NASM assembler (tool binary)
+│   └── ninja/                 # Ninja build tool (tool binary)
+├── build_scripts/             # Dependency build automation
+│   ├── msvc-release-policy.json # Shared compiler/linker/ISA policy
+│   ├── MsvcPolicy.ps1         # Policy helpers (Get-IsaFolderName, etc.)
+│   ├── rebuild-all.ps1        # Batch builder for format libraries
+│   ├── build_qtiff_jpeg.ps1
+│   ├── build_qpng_spng.ps1
+│   ├── build_qjpeg_jpeg.ps1
+│   ├── build_exiv2.ps1
+│   ├── build_ffmpeg_msvc.py
+│   ├── check-isa.ps1          # ISA compliance verification scanner
+│   ├── check_deps.py
+│   ├── deploy-plugins.ps1     # Plugin & dependency deployment
+│   └── setup-deps.ps1
+├── release/                   # AVX2 output directory
+├── release-sse2/              # SSE2 output directory
+├── INSTALL/                   # Packaged installer executables
+├── patches/                   # Local patch files for dependencies
+│   ├── *.patch                # Single-file patches
+│   ├── kimageformats/         # Patch series (10 commits past v6.26.0)
+│   └── openjpeg/              # Patch series (15 commits past v2.5.4)
+```
+
+---
+
+## Dependency Table
+
+### Built by `rebuild-all.ps1`
+
+| Library | Version | Upstream | Patched | Output |
+|---------|---------|----------|:---:|--------|
+| Imath | v3.2.3 | [AcademySoftwareFoundation/Imath](https://github.com/AcademySoftwareFoundation/Imath) | Yes | Static lib |
+| OpenJPH | 0.32.0 | [aous72/OpenJPH](https://github.com/aous72/OpenJPH) | Yes | HTJ2K codec |
+| OpenEXR | v3.5.0 | [AcademySoftwareFoundation/openexr](https://github.com/AcademySoftwareFoundation/openexr) | Yes | Static lib |
+| libavif | v1.4.2 | [AOMediaCodec/libavif](https://github.com/AOMediaCodec/libavif) | Yes | Static lib |
+| libjxl | v0.12.0 | [libjxl/libjxl](https://github.com/libjxl/libjxl) | No | Static lib |
+| jxrlib | v2019.10.9 | [4creators/jxrlib](https://github.com/4creators/jxrlib) | Yes | Static lib |
+| libdeflate | 1.26 | [ebiggers/libdeflate](https://github.com/ebiggers/libdeflate) | Yes | Shared DLL (`deflate.dll`) |
+| zstd | 1.5.7 | [facebook/zstd](https://github.com/facebook/zstd) | No | Shared DLL (`zstd.dll`) |
+| LibRaw | 0.22.2 | [LibRaw/LibRaw](https://github.com/LibRaw/LibRaw) | Yes | Shared DLL (`libraw.dll`) |
+
+### Built by `build_qtiff_jpeg.ps1` / `build_qpng_spng.ps1` / `build_qjpeg_jpeg.ps1`
+
+| Library | Version | Upstream | Patched | Output |
+|---------|---------|----------|:---:|--------|
+| zlib-ng | 2.3.3 | [zlib-ng/zlib-ng](https://github.com/zlib-ng/zlib-ng) | No | Shared DLL (`zlib1.dll`) |
+| libjpeg-turbo | 3.2.0 | [libjpeg-turbo/libjpeg-turbo](https://github.com/libjpeg-turbo/libjpeg-turbo) | No | Shared DLL (`jpeg62.dll`) |
+| libtiff | 4.7.2 | [libtiff/libtiff](https://gitlab.com/libtiff/libtiff) | No | Static lib |
+| libspng | 0.7.4 | [randy408/libspng](https://github.com/randy408/libspng) | No | Static lib |
+| qtiff.dll | — | Qt plugin | Custom build | Qt image format plugin |
+| qjpeg.dll | — | Qt plugin | Custom build | Qt image format plugin |
+
+### Built by `build_exiv2.ps1`
+
+| Library | Version | Upstream | Patched | Output |
+|---------|---------|----------|:---:|--------|
+| exiv2 | v0.28.9 | [Exiv2/exiv2](https://github.com/Exiv2/exiv2) | No | Static lib (Release + Debug), linked into `wynpix.exe` |
+
+### Built as part of main CMake tree
+
+| Library | Version | Upstream | Patched | Notes |
+|---------|---------|----------|:---:|-------|
+| OpenJPEG | v2.5.4 + 15 commits | [uclouvain/openjpeg](https://github.com/uclouvain/openjpeg) | Yes | JPEG 2000 codec |
+| LZMA SDK | 26.03 | [7-Zip / LZMA SDK](https://www.7-zip.org/sdk.html) | No | ANSI-C 7z decoder for kimg_7z plugin |
+| UnRAR | 7.30 beta 1 (current source) | [RARLAB](https://www.rarlab.com/rar_add.htm) | No | Downloaded source archive; static read-only backend for the kimg_rar plugin; see `formats/unrar/license.txt` |
+| upscayl-ncnn | (fork, qimgv branch) | [hadoooooouken/upscayl-ncnn-qimgv-plus](https://github.com/hadoooooouken/upscayl-ncnn-qimgv-plus) | Fork | AI upscaling engine; uses [ncnn fork](https://github.com/hadoooooouken/ncnn) |
+
+### Built separately
+
+| Library | Version | Upstream | Notes |
+|---------|---------|----------|-------|
+| FFmpeg | n9.0.2 | [FFmpeg](https://git.ffmpeg.org/ffmpeg.git) | HEVC decoder only; requires MSYS2 + Python |
+
+### Prebuilt / Tools (no compilation needed)
+
+| Component | Version | Source |
+|-----------|---------|--------|
+| NASM | Latest | [nasm.us](https://www.nasm.us/) |
+| Ninja | Latest | [ninja-build/ninja](https://github.com/ninja-build/ninja/releases) |
+
+---
+
+## Patch Descriptions
+
+All patches are in the `patches/` directory. They are applied automatically by `build_scripts/setup-deps.ps1` and are kept as UTF-8 with LF line endings (`.gitattributes`), which `git apply` requires.
+
+Compiler, linker and ISA flags are not patched into upstream sources. The build scripts pass them from `build_scripts/msvc-release-policy.json`.
+
+| Patch File | Library | Description |
+|------------|---------|-------------|
+| `jxrlib-v2019.10.9-uintptr-fix.patch` | jxrlib | Uses portable `uintptr_t` / `intptr_t` |
+| `jxrlib-v2019.10.9-cmake-build.patch` | jxrlib | Adds the CMake build used by `rebuild-all.ps1` (upstream has none) |
+| `LibRaw-0.22.2-vcxproj-toolset.patch` | LibRaw | Updates VS project files to toolset v145 and SDK 10.0 |
+| `kimageformats/*.patch` | kimageformats | Required local patch series for Wynpix's Qt image format plugins |
+| `openjpeg/0001-*.patch` ... | openjpeg | 15 upstream commits past v2.5.4 (bug fixes, NEON optimizations, ARM64 support) |
+
+---
+
+## Build Order (Detailed)
+
+### Phase 1: Format Libraries
+
+All scripts should be run from a **VS Developer Command Prompt** (x64).
+
+#### Step 1: `build_qtiff_jpeg.ps1`
+
+Builds the image I/O foundation used by the entire application:
+
+```powershell
+cd build_scripts
+.\build_qtiff_jpeg.ps1
+```
+
+**Chain:** zlib-ng (shared) → libjpeg-turbo (shared, NASM SIMD) → libtiff (static) → qtiff.dll (Qt plugin)
+
+**Outputs:**
+- `formats/zlib-ng/install/` → `zlib1.dll`
+- `formats/libjpeg-turbo/install/` → `jpeg62.dll`
+- `formats/libtiff/install/` → static lib
+- `build_scripts/qtiff_jpeg/install/` → `qtiff.dll`
+
+#### Step 2: `build_qpng_spng.ps1`
+
+```powershell
+.\build_qpng_spng.ps1
+```
+
+Builds libspng (static). Requires zlib-ng from Step 1.
+
+**Output:** `formats/libspng/install/` → static lib
+
+#### Step 3: `build_qjpeg_jpeg.ps1`
+
+```powershell
+.\build_qjpeg_jpeg.ps1
+```
+
+Builds a custom qjpeg.dll backed by the shared libjpeg-turbo from Step 1.
+
+**Output:** `build_scripts/qjpeg_jpeg/install/` → `qjpeg.dll`
+
+#### Step 4: `build_exiv2.ps1`
+
+```powershell
+.\build_exiv2.ps1
+```
+
+Builds a minimal static exiv2 for EXIF reading: XMP, video, web access, NLS, Brotli, inih and Nikon lens data are disabled; PNG (zlib) and BMFF (HEIF/AVIF/JPEG XL) support stay enabled. Release and Debug are installed into one prefix (Debug as `exiv2d.lib`) so every CMake preset links a library with a matching CRT; use `-Configs Release` to skip Debug. Requires zlib-ng from Step 1.
+
+**Output:** `formats/exiv2/install/` → static lib (no DLL to deploy)
+
+> [!NOTE]
+> `formats/exiv2/` used to hold the official prebuilt bundle. If it still does, delete it before running `setup-deps.ps1` with `-SkipClone`; without that switch the script replaces it with the source checkout.
+
+#### Step 5: `rebuild-all.ps1`
+
+```powershell
+.\rebuild-all.ps1
+```
+
+Builds all remaining format libraries in dependency order: zstd → Imath → OpenEXR → libavif → libjxl → jxrlib → libdeflate → LibRaw.
+
+#### Step 6 (Optional): `build_ffmpeg_msvc.py`
+
+```powershell
+python build_ffmpeg_msvc.py
+```
+
+Builds a minimal FFmpeg with only the HEVC decoder. Required for HEIF/HEIC support via the `kimg_heif` plugin.
+
+**Requires:** MSYS2, Python 3, NASM
+
+> [!NOTE]
+> If you skip this step, the application will still build but HEIF/HEIC format support may be limited.
+
+### Phase 2: Main Application
+
+```powershell
+cd ..  # back to project root
+
+# --- Build AVX2 (default) ---
+cmake --preset wynpix-x64-release
+cmake --build --preset wynpix-x64-release
+
+# --- Build SSE2 ---
+cmake --preset wynpix-x64-release-sse2
+cmake --build --preset wynpix-x64-release-sse2
+```
+
+Outputs are placed in `release/` (AVX2) and `release-sse2/` (SSE2).
+
+### Phase 3: Post-Build (Optional)
+
+If plugins or dependency DLLs need to be redeployed manually:
+
+```powershell
+cd build_scripts
+.\deploy-plugins.ps1            # Deploy to release/
+.\deploy-plugins.ps1 -Isa SSE2 # Deploy to release-sse2/
+cd ..
+```
+
+---
+
+## Dual AVX2 / SSE2 Release Procedure
+
+Wynpix supports building and shipping two official installer variants from a single source tree:
+- **AVX2 build** (`release/`, packaged as `wynpix-setup.exe`): Target baseline for modern CPUs with AVX2 support.
+- **SSE2 build** (`release-sse2/`, packaged as `wynpix-setup-sse2.exe`): Target baseline for x86-64 CPUs without AVX2. The minimum CPU is Intel Core 2 (Merom: SSE3/SSSE3, no SSE4.1); this covers e.g. Core 2 Duo, Core i 1st-3rd generation, AMD FX and Celeron/Pentium models without AVX. AMD CPUs before Bulldozer (Athlon 64, Phenom) lack SSSE3 and are not a target.
+
+Each variant maintains its own isolated CMake build directory (`out/build/wynpix-x64-release` vs `out/build/wynpix-x64-release-sse2`), dependency install trees (`formats/<lib>/install` vs `formats/<lib>/install-sse2`), and output folder (`release` vs `release-sse2`).
+
+Follow these four steps to produce and verify an official release:
+
+### 1. Dependencies
+
+Format dependencies must be compiled for both ISA targets. **Rebuild them only when a dependency version or patch changes**, not on every application release.
+
+Run each script from a Visual Studio Developer Command Prompt:
+
+```powershell
+cd build_scripts
+
+# --- AVX2 Dependencies (Default) ---
+.\build_qtiff_jpeg.ps1
+.\build_qpng_spng.ps1
+.\build_qjpeg_jpeg.ps1
+.\build_exiv2.ps1
+.\rebuild-all.ps1
+python build_ffmpeg_msvc.py
+
+# --- SSE2 Dependencies ---
+.\build_qtiff_jpeg.ps1 -Isa SSE2
+.\build_qpng_spng.ps1  -Isa SSE2
+.\build_qjpeg_jpeg.ps1 -Isa SSE2
+.\build_exiv2.ps1      -Isa SSE2
+.\rebuild-all.ps1      -Isa SSE2
+python build_ffmpeg_msvc.py --isa SSE2
+
+cd ..
+```
+
+> [!NOTE]
+> All build scripts share common compiler/linker policies defined in `build_scripts/msvc-release-policy.json` and `build_scripts/MsvcPolicy.ps1`. The `-Isa SSE2` switch configures `/arch:SSE2` and routes outputs to `install-sse2` prefixes.
+
+### 2. Application
+
+Build both CMake presets. CMake automatically executes post-build steps (`windeployqt`, dependency DLL copies, and plugin deployment) into the corresponding release folder.
+
+```powershell
+# --- Build AVX2 Release (outputs to release/) ---
+cmake --preset wynpix-x64-release
+cmake --build --preset wynpix-x64-release
+
+# --- Build SSE2 Release (outputs to release-sse2/) ---
+cmake --preset wynpix-x64-release-sse2
+cmake --build --preset wynpix-x64-release-sse2
+```
+
+### 3. Verification
+
+Before packaging, verify ISA compliance using `check-isa.ps1` to ensure no illegal AVX/AVX2 instructions leaked into the SSE2 binaries.
+
+#### 3a. Verify AVX2 Release
+```powershell
+.\build_scripts\check-isa.ps1 -Path release -Isa AVX2
+```
+Confirms that the AVX2 release binaries pass ISA consistency checks.
+
+#### 3b. Verify SSE2 Release
+```powershell
+.\build_scripts\check-isa.ps1 -Path release-sse2 -ObjDir out\build\wynpix-x64-release-sse2
+```
+Scans first-party `.obj` files in the build tree and release binaries. Passing `-ObjDir` verifies that first-party translation units contain no AVX/VEX/BMI instructions and nothing newer than the Core 2 minimum (SSE4.1, SSE4.2, SSE4a, AES-NI, PCLMULQDQ, SHA, MOVBE, RDRAND, ADX). MSVC compiles such intrinsics under `/arch:SSE2` without an error. `popcnt`/`lzcnt` are listed for review without failing, because the MSVC STL emits them behind an `__isa_available` check. A clean scan also confirms that any vector instructions in first-party binaries originate strictly from MSVC CRT runtime dispatch (`vector_algorithms.obj`).
+
+#### 3c. SDE Smoke Test (SSE2 Only)
+Validate runtime execution under the Intel Software Development Emulator (SDE) using the minimum CPU model:
+```powershell
+.\build_scripts\check-isa.ps1 -Path release-sse2 -Sde
+```
+Or run directly:
+```powershell
+$env:QSG_RHI_PREFER_SOFTWARE_RENDERER = '1'
+sde -mrm -- release-sse2\wynpix.exe
+```
+The `-mrm` flag emulates a Core 2 Merom (SSE3/SSSE3, no SSE4.1), the minimum CPU of the SSE2 build. Any executed instruction newer than SSSE3, including unguarded AVX/AVX2, triggers an illegal instruction exception. This also covers runtime-dispatched dependencies, which the static scan allowlists.
+
+`QSG_RHI_PREFER_SOFTWARE_RENDERER=1` renders with D3D11 WARP. With the hardware adapter, the GPU driver runs `xgetbv` because Windows reports XSAVE support for the real CPU, and SDE aborts with `OSXSAVE BIT IS NOT SET IN CPUID`. The script sets it for `-Sde`.
+
+The unit tests of the SSE2 tree (`-DWYNPIX_BUILD_TESTS=ON`) can run under SDE too. They must load the plugins and DLLs of `release-sse2`. The Qt SDK holds the AVX2 `qjpeg.dll` and `jpeg62.dll` that the dependency scripts deploy there:
+```powershell
+$env:QT_QPA_PLATFORM = 'offscreen'
+$env:QT_QPA_PLATFORM_PLUGIN_PATH = 'E:\Qt\6.12.0\msvc2022_64\plugins\platforms'
+$env:QT_PLUGIN_PATH = 'E:\wynpix\release-sse2'
+$env:PATH = 'E:\wynpix\release-sse2;E:\Qt\6.12.0\msvc2022_64\bin;' + $env:PATH
+sde -mrm -- out\build\wynpix-x64-release-sse2\tests\unit\wynpix_tests.exe
+```
+`AnimationPlayerTests::scheduleMatchesMovieDelays` fails under SDE because the emulator slows the process down and `QMovie::nextFrameDelay()` then reports shorter delays. It is not an instruction set failure.
+
+### 4. Installers
+
+Build the Inno Setup installers for both variants:
+
+```powershell
+# AVX2 installer -> INSTALL\wynpix-setup.exe
+iscc src\wynpix.iss
+
+# SSE2 installer -> INSTALL\wynpix-setup-sse2.exe
+iscc /DIsa=SSE2 src\wynpix.iss
+```
+
+- The **AVX2 installer** (`wynpix-setup.exe`) includes a hardware check in `InitializeSetup` that aborts installation on CPUs without AVX2 support and directs the user to download the SSE2 installer.
+- The **SSE2 installer** (`wynpix-setup-sse2.exe`) packages the `release-sse2/` tree and runs on Core 2 and newer CPUs without AVX2 hardware constraints.
+- Both setup executables are written to the `INSTALL/` directory.
+
+---
+
+## Path Configuration
+
+The build scripts and CMake presets reference several SDK installation paths. By default they use the paths below. If your SDKs are installed elsewhere, set the corresponding **environment variables** before running any build step.
+
+| Purpose | Environment Variable | Default Value |
+|---------|---------------------|---------------|
+| Qt SDK | `QT_DIR` | `E:\Qt\6.12.0\msvc2022_64` |
+| Vulkan SDK | `VULKAN_SDK` | `E:\VULKAN` |
+| Visual Studio | `VSINSTALLDIR` | Auto-detected via `vswhere.exe` |
+| MSYS2 (FFmpeg only) | `MSYS2_ROOT` | `E:\MSYS2` |
+| Python (FFmpeg only) | — | System PATH |
+
+### CMakePresets.json
+
+Edit [`CMakePresets.json`](CMakePresets.json) to update these values for your system:
+
+```json
+{
+  "cacheVariables": {
+    "CMAKE_PREFIX_PATH": "E:/Qt/6.12.0/msvc2022_64;E:/Vulkan"
+  },
+  "environment": {
+    "VULKAN_SDK": "E:/Vulkan"
+  }
+}
+```
+
+### Build Scripts
+
+The following scripts have Qt SDK paths that may need updating:
+
+| Script | Variable | Line |
+|--------|----------|------|
+| `build_qtiff_jpeg.ps1` | `$QT_DIR` | Line 54 |
+| `build_qjpeg_jpeg.ps1` | `$QT_DIR` | Line 53 |
+| `build_ffmpeg_msvc.py` | `MSVC_BASE`, `MSYS2_BIN` | Lines 10-11 |
+
+---
+
+## Troubleshooting
+
+### "cl.exe not found" errors
+
+Make sure you're running from a **VS Developer Command Prompt**, or run:
+```cmd
+"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+```
+
+### "NASM not found" during libjpeg-turbo build
+
+Ensure `nasm.exe` is in `formats/nasm/`. The build scripts reference this path directly.
+
+### Vulkan SDK not found
+
+Set the `VULKAN_SDK` environment variable:
+```powershell
+$env:VULKAN_SDK = "C:\VulkanSDK\1.3.xxx.x"
+```
+
+### Qt not found during CMake configure
+
+Update `CMAKE_PREFIX_PATH` in `CMakePresets.json` to point to your Qt installation:
+```
+E:/Qt/6.x.x/msvc2022_64
+```
+
+### zlib-ng import library not found
+
+Run `build_scripts\build_qtiff_jpeg.ps1` first — it builds zlib-ng, which is required by the main application, libspng and exiv2.
+
+### exiv2 not found during CMake configure
+
+Run `build_scripts\build_exiv2.ps1`. The main build links only the static exiv2 from `formats/exiv2/install/`; a shared exiv2 package is rejected at configure time.

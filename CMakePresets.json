@@ -1,0 +1,74 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "windows-base",
+      "description": "Base configuration for Windows",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "E:/Qt/6.12.0/msvc2022_64;E:/Vulkan",
+        "EXIV2": "ON",
+        "exiv2_DIR": "E:/wynpix/formats/exiv2/install/lib/cmake/exiv2"
+      },
+      "environment": {
+        "VULKAN_SDK": "E:/Vulkan",
+        "PATH": "E:/Qt/6.12.0/msvc2022_64/bin;E:/Vulkan/Bin;$penv{PATH}"
+      }
+    },
+    {
+      "name": "wynpix-x64-debug",
+      "displayName": "wynpix: x64 Debug",
+      "inherits": "windows-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "wynpix-x64-release",
+      "displayName": "wynpix: x64 Release",
+      "inherits": "windows-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "WYNPIX_BUILD_TESTS": "OFF"
+      }
+    },
+    {
+      "name": "wynpix-x64-release-sse2",
+      "displayName": "wynpix: x64 Release (SSE2)",
+      "inherits": "wynpix-x64-release",
+      "cacheVariables": {
+        "WYNPIX_ISA": "SSE2",
+        "exiv2_DIR": "E:/wynpix/formats/exiv2/install-sse2/lib/cmake/exiv2"
+      }
+    },
+    {
+      "name": "wynpix-x64-relwithdebinfo",
+      "displayName": "wynpix: x64 RelWithDebInfo",
+      "inherits": "windows-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "wynpix-x64-debug",
+      "configurePreset": "wynpix-x64-debug"
+    },
+    {
+      "name": "wynpix-x64-release",
+      "configurePreset": "wynpix-x64-release"
+    },
+    {
+      "name": "wynpix-x64-release-sse2",
+      "configurePreset": "wynpix-x64-release-sse2"
+    },
+    {
+      "name": "wynpix-x64-relwithdebinfo",
+      "configurePreset": "wynpix-x64-relwithdebinfo"
+    }
+  ]
+}

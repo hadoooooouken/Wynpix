@@ -1,0 +1,65 @@
+#pragma once
+
+enum SortingMode {
+  SORT_NAME,
+  SORT_NAME_DESC,
+  SORT_SIZE,
+  SORT_SIZE_DESC,
+  SORT_TIME,
+  SORT_TIME_DESC
+};
+
+enum ImageFitMode {
+  FIT_WINDOW,
+  FIT_WIDTH,
+  FIT_ORIGINAL,
+  FIT_HEIGHT,
+  FIT_FREE
+};
+
+enum PanelPosition { PANEL_TOP, PANEL_BOTTOM, PANEL_LEFT, PANEL_RIGHT };
+
+enum ScalingFilter {
+  QI_FILTER_NEAREST,
+  QI_FILTER_BILINEAR,
+  QI_FILTER_SMART,
+  QI_FILTER_CAS,
+  QI_FILTER_SMART_GPU,
+  QI_FILTER_MKS2021,
+  // Magic Kernel Sharp 2021 computed by the Qt Quick GPU renderer. Appended
+  // so that the values stored in existing configuration files keep their
+  // meaning.
+  QI_FILTER_MKS2021_GPU
+};
+
+enum ZoomIndicatorMode {
+  INDICATOR_DISABLED,
+  INDICATOR_ENABLED,
+  INDICATOR_AUTO
+};
+
+enum DefaultCropAction { ACTION_CROP, ACTION_CROP_SAVE };
+
+enum ImageFocusPoint { FOCUS_TOP, FOCUS_CENTER, FOCUS_CURSOR };
+
+enum ImageScrolling {
+  SCROLL_NONE,
+  SCROLL_BY_TRACKPAD,
+  SCROLL_BY_TRACKPAD_AND_WHEEL
+};
+
+enum ViewMode { MODE_DOCUMENT, MODE_FOLDERVIEW };
+
+enum FolderEndAction {
+  FOLDER_END_NO_ACTION,
+  FOLDER_END_LOOP,
+  FOLDER_END_GOTO_ADJACENT
+};
+
+enum ThumbPanelStyle { TH_PANEL_SIMPLE, TH_PANEL_EXTENDED };
+
+enum ThemeMode { THEME_AUTO, THEME_DARK, THEME_LIGHT };
+
+// Graphics API of the Qt Quick UI; applied before its window is
+// created.
+enum class QuickGraphicsApi { Direct3D11, Direct3D12, Vulkan };

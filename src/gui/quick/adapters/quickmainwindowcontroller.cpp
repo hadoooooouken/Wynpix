@@ -1,0 +1,376 @@
+#include "quickmainwindowcontroller.h"
+
+#include <QCloseEvent>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QGuiApplication>
+#include <QLocale>
+#include <QMimeData>
+#include <QMouseEvent>
+#include <QQuickWindow>
+#include <QScreen>
+
+#include "components/actionmanager/actionmanager.h"
+#include "components/viewmode/viewmodecontroller.h"
+#include "gui/ports/uievents.h"
+#include "gui/quick/adapters/quickfolderviewactions.h"
+#include "gui/quick/ui/crop/cropcontroller.h"
+#include "gui/quick/ui/folderview/folderviewcontroller.h"
+#include "gui/quick/ui/imageviewportcontroller.h"
+#include "gui/quick/ui/mainwindowshell.h"
+#include "gui/quick/ui/menus/contextmenumodel.h"
+#include "gui/quick/ui/overlays/notificationoverlaymodel.h"
+#include "gui/quick/ui/overlays/overlaycoordinator.h"
+#include "gui/quick/ui/thumbnails/thumbnailpanelcontroller.h"
+#include "settings.h"
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#include <dwmapi.h>
+
+namespace {
+using namespace Qt::StringLiterals;
+
+constexpr auto exitActionName = "exit"_L1;
+constexpr double kPercent = 100.0;
+
+WindowPlacement savedPlacement(Settings &settings) {
+    return {
+        .geometry = settings.windowGeometry(),
+        .maximized = settings.maximizedWindow(),
+        .display = settings.lastDisplay(),
+    };
+}
+
+// The messages reuse the widget UI's translations, which lupdate files under
+// the main window's context ("MW"); lupdate needs the literal context in
+// every QCoreApplication::translate() call.
+QString sortingMessage(SortingMode mode) {
+    switch (mode) {
+    case SORT_NAME:
+        return QCoreApplication::translate("MW", "Sorting: By Name");
+    case SORT_NAME_DESC:
+        return QCoreApplication::translate("MW", "Sorting: By Name (desc.)");
+    case SORT_TIME:
+        return QCoreApplication::translate("MW", "Sorting: By Time");
+    case SORT_TIME_DESC:
+        return QCoreApplication::translate("MW", "Sorting: By Time (desc.)");
+    case SORT_SIZE:
+        return QCoreApplication::translate("MW", "Sorting: By File Size");
+    case SORT_SIZE_DESC:
+        return QCoreApplication::translate("MW", "Sorting: By File Size (desc.)");
+    }
+    qWarning() << "QuickMainWindowController: no message for the sorting mode" << mode;
+    return {};
+}
+
+QString folderSortingMessage(SortingMode mode) {
+    switch (mode) {
+    case SORT_NAME:
+        return QCoreApplication::translate("MW", "Folder Thumbnails: By Name");
+    case SORT_NAME_DESC:
+        return QCoreApplication::translate("MW", "Folder Thumbnails: By Name (desc.)");
+    case SORT_TIME:
+        return QCoreApplication::translate("MW", "Folder Thumbnails: Oldest");
+    case SORT_TIME_DESC:
+        return QCoreApplication::translate("MW", "Folder Thumbnails: Newest");
+    case SORT_SIZE:
+        return QCoreApplication::translate("MW", "Folder Thumbnails: By File Size");
+    case SORT_SIZE_DESC:
+        return QCoreApplication::translate("MW", "Folder Thumbnails: By File Size (desc.)");
+    }
+    qWarning() << "QuickMainWindowController: no message for the folder sorting mode" << mode;
+    return {};
+}
+} // namespace
+
+QuickMainWindowController::QuickMainWindowController(
+    const QuickMainWindowContext &context, QObject *parent)
+    : QObject(parent),
+      window(context.window),
+      shell(context.shell),
+      viewport(context.viewport),
+      overlays(context.overlays),
+      thumbnailPanel(context.thumbnailPanel),
+      contextMenu(context.contextMenu),
+      crop(context.crop),
+      folderView(context.folderView),
+      folderViewActions(context.folderViewActions),
+      viewMode(context.viewMode),
+      events(context.events),
+      settings(context.settings),
+      actions(context.actions),
+      windowState(context.window, savedPlacement(context.settings)) {
+    window.installEventFilter(this);
+
+    connect(&windowState, &WindowStateController::placementChanged, this,
+            &QuickMainWindowController::persistPlacement);
+    connect(&windowState, &WindowStateController::fullscreenChanged, &shell,
+            &MainWindowShell::setFullscreen);
+    connect(&windowState, &WindowStateController::fullscreenChanged, &overlays,
+            &OverlayCoordinator::setFullscreen);
+    connect(&windowState, &WindowStateController::fullscreenChanged, &thumbnailPanel,
+            &ThumbnailPanelController::setFullscreen);
+    connect(&windowState, &WindowStateController::fullscreenChanged, &folderView,
+            &FolderViewController::setFullscreen);
+    connect(&window, &QWindow::widthChanged, this,
+            [this]() { thumbnailPanel.setWindowSize(window.size()); });
+    connect(&window, &QWindow::heightChanged, this,
+            [this]() { thumbnailPanel.setWindowSize(window.size()); });
+    connect(&window, &QWindow::activeChanged, this, [this]() {
+        if (!window.isActive())
+            thumbnailPanel.pointerLeftWindow();
+    });
+    // Saved also when the application quits while the window rests (the
+    // debounced report may still be pending).
+    connect(qGuiApp, &QGuiApplication::aboutToQuit, this,
+            [this]() { windowState.savePlacement(); });
+
+    // Core::onDropIn reads the URLs synchronously, so the payload can live on
+    // the stack for the duration of the emission.
+    connect(&shell, &MainWindowShell::urlsDropped, this,
+            [this](const QList<QUrl> &urls, QObject *source) {
+        QMimeData mimeData;
+        mimeData.setUrls(urls);
+        emit events.droppedIn(&mimeData, source);
+    });
+
+    connect(&viewMode, &ViewModeController::viewModeApplied, this, [this](ViewMode mode) {
+        shell.setFolderViewActive(mode == MODE_FOLDERVIEW);
+        overlays.setFolderViewActive(mode == MODE_FOLDERVIEW);
+        thumbnailPanel.setFolderViewActive(mode == MODE_FOLDERVIEW);
+        contextMenu.setFolderViewActive(mode == MODE_FOLDERVIEW);
+        crop.setFolderViewActive(mode == MODE_FOLDERVIEW);
+        folderView.setActive(mode == MODE_FOLDERVIEW);
+        updateTitle();
+    });
+    shell.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    overlays.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    overlays.setFullscreen(windowState.isFullscreen());
+    thumbnailPanel.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    thumbnailPanel.setFullscreen(windowState.isFullscreen());
+    contextMenu.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    crop.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    folderView.setFullscreen(windowState.isFullscreen());
+    folderView.setActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    thumbnailPanel.setWindowSize(window.size());
+
+    // The title shows the zoom, the view locks and (by setting) extended
+    // details. The lock actions run on the viewport before these
+    // connections, which are made later.
+    connect(&viewport, &ImageViewportController::scaleChanged, this,
+            &QuickMainWindowController::updateTitle);
+    connect(&actions, &ActionManager::lockZoom, this, &QuickMainWindowController::updateTitle);
+    connect(&actions, &ActionManager::lockView, this, &QuickMainWindowController::updateTitle);
+    connect(&settings, &Settings::settingsChanged, this, &QuickMainWindowController::updateTitle);
+
+    connect(&actions, &ActionManager::toggleFullscreen, this,
+            [this]() { windowState.toggleFullscreen(); });
+    connect(&actions, &ActionManager::closeFullScreenOrExit, this,
+            &QuickMainWindowController::closeFullscreenOrExit);
+
+    updateTitle();
+}
+
+bool QuickMainWindowController::isFullscreen() const {
+    return windowState.isFullscreen();
+}
+
+//------------------------------------------------------------------------------
+// IWindowPort
+
+void QuickMainWindowController::showWindow() {
+    if (window.isVisible())
+        return;
+    if (settings.fullscreenMode())
+        windowState.showFullscreen();
+    else
+        windowState.showWindowed();
+}
+
+void QuickMainWindowController::hideWindow() {
+    window.hide();
+}
+
+bool QuickMainWindowController::isWindowVisible() const {
+    return window.isVisible();
+}
+
+void QuickMainWindowController::setWindowConcealed(bool concealed) {
+    if (concealed == windowCloaked)
+        return;
+    // winId() creates the native window of a window that was never shown;
+    // the graphics configuration is applied before Core can get here.
+    const auto hwnd = reinterpret_cast<HWND>(window.winId());
+    if (!hwnd) {
+        qWarning() << "QuickMainWindowController: the main window has no native"
+                      " handle; it cannot be"
+                   << (concealed ? "concealed" : "revealed");
+        return;
+    }
+    const BOOL cloak = concealed ? TRUE : FALSE;
+    const HRESULT result = DwmSetWindowAttribute(hwnd, DWMWA_CLOAK, &cloak, sizeof(cloak));
+    if (FAILED(result)) {
+        qWarning() << "QuickMainWindowController: DWM could not"
+                   << (concealed ? "cloak" : "uncloak") << "the main window, HRESULT"
+                   << Qt::hex << static_cast<quint32>(result);
+        return;
+    }
+    windowCloaked = concealed;
+}
+
+void QuickMainWindowController::raiseAndActivateWindow() {
+    window.raise();
+    window.requestActivate();
+}
+
+WId QuickMainWindowController::nativeWindowHandle() const {
+    return window.winId();
+}
+
+void QuickMainWindowController::fitWindowToDocument(QSize size) {
+    if (settings.autoResizeWindow())
+        windowState.fitToContent(size, settings.autoResizeLimit());
+}
+
+void QuickMainWindowController::saveWindowGeometry() {
+    windowState.savePlacement();
+}
+
+void QuickMainWindowController::setWindowUpdatesSuspended(bool suspended) {
+    // The scene graph synchronizes with the GUI thread only between event
+    // loop iterations, so changes applied in one go are presented together.
+    Q_UNUSED(suspended)
+}
+
+//------------------------------------------------------------------------------
+// IShellPort
+
+void QuickMainWindowController::setDirectoryPath(const QString &path) {
+    folderView.setDirectoryPath(path);
+}
+
+void QuickMainWindowController::setCurrentInfo(const ShellFileInfo &info) {
+    currentInfo = info;
+    updateTitle();
+    overlays.setFileInfo(info);
+}
+
+void QuickMainWindowController::setMetadata(const MetadataEntries &entries) {
+    overlays.setMetadata(entries);
+}
+
+// The SettingsEnums values mirror the settings enums one to one. As in
+// MW::onSortingChanged() / onFolderSortingChanged(), a message announces the
+// new order only in the view whose items it sorts; the folder view shows
+// both in its own controls.
+void QuickMainWindowController::notifySortingChanged(SortingMode mode) {
+    folderView.setSortingMode(static_cast<SettingsEnums::SortingMode>(mode));
+    if (viewMode.currentViewMode() == MODE_DOCUMENT)
+        showMessage(sortingMessage(mode));
+}
+
+void QuickMainWindowController::notifyFolderSortingChanged(SortingMode mode) {
+    folderView.setFolderSortingMode(static_cast<SettingsEnums::SortingMode>(mode));
+    if (viewMode.currentViewMode() == MODE_FOLDERVIEW)
+        showMessage(folderSortingMessage(mode));
+}
+
+void QuickMainWindowController::refreshFolderTree(const QString &directoryPath) {
+    folderViewActions.refreshFolderTree(directoryPath);
+}
+
+void QuickMainWindowController::setSaveOverlayVisible(bool visible) {
+    overlays.setSaveConfirmVisible(visible);
+}
+
+bool QuickMainWindowController::isCropPanelActive() const {
+    return crop.isActive();
+}
+
+void QuickMainWindowController::toggleCropPanel() {
+    if (const QScreen *screen = window.screen())
+        crop.setScreenSize(screen->geometry().size());
+    else
+        qWarning() << "QuickMainWindowController: the window has no screen;"
+                      " the screen aspect preset keeps its ratio";
+    crop.toggle();
+}
+
+void QuickMainWindowController::toggleFullscreenInfoBar() {
+    overlays.fullscreenChrome()->toggleInfoBar();
+}
+
+void QuickMainWindowController::toggleRenamePrompt(const QString &currentName) {
+    overlays.toggleRename(currentName);
+}
+
+//------------------------------------------------------------------------------
+
+bool QuickMainWindowController::eventFilter(QObject *watched, QEvent *event) {
+    // Every pointer move over the window, whichever item handles it, like
+    // the application-wide filter of the widget main window.
+    if (watched == &window && event->type() == QEvent::MouseMove) {
+        const auto *mouseEvent = static_cast<const QMouseEvent *>(event);
+        overlays.pointerMoved(mouseEvent->position(), window.isActive());
+        thumbnailPanel.pointerMoved(mouseEvent->position(), mouseEvent->buttons());
+    }
+    if (watched == &window && event->type() == QEvent::Leave)
+        thumbnailPanel.pointerLeftWindow();
+    if (watched == &window && event->type() == QEvent::Close) {
+        // The window stays; standby hides it, exit tears the UI down.
+        event->ignore();
+        onCloseRequested();
+        return true;
+    }
+    return QObject::eventFilter(watched, event);
+}
+
+// As in the widget UI: closing the window suspends to standby when enabled.
+// At the end of the Windows session (shutdown, logoff) the application exits
+// through the normal exit path, since the window closing alone would not quit
+// it (quitOnLastWindowClosed is off for standby).
+void QuickMainWindowController::onCloseRequested() {
+    if (qGuiApp->isSavingSession() || !settings.standbyMode()) {
+        actions.invokeAction(exitActionName);
+        return;
+    }
+    emit events.suspendRequested();
+}
+
+void QuickMainWindowController::closeFullscreenOrExit() {
+    if (windowState.isFullscreen())
+        windowState.showWindowed();
+    else
+        actions.invokeAction(exitActionName);
+}
+
+void QuickMainWindowController::persistPlacement(const WindowPlacement &placement) {
+    settings.setWindowGeometry(placement.geometry);
+    settings.setMaximizedWindow(placement.maximized);
+    settings.setLastDisplay(placement.display);
+}
+
+void QuickMainWindowController::showMessage(const QString &text) {
+    // The message helpers have already reported a mode without a text.
+    if (text.isEmpty())
+        return;
+    overlays.messages()->showMessage(text);
+}
+
+void QuickMainWindowController::updateTitle() {
+    const WindowTitleState state{
+        .info = currentInfo,
+        .viewMode = viewMode.currentViewMode(),
+        .scalePercent = qRound(viewport.currentScale() * kPercent),
+        .extendedInfo = settings.windowTitleExtendedInfo(),
+        .zoomLocked = viewport.isZoomLocked(),
+        .viewLocked = viewport.isViewLocked(),
+    };
+    const QString title = windowTitleFor(state, QLocale());
+    if (window.title() != title)
+        window.setTitle(title);
+}
+

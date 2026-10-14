@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/icons/common/other/folder32-scalable.svg</file>
+        <file>res/fonts/FluentSystemIcons-Custom.ttf</file>
+        <file>res/icons/common/logo/app/wynpix.svg</file>
+        <file>res/icons/common/logo/3rdparty/qt.svg</file>
+    </qresource>
+</RCC>

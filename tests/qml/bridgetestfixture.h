@@ -1,0 +1,312 @@
+#pragma once
+
+#include <QMap>
+#include <QObject>
+#include <QPoint>
+#include <QPointF>
+#include <QQuickWindow>
+#include <QString>
+#include <QUrl>
+#include <QVariantList>
+#include <QtQml/qqmlregistration.h>
+
+#include <memory>
+
+#include "fakesettingsstores.h"
+#include "gui/quick/bridges/actionbridge.h"
+#include "gui/quick/bridges/actiondispatcher.h"
+#include "gui/quick/bridges/settingsbridge.h"
+#include "gui/quick/bridges/themebridge.h"
+#include "gui/quick/ui/crop/cropcontroller.h"
+#include "gui/quick/ui/dialogs/dialogcoordinator.h"
+#include "gui/quick/ui/folderview/foldergridcontroller.h"
+#include "gui/quick/ui/folderview/folderviewcontroller.h"
+#include "gui/quick/ui/imageviewportcontroller.h"
+#include "gui/quick/ui/mainwindowshell.h"
+#include "gui/quick/ui/menus/contextmenumodel.h"
+#include "gui/quick/ui/overlays/overlaycoordinator.h"
+#include "gui/quick/ui/settings/settingsdialogcontroller.h"
+#include "gui/quick/ui/thumbnails/thumbnailpanelcontroller.h"
+#include "fakebatchconversionservice.h"
+
+class QFileSystemModel;
+
+// Records what ActionBridge forwards instead of running actions.
+class FakeActionDispatcher final : public IActionDispatcher {
+public:
+  FakeActionDispatcher();
+
+  [[nodiscard]] QStringList actionNames() const override;
+  [[nodiscard]] QString shortcutFor(const QString &action) const override;
+  bool invoke(const QString &action) override;
+  bool processEvent(QInputEvent &event) override;
+  [[nodiscard]] QString shortcutText(QInputEvent &event) const override;
+  [[nodiscard]] QString keyText(const QKeyEvent &event) const override;
+
+  void setShortcut(const QString &action, const QString &shortcut);
+
+  QString lastInvoked;
+  int lastKey = 0;
+  int lastModifiers = 0;
+  QPoint lastWheelAngleDelta;
+  // QEvent::Type and Qt::MouseButton of the mouse events, oldest first.
+  QVariantList mouseEventTypes;
+  QVariantList mouseButtons;
+
+private:
+  QMap<QString, QString> mShortcuts; // <action, shortcut>
+};
+
+// Per-engine test services: the three bridges over a fake dispatcher and
+// fixed snapshots, an image viewport controller, plus the hooks the tests use
+// to change them. Published as the Fixture singleton of the wynpix.tests
+// module.
+class BridgeTestFixture : public QObject {
+  Q_OBJECT
+  QML_NAMED_ELEMENT(Fixture)
+  QML_SINGLETON
+  QML_UNCREATABLE("Provided by QmlTestSetup")
+  Q_PROPERTY(QString lastInvoked READ lastInvoked FINAL)
+  Q_PROPERTY(int lastKey READ lastKey FINAL)
+  Q_PROPERTY(int lastModifiers READ lastModifiers FINAL)
+  Q_PROPERTY(QPoint lastWheelAngleDelta READ lastWheelAngleDelta FINAL)
+  Q_PROPERTY(QVariantList mouseEventTypes READ mouseEventTypes FINAL)
+  Q_PROPERTY(QVariantList mouseButtons READ mouseButtons FINAL)
+  Q_PROPERTY(ImageViewportController *viewportController READ viewportController CONSTANT FINAL)
+  Q_PROPERTY(MainWindowShell *windowShell READ windowShell CONSTANT FINAL)
+  Q_PROPERTY(QList<QUrl> lastDroppedUrls READ lastDroppedUrls FINAL)
+  Q_PROPERTY(OverlayCoordinator *overlays READ overlays CONSTANT FINAL)
+  Q_PROPERTY(QString lastFileRequest READ lastFileRequest FINAL)
+  Q_PROPERTY(ThumbnailPanelController *thumbnailPanel READ thumbnailPanel CONSTANT FINAL)
+  Q_PROPERTY(int thumbnailRequestCount READ thumbnailRequestCount FINAL)
+  Q_PROPERTY(int requestedThumbnailCount READ requestedThumbnailCount FINAL)
+  Q_PROPERTY(int lastActivatedThumbnail READ lastActivatedThumbnail FINAL)
+  Q_PROPERTY(int lastPinRequest READ lastPinRequest FINAL)
+  Q_PROPERTY(ContextMenuModel *contextMenu READ contextMenu CONSTANT FINAL)
+  Q_PROPERTY(CropController *crop READ crop CONSTANT FINAL)
+  Q_PROPERTY(QString lastCropRequest READ lastCropRequest FINAL)
+  Q_PROPERTY(FolderViewController *folderView READ folderView CONSTANT FINAL)
+  // The last request of the folder view: "sorting:<mode>",
+  // "folderSorting:<mode>", "nameFilter:<text>", "formats:<extensions>",
+  // "directory:<path>", "activated:<index>", "typeAhead:<text>",
+  // "contextMenu", "batch", "openSelected", "drop:<index>:<action>".
+  Q_PROPERTY(QString lastFolderRequest READ lastFolderRequest FINAL)
+  Q_PROPERTY(int folderThumbnailRequestCount READ folderThumbnailRequestCount FINAL)
+  Q_PROPERTY(int scriptSettingsRequests READ scriptSettingsRequests FINAL)
+  Q_PROPERTY(DialogCoordinator *dialogs READ dialogs CONSTANT FINAL)
+  // The answer of the last finished dialog request: "confirm:<0|1>",
+  // "replace:<yes>:<all>:<cancel>", "resize:<w>x<h>:<filter>:<upscayl>:<model>"
+  // or "resize:none", "text:<0|1>:<text>"; empty for none.
+  Q_PROPERTY(QString lastDialogAnswer READ lastDialogAnswer FINAL)
+  // The settings window over an editor with in-memory stores.
+  Q_PROPERTY(SettingsDialogController *settingsDialog READ settingsDialog CONSTANT FINAL)
+  Q_PROPERTY(int settingsApplyCount READ settingsApplyCount FINAL)
+  // The shortcuts the last apply stored, "action=shortcut" joined by ";".
+  Q_PROPERTY(QString appliedShortcuts READ appliedShortcuts FINAL)
+  Q_PROPERTY(QStringList storedScripts READ storedScripts FINAL)
+  Q_PROPERTY(int previewedThemeMode READ previewedThemeMode FINAL)
+  Q_PROPERTY(int cacheClearCount READ cacheClearCount FINAL)
+
+public:
+  explicit BridgeTestFixture(QObject *parent = nullptr);
+
+  [[nodiscard]] SettingsBridge &settingsBridge();
+  [[nodiscard]] ThemeBridge &themeBridge();
+  [[nodiscard]] ActionBridge &actionBridge();
+
+  [[nodiscard]] QString lastInvoked() const;
+  [[nodiscard]] int lastKey() const;
+  [[nodiscard]] int lastModifiers() const;
+  [[nodiscard]] QPoint lastWheelAngleDelta() const;
+  [[nodiscard]] QVariantList mouseEventTypes() const;
+  [[nodiscard]] QVariantList mouseButtons() const;
+  [[nodiscard]] ImageViewportController *viewportController();
+  [[nodiscard]] MainWindowShell *windowShell();
+  [[nodiscard]] QList<QUrl> lastDroppedUrls() const;
+  [[nodiscard]] OverlayCoordinator *overlays();
+  // The last request the overlays made: "copy:<dir>", "move:<dir>",
+  // "rename:<name>", "save", "saveAs" or "discard".
+  [[nodiscard]] QString lastFileRequest() const;
+  [[nodiscard]] ThumbnailPanelController *thumbnailPanel();
+  // Requests of the thumbnail model (thumbnailsNeeded) and the items they
+  // named, since the last population.
+  [[nodiscard]] int thumbnailRequestCount() const;
+  [[nodiscard]] int requestedThumbnailCount() const;
+  // The last activated item, -1 for none.
+  [[nodiscard]] int lastActivatedThumbnail() const;
+  // The last pin button request: 1 pin, 0 unpin, -1 none.
+  [[nodiscard]] int lastPinRequest() const;
+  [[nodiscard]] ContextMenuModel *contextMenu();
+  [[nodiscard]] CropController *crop();
+  [[nodiscard]] FolderViewController *folderView();
+  [[nodiscard]] QString lastFolderRequest() const;
+  [[nodiscard]] int folderThumbnailRequestCount() const;
+  // The last crop request: "crop:x,y,w,h", "cropAndSave:x,y,w,h" or
+  // "default:<action>"; empty for none.
+  [[nodiscard]] QString lastCropRequest() const;
+  // How often "Configure menu" asked for the script settings.
+  [[nodiscard]] int scriptSettingsRequests() const;
+  [[nodiscard]] DialogCoordinator *dialogs();
+  [[nodiscard]] QString lastDialogAnswer() const;
+  [[nodiscard]] SettingsDialogController *settingsDialog();
+  [[nodiscard]] int settingsApplyCount() const;
+  [[nodiscard]] QString appliedShortcuts() const;
+  [[nodiscard]] QStringList storedScripts() const;
+  [[nodiscard]] int previewedThemeMode() const;
+  [[nodiscard]] int cacheClearCount() const;
+
+  // Flips viewer.smoothZoom and publishes the snapshot (viewer area only).
+  Q_INVOKABLE void toggleSmoothZoom();
+  // Publishes the current snapshot again (no area changes).
+  Q_INVOKABLE void reapplySettings();
+  // Switches between the application's dark and light theme.
+  Q_INVOKABLE void switchTheme();
+  // Rebinds action and refreshes the actions bridge.
+  Q_INVOKABLE void setShortcut(const QString &action, const QString &shortcut);
+  // Shows a plain image of width x height pixels in the viewport, as a new
+  // document (fitted with the default fit mode).
+  Q_INVOKABLE void showTestImage(int width, int height);
+  // Closes the shown image.
+  Q_INVOKABLE void closeTestImage();
+  // Sets the window shell state, as the Quick UI host does.
+  Q_INVOKABLE void setFolderViewActive(bool active);
+  Q_INVOKABLE void setFullscreen(bool fullscreen);
+  Q_INVOKABLE void setWindowedBackgroundOpacity(qreal opacity);
+  Q_INVOKABLE void setTranslucentWindow(bool translucent);
+  // Drags a file with url from another application onto window at
+  // position (window coordinates) and drops it there, with the drag and drop
+  // events the platform sends. Returns whether the drop was accepted.
+  Q_INVOKABLE bool dropExternalFile(QQuickWindow *window, QPointF position,
+                                    const QUrl &url);
+  // Forgets the input the dispatcher recorded.
+  Q_INVOKABLE void clearInputLog();
+
+  // Overlay requests as the actions and the shell port make them.
+  Q_INVOKABLE void toggleCopy();
+  Q_INVOKABLE void toggleMove();
+  Q_INVOKABLE void toggleImageInfo();
+  Q_INVOKABLE void toggleRename(const QString &currentName);
+  Q_INVOKABLE void toggleColorAdjustments();
+  Q_INVOKABLE void toggleCasSettings();
+  Q_INVOKABLE void setSaveConfirmVisible(bool visible);
+  Q_INVOKABLE void showMessage(const QString &text);
+  // Metadata of count entries "Name <i>" / "Value <i>".
+  Q_INVOKABLE void setMetadataEntries(int count);
+  Q_INVOKABLE void pointerMoved(QPointF position);
+  // Closes every overlay, hides the message and forgets the last request.
+  Q_INVOKABLE void closeOverlays();
+  // Thumbnail panel: enabled with kTestPreviewsSize previews and a short
+  // hide delay, pinned or floating, at position (SettingsEnums::
+  // PanelPosition), with the extended style or not.
+  Q_INVOKABLE void configureThumbnailPanel(bool pinned, int position, bool extended);
+  Q_INVOKABLE void allowThumbnailPanelCreation();
+  Q_INVOKABLE void setPanelWindowSize(int width, int height);
+  // Populates the strip with count items and forgets the requests.
+  Q_INVOKABLE void populateThumbnails(int count);
+  Q_INVOKABLE void selectThumbnail(int index);
+  // Answers every request not answered yet with a decoded image; returns
+  // how many thumbnails were delivered.
+  Q_INVOKABLE int deliverRequestedThumbnails();
+  Q_INVOKABLE void panelPointerMoved(QPointF position, int buttons);
+
+  // Context menu: the menu action, as QuickContextMenuActions runs it, with
+  // the scripts named in scripts and the CAS filter on or off.
+  Q_INVOKABLE void toggleContextMenu(const QStringList &scripts, bool casFilter);
+  // Crop mode: the crop panel request of the shell port, with screenSize.
+  // The fixture keeps the controller's image and image area in sync with
+  // the viewport and turns the viewer input off while it is active, as
+  // QuickCropActions does.
+  Q_INVOKABLE void toggleCrop(QSize screenSize);
+  Q_INVOKABLE void clearCropRequest();
+
+  // Folder view: a directory of count items (the first dirCount are
+  // folders) shown at path; thumbnails answered like the panel's.
+  Q_INVOKABLE void populateFolder(int count, int dirCount, const QString &path);
+  Q_INVOKABLE int deliverFolderThumbnails();
+  Q_INVOKABLE void clearFolderRequest();
+
+  // Dialog requests as QuickDialogPort starts them (without waiting).
+  Q_INVOKABLE bool requestConfirmation(const QString &title, const QString &message);
+  // mode: a FileReplaceMode value.
+  Q_INVOKABLE bool requestFileReplace(const QString &source, const QString &destination,
+                                      int mode, bool multiple);
+  Q_INVOKABLE bool requestResize(QSize originalSize, QSize desktopSize,
+                                 const QStringList &upscaylModels, bool useUpscayl);
+  Q_INVOKABLE bool requestText(const QString &title, const QString &label,
+                               const QString &initialText);
+  // Batch converter over paths, converting through the fixture's fake
+  // service; the counts and reports drive that service.
+  Q_INVOKABLE bool requestBatchConversion(const QStringList &paths);
+  Q_INVOKABLE int batchStartCount() const;
+  Q_INVOKABLE int batchCancelCount() const;
+  // state: a BatchQueueModel.ItemState value.
+  Q_INVOKABLE void reportBatchProgress(int index, int state, const QString &details);
+  Q_INVOKABLE void finishBatch(int succeeded, int failed, int total);
+  Q_INVOKABLE void cancelBatch(int succeeded, int failed, int total);
+  // Print dialog for a 400 x 200 image with these printers (none: PDF only).
+  Q_INVOKABLE bool requestPrint(const QStringList &printers);
+  Q_INVOKABLE void clearDialogAnswer();
+  // Abandons every open dialog request.
+  Q_INVOKABLE void abandonDialogs();
+  // Settings window: opens it on page (SettingsEditorModel.Page) with the
+  // stored values; closes it and its sub-dialogs without applying.
+  Q_INVOKABLE void openSettings(int page);
+  Q_INVOKABLE void closeSettings();
+  // A field of a stored settings page ("general", "view", "theme",
+  // "controls", "advanced", "upscale"), as the store keeps it; an invalid
+  // value for an unknown page or field.
+  Q_INVOKABLE QVariant storedSetting(const QString &page, const QString &field) const;
+  Q_INVOKABLE void setStoredSetting(const QString &page, const QString &field,
+                                    const QVariant &value);
+  // Restores the stored values, shortcuts and scripts of a fresh fixture.
+  Q_INVOKABLE void resetSettingsStores();
+  // Key presses and text as the platform delivers them to window (shortcuts
+  // included).
+  Q_INVOKABLE void sendKey(QQuickWindow *window, int key);
+  Q_INVOKABLE void sendText(QQuickWindow *window, const QString &text);
+
+  // Path of fileName next to the test executable, for images the tests save
+  // for review.
+  Q_INVOKABLE QString artifactPath(const QString &fileName) const;
+
+private:
+  void connectFolderView();
+  void connectDialogs();
+
+  FakeActionDispatcher mDispatcher;
+  UiSettingsSnapshot mSettings;
+  bool mDark = true;
+  SettingsBridge mSettingsBridge;
+  ThemeBridge mThemeBridge;
+  ActionBridge mActionBridge;
+  ImageViewportController mViewport;
+  MainWindowShell mWindowShell;
+  OverlayCoordinator mOverlays;
+  QList<QUrl> mLastDroppedUrls;
+  QString mLastFileRequest;
+  ThumbnailListModel mThumbnails;
+  ThumbnailPanelController mThumbnailPanel;
+  QList<int> mUnansweredThumbnails;
+  int mThumbnailRequestCount = 0;
+  int mRequestedThumbnailCount = 0;
+  int mLastActivatedThumbnail = -1;
+  int mLastPinRequest = -1;
+  ContextMenuModel mContextMenu;
+  CropController mCrop;
+  QString mLastCropRequest;
+  ThumbnailListModel mFolderThumbnails;
+  FolderGridController mFolderGrid;
+  FolderViewController mFolderView;
+  std::unique_ptr<QFileSystemModel> mFolderTree;
+  QList<int> mUnansweredFolderThumbnails;
+  int mFolderThumbnailRequestCount = 0;
+  QString mLastFolderRequest;
+  int mScriptSettingsRequests = 0;
+  FakeBatchConversionService mBatchService;
+  DialogCoordinator mDialogs;
+  QString mLastDialogAnswer;
+  FakeSettingsValueStore mSettingsValues;
+  FakeShortcutScriptStore mShortcutScripts;
+  SettingsEditorModel mSettingsEditor;
+  SettingsDialogController mSettingsDialog;
+};

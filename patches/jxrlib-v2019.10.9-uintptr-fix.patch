@@ -1,0 +1,21 @@
+diff --git a/image/sys/ansi.h b/image/sys/ansi.h
+index 74900c9..0a06bbc 100644
+--- a/image/sys/ansi.h
++++ b/image/sys/ansi.h
+@@ -44,13 +44,9 @@
+ //================================
+ #define FORCE_INLINE
+ #define CDECL
+-#if __LP64__
+-#define UINTPTR_T unsigned long long
+-#define INTPTR_T long long
+-#else
+-#define UINTPTR_T unsigned int
+-#define INTPTR_T int
+-#endif
++#include <stdint.h>
++#define UINTPTR_T uintptr_t
++#define INTPTR_T intptr_t
+ 
+ 
+ //================================

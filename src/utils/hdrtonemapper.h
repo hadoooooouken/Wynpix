@@ -1,0 +1,53 @@
+#pragma once
+
+#include <QImage>
+#include <QString>
+#include <cstdint>
+
+enum class ToneMapOperator {
+    Bt2408 = 0,
+    ReinhardJodie = 1,
+    AcesFilmic = 2,
+    Hable = 3
+};
+
+struct HdrToneMapParams {
+    bool enabled = true;
+    ToneMapOperator op = ToneMapOperator::Bt2408;
+    float targetWhiteNits = 203.0f;
+
+    // Equal parameters produce equal SDR pixels (a built SDR copy is keyed on
+    // them).
+    bool operator==(const HdrToneMapParams &) const = default;
+};
+
+class HdrToneMapper {
+public:
+    // Checks whether the given image is an HDR image (via color space, floating-point
+    // pixel format, or HDR text attributes).
+    static bool isHdr(const QImage &image);
+
+    // Checks whether the given pixel format stores raw linear-light samples in
+    // floating point, i.e. the format the JXR/EXR/HDR/PFM plugins decode into.
+    // This is narrower than isHdr(): PQ/HLG-tagged HDR images are HDR but are
+    // NOT linear, so callers that need to know "is this raw data linear light"
+    // (e.g. before re-tagging a cached image's color space) should use this,
+    // not isHdr().
+    static bool isLinearFloatFormat(QImage::Format format);
+
+    // Returns a human-readable HDR profile description (e.g. "Rec.2100 PQ (HDR10)", "BT.2100 HLG"),
+    // or an empty QString if the image is SDR.
+    static QString detectHdrProfile(const QImage &image);
+
+    // Tone-maps an HDR image into an 8-bit SDR image in standard sRGB color space.
+    // If the input image is not HDR or tone-mapping fails, returns a fallback copy converted to ARGB32.
+    static QImage applyToneMapping(const QImage &srcImage, const HdrToneMapParams &params);
+
+    // HDR -> SDR for the CPU work on an image (editing, saving, copying,
+    // upscaling): tone mapped with params when params.enabled, otherwise (or
+    // when tone mapping fails) converted to integer sRGB. Either way the result
+    // is an integer sRGB image without the HDR_* metadata text; a null image
+    // when even the conversion fails. Works per pixel, so converting a crop
+    // gives the crop of the converted image.
+    static QImage toSdr(const QImage &hdr, const HdrToneMapParams &params);
+};

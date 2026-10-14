@@ -1,0 +1,78 @@
+#include <QDebug>
+#include <QFont>
+#include <QFontDatabase>
+#include <QGuiApplication>
+#include <QStringList>
+#include <QLatin1StringView>
+#include <QObject>
+#include <QQmlEngine>
+#include <QtQml/QQmlExtensionPlugin>
+#include <QtQuickTest/quicktest.h>
+
+#include "bridgetestfixture.h"
+
+// The wynpix.* QML modules are static; see gui/quick/quickuihost.cpp.
+Q_IMPORT_QML_PLUGIN(wynpix_bridgesPlugin)
+Q_IMPORT_QML_PLUGIN(wynpix_stylePlugin)
+Q_IMPORT_QML_PLUGIN(wynpix_uiPlugin)
+Q_IMPORT_QML_PLUGIN(wynpix_renderPlugin)
+
+namespace {
+using namespace Qt::StringLiterals;
+
+constexpr QLatin1StringView bridgesModule = "wynpix.bridges"_L1;
+constexpr QLatin1StringView testsModule = "wynpix.tests"_L1;
+
+// The offscreen platform finds no system fonts; the tests use the Windows UI
+// font at the size of the Windows default application font.
+constexpr QLatin1StringView uiFontFile = "C:/Windows/Fonts/segoeui.ttf"_L1;
+constexpr int uiFontPointSize = 9;
+
+void loadFont(const QString &file, bool makeApplicationFont) {
+  const int id = QFontDatabase::addApplicationFont(file);
+  const QStringList families =
+      id < 0 ? QStringList() : QFontDatabase::applicationFontFamilies(id);
+  if (families.isEmpty()) {
+    qWarning() << "QmlTestSetup: failed to load the font" << file;
+    return;
+  }
+  if (makeApplicationFont)
+    QGuiApplication::setFont(QFont(families.constFirst(), uiFontPointSize));
+}
+} // namespace
+
+// Gives every test engine its own fixture and publishes the fixture's bridges
+// as the wynpix.bridges singletons, as QuickUiHost does in the application.
+class QmlTestSetup : public QObject {
+  Q_OBJECT
+
+public slots:
+  // Registers a text font and the application's icon font (which the
+  // application loads from its resources through IconFontManager), so that
+  // the style tests lay out and draw text and glyphs.
+  void applicationAvailable() {
+    loadFont(uiFontFile, true);
+    loadFont(QStringLiteral(WYNPIX_ICON_FONT_FILE), false);
+  }
+
+  void qmlEngineAvailable(QQmlEngine *engine) {
+    // Owned by the engine (QObject parent): destroyed with it, after the
+    // engine's own QML teardown.
+    auto *fixture = new BridgeTestFixture(engine);
+    const bool registered =
+        engine->setExternalSingletonInstance(bridgesModule, "AppSettings"_L1,
+                                             &fixture->settingsBridge()) &&
+        engine->setExternalSingletonInstance(bridgesModule, "Theme"_L1,
+                                             &fixture->themeBridge()) &&
+        engine->setExternalSingletonInstance(bridgesModule, "Actions"_L1,
+                                             &fixture->actionBridge()) &&
+        engine->setExternalSingletonInstance(testsModule, "Fixture"_L1,
+                                             fixture);
+    if (!registered)
+      qFatal("QmlTestSetup: failed to register the test singletons");
+  }
+};
+
+QUICK_TEST_MAIN_WITH_SETUP(wynpix_qml_tests, QmlTestSetup)
+
+#include "main.moc"

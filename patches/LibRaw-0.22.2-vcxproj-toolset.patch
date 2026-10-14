@@ -1,0 +1,1373 @@
+diff --git a/buildfiles/4channels.vcxproj b/buildfiles/4channels.vcxproj
+index 50855bd4..03c0f0d7 100644
+--- a/buildfiles/4channels.vcxproj
++++ b/buildfiles/4channels.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{F68CBE78-B27A-3A05-BCD3-293E8CAC1C52}</ProjectGuid>
+     <RootNamespace>4channels</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\4channels.obj\</IntermediateDirectory>
+     <PrimaryOutput>4channels</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\4channels.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">4channels</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\4channels.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">4channels</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\4channels.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4channels</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\4channels.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4channels</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/dcraw_emu.vcxproj b/buildfiles/dcraw_emu.vcxproj
+index 053cbe4f..d4b51e59 100644
+--- a/buildfiles/dcraw_emu.vcxproj
++++ b/buildfiles/dcraw_emu.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{48688DB8-559A-3DE2-ADDE-5BD27BFEDDA2}</ProjectGuid>
+     <RootNamespace>dcraw_emu</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\dcraw_emu.obj\</IntermediateDirectory>
+     <PrimaryOutput>dcraw_emu</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\dcraw_emu.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">dcraw_emu</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\dcraw_emu.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">dcraw_emu</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\dcraw_emu.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dcraw_emu</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\dcraw_emu.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">dcraw_emu</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/dcraw_half.vcxproj b/buildfiles/dcraw_half.vcxproj
+index f528fc2f..1740443e 100644
+--- a/buildfiles/dcraw_half.vcxproj
++++ b/buildfiles/dcraw_half.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{C6EACFA3-9FC5-393B-BCF6-2874B05E4581}</ProjectGuid>
+     <RootNamespace>dcraw_half</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\dcraw_half.obj\</IntermediateDirectory>
+     <PrimaryOutput>dcraw_half</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\dcraw_half.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">dcraw_half</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\dcraw_half.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">dcraw_half</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\dcraw_half.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dcraw_half</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\dcraw_half.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">dcraw_half</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/libraw.vcxproj b/buildfiles/libraw.vcxproj
+index 8fa22901..d5f9205e 100644
+--- a/buildfiles/libraw.vcxproj
++++ b/buildfiles/libraw.vcxproj
+@@ -1,4 +1,4 @@
+-<?xml version="1.0" encoding="utf-8"?>
++﻿<?xml version="1.0" encoding="utf-8"?>
+ <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|x64">
+@@ -14,49 +14,51 @@
+     <ProjectGuid>{A71D2131-F425-381F-8A9A-29D60132A046}</ProjectGuid>
+     <RootNamespace>libraw</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+     <ConfigurationType>DynamicLibrary</ConfigurationType>
+     <IntermediateDirectory>debug-x86_64\libraw.obj\</IntermediateDirectory>
+     <PrimaryOutput>libraw</PrimaryOutput>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+     <ConfigurationType>DynamicLibrary</ConfigurationType>
+     <IntermediateDirectory>release-x86_64\libraw.obj\</IntermediateDirectory>
+     <PrimaryOutput>libraw</PrimaryOutput>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\libraw.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">libraw</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\libraw.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">libraw</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\libraw.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">libraw</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\libraw.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">libraw</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -66,13 +68,20 @@
+       <ExceptionHandling>Sync</ExceptionHandling>
+       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+       <ObjectFileName>debug-x86_64\libraw.obj\</ObjectFileName>
+-      <Optimization>Disabled</Optimization>
++      <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;LIBRAW_BUILDLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
++      <IntrinsicFunctions>true</IntrinsicFunctions>
++      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
++      <WholeProgramOptimization>true</WholeProgramOptimization>
++      <OpenMPSupport>true</OpenMPSupport>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
++      <FloatingPointModel>Fast</FloatingPointModel>
+     </ClCompile>
+     <Link>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+@@ -94,7 +103,7 @@
+       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;LIBRAW_BUILDLIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -107,11 +116,19 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;LIBRAW_BUILDLIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
++      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
++      <IntrinsicFunctions>true</IntrinsicFunctions>
++      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
++      <WholeProgramOptimization>true</WholeProgramOptimization>
++      <OpenMPSupport>true</OpenMPSupport>
++      <FloatingPointModel>Fast</FloatingPointModel>
+     </ClCompile>
+     <Link>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+@@ -235,4 +252,4 @@
+   </ItemGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets" />
+-</Project>
++</Project>
+\ No newline at end of file
+diff --git a/buildfiles/libraw.vcxproj.filters b/buildfiles/libraw.vcxproj.filters
+index e4daa944..d3912665 100644
+--- a/buildfiles/libraw.vcxproj.filters
++++ b/buildfiles/libraw.vcxproj.filters
+@@ -244,6 +244,18 @@
+     <ClCompile Include="..\src\demosaic\xtrans_demosaic.cpp">
+       <Filter>Source Files</Filter>
+     </ClCompile>
++    <ClCompile Include="..\src\decoders\pana8.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\src\decoders\olympus14.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\src\decoders\sonycc.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\src\decompressors\losslessjpeg.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
+   </ItemGroup>
+   <ItemGroup>
+     <ClInclude Include="..\internal\dcraw_defs.h">
+diff --git a/buildfiles/mem_image.vcxproj b/buildfiles/mem_image.vcxproj
+index a242e32e..d6c30192 100644
+--- a/buildfiles/mem_image.vcxproj
++++ b/buildfiles/mem_image.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{BF8A2750-B847-3BA6-9EAF-05F43380F46C}</ProjectGuid>
+     <RootNamespace>mem_image</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\mem_image.obj\</IntermediateDirectory>
+     <PrimaryOutput>mem_image</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\mem_image.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">mem_image</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\mem_image.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">mem_image</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\mem_image.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mem_image</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\mem_image.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mem_image</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/multirender_test.vcxproj b/buildfiles/multirender_test.vcxproj
+index 729f3ada..ae911bba 100644
+--- a/buildfiles/multirender_test.vcxproj
++++ b/buildfiles/multirender_test.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{30D21208-219A-3AA8-ADCF-E6B1FFAF6A73}</ProjectGuid>
+     <RootNamespace>multirender_test</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\multirender_test.obj\</IntermediateDirectory>
+     <PrimaryOutput>multirender_test</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\multirender_test.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">multirender_test</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\multirender_test.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">multirender_test</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\multirender_test.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">multirender_test</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\multirender_test.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">multirender_test</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/openbayer_sample.vcxproj b/buildfiles/openbayer_sample.vcxproj
+index 92cfcf6e..0fa09d00 100644
+--- a/buildfiles/openbayer_sample.vcxproj
++++ b/buildfiles/openbayer_sample.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{EF67FEF1-4B19-3765-A660-9F8E9333DEF3}</ProjectGuid>
+     <RootNamespace>openbayer_sample</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\openbayer_sample.obj\</IntermediateDirectory>
+     <PrimaryOutput>openbayer_sample</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\openbayer_sample.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">openbayer_sample</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\openbayer_sample.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">openbayer_sample</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\openbayer_sample.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">openbayer_sample</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\openbayer_sample.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">openbayer_sample</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/postprocessing_benchmark.vcxproj b/buildfiles/postprocessing_benchmark.vcxproj
+index a94e078b..8db1caa6 100644
+--- a/buildfiles/postprocessing_benchmark.vcxproj
++++ b/buildfiles/postprocessing_benchmark.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{5C66A8FA-D211-3E2F-A2F1-0C3C665689CC}</ProjectGuid>
+     <RootNamespace>postprocessing_benchmark</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\postprocessing_benchmark.obj\</IntermediateDirectory>
+     <PrimaryOutput>postprocessing_benchmark</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\postprocessing_benchmark.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">postprocessing_benchmark</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\postprocessing_benchmark.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">postprocessing_benchmark</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\postprocessing_benchmark.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">postprocessing_benchmark</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\postprocessing_benchmark.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">postprocessing_benchmark</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>libraw.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>libraw.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/raw-identify.vcxproj b/buildfiles/raw-identify.vcxproj
+index a3161372..e14d4063 100644
+--- a/buildfiles/raw-identify.vcxproj
++++ b/buildfiles/raw-identify.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{7C4F61DB-717E-36C9-B20E-36F8E218AB51}</ProjectGuid>
+     <RootNamespace>raw-identify</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\raw-identify.obj\</IntermediateDirectory>
+     <PrimaryOutput>raw-identify</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\raw-identify.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">raw-identify</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\raw-identify.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">raw-identify</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\raw-identify.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">raw-identify</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\raw-identify.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">raw-identify</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/rawtextdump.vcxproj b/buildfiles/rawtextdump.vcxproj
+index a2c44589..24034791 100644
+--- a/buildfiles/rawtextdump.vcxproj
++++ b/buildfiles/rawtextdump.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{53A1E3F0-8032-348E-B3BF-3E540A45005F}</ProjectGuid>
+     <RootNamespace>rawtextdump</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\rawtextdump.obj\</IntermediateDirectory>
+     <PrimaryOutput>rawtextdump</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\rawtextdump.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">rawtextdump</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\rawtextdump.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">rawtextdump</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\rawtextdump.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rawtextdump</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\rawtextdump.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">rawtextdump</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/simple_dcraw.vcxproj b/buildfiles/simple_dcraw.vcxproj
+index 4d1529de..a110d41b 100644
+--- a/buildfiles/simple_dcraw.vcxproj
++++ b/buildfiles/simple_dcraw.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{AD1E31D8-A022-3672-982F-C8280A0D6458}</ProjectGuid>
+     <RootNamespace>simple_dcraw</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\simple_dcraw.obj\</IntermediateDirectory>
+     <PrimaryOutput>simple_dcraw</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\simple_dcraw.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">simple_dcraw</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\simple_dcraw.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">simple_dcraw</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\simple_dcraw.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">simple_dcraw</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\simple_dcraw.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">simple_dcraw</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+diff --git a/buildfiles/unprocessed_raw.vcxproj b/buildfiles/unprocessed_raw.vcxproj
+index 11c64d33..364501fb 100644
+--- a/buildfiles/unprocessed_raw.vcxproj
++++ b/buildfiles/unprocessed_raw.vcxproj
+@@ -14,12 +14,12 @@
+     <ProjectGuid>{1333E21E-D3B5-3640-9A4D-D8955082B855}</ProjectGuid>
+     <RootNamespace>unprocessed_raw</RootNamespace>
+     <Keyword>Qt4VSv1.0</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>debug-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -27,8 +27,8 @@
+     <IntermediateDirectory>debug-x86_64\unprocessed_raw.obj\</IntermediateDirectory>
+     <PrimaryOutput>unprocessed_raw</PrimaryOutput>
+   </PropertyGroup>
+-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="Configuration">
+-    <PlatformToolset>v142</PlatformToolset>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <PlatformToolset>v145</PlatformToolset>
+     <OutputDirectory>release-x86_64\</OutputDirectory>
+     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+     <CharacterSet>NotSet</CharacterSet>
+@@ -38,25 +38,25 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings" />
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;" Label="PropertySheets">
+-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+   </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">debug-x86_64\unprocessed_raw.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">unprocessed_raw</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</IgnoreImportLibrary>
+-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\</OutDir>
+-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">release-x86_64\unprocessed_raw.obj\</IntDir>
+-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">unprocessed_raw</TargetName>
+-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</IgnoreImportLibrary>
+-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">false</LinkIncremental>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug-x86_64\unprocessed_raw.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">unprocessed_raw</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release-x86_64\unprocessed_raw.obj\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">unprocessed_raw</TargetName>
++    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
++    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+   </PropertyGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -77,7 +77,7 @@
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>debug-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+@@ -95,7 +95,7 @@
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ResourceCompile>
+   </ItemDefinitionGroup>
+-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <ClCompile>
+       <AdditionalIncludeDirectories>.;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+@@ -108,16 +108,18 @@
+       <Optimization>MaxSpeed</Optimization>
+       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <PreprocessToFile>false</PreprocessToFile>
+-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
++      <ProgramDataBaseFileName>
++      </ProgramDataBaseFileName>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+       <WarningLevel>TurnOffAllWarnings</WarningLevel>
++      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>ws2_32.lib;libraw.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <AdditionalLibraryDirectories>release-x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+-      <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+       <DataExecutionPrevention>true</DataExecutionPrevention>
+       <GenerateDebugInformation>false</GenerateDebugInformation>
+       <IgnoreImportLibrary>true</IgnoreImportLibrary>

@@ -1,0 +1,586 @@
+# SSE2 Release Build Plan
+
+Goal: ship two installers from one source tree:
+
+- `wynpix-setup.exe`: the current AVX2 build, unchanged in behavior and performance.
+- `wynpix-setup-sse2.exe`: a build that runs on x64 CPUs without AVX/AVX2, down to Intel
+  Core 2 (Merom).
+
+There is no separate long-lived branch. The ISA is a build parameter. Each variant has its own
+CMake build directory (its own `.sln`), its own dependency install tree and its own output folder.
+
+Work through the stages in order. Each stage is one atomic commit (or a few) and leaves the AVX2
+build working. Tick the status box when a stage is merged.
+
+## Key Facts
+
+- The instruction set in a binary is decided by compiler flags, not by the build machine. An SSE2
+  build compiled on an AVX2 machine runs on that machine too, because SSE2 is a subset of AVX2.
+- On MSVC, removing `/arch:AVX2` is **not enough**. `_mm256_*` intrinsics still compile without
+  the flag and crash with an illegal instruction on a CPU without AVX2. Every hand-written AVX2 path
+  needs a compile-time alternative.
+- MSVC predefines `__AVX2__` only under `/arch:AVX2`. That macro selects the code path.
+  ISA-selection `#if` blocks are allowed. The AGENTS.md rule against conditional compilation covers
+  OS/platform checks, not ISA checks.
+- Every shipped DLL must be built for the same ISA. One AVX2-compiled dependency (libjpeg-turbo,
+  LibRaw, ...) is enough to crash the SSE2 build on an old CPU.
+- Windows 11 24H2 itself requires SSE4.2/POPCNT. The SSE2 build therefore matters mainly for
+  Windows 10 machines.
+- Minimum CPU of the SSE2 build (decided 2026-10-14): Intel Core 2 Merom, i.e. SSE3 and SSSE3
+  but no SSE4.1. The compiler flag stays `/arch:SSE2`, because MSVC has no `/arch:SSSE3`. Code
+  outside `__AVX2__` guards must not use intrinsics newer than SSSE3; first-party code currently
+  uses only SSE2. AMD CPUs before Bulldozer (Athlon 64, Phenom) lack SSSE3 and are not a target:
+  no check covers them.
+
+## Current ISA Configuration
+
+| Area | Location | Current value |
+|---|---|---|
+| First-party targets | `cmake/WynpixMsvcPolicy.cmake:25` (`WYNPIX_MSVC_ISA_OPTIONS`) | `/arch:AVX2` |
+| ncnn base TUs | `CMakeLists.txt:84` (application ISA placed before ncnn's own `/arch:SSE2`) | AVX2 macros, runtime dispatch |
+| glslang | `CMakeLists.txt:86-90` via `wynpix_apply_msvc_profile` | `/arch:AVX2` |
+| External dependencies | `build_scripts/msvc-release-policy.json` (`isa.<ISA>.arch`, Stage 2) | `/arch:AVX2` (default `-Isa`) |
+| Dependency install trees | `formats/<lib>/install` (hardcoded in CMake files, see Stage 1) | single tree |
+| Output folder | `src/CMakeLists.txt:135`, `shellex/CMakeLists.txt:39` | `../release` |
+| Installer CPU check | `src/wynpix.iss`, `InitializeSetup` | aborts without AVX2 |
+
+Hand-written AVX2 code:
+
+| File | AVX2 code | Existing scalar code |
+|---|---|---|
+| `src/utils/hdrtonemapper.cpp` | primitives at lines 222-525, worker at 640+ | `*Scalar` helpers (lines 528-640) for row tails |
+| `src/utils/imagelib.cpp` | MKS fixed/general passes (130-390), `scaled_Smart`, `applyColorAdjustments` | scalar tails and the "Scalar fallback" loops |
+| `src/3rdparty/kimageformats/hdr.cpp` | `storeRgbePairAvx2` and the RGBE block loop (346-388) | `convertRgbeScalar` (330-344), full per-pixel path |
+| `src/3rdparty/djvudec/djvu.c` | already guarded by `#if defined(__AVX2__)` | already present |
+
+### Stage 0 Findings
+
+Audited 2026-10-11 against the `release/` folder from the 2026-10-10 build. Runtime-dispatched
+means that the code reaches AVX/AVX2 only after a CPUID check.
+
+Shipped binaries and their producers:
+
+| Binary | Producer | ISA source |
+|---|---|---|
+| `wynpix.exe` | target `wynpix` (`src/CMakeLists.txt`) | `WYNPIX_MSVC_ISA_OPTIONS`; statically links exiv2 (`build_exiv2.ps1`, policy JSON) |
+| `wynpixshellex.dll` | target `wynpixshellex` (`shellex/CMakeLists.txt`) | `WYNPIX_MSVC_ISA_OPTIONS`; statically links `libraw_static.lib` (`rebuild-all.ps1` LibRaw) |
+| `upscayl-ncnn.dll` | target `upscayl-ncnn` (root `CMakeLists.txt`) | `WYNPIX_MSVC_ISA_OPTIONS` + ncnn runtime dispatch + glslang |
+| `imageformats/kimg_*.dll` | `kimageformats_add_plugin` targets, copied by `wynpix` POST_BUILD (also `deploy-plugins.ps1`) | `WYNPIX_MSVC_ISA_OPTIONS` + statically linked codecs, see below |
+| `imageformats/qjpeg.dll` | `build_qjpeg_jpeg.ps1` -> `build_scripts/qjpeg_jpeg/install`, copied by POST_BUILD over the stock plugin | policy JSON |
+| `imageformats/qtiff.dll` | `build_qtiff_jpeg.ps1` -> `build_scripts/qtiff_jpeg/install`, copied by POST_BUILD over the stock plugin | policy JSON (libtiff statically linked) |
+| `jpeg62.dll` | `build_qtiff_jpeg.ps1` step `libjpeg-turbo` | policy JSON + NASM SIMD, runtime-dispatched |
+| `zlib1.dll` | `build_qtiff_jpeg.ps1` step `zlib` (zlib-ng, `ZLIB_COMPAT=ON`) | policy JSON, runtime-dispatched |
+| `deflate.dll` | `rebuild-all.ps1` libdeflate | policy JSON, runtime-dispatched |
+| `zstd.dll` | `rebuild-all.ps1` zstd | policy JSON (zstd's x64 asm/BMI2 paths are runtime-dispatched) |
+| `vcomp140.dll` | POST_BUILD copy from the MSVC redist | Microsoft, SSE2 baseline |
+| `Qt6*.dll`, `platforms/`, `styles/`, `iconengines/`, `generic/`, `networkinformation/`, `sqldrivers/`, stock `imageformats/q*.dll` | `windeployqt` POST_BUILD from `E:/Qt/6.12.0/msvc2022_64` | Qt SDK, see below |
+| `d3dcompiler_47.dll`, `dxcompiler.dll`, `dxil.dll` | `windeployqt` | Microsoft redistributables, SSE2 baseline |
+
+Statically linked codecs inside the plugins (all built with the policy JSON flags, so all need an
+SSE2 rebuild):
+
+| Plugin | Static dependency | Build script | Path used by CMake |
+|---|---|---|---|
+| `kimg_exr` | OpenEXR, Imath (+ `zstd.dll`, `deflate.dll`) | `rebuild-all.ps1` | `formats/{openexr,Imath,zstd}/install` |
+| `kimg_raw` | LibRaw | `rebuild-all.ps1` (nmake) | `formats/LibRaw/buildfiles/release-x86_64` |
+| `kimg_jxr` | jxrlib | `rebuild-all.ps1` | `formats/jxrlib/install` |
+| `kimg_heif`, `kimg_ff` | FFmpeg (`--enable-static --disable-shared`, x86asm runtime-dispatched) | `build_ffmpeg_msvc.py` | absolute `E:/wynpix/formats/ffmpeg/ffmpeg-build-msvc` |
+| `kimg_avif` | libavif + dav1d, aom (encoder), libyuv; all runtime-dispatched | `rebuild-all.ps1` | `formats/libavif/build/Release` (build tree, not install) |
+| `kimg_jxl` | libjxl, brotli, Highway (runtime-dispatched) | `rebuild-all.ps1` | `formats/libjxl/build/...` (build tree, not install) |
+| `kimg_jp2` | openjpeg | not in any script (setup-deps clones it; built by hand) | `formats/openjpeg/install` |
+| `kimg_jph` | OpenJPH | `rebuild-all.ps1` | `formats/OpenJPH/install` |
+| `kimg_png` | libspng (+ `zlib1.dll`) | `build_qpng_spng.ps1` | `formats/libspng/install` |
+| `kimg_7z`, `kimg_rar` | LZMA SDK, UnRAR | compiled in-tree (`wynpix_7z_sdk`, `wynpix_unrar_sdk`) | `WYNPIX_MSVC_ISA_OPTIONS` |
+
+Qt SDK minimum ISA: **SSE2, no custom Qt build is needed.**
+
+- `mkspecs/qmodule.pri` has an empty `QT_CPU_FEATURES.x86_64`. Qt was built without any `/arch`
+  baseline beyond x86-64, so the startup "Incompatible processor" check requires only SSE2.
+- `QT_COMPILER_SUPPORTS_SSE4_2/AVX2/AVX512*` in `qconfig.h` lists the runtime-dispatched variants
+  Qt compiled, not a baseline.
+- Disassembly cross-check of `Qt6Core.dll` (about 1.08M lines): 1 `popcnt`, 0 `crc32`,
+  6 `pcmpestri`/`pcmpistri`, 10 `pshufb`, 220 `ymm` lines, 0 FMA. Instruction counts this low
+  only occur in dispatched functions, so the baseline is SSE2.
+- The SDE smoke test in Stage 7 is the final runtime confirmation.
+
+ncnn: `NCNN_RUNTIME_CPU=ON` (option default in `upscayl-ncnn/src/ncnn/CMakeLists.txt:78`, and set
+in `out/build/wynpix-x64-release/CMakeCache.txt`), with `NCNN_AVX`, `NCNN_FMA`, `NCNN_F16C`,
+`NCNN_AVX2` and `NCNN_AVX512` on. Today's base TUs contain unguarded AVX2 code (the `__AVX2__`
+macro is leaked by the leading `/arch:AVX2`, see `CMakeLists.txt:73-80`), so the current
+`upscayl-ncnn.dll` would crash on a pre-AVX2 CPU even without the application code. With
+`/arch:SSE2` the base TUs fall back to SSE2 and the dispatched TUs are unchanged.
+
+`hdr.cpp`: a full scalar path exists. `convertRgbeScalar` already converts the row tail, and it is
+the only path for the half-float output format (`HDR_HALF_QUALITY`). Stage 5 only needs to guard
+`storeRgbePairAvx2` and the `if constexpr` block. `convertedPixelCount` then stays `0`, and the
+scalar call covers the whole row.
+
+`djvu.c`: confirmed safe. Under `__AVX2__` it enables `DJVU_IW44_AVX2` (including its SSSE3
+`_mm_shuffle_epi8` code at 4481-4516). Otherwise `_M_X64` selects the SSE2-only path through
+`<emmintrin.h>`.
+
+Corrections to the later stages found during the audit:
+
+1. **The `imagelib.cpp` "Scalar/SSE tails" are not SSE2.** The odd-pixel tails in all four MKS
+   passes (lines 201-214, 250-261, 314-326, 368-378) and in the `scaled_Smart` Gaussian pass
+   (1049-1113) use `_mm_cvtepu8_epi32` and `_mm_packus_epi32` (SSE4.1) and `_mm_fmadd_ps` and
+   `_mm_fmsub_ps` (FMA3). MSVC compiles these without `/arch` and they fault on an SSE2 CPU.
+   Stage 4 must replace them with true scalar helpers, used by the AVX2 tails and the `#else`
+   path, instead of reusing them. The truly scalar tails are those of the `scaled_Smart` upscale
+   passes (758+, 850+), its sharpen fallback (954-972) and the `applyColorAdjustments` fallback
+   (1433-1450).
+2. `scaled_Smart` has **four** AVX2 passes, and Stage 4 must guard all of them: upscale
+   horizontal (713-757), upscale vertical (813-849), sharpen (909-951) and downscale Gaussian
+   (1022-1094).
+3. Stage 1 must also make these paths ISA-specific: `build_scripts/qtiff_jpeg/install` and
+   `build_scripts/qjpeg_jpeg/install` (`src/CMakeLists.txt:199, 212`), the libavif and libjxl
+   **build** trees (`kimageformats/CMakeLists.txt:250-268`), the absolute FFmpeg prefix (line 234),
+   LibRaw `buildfiles/release-x86_64` in `kimg_raw` (line 208) as well as in shellex, and the
+   OpenMP DLL path. The OpenMP DLL is ISA-neutral and stays shared.
+4. Stage 2: `build_qtiff_jpeg.ps1` and `build_qjpeg_jpeg.ps1` also **deploy into the shared Qt SDK**
+   (`plugins/imageformats`, `bin/jpeg62.dll`). An SSE2 run must skip that deploy (use the existing
+   `-SkipDeploy` switch, or force it under `-Isa SSE2`). Otherwise it overwrites the AVX2
+   plugins that developers run against. openjpeg has no build script and needs one, or a
+   documented manual `-Isa SSE2` procedure.
+5. `windeployqt` also ships unused SQL drivers (`qsqlibase`, `qsqlmimer`, `qsqloci`, `qsqlpsql`,
+   `qsqlodbc`). This does not affect the ISA work, but it is an easy size reduction for both
+   installers.
+6. The QML branch adds Qt Quick/QML DLLs and `qml/` through the same `windeployqt` call from the
+   same SDK. The Qt conclusion above applies to them unchanged.
+
+---
+
+## Stage 0: Audit (no code changes)
+
+Status: [x] (findings in "Stage 0 Findings" above)
+
+1. List every binary that `release/` ships (`*.exe`, `*.dll`, `imageformats/*.dll`, other plugin
+   folders) and map each one to the script or CMake target that produces it.
+2. Confirm the minimum ISA of the Qt SDK in use (`E:/Qt/6.12.0/msvc2022_64`). QtCore aborts at
+   startup with "Incompatible processor" when the CPU lacks features Qt was compiled for. If the
+   official build requires more than SSE2, decide between a custom Qt build and raising the SSE
+   target to SSE4.2 for the whole plan.
+3. Confirm that ncnn is configured with `NCNN_RUNTIME_CPU=ON`, so the SSE2 build still uses AVX2
+   kernels on modern CPUs.
+4. For `hdr.cpp`, confirm whether a scalar path exists next to the AVX2 block loop.
+5. Record the findings in this file (the "Current ISA Configuration" section).
+
+Done when: every shipped binary has a known producer and ISA source, and the Qt question is
+resolved.
+
+## Stage 1: CMake ISA Option (first-party build)
+
+Status: [x]
+
+Files: `cmake/WynpixMsvcPolicy.cmake`, `CMakeLists.txt`, `src/CMakeLists.txt`,
+`src/utils/CMakeLists.txt`, `src/3rdparty/kimageformats/CMakeLists.txt`,
+`shellex/CMakeLists.txt`, `CMakePresets.json`.
+
+1. Add a validated cache variable in `WynpixMsvcPolicy.cmake`:
+   - `WYNPIX_ISA` (`STRING`, default `AVX2`, `STRINGS` property `AVX2;SSE2`).
+   - Fail with `FATAL_ERROR` on any other value.
+   - Derive `WYNPIX_MSVC_ISA_OPTIONS`: `/arch:AVX2` for AVX2, `/arch:SSE2` for SSE2.
+2. Derive from `WYNPIX_ISA`, in one place:
+   - `WYNPIX_DEPS_INSTALL_NAME`: `install` for AVX2, `install-sse2` for SSE2.
+   - `WYNPIX_RELEASE_DIR`: `${CMAKE_SOURCE_DIR}/release` for AVX2,
+     `${CMAKE_SOURCE_DIR}/release-sse2` for SSE2.
+3. Replace every hardcoded `formats/<lib>/install` path with
+   `formats/<lib>/${WYNPIX_DEPS_INSTALL_NAME}`. Known sites:
+   - `src/CMakeLists.txt`: 68, 83, 102, 290, 301, 319, 327
+   - `src/utils/CMakeLists.txt`: 3
+   - `src/3rdparty/kimageformats/CMakeLists.txt`: 185-187, 212, 286, 295, 307
+   - `shellex/CMakeLists.txt:52`: LibRaw `buildfiles/release-x86_64`; needs an ISA-specific
+     folder, defined together with Stage 2
+   - `CMakePresets.json`: `exiv2_DIR`
+4. Replace both `RUNTIME_OUTPUT_DIRECTORY_RELEASE` values with `WYNPIX_RELEASE_DIR`.
+5. Check `CMakeLists.txt:84`: with SSE2, `WYNPIX_MSVC_ISA_OPTIONS` is `/arch:SSE2`, so ncnn base
+   TUs fall back to SSE paths and its runtime dispatch still selects AVX/AVX2. Update the comment
+   to describe both variants.
+6. Add presets `wynpix-x64-release-sse2` (`WYNPIX_ISA=SSE2`, `exiv2_DIR` pointing to
+   `install-sse2`).
+
+Implementation notes:
+
+- ISA-dependent paths must be normal variables derived from `WYNPIX_ISA`, never `CACHE` entries.
+  A cache entry keeps the value of the first configure, so a later ISA change in the same build
+  directory would still link the other ISA's dependency. The former `WYNPIX_ZSTD_ROOT` cache
+  entry was replaced by `ZSTD_INSTALL_DIR` in `src/CMakeLists.txt`, which `utils/`, `kimg_exr`
+  and the `zstd.dll` deploy share. Existing build directories keep a stale, unused
+  `WYNPIX_ZSTD_ROOT` cache entry; it has no effect.
+- `exiv2_DIR` from the presets takes precedence over the `find_package` hint, so
+  `src/CMakeLists.txt` fails the configure when the exiv2 it found is not inside the current
+  ISA's install tree.
+- Use one build directory per ISA (one preset each). Changing `WYNPIX_ISA` in an existing build
+  directory is not a supported workflow.
+
+Done when: an AVX2 configure produces a byte-for-byte equivalent command line to today's build,
+and an SSE2 configure points every dependency path to `install-sse2` and outputs to
+`release-sse2`.
+
+Commit: `Add WYNPIX_ISA build option with per-ISA dependency and output directories`
+
+## Stage 2: ISA Parameter in Dependency Build Scripts
+
+Status: [x]
+
+Files: `build_scripts/msvc-release-policy.json`, `build_scripts/MsvcPolicy.ps1`,
+`build_scripts/rebuild-all.ps1`, `build_exiv2.ps1`, `build_qjpeg_jpeg.ps1`,
+`build_qpng_spng.ps1`, `build_qtiff_jpeg.ps1`, `deploy-plugins.ps1`, `setup-deps.ps1`,
+`build_ffmpeg_msvc.py`.
+
+1. Move the ISA flag out of `compile` in `msvc-release-policy.json` into a map:
+   `"isa": { "AVX2": "/arch:AVX2", "SSE2": "/arch:SSE2" }`.
+2. `MsvcPolicy.ps1`: `Get-MsvcPolicyCMakeArgs -Isa <AVX2|SSE2>` (default `AVX2`) builds the flag
+   string from `isa[Isa]` + `compile`. Also expose a helper that returns the install and build
+   folder names for an ISA (`install` / `install-sse2`, `build` / `build-sse2`).
+3. Every script gets `-Isa` (`ValidateSet("AVX2","SSE2")`, default `AVX2`) and uses the helper
+   instead of literal `install` / `build` folder names.
+4. `build_ffmpeg_msvc.py`: add `--isa` with the same values and read the flag from the same JSON
+   map. The SSE2 prefix is `formats/ffmpeg/ffmpeg-build-msvc-sse2`.
+5. LibRaw (nmake `buildfiles/release-x86_64`): the SSE2 build goes to
+   `buildfiles/release-x86_64-sse2`, which `kimg_raw` and `shellex` already expect (Stage 1).
+6. libjpeg-turbo and zlib-ng have their own runtime SIMD dispatch. Build them with the plain SSE2
+   baseline and keep their SIMD options enabled.
+
+Stage 1 derives every ISA-specific folder from `WYNPIX_DEPS_SUFFIX` (empty for AVX2, `-sse2` for
+SSE2): `install<suffix>`, `build<suffix>` (libavif, libjxl), `release-x86_64<suffix>` (LibRaw),
+`ffmpeg-build-msvc<suffix>`, and `build_scripts/{qtiff_jpeg,qjpeg_jpeg}/install<suffix>`. The
+scripts must produce exactly these names.
+
+Implementation notes:
+
+- Each `isa` entry in the policy JSON is an object, `{ "arch": "/arch:SSE2", "deps_suffix": "-sse2" }`,
+  so `build_ffmpeg_msvc.py` and the PowerShell scripts share both the flag and the folder
+  suffix. `deps_suffix` must stay equal to `WYNPIX_DEPS_SUFFIX` in `cmake/WynpixMsvcPolicy.cmake`.
+  The `arch` flag is placed before `compile`, so the AVX2 command lines are unchanged.
+- `MsvcPolicy.ps1` exposes `Get-MsvcPolicyCMakeArgs -Isa`, `Get-MsvcPolicyCompileFlags -Isa`
+  (LibRaw nmake) and `Get-IsaFolderName -BaseName -Isa`. Intermediate build folders get the
+  suffix too (`build_msvc-sse2`, `build-msvc-sse2`, `qtiff_jpeg/build-sse2`), so both ISAs can
+  stay configured side by side.
+- `build_qtiff_jpeg.ps1` and `build_qjpeg_jpeg.ps1` deploy into the shared Qt SDK only for the
+  default ISA (`$MSVC_DEFAULT_ISA`). With `-Isa SSE2` they update only `release-sse2`.
+- openjpeg is now the `openjpeg` step of `rebuild-all.ps1`, part of the default list. It uses
+  the hand-built configuration (static, no codec/JPIP/tests/docs, IPO) plus the shared policy.
+  The previous hand-built AVX2 `install` lacked the hardening flags; rebuild it once.
+- LibRaw's nmake build is in-tree. Each run cleans first, and only the copy into
+  `buildfiles/release-x86_64<suffix>` keeps the ISAs apart. FFmpeg is also built in-tree
+  (`make clean` first), so its prefix is the only per-ISA output.
+- libavif fetches its LOCAL codecs (dav1d, aom, libyuv) into the build folder, so the first
+  `-Isa SSE2` run downloads them again into `build-sse2`.
+- `deploy-plugins.ps1 -Isa SSE2` reads `out/build/wynpix-x64-release-sse2` and writes
+  `release-sse2`.
+- `.gitignore` covers `release-sse2/`, `build-sse2/` and `install-sse2/`.
+
+Done when: `rebuild-all.ps1` without `-Isa` behaves exactly as before (plus the new openjpeg
+step), and `-Isa SSE2` fills only `install-sse2` / `build-sse2` folders.
+
+Commit: `Add ISA parameter to dependency build scripts`
+
+## Stage 3: HDR Tone Mapper Fallback
+
+Status: [x]
+
+File: `src/utils/hdrtonemapper.cpp`.
+
+1. Keep the `__m256` primitives and AVX2 worker loop inside `#if defined(__AVX2__)`.
+2. In `#else`, process whole rows with the existing `*Scalar` helpers (the code that already
+   handles row tails). Do not duplicate the math. Restructure so AVX2 and SSE2 share the scalar
+   helpers.
+3. Guard `#include <immintrin.h>` usage accordingly. SSE2 intrinsics are not required in this
+   stage; MSVC auto-vectorizes simple scalar loops with SSE2.
+4. Verify visually: the same HDR/EXR/AVIF-PQ files on both builds. Small rounding differences
+   are expected, because FMA in AVX2 is not used in the scalar path.
+
+Implementation notes:
+
+- The per-pixel loop in `ToneMapTask::run()` was already the AVX2 build's path for
+  premultiplied, 8-bit and narrow (< 8 px) rows. Only `<immintrin.h>`, the `__m256` primitives
+  and the vectorized row branch are guarded. Non-AVX2 builds send every row through that loop,
+  so no math is duplicated. The AVX2 build's vectorized path is unchanged.
+- Fixed while auditing that loop: the premultiplied FP16 branch divided by alpha and then
+  discarded the result (the LUT lookup re-read the original half bits). It now un-premultiplies,
+  clamps and re-quantizes to half before the lookup, like the FP32 branch.
+- Known scalar/AVX2 difference (unchanged): for FP32 input the AVX2 path converts to half
+  without clamping, so values above 65504 become `inf` and map to 0 (black) through the LUT.
+  The scalar path clamps them to 65504. This only affects extreme linear values.
+
+Commit: `Add scalar fallback for HDR tone mapping in non-AVX2 builds`
+
+## Stage 4: Image Scaling and Color Adjustment Fallback
+
+Status: [x]
+
+File: `src/utils/imagelib.cpp`.
+
+Scaler coverage (`ImageLib::scaled` dispatch, line ~542):
+
+| Filter | Implementation | Stage 4 work |
+|---|---|---|
+| Nearest, Bilinear | `scaled_Qt` -> `QImage::scaled` | None. Qt dispatches its SIMD at runtime. |
+| Smart | `scaled_Smart`, four AVX2 passes | Yes (step 3). |
+| MKS2021 | `scaled_MKS2021`, four AVX2 passes | Yes (steps 1-2). |
+| Upscayl (ncnn) | `upscayl-ncnn.dll`, Vulkan | None. ncnn dispatches CPU code at runtime (Stage 7 allowlist). |
+
+1. Add SSE2-only per-pixel helpers (SSE2 is the x64 baseline) for the MKS horizontal and
+   vertical taps and for the `scaled_Smart` passes. The existing "Scalar/SSE tails" use
+   SSE4.1 and FMA3 (audit correction 1) and must not be reused in the `#else` path. The AVX2
+   builds use the same helpers for their odd trailing pixel.
+2. MKS2021: guard the vector loops of `mksHorizontalFixed`, `mksVerticalFixed`,
+   `mksHorizontalGeneral` and `mksVerticalGeneral` with `#if defined(__AVX2__)`. In `#else`, the
+   scalar helpers process every pixel. `scaled_MKS2021` (line ~1137) keeps its fixed/general
+   selection in one place.
+3. `scaled_Smart`: guard all four AVX2 passes (audit correction 2): upscale horizontal, upscale
+   vertical, sharpen and downscale Gaussian. In `#else`, the existing scalar loops (upscale,
+   sharpen "Scalar fallback") or the new Gaussian helper cover the full range.
+4. `applyColorAdjustments` (~1328): the AVX2 loop goes under `#if defined(__AVX2__)`, and the
+   existing "Scalar fallback" loop covers the full range in `#else`.
+5. Keep the per-pixel code in shared helpers instead of copying it into the `#else` branches.
+
+Implementation notes:
+
+- Helpers `unpackPixelSse2`, `accumulatePixelSse2` and `packPixelSse2` hold one pixel as four
+  float lanes. SSE4.1 `cvtepu8_epi32` is replaced by two SSE2 unpacks, SSE4.1 `packus_epi32` by
+  SSE2 `packs_epi32` (lanes are already clamped to [0, 255]), and FMA by `mul` + `add`. The
+  rounding matches the AVX2 loops (add 0.5, clamp, `cvtps2dq`).
+- Each former `if (x < W)` tail is now a `for (; x < W; ++x)` loop after the guarded AVX2
+  loop. It handles the odd trailing pixel in AVX2 builds and the whole row in SSE2 builds, so
+  no per-pixel math is duplicated.
+- The `scaled_Smart` upscale tails previously used plain C++ with truncation. They now use the
+  SSE2 helpers, so the AVX2 build's last odd column rounds like the rest of the row.
+- `applyColorAdjustments`: the AVX2 constants moved into the task lambda under the guard, so
+  the capture list no longer depends on the ISA. The sharpen pass and the color loop keep
+  their existing scalar loops.
+- Known AVX2/SSE2 difference: the `applyColorAdjustments` scalar loop rounds with
+  `int(v + 0.5)` (ties away from zero), the AVX2 loop with `cvtps2dq` (ties to even). In SSE2
+  builds every pixel goes through the scalar loop, so the builds can differ by 1 on exact ties
+  and through FMA rounding. Before the rounding fix below the AVX2 loop was also biased.
+
+Found during this stage (fixed on `qml` on 2026-10-14, separately from the SSE2 work):
+
+- **Rounding bias in all AVX2 resample/color loops and the SSE2 helpers.** They add
+  `kRoundOffset` (0.5) and then convert with `cvtps2dq`, which already rounds to nearest. The
+  result is rounded up twice: 10.3 becomes 11, and an exact 11.0 becomes 12. Fix: drop the
+  `+ 0.5` before `cvtps2dq` (or use truncating `cvttps2dq`) in all paths together, so AVX2
+  and SSE2 builds stay identical.
+  Fixed: the `+ 0.5` is removed from the MKS2021 passes, the four `scaled_Smart` passes, the
+  `applyColorAdjustments` AVX2 offset and `packPixelSse2`. The `kRoundOffset` constant is gone.
+  The CPU results now match the GPU `resample.frag` path (hardware round-to-nearest on the
+  8-bit target) and the render test reference (`std::round`). Outputs change by at most 1 level.
+- **Out-of-bounds read in the `scaled_Smart` sharpen pass when `W_dst == 1`.** The `x = 0`
+  border reads `rowC[1]` from a one-element buffer. This happens when a 1-pixel-wide image is
+  upscaled vertically. Fix: use `c` for the right neighbor when `W_dst == 1`.
+  Fixed as proposed; the right border already handled it this way.
+- Regression test: `tests/unit/tst_imagelib.cpp` (`ImageLibTests`) checks that Smart and
+  MKS2021 keep a flat image's levels when upscaling and downscaling, that Smart upscales a
+  one-pixel-wide column, and that a neutral colour adjustment keeps every pixel. All six cases
+  fail on the code before the fix. In the SSE2 build the suite also runs under SDE `-mrm`, which
+  covers the non-AVX2 paths of `imagelib.cpp` and `hdrtonemapper.cpp` without the UI.
+
+Commit: `Add scalar fallback for MKS scaling and color adjustments in non-AVX2 builds`
+
+## Stage 5: Radiance HDR Plugin Fallback
+
+Status: [x]
+
+File: `src/3rdparty/kimageformats/hdr.cpp`.
+
+1. Guard `storeRgbePairAvx2` and the gather-based block loop with `#if defined(__AVX2__)`.
+2. In `#else`, use the per-pixel RGBE conversion (existing scalar path, or add one based on
+   Stage 0 findings).
+
+Implementation notes:
+
+- No `#else` branch was needed. `<immintrin.h>`, `<type_traits>`, the AVX2-only constants
+  (`kRgbeExponentShift`, the block/store/lane constants), `storeRgbePairAvx2` and the
+  `if constexpr` block loop are under `#if defined(__AVX2__)`. Non-AVX2 builds leave
+  `convertedPixelCount` at 0, and the existing `convertRgbeScalar` converts the whole row.
+- The scalar path uses the same scale LUT and the same `channel * (scale * exposureScale)`
+  order as the AVX2 path, so FP32 output from both builds is bit-identical. The
+  `HDR_HALF_QUALITY` (FP16) path was already scalar-only and is unchanged.
+
+Commit: `Add scalar RGBE decode path for non-AVX2 builds`
+
+## Stage 6: Installer Variants
+
+Status: [x]
+
+File: `src/wynpix.iss`.
+
+1. Add an ISPP define with a default: `#ifndef Isa` / `#define Isa "AVX2"` / `#endif`.
+   Build the SSE2 installer with `iscc /DIsa=SSE2 wynpix.iss`.
+2. Per variant:
+   - `OutputBaseFilename`: `wynpix-setup` / `wynpix-setup-sse2`.
+   - `[Files]` source folder: `..\release` / `..\release-sse2` (one `#define` used by all
+     `Source:` lines).
+   - `InitializeSetup`: the AVX2 variant keeps the AVX2 check. Update `AVX2ErrorMsg` in all
+     languages to point to the SSE2 installer. The SSE2 variant has no CPU check.
+3. Keep the same `AppId`, so both variants install to the same location and replace each
+   other.
+
+Commit: `Build AVX2 and SSE2 installer variants from one script`
+
+## Stage 7: ISA Verification
+
+Status: [ ] (first version committed in `48b97861`; review findings 3-5 and 7 below are open)
+
+1. Add `build_scripts/check-isa.ps1 -Path <release dir>`:
+   - Run `dumpbin /disasm` on every `*.exe` / `*.dll`.
+   - Report files that contain `ymm` registers or VEX-encoded (`v`-prefixed) instructions.
+   - Allowlist files with confirmed runtime dispatch (ncnn inside `upscayl-ncnn.dll`,
+     libjpeg-turbo, zlib-ng). Their AVX code is reachable only after a CPUID check.
+   - Exit with a non-zero code on any unexpected file.
+2. Smoke test the SSE2 build under the Intel Software Development Emulator on a pre-AVX CPU model:
+   `sde -mrm -- release-sse2\wynpix.exe` (Core 2 Merom, the minimum CPU). Open at least JPEG,
+   PNG, TIFF, HEIC, AVIF, JXL, JXR, EXR, Radiance HDR, a RAW file, DjVu and an archive. Run
+   upscaling, color adjustments and MKS scaling. Any illegal-instruction fault fails the release.
+
+Implementation notes:
+
+- `check-isa.ps1` locates the MSVC `Hostx64\x64\dumpbin.exe` directly via `vswhere` (or imports
+  `vcvarsall.bat x64` if needed) and sets its working directory so `msvcdis140.dll` resolves
+  without requiring a pre-configured developer shell.
+- It parses disassembly line-by-line via process redirection, detecting VEX prefixes (`v*` except
+  legacy `verr`/`verw`), `ymm`/`zmm` registers, vector memory sizes (`ymmword`/`zmmword`), and
+  BMI instructions.
+- By default it terminates `dumpbin` on the first match per binary for fast scanning (~30s for the
+  entire 74-binary tree), with an optional `-FullCount` switch to count all occurrences.
+- Allowlisted categories: runtime-dispatched `upscayl-ncnn.dll`, `jpeg*.dll`, `zlib1.dll`,
+  `deflate.dll`, `zstd.dll`, statically linked plugins (`kimg_avif.dll`, `kimg_jxl.dll`,
+  `kimg_ff.dll`, `kimg_heif.dll`), Microsoft redistributables (`d3dcompiler_47.dll`, `dxcompiler.dll`,
+  `dxil.dll`, `vcomp140.dll`), and Qt SDK binaries/plugins.
+- Verified against the current AVX2 `release/` tree: all 31 first-party and static plugin binaries
+  fail under `-Isa SSE2` with offending instruction samples reported, and pass under `-Isa AVX2`.
+- Added `-Sde` switch to launch the Intel SDE pre-AVX CPU smoke test (`sde -mrm -- <exe>`).
+
+Review findings (2026-10-11; finding 7 added 2026-10-14; 1, 2 and 6 resolved). Findings 1-6
+were made before any `release-sse2/` tree existed.
+
+1. **False FAIL on every correct SSE2 first-party binary (blocking).** `msvcprt.lib` (the `/MD`
+   import library) statically contains the STL `vector_algorithms.obj`: 6319 `ymm` lines and
+   475 SSSE3/SSE4.1 lines, all behind an `__isa_available` check. Any binary that calls
+   `std::find`, `std::count`, `std::min_element`, `std::reverse` and similar links this code,
+   so `wynpix.exe`, `wynpixshellex.dll` and the `kimg_*` plugins report `[FAIL]` even when
+   built with `/arch:SSE2`. Binary-level "any VEX" detection cannot tell this dispatched code
+   from a real leak, and release builds have no PDBs for per-function attribution.
+2. **SSE3/SSSE3/SSE4.x are not detected.** Only VEX, `ymm`/`zmm` and BMI are matched. The Stage 0
+   bug class (`_mm_cvtepu8_epi32` -> `pmovzxbd`, `_mm_packus_epi32` -> `packusdw`, compiled
+   legacy-encoded without `/arch`) passes as `[OK]`.
+   Resolved 2026-10-14: the `-ObjDir` scan fails a first-party `.obj` on any instruction newer
+   than the Core 2 minimum (SSE4.1, SSE4.2, SSE4a, AES-NI, PCLMULQDQ, SHA, MOVBE, RDRAND, ADX)
+   and fails the whole verification. SSE3/SSSE3 are allowed. `popcnt`/`lzcnt` are reported for
+   review only, because the MSVC STL (`<bit>`, `std::bitset`) inlines them behind an
+   `__isa_available` check. Linked binaries are not checked for these instructions: the CRT
+   `vector_algorithms.obj` and the dispatched dependencies contain them legitimately.
+3. **Whole-file allowlist hides wrong-ISA dependencies.** `kimg_avif`, `kimg_jxl`, `kimg_heif`,
+   `kimg_ff`, `jpeg62`, `zlib1`, `deflate` and `zstd` pass unconditionally, although Stage 2
+   rebuilds every one of them with `-Isa SSE2`. A dependency built without `-Isa SSE2` (full
+   `/arch:AVX2` code) is not caught.
+4. **Silent pass on `dumpbin` failure.** The exit code is not checked and the number of parsed
+   instruction lines is not validated. If `dumpbin` fails (missing `msvcdis140.dll`, bad file),
+   the binary reports `[OK]`.
+5. **Mnemonic regex misparses.** `[0-9A-Fa-f\s]{2,}` with case-insensitive `-match` also consumes
+   mnemonics made of hex letters (`add`, `adc`, `dec`), so the first operand is captured as the
+   mnemonic. VEX detection still works because `v` is not a hex digit. The byte group should be
+   matched as `(?:[0-9A-F]{2} )+` with case-sensitive `-cmatch`.
+6. **SDE CPU model.** `-mrm` (Merom) supports SSSE3, so SSSE3 leaks do not fault; `-p4p`
+   (Pentium 4 Prescott, SSE3) was proposed.
+   Resolved 2026-10-14: Core 2 Merom is the minimum CPU, so `-mrm` is the correct model and
+   SSSE3 is allowed. `BUILDING.md` now uses `-mrm` as well.
+
+7. **CRT-DISP attribution does not cover statically linked prebuilt libraries.** The `-ObjDir`
+   scan sees only objects compiled in the CMake tree. `kimg_exr` (OpenEXR, Imath), `kimg_jph`
+   (OpenJPH) and `kimg_raw` (LibRaw) link prebuilt static libraries, so AVX found in them is
+   reported as `[CRT-DISP]` without proof that it comes from the CRT. OpenJPH has its own
+   CPUID dispatch, so AVX there is expected. A static library built without `-Isa SSE2` would
+   pass the same way. Until this is fixed, only the SDE run covers these three plugins.
+
+Proposed rework (pending confirmation):
+
+- First-party code: scan the `.obj` files of the SSE2 CMake build tree instead of linked binaries.
+  Each object maps to one source file, so the STL static objects are excluded and any VEX or
+  post-SSSE3 instruction in a first-party TU is a real leak. Allowlist only the ncnn runtime-dispatch
+  TUs by name.
+- Shipped binaries (including dependencies): detect whole-module `/arch:AVX*` compilation. MSVC
+  emits VEX encodings for all scalar float code under `/arch:AVX*` and legacy encodings without
+  it, so a module with VEX scalar float instructions and no legacy ones was compiled for AVX.
+  Dispatched SIMD code does not change this ratio.
+- Keep the SDE run (with `-mrm`) as the runtime check.
+
+Commit: `Add ISA verification script for release folders`
+
+## Stage 8: Release Procedure
+
+Status: [x]
+
+Document the steps in `BUILDING.md`:
+
+1. Dependencies: `rebuild-all.ps1` and the other scripts, once without `-Isa` and once with
+   `-Isa SSE2`. Rebuild them only when a dependency changes.
+2. Application: build presets `wynpix-x64-release` and `wynpix-x64-release-sse2`.
+3. Verification: `check-isa.ps1` on both release folders, plus the SDE smoke test on
+   `release-sse2`.
+4. Installers: `iscc wynpix.iss` and `iscc /DIsa=SSE2 wynpix.iss`.
+
+Commit: `Document the dual AVX2/SSE2 release procedure`
+
+## QML Branch Port
+
+Status: [x] (2026-10-14)
+
+The `qml` branch forked from `master` at `bb8df119` (Release 3.6.4), before this plan, and received
+the Stage 1-8 commits (`e2630ab7`..`81de3b27`) by cherry-pick. Line numbers quoted in the stages
+above refer to `master` and are not valid on `qml`.
+
+Differences from `master`:
+
+- `src/utils/hdrtonemapper.cpp`: `qml` replaced the local `InputTransfer`/`InputPrimaries`
+  enums with aliases of `HdrTransfer`/`HdrPrimaries` from `utils/hdrsource.h`, which the GPU
+  renderer shares. The aliases are kept, and `kHalfFloatMax` is added in front of them. The GPU
+  tone mapping path runs in shaders and has no ISA dependency.
+- `src/utils/imagelib.cpp`: the Stage 4 guards apply unchanged. `qml` only moved the color
+  adjustment matrix to `colorAdjustmentMatrix(const ColorAdjustments &)`, which contains no
+  intrinsics.
+- `.gitignore`: `build-sse2/`, `release-sse2/` and `install-sse2/` were already ignored on `qml`.
+- `check-isa.ps1`: the Qt Quick plugins that `windeployqt` deploys under `qml\` (16 DLLs, all
+  from the Qt SDK, none first-party) are allowlisted like the other Qt SDK plugin folders. The
+  first-party QML modules are static and linked into `wynpix.exe`, so the `.obj` scan covers
+  them. The qmlcachegen AOT output and the QML helper targets get the ISA baseline through
+  `wynpix_apply_msvc_directory_profile()`.
+
+Audit on `qml` after the port: the only first-party sources with intrinsics are still
+`imagelib.cpp`, `hdrtonemapper.cpp`, `kimageformats/hdr.cpp` and `djvudec/djvu.c`. Outside their
+`__AVX2__` guards (`DJVU_IW44_AVX2` and `DJVU_SCALER_AVX2` in `djvu.c`) they use only SSE2
+intrinsics. No CMake file outside `WynpixMsvcPolicy.cmake` sets `/arch`. All prebuilt dependency
+paths go through `WYNPIX_DEPS_INSTALL_NAME` / `WYNPIX_DEPS_SUFFIX`.
+
+First SSE2 build of `qml` (2026-10-14, dependencies from 2026-10-11): preset
+`wynpix-x64-release-sse2` built without warnings. `check-isa.ps1 -Path release-sse2 -ObjDir
+outuild\wynpix-x64-release-sse2` passed. 531 first-party `.obj` files were within the Core 2
+minimum, with no popcnt/lzcnt review entries. Of 97 binaries, 65 were clean, 26 allowlisted and
+6 `[CRT-DISP]` (`wynpix.exe`, `wynpixshellex.dll`, `kimg_exr`, `kimg_jph`, `kimg_rar`,
+`kimg_raw`; see Stage 7 finding 7). The SSE2 installer was built from this tree.
+
+SDE run on `qml` (2026-10-14, SDE 10.13.1, `-mrm`, after the rounding fix):
+
+- `wynpix_tests` of the SSE2 tree, with the plugins and DLLs of `release-sse2`: all 29 suites
+  ran without a chip-check error, `ImageLibTests` included. Only
+  `AnimationPlayerTests::scheduleMatchesMovieDelays` failed, on timing: `QMovie::nextFrameDelay()`
+  reported 58 or 53 ms instead of 60 in the slowed-down process.
+- With the Qt SDK on the plugin path, the test run hit AVX in `E:/Qt/.../imageformats/qjpeg.dll`
+  and `bin/jpeg62.dll`. These are the AVX2 builds that the dependency scripts deploy into the SDK,
+  not files of `release-sse2`. SDE test runs must load the plugins from `release-sse2`.
+- `wynpix.exe` from `release-sse2`, one launch per sample until the
+  `first document rendering settled` milestone: 29 samples (AVIF, AVCI, HEIF, HEJ2, JXL, JXR, JP2,
+  J2C, EXR, HDR, PFM, ARW, PSD, XCF, KRA, ORA, DDS, QOI, TGA, PCX, IFF, FF, JPEG, PNG, TIFF, GIF,
+  WebP, CBZ, 7z) opened without a chip-check error. DjVu was not covered (no sample available).
+- With the hardware D3D11 adapter, SDE aborts with `OSXSAVE BIT IS NOT SET IN CPUID`: the GPU
+  driver runs `xgetbv` because Windows reports XSAVE for the real CPU. The app run therefore uses
+  D3D11 WARP (`QSG_RHI_PREFER_SOFTWARE_RENDERER=1`), and `check-isa.ps1 -Sde` sets it.
+- Not covered by the run: Upscayl (ncnn Vulkan, same driver limitation) and the UI actions that
+  call the CPU scalers. `ImageLibTests` covers the scalers and the colour adjustment.
+
+## Maintenance Rule
+
+Any change to a function inside an `#if defined(__AVX2__)` block must also be applied to its
+`#else` branch in the same commit. Changes to the scalar helpers apply to both builds
+automatically.

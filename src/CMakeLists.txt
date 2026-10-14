@@ -1,0 +1,549 @@
+include(GNUInstallDirs)
+
+# djvudec is a plain-C decoder embedded into wynpix. The parent project
+# historically only needed C++, so explicitly enable C for the amalgamated
+# decoder instead of compiling djvu.c as C++.
+enable_language(C)
+
+add_library(djvudec STATIC
+    3rdparty/djvudec/djvu.c
+)
+target_include_directories(djvudec PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/djvudec"
+)
+set_target_properties(djvudec PROPERTIES
+    C_STANDARD 11
+    C_STANDARD_REQUIRED ON
+    C_EXTENSIONS OFF
+)
+wynpix_apply_msvc_profile(djvudec)
+wynpix_suppress_crt_deprecation(djvudec)
+
+# Fluent icon catalogue (FluentIcon enum and its codepoints). A library of its
+# own because wynpix, the wynpix.bridges QML module and the tests all use
+# it, and its Q_NAMESPACE meta-object must be generated exactly once.
+add_library(wynpix_fluenticons STATIC
+    utils/fluenticon.cpp
+    utils/fluenticon.h
+)
+target_include_directories(wynpix_fluenticons PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_features(wynpix_fluenticons PUBLIC cxx_std_23)
+target_link_libraries(wynpix_fluenticons PUBLIC Qt6::Core)
+# The wynpix.bridges module registers the enum with QML_FOREIGN_NAMESPACE;
+# qmltyperegistrar reads it from these metatypes.
+qt_extract_metatypes(wynpix_fluenticons)
+wynpix_apply_msvc_profile(wynpix_fluenticons)
+
+# UI-independent viewer components: zoom / pan / fit state, mouse
+# interaction, scaling filter selection, animation playback, SVG
+# rasterization, the file info
+# texts and the copy / move destinations. A library of its own because
+# wynpix, the wynpix.ui QML module (ImageViewportController, the overlay
+# models) and the tests all use them.
+add_library(wynpix_viewcomponents STATIC
+    components/animationplayer/animationplayer.cpp
+    components/animationplayer/animationplayer.h
+    # Rules and job of the batch converter dialog.
+    components/batchconverter/batchjob.h
+    components/batchconverter/batchjobrules.cpp
+    components/batchconverter/batchjobrules.h
+    components/copytargets/copytargetlist.cpp
+    components/copytargets/copytargetlist.h
+    # Printing of an image (the print dialog).
+    components/printing/imageprintsetup.cpp
+    components/printing/imageprintsetup.h
+    components/shellinfo/fileinfotext.cpp
+    components/shellinfo/fileinfotext.h
+    components/scalingfilter/scalingfilterselection.cpp
+    components/scalingfilter/scalingfilterselection.h
+    # The settings dialog's values, rules and view-models.
+    components/settingseditor/editorsession.cpp
+    components/settingseditor/editorsession.h
+    components/settingseditor/scripteditormodel.cpp
+    components/settingseditor/scripteditormodel.h
+    components/settingseditor/settingseditormodel.cpp
+    components/settingseditor/settingseditormodel.h
+    components/settingseditor/settingsoptions.cpp
+    components/settingseditor/settingsoptions.h
+    components/settingseditor/settingsscales.cpp
+    components/settingseditor/settingsscales.h
+    components/settingseditor/settingsstores.h
+    components/settingseditor/settingsvalues.h
+    components/settingseditor/shortcuteditormodel.cpp
+    components/settingseditor/shortcuteditormodel.h
+    components/settingseditor/shortcuttablemodel.cpp
+    components/settingseditor/shortcuttablemodel.h
+    components/svgrasterizer/svgrasterizer.cpp
+    components/svgrasterizer/svgrasterizer.h
+    components/viewtransform/viewportinteraction.cpp
+    components/viewtransform/viewportinteraction.h
+    components/viewtransform/viewtransform.cpp
+    components/viewtransform/viewtransform.h
+    components/viewtransform/viewtransformcontroller.cpp
+    components/viewtransform/viewtransformcontroller.h
+    # Upscayl and HDR tone mapping toggles of the viewer.
+    components/viewertoggles/viewertoggles.cpp
+    components/viewertoggles/viewertoggles.h
+    # Format categories of the folder view's format filter.
+    utils/formatgroups.cpp
+    utils/formatgroups.h
+    # Name filters of the "Save File as..." dialog.
+    utils/savefilefilters.cpp
+    utils/savefilefilters.h
+)
+target_include_directories(wynpix_viewcomponents PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_features(wynpix_viewcomponents PUBLIC cxx_std_23)
+if(MSVC)
+    # Same C++26 working-draft switch as wynpix.
+    target_compile_options(wynpix_viewcomponents PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:/std:c++latest>")
+endif()
+target_link_libraries(wynpix_viewcomponents PUBLIC Qt6::Core Qt6::Gui Qt6::Svg Qt6::PrintSupport)
+# The wynpix.ui module registers the settings editor types with QML_FOREIGN;
+# qmltyperegistrar reads them from these metatypes.
+qt_extract_metatypes(wynpix_viewcomponents)
+wynpix_apply_msvc_profile(wynpix_viewcomponents)
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# TRANSLATIONS
+find_package(Qt6 COMPONENTS LinguistTools REQUIRED)
+set(TS_FILES
+    "zh_CN.ts"
+    "uk_UA.ts"
+    "es_ES.ts"
+    "de_DE.ts"
+    "fr_FR.ts"
+    "tr_TR.ts"
+    "ja_JP.ts"
+    "ru_RU.ts"
+)
+list(TRANSFORM TS_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/res/translations/)
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION ${PROJECT_BINARY_DIR}/src/translations)
+
+
+
+# ADD EXECUTABLE
+add_executable(wynpix
+    appservices.cpp
+    apptranslator.cpp
+    appversion.cpp
+    core.cpp
+    main.cpp
+    settings.cpp
+    themestore.cpp
+    shortcutbuilder.cpp
+    resources.qrc
+    wynpix.rc
+    ${QM_FILES}
+)
+
+# zlib for PngTextChunkReader (zTXt inflate), qtiff.dll, and kimg_png.
+# All three use the shared zlib-ng DLL, so only the import library is needed.
+# NOTE: this is set() *before* add_subdirectory(3rdparty/kimageformats) below
+# on purpose -- CMake copies the parent's variables into a child directory's
+# scope only as of the moment add_subdirectory() is called, so kimg_png can
+# reuse ZLIB_IMPORT_LIB/ZLIB_INCLUDE_DIR directly only if this block runs first.
+# This is the single source of truth for the zlib-ng install path; don't
+# re-derive it with a second set() in 3rdparty/kimageformats/CMakeLists.txt.
+set(ZLIB_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/zlib-ng/${WYNPIX_DEPS_INSTALL_NAME}")
+set(ZLIB_IMPORT_LIB "${ZLIB_INSTALL_DIR}/lib/zlib.lib")
+set(ZLIB_INCLUDE_DIR "${ZLIB_INSTALL_DIR}/include")
+if(EXISTS "${ZLIB_IMPORT_LIB}")
+    target_include_directories(wynpix PRIVATE "${ZLIB_INCLUDE_DIR}")
+    target_link_libraries(wynpix PRIVATE "${ZLIB_IMPORT_LIB}")
+else()
+    message(SEND_ERROR "zlib-ng import library not found at: ${ZLIB_IMPORT_LIB} - run build_scripts/build_qtiff_jpeg.ps1 first")
+endif()
+
+# Shared zstd build: Blender previews (utils/), kimg_exr and the deployed
+# zstd.dll. Like ZLIB_INSTALL_DIR, this is the single source of truth for the
+# zstd install path and must be set before the add_subdirectory() calls below.
+# It is a normal variable on purpose: a cache entry would keep the path of the
+# first configured ISA.
+set(ZSTD_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/zstd/${WYNPIX_DEPS_INSTALL_NAME}")
+
+# exiv2 is built from source as a static library by build_scripts/build_exiv2.ps1
+# (Release and Debug in one install prefix). Its package config resolves the
+# private ZLIB dependency of a static build with find_dependency(ZLIB), which
+# ZLIB_ROOT points at the same zlib-ng install as above.
+if(EXIV2)
+    set(EXIV2_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/exiv2/${WYNPIX_DEPS_INSTALL_NAME}")
+    set(ZLIB_ROOT "${ZLIB_INSTALL_DIR}")
+    find_package(exiv2 REQUIRED CONFIG HINTS "${EXIV2_INSTALL_DIR}")
+
+    # exiv2_DIR (set by CMakePresets.json) takes precedence over HINTS, so a
+    # preset or cache entry from the other ISA would silently link the wrong
+    # build. Paths are compared case-insensitively, as Windows resolves them.
+    cmake_path(SET _exiv2_expected_root NORMALIZE "${EXIV2_INSTALL_DIR}")
+    cmake_path(SET _exiv2_found_dir NORMALIZE "${exiv2_DIR}")
+    string(TOLOWER "${_exiv2_expected_root}" _exiv2_expected_root)
+    string(TOLOWER "${_exiv2_found_dir}" _exiv2_found_dir)
+    cmake_path(IS_PREFIX _exiv2_expected_root "${_exiv2_found_dir}" _exiv2_matches_isa)
+    if(NOT _exiv2_matches_isa)
+        message(FATAL_ERROR "exiv2_DIR '${exiv2_DIR}' is not inside the ${WYNPIX_ISA} exiv2 install "
+                            "'${EXIV2_INSTALL_DIR}'")
+    endif()
+
+    get_target_property(_exiv2_type Exiv2::exiv2lib TYPE)
+    if(NOT _exiv2_type STREQUAL "STATIC_LIBRARY")
+        message(FATAL_ERROR "exiv2 must be the static build from build_scripts/build_exiv2.ps1 "
+                            "(found ${_exiv2_type} at ${exiv2_DIR})")
+    endif()
+
+    # Only Release and Debug are installed; the remaining configurations use
+    # the Release library, which shares their non-debug CRT.
+    set_target_properties(Exiv2::exiv2lib PROPERTIES
+        MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release
+        MAP_IMPORTED_CONFIG_MINSIZEREL Release
+    )
+endif()
+
+# libdeflate for fast PNG writing in batch converter (pre-built shared dll, loaded at runtime via QLibrary)
+set(LIBDEFLATE_DLL "${CMAKE_CURRENT_SOURCE_DIR}/../formats/libdeflate/${WYNPIX_DEPS_INSTALL_NAME}/bin/deflate.dll")
+if(EXISTS "${LIBDEFLATE_DLL}")
+    add_custom_command(TARGET wynpix POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${LIBDEFLATE_DLL}" "$<TARGET_FILE_DIR:wynpix>/"
+        COMMENT "Deploying deflate.dll (libdeflate) to output directory..."
+    )
+else()
+    message(WARNING "libdeflate DLL not found at: ${LIBDEFLATE_DLL} - batch PNG fast encoding will be unavailable")
+endif()
+
+# ADD SOURCES
+add_subdirectory(components)
+add_subdirectory(sourcecontainers)
+add_subdirectory(gui)
+add_subdirectory(utils)
+
+# update .ts, compile .qm
+# Placed after the source subdirectories so that the QML module targets
+# created under gui/quick exist; they contribute their .qml files to lupdate.
+qt_add_lupdate(
+    LUPDATE_TARGET wynpix_lupdate
+    TS_FILES ${TS_FILES}
+    # wynpix_viewcomponents holds UI texts too (settings editor, batch rules,
+    # viewer toggles, file info).
+    SOURCE_TARGETS wynpix wynpix_viewcomponents wynpix_ui wynpix_render wynpix_bridges
+    # Strings the sources no longer contain are dropped, not kept as vanished.
+    OPTIONS -no-obsolete
+)
+qt_add_lrelease(wynpix TS_FILES ${TS_FILES})
+
+add_subdirectory(3rdparty/miniz)
+add_subdirectory(3rdparty/kimageformats)
+
+# C++ STANDARD
+target_compile_features(wynpix PRIVATE cxx_std_23)
+
+if(MSVC)
+    # cxx_std_26 has no MSVC mapping in the current CMake; /std:c++latest is the
+    # C++26 working-draft switch.
+    target_compile_options(wynpix PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:/std:c++latest>")
+endif()
+
+wynpix_apply_msvc_profile(wynpix)
+wynpix_suppress_crt_deprecation(wynpix)
+
+set_target_properties(wynpix PROPERTIES
+    CXX_EXTENSIONS OFF
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${WYNPIX_RELEASE_DIR}"
+)
+
+# LINK STUFF
+target_link_libraries(wynpix PRIVATE 
+    Qt6::Core 
+    Qt6::Network 
+    Qt6::Svg 
+    Qt6::PrintSupport 
+    Qt6::Sql 
+    Qt6::Pdf
+    Qt6::Qml
+    Qt6::Quick
+    # QQuickStyle (the run-time style of Qt's Quick dialogs).
+    Qt6::QuickControls2
+    djvudec
+    # DwmSetWindowAttribute (cloaking the main window until it is ready).
+    dwmapi
+)
+
+# Qt Quick UI: static QML modules, imported through their static plugins
+# (Q_IMPORT_QML_PLUGIN in gui/quick/quickuihost.cpp).
+target_link_libraries(wynpix PRIVATE
+    wynpix_bridgesplugin
+    wynpix_styleplugin
+    wynpix_uiplugin
+    wynpix_renderplugin
+    wynpix_fluenticons
+    wynpix_viewcomponents
+)
+
+# OPTION DEFINITIONS, LINKING
+if(EXIV2)
+    target_link_libraries(wynpix PRIVATE Exiv2::exiv2lib)
+    # exiv2 generates its export header with STATIC_DEFINE exiv2lib_STATIC but
+    # does not propagate that definition to consumers of the static library;
+    # without it EXIV2API expands to __declspec(dllimport).
+    target_compile_definitions(wynpix PRIVATE USE_EXIV2 exiv2lib_STATIC)
+endif()
+
+
+# UPSCAYL SUPPORT
+target_link_libraries(wynpix PRIVATE upscayl-ncnn)
+
+
+# generate proper GUI program on specified platform
+if(MSVC) # Check if we are using the Visual Studio compiler
+    set_target_properties(wynpix PROPERTIES WIN32_EXECUTABLE ON)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_link_options(wynpix PRIVATE "-mwindows")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+    set(CMAKE_CXX_FLAGS "$ENV{CMAKE_CXX_FLAGS} -Wno-shift-negative-value")
+    set(CMAKE_EXE_LINKER_FLAGS "$ENV{CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
+    target_link_options(wynpix PRIVATE "-mwindows")
+else()
+    message(SEND_ERROR "You are using an unsupported Windows compiler! (Not MSVC or GCC)")
+endif(MSVC)
+
+## INSTALLATION
+install(TARGETS wynpix DESTINATION bin)
+
+# Install internationalization language files
+install(DIRECTORY "${PROJECT_BINARY_DIR}/src/translations" DESTINATION "${CMAKE_INSTALL_BINDIR}")
+
+# Automate deployment of ALL dependencies on Windows
+if(WIN32)
+    # 1. Qt dependencies
+    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${Qt6Core_DIR}/../../../bin")
+    if(WINDEPLOYQT_EXECUTABLE)
+        # windeployqt deploys every Qt Quick Controls style, because the
+        # QtQuick.Controls module lists them all as optional imports. The
+        # application only uses Basic (its own style is built on it, and
+        # QuickUiHost pins it as the run-time style), so the other styles,
+        # their libraries and the native style they need are removed again.
+        # The QtQuick.Dialogs implementation carries per-style variants of
+        # its dialogs for the same reason; only the Basic ones are loaded.
+        # "styles" are Qt Widgets style plugins; no QApplication loads them
+        # (skipped, and removed from earlier deployments).
+        set(_unused_controls_styles Fusion Imagine Material Universal FluentWinUI3 Windows)
+        set(_unused_dialog_styles Fusion Imagine Material Universal)
+        set(_unused_style_removals)
+        foreach(_style ${_unused_controls_styles})
+            list(APPEND _unused_style_removals
+                COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:wynpix>/qml/QtQuick/Controls/${_style}"
+                COMMAND ${CMAKE_COMMAND} -E rm -f
+                    "$<TARGET_FILE_DIR:wynpix>/Qt6QuickControls2${_style}.dll"
+                    "$<TARGET_FILE_DIR:wynpix>/Qt6QuickControls2${_style}StyleImpl.dll"
+            )
+        endforeach()
+        foreach(_style ${_unused_dialog_styles})
+            list(APPEND _unused_style_removals
+                COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:wynpix>/qml/QtQuick/Dialogs/quickimpl/qml/+${_style}"
+            )
+        endforeach()
+
+        # Plugin types the application never loads: QML debugging and
+        # profiling (qmltooling, which also pulls in Qt6Quick3DUtils), TUIO
+        # touch input (generic), network reachability (networkinformation;
+        # only local sockets are used), the virtual keyboard
+        # (platforminputcontexts) and Lottie vector images
+        # (vectorimageformats, which pull in Qt6Lottie and
+        # Qt6QuickVectorImage). The thumbnail cache only needs the SQLite
+        # driver. All of them are removed from earlier deployments as well,
+        # since windeployqt never deletes files it no longer deploys.
+        set(_skipped_plugin_types styles qmltooling generic networkinformation platforminputcontexts vectorimageformats)
+        set(_excluded_sql_drivers qsqlibase qsqlmimer qsqloci qsqlodbc qsqlpsql)
+        set(_unused_qt_libraries
+            Qt6Quick3DUtils Qt6VirtualKeyboard
+            Qt6Lottie Qt6LottieVectorImageGenerator
+            Qt6QuickVectorImage Qt6QuickVectorImageGenerator
+        )
+        # Empty module directories left behind by earlier deployments.
+        set(_empty_qml_module_dirs
+            QtQml/DesignSupport QtQml/StateMachine QtQml/XmlListModel
+            QtQuick/Controls/Native QtQuick/LocalStorage QtQuick/Particles
+            QtQuick/Pdf QtQuick/Scene2D QtQuick/Scene3D
+            QtQuick/Shapes/DesignHelpers QtQuick/Timeline QtQuick/tooling
+            QtQuick/VectorImage QtQuick/VirtualKeyboard
+        )
+        list(JOIN _skipped_plugin_types "," _skipped_plugin_types_arg)
+        list(JOIN _excluded_sql_drivers "," _excluded_sql_drivers_arg)
+        set(_unused_plugin_removals)
+        foreach(_plugin_type ${_skipped_plugin_types})
+            list(APPEND _unused_plugin_removals
+                COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:wynpix>/${_plugin_type}"
+            )
+        endforeach()
+        foreach(_driver ${_excluded_sql_drivers})
+            list(APPEND _unused_plugin_removals
+                COMMAND ${CMAKE_COMMAND} -E rm -f "$<TARGET_FILE_DIR:wynpix>/sqldrivers/${_driver}.dll"
+            )
+        endforeach()
+        foreach(_library ${_unused_qt_libraries})
+            list(APPEND _unused_plugin_removals
+                COMMAND ${CMAKE_COMMAND} -E rm -f "$<TARGET_FILE_DIR:wynpix>/${_library}.dll"
+            )
+        endforeach()
+        foreach(_module_dir ${_empty_qml_module_dirs})
+            list(APPEND _unused_plugin_removals
+                COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:wynpix>/qml/${_module_dir}"
+            )
+        endforeach()
+
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} --no-translations --no-compiler-runtime --no-opengl-sw
+                --skip-plugin-types ${_skipped_plugin_types_arg}
+                --exclude-plugins ${_excluded_sql_drivers_arg}
+                --qmldir "${CMAKE_CURRENT_SOURCE_DIR}/gui/quick" "$<TARGET_FILE:wynpix>"
+            COMMAND ${CMAKE_COMMAND} -E rm -f "$<TARGET_FILE_DIR:wynpix>/vc_redist.x64.exe"
+            COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:wynpix>/tls"
+            ${_unused_style_removals}
+            COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:wynpix>/qml/QtQuick/NativeStyle"
+            COMMAND ${CMAKE_COMMAND} -E rm -f "$<TARGET_FILE_DIR:wynpix>/Qt6QuickNativeStyle.dll"
+            ${_unused_plugin_removals}
+            COMMENT "Deploying Qt dependencies and cleaning up redistributable, unused styles and unused plugins..."
+        )
+    endif()
+
+    # 1b. Custom qtiff.dll with JPEG compression support (overrides stock after windeployqt)
+    set(CUSTOM_QTIFF_DLL "${CMAKE_CURRENT_SOURCE_DIR}/../build_scripts/qtiff_jpeg/${WYNPIX_DEPS_INSTALL_NAME}/qtiff.dll")
+    if(EXISTS "${CUSTOM_QTIFF_DLL}")
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CUSTOM_QTIFF_DLL}"
+                "$<TARGET_FILE_DIR:wynpix>/imageformats/qtiff.dll"
+            COMMENT "Deploying custom qtiff.dll with JPEG compression support..."
+        )
+    endif()
+
+    # 1c. Custom qjpeg.dll backed by shared libjpeg-turbo (overrides stock after windeployqt)
+    # Shares its JPEG codec with qtiff.dll above via the jpeg*.dll deployed in step 9c,
+    # instead of each plugin carrying its own copy of libjpeg-turbo.
+    set(CUSTOM_QJPEG_DLL "${CMAKE_CURRENT_SOURCE_DIR}/../build_scripts/qjpeg_jpeg/${WYNPIX_DEPS_INSTALL_NAME}/qjpeg.dll")
+    if(EXISTS "${CUSTOM_QJPEG_DLL}")
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CUSTOM_QJPEG_DLL}"
+                "$<TARGET_FILE_DIR:wynpix>/imageformats/qjpeg.dll"
+            COMMENT "Deploying custom qjpeg.dll backed by shared libjpeg-turbo..."
+        )
+    endif()
+
+    # 2. Exiv2 is linked statically into wynpix.exe; nothing to deploy.
+
+
+    # 5. kimageformats dependencies (safe check)
+    set(_kimg_plugins ani dds ff hdr iff pcx pic pfm psd pxr qoi ras rgb sct tim tga xcf exr raw avif jxl kra ora cbz 7z rar jxr heif jp2 jph png)
+    foreach(_plugin ${_kimg_plugins})
+        if(TARGET kimg_${_plugin})
+            add_dependencies(wynpix kimg_${_plugin})
+            message(STATUS "Linked plugin: kimg_${_plugin}")
+        endif()
+    endforeach()
+    
+    # 6. kimageformats plugins deployment
+    add_custom_command(TARGET wynpix POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:wynpix>/imageformats"
+        COMMENT "Preparing imageformats output directory..."
+    )
+    # Copy each plugin only if its target was actually built
+    set(_kimg_required_plugins ani dds ff hdr iff pcx pic pfm psd pxr qoi ras rgb sct tim tga xcf exr raw kra ora cbz 7z rar jp2 jph)
+    foreach(_plugin ${_kimg_required_plugins})
+        if(TARGET kimg_${_plugin})
+            add_custom_command(TARGET wynpix POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kimg_${_plugin}>" "$<TARGET_FILE_DIR:wynpix>/imageformats/"
+                COMMENT "Deploying kimg_${_plugin}..."
+            )
+        else()
+            message(WARNING "Plugin kimg_${_plugin} was not built, skipping deployment")
+        endif()
+    endforeach()
+    # Optional format plugins
+    if(TARGET kimg_heif)
+        add_custom_command(TARGET wynpix POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kimg_heif>" "$<TARGET_FILE_DIR:wynpix>/imageformats/")
+    endif()
+    if(TARGET kimg_avif)
+        add_custom_command(TARGET wynpix POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kimg_avif>" "$<TARGET_FILE_DIR:wynpix>/imageformats/")
+    endif()
+    if(TARGET kimg_jxl)
+        add_custom_command(TARGET wynpix POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kimg_jxl>" "$<TARGET_FILE_DIR:wynpix>/imageformats/")
+    endif()
+    if(TARGET kimg_jxr)
+        add_custom_command(TARGET wynpix POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kimg_jxr>" "$<TARGET_FILE_DIR:wynpix>/imageformats/")
+    endif()
+    if(TARGET kimg_png)
+        add_custom_command(TARGET wynpix POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kimg_png>" "$<TARGET_FILE_DIR:wynpix>/imageformats/")
+    endif()
+
+
+
+    # 7. Translation files deployment
+    add_custom_command(TARGET wynpix POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:wynpix>/translations"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/src/translations" "$<TARGET_FILE_DIR:wynpix>/translations"
+        COMMENT "Deploying translation files..."
+    )
+
+    # 8. Copy OpenMP runtime for LibRaw
+    set(OPENMP_DLL_PATH "E:/MVSC/VC/Redist/MSVC/14.51.36231/x64/Microsoft.VC145.OpenMP/vcomp140.dll")
+    if(EXISTS "${OPENMP_DLL_PATH}")
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENMP_DLL_PATH}" "$<TARGET_FILE_DIR:wynpix>/"
+            COMMENT "Deploying OpenMP runtime (vcomp140.dll)..."
+        )
+    else()
+        message(WARNING "OpenMP runtime NOT found at: ${OPENMP_DLL_PATH}")
+    endif()
+
+
+    # 9b. Copy zlib-ng shared library for qtiff.dll and wynpix.exe
+    set(ZLIB_DLL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../formats/zlib-ng/${WYNPIX_DEPS_INSTALL_NAME}/bin/zlib1.dll")
+    if(EXISTS "${ZLIB_DLL_PATH}")
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${ZLIB_DLL_PATH}" "$<TARGET_FILE_DIR:wynpix>/"
+            COMMENT "Deploying zlib-ng shared library (zlib1.dll)..."
+        )
+    else()
+        message(WARNING "zlib-ng DLL not found at: ${ZLIB_DLL_PATH}")
+    endif()
+
+    # 9c. Copy Zstandard shared library for Blender .blend previews
+    set(ZSTD_DLL_PATH "${ZSTD_INSTALL_DIR}/bin/zstd.dll")
+    if(EXISTS "${ZSTD_DLL_PATH}")
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${ZSTD_DLL_PATH}" "$<TARGET_FILE_DIR:wynpix>/"
+            COMMENT "Deploying Zstandard shared library (zstd.dll)..."
+        )
+    else()
+        message(WARNING "Zstandard DLL not found at: ${ZSTD_DLL_PATH}")
+    endif()
+
+    # 9d. Copy shared libjpeg-turbo library for qtiff.dll (via libtiff) and qjpeg.dll.
+    # Both plugins link against this one LTCG-optimized build (see
+    # build_scripts/build_qtiff_jpeg.ps1 Step 2 and build_qjpeg_jpeg.ps1) instead of
+    # each carrying a private static copy. Like zlib1.dll above, this has to sit next
+    # to the exe (not in imageformats/): Windows' default DLL search order covers the
+    # application directory but not a plugin's own directory.
+    # The DLL name is versioned (e.g. jpeg62.dll) by libjpeg-turbo's SO_MAJOR_VERSION,
+    # so it's resolved with a glob instead of being hardcoded.
+    file(GLOB _jpeg_dll_candidates "${CMAKE_CURRENT_SOURCE_DIR}/../formats/libjpeg-turbo/${WYNPIX_DEPS_INSTALL_NAME}/bin/jpeg*.dll")
+    if(_jpeg_dll_candidates)
+        list(GET _jpeg_dll_candidates 0 JPEG_DLL_PATH)
+        add_custom_command(TARGET wynpix POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${JPEG_DLL_PATH}" "$<TARGET_FILE_DIR:wynpix>/"
+            COMMENT "Deploying shared libjpeg-turbo library (${JPEG_DLL_PATH})..."
+        )
+    else()
+        message(WARNING "libjpeg-turbo shared DLL not found in: ${CMAKE_CURRENT_SOURCE_DIR}/../formats/libjpeg-turbo/${WYNPIX_DEPS_INSTALL_NAME}/bin - run build_scripts/build_qtiff_jpeg.ps1 -Steps libjpeg-turbo first")
+    endif()
+
+    # 10. Copy upscayl-ncnn DLL and models directory
+    add_custom_command(TARGET wynpix POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:upscayl-ncnn>" "$<TARGET_FILE_DIR:wynpix>/"
+        COMMENT "Deploying upscayl-ncnn DLL..."
+    )
+    add_custom_command(TARGET wynpix POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:wynpix>/models"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/../upscayl-ncnn/models" "$<TARGET_FILE_DIR:wynpix>/models"
+        COMMENT "Deploying Upscayl models directory..."
+    )
+endif()

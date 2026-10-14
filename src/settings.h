@@ -1,0 +1,361 @@
+#pragma once
+
+#include <memory>
+#include "themestore.h"
+#include "utils/script.h"
+#include <QGuiApplication>
+#include <QStyleHints>
+#include <QColor>
+#include <QDebug>
+#include <QDir>
+#include <QFont>
+#include <QFontMetrics>
+#include <QImageReader>
+#include <QKeySequence>
+#include <QMap>
+#include <QObject>
+#include <QPalette>
+#include <QSettings>
+#include <QStandardPaths>
+#include <QStringList>
+#include <QThread>
+#include <QVersionNumber>
+#include <atomic>
+#include <QReadWriteLock>
+
+#include "settings_types.h"
+#include "utils/hdrtonemapper.h"
+
+class Settings : public QObject {
+  Q_OBJECT
+public:
+  static constexpr int MinThumbnailerThreads = 1;
+  static constexpr int MaxThumbnailerThreads = 32;
+  static constexpr int MinPanelHideDelayMs = 0;
+  static constexpr int MaxPanelHideDelayMs = 2'000;
+  static constexpr int PanelHideDelayStepMs = 100;
+  static constexpr int DefaultPanelHideDelayMs = 600;
+  static constexpr int DefaultThumbnailCacheMaxSizeMB = 512;
+  static constexpr qint64 DefaultThumbnailCacheMaxEntries = 100'000;
+
+  static Settings *getInstance();
+  ~Settings();
+  QStringList supportedMimeTypes();
+  QList<QByteArray> supportedFormats();
+  QString supportedFormatsRegex();
+  int panelPreviewsSize();
+  void setPanelPreviewsSize(int size);
+  bool usePreloader();
+  void setUsePreloader(bool mode);
+  bool useUpscayl();
+  void setUseUpscayl(bool mode);
+  bool preloadUpscayl();
+  void setPreloadUpscayl(bool mode);
+  static QString defaultUpscaylModel();
+  QString upscaylModel();
+  void setUpscaylModel(const QString &model);
+  QString resizeUpscaylModel();
+  void setResizeUpscaylModel(const QString &model);
+  QString batchUpscaylModel();
+  void setBatchUpscaylModel(const QString &model);
+  bool upscaylLimitEnabled();
+  void setUpscaylLimitEnabled(bool enabled);
+  int upscaylLimitValue();
+  void setUpscaylLimitValue(int value);
+  bool resizeUseUpscayl();
+  void setResizeUseUpscayl(bool enabled);
+  QStringList availableUpscaylModels();
+  bool fullscreenMode();
+  void setFullscreenMode(bool mode);
+  bool standbyMode();
+  void setStandbyMode(bool mode);
+  // Hidden setting (no settings dialog entry yet); Direct3D 11 by default.
+  QuickGraphicsApi quickGraphicsApi();
+  void setQuickGraphicsApi(QuickGraphicsApi api);
+  ImageFitMode imageFitMode();
+  void setImageFitMode(ImageFitMode mode);
+  QRect windowGeometry();
+  void setWindowGeometry(QRect geometry);
+  PanelPosition panelPosition();
+  void setPanelPosition(PanelPosition);
+  bool loopSlideshow();
+  void setLoopSlideshow(bool mode);
+  void readShortcuts(QMap<QString, QString> &shortcuts);
+  void saveShortcuts(const QMap<QString, QString> &shortcuts);
+  bool panelEnabled();
+  void setPanelEnabled(bool mode);
+  int lastDisplay();
+  void setLastDisplay(int display);
+  bool squareThumbnails();
+  void setSquareThumbnails(bool mode);
+  bool transparencyGrid();
+  void setTransparencyGrid(bool mode);
+  bool enableSmoothScroll();
+  void setEnableSmoothScroll(bool mode);
+  bool enableSmoothZoom();
+  void setEnableSmoothZoom(bool mode);
+  bool useThumbnailCache();
+  void setUseThumbnailCache(bool mode);
+  QStringList savedPaths();
+  void setSavedPaths(QStringList paths);
+  QString tmpDir();
+  QString thumbnailCacheDir();
+  int thumbnailResolution();
+  void setThumbnailResolution(int size);
+  int thumbnailerThreadCount();
+  void setThumbnailerThreadCount(int count);
+  int thumbnailCacheMaxSizeMB();
+  void setThumbnailCacheMaxSizeMB(int mb);
+  qint64 thumbnailCacheMaxEntries();
+
+  void setExpandImage(bool mode);
+  bool expandImage();
+  ScalingFilter scalingFilter();
+  void setScalingFilter(ScalingFilter mode);
+  float casSharpening();
+  void setCasSharpening(float value);
+  float casContrast();
+  void setCasContrast(float value);
+
+  bool panelFullscreenOnly();
+  void setPanelFullscreenOnly(bool mode);
+  QVersionNumber lastVersion();
+  void setLastVersion(QVersionNumber &ver);
+  qreal backgroundOpacity();
+  void setBackgroundOpacity(qreal value);
+  void setSortingMode(SortingMode mode);
+  SortingMode sortingMode();
+  void readScripts(QMap<QString, Script> &scripts);
+  void saveScripts(const QMap<QString, Script> &scripts);
+  int folderViewIconSize();
+  void setFolderViewIconSize(int value);
+
+  bool firstRun();
+  void setFirstRun(bool mode);
+
+  void sync();
+  bool cursorAutohide();
+  void setCursorAutohide(bool mode);
+
+  bool infoBarFullscreen();
+  void setInfoBarFullscreen(bool mode);
+
+  bool windowTitleExtendedInfo();
+  void setWindowTitleExtendedInfo(bool mode);
+
+  bool maximizedWindow();
+  void setMaximizedWindow(bool mode);
+
+  bool keepFitMode();
+  void setKeepFitMode(bool mode);
+
+  int expandLimit();
+  void setExpandLimit(int value);
+
+  float zoomStep();
+  void setZoomStep(float value);
+  int JPEGSaveQuality();
+  void setJPEGSaveQuality(int value);
+  int pngSaveQuality();
+  void setPngSaveQuality(int value);
+  int modernSaveQuality();
+  void setModernSaveQuality(int value);
+  void setZoomIndicatorMode(ZoomIndicatorMode mode);
+  ZoomIndicatorMode zoomIndicatorMode();
+  void setFocusPointIn1to1Mode(ImageFocusPoint mode);
+  ImageFocusPoint focusPointIn1to1Mode();
+  void setDefaultCropAction(DefaultCropAction mode);
+  DefaultCropAction defaultCropAction();
+  bool placesPanel();
+  void setPlacesPanel(bool mode);
+
+  QStringList bookmarks();
+  void setBookmarks(QStringList paths);
+
+  QStringList formatFilter();
+  void setFormatFilter(QStringList extensions);
+  bool placesPanelBookmarksExpanded();
+  void setPlacesPanelBookmarksExpanded(bool mode);
+  bool placesPanelTreeExpanded();
+  void setPlacesPanelTreeExpanded(bool mode);
+
+  void setSlideshowInterval(int ms);
+  int slideshowInterval();
+
+  ImageScrolling imageScrolling();
+  void setImageScrolling(ImageScrolling mode);
+
+  int placesPanelWidth();
+  void setPlacesPanelWidth(int width);
+
+  ViewMode defaultViewMode();
+  void setDefaultViewMode(ViewMode mode);
+
+  FolderEndAction folderEndAction();
+  void setFolderEndAction(FolderEndAction mode);
+
+  const ColorScheme &colorScheme();
+  void setColorScheme(ColorScheme scheme);
+
+  ThemeMode themeMode();
+  void setThemeMode(ThemeMode mode);
+
+  qreal thumbnailOpacity();
+  void setThumbnailOpacity(qreal value);
+
+  bool useBlackBackground();
+  void setUseBlackBackground(bool mode);
+
+  void loadTheme();
+  void saveTheme();
+  bool hasCustomAccent() const { return mHasCustomAccent; }
+  void setHasCustomAccent(bool custom) { mHasCustomAccent = custom; }
+  void clearCustomAccent();
+
+
+  bool showSaveOverlay();
+  void setShowSaveOverlay(bool mode);
+  bool confirmDelete();
+  void setConfirmDelete(bool mode);
+  bool confirmTrash();
+  void setConfirmTrash(bool mode);
+
+  bool colorManagementEnabled();
+  void setColorManagementEnabled(bool enabled);
+  QString monitorColorProfileType();
+  void setMonitorColorProfileType(const QString &type);
+  QString monitorColorProfilePath();
+  void setMonitorColorProfilePath(const QString &path);
+
+  bool hdrToneMappingEnabled();
+  void setHdrToneMappingEnabled(bool enabled);
+  int hdrToneMappingOperator();
+  void setHdrToneMappingOperator(int op);
+  int hdrTargetWhiteLevel();
+  void setHdrTargetWhiteLevel(int nits);
+  // The CPU HDR -> SDR conversion the three settings above select. With tone
+  // mapping off, the operator and white level are left at their defaults so
+  // that they do not tell apart conversions that give the same pixels.
+  HdrToneMapParams hdrToneMapParams();
+
+
+
+  bool printLandscape();
+  void setPrintLandscape(bool mode);
+  bool printPdfDefault();
+  void setPrintPdfDefault(bool mode);
+  bool printColor();
+  void setPrintColor(bool mode);
+  bool printFitToPage();
+  void setPrintFitToPage(bool mode);
+  QString lastPrinter();
+  void setLastPrinter(QString name);
+  bool unloadThumbs();
+  void setUnloadThumbs(bool mode);
+  ThumbPanelStyle thumbPanelStyle();
+  void setThumbPanelStyle(ThumbPanelStyle mode);
+
+  bool autoResizeWindow();
+  void setAutoResizeWindow(bool mode);
+  int autoResizeLimit();
+  void setAutoResizeLimit(int percent);
+
+  bool panelPinned();
+  void setPanelPinned(bool mode);
+  int panelHideDelayMs();
+  void setPanelHideDelayMs(int delayMs);
+  int memoryAllocationLimit();
+  void setMemoryAllocationLimit(int limitMB);
+  bool panelCenterSelection();
+  void setPanelCenterSelection(bool mode);
+  QString language();
+  void setLanguage(QString lang);
+  bool showSubfoldersInPanel();
+  void setShowSubfoldersInPanel(bool mode);
+
+  QString defaultZoomLevels();
+  QString zoomLevels();
+  void setZoomLevels(QString levels);
+  bool useFixedZoomLevels();
+  void setUseFixedZoomLevels(bool mode);
+  bool unlockMinZoom();
+  void setUnlockMinZoom(bool mode);
+  bool sortFolders();
+  void setSortFolders(bool mode);
+  bool trackpadDetection();
+  void setTrackpadDetection(bool mode);
+
+  void setFolderIconSortingMode(SortingMode mode);
+  SortingMode folderIconSortingMode();
+
+  bool clickableEdges();
+  void setClickableEdges(bool mode);
+  bool clickableEdgesVisible();
+  void setClickableEdgesVisible(bool mode);
+
+  float mouseScrollingSpeed();
+  void setMouseScrollingSpeed(float value);
+
+  bool showHiddenFiles();
+  void setShowHiddenFiles(bool mode);
+
+  bool multiInstance();
+  void setMultiInstance(bool mode);
+
+  bool rememberLastFolder();
+  void setRememberLastFolder(bool mode);
+  QString lastFolder();
+  void setLastFolder(const QString &path);
+
+  QString excludedCachePaths();
+  void setExcludedCachePaths(QString paths);
+  bool isPathExcludedFromCache(const QString &path);
+
+
+private:
+  explicit Settings(QObject *parent = nullptr);
+  std::unique_ptr<QSettings> settingsConf, stateConf, themeConf;
+  std::unique_ptr<QDir> mTmpDir, mThumbCacheDir, mConfDir;
+  ColorScheme mColorScheme;
+  bool mHasCustomAccent = false;
+
+  void setupCache();
+
+  void initCache();
+
+  // Thread-safe cached values
+  std::atomic<bool> mCachedUseUpscayl{false};
+  std::atomic<bool> mCachedResizeUseUpscayl{false};
+  std::atomic<bool> mCachedPreloadUpscayl{false};
+  std::atomic<bool> mCachedUpscaylLimitEnabled{false};
+  std::atomic<int> mCachedUpscaylLimitValue{200};
+  std::atomic<int> mCachedMemoryAllocationLimit{2048};
+  std::atomic<int> mCachedThumbnailResolution{256};
+  std::atomic<int> mCachedThumbnailCacheMaxSizeMB{
+      DefaultThumbnailCacheMaxSizeMB};
+  std::atomic<qint64> mCachedThumbnailCacheMaxEntries{
+      DefaultThumbnailCacheMaxEntries};
+  std::atomic<bool> mCachedColorManagementEnabled{false};
+  std::atomic<bool> mCachedHdrToneMappingEnabled{true};
+  std::atomic<int> mCachedHdrToneMappingOperator{0};
+  std::atomic<int> mCachedHdrTargetWhiteLevel{203};
+  std::atomic<int> mCachedPngSaveQuality{3};
+  std::atomic<int> mCachedJPEGSaveQuality{95};
+  std::atomic<int> mCachedModernSaveQuality{90};
+
+  mutable QReadWriteLock mProfileLock;
+  QString mCachedMonitorColorProfileType;
+  QString mCachedMonitorColorProfilePath;
+
+  mutable QReadWriteLock mExcludedPathsLock;
+  QString mCachedExcludedCachePaths;
+  QStringList mCachedExcludedCachePathsList;
+
+signals:
+  void settingsChanged();
+
+public slots:
+  void sendChangeNotification();
+};
+
+extern Settings *settings;
