@@ -28,6 +28,8 @@ T.AbstractButton {
     readonly property int formatColumns: 4
     readonly property int formatIndent: 20
     readonly property int popupTopGap: 10
+    // Distance kept between the popup and the screen's right edge.
+    readonly property int popupRightGap: 20
     readonly property int controlRadius: 4
     readonly property int borderWidth: 2
     // Text and glyph on the accent field (Qt::white in the widget).
@@ -87,16 +89,39 @@ T.AbstractButton {
         }
     }
 
-    T.Popup {
+    Popup {
         id: popup
 
         y: control.height + control.popupTopGap
         popupType: T.Popup.Window
         padding: control.popupMargin
+        // Negative insets make the popup window large enough for the shadow;
+        // the frame keeps the popup's own size.
+        topInset: -StyleConstants.popupShadowMargin
+        bottomInset: -StyleConstants.popupShadowMargin
+        leftInset: -StyleConstants.popupShadowMargin
+        rightInset: -StyleConstants.popupShadowMargin
         closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent
 
-        background: PopupBackground {
-            radius: Theme.metrics.contextMenuBorderRadius
+        // Below the field, shifted left as far as needed to keep the gap to
+        // the screen's right edge.
+        onAboutToShow: {
+            const fieldX = control.mapToGlobal(0, 0).x;
+            const screenLeft = control.Screen.virtualX;
+            const screenRight = screenLeft + control.Screen.width;
+            const rightmostX = screenRight - control.popupRightGap - popup.width;
+            popup.x = Math.max(screenLeft, Math.min(fieldX, rightmostX)) - fieldX;
+        }
+
+        background: Item {
+            PopupBackground {
+                anchors.fill: parent
+                anchors.leftMargin: -popup.leftInset
+                anchors.rightMargin: -popup.rightInset
+                anchors.topMargin: -popup.topInset
+                anchors.bottomMargin: -popup.bottomInset
+                radius: Theme.metrics.contextMenuBorderRadius
+            }
         }
 
         contentItem: Column {
