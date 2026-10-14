@@ -29,6 +29,12 @@ struct OutputFormat {
 // The formats in the order the dialogs list them; JPEG first (the default).
 [[nodiscard]] QList<OutputFormat> outputFormats();
 
+// Whether a source file can be batch-converted. Container formats (archives),
+// multi-page documents, fonts, and Blender projects are excluded because the
+// converter's QImage load path has no multi-page extraction or format-hint
+// logic for them.
+[[nodiscard]] bool isBatchConvertible(const QString &filePath);
+
 enum class QualityKind : uint8_t {
     None,         // The format has no quality setting.
     Compression,  // PNG compression level.

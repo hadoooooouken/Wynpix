@@ -9,6 +9,7 @@
 
 #include "gui/quick/adapters/appbatchconversionservice.h"
 #include "gui/quick/ui/dialogs/dialogcoordinator.h"
+#include "components/batchconverter/batchjobrules.h"
 #include "settings.h"
 
 namespace {
@@ -86,12 +87,21 @@ TextInputResult QuickDialogPort::requestText(const TextInputRequest &request) {
 
 BatchConversionResult QuickDialogPort::runBatchConverter(const BatchConversionRequest &request) {
     BatchConverterDialogModel &dialog = *mDialogs.batchConverter();
+    // Drop files the batch converter cannot handle (containers, multi-page
+    // documents, fonts, Blender projects) so the queue shows only
+    // actionable items.
+    QList<QString> convertiblePaths;
+    convertiblePaths.reserve(request.filePaths.size());
+    for (const QString &path : request.filePaths) {
+        if (BatchJobRules::isBatchConvertible(path))
+            convertiblePaths.append(path);
+    }
+    if (convertiblePaths.isEmpty())
+        return {.conversionStarted = false};
     // The resize fields start from the first file, as in the widget dialog.
-    const QSize originalSize = request.filePaths.isEmpty()
-                                   ? QSize()
-                                   : QImageReader(request.filePaths.first()).size();
+    const QSize originalSize = QImageReader(convertiblePaths.first()).size();
     const BatchConverterDialogInput input{
-        .filePaths = request.filePaths,
+        .filePaths = convertiblePaths,
         .defaultOutputDirectory = request.defaultOutputDirectory,
         .originalSize = originalSize,
         .saveQualities = {.jpeg = mSettings.JPEGSaveQuality(),

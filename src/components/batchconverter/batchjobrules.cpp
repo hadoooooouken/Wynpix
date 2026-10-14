@@ -74,6 +74,20 @@ QList<OutputFormat> outputFormats() {
     };
 }
 
+bool isBatchConvertible(const QString &filePath) {
+    // Extensions the batch converter cannot handle: container formats that
+    // need explicit QImageReader format hints or multi-page extraction,
+    // font files, and Blender project files.
+    static const QStringList kUnsupportedExtensions = {
+        u"zip"_s,  u"cbz"_s,  u"7z"_s,   u"rar"_s,   // image archives
+        u"pdf"_s,  u"djvu"_s, u"djv"_s,               // multi-page documents
+        u"ttf"_s,  u"otf"_s,  u"ttc"_s,               // font files
+        u"blend"_s                                     // Blender projects
+    };
+    const QString suffix = QFileInfo(filePath).suffix().toLower();
+    return !kUnsupportedExtensions.contains(suffix);
+}
+
 QualityScale qualityScaleFor(QStringView extension) {
     if (isPngExtension(extension))
         return {.kind = QualityKind::Compression,
