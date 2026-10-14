@@ -20,7 +20,7 @@ A fast, Windows-optimized image viewer featuring high-quality CPU and GPU scalin
 
 * **Native Support for Modern Formats**: Out-of-the-box support for AVIF, HEIF/HEIC, JPEG XL (JXL), JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph), PSD, DDS, RAW, KRA, ORA, and QOI.
 
-* **Modern CPU Optimization**: Compiled with AVX2 support for high-speed image processing on modern processors.
+* **Modern CPU Optimization**: Compiled with AVX2 support for high-speed image processing on modern processors. A separate SSE2 build is available for older PCs (see [Installation](#installation)).
 
 * **Batch Image Converter**: Multi-threaded background queue to convert, resize, rename, adjust colors, and AI-upscale multiple images.
 
@@ -252,6 +252,7 @@ Wynpix is optimized exclusively for **Windows (64-bit)** to deliver maximum perf
 
 * **Installer (.exe)**: Run the installer to automatically set up the application, configure file associations, and create shortcuts.
 * **Portable Version**: Download the portable ZIP archive to run the application from any folder (all configuration is stored in the app folder).
+* **SSE2 Version for Older PCs**: The standard build requires a processor with AVX2 (Intel Haswell / AMD Excavator, 2013–2015 or newer), and its installer refuses to run without it. For older processors, download the files with the `-sse2` suffix (for example, `wynpix-setup-sse2.exe`) from the same release.
 
 Grab the latest version from the [latest release](https://github.com/hadoooooouken/wynpix/releases/latest) or browse the [releases page](https://github.com/hadoooooouken/wynpix/releases).
 
