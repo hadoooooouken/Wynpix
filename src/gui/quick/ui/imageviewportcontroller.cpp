@@ -18,6 +18,10 @@ namespace {
 // Delay before the settle pass after the view stops moving (the widget
 // viewer's high-quality rescale delay).
 constexpr int kSettleDelayMs = 80;
+constexpr int kSvgOverscanDivisor = 4;
+constexpr int kSvgOverscanAttempts = 5;
+constexpr int kSvgMaxViewportMultiplier = 2;
+constexpr qreal kSvgRasterScalePixelTolerance = 1.0;
 
 // Settings::hdrToneMappingOperator() -> renderer operator; the values are
 // the same (see imagerenderitem.cpp). Unknown values select BT.2408, as
@@ -691,9 +695,7 @@ void ImageViewportController::requestScaling() {
         return;
     }
     // Zooming continues; its end requests scaling again.
-    if (isZoomAnimating() || mPinching ||
-        mInteraction.mode() == ViewportInteraction::Mode::Zoom ||
-        mInteraction.mode() == ViewportInteraction::Mode::WheelZoom) {
+    if (isSvgMotionActive()) {
         requestSvgRaster();
         return;
     }
@@ -761,7 +763,8 @@ bool ImageViewportController::requestSvgRaster() {
     if (mCrop == CropKind::SvgRaster &&
         !shownSvgRasterCoversVisibleRect())
         clearCrop();
-    if (mCrop == CropKind::SvgRaster && mShownSvgRaster == request) {
+    if (mCrop == CropKind::SvgRaster &&
+        svgRasterMatchesCurrentView(mShownSvgRaster)) {
         if (mSvgRequestId != SvgRasterizer::kNoRequest) {
             mSvg.cancelRequests();
             mSvgRequestId = SvgRasterizer::kNoRequest;
@@ -778,11 +781,50 @@ bool ImageViewportController::requestSvgRaster() {
 
 SvgRasterRequest
 ImageViewportController::svgRasterRequestForCurrentView() const {
-    const QRect source = visibleOriginalImageRect();
+    const QRect visible = visibleOriginalImageRect();
     const float scale = currentScale();
-    return {.sourceRect = source,
+    const QRect imageBounds(QPoint(0, 0), mImage->size());
+    const QSize viewport = viewportSize();
+    const qreal dpr = windowDevicePixelRatio();
+    const QSize maxTargetSize(
+        qMax(1, qRound(viewport.width() * dpr * kSvgMaxViewportMultiplier)),
+        qMax(1, qRound(viewport.height() * dpr * kSvgMaxViewportMultiplier)));
+    const auto makeRequest = [scale](const QRect &source) {
+        return SvgRasterRequest{
+            .sourceRect = source,
             .targetSize = QSize(qRound(source.width() * scale),
                                 qRound(source.height() * scale))};
+    };
+
+    for (int attempt = 0; attempt < kSvgOverscanAttempts; ++attempt) {
+        const int divisor = kSvgOverscanDivisor << attempt;
+        const int marginX = visible.width() / divisor;
+        const int marginY = visible.height() / divisor;
+        const QRect source =
+            visible.adjusted(-marginX, -marginY, marginX, marginY)
+                .intersected(imageBounds);
+        const SvgRasterRequest request = makeRequest(source);
+        if (request.targetSize.width() <= maxTargetSize.width() &&
+            request.targetSize.height() <= maxTargetSize.height() &&
+            SvgRasterizer::isValidRequest(request, mImage->size()))
+            return request;
+    }
+    return makeRequest(visible);
+}
+
+bool ImageViewportController::svgRasterMatchesCurrentView(
+    const SvgRasterRequest &request) const {
+    const QRect &source = request.sourceRect;
+    if (source.isEmpty() ||
+        !source.contains(visibleOriginalImageRect()))
+        return false;
+    const qreal scale = currentScale();
+    const qreal scaleX = qreal(request.targetSize.width()) / source.width();
+    const qreal scaleY = qreal(request.targetSize.height()) / source.height();
+    return std::abs(scaleX - scale) * source.width() <
+               kSvgRasterScalePixelTolerance &&
+           std::abs(scaleY - scale) * source.height() <
+               kSvgRasterScalePixelTolerance;
 }
 
 bool ImageViewportController::shownSvgRasterCoversVisibleRect() const {
@@ -805,11 +847,20 @@ void ImageViewportController::onSvgRasterized(const SvgRaster &raster) {
         return;
     }
     const bool matchesCurrentView =
-        raster.request == svgRasterRequestForCurrentView();
+        svgRasterMatchesCurrentView(raster.request);
     if (!raster.request.sourceRect.contains(visibleOriginalImageRect())) {
-        if (!shownSvgRasterCoversVisibleRect())
+        if (mCrop == CropKind::SvgRaster &&
+            !shownSvgRasterCoversVisibleRect())
             clearCrop();
         requestSvgRaster();
+        return;
+    }
+    if (!matchesCurrentView &&
+        svgRasterMatchesCurrentView(mShownSvgRaster)) {
+        if (isSvgMotionActive() || mScaleTimer.isActive())
+            mView->update();
+        else
+            presentSettledFrame();
         return;
     }
     QImage image = raster.image;
@@ -823,6 +874,7 @@ void ImageViewportController::onSvgRasterized(const SvgRaster &raster) {
     if (isSvgMotionActive() || mScaleTimer.isActive() ||
         !matchesCurrentView) {
         mView->update();
+        // A pending settle timer will request the final-scale raster.
         if (isSvgMotionActive() || !matchesCurrentView)
             requestSvgRaster();
     } else {

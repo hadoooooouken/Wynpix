@@ -691,27 +691,41 @@ private slots:
     controller.setUpscaledCrop(*testImage(kSmallImage), QRect(QPoint(0, 0), kSmallImage));
     QCOMPARE(viewport.item.cropComposition(), CropComposition::Replace);
 
-    // Keep showing the last raster while a sharper one is rendered for the
-    // changed view.
-    const QRect previousSourceRect = viewport.item.cropSourceRect();
+    // At 1:1 the decoded image is the document. Zoom in again to request a
+    // raster smaller than the whole image, with an overscan border.
+    controller.fitOriginal();
+    QVERIFY(!viewport.item.hasUpscaledCrop());
     controller.zoomIn();
-    QVERIFY(viewport.item.hasUpscaledCrop());
-    QTRY_VERIFY_WITH_TIMEOUT(viewport.item.cropSourceRect() != previousSourceRect,
-                             kSvgTimeoutMs);
-    QTRY_COMPARE_WITH_TIMEOUT(viewport.item.cropSourceRect(),
-                              controller.visibleOriginalImageRect(),
-                              kSvgTimeoutMs);
-
-    // Zooming back out exposes source pixels outside the old crop. Show the
-    // decoded image until a raster covering the larger view is ready.
-    controller.zoomOut();
-    QTRY_VERIFY_WITH_TIMEOUT(!viewport.item.hasUpscaledCrop(), kSvgTimeoutMs);
     QTRY_VERIFY_WITH_TIMEOUT(viewport.item.hasUpscaledCrop(), kSvgTimeoutMs);
-    QTRY_COMPARE_WITH_TIMEOUT(viewport.item.cropSourceRect(),
-                              controller.visibleOriginalImageRect(),
-                              kSvgTimeoutMs);
+    QTRY_VERIFY_WITH_TIMEOUT(
+        viewport.item.cropSourceRect().width() >
+                controller.visibleOriginalImageRect().width() &&
+            viewport.item.cropSourceRect().height() >
+                controller.visibleOriginalImageRect().height(),
+        kSvgTimeoutMs);
 
-    // At 1:1 the decoded image is the document.
+    // Panning within the overscan keeps the SVG raster visible.
+    const QRect rasterSourceRect = viewport.item.cropSourceRect();
+    const QRect visibleBeforePan = controller.visibleOriginalImageRect();
+    controller.pointerPressed(kCentre, kLeft, kNoModifiers);
+    controller.pointerMoved(kCentre + QPointF(-10, 0), kLeft);
+    QVERIFY(controller.visibleOriginalImageRect() != visibleBeforePan);
+    QVERIFY(viewport.item.hasUpscaledCrop());
+    QCOMPARE(viewport.item.cropSourceRect(), rasterSourceRect);
+    QVERIFY(viewport.item.cropSourceRect().contains(
+        controller.visibleOriginalImageRect()));
+    controller.pointerReleased(kCentre + QPointF(-10, 0));
+
+    // The overscan keeps the old raster covering the view when zooming back
+    // out to the same scale.
+    controller.zoomIn();
+    QTRY_VERIFY_WITH_TIMEOUT(
+        qAbs(controller.currentScale() - 1.5625f) < kScaleTolerance,
+        kSvgTimeoutMs);
+    controller.zoomOut();
+    QVERIFY(viewport.item.hasUpscaledCrop());
+    QVERIFY(viewport.item.cropSourceRect().contains(
+        controller.visibleOriginalImageRect()));
     controller.fitOriginal();
     QVERIFY(!viewport.item.hasUpscaledCrop());
     QTest::qWait(kSvgQuietWaitMs);

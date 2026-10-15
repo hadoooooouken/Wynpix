@@ -310,6 +310,8 @@ private:
     // shown, so the settled frame can be presented now.
     bool requestSvgRaster();
     [[nodiscard]] SvgRasterRequest svgRasterRequestForCurrentView() const;
+    [[nodiscard]] bool svgRasterMatchesCurrentView(
+        const SvgRasterRequest &request) const;
     [[nodiscard]] bool shownSvgRasterCoversVisibleRect() const;
     [[nodiscard]] bool isSvgMotionActive() const;
     void onSvgRasterized(const SvgRaster &raster);
