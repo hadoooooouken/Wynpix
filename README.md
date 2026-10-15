@@ -1,10 +1,34 @@
-# Wynpix
+<p align="center">
+  <img src="src/res/icons/common/logo/app/wynpix.svg" width="96" alt="Wynpix logo" />
+</p>
 
-[![Version](https://img.shields.io/github/v/tag/hadoooooouken/wynpix?color=blue\&label=Version)](https://github.com/hadoooooouken/wynpix/releases/latest) ![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows\&logoColor=white) ![C++](https://img.shields.io/badge/C%2B%2B-26-00599C?logo=c%2B%2B\&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6.12-41CD52?logo=qt\&logoColor=white) ![CPU](https://img.shields.io/badge/CPU-AVX2-orange) ![GPU](https://img.shields.io/badge/GPU-Direct3D%2011%20%7C%2012%20%7C%20Vulkan-0696D7) ![AI Upscaling](https://img.shields.io/badge/AI_Upscaling-Upscayl%20\(Vulkan\)-8A2BE2)
+<h1 align="center">Wynpix</h1>
 
-A fast, Windows-optimized image viewer featuring high-quality GPU scaling, real-time AI upscaling (Upscayl), shader-based color adjustments, 360° spherical panorama viewing, HDR tone-mapping, and native support for modern image formats.
+<p align="center">
+  <a href="https://github.com/hadoooooouken/wynpix/releases/latest"><img src="https://img.shields.io/github/v/tag/hadoooooouken/wynpix?color=blue&label=Version" alt="Version" /></a>
+  <img src="https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white" alt="Platform" />
+  <img src="https://img.shields.io/badge/C%2B%2B-26-00599C?logo=c%2B%2B&logoColor=white" alt="C++" />
+  <img src="https://img.shields.io/badge/Qt-6.12-41CD52?logo=qt&logoColor=white" alt="Qt" />
+  <img src="https://img.shields.io/badge/CPU-AVX2-orange" alt="CPU" />
+  <img src="https://img.shields.io/badge/GPU-Direct3D%2011%20%7C%2012%20%7C%20Vulkan-0696D7" alt="GPU" />
+  <img src="https://img.shields.io/badge/AI_Upscaling-Upscayl%20(Vulkan)-8A2BE2" alt="AI Upscaling" />
+</p>
 
-**[Download Latest Release](https://github.com/hadoooooouken/wynpix/releases/latest)**
+---
+
+<p align="center">
+  <b>A fast, Windows-optimized image viewer built for speed, visual fidelity, and modern formats.</b><br>
+  Featuring real-time AI upscaling (Upscayl), GPU-accelerated MKS2021 scaling, shader color adjustments,<br>
+  360° spherical panorama viewing, HDR tone-mapping, ComfyUI workflow inspection, and a multi-threaded batch converter.
+</p>
+
+<p align="center">
+  <a href="https://github.com/hadoooooouken/wynpix/releases/latest"><b>Download Latest Release</b></a>
+</p>
+
+<p align="center">
+  <img src="screenshots/01_main_viewer.webp" alt="Wynpix Main Viewer" width="100%" />
+</p>
 
 ## Key features
 
@@ -111,6 +135,8 @@ The idea is to have an uncluttered, simple and easy to use UI. You can see UI el
 
 There is a pull-down panel with thumbnails, as well as folder view. You can also bring up a context menu via right click.
 
+![Wynpix Folder View with Folder Thumbnails](screenshots/02_folder_view.webp)
+
 ## Using quick copy / quick move panels
 
 Bring up the panel with C or M shortcut. You will see 9 destination directories, click on the folder icon to change them.
@@ -189,6 +215,28 @@ Wynpix integrates **[upscayl-ncnn](https://github.com/upscayl/upscayl-ncnn)** (N
 
 * **Settings & Hotkeys**: Configure everything under **Settings > AI Upscale**. Press **`Alt + I`** to instantly toggle AI upscaling and **`Alt + Shift + I`** to cycle through the installed models.
 
+![Real-Time AI Upscaling](screenshots/05_upscaling.webp)
+
+## Real-Time Color Adjustments
+
+Wynpix provides instant, lag-free adjustments calculated directly on the graphics card using GPU shaders:
+
+* **Interactive HUD Overlay**: Adjust Brightness, Contrast, Saturation, Hue, Exposure, Temperature, and Tint on the fly.
+* **Instant A/B Comparison**: Press and hold the **Compare** button to instantly see the original unadjusted image.
+* **Fast Reset & Apply**: Apply adjustments directly to your viewing session or double-click any slider to reset it to default.
+
+![Real-Time Shader Color Adjustments](screenshots/03_color_adjustments.webp)
+
+## 360-Degree Spherical Panorama View
+
+Interactive drag-and-look viewer for equirectangular 360° panoramic photographs:
+
+* **Smooth Navigation**: Click and drag to look around in full spherical 360° space; zoom with the mouse wheel.
+* **GPU-Accelerated**: Fluid real-time projection rendering, fully compatible with shader-based color adjustments.
+* **Hotkeys**: Press **`Shift + P`** to instantly enter or exit panorama mode.
+
+![360-Degree Spherical Panorama View](screenshots/04_panorama_360.webp)
+
 ## Batch Image Converter
 
 Multi-threaded background queue processor:
@@ -204,6 +252,17 @@ Multi-threaded background queue processor:
 * **Scaling Filters**: Supports CPU filters (Nearest, Bilinear, Smart sharpen, and MKS2021, the default) and **Vulkan-accelerated AI Upscaling (Upscayl)** using customizable models such as `4xLSDIRCompactC3`.
 
 * **Color Correction**: Applies Exposure, Contrast, Brightness, Saturation, Hue, Temperature, and Tint adjustments. Includes a one-click reset button to clear all sliders.
+
+![Batch Image Converter](screenshots/06_batch_converter.webp)
+
+## Image Info & ComfyUI Workflow Inspector
+
+Press **`I`** to open the comprehensive image information panel:
+
+* **Metadata & EXIF**: Inspect image dimensions, format, bit depth, color profile, and full camera EXIF attributes (lens, focal length, ISO, exposure time, aperture).
+* **ComfyUI Generation Data**: For PNG images generated with **ComfyUI**, Wynpix automatically detects embedded KSampler workflow metadata and displays model checkpoints, CLIP/VAE models, samplers, schedulers, seeds, steps, CFG scale, denoise settings, and full positive/negative prompt text in a clean structured view.
+
+![Image Info and ComfyUI Workflow Inspector](screenshots/07_image_info.webp)
 
 ## Display Color Management
 
