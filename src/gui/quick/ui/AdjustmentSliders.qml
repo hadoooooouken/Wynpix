@@ -28,10 +28,20 @@ GridLayout {
             required property int index
             required property string label
 
+            objectName: "adjustmentLabel_" + index
             text: label
             color: Theme.colors.textHc
             Layout.row: index
             Layout.column: 0
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton
+                onDoubleClicked: mouse => {
+                    mouse.accepted = true;
+                    grid.sliders.resetValue(index);
+                }
+            }
         }
     }
 
@@ -50,14 +60,33 @@ GridLayout {
             stepSize: 1
             snapMode: Slider.SnapAlways
             focusPolicy: Qt.NoFocus
+            objectName: "adjustmentSlider_" + index
             Layout.row: index
             Layout.column: 1
             Layout.fillWidth: true
 
-            onMoved: grid.sliders.setValue(slider.index, Math.round(slider.value))
+            function setValueAt(x) {
+                const handleRadius = slider.handle.width / 2;
+                const trackLength = slider.availableWidth - slider.handle.width;
+                const position = Math.max(0, Math.min(1,
+                    (x - handleRadius - slider.leftPadding) / trackLength));
+                const logicalPosition = slider.mirrored ? 1 - position : position;
+                grid.sliders.setValue(slider.index, Math.round(slider.valueAt(logicalPosition)));
+            }
 
-            TapHandler {
-                onDoubleTapped: grid.sliders.resetValue(slider.index)
+            MouseArea {
+                anchors.fill: parent
+                z: 1
+                acceptedButtons: Qt.LeftButton
+                onPressed: mouse => slider.setValueAt(mouse.x)
+                onPositionChanged: mouse => {
+                    if (pressed)
+                        slider.setValueAt(mouse.x);
+                }
+                onDoubleClicked: mouse => {
+                    mouse.accepted = true;
+                    grid.sliders.resetValue(slider.index);
+                }
             }
         }
     }
@@ -69,12 +98,22 @@ GridLayout {
             required property int index
             required property string valueText
 
+            objectName: "adjustmentValue_" + index
             text: valueText
             color: Theme.colors.textHc
             horizontalAlignment: Text.AlignRight
             Layout.row: index
             Layout.column: 2
             Layout.minimumWidth: grid.valueTextMinimumWidth
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton
+                onDoubleClicked: mouse => {
+                    mouse.accepted = true;
+                    grid.sliders.resetValue(index);
+                }
+            }
         }
     }
 }
