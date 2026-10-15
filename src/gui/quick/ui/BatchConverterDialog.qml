@@ -488,6 +488,7 @@ Window {
                                     required property int index
                                     required property var modelData
 
+                                    rowIndex: index
                                     Layout.fillWidth: true
                                     spec: modelData
                                     value: root.dialog.colorValues[index]

@@ -109,6 +109,42 @@ TestCase {
         compare(Fixture.lastDialogAnswer, "batch:0");
     }
 
+    function test_batchColorSliderDoubleClickResets() {
+        verify(Fixture.requestBatchConversion(sources()));
+        const window = openedWindow(batchIndex);
+        const dialog = Fixture.dialogs.batchConverter;
+        dialog.setColorEnabled(true);
+
+        const slider = findNamed(window.contentItem, "batchColorSlider_0");
+        const label = findNamed(window.contentItem, "batchColorLabel_0");
+        const firstValue = findNamed(window.contentItem, "batchColorValue_0");
+        const secondValue = findNamed(window.contentItem, "batchColorValue_1");
+        verify(slider !== null);
+        verify(label !== null);
+        verify(firstValue !== null);
+        verify(secondValue !== null);
+
+        const firstRight = firstValue.mapToItem(
+            window.contentItem, firstValue.width, 0).x;
+        const secondRight = secondValue.mapToItem(
+            window.contentItem, secondValue.width, 0).x;
+        verify(Math.abs(firstRight - secondRight) < 1,
+               "color value texts do not share a right edge");
+
+        dialog.setColorValue(0, 1.5);
+        compare(dialog.colorValues[0], 1.5);
+        mouseDoubleClickSequence(slider, slider.width / 2, slider.height / 2);
+        tryVerify(() => dialog.colorValues[0] === 0);
+
+        dialog.setColorValue(0, 1.5);
+        mouseDoubleClickSequence(label, label.width / 2, label.height / 2);
+        tryVerify(() => dialog.colorValues[0] === 0);
+
+        dialog.setColorValue(0, 1.5);
+        mouseDoubleClickSequence(firstValue, firstValue.width / 2, firstValue.height / 2);
+        tryVerify(() => dialog.colorValues[0] === 0);
+    }
+
     function test_batchWarnsWithoutSelectedFiles() {
         const startsBefore = Fixture.batchStartCount();
         verify(Fixture.requestBatchConversion(sources()));
