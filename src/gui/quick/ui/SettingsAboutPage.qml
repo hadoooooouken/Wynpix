@@ -13,7 +13,7 @@ SettingsPage {
     Label {
         Layout.fillWidth: true
         text: root.editor.aboutText
-        textFormat: Text.MarkdownText
+        textFormat: Text.StyledText
         wrapMode: Text.WordWrap
         onLinkActivated: link => Qt.openUrlExternally(link)
 

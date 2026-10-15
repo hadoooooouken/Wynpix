@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QLocale>
+#include <QRegularExpression>
 #include <QUrl>
 
 #include <algorithm>
@@ -17,6 +18,19 @@ constexpr char kContext[] = "SettingsDialog";
 
 QString translated(const char *text) {
     return QCoreApplication::translate(kContext, text);
+}
+
+QString markdownToStyledText(const QString &markdown) {
+    QString text = markdown.trimmed().toHtmlEscaped();
+
+    static const QRegularExpression linkRegex(u"\\[([^\\]]+)\\]\\(([^\\)]+)\\)"_s);
+    text.replace(linkRegex, u"<a href=\"\\2\">\\1</a>"_s);
+
+    static const QRegularExpression boldRegex(u"\\*\\*([^\\*]+)\\*\\*"_s);
+    text.replace(boldRegex, u"<b>\\1</b>"_s);
+
+    text.replace(u'\n', u"<br>"_s);
+    return text;
 }
 
 bool offers(const SettingsOptionList &options, const QVariant &value) {
@@ -253,7 +267,7 @@ QString SettingsEditorModel::windowTitle() {
 }
 
 QString SettingsEditorModel::aboutText() {
-    return translated(QT_TRANSLATE_NOOP(
+    return markdownToStyledText(translated(QT_TRANSLATE_NOOP(
         "SettingsDialog",
         "This is a fast and easy to use image viewer\n"
         "\n"
@@ -265,7 +279,7 @@ QString SettingsEditorModel::aboutText() {
         "\n"
         "Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)\n"
         "\n"
-        "Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)\n"));
+        "Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)\n")));
 }
 
 QString SettingsEditorModel::applicationVersion() {

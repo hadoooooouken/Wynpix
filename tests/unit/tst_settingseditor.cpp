@@ -554,6 +554,16 @@ private slots:
         controller.setPage(SettingsDialogController::pageCount());
         QCOMPARE(controller.page(), static_cast<int>(SettingsEditorModel::Page::About));
     }
+
+    void aboutTextIsFormattedAsStyledText() {
+        const QString text = SettingsEditorModel::aboutText();
+        QVERIFY(text.contains(u"<a href=\""_s));
+        QVERIFY(text.contains(u"<b>"_s));
+        QVERIFY(text.contains(u"<br>"_s));
+        QVERIFY(!text.contains(u"**"_s));
+        QVERIFY(!text.contains(u"]("_s));
+        QVERIFY(!text.contains(u'\n'));
+    }
 };
 
 int runSettingsEditorTests(int argc, char **argv) {
