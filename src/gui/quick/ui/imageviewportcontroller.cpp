@@ -650,9 +650,7 @@ void ImageViewportController::onTransformChanged() {
             hideUpscaledCrop();
         mView->setPlacement({.position = transform.imagePosition(), .scale = transform.scale()});
     }
-    // The SVG raster replaces the whole image: it must not stay over a
-    // view it was not made for.
-    dropSvgRaster();
+    requestSvgRaster();
     // The settle pass of the previous view no longer matches.
     setRenderingSettled(false);
     mPresentation.cancel();
@@ -668,7 +666,7 @@ void ImageViewportController::onScaleChanged(qreal scale) {
 void ImageViewportController::onViewPositionChanged() {
     mScaleTimer.start();
     hideUpscaledCrop();
-    dropSvgRaster();
+    requestSvgRaster();
 }
 
 void ImageViewportController::onPanoramaChanged() {
@@ -695,8 +693,10 @@ void ImageViewportController::requestScaling() {
     // Zooming continues; its end requests scaling again.
     if (isZoomAnimating() || mPinching ||
         mInteraction.mode() == ViewportInteraction::Mode::Zoom ||
-        mInteraction.mode() == ViewportInteraction::Mode::WheelZoom)
+        mInteraction.mode() == ViewportInteraction::Mode::WheelZoom) {
+        requestSvgRaster();
         return;
+    }
     if (wantsUpscale())
         emit upscaleRequested(mTransform.transform().scaledSize() * devicePixelRatio());
     else if (mSettings.viewer.useUpscayl)
@@ -732,8 +732,11 @@ void ImageViewportController::onSvgDocumentReady(QSize documentSize) {
         mSvg.close();
         return;
     }
-    // A pending settle requests the raster itself.
-    if (!mScaleTimer.isActive())
+    // A pending settle requests the raster itself; active motion refreshes
+    // it progressively in the background.
+    if (isSvgMotionActive())
+        requestSvgRaster();
+    else if (!mScaleTimer.isActive())
         requestScaling();
 }
 
@@ -748,19 +751,49 @@ bool ImageViewportController::requestSvgRaster() {
         dropSvgRaster();
         return false;
     }
-    const QRect source = visibleOriginalImageRect();
-    const SvgRasterRequest request{
-        .sourceRect = source,
-        .targetSize = QSize(qRound(source.width() * scale), qRound(source.height() * scale))};
+    const SvgRasterRequest request = svgRasterRequestForCurrentView();
     if (!SvgRasterizer::isValidRequest(request, mImage->size())) {
         dropSvgRaster();
         return false;
     }
-    if (mCrop == CropKind::SvgRaster && mShownSvgRaster == request)
+    // A Replace crop must cover the complete viewport area or it would leave
+    // uncovered pixels when zooming out or panning.
+    if (mCrop == CropKind::SvgRaster &&
+        !shownSvgRasterCoversVisibleRect())
+        clearCrop();
+    if (mCrop == CropKind::SvgRaster && mShownSvgRaster == request) {
+        if (mSvgRequestId != SvgRasterizer::kNoRequest) {
+            mSvg.cancelRequests();
+            mSvgRequestId = SvgRasterizer::kNoRequest;
+        }
         return false;
-    dropSvgRaster();
+    }
+    // Let the current render finish. Its completion compares against the
+    // latest view and queues a replacement if movement made it stale.
+    if (mSvgRequestId != SvgRasterizer::kNoRequest)
+        return true;
     mSvgRequestId = mSvg.request(request);
     return mSvgRequestId != SvgRasterizer::kNoRequest;
+}
+
+SvgRasterRequest
+ImageViewportController::svgRasterRequestForCurrentView() const {
+    const QRect source = visibleOriginalImageRect();
+    const float scale = currentScale();
+    return {.sourceRect = source,
+            .targetSize = QSize(qRound(source.width() * scale),
+                                qRound(source.height() * scale))};
+}
+
+bool ImageViewportController::shownSvgRasterCoversVisibleRect() const {
+    return mCrop == CropKind::SvgRaster &&
+           mShownSvgRaster.sourceRect.contains(visibleOriginalImageRect());
+}
+
+bool ImageViewportController::isSvgMotionActive() const {
+    return isZoomAnimating() || mPinching || mInteraction.isBusy() ||
+           mScrollAnimationX.state() == QAbstractAnimation::Running ||
+           mScrollAnimationY.state() == QAbstractAnimation::Running;
 }
 
 void ImageViewportController::onSvgRasterized(const SvgRaster &raster) {
@@ -771,6 +804,14 @@ void ImageViewportController::onSvgRasterized(const SvgRaster &raster) {
         presentSettledFrame();
         return;
     }
+    const bool matchesCurrentView =
+        raster.request == svgRasterRequestForCurrentView();
+    if (!raster.request.sourceRect.contains(visibleOriginalImageRect())) {
+        if (!shownSvgRasterCoversVisibleRect())
+            clearCrop();
+        requestSvgRaster();
+        return;
+    }
     QImage image = raster.image;
     // Converted like the image it replaces.
     image.setColorSpace(mImage->colorSpace());
@@ -779,7 +820,14 @@ void ImageViewportController::onSvgRasterized(const SvgRaster &raster) {
                            raster.request.sourceRect, CropComposition::Replace);
     mCrop = CropKind::SvgRaster;
     mShownSvgRaster = raster.request;
-    presentSettledFrame();
+    if (isSvgMotionActive() || mScaleTimer.isActive() ||
+        !matchesCurrentView) {
+        mView->update();
+        if (isSvgMotionActive() || !matchesCurrentView)
+            requestSvgRaster();
+    } else {
+        presentSettledFrame();
+    }
 }
 
 void ImageViewportController::onSvgRasterFailed(quint64 requestId, const QString &message) {

@@ -691,11 +691,25 @@ private slots:
     controller.setUpscaledCrop(*testImage(kSmallImage), QRect(QPoint(0, 0), kSmallImage));
     QCOMPARE(viewport.item.cropComposition(), CropComposition::Replace);
 
-    // A view change drops the raster until the next settle.
+    // Keep showing the last raster while a sharper one is rendered for the
+    // changed view.
+    const QRect previousSourceRect = viewport.item.cropSourceRect();
     controller.zoomIn();
-    QVERIFY(!viewport.item.hasUpscaledCrop());
+    QVERIFY(viewport.item.hasUpscaledCrop());
+    QTRY_VERIFY_WITH_TIMEOUT(viewport.item.cropSourceRect() != previousSourceRect,
+                             kSvgTimeoutMs);
+    QTRY_COMPARE_WITH_TIMEOUT(viewport.item.cropSourceRect(),
+                              controller.visibleOriginalImageRect(),
+                              kSvgTimeoutMs);
+
+    // Zooming back out exposes source pixels outside the old crop. Show the
+    // decoded image until a raster covering the larger view is ready.
+    controller.zoomOut();
+    QTRY_VERIFY_WITH_TIMEOUT(!viewport.item.hasUpscaledCrop(), kSvgTimeoutMs);
     QTRY_VERIFY_WITH_TIMEOUT(viewport.item.hasUpscaledCrop(), kSvgTimeoutMs);
-    QCOMPARE(viewport.item.cropSourceRect(), controller.visibleOriginalImageRect());
+    QTRY_COMPARE_WITH_TIMEOUT(viewport.item.cropSourceRect(),
+                              controller.visibleOriginalImageRect(),
+                              kSvgTimeoutMs);
 
     // At 1:1 the decoded image is the document.
     controller.fitOriginal();

@@ -309,6 +309,9 @@ private:
     // when none is needed (no document, 1:1, panorama) or it is already
     // shown, so the settled frame can be presented now.
     bool requestSvgRaster();
+    [[nodiscard]] SvgRasterRequest svgRasterRequestForCurrentView() const;
+    [[nodiscard]] bool shownSvgRasterCoversVisibleRect() const;
+    [[nodiscard]] bool isSvgMotionActive() const;
     void onSvgRasterized(const SvgRaster &raster);
     void onSvgRasterFailed(quint64 requestId, const QString &message);
     // Drops the raster request in flight and the shown raster (the view
