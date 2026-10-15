@@ -110,6 +110,16 @@ japanese.ThumbnailsTaskDesc=Windowsエクスプローラーでサムネイルを
 turkish.ThumbnailsTaskDesc=Windows Gezgini'nde küçük resimler oluştur
 russian.ThumbnailsTaskDesc=Создавать эскизы в Проводнике Windows
 
+; Task description for file associations
+english.AssociateFilesTaskDesc=Associate {#MyAppName} with supported image formats
+ukrainian.AssociateFilesTaskDesc=Асоціювати {#MyAppName} з підтримуваними форматами зображень
+german.AssociateFilesTaskDesc={#MyAppName} mit unterstützten Bildformaten verknüpfen
+spanish.AssociateFilesTaskDesc=Asociar {#MyAppName} con los formatos de imagen compatibles
+french.AssociateFilesTaskDesc=Associer {#MyAppName} aux formats d'image pris en charge
+japanese.AssociateFilesTaskDesc={#MyAppName} をサポートされている画像形式に関連付ける
+turkish.AssociateFilesTaskDesc={#MyAppName} uygulamasını desteklenen görüntü formatlarıyla ilişkilendir
+russian.AssociateFilesTaskDesc=Ассоциировать {#MyAppName} с поддерживаемыми форматами изображений
+
 ; AVX2 error messages (AVX2 installer only)
 #if Isa == "AVX2"
 english.AVX2ErrorMsg=Installation impossible: your processor does not support AVX2.%n%nThis version requires AVX2. Please download the SSE2 version installer ({#MySse2OutputBaseFilename}.exe) instead.
@@ -124,7 +134,7 @@ russian.AVX2ErrorMsg=Установка невозможна: ваш проце�
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
-Name: "associate"; Description: "Associate {#MyAppName} with common image file formats"; GroupDescription: "{cm:GroupFileAssociations}"
+Name: "associate"; Description: "{cm:AssociateFilesTaskDesc}"; GroupDescription: "{cm:GroupFileAssociations}"
 Name: "compact"; Description: "{cm:CompactFilesTaskDesc}"; GroupDescription: "{cm:GroupAdditionalOptions}"
 Name: "thumbnails"; Description: "{cm:ThumbnailsTaskDesc}"; GroupDescription: "{cm:GroupAdditionalOptions}"
 
