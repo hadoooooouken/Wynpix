@@ -86,6 +86,7 @@ Item {
 
         function init() {
             Fixture.showTestImage(400, 300);
+            Fixture.overlays.colorAdjustmentsEditor.resetAll();
         }
 
         function cleanup() {
@@ -241,6 +242,26 @@ Item {
             Fixture.overlays.colorAdjustmentsEditor.setValue(0, 150);
             mouseDoubleClickSequence(valueText, valueText.width / 2, valueText.height / 2);
             tryCompare(slider, "value", 0);
+        }
+
+        function test_colorAdjustmentWheelOverParameterChangesItsValue() {
+            Fixture.toggleColorAdjustments();
+            const adjustments = overlay(colorAdjustmentsLoader);
+            const label = findObject(adjustments, "adjustmentLabel_0");
+            const slider = findObject(adjustments, "adjustmentSlider_0");
+            const valueText = findObject(adjustments, "adjustmentValue_0");
+            verify(label !== null);
+            verify(slider !== null);
+            verify(valueText !== null);
+
+            mouseWheel(label, label.width / 2, label.height / 2, 0, 120);
+            tryCompare(slider, "value", 1);
+
+            mouseWheel(slider, slider.width / 2, slider.height / 2, 0, -120);
+            tryCompare(slider, "value", 0);
+
+            mouseWheel(valueText, valueText.width / 2, valueText.height / 2, 0, -120);
+            tryCompare(slider, "value", -1);
         }
 
         function test_casSettingsShowTheParameters() {

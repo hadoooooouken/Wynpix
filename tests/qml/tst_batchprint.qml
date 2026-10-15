@@ -145,6 +145,44 @@ TestCase {
         tryVerify(() => dialog.colorValues[0] === 0);
     }
 
+    function test_batchColorSliderKeepsDraggingOutsideItsBounds() {
+        verify(Fixture.requestBatchConversion(sources()));
+        const window = openedWindow(batchIndex);
+        const dialog = Fixture.dialogs.batchConverter;
+        dialog.setColorEnabled(true);
+        const slider = findNamed(window.contentItem, "batchColorSlider_0");
+        verify(slider !== null);
+
+        mousePress(slider, slider.width / 2, slider.height / 2);
+        mouseMove(slider, slider.width + 100, slider.height / 2);
+        tryVerify(() => dialog.colorValues[0] > 1.5);
+        mouseMove(slider, -100, slider.height / 2);
+        tryVerify(() => dialog.colorValues[0] < -1.5);
+        mouseRelease(slider, -100, slider.height / 2);
+    }
+
+    function test_batchColorSliderWheelOverRowChangesItsValue() {
+        verify(Fixture.requestBatchConversion(sources()));
+        const window = openedWindow(batchIndex);
+        const dialog = Fixture.dialogs.batchConverter;
+        dialog.setColorEnabled(true);
+        const label = findNamed(window.contentItem, "batchColorLabel_0");
+        const slider = findNamed(window.contentItem, "batchColorSlider_0");
+        const valueText = findNamed(window.contentItem, "batchColorValue_0");
+        verify(label !== null);
+        verify(slider !== null);
+        verify(valueText !== null);
+
+        mouseWheel(label, label.width / 2, label.height / 2, 0, 120);
+        tryVerify(() => dialog.colorValues[0] === 0.01);
+
+        mouseWheel(slider, slider.width / 2, slider.height / 2, 0, -120);
+        tryVerify(() => dialog.colorValues[0] === 0);
+
+        mouseWheel(valueText, valueText.width / 2, valueText.height / 2, 0, -120);
+        tryVerify(() => dialog.colorValues[0] === -0.01);
+    }
+
     function test_batchWarnsWithoutSelectedFiles() {
         const startsBefore = Fixture.batchStartCount();
         verify(Fixture.requestBatchConversion(sources()));

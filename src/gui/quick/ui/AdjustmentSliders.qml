@@ -17,6 +17,13 @@ GridLayout {
     readonly property int formRowSpacing: 10
     readonly property int formFieldSpacing: 6
 
+    function adjustSliderByWheel(row, value, delta) {
+        if (delta === 0)
+            return;
+        const steps = Math.max(1, Math.floor(Math.abs(delta) / 120));
+        grid.sliders.setValue(row, value + Math.sign(delta) * steps);
+    }
+
     columns: 3
     rowSpacing: formRowSpacing
     columnSpacing: formFieldSpacing
@@ -27,6 +34,7 @@ GridLayout {
         delegate: Label {
             required property int index
             required property string label
+            required property int value
 
             objectName: "adjustmentLabel_" + index
             text: label
@@ -40,6 +48,10 @@ GridLayout {
                 onDoubleClicked: mouse => {
                     mouse.accepted = true;
                     grid.sliders.resetValue(index);
+                }
+                onWheel: wheel => {
+                    wheel.accepted = true;
+                    grid.adjustSliderByWheel(index, value, wheel.angleDelta.y);
                 }
             }
         }
@@ -87,6 +99,11 @@ GridLayout {
                     mouse.accepted = true;
                     grid.sliders.resetValue(slider.index);
                 }
+                onWheel: wheel => {
+                    wheel.accepted = true;
+                    grid.adjustSliderByWheel(slider.index, slider.model.value,
+                                             wheel.angleDelta.y);
+                }
             }
         }
     }
@@ -97,6 +114,7 @@ GridLayout {
         delegate: Label {
             required property int index
             required property string valueText
+            required property int value
 
             objectName: "adjustmentValue_" + index
             text: valueText
@@ -112,6 +130,10 @@ GridLayout {
                 onDoubleClicked: mouse => {
                     mouse.accepted = true;
                     grid.sliders.resetValue(index);
+                }
+                onWheel: wheel => {
+                    wheel.accepted = true;
+                    grid.adjustSliderByWheel(index, value, wheel.angleDelta.y);
                 }
             }
         }

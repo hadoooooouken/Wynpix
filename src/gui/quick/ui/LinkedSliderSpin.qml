@@ -25,6 +25,13 @@ RowLayout {
 
     spacing: root.formFieldSpacing
 
+    function adjustByWheel(delta) {
+        if (delta === 0)
+            return;
+        const steps = Math.max(1, Math.floor(Math.abs(delta) / 120));
+        root.edited(root.value + Math.sign(delta) * steps * root.spec.step);
+    }
+
     Label {
         objectName: "batchColorLabel_" + root.rowIndex
         Layout.preferredWidth: root.labelWidth
@@ -36,6 +43,10 @@ RowLayout {
             onDoubleClicked: mouse => {
                 mouse.accepted = true;
                 root.edited(root.spec.defaultValue);
+            }
+            onWheel: wheel => {
+                wheel.accepted = true;
+                root.adjustByWheel(wheel.angleDelta.y);
             }
         }
     }
@@ -69,6 +80,7 @@ RowLayout {
         MouseArea {
             anchors.fill: parent
             z: 1
+            preventStealing: true
             acceptedButtons: Qt.LeftButton
             onPressed: mouse => slider.setValueAt(mouse.x)
             onPositionChanged: mouse => {
@@ -78,6 +90,10 @@ RowLayout {
             onDoubleClicked: mouse => {
                 mouse.accepted = true;
                 root.edited(root.spec.defaultValue);
+            }
+            onWheel: wheel => {
+                wheel.accepted = true;
+                root.adjustByWheel(wheel.angleDelta.y);
             }
         }
     }
@@ -94,6 +110,10 @@ RowLayout {
             onDoubleClicked: mouse => {
                 mouse.accepted = true;
                 root.edited(root.spec.defaultValue);
+            }
+            onWheel: wheel => {
+                wheel.accepted = true;
+                root.adjustByWheel(wheel.angleDelta.y);
             }
         }
     }
