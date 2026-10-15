@@ -120,8 +120,10 @@ QuickMainWindowController::QuickMainWindowController(
     connect(&window, &QWindow::heightChanged, this,
             [this]() { thumbnailPanel.setWindowSize(window.size()); });
     connect(&window, &QWindow::activeChanged, this, [this]() {
-        if (!window.isActive())
+        if (!window.isActive()) {
             thumbnailPanel.pointerLeftWindow();
+            contextMenu.close();
+        }
     });
     // Saved also when the application quits while the window rests (the
     // debounced report may still be pending).
