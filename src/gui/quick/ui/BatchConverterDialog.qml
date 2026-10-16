@@ -243,92 +243,105 @@ Window {
                             spacing: StyleConstants.dialogSpacing
                             enabled: root.dialog.resizeEnabled
 
-                            RadioButton {
-                                text: qsTr("By Percent:")
-                                checkable: false
-                                checked: root.dialog.byPercent
-                                onClicked: root.dialog.setByPercent(true)
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: StyleConstants.dialogSpacing
+
+                                RadioButton {
+                                    text: qsTr("By Percent:")
+                                    checkable: false
+                                    checked: root.dialog.byPercent
+                                    onClicked: root.dialog.setByPercent(true)
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Layout.leftMargin: root.indent
+                                    spacing: StyleConstants.dialogSpacing
+                                    enabled: root.dialog.byPercent
+
+                                    Label {
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignRight
+                                        text: qsTr("Percent:")
+                                    }
+                                    DoubleSpinBox {
+                                        id: percentBox
+
+                                        Layout.preferredWidth: root.fieldWidth
+                                        from: root.dialog.minimumPercent
+                                        to: root.dialog.maximumPercent
+                                        decimals: root.dialog.percentDecimals
+                                        value: root.dialog.percent
+                                        editable: true
+                                        onValueModified: root.dialog.setPercent(percentBox.value)
+                                    }
+                                }
                             }
 
                             RowLayout {
-                                Layout.leftMargin: root.indent
+                                Layout.fillWidth: true
                                 spacing: StyleConstants.dialogSpacing
-                                enabled: root.dialog.byPercent
 
-                                Label {
+                                RadioButton {
+                                    Layout.alignment: Qt.AlignTop
+                                    text: qsTr("By Absolute Size:")
+                                    checkable: false
+                                    checked: !root.dialog.byPercent
+                                    onClicked: root.dialog.setByPercent(false)
+                                }
+
+                                GridLayout {
                                     Layout.fillWidth: true
-                                    horizontalAlignment: Text.AlignRight
-                                    text: qsTr("Percent:")
-                                }
-                                DoubleSpinBox {
-                                    id: percentBox
+                                    Layout.leftMargin: root.indent
+                                    columns: 2
+                                    columnSpacing: StyleConstants.dialogSpacing
+                                    enabled: !root.dialog.byPercent
 
-                                    Layout.preferredWidth: root.fieldWidth
-                                    from: root.dialog.minimumPercent
-                                    to: root.dialog.maximumPercent
-                                    decimals: root.dialog.percentDecimals
-                                    value: root.dialog.percent
-                                    editable: true
-                                    onValueModified: root.dialog.setPercent(percentBox.value)
-                                }
-                            }
+                                    Label {
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignRight
+                                        text: qsTr("Max Width:")
+                                    }
+                                    SpinBox {
+                                        id: widthBox
 
-                            RadioButton {
-                                text: qsTr("By Absolute Size:")
-                                checkable: false
-                                checked: !root.dialog.byPercent
-                                onClicked: root.dialog.setByPercent(false)
-                            }
+                                        objectName: "batchWidth"
+                                        Layout.preferredWidth: root.fieldWidth
+                                        from: root.dialog.minimumSide
+                                        to: root.dialog.maximumSide
+                                        value: root.dialog.targetWidth
+                                        editable: true
+                                        onValueModified: root.dialog.setTargetWidth(widthBox.value)
+                                    }
 
-                            GridLayout {
-                                Layout.leftMargin: root.indent
-                                columns: 2
-                                columnSpacing: StyleConstants.dialogSpacing
-                                enabled: !root.dialog.byPercent
+                                    Label {
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignRight
+                                        text: qsTr("Max Height:")
+                                    }
+                                    SpinBox {
+                                        id: heightBox
 
-                                Label {
-                                    Layout.fillWidth: true
-                                    horizontalAlignment: Text.AlignRight
-                                    text: qsTr("Max Width:")
-                                }
-                                SpinBox {
-                                    id: widthBox
+                                        Layout.preferredWidth: root.fieldWidth
+                                        from: root.dialog.minimumSide
+                                        to: root.dialog.maximumSide
+                                        value: root.dialog.targetHeight
+                                        editable: true
+                                        onValueModified: root.dialog.setTargetHeight(heightBox.value)
+                                    }
 
-                                    objectName: "batchWidth"
-                                    Layout.preferredWidth: root.fieldWidth
-                                    from: root.dialog.minimumSide
-                                    to: root.dialog.maximumSide
-                                    value: root.dialog.targetWidth
-                                    editable: true
-                                    onValueModified: root.dialog.setTargetWidth(widthBox.value)
-                                }
-
-                                Label {
-                                    Layout.fillWidth: true
-                                    horizontalAlignment: Text.AlignRight
-                                    text: qsTr("Max Height:")
-                                }
-                                SpinBox {
-                                    id: heightBox
-
-                                    Layout.preferredWidth: root.fieldWidth
-                                    from: root.dialog.minimumSide
-                                    to: root.dialog.maximumSide
-                                    value: root.dialog.targetHeight
-                                    editable: true
-                                    onValueModified: root.dialog.setTargetHeight(heightBox.value)
-                                }
-
-                                Label {
-                                    Layout.fillWidth: true
-                                    horizontalAlignment: Text.AlignRight
-                                    text: qsTr("Common sizes:")
-                                }
-                                ComboBox {
-                                    Layout.preferredWidth: root.fieldWidth
-                                    model: root.dialog.commonSizes
-                                    currentIndex: root.dialog.commonSizeIndex
-                                    onActivated: index => root.dialog.selectCommonSize(index)
+                                    Label {
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignRight
+                                        text: qsTr("Common sizes:")
+                                    }
+                                    ComboBox {
+                                        Layout.preferredWidth: root.fieldWidth
+                                        model: root.dialog.commonSizes
+                                        currentIndex: root.dialog.commonSizeIndex
+                                        onActivated: index => root.dialog.selectCommonSize(index)
+                                    }
                                 }
                             }
 
