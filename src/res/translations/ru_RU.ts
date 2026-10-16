@@ -4,114 +4,119 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="321"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="353"/>
         <source>Stopped</source>
         <translation>Остановлено</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="319"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="351"/>
         <source>Failed</source>
         <translation>Не удалось</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="138"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="142"/>
         <source>Load Error</source>
         <translation>Ошибка загрузки</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="189"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="201"/>
         <source>AI Model Error</source>
         <translation>Ошибка модели ИИ</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="200"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="212"/>
         <source>AI Upscaling Failed</source>
         <translation>Ошибка масштабирования ИИ</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="217"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="235"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="230"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="249"/>
         <source>Resize Error</source>
         <translation>Ошибка изменения размера</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="253"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="272"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="267"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="286"/>
         <source>Transform Error</source>
         <translation>Ошибка преобразования</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="317"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="349"/>
         <source>Done</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="292"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="320"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="306"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="334"/>
         <source>Save Error</source>
         <translation>Ошибка сохранения</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="24"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="26"/>
         <source>Original backup retained at:
 %1</source>
         <translation>Резервная копия оригинала сохранена в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="33"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="35"/>
         <source>Staged output retained at:
 %1</source>
         <translation>Промежуточный результат сохранён в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="37"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="39"/>
         <source>Temporary output could not be removed. Retained at:
 %1</source>
         <translation>Не удалось удалить временный результат. Сохранён в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="49"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="51"/>
         <source>Windows error: %1</source>
         <translation>Ошибка Windows: %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="341"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="360"/>
         <source>Commit Error</source>
         <translation>Ошибка фиксации</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="401"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="420"/>
         <source>Could not create a unique batch subfolder in &quot;%1&quot;. The batch was aborted.</source>
         <translation>Не удалось создать уникальную подпапку для пакета в «%1». Пакетная обработка прервана.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="427"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="452"/>
         <source>Invalid destination path</source>
         <translation>Недопустимый путь назначения</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="328"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="439"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="451"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="443"/>
+        <source>Invalid source index</source>
+        <translation>Недопустимый исходный индекс</translation>
+    </message>
+    <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="342"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="464"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="476"/>
         <source>Skipped (Exists)</source>
         <translation>Пропущено (уже существует)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="433"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="457"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="458"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="482"/>
         <source>Destination planning failed: invalid reservation key</source>
         <translation>Ошибка планирования назначения: недопустимый ключ резервирования</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="446"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
         <source>Destination planning failed: no unique output path is available</source>
         <translation>Ошибка планирования назначения: нет доступного уникального пути вывода</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="347"/>
         <source>Processing...</source>
         <translation>Обработка...</translation>
     </message>
@@ -144,293 +149,308 @@
         <translation>Изменение размера</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="247"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="252"/>
         <source>By Percent:</source>
         <translation>В процентах:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="277"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
         <source>By Absolute Size:</source>
         <translation>Точный размер:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="644"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="369"/>
+        <source>By Megapixels:</source>
+        <translation>По мегапикселям:</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="384"/>
+        <source>Megapixels:</source>
+        <translation>Мегапиксели:</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="406"/>
+        <source>Binary (1M = 1024x1024)</source>
+        <translation>Двоичные (1M = 1024x1024)</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="725"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="261"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="268"/>
         <source>Percent:</source>
         <translation>Процент:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="346"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="425"/>
         <source>Keep aspect ratio</source>
         <translation>Сохранять пропорции</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="406"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="486"/>
         <source>Filter:</source>
         <translation>Фильтр:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="421"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="501"/>
         <source>Model:</source>
         <translation>Модель:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="539"/>
         <source>Flip horizontal</source>
         <translation>Отразить по горизонтали</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="465"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="545"/>
         <source>Flip vertical</source>
         <translation>Отразить по вертикали</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="325"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
         <source>Common sizes:</source>
         <translation>Стандартные размеры:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="474"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="554"/>
         <source>Color adjustments</source>
         <translation>Цветокоррекция</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="193"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="225"/>
         <source>Exposure:</source>
         <translation>Экспозиция:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="194"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="226"/>
         <source>Contrast:</source>
         <translation>Контрастность:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="195"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="227"/>
         <source>Brightness:</source>
         <translation>Яркость:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="198"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
         <source>Temperature:</source>
         <translation>Температура:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="199"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
         <source>Tint:</source>
         <translation>Оттенок:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="196"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="228"/>
         <source>Saturation:</source>
         <translation>Насыщенность:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="292"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="310"/>
         <source>Max Width:</source>
         <translation>Макс. ширина:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="309"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="348"/>
         <source>Max Height:</source>
         <translation>Макс. высота:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="354"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="354"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Width</source>
         <translation>Ширина</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="354"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Height</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="381"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="461"/>
         <source>Upscayl</source>
         <translation>Использовать Upscayl</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="177"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="209"/>
         <source>0°</source>
         <translation>0°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="179"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="211"/>
         <source>90°</source>
         <translation>90°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="181"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="213"/>
         <source>180°</source>
         <translation>180°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="183"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="215"/>
         <source>270°</source>
         <translation>270°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="197"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
         <source>Hue:</source>
         <translation>Цветовой тон:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="508"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="589"/>
         <source>Output folder:</source>
         <translation>Выходная папка:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="520"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="601"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="526"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
         <source>Create subfolder for batch</source>
         <translation>Создать подпапку для пакета</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="532"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="613"/>
         <source>Filename pattern:</source>
         <translation>Шаблон имени файла:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="263"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="235"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="267"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>Доступно: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="547"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="628"/>
         <source>Overwrite existing files</source>
         <translation>Перезаписывать существующие файлы</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="341"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="373"/>
         <source>Ready to convert.</source>
         <translation>Готов к конвертации.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="578"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
         <source>Convert</source>
         <translation>Конвертировать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="585"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="150"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="182"/>
         <source>Nearest</source>
         <translation>Ближайший сосед</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="151"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="183"/>
         <source>Bilinear</source>
         <translation>Билинейный</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="152"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="184"/>
         <source>Smart sharpen</source>
         <translation>Умная резкость</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="153"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="185"/>
         <source>Magic Kernel Sharp 2021</source>
         <translation>Magic Kernel Sharp 2021</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="337"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="415"/>
         <source>Reset: %1 x %2</source>
         <translation>Сбросить: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="393"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="473"/>
         <source>No AI models found in models/ directory.</source>
         <translation>Модели ИИ не найдены в папке models/.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="334"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="366"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>Выбрано файлов: %1 (%2 МБ)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="596"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="677"/>
         <source>Select Output Directory</source>
         <translation>Выбрать выходную папку</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="100"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="115"/>
         <source>PNG Compression level (0 - none, 9 - max)</source>
         <translation>Уровень сжатия PNG (0 - нет, 9 - макс)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="102"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="117"/>
         <source>Quality (1 - lowest, 100 - highest)</source>
         <translation>Качество (1 - худшее, 100 - лучшее)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="353"/>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="584"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
         <source>Stopping...</source>
         <translation>Остановка...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="585"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="283"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
         <source>Invalid Directory</source>
         <translation>Неверная папка</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="283"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
         <source>Please select a valid output directory.</source>
         <translation>Пожалуйста, выберите существующую выходную папку.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="285"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="317"/>
         <source>Invalid Pattern</source>
         <translation>Недопустимый шаблон</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="286"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="318"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>Шаблон имени файла не может содержать относительные переходы (..) или абсолютные пути.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="289"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="321"/>
         <source>No files</source>
         <translation>Нет файлов</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="290"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="322"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>В очереди нет выбранных файлов. Пожалуйста, отметьте хотя бы один файл.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="293"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="325"/>
         <source>Resolution Limit Exceeded</source>
         <translation>Лимит разрешения превышен</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="294"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="326"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -445,42 +465,42 @@ Please reduce the percentage or absolute size.</source>
 Пожалуйста, уменьшите процент или абсолютный размер.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="345"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="377"/>
         <source>Processing...</source>
         <translation>Обработка...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="361"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>Остановлено пользователем. Успешно: %1, Ошибок: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="365"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
         <source>Batch aborted.</source>
         <translation>Пакетная обработка прервана.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="378"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="410"/>
         <source>Batch Conversion Failed</source>
         <translation>Ошибка пакетного преобразования</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="349"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="381"/>
         <source>Processed %1 / %2 files.</source>
         <translation>Обработано %1 из %2 файлов.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="357"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="389"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>Завершено. Успешно: %1, Ошибок: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="369"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
         <source>Batch Conversion Complete</source>
         <translation>Пакетное преобразование завершено</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="370"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="402"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -493,12 +513,12 @@ Total files: %3</source>
 Всего файлов: %3</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="142"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="174"/>
         <source>Original size</source>
         <translation>Оригинальный размер</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="500"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="581"/>
         <source>Reset Color Adjustments</source>
         <translation>Сбросить цветокоррекцию</translation>
     </message>
@@ -506,7 +526,7 @@ Total files: %3</source>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="313"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="345"/>
         <source>Pending</source>
         <translation>Ожидание</translation>
     </message>
@@ -608,152 +628,152 @@ Total files: %3</source>
 <context>
     <name>ContextMenu</name>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="91"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="92"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="95"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="96"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="74"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="75"/>
         <source>Quick copy</source>
         <translation>Быстрое копирование</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="76"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="77"/>
         <source>Quick move</source>
         <translation>Быстрое перемещение</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="98"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="99"/>
         <source>Move to trash</source>
         <translation>Переместить в корзину</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="65"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="66"/>
         <source>Color adjustments</source>
         <translation>Цветокоррекция</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="35"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="36"/>
         <source>Fit to window</source>
         <translation>По размеру окна</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="37"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="38"/>
         <source>Fit to width</source>
         <translation>По ширине</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="39"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="40"/>
         <source>Fit to height</source>
         <translation>По высоте</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="41"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="42"/>
         <source>Original size</source>
         <translation>Исходный размер</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="43"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="44"/>
         <source>Zoom in</source>
         <translation>Увеличить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="45"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="46"/>
         <source>Zoom out</source>
         <translation>Уменьшить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="50"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="51"/>
         <source>Rotate left</source>
         <translation>Повернуть влево</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="53"/>
         <source>Rotate right</source>
         <translation>Повернуть вправо</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="54"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="55"/>
         <source>Flip vertical</source>
         <translation>Отразить по вертикали</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="56"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="57"/>
         <source>Flip horizontal</source>
         <translation>Отразить по горизонтали</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="58"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="59"/>
         <source>Crop</source>
         <translation>Обрезать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="60"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="61"/>
         <source>Resize</source>
         <translation>Изменить размер</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="67"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="68"/>
         <source>Panorama mode</source>
         <translation>Режим панорамы</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="69"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="70"/>
         <source>AI Upscale</source>
         <translation>Масштабирование ИИ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="71"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="72"/>
         <source>CAS Settings</source>
         <translation>Настройки CAS</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="78"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="79"/>
         <source>Folder View</source>
         <translation>Режим галереи</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="82"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="83"/>
         <source>Image info</source>
         <translation>Информация об изображении</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="87"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="88"/>
         <source>More</source>
         <translation>Ещё</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="93"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="94"/>
         <source>Set as wallpaper</source>
         <translation>Сделать обоями рабочего стола</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="84"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="85"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="89"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="90"/>
         <source>Open with...</source>
         <translation>Открыть с помощью...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="80"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="81"/>
         <source>Show in folder</source>
         <translation>Показать в папке</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="101"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="102"/>
         <source>Delete permanently</source>
         <translation>Удалить навсегда</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="343"/>
+        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="353"/>
         <source>Configure menu</source>
         <translation>Настроить меню</translation>
     </message>
@@ -798,221 +818,221 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="784"/>
+        <location filename="../../core.cpp" line="780"/>
         <source>Updated: </source>
         <translation>Обновлено: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="791"/>
+        <location filename="../../core.cpp" line="787"/>
         <source>Welcome to </source>
         <translation>Добро пожаловать в </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="792"/>
+        <location filename="../../core.cpp" line="788"/>
         <source> version </source>
         <translation> версия </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="810"/>
+        <location filename="../../core.cpp" line="806"/>
         <source>Shuffle mode: OFF</source>
         <translation>Режим перемешивания: Выключен</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="813"/>
+        <location filename="../../core.cpp" line="809"/>
         <source>Shuffle mode: ON</source>
         <translation>Режим перемешивания: Включен</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="822"/>
+        <location filename="../../core.cpp" line="818"/>
         <source>Slideshow: OFF</source>
         <translation>Слайд-шоу: Выключено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="826"/>
+        <location filename="../../core.cpp" line="822"/>
         <source>Slideshow: ON</source>
         <translation>Слайд-шоу: Включено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1020"/>
-        <location filename="../../core.cpp" line="1023"/>
-        <location filename="../../core.cpp" line="1026"/>
+        <location filename="../../core.cpp" line="1016"/>
+        <location filename="../../core.cpp" line="1019"/>
+        <location filename="../../core.cpp" line="1022"/>
         <source>Delete </source>
         <translation>Удалить </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1021"/>
+        <location filename="../../core.cpp" line="1017"/>
         <source> folders permanently?</source>
         <translation> папок навсегда?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1024"/>
+        <location filename="../../core.cpp" line="1020"/>
         <source> files permanently?</source>
         <translation> файлов навсегда?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1023"/>
         <source> items permanently?</source>
         <translation> файлов навсегда?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1035"/>
+        <location filename="../../core.cpp" line="1031"/>
         <source>Delete permanently</source>
         <translation>Удалить навсегда</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1055"/>
+        <location filename="../../core.cpp" line="1051"/>
         <source>File removed</source>
         <translation>Файл удален</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1061"/>
-        <location filename="../../core.cpp" line="1064"/>
-        <location filename="../../core.cpp" line="1067"/>
+        <location filename="../../core.cpp" line="1057"/>
+        <location filename="../../core.cpp" line="1060"/>
+        <location filename="../../core.cpp" line="1063"/>
         <source>Removed: </source>
         <translation>Удалено: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1065"/>
-        <location filename="../../core.cpp" line="1134"/>
+        <location filename="../../core.cpp" line="1061"/>
+        <location filename="../../core.cpp" line="1130"/>
         <source> files</source>
         <translation> файлов</translation>
     </message>
     <message>
+        <location filename="../../core.cpp" line="1088"/>
+        <location filename="../../core.cpp" line="1090"/>
         <location filename="../../core.cpp" line="1092"/>
-        <location filename="../../core.cpp" line="1094"/>
-        <location filename="../../core.cpp" line="1096"/>
         <source>Move </source>
         <translation>Переместить </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1096"/>
+        <location filename="../../core.cpp" line="1092"/>
         <source> items to trash?</source>
         <translation> файлов в корзину?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1104"/>
+        <location filename="../../core.cpp" line="1100"/>
         <source>Move to trash</source>
         <translation>Переместить в корзину</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1122"/>
+        <location filename="../../core.cpp" line="1118"/>
         <source>Folder moved to trash</source>
         <translation>Папка перемещена в корзину</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1124"/>
+        <location filename="../../core.cpp" line="1120"/>
         <source>Moved to trash</source>
         <translation>Перемещено в корзину</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1130"/>
-        <location filename="../../core.cpp" line="1133"/>
-        <location filename="../../core.cpp" line="1136"/>
+        <location filename="../../core.cpp" line="1126"/>
+        <location filename="../../core.cpp" line="1129"/>
+        <location filename="../../core.cpp" line="1132"/>
         <source>Moved to trash: </source>
         <translation>Перемещено в корзину: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1217"/>
+        <location filename="../../core.cpp" line="1213"/>
         <source>File copied</source>
         <translation>Файл скопирован</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1224"/>
+        <location filename="../../core.cpp" line="1220"/>
         <source>Path copied</source>
         <translation>Путь скопирован</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1353"/>
-        <location filename="../../core.cpp" line="1542"/>
-        <location filename="../../core.cpp" line="1566"/>
+        <location filename="../../core.cpp" line="1349"/>
+        <location filename="../../core.cpp" line="1538"/>
+        <location filename="../../core.cpp" line="1562"/>
         <source>File exists</source>
         <translation>Файл существует</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1353"/>
+        <location filename="../../core.cpp" line="1349"/>
         <source>Overwrite file?</source>
         <translation>Перезаписать файл?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1448"/>
+        <location filename="../../core.cpp" line="1444"/>
         <source>Add folder</source>
         <translation>Добавить папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1448"/>
+        <location filename="../../core.cpp" line="1444"/>
         <source>Folder name:</source>
         <translation>Имя папки:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1455"/>
+        <location filename="../../core.cpp" line="1451"/>
         <source>Folder already exists</source>
         <translation>Папка уже существует</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1464"/>
+        <location filename="../../core.cpp" line="1460"/>
         <source>Failed to create folder</source>
         <translation>Не удалось создать папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1540"/>
+        <location filename="../../core.cpp" line="1536"/>
         <source>File moved.</source>
         <translation>Файл перемещен.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1543"/>
-        <location filename="../../core.cpp" line="1567"/>
+        <location filename="../../core.cpp" line="1539"/>
+        <location filename="../../core.cpp" line="1563"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>Файл назначения существует. Перезаписать?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1564"/>
+        <location filename="../../core.cpp" line="1560"/>
         <source>File copied.</source>
         <translation>Файл скопирован.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1650"/>
+        <location filename="../../core.cpp" line="1646"/>
         <source>Perform action &quot;</source>
         <translation>Выполнить действие &quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1651"/>
+        <location filename="../../core.cpp" line="1647"/>
         <source>Changes will be saved immediately.</source>
         <translation>Изменения будут сохранены немедленно.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1682"/>
+        <location filename="../../core.cpp" line="1678"/>
         <source>Flip horizontal</source>
         <translation>Отразить по горизонтали</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1686"/>
+        <location filename="../../core.cpp" line="1682"/>
         <source>Flip vertical</source>
         <translation>Отразить по вертикали</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1691"/>
+        <location filename="../../core.cpp" line="1687"/>
         <source>Rotate</source>
         <translation>Повернуть</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1735"/>
-        <location filename="../../core.cpp" line="1761"/>
+        <location filename="../../core.cpp" line="1731"/>
+        <location filename="../../core.cpp" line="1757"/>
         <source>Resize</source>
         <translation>Изменение размера</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1804"/>
+        <location filename="../../core.cpp" line="1800"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>Масштабирование ИИ завершено, но изображение изменилось.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1822"/>
-        <location filename="../../core.cpp" line="1828"/>
+        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1824"/>
         <source>Crop</source>
         <translation>Обрезать</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1890"/>
+        <location filename="../../core.cpp" line="1886"/>
         <source>File saved</source>
         <translation>Файл сохранен</translation>
     </message>
@@ -1032,19 +1052,19 @@ Total files: %3</source>
         <translation>Не удалось сохранить файл: сбой автоматического восстановления (ошибка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1969"/>
-        <location filename="../../core.cpp" line="1975"/>
+        <location filename="../../core.cpp" line="1965"/>
+        <location filename="../../core.cpp" line="1971"/>
         <source>Set wallpaper: file not supported</source>
         <translation>Установка обоев: файл не поддерживается</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1993"/>
-        <location filename="../../core.cpp" line="2002"/>
+        <location filename="../../core.cpp" line="1989"/>
+        <location filename="../../core.cpp" line="1998"/>
         <source>Could not open image</source>
         <translation>Не удалось открыть изображение</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1997"/>
+        <location filename="../../core.cpp" line="1993"/>
         <source>Can only print static images</source>
         <translation>Печать доступна только для статических изображений</translation>
     </message>
@@ -1211,69 +1231,69 @@ Staged copy:
     </message>
     <message>
         <location filename="../../core.cpp" line="632"/>
-        <location filename="../../core.cpp" line="1505"/>
+        <location filename="../../core.cpp" line="1501"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>Не удалось очистить кэш эскизов</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1031"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Delete folder permanently?</source>
         <translation>Удалить папку навсегда?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1033"/>
+        <location filename="../../core.cpp" line="1029"/>
         <source>Delete file permanently?</source>
         <translation>Удалить файл навсегда?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1053"/>
+        <location filename="../../core.cpp" line="1049"/>
         <source>Folder removed</source>
         <translation>Папка удалена</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1062"/>
-        <location filename="../../core.cpp" line="1131"/>
+        <location filename="../../core.cpp" line="1058"/>
+        <location filename="../../core.cpp" line="1127"/>
         <source> folders</source>
         <translation> папок</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1068"/>
-        <location filename="../../core.cpp" line="1137"/>
+        <location filename="../../core.cpp" line="1064"/>
+        <location filename="../../core.cpp" line="1133"/>
         <source> items</source>
         <translation> элементов</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1092"/>
+        <location filename="../../core.cpp" line="1088"/>
         <source> folders to trash?</source>
         <translation> папок в корзину?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1094"/>
+        <location filename="../../core.cpp" line="1090"/>
         <source> files to trash?</source>
         <translation> файлов в корзину?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1100"/>
+        <location filename="../../core.cpp" line="1096"/>
         <source>Move folder to trash?</source>
         <translation>Переместить папку в корзину?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1102"/>
+        <location filename="../../core.cpp" line="1098"/>
         <source>Move file to trash?</source>
         <translation>Переместить файл в корзину?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1487"/>
+        <location filename="../../core.cpp" line="1483"/>
         <source>Moving: %1 (%2)</source>
         <translation>Перемещение: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1488"/>
+        <location filename="../../core.cpp" line="1484"/>
         <source>Copying: %1 (%2)</source>
         <translation>Копирование: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1497"/>
+        <location filename="../../core.cpp" line="1493"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>Перемещён %n файл</numerusform>
@@ -1282,7 +1302,7 @@ Staged copy:
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1498"/>
+        <location filename="../../core.cpp" line="1494"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>Скопирован %n файл</numerusform>
@@ -1291,63 +1311,63 @@ Staged copy:
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1675"/>
+        <location filename="../../core.cpp" line="1671"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1: ошибка, не удалось изменить изображение.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1703"/>
+        <location filename="../../core.cpp" line="1699"/>
         <source>AI resize is already running.</source>
         <translation>Масштабирование ИИ уже запущено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1712"/>
+        <location filename="../../core.cpp" line="1708"/>
         <source>AI resize supports one image at a time.</source>
         <translation>Масштабирование ИИ поддерживает только одно изображение за раз.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1719"/>
-        <location filename="../../core.cpp" line="1725"/>
+        <location filename="../../core.cpp" line="1715"/>
+        <location filename="../../core.cpp" line="1721"/>
         <source>Could not resize image.</source>
         <translation>Не удалось изменить размер изображения.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1751"/>
+        <location filename="../../core.cpp" line="1747"/>
         <source>AI resizing...</source>
         <translation>Масштабирование ИИ...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1786"/>
+        <location filename="../../core.cpp" line="1782"/>
         <source>AI resize failed.</source>
         <translation>Ошибка масштабирования ИИ.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1791"/>
+        <location filename="../../core.cpp" line="1787"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Масштабирование ИИ завершено, но изображения больше нет в списке.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1797"/>
+        <location filename="../../core.cpp" line="1793"/>
         <source>Could not apply AI resize.</source>
         <translation>Не удалось применить масштабирование ИИ.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1813"/>
+        <location filename="../../core.cpp" line="1809"/>
         <source>AI resize finished.</source>
         <translation>Масштабирование ИИ завершено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1815"/>
+        <location filename="../../core.cpp" line="1811"/>
         <source>AI resize finished for %1.</source>
         <translation>Масштабирование ИИ для %1 завершено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1848"/>
+        <location filename="../../core.cpp" line="1844"/>
         <source>Could not adjust the image colors.</source>
         <translation>Не удалось настроить цвета изображения.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1981"/>
+        <location filename="../../core.cpp" line="1977"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>Установка обоев: не удалось получить изображение</translation>
     </message>
@@ -1357,50 +1377,50 @@ Staged copy:
         <translation>Обои установлены</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2087"/>
+        <location filename="../../core.cpp" line="2083"/>
         <source>Could not open path: </source>
         <translation>Не удалось открыть путь: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2152"/>
+        <location filename="../../core.cpp" line="2148"/>
         <source>Could not load folder: </source>
         <translation>Не удалось загрузить папку: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2211"/>
-        <location filename="../../core.cpp" line="2237"/>
+        <location filename="../../core.cpp" line="2207"/>
+        <location filename="../../core.cpp" line="2233"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>Не удалось получить список соседних папок: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2376"/>
+        <location filename="../../core.cpp" line="2372"/>
         <source>End of directory.</source>
         <translation>Конец папки.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2410"/>
+        <location filename="../../core.cpp" line="2406"/>
         <source>Load failed: </source>
         <translation>Ошибка загрузки: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2480"/>
-        <location filename="../../core.cpp" line="2487"/>
+        <location filename="../../core.cpp" line="2476"/>
+        <location filename="../../core.cpp" line="2483"/>
         <source>Error: could not load image.</source>
         <translation>Ошибка: не удалось загрузить изображение.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2504"/>
+        <location filename="../../core.cpp" line="2500"/>
         <source>HDR Profile</source>
         <translation>Профиль HDR</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2510"/>
+        <location filename="../../core.cpp" line="2506"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2538"/>
-        <location filename="../../core.cpp" line="2561"/>
+        <location filename="../../core.cpp" line="2534"/>
+        <location filename="../../core.cpp" line="2557"/>
         <source>Page %1/%2</source>
         <translation>Страница %1/%2</translation>
     </message>
@@ -1408,102 +1428,102 @@ Staged copy:
 <context>
     <name>CropPanel</name>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="100"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="107"/>
         <source>Selection</source>
         <translation>Выделение</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="111"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="118"/>
         <source>Width</source>
         <translation>Ширина</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="129"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="136"/>
         <source>Height</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="154"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="161"/>
         <source>Pos_X</source>
         <translation>Поз. X</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="172"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="179"/>
         <source>Pos_Y</source>
         <translation>Поз. Y</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="191"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="198"/>
         <source>Aspect Ratio</source>
         <translation>Соотношение сторон</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>Free</source>
         <translation>Произвольно</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>Custom</source>
         <translation>Пользовательские</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>Current Image</source>
         <translation>Текущее изображение</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>This Screen</source>
         <translation>Этот экран</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>1:1</source>
         <translation>1:1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>4:3</source>
         <translation>4:3</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>16:9</source>
         <translation>16:9</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>16:10</source>
         <translation>16:10</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="228"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="235"/>
         <source>⇄</source>
         <translation>⇄</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="233"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="240"/>
         <source>Swap aspect ratio</source>
         <translation>Поменять стороны</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="260"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="267"/>
         <source>Crop</source>
         <translation>Обрезать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="268"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="275"/>
         <source>Crop &amp;&amp; Save</source>
         <translation>Обрезать и сохранить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="277"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="284"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="284"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="291"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -1551,72 +1571,72 @@ Staged copy:
 <context>
     <name>FileReplaceDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="60"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="61"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="73"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="74"/>
         <source>&gt;&gt;&gt;</source>
         <translation>&gt;&gt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="77"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="78"/>
         <source>Destination:</source>
         <translation>Назначение:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="102"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="103"/>
         <source>Apply to all</source>
         <translation>Применить ко всем</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="121"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="122"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="127"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="128"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="131"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="132"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="28"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="29"/>
         <source>File already exists</source>
         <translation>Файл уже существует</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="54"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="55"/>
         <source>Replace destination file?</source>
         <translation>Заменить файл назначения?</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="23"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="24"/>
         <source>Directory already exists</source>
         <translation>Папка уже существует</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="48"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="49"/>
         <source>Merge directories?</source>
         <translation>Объединить папки?</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="26"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="27"/>
         <source>Destination already exists</source>
         <translation>Назначение уже существует</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="53"/>
         <source>There is a file with that name. Replace?</source>
         <translation>Файл с таким именем уже существует. Заменить?</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="50"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="51"/>
         <source>There is a folder with that name. Replace?</source>
         <translation>Папка с таким именем уже существует. Заменить?</translation>
     </message>
@@ -1662,122 +1682,122 @@ Staged copy:
 <context>
     <name>FolderView</name>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="99"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="98"/>
         <source>Toggle side panel</source>
         <translation>Скрыть/показать боковую панель</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="129"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="128"/>
         <source>Go up</source>
         <translation>Вверх</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="203"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="202"/>
         <source>Batch convert</source>
         <translation>Пакетная конвертация</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="218"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="217"/>
         <source>Grid size</source>
         <translation>Размер сетки</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>A - Z</source>
         <translation>A - Z</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Z - A</source>
         <translation>Z - A</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Size (desc)</source>
         <translation>Размер (убыв.)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Oldest</source>
         <translation>Старые</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="58"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
         <source>Newest</source>
         <translation>Новые</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="239"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="238"/>
         <source>Folder icon sorting</source>
         <translation>Сортировка значков папок</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="248"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="247"/>
         <source>Sort folders and images</source>
         <translation>Сортировать папки и изображения</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="264"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="263"/>
         <source>Filter by file format</source>
         <translation>Фильтр по формату файла</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="277"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="276"/>
         <source>Name filter</source>
         <translation>Фильтр по имени</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="283"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="282"/>
         <source>Filter images by name</source>
         <translation>Фильтровать изображения по имени</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="291"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="290"/>
         <source>Viewer</source>
         <translation>Просмотр</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="299"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="298"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="307"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="306"/>
         <source>Quit Wynpix</source>
         <translation>Выйти из Wynpix</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="70"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="69"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="131"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="130"/>
         <source>Filesystem</source>
         <translation>Файловая система</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="133"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="132"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="215"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="216"/>
         <source>Select directory</source>
         <translation>Выбрать папку</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="172"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="171"/>
         <source>1 image selected</source>
         <translation>выбрано 1 изображение</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="173"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="172"/>
         <source>%1 images selected</source>
         <translation>выбрано изображений: %1</translation>
     </message>
@@ -1841,7 +1861,7 @@ Staged copy:
 <context>
     <name>ImageViewport</name>
     <message>
-        <location filename="../../gui/quick/ui/ImageViewport.qml" line="179"/>
+        <location filename="../../gui/quick/ui/ImageViewport.qml" line="177"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
@@ -1849,22 +1869,22 @@ Staged copy:
 <context>
     <name>ImageViewportController</name>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="339"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="343"/>
         <source>Display error: %1</source>
         <translation>Ошибка отображения: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="345"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="349"/>
         <source>The graphics device was lost. The view is drawn again on a new device.</source>
         <translation>Графическое устройство потеряно. Изображение будет перерисовано на новом устройстве.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="456"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="460"/>
         <source>Cannot open the animation %1: %2</source>
         <translation>Не удалось открыть анимацию %1: %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="459"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="463"/>
         <source>Cannot decode frame %1 of the animation %2: %3</source>
         <translation>Не удалось декодировать кадр %1 анимации %2: %3</translation>
     </message>
@@ -2065,67 +2085,67 @@ Staged copy:
         <translation>Предпросмотр</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="101"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="102"/>
         <source>Printer:</source>
         <translation>Принтер:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="105"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="106"/>
         <source>&lt;No printers found&gt;</source>
         <translation>&lt;Принтеры не найдены&gt;</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="126"/>
         <source>Page orientation:</source>
         <translation>Ориентация страницы:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="128"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="129"/>
         <source>Portrait</source>
         <translation>Книжная</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="134"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="135"/>
         <source>Landscape</source>
         <translation>Альбомная</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="152"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="153"/>
         <source>Color mode:</source>
         <translation>Цветовой режим:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="155"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="156"/>
         <source>Grayscale</source>
         <translation>Оттенки серого</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="161"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="162"/>
         <source>Color</source>
         <translation>Цветной</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="170"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="171"/>
         <source>Fit to page</source>
         <translation>Вписать в страницу</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="192"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="193"/>
         <source>Export PDF</source>
         <translation>Экспорт в PDF</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="202"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="203"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="207"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="208"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="217"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="218"/>
         <source>Choose pdf location</source>
         <translation>Выберите место сохранения PDF</translation>
     </message>
@@ -2327,117 +2347,117 @@ Staged copy:
 <context>
     <name>ResizeDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="20"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="21"/>
         <source>Resize</source>
         <translation>Изменение размера</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="36"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="37"/>
         <source>By Percent:</source>
         <translation>В процентах:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="64"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="65"/>
         <source>By Absolute Size:</source>
         <translation>Точный размер:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="48"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="49"/>
         <source>Percent:</source>
         <translation>В процентах:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="76"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="77"/>
         <source>Width:</source>
         <translation>Ширина:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="92"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="93"/>
         <source>Height:</source>
         <translation>Высота:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="107"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="108"/>
         <source>Keep aspect ratio</source>
         <translation>Сохранять пропорции</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="141"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="144"/>
         <source>Use Upscayl</source>
         <translation>Использовать Upscayl</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="120"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="121"/>
         <source>Filter:</source>
         <translation>Фильтр:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="128"/>
         <source>Nearest</source>
         <translation>По соседним пикселям</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="128"/>
         <source>Bilinear</source>
         <translation>Билинейная</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="128"/>
         <source>Smart sharpen</source>
         <translation>Умная резкость</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="126"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="129"/>
         <source>Magic Kernel Sharp 2021</source>
         <translation>Magic Kernel Sharp 2021</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="153"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="156"/>
         <source>No AI models found in models/ directory.</source>
         <translation>Модели ИИ не найдены в папке models/.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="169"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="172"/>
         <source>Model:</source>
         <translation>Модель:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="186"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="189"/>
         <source>Common sizes:</source>
         <translation>Стандартные размеры:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="191"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="194"/>
         <source>Select:</source>
         <translation>Выбрать:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="199"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="202"/>
         <source>Fit to desktop</source>
         <translation>Вписать в рабочий стол</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="205"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="208"/>
         <source>Fill desktop (expanding)</source>
         <translation>Заполнить рабочий стол</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="226"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="229"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="230"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="233"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="155"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="158"/>
         <source>Use Upscayl only applies when the target size is larger than the original; it has no effect at this size and will be skipped.</source>
         <translation>«Использовать Upscayl» действует, только если целевой размер больше исходного; при этом размере параметр не действует и будет пропущен.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="211"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="214"/>
         <source>Reset:</source>
         <translation>Сбросить:</translation>
     </message>
@@ -2539,7 +2559,7 @@ Staged copy:
         <translation>Создать</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ScriptEditorDialog.qml" line="96"/>
+        <location filename="../../gui/quick/ui/ScriptEditorDialog.qml" line="97"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -3147,14 +3167,14 @@ Staged copy:
         <translation>Сбросить к умолчанию</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="47"/>
         <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="91"/>
+        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="47"/>
         <source>Action</source>
         <translation>Действие</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="49"/>
         <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="99"/>
+        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="49"/>
         <source>Shortcut</source>
         <translation>Сочетание</translation>
     </message>
@@ -3363,7 +3383,7 @@ Example: %1</source>
         <translation>О Wynpix</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="256"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
@@ -3390,22 +3410,22 @@ Wynpix распространяется под лицензией [GNU GPL ве�
 </translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="241"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="245"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="249"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="251"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="252"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="266"/>
         <source>Preferences — </source>
         <translation>Настройки — </translation>
     </message>
@@ -3527,12 +3547,12 @@ Wynpix распространяется под лицензией [GNU GPL ве�
         <translation>Обзор...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="284"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="294"/>
         <source>Select Monitor Color Profile</source>
         <translation>Выберите цветовой профиль монитора</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="288"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>Цветовые профили (*.icc *.icm)</translation>
     </message>
@@ -3706,32 +3726,32 @@ Wynpix распространяется под лицензией [GNU GPL ве�
 <context>
     <name>main</name>
     <message>
-        <location filename="../../main.cpp" line="121"/>
+        <location filename="../../main.cpp" line="122"/>
         <source>File or directory path.</source>
         <translation>Путь к файлу или папке.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="124"/>
+        <location filename="../../main.cpp" line="125"/>
         <source>Generate all thumbnails for directory.</source>
         <translation>Сгенерировать миниатюры для папки.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="126"/>
+        <location filename="../../main.cpp" line="127"/>
         <source>directory-path</source>
         <translation>путь-до-папки</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="128"/>
+        <location filename="../../main.cpp" line="129"/>
         <source>Thumbnail size. Current size is used if not specified.</source>
         <translation>Размер миниатюр. Если не указан, используется текущий.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="130"/>
+        <location filename="../../main.cpp" line="131"/>
         <source>thumbnail-size</source>
         <translation>размер-эскиза</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="132"/>
+        <location filename="../../main.cpp" line="133"/>
         <source>Show build options.</source>
         <translation>Показать опции сборки.</translation>
     </message>

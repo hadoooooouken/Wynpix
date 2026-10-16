@@ -4,114 +4,119 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="321"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="353"/>
         <source>Stopped</source>
         <translation>已停止</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="319"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="351"/>
         <source>Failed</source>
         <translation>失败</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="138"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="142"/>
         <source>Load Error</source>
         <translation>加载错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="189"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="201"/>
         <source>AI Model Error</source>
         <translation>AI模型错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="200"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="212"/>
         <source>AI Upscaling Failed</source>
         <translation>AI超分辨率失败</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="217"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="235"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="230"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="249"/>
         <source>Resize Error</source>
         <translation>调整大小错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="253"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="272"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="267"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="286"/>
         <source>Transform Error</source>
         <translation>变换错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="317"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="349"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="292"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="320"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="306"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="334"/>
         <source>Save Error</source>
         <translation>保存错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="24"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="26"/>
         <source>Original backup retained at:
 %1</source>
         <translation>原始备份保留在:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="33"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="35"/>
         <source>Staged output retained at:
 %1</source>
         <translation>中间输出保留在:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="37"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="39"/>
         <source>Temporary output could not be removed. Retained at:
 %1</source>
         <translation>无法删除临时输出。保留在:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="49"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="51"/>
         <source>Windows error: %1</source>
         <translation>Windows 错误: %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="341"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="360"/>
         <source>Commit Error</source>
         <translation>提交错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="401"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="420"/>
         <source>Could not create a unique batch subfolder in &quot;%1&quot;. The batch was aborted.</source>
         <translation>无法在“%1”中创建唯一的批量任务子文件夹。批量任务已中止。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="427"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="452"/>
         <source>Invalid destination path</source>
         <translation>目标路径无效</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="328"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="439"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="451"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="443"/>
+        <source>Invalid source index</source>
+        <translation>无效的源索引</translation>
+    </message>
+    <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="342"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="464"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="476"/>
         <source>Skipped (Exists)</source>
         <translation>已跳过 (文件已存在)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="433"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="457"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="458"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="482"/>
         <source>Destination planning failed: invalid reservation key</source>
         <translation>目标规划失败: 预留键无效</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="446"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
         <source>Destination planning failed: no unique output path is available</source>
         <translation>目标规划失败: 没有可用的唯一输出路径</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="347"/>
         <source>Processing...</source>
         <translation>正在处理...</translation>
     </message>
@@ -144,303 +149,318 @@
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="247"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="252"/>
         <source>By Percent:</source>
         <translation>按百分比：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="277"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
         <source>By Absolute Size:</source>
         <translation>按绝对大小：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="644"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="369"/>
+        <source>By Megapixels:</source>
+        <translation>按百万像素：</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="384"/>
+        <source>Megapixels:</source>
+        <translation>百万像素：</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="406"/>
+        <source>Binary (1M = 1024x1024)</source>
+        <translation>二进制 (1M = 1024x1024)</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="725"/>
         <source>OK</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="261"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="268"/>
         <source>Percent:</source>
         <translation>百分比：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="346"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="425"/>
         <source>Keep aspect ratio</source>
         <translation>保持长宽比</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="381"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="461"/>
         <source>Upscayl</source>
         <translation>使用 Upscayl</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="406"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="486"/>
         <source>Filter:</source>
         <translation>过滤器：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="421"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="501"/>
         <source>Model:</source>
         <translation>模型：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="539"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="465"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="545"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="325"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
         <source>Common sizes:</source>
         <translation>常用尺寸：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="474"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="554"/>
         <source>Color adjustments</source>
         <translation>颜色调整</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="193"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="225"/>
         <source>Exposure:</source>
         <translation>曝光：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="194"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="226"/>
         <source>Contrast:</source>
         <translation>对比度：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="195"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="227"/>
         <source>Brightness:</source>
         <translation>亮度：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="198"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
         <source>Temperature:</source>
         <translation>温度：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="199"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
         <source>Tint:</source>
         <translation>色调：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="196"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="228"/>
         <source>Saturation:</source>
         <translation>饱和度：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="354"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="354"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Width</source>
         <translation>宽度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="354"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Height</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="197"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
         <source>Hue:</source>
         <translation>色相：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="508"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="589"/>
         <source>Output folder:</source>
         <translation>输出文件夹：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="520"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="601"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="526"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
         <source>Create subfolder for batch</source>
         <translation>为批量任务创建子文件夹</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="532"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="613"/>
         <source>Filename pattern:</source>
         <translation>文件名模板：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="263"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="235"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="267"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>可用变量：{name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="547"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="628"/>
         <source>Overwrite existing files</source>
         <translation>覆盖现有文件</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="341"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="373"/>
         <source>Ready to convert.</source>
         <translation>准备转换。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="578"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
         <source>Convert</source>
         <translation>转换</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="585"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="500"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="581"/>
         <source>Reset Color Adjustments</source>
         <translation>重置颜色调整</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="292"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="310"/>
         <source>Max Width:</source>
         <translation>最大宽度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="309"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="348"/>
         <source>Max Height:</source>
         <translation>最大高度:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="177"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="209"/>
         <source>0°</source>
         <translation>0°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="179"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="211"/>
         <source>90°</source>
         <translation>90°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="181"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="213"/>
         <source>180°</source>
         <translation>180°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="183"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="215"/>
         <source>270°</source>
         <translation>270°</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="150"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="182"/>
         <source>Nearest</source>
         <translation>最近邻</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="151"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="183"/>
         <source>Bilinear</source>
         <translation>双线性</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="152"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="184"/>
         <source>Smart sharpen</source>
         <translation>智能锐化</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="153"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="185"/>
         <source>Magic Kernel Sharp 2021</source>
         <translation>Magic Kernel Sharp 2021</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="142"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="174"/>
         <source>Original size</source>
         <translation>原始大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="337"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="415"/>
         <source>Reset: %1 x %2</source>
         <translation>重置：%1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="393"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="473"/>
         <source>No AI models found in models/ directory.</source>
         <translation>在 models/ 目录中未找到 AI 模型。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="334"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="366"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>已选择 %1 个文件 (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="596"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="677"/>
         <source>Select Output Directory</source>
         <translation>选择输出目录</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="100"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="115"/>
         <source>PNG Compression level (0 - none, 9 - max)</source>
         <translation>PNG 压缩级别 (0 - 无压缩, 9 - 最大)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="102"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="117"/>
         <source>Quality (1 - lowest, 100 - highest)</source>
         <translation>质量 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="353"/>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="584"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
         <source>Stopping...</source>
         <translation>正在停止...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="585"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="283"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
         <source>Invalid Directory</source>
         <translation>无效目录</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="283"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
         <source>Please select a valid output directory.</source>
         <translation>请选择一个有效的输出目录。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="285"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="317"/>
         <source>Invalid Pattern</source>
         <translation>格式无效</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="286"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="318"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>文件名格式不能包含路径遍历序列 (..) 或绝对路径。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="289"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="321"/>
         <source>No files</source>
         <translation>无文件</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="290"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="322"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>队列中未选择任何文件。请至少勾选一个文件。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="293"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="325"/>
         <source>Resolution Limit Exceeded</source>
         <translation>超出分辨率限制</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="294"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="326"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -455,42 +475,42 @@ Please reduce the percentage or absolute size.</source>
 请降低百分比或绝对大小。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="345"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="377"/>
         <source>Processing...</source>
         <translation>正在处理...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="361"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>被用户停止。成功: %1，失败: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="365"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
         <source>Batch aborted.</source>
         <translation>批量任务已中止。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="378"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="410"/>
         <source>Batch Conversion Failed</source>
         <translation>批量转换失败</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="349"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="381"/>
         <source>Processed %1 / %2 files.</source>
         <translation>已处理 %1 / %2 个文件。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="357"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="389"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>已完成。成功：%1，失败：%2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="369"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
         <source>Batch Conversion Complete</source>
         <translation>批量转换完成</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="370"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="402"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -506,7 +526,7 @@ Total files: %3</source>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="313"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="345"/>
         <source>Pending</source>
         <translation>等待中</translation>
     </message>
@@ -608,152 +628,152 @@ Total files: %3</source>
 <context>
     <name>ContextMenu</name>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="91"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="92"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="95"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="96"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="74"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="75"/>
         <source>Quick copy</source>
         <translation>快速拷贝</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="76"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="77"/>
         <source>Quick move</source>
         <translation>快速移动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="98"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="99"/>
         <source>Move to trash</source>
         <translation>移到回收站</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="65"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="66"/>
         <source>Color adjustments</source>
         <translation>颜色微调</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="35"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="36"/>
         <source>Fit to window</source>
         <translation>适应窗口</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="37"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="38"/>
         <source>Fit to width</source>
         <translation>适应宽度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="39"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="40"/>
         <source>Fit to height</source>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="41"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="42"/>
         <source>Original size</source>
         <translation>原始大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="43"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="44"/>
         <source>Zoom in</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="45"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="46"/>
         <source>Zoom out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="50"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="51"/>
         <source>Rotate left</source>
         <translation>向左旋转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="53"/>
         <source>Rotate right</source>
         <translation>向右旋转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="54"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="55"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="56"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="57"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="58"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="59"/>
         <source>Crop</source>
         <translation>裁剪</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="60"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="61"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="67"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="68"/>
         <source>Panorama mode</source>
         <translation>全景模式</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="69"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="70"/>
         <source>AI Upscale</source>
         <translation>AI 放大</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="71"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="72"/>
         <source>CAS Settings</source>
         <translation>CAS 设置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="78"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="79"/>
         <source>Folder View</source>
         <translation>文件夹视图</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="82"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="83"/>
         <source>Image info</source>
         <translation>图像信息</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="87"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="88"/>
         <source>More</source>
         <translation>更多</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="93"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="94"/>
         <source>Set as wallpaper</source>
         <translation>设为壁纸</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="84"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="85"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="89"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="90"/>
         <source>Open with...</source>
         <translation>打开方式...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="80"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="81"/>
         <source>Show in folder</source>
         <translation>在文件管理器中显示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="101"/>
+        <location filename="../../gui/quick/ui/menus/contextmenumodel.cpp" line="102"/>
         <source>Delete permanently</source>
         <translation>永久删除</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="343"/>
+        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="353"/>
         <source>Configure menu</source>
         <translation>配置菜单</translation>
     </message>
@@ -798,221 +818,221 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="784"/>
+        <location filename="../../core.cpp" line="780"/>
         <source>Updated: </source>
         <translation>更新到: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="791"/>
+        <location filename="../../core.cpp" line="787"/>
         <source>Welcome to </source>
         <translation>欢迎使用 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="792"/>
+        <location filename="../../core.cpp" line="788"/>
         <source> version </source>
         <translation> 版本 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="810"/>
+        <location filename="../../core.cpp" line="806"/>
         <source>Shuffle mode: OFF</source>
         <translation>随机模式: 关闭</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="813"/>
+        <location filename="../../core.cpp" line="809"/>
         <source>Shuffle mode: ON</source>
         <translation>随机模式: 启用</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="822"/>
+        <location filename="../../core.cpp" line="818"/>
         <source>Slideshow: OFF</source>
         <translation>幻灯片播放：关闭</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="826"/>
+        <location filename="../../core.cpp" line="822"/>
         <source>Slideshow: ON</source>
         <translation>幻灯片播放：启用</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1020"/>
-        <location filename="../../core.cpp" line="1023"/>
-        <location filename="../../core.cpp" line="1026"/>
+        <location filename="../../core.cpp" line="1016"/>
+        <location filename="../../core.cpp" line="1019"/>
+        <location filename="../../core.cpp" line="1022"/>
         <source>Delete </source>
         <translation>永久删除 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1021"/>
+        <location filename="../../core.cpp" line="1017"/>
         <source> folders permanently?</source>
         <translation> 文件夹吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1024"/>
+        <location filename="../../core.cpp" line="1020"/>
         <source> files permanently?</source>
         <translation> 文件吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1023"/>
         <source> items permanently?</source>
         <translation> 个项目?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1035"/>
+        <location filename="../../core.cpp" line="1031"/>
         <source>Delete permanently</source>
         <translation>永久删除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1055"/>
+        <location filename="../../core.cpp" line="1051"/>
         <source>File removed</source>
         <translation>文件已删除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1061"/>
-        <location filename="../../core.cpp" line="1064"/>
-        <location filename="../../core.cpp" line="1067"/>
+        <location filename="../../core.cpp" line="1057"/>
+        <location filename="../../core.cpp" line="1060"/>
+        <location filename="../../core.cpp" line="1063"/>
         <source>Removed: </source>
         <translation>成功删除: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1065"/>
-        <location filename="../../core.cpp" line="1134"/>
+        <location filename="../../core.cpp" line="1061"/>
+        <location filename="../../core.cpp" line="1130"/>
         <source> files</source>
         <translation> 个文件</translation>
     </message>
     <message>
+        <location filename="../../core.cpp" line="1088"/>
+        <location filename="../../core.cpp" line="1090"/>
         <location filename="../../core.cpp" line="1092"/>
-        <location filename="../../core.cpp" line="1094"/>
-        <location filename="../../core.cpp" line="1096"/>
         <source>Move </source>
         <translation>移动 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1096"/>
+        <location filename="../../core.cpp" line="1092"/>
         <source> items to trash?</source>
         <translation> 个项目到回收站?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1104"/>
+        <location filename="../../core.cpp" line="1100"/>
         <source>Move to trash</source>
         <translation>删除到回收站</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1122"/>
+        <location filename="../../core.cpp" line="1118"/>
         <source>Folder moved to trash</source>
         <translation>文件夹已移至回收站</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1124"/>
+        <location filename="../../core.cpp" line="1120"/>
         <source>Moved to trash</source>
         <translation>删除到回收站</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1130"/>
-        <location filename="../../core.cpp" line="1133"/>
-        <location filename="../../core.cpp" line="1136"/>
+        <location filename="../../core.cpp" line="1126"/>
+        <location filename="../../core.cpp" line="1129"/>
+        <location filename="../../core.cpp" line="1132"/>
         <source>Moved to trash: </source>
         <translation>移动到回收站： </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1217"/>
+        <location filename="../../core.cpp" line="1213"/>
         <source>File copied</source>
         <translation>文件已拷贝</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1224"/>
+        <location filename="../../core.cpp" line="1220"/>
         <source>Path copied</source>
         <translation>目录已拷贝</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1353"/>
-        <location filename="../../core.cpp" line="1542"/>
-        <location filename="../../core.cpp" line="1566"/>
+        <location filename="../../core.cpp" line="1349"/>
+        <location filename="../../core.cpp" line="1538"/>
+        <location filename="../../core.cpp" line="1562"/>
         <source>File exists</source>
         <translation>文件已经存在</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1353"/>
+        <location filename="../../core.cpp" line="1349"/>
         <source>Overwrite file?</source>
         <translation>覆盖文件吗?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1448"/>
+        <location filename="../../core.cpp" line="1444"/>
         <source>Add folder</source>
         <translation>新建文件夹</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1448"/>
+        <location filename="../../core.cpp" line="1444"/>
         <source>Folder name:</source>
         <translation>文件夹名称:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1455"/>
+        <location filename="../../core.cpp" line="1451"/>
         <source>Folder already exists</source>
         <translation>文件夹已存在</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1464"/>
+        <location filename="../../core.cpp" line="1460"/>
         <source>Failed to create folder</source>
         <translation>新建文件夹失败</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1540"/>
+        <location filename="../../core.cpp" line="1536"/>
         <source>File moved.</source>
         <translation>文件已移动.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1543"/>
-        <location filename="../../core.cpp" line="1567"/>
+        <location filename="../../core.cpp" line="1539"/>
+        <location filename="../../core.cpp" line="1563"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>目标文件已经存在. 覆盖吗?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1564"/>
+        <location filename="../../core.cpp" line="1560"/>
         <source>File copied.</source>
         <translation>文件已拷贝.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1650"/>
+        <location filename="../../core.cpp" line="1646"/>
         <source>Perform action &quot;</source>
         <translation>执行操作 \&quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1651"/>
+        <location filename="../../core.cpp" line="1647"/>
         <source>Changes will be saved immediately.</source>
         <translation>更改将立即保存.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1682"/>
+        <location filename="../../core.cpp" line="1678"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1686"/>
+        <location filename="../../core.cpp" line="1682"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1691"/>
+        <location filename="../../core.cpp" line="1687"/>
         <source>Rotate</source>
         <translation>旋转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1735"/>
-        <location filename="../../core.cpp" line="1761"/>
+        <location filename="../../core.cpp" line="1731"/>
+        <location filename="../../core.cpp" line="1757"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1804"/>
+        <location filename="../../core.cpp" line="1800"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>AI缩放已完成，但图像已更改。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1822"/>
-        <location filename="../../core.cpp" line="1828"/>
+        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1824"/>
         <source>Crop</source>
         <translation>裁剪</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1890"/>
+        <location filename="../../core.cpp" line="1886"/>
         <source>File saved</source>
         <translation>文件已保存</translation>
     </message>
@@ -1032,19 +1052,19 @@ Total files: %3</source>
         <translation>不能保存文件: 自动恢复失败 (Windows 错误 %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1969"/>
-        <location filename="../../core.cpp" line="1975"/>
+        <location filename="../../core.cpp" line="1965"/>
+        <location filename="../../core.cpp" line="1971"/>
         <source>Set wallpaper: file not supported</source>
         <translation>设为壁纸: 不支持的文件格式</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1993"/>
-        <location filename="../../core.cpp" line="2002"/>
+        <location filename="../../core.cpp" line="1989"/>
+        <location filename="../../core.cpp" line="1998"/>
         <source>Could not open image</source>
         <translation>不能打开图片</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1997"/>
+        <location filename="../../core.cpp" line="1993"/>
         <source>Can only print static images</source>
         <translation>只能打印静态图片</translation>
     </message>
@@ -1211,139 +1231,139 @@ Staged copy:
     </message>
     <message>
         <location filename="../../core.cpp" line="632"/>
-        <location filename="../../core.cpp" line="1505"/>
+        <location filename="../../core.cpp" line="1501"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>无法清除缩略图缓存</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1031"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Delete folder permanently?</source>
         <translation>永久删除文件夹吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1033"/>
+        <location filename="../../core.cpp" line="1029"/>
         <source>Delete file permanently?</source>
         <translation>永久删除文件吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1053"/>
+        <location filename="../../core.cpp" line="1049"/>
         <source>Folder removed</source>
         <translation>文件夹已移除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1062"/>
-        <location filename="../../core.cpp" line="1131"/>
+        <location filename="../../core.cpp" line="1058"/>
+        <location filename="../../core.cpp" line="1127"/>
         <source> folders</source>
         <translation> 文件夹</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1068"/>
-        <location filename="../../core.cpp" line="1137"/>
+        <location filename="../../core.cpp" line="1064"/>
+        <location filename="../../core.cpp" line="1133"/>
         <source> items</source>
         <translation> 项</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1092"/>
+        <location filename="../../core.cpp" line="1088"/>
         <source> folders to trash?</source>
         <translation> 文件夹至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1094"/>
+        <location filename="../../core.cpp" line="1090"/>
         <source> files to trash?</source>
         <translation> 文件至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1100"/>
+        <location filename="../../core.cpp" line="1096"/>
         <source>Move folder to trash?</source>
         <translation>移动文件夹至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1102"/>
+        <location filename="../../core.cpp" line="1098"/>
         <source>Move file to trash?</source>
         <translation>移动文件至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1487"/>
+        <location filename="../../core.cpp" line="1483"/>
         <source>Moving: %1 (%2)</source>
         <translation>正在移动: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1488"/>
+        <location filename="../../core.cpp" line="1484"/>
         <source>Copying: %1 (%2)</source>
         <translation>正在复制: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1497"/>
+        <location filename="../../core.cpp" line="1493"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>已移动 %n 个文件</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1498"/>
+        <location filename="../../core.cpp" line="1494"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>已复制 %n 个文件</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1675"/>
+        <location filename="../../core.cpp" line="1671"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1 失败: 无法编辑图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1703"/>
+        <location filename="../../core.cpp" line="1699"/>
         <source>AI resize is already running.</source>
         <translation>AI缩放已在运行中。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1712"/>
+        <location filename="../../core.cpp" line="1708"/>
         <source>AI resize supports one image at a time.</source>
         <translation>AI缩放一次仅支持一张图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1719"/>
-        <location filename="../../core.cpp" line="1725"/>
+        <location filename="../../core.cpp" line="1715"/>
+        <location filename="../../core.cpp" line="1721"/>
         <source>Could not resize image.</source>
         <translation>无法缩放图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1751"/>
+        <location filename="../../core.cpp" line="1747"/>
         <source>AI resizing...</source>
         <translation>正在进行AI缩放...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1786"/>
+        <location filename="../../core.cpp" line="1782"/>
         <source>AI resize failed.</source>
         <translation>AI缩放失败。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1791"/>
+        <location filename="../../core.cpp" line="1787"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>AI缩放已完成，但该图像已不再列表中。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1797"/>
+        <location filename="../../core.cpp" line="1793"/>
         <source>Could not apply AI resize.</source>
         <translation>无法应用AI缩放。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1813"/>
+        <location filename="../../core.cpp" line="1809"/>
         <source>AI resize finished.</source>
         <translation>AI缩放已完成。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1815"/>
+        <location filename="../../core.cpp" line="1811"/>
         <source>AI resize finished for %1.</source>
         <translation>%1 的AI缩放已完成。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1848"/>
+        <location filename="../../core.cpp" line="1844"/>
         <source>Could not adjust the image colors.</source>
         <translation>无法调整图像颜色。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1981"/>
+        <location filename="../../core.cpp" line="1977"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>设置壁纸：获取图像失败</translation>
     </message>
@@ -1353,50 +1373,50 @@ Staged copy:
         <translation>壁纸已设置</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2087"/>
+        <location filename="../../core.cpp" line="2083"/>
         <source>Could not open path: </source>
         <translation>不能打开的路径: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2152"/>
+        <location filename="../../core.cpp" line="2148"/>
         <source>Could not load folder: </source>
         <translation>不能载入的目录: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2211"/>
-        <location filename="../../core.cpp" line="2237"/>
+        <location filename="../../core.cpp" line="2207"/>
+        <location filename="../../core.cpp" line="2233"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>无法枚举同级文件夹: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2376"/>
+        <location filename="../../core.cpp" line="2372"/>
         <source>End of directory.</source>
         <translation>目录末尾.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2410"/>
+        <location filename="../../core.cpp" line="2406"/>
         <source>Load failed: </source>
         <translation>加载失败: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2480"/>
-        <location filename="../../core.cpp" line="2487"/>
+        <location filename="../../core.cpp" line="2476"/>
+        <location filename="../../core.cpp" line="2483"/>
         <source>Error: could not load image.</source>
         <translation>错误: 不能载入图片.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2504"/>
+        <location filename="../../core.cpp" line="2500"/>
         <source>HDR Profile</source>
         <translation>HDR 配置文件</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2510"/>
+        <location filename="../../core.cpp" line="2506"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2538"/>
-        <location filename="../../core.cpp" line="2561"/>
+        <location filename="../../core.cpp" line="2534"/>
+        <location filename="../../core.cpp" line="2557"/>
         <source>Page %1/%2</source>
         <translation>第 %1/%2 页</translation>
     </message>
@@ -1404,102 +1424,102 @@ Staged copy:
 <context>
     <name>CropPanel</name>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="100"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="107"/>
         <source>Selection</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="111"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="118"/>
         <source>Width</source>
         <translation>宽度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="129"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="136"/>
         <source>Height</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="154"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="161"/>
         <source>Pos_X</source>
         <translation>位置 X</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="172"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="179"/>
         <source>Pos_Y</source>
         <translation>位置 Y</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="191"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="198"/>
         <source>Aspect Ratio</source>
         <translation>纵横比例</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>Free</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>Custom</source>
         <translation>定制比例</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>Current Image</source>
         <translation>当前图片</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="200"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="207"/>
         <source>This Screen</source>
         <translation>此屏幕</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>1:1</source>
         <translation>1:1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>4:3</source>
         <translation>4:3</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>16:9</source>
         <translation>16:9</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="201"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="208"/>
         <source>16:10</source>
         <translation>16:10</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="228"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="235"/>
         <source>⇄</source>
         <translation>⇄</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="233"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="240"/>
         <source>Swap aspect ratio</source>
         <translation>交换长宽比</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="260"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="267"/>
         <source>Crop</source>
         <translation>裁剪</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="268"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="275"/>
         <source>Crop &amp;&amp; Save</source>
         <translation>裁剪并保存</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="277"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="284"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/CropPanel.qml" line="284"/>
+        <location filename="../../gui/quick/ui/CropPanel.qml" line="291"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -1547,72 +1567,72 @@ Staged copy:
 <context>
     <name>FileReplaceDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="60"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="61"/>
         <source>Source:</source>
         <translation>来自:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="73"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="74"/>
         <source>&gt;&gt;&gt;</source>
         <translation>&gt;&gt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="77"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="78"/>
         <source>Destination:</source>
         <translation>目标:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="102"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="103"/>
         <source>Apply to all</source>
         <translation>适用于所有</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="121"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="122"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="127"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="128"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="131"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="132"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="28"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="29"/>
         <source>File already exists</source>
         <translation>文件已存在</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="54"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="55"/>
         <source>Replace destination file?</source>
         <translation>是否替换目标文件？</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="23"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="24"/>
         <source>Directory already exists</source>
         <translation>目录已存在</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="48"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="49"/>
         <source>Merge directories?</source>
         <translation>是否合并目录？</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="26"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="27"/>
         <source>Destination already exists</source>
         <translation>目标已存在</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="53"/>
         <source>There is a file with that name. Replace?</source>
         <translation>已存在同名文件。是否替换？</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="50"/>
+        <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="51"/>
         <source>There is a folder with that name. Replace?</source>
         <translation>已存在同名文件夹。是否替换？</translation>
     </message>
@@ -1658,122 +1678,122 @@ Staged copy:
 <context>
     <name>FolderView</name>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="99"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="98"/>
         <source>Toggle side panel</source>
         <translation>切换侧边栏</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="129"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="128"/>
         <source>Go up</source>
         <translation>向上</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="203"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="202"/>
         <source>Batch convert</source>
         <translation>批量转换</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="218"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="217"/>
         <source>Grid size</source>
         <translation>网格大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>A - Z</source>
         <translation>A - Z</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Z - A</source>
         <translation>Z - A</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Size (desc)</source>
         <translation>大小 (降序)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="56"/>
         <source>Oldest</source>
         <translation>最旧</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="58"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="57"/>
         <source>Newest</source>
         <translation>最新</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="239"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="238"/>
         <source>Folder icon sorting</source>
         <translation>文件夹图标排序</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="248"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="247"/>
         <source>Sort folders and images</source>
         <translation>对文件夹和图像进行排序</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="264"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="263"/>
         <source>Filter by file format</source>
         <translation>按文件格式筛选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="277"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="276"/>
         <source>Name filter</source>
         <translation>名称筛选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="283"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="282"/>
         <source>Filter images by name</source>
         <translation>按名称筛选图像</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="291"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="290"/>
         <source>Viewer</source>
         <translation>查看器</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="299"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="298"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="307"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="306"/>
         <source>Quit Wynpix</source>
         <translation>退出 Wynpix</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="70"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="69"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="131"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="130"/>
         <source>Filesystem</source>
         <translation>文件系统</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="133"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="132"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="215"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="216"/>
         <source>Select directory</source>
         <translation>选择目录</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="172"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="171"/>
         <source>1 image selected</source>
         <translation>已选择 1 张图像</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="173"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="172"/>
         <source>%1 images selected</source>
         <translation>已选择 %1 张图像</translation>
     </message>
@@ -1837,7 +1857,7 @@ Staged copy:
 <context>
     <name>ImageViewport</name>
     <message>
-        <location filename="../../gui/quick/ui/ImageViewport.qml" line="179"/>
+        <location filename="../../gui/quick/ui/ImageViewport.qml" line="177"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
@@ -1845,22 +1865,22 @@ Staged copy:
 <context>
     <name>ImageViewportController</name>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="339"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="343"/>
         <source>Display error: %1</source>
         <translation>显示错误: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="345"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="349"/>
         <source>The graphics device was lost. The view is drawn again on a new device.</source>
         <translation>图形设备已丢失。视图将在新设备上重新绘制。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="456"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="460"/>
         <source>Cannot open the animation %1: %2</source>
         <translation>无法打开动画 %1: %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="459"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="463"/>
         <source>Cannot decode frame %1 of the animation %2: %3</source>
         <translation>无法解码动画 %2 的第 %1 帧: %3</translation>
     </message>
@@ -2061,67 +2081,67 @@ Staged copy:
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="101"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="102"/>
         <source>Printer:</source>
         <translation>打印机:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="105"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="106"/>
         <source>&lt;No printers found&gt;</source>
         <translation>没找到打印机</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="126"/>
         <source>Page orientation:</source>
         <translation>页面风格:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="128"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="129"/>
         <source>Portrait</source>
         <translation>肖像</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="134"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="135"/>
         <source>Landscape</source>
         <translation>风景</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="152"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="153"/>
         <source>Color mode:</source>
         <translation>颜色:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="155"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="156"/>
         <source>Grayscale</source>
         <translation>黑白</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="161"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="162"/>
         <source>Color</source>
         <translation>参数</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="170"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="171"/>
         <source>Fit to page</source>
         <translation>符合页面</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="192"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="193"/>
         <source>Export PDF</source>
         <translation>导出为PDF</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="202"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="203"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="207"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="208"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PrintDialog.qml" line="217"/>
+        <location filename="../../gui/quick/ui/PrintDialog.qml" line="218"/>
         <source>Choose pdf location</source>
         <translation>选择pdf文件所在位置</translation>
     </message>
@@ -2324,117 +2344,117 @@ Staged copy:
 <context>
     <name>ResizeDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="20"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="21"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="36"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="37"/>
         <source>By Percent:</source>
         <translation>按百分比:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="64"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="65"/>
         <source>By Absolute Size:</source>
         <translation>按绝对尺寸：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="48"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="49"/>
         <source>Percent:</source>
         <translation>百分比:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="153"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="156"/>
         <source>No AI models found in models/ directory.</source>
         <translation>在 models/ 目录中未找到 AI 模型。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="76"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="77"/>
         <source>Width:</source>
         <translation>宽度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="92"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="93"/>
         <source>Height:</source>
         <translation>高度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="107"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="108"/>
         <source>Keep aspect ratio</source>
         <translation>保持纵横比例</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="120"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="121"/>
         <source>Filter:</source>
         <translation>过滤器:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="126"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="129"/>
         <source>Magic Kernel Sharp 2021</source>
         <translation>Magic Kernel Sharp 2021</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="141"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="144"/>
         <source>Use Upscayl</source>
         <translation>使用 Upscayl</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="169"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="172"/>
         <source>Model:</source>
         <translation>模型：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="186"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="189"/>
         <source>Common sizes:</source>
         <translation>正常尺寸:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="191"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="194"/>
         <source>Select:</source>
         <translation>选择:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="199"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="202"/>
         <source>Fit to desktop</source>
         <translation>适合桌面</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="205"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="208"/>
         <source>Fill desktop (expanding)</source>
         <translation>填充桌面（扩展）</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="226"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="229"/>
         <source>OK</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="230"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="233"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="155"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="158"/>
         <source>Use Upscayl only applies when the target size is larger than the original; it has no effect at this size and will be skipped.</source>
         <translation>“使用 Upscayl”仅在目标尺寸大于原始尺寸时生效；在此尺寸下无效，将被跳过。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="211"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="214"/>
         <source>Reset:</source>
         <translation>重置:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="128"/>
         <source>Nearest</source>
         <translation>最近邻</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="128"/>
         <source>Bilinear</source>
         <translation>双线性</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="125"/>
+        <location filename="../../gui/quick/ui/ResizeDialog.qml" line="128"/>
         <source>Smart sharpen</source>
         <translation>智能锐化</translation>
     </message>
@@ -2536,7 +2556,7 @@ Staged copy:
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ScriptEditorDialog.qml" line="96"/>
+        <location filename="../../gui/quick/ui/ScriptEditorDialog.qml" line="97"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -3038,14 +3058,14 @@ Staged copy:
         <translation>重置为标准</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="47"/>
         <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="91"/>
+        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="47"/>
         <source>Action</source>
         <translation>行为</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="49"/>
         <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="99"/>
+        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="49"/>
         <source>Shortcut</source>
         <translation>快捷键</translation>
     </message>
@@ -3229,22 +3249,22 @@ Example: %1</source>
         <translation>允许多个实例</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="241"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
         <source>OK</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="245"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="249"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="251"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="252"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="266"/>
         <source>Preferences — </source>
         <translation>首选项 — </translation>
     </message>
@@ -3371,12 +3391,12 @@ Example: %1</source>
         <translation>浏览...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="284"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="294"/>
         <source>Select Monitor Color Profile</source>
         <translation>选择显示器色彩配置文件</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="288"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>色彩配置文件 (*.icc *.icm)</translation>
     </message>
@@ -3532,7 +3552,7 @@ Example: %1</source>
         <translation>使用 Upscayl</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="256"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
@@ -3703,32 +3723,32 @@ Wynpix 采用 [GNU GPL 第 3 版](https://www.gnu.org/licenses/gpl-3.0.en.html) 
 <context>
     <name>main</name>
     <message>
-        <location filename="../../main.cpp" line="121"/>
+        <location filename="../../main.cpp" line="122"/>
         <source>File or directory path.</source>
         <translation>文件或目录所在路径.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="124"/>
+        <location filename="../../main.cpp" line="125"/>
         <source>Generate all thumbnails for directory.</source>
         <translation>为该目录下的所有文件生成略缩图.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="126"/>
+        <location filename="../../main.cpp" line="127"/>
         <source>directory-path</source>
         <translation>目录所在路径</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="128"/>
+        <location filename="../../main.cpp" line="129"/>
         <source>Thumbnail size. Current size is used if not specified.</source>
         <translation>缩略图大小. 如果未指定, 则使用当前大小.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="130"/>
+        <location filename="../../main.cpp" line="131"/>
         <source>thumbnail-size</source>
         <translation>略缩图大小</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="132"/>
+        <location filename="../../main.cpp" line="133"/>
         <source>Show build options.</source>
         <translation>显示编译选项.</translation>
     </message>
