@@ -1,5 +1,6 @@
 #include "imagelib.h"
 #include "settings.h"
+#include "utils/batchresourcepolicy.h"
 #include <array>
 #include <thread>
 #include <vector>
@@ -429,15 +430,32 @@ inline std::span<const uint32_t> constScanlineSpan(const QImage &img, int y) {
 }
 
 // Thread pool helper childed to QCoreApplication to avoid static destruction issues
-QThreadPool* getScalingThreadPool() {
-    static QThreadPool* pool = []() {
-        QThreadPool* p = new QThreadPool(QCoreApplication::instance());
-        int threads = std::thread::hardware_concurrency();
-        if (threads <= 0) threads = 4;
-        p->setMaxThreadCount(threads);
-        return p;
+int scalingThreadCount(ImageLib::ExecutionMode executionMode) {
+  if (executionMode == ImageLib::ExecutionMode::Batch)
+    return BatchResourcePolicy::scalingLimit();
+  int threads = std::thread::hardware_concurrency();
+  return threads > 0 ? threads : 4;
+}
+
+QThreadPool *getScalingThreadPool(ImageLib::ExecutionMode executionMode) {
+  if (executionMode == ImageLib::ExecutionMode::Batch) {
+    static QThreadPool *batchPool = []() {
+      auto *pool = new QThreadPool(QCoreApplication::instance());
+      pool->setMaxThreadCount(BatchResourcePolicy::defaultLimits().scalingThreads);
+      return pool;
     }();
+    return batchPool;
+  }
+
+  static QThreadPool *interactivePool = []() {
+    auto *pool = new QThreadPool(QCoreApplication::instance());
+    int threads = std::thread::hardware_concurrency();
+    if (threads <= 0)
+      threads = 4;
+    pool->setMaxThreadCount(threads);
     return pool;
+  }();
+  return interactivePool;
 }
 }
 
@@ -565,6 +583,16 @@ std::unique_ptr<QImage> ImageLib::exifRotated(std::unique_ptr<QImage> src,
 
 QImage ImageLib::scaled(std::shared_ptr<const QImage> source, QSize destSize,
                         ScalingFilter filter) {
+  return scaledWithMode(std::move(source), destSize, filter, ExecutionMode::Interactive);
+}
+
+QImage ImageLib::scaledForBatch(std::shared_ptr<const QImage> source, QSize destSize,
+                                ScalingFilter filter) {
+  return scaledWithMode(std::move(source), destSize, filter, ExecutionMode::Batch);
+}
+
+QImage ImageLib::scaledWithMode(std::shared_ptr<const QImage> source, QSize destSize,
+                                ScalingFilter filter, ExecutionMode executionMode) {
   int maxDim = 12288;
   qint64 maxPixels = 100000000;
   if (settings->useUpscayl() || settings->resizeUseUpscayl()) {
@@ -588,9 +616,9 @@ QImage ImageLib::scaled(std::shared_ptr<const QImage> source, QSize destSize,
   case QI_FILTER_BILINEAR:
     return scaled_Qt(scaleTarget, destSize, true);
   case QI_FILTER_SMART:
-    return scaled_Smart(scaleTarget, destSize);
+    return scaled_SmartWithMode(scaleTarget, destSize, executionMode);
   case QI_FILTER_MKS2021:
-    return scaled_MKS2021(scaleTarget, destSize);
+    return scaled_MKS2021WithMode(scaleTarget, destSize, executionMode);
   default:
     return scaled_Qt(scaleTarget, destSize, true);
   }
@@ -624,8 +652,12 @@ QImage ImageLib::scaled_Qt(std::shared_ptr<const QImage> source,
 
 
 
-QImage ImageLib::scaled_Smart(std::shared_ptr<const QImage> source,
-                               QSize destSize) {
+QImage ImageLib::scaled_Smart(std::shared_ptr<const QImage> source, QSize destSize) {
+  return scaled_SmartWithMode(std::move(source), destSize, ExecutionMode::Interactive);
+}
+
+QImage ImageLib::scaled_SmartWithMode(std::shared_ptr<const QImage> source,
+                                      QSize destSize, ExecutionMode executionMode) {
   if (!source || source->isNull())
     return QImage();
 
@@ -716,10 +748,9 @@ QImage ImageLib::scaled_Smart(std::shared_ptr<const QImage> source,
     QImage interImg(W_dst, H_src, srcImg.format());
     
     // Determine thread count
-    int numThreads = std::thread::hardware_concurrency();
-    if (numThreads <= 0) numThreads = 4;
+    int numThreads = scalingThreadCount(executionMode);
 
-    QThreadPool* pool = getScalingThreadPool();
+    QThreadPool* pool = getScalingThreadPool(executionMode);
 
     {
       QSemaphore semaphore;
@@ -1009,10 +1040,9 @@ QImage ImageLib::scaled_Smart(std::shared_ptr<const QImage> source,
     QImage destImg(W_dst, H_dst, srcImg.format());
 
     // Determine thread count
-    int numThreads = std::thread::hardware_concurrency();
-    if (numThreads <= 0) numThreads = 4;
+    int numThreads = scalingThreadCount(executionMode);
 
-    QThreadPool* pool = getScalingThreadPool();
+    QThreadPool* pool = getScalingThreadPool(executionMode);
 
     {
       QSemaphore semaphore;
@@ -1146,8 +1176,12 @@ QImage ImageLib::scaled_Smart(std::shared_ptr<const QImage> source,
   }
 }
 
-QImage ImageLib::scaled_MKS2021(std::shared_ptr<const QImage> source,
-                                 QSize destSize) {
+QImage ImageLib::scaled_MKS2021(std::shared_ptr<const QImage> source, QSize destSize) {
+  return scaled_MKS2021WithMode(std::move(source), destSize, ExecutionMode::Interactive);
+}
+
+QImage ImageLib::scaled_MKS2021WithMode(std::shared_ptr<const QImage> source,
+                                         QSize destSize, ExecutionMode executionMode) {
   if (!source || source->isNull())
     return QImage();
 
@@ -1200,9 +1234,8 @@ QImage ImageLib::scaled_MKS2021(std::shared_ptr<const QImage> source,
   if (vUseFixed)
     vFixedTaps = convertToFixedTaps(vTaps, vWeightPool);
 
-  int numThreads = std::thread::hardware_concurrency();
-  if (numThreads <= 0) numThreads = 4;
-  QThreadPool *pool = getScalingThreadPool();
+  int numThreads = scalingThreadCount(executionMode);
+  QThreadPool *pool = getScalingThreadPool(executionMode);
 
   // --- Horizontal pass: W_src x H_src -> W_dst x H_src ---
   QImage interImg(W_dst, H_src, srcImg.format());
@@ -1263,7 +1296,20 @@ QImage ImageLib::scaled_MKS2021(std::shared_ptr<const QImage> source,
   return destImg;
 }
 
-QImage ImageLib::applyColorAdjustments(std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments) {
+QImage ImageLib::applyColorAdjustments(std::shared_ptr<const QImage> source,
+                                       const ColorAdjustments &adjustments) {
+  return applyColorAdjustmentsWithMode(std::move(source), adjustments,
+                                       ExecutionMode::Interactive);
+}
+
+QImage ImageLib::applyColorAdjustmentsForBatch(
+    std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments) {
+  return applyColorAdjustmentsWithMode(std::move(source), adjustments, ExecutionMode::Batch);
+}
+
+QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> source,
+                                               const ColorAdjustments &adjustments,
+                                               ExecutionMode executionMode) {
   if (!source)
     return QImage();
 
@@ -1277,10 +1323,9 @@ QImage ImageLib::applyColorAdjustments(std::shared_ptr<const QImage> source, con
   uchar *bits = dst.bits();
   int bytesPerLine = dst.bytesPerLine();
 
-  int numThreads = std::thread::hardware_concurrency();
-  if (numThreads <= 0) numThreads = 4;
+  int numThreads = scalingThreadCount(executionMode);
 
-  QThreadPool* pool = getScalingThreadPool();
+  QThreadPool* pool = getScalingThreadPool(executionMode);
 
   {
     QSemaphore semaphore;

@@ -15,6 +15,7 @@
 #include "avif_p.h"
 #include "microexif_p.h"
 #include "util_p.h"
+#include "utils/batchresourcepolicy.h"
 
 #include <cfloat>
 
@@ -160,7 +161,10 @@ bool QAVIFHandler::ensureDecoder()
     m_decoder = avifDecoderCreate();
 
 #if AVIF_VERSION >= 80400
-    m_decoder->maxThreads = qBound(1, QThread::idealThreadCount(), 64);
+    const int defaultDecoderThreads = qBound(1, QThread::idealThreadCount(), 64);
+    m_decoder->maxThreads = BatchResourcePolicy::isBatchThread()
+        ? BatchResourcePolicy::codecLimit(defaultDecoderThreads)
+        : defaultDecoderThreads;
 #endif
 
 #if AVIF_VERSION >= 90100
@@ -1070,7 +1074,10 @@ bool QAVIFHandler::write(const QImage &image)
 
     avifRWData raw = AVIF_DATA_EMPTY;
     avifEncoder *encoder = avifEncoderCreate();
-    encoder->maxThreads = qBound(1, QThread::idealThreadCount(), 64);
+    const int defaultEncoderThreads = qBound(1, QThread::idealThreadCount(), 64);
+    encoder->maxThreads = BatchResourcePolicy::isBatchThread()
+        ? BatchResourcePolicy::codecLimit(defaultEncoderThreads)
+        : defaultEncoderThreads;
 
 #if AVIF_VERSION < 1000000
     encoder->minQuantizer = minQuantizer;

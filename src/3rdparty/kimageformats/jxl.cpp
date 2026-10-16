@@ -13,6 +13,7 @@
 #include "jxl_p.h"
 #include "microexif_p.h"
 #include "util_p.h"
+#include "utils/batchresourcepolicy.h"
 
 #include <jxl/cms.h>
 #include <jxl/encode.h>
@@ -77,7 +78,10 @@ int decoderThreadCount(uint64_t width, uint64_t height)
         return 1;
     }
 
-    return qBound(2, processorCount / 2, kMaximumJxlThreadCount);
+    const int defaultThreads = qBound(2, processorCount / 2, kMaximumJxlThreadCount);
+    return BatchResourcePolicy::isBatchThread()
+        ? BatchResourcePolicy::codecLimit(defaultThreads)
+        : defaultThreads;
 }
 }
 
@@ -991,9 +995,14 @@ bool QJpegXLHandler::write(const QImage &image)
     }
 
     void *runner = nullptr;
-    const int num_worker_threads = shouldProcessSingleThreaded(image.width(), image.height())
+    const int defaultWorkerThreads = shouldProcessSingleThreaded(image.width(), image.height())
         ? 0
         : qBound(1, QThread::idealThreadCount(), kMaximumJxlThreadCount);
+    const int num_worker_threads = defaultWorkerThreads > 0
+        ? BatchResourcePolicy::isBatchThread()
+            ? BatchResourcePolicy::codecLimit(defaultWorkerThreads)
+            : defaultWorkerThreads
+        : 0;
 
     if (num_worker_threads > 1) {
         runner = JxlThreadParallelRunnerCreate(nullptr, num_worker_threads);

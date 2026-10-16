@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "batchjob.h"
+#include "utils/batchresourcepolicy.h"
 
 class BatchConverter : public QObject {
     Q_OBJECT
@@ -56,6 +57,7 @@ private:
     std::atomic<int> m_inFlightTasksCount{0};
     std::atomic<bool> m_selfDestructOnFinished{false};
     std::atomic<bool> m_deleteLaterCalled{false};
+    std::atomic<bool> m_batchPolicyActive{false};
 
     int m_totalFiles = 0;
     int m_processedFiles = 0;

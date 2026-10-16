@@ -11,6 +11,7 @@
 #include "components/batchconverter/batchjobrules.h"
 #include "components/printing/imageprintsetup.h"
 #include "fakebatchconversionservice.h"
+#include "utils/batchresourcepolicy.h"
 #include "gui/quick/ui/dialogs/batchconverterdialogmodel.h"
 #include "gui/quick/ui/dialogs/batchqueuemodel.h"
 #include "gui/quick/ui/dialogs/printdialogmodel.h"
@@ -82,6 +83,26 @@ class BatchPrintTests : public QObject {
     Q_OBJECT
 
 private slots:
+    void batchResourceBudgetReservesTwoLogicalThreads() {
+        const BatchResourcePolicy::Limits twelveThreadLimits =
+            BatchResourcePolicy::limitsForThreadCount(12);
+        QCOMPARE(twelveThreadLimits.cpuBudget, 10);
+        QCOMPARE(twelveThreadLimits.fileConcurrency, 9);
+        QCOMPARE(twelveThreadLimits.scalingThreads, 1);
+        QCOMPARE(twelveThreadLimits.fileConcurrency + twelveThreadLimits.scalingThreads,
+                 twelveThreadLimits.cpuBudget);
+
+        const BatchResourcePolicy::Limits sixteenThreadLimits =
+            BatchResourcePolicy::limitsForThreadCount(16);
+        QCOMPARE(sixteenThreadLimits.cpuBudget, 14);
+        QCOMPARE(sixteenThreadLimits.fileConcurrency, 13);
+        QCOMPARE(sixteenThreadLimits.scalingThreads, 1);
+        QCOMPARE(sixteenThreadLimits.fileConcurrency + sixteenThreadLimits.scalingThreads,
+                 sixteenThreadLimits.cpuBudget);
+
+        QCOMPARE(BatchResourcePolicy::limitsForThreadCount(1).cpuBudget, 1);
+    }
+
     //--- batch job rules -----------------------------------------------------
     void qualityScalesFollowTheFormat() {
         const SaveQualityDefaults defaults{.jpeg = 95, .png = 3, .modern = 80};

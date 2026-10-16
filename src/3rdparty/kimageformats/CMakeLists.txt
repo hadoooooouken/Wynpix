@@ -251,7 +251,7 @@ set(AVIF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libavif/inclu
 set(AVIF_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libavif/${WYNPIX_DEPS_BUILD_NAME}/Release/avif.lib")
 if(EXISTS "${AVIF_LIBRARY}")
     kimageformats_add_plugin(kimg_avif SOURCES avif.cpp microexif.cpp)
-    target_include_directories(kimg_avif PRIVATE ${AVIF_INCLUDE_DIR})
+    target_include_directories(kimg_avif PRIVATE ${AVIF_INCLUDE_DIR} "${PROJECT_SOURCE_DIR}/src")
     target_link_libraries(kimg_avif PRIVATE ${AVIF_LIBRARY})
 endif()
 
@@ -269,7 +269,7 @@ set(HWY_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DE
 
 if(EXISTS "${JXL_LIBRARY}")
     kimageformats_add_plugin(kimg_jxl SOURCES jxl.cpp microexif.cpp)
-    target_include_directories(kimg_jxl PRIVATE ${JXL_INCLUDE_DIR} ${JXL_BUILD_INCLUDE_DIR})
+    target_include_directories(kimg_jxl PRIVATE ${JXL_INCLUDE_DIR} ${JXL_BUILD_INCLUDE_DIR} "${PROJECT_SOURCE_DIR}/src")
     target_link_libraries(kimg_jxl PRIVATE
         ${JXL_LIBRARY}
         ${JXL_THREADS_LIBRARY}

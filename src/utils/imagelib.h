@@ -14,6 +14,11 @@
 
 class ImageLib {
     public:
+        enum class ExecutionMode {
+            Interactive,
+            Batch
+        };
+
         static constexpr float kAdjustEpsilon = kColorAdjustmentEpsilon;
         static constexpr double kPi = std::numbers::pi;
 
@@ -32,6 +37,8 @@ class ImageLib {
 
         //static QImage *scaled(const QImage *source, QSize destSize, ScalingFilter filter);
         static QImage scaled(std::shared_ptr<const QImage> source, QSize destSize, ScalingFilter filter);
+        static QImage scaledForBatch(std::shared_ptr<const QImage> source, QSize destSize,
+                                     ScalingFilter filter);
 
         static QImage scaled_Qt(std::shared_ptr<const QImage> source, QSize destSize, bool smooth);
 
@@ -46,8 +53,22 @@ class ImageLib {
         static std::unique_ptr<const QImage> exifRotated(std::unique_ptr<const QImage> src, int orientation);
         static std::unique_ptr<QImage> exifRotated(std::unique_ptr<QImage> src, int orientation);
         static void recolor(QPixmap &pixmap, QColor color);
-        static QImage applyColorAdjustments(std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments);
+        static QImage applyColorAdjustments(std::shared_ptr<const QImage> source,
+                                            const ColorAdjustments &adjustments);
+        static QImage applyColorAdjustmentsForBatch(
+            std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments);
         static QImage loadICO(const QString &path);
+
+    private:
+        static QImage scaledWithMode(std::shared_ptr<const QImage> source, QSize destSize,
+                                     ScalingFilter filter, ExecutionMode executionMode);
+        static QImage scaled_SmartWithMode(std::shared_ptr<const QImage> source, QSize destSize,
+                                           ExecutionMode executionMode);
+        static QImage scaled_MKS2021WithMode(std::shared_ptr<const QImage> source, QSize destSize,
+                                             ExecutionMode executionMode);
+        static QImage applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> source,
+                                                     const ColorAdjustments &adjustments,
+                                                     ExecutionMode executionMode);
 };
 
 

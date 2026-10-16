@@ -16,6 +16,7 @@
 #include <utility>
 #include "components/upscaler/upscaler.h"
 #include "components/batchconverter/batchjobrules.h"
+#include "utils/batchresourcepolicy.h"
 
 namespace {
 
@@ -115,6 +116,7 @@ public:
     }
 
     void run() override {
+        BatchResourcePolicy::Scope batchScope;
         auto notifyFinished = [this](BatchItemState state, const QString &details) {
             QMetaObject::invokeMethod(
                 m_converter, "onTaskFinished", Qt::QueuedConnection, Q_ARG(int, m_index),
@@ -158,7 +160,8 @@ public:
                 return;
             }
             std::shared_ptr<const QImage> srcPtr = std::make_shared<const QImage>(processedImg);
-            QImage adj = ImageLib::applyColorAdjustments(srcPtr, m_job.colorAdjustments);
+            QImage adj = ImageLib::applyColorAdjustmentsForBatch(srcPtr,
+                                                                 m_job.colorAdjustments);
             if (!adj.isNull()) {
                 processedImg = adj;
             }
@@ -371,7 +374,7 @@ private:
         if (img.isNull()) return QImage();
         QSize finalSize = computeAspectFitSize(img.size(), targetSize, keepAspect, fitMode);
         std::shared_ptr<const QImage> imgPtr = std::make_shared<const QImage>(img);
-        return ImageLib::scaled(imgPtr, finalSize, static_cast<ScalingFilter>(filter));
+        return ImageLib::scaledForBatch(imgPtr, finalSize, static_cast<ScalingFilter>(filter));
     }
 
     BatchConverter *m_converter;
@@ -384,7 +387,7 @@ private:
 
 BatchConverter::BatchConverter(QObject *parent)
     : QObject(parent), m_cancelFlag(std::make_shared<std::atomic<bool>>(false)) {
-    m_threadPool.setMaxThreadCount(QThread::idealThreadCount());
+    m_threadPool.setMaxThreadCount(BatchResourcePolicy::fileLimit());
 }
 
 BatchConverter::~BatchConverter() {
@@ -422,7 +425,10 @@ void BatchConverter::start(const QStringList &allPaths, const QList<int> &select
     // serializing the whole batch because of a stale checkbox state.
     bool upscaylMayRun = job.useUpscayl && job.doResize &&
                           !(job.resizeMode == ResizeMode::ByPercent && job.resizePercent <= 100.0);
-    m_threadPool.setMaxThreadCount(upscaylMayRun ? 1 : QThread::idealThreadCount());
+    BatchResourcePolicy::beginBatch();
+    m_batchPolicyActive.store(true, std::memory_order_release);
+    const int effectiveBatchThreads = BatchResourcePolicy::fileLimit();
+    m_threadPool.setMaxThreadCount(upscaylMayRun ? 1 : effectiveBatchThreads);
 
     QSet<QString> reservedDestinationKeys;
     int activeIndex = 0;
@@ -481,6 +487,9 @@ void BatchConverter::start(const QStringList &allPaths, const QList<int> &select
 
     if (m_processedFiles >= m_totalFiles) {
         m_isConverting = false;
+        if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel)) {
+            BatchResourcePolicy::endBatch();
+        }
         emit finished(m_successCount, m_failedCount, m_totalFiles);
     }
 }
@@ -510,6 +519,9 @@ void BatchConverter::finishCancellation() {
     if (!m_isConverting && !m_isCancelling) return;
     m_isConverting = false;
     m_isCancelling = false;
+    if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel)) {
+        BatchResourcePolicy::endBatch();
+    }
     emit cancelled(m_successCount, m_failedCount, m_totalFiles);
 }
 
@@ -559,6 +571,9 @@ void BatchConverter::onTaskFinished(int index, BatchItemState state, QString det
 
     if (m_processedFiles >= m_totalFiles) {
         m_isConverting = false;
+        if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel)) {
+            BatchResourcePolicy::endBatch();
+        }
         emit finished(m_successCount, m_failedCount, m_totalFiles);
     }
 }
