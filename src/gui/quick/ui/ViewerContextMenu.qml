@@ -327,6 +327,8 @@ Menu {
     component ScriptsMenu: Menu {
         id: scriptsMenu
 
+        popupType: T.Popup.Window
+
         required property string entryText
         required property int entryIcon
         required property bool entryEnabled
