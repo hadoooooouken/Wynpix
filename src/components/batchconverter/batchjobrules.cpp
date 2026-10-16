@@ -5,6 +5,7 @@
 #include <QFileInfo>
 
 #include <algorithm>
+#include <cmath>
 
 namespace BatchJobRules {
 namespace {
@@ -129,6 +130,23 @@ QSize percentTarget(QSize original, double percent) {
     const double scale = percent / kPercentPerUnit;
     return clampedToSideRange(
         {truncated(original.width() * scale), truncated(original.height() * scale)});
+}
+
+double megapixelsForSize(QSize size, bool useBinaryMegapixel) {
+    const double base = useBinaryMegapixel ? (1024.0 * 1024.0) : (1000.0 * 1000.0);
+    return (static_cast<double>(size.width()) * size.height()) / base;
+}
+
+QSize megapixelTarget(QSize original, double targetMegapixels, bool useBinaryMegapixel) {
+    const double base = useBinaryMegapixel ? (1024.0 * 1024.0) : (1000.0 * 1000.0);
+    const double targetPixels = targetMegapixels * base;
+    const double origPixels = static_cast<double>(original.width()) * original.height();
+    const double scaleFactor = std::sqrt(targetPixels / origPixels);
+    const int newWidth =
+        std::max(1, static_cast<int>(std::lround(original.width() * scaleFactor)));
+    const int newHeight =
+        std::max(1, static_cast<int>(std::lround(original.height() * scaleFactor)));
+    return {newWidth, newHeight};
 }
 
 QSize widthEdited(QSize original, QSize target, int width, bool keepAspectRatio) {

@@ -68,6 +68,9 @@ inline constexpr double kDefaultPercent = 100.0;
 inline constexpr int kPercentDecimals = 1;
 inline constexpr int kMinimumSide = 1;
 inline constexpr int kMaximumSide = 65535;
+inline constexpr double kMinimumMegapixels = 0.0;
+inline constexpr double kMaximumMegapixels = 1000.0;
+inline constexpr int kMegapixelDecimals = 1;
 
 // Size the resize fields start from when no source image size is known.
 [[nodiscard]] QSize fallbackOriginalSize();
@@ -75,6 +78,9 @@ inline constexpr int kMaximumSide = 65535;
 // Target of a percent of original. Each side is truncated, as the widget
 // dialog did, and kept within kMinimumSide - kMaximumSide.
 [[nodiscard]] QSize percentTarget(QSize original, double percent);
+[[nodiscard]] double megapixelsForSize(QSize size, bool useBinaryMegapixel);
+[[nodiscard]] QSize megapixelTarget(QSize original, double targetMegapixels,
+                                    bool useBinaryMegapixel);
 // Target after the width (or height) field was set to value: the other side
 // follows in the original's aspect ratio when keepAspectRatio (truncated, in
 // single precision, as the widget dialog did), otherwise it is kept.

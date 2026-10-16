@@ -248,6 +248,7 @@ Window {
                                 spacing: StyleConstants.dialogSpacing
 
                                 RadioButton {
+                                    objectName: "batchPercentMode"
                                     text: qsTr("By Percent:")
                                     checkable: false
                                     checked: root.dialog.byPercent
@@ -255,6 +256,7 @@ Window {
                                 }
 
                                 RowLayout {
+                                    objectName: "batchPercentControls"
                                     Layout.fillWidth: true
                                     Layout.leftMargin: root.indent
                                     spacing: StyleConstants.dialogSpacing
@@ -288,17 +290,19 @@ Window {
                                     spacing: StyleConstants.dialogSpacing
 
                                     RadioButton {
+                                        objectName: "batchAbsoluteMode"
                                         text: qsTr("By Absolute Size:")
                                         checkable: false
-                                        checked: !root.dialog.byPercent
+                                        checked: root.dialog.byAbsoluteSize
                                         onClicked: root.dialog.setByPercent(false)
                                     }
 
                                     RowLayout {
+                                        objectName: "batchAbsoluteWidthControls"
                                         Layout.fillWidth: true
                                         Layout.leftMargin: root.indent
                                         spacing: StyleConstants.dialogSpacing
-                                        enabled: !root.dialog.byPercent
+                                        enabled: root.dialog.byAbsoluteSize
 
                                         Label {
                                             Layout.fillWidth: true
@@ -320,12 +324,13 @@ Window {
                                 }
 
                                 RowLayout {
+                                    objectName: "batchCommonSizeAndHeightControls"
                                     Layout.fillWidth: true
                                     Layout.leftMargin: StyleConstants.indicatorPadding
                                                         + StyleConstants.indicatorSize
                                                         + StyleConstants.indicatorSpacing
                                     spacing: StyleConstants.dialogSpacing
-                                    enabled: !root.dialog.byPercent
+                                    enabled: root.dialog.byAbsoluteSize
 
                                     Label {
                                         text: qsTr("Common sizes:")
@@ -345,6 +350,7 @@ Window {
                                     SpinBox {
                                         id: heightBox
 
+                                        objectName: "batchHeight"
                                         Layout.preferredWidth: root.fieldWidth
                                         from: root.dialog.minimumSide
                                         to: root.dialog.maximumSide
@@ -359,16 +365,18 @@ Window {
                                     spacing: StyleConstants.dialogSpacing
 
                                     RadioButton {
+                                        objectName: "batchMegapixelMode"
                                         text: qsTr("By Megapixels:")
                                         checkable: false
-                                        enabled: false
+                                        checked: root.dialog.byMegapixels
+                                        onClicked: root.dialog.setByMegapixels(true)
                                     }
 
                                     RowLayout {
                                         Layout.fillWidth: true
                                         Layout.leftMargin: root.indent
                                         spacing: StyleConstants.dialogSpacing
-                                        enabled: false
+                                        enabled: root.dialog.byMegapixels
 
                                         Label {
                                             Layout.fillWidth: true
@@ -376,22 +384,29 @@ Window {
                                             text: qsTr("Megapixels:")
                                         }
                                         DoubleSpinBox {
+                                            id: megapixelBox
+
+                                            objectName: "batchMegapixels"
                                             Layout.preferredWidth: root.fieldWidth
-                                            from: 0
-                                            to: 1000
-                                            decimals: 1
-                                            value: 1.3
-                                            editable: false
+                                            from: root.dialog.minimumMegapixels
+                                            to: root.dialog.maximumMegapixels
+                                            decimals: root.dialog.megapixelDecimals
+                                            value: root.dialog.targetMegapixels
+                                            editable: true
+                                            onValueModified: root.dialog.setTargetMegapixels(megapixelBox.value)
                                         }
                                     }
                                 }
 
                                 CheckBox {
+                                    objectName: "batchBinaryMegapixel"
                                     Layout.leftMargin: StyleConstants.indicatorPadding
                                                         + StyleConstants.indicatorSize
                                                         + StyleConstants.indicatorSpacing
                                     text: qsTr("Binary (1M = 1024x1024)")
-                                    enabled: false
+                                    checked: root.dialog.useBinaryMegapixel
+                                    enabled: root.dialog.byMegapixels
+                                    onToggled: root.dialog.setUseBinaryMegapixel(checked)
                                 }
                             }
 
@@ -406,8 +421,9 @@ Window {
                                 spacing: StyleConstants.dialogSpacing
 
                                 CheckBox {
+                                    objectName: "batchKeepAspectRatio"
                                     text: qsTr("Keep aspect ratio")
-                                    enabled: !root.dialog.byPercent
+                                    enabled: root.dialog.byAbsoluteSize
                                     checked: root.dialog.keepAspectRatio
                                     onToggled: root.dialog.setKeepAspectRatio(checked)
                                 }
@@ -420,8 +436,9 @@ Window {
                                         required property int index
                                         required property string modelData
 
+                                        objectName: "batchAspectFit_" + index
                                         text: modelData
-                                        enabled: root.dialog.keepAspectRatio && !root.dialog.byPercent
+                                        enabled: root.dialog.keepAspectRatio && root.dialog.byAbsoluteSize
                                         checkable: false
                                         checked: root.dialog.aspectFitMode === index
                                         onClicked: root.dialog.setAspectFitMode(index)

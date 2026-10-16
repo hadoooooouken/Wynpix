@@ -122,6 +122,13 @@ private slots:
         QCOMPARE(percentTarget(QSize(100, 100), kMaximumPercent), QSize(1600, 1600));
     }
 
+    void megapixelTargetsPreserveAspectRatio() {
+        QCOMPARE(megapixelsForSize(QSize(1000, 500), false), 0.5);
+        QCOMPARE(megapixelTarget(QSize(4000, 2000), 2.0, false), QSize(2000, 1000));
+        QCOMPARE(megapixelTarget(QSize(4000, 2000), 2.0, true), QSize(2048, 1024));
+        QCOMPARE(megapixelTarget(QSize(4000, 2000), 0.0, false), QSize(1, 1));
+    }
+
     void editedSidesFollowTheAspectRatio() {
         const QSize original(1000, 500);
         QCOMPARE(widthEdited(original, original, 300, true), QSize(300, 150));
@@ -366,6 +373,37 @@ private slots:
         QCOMPARE(job.rotation, RotationAngle::Rotate180);
         QVERIFY(job.flipVertical);
         QCOMPARE(job.upscaylModel, u"anime"_s);
+        dialog.reject();
+    }
+
+    void batchMegapixelResizeMode() {
+        BatchConverterDialogModel dialog;
+        FakeBatchConversionService service;
+        QVERIFY(dialog.start(batchInput({u"C:/a.png"_s}), service));
+        QCOMPARE(dialog.targetMegapixels(), 0.5);
+        QVERIFY(dialog.byAbsoluteSize());
+
+        dialog.setByMegapixels(true);
+        QVERIFY(dialog.byMegapixels());
+        QVERIFY(!dialog.byPercent());
+        QVERIFY(!dialog.byAbsoluteSize());
+        dialog.setTargetMegapixels(2.4);
+        dialog.setUseBinaryMegapixel(true);
+        const BatchJob job = dialog.job();
+        QCOMPARE(job.resizeMode, ResizeMode::ByMegapixels);
+        QCOMPARE(job.targetMegapixels, 2.4);
+        QVERIFY(job.useBinaryMegapixel);
+
+        dialog.setTargetMegapixels(5000.0);
+        QCOMPARE(dialog.targetMegapixels(), kMaximumMegapixels);
+        dialog.resetSize();
+        QCOMPARE(dialog.targetMegapixels(), megapixelsForSize(QSize(1000, 500), true));
+        QVERIFY(dialog.byMegapixels());
+
+        dialog.setByPercent(true);
+        QVERIFY(dialog.byPercent());
+        QVERIFY(!dialog.byMegapixels());
+        QVERIFY(!dialog.byAbsoluteSize());
         dialog.reject();
     }
 

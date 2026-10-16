@@ -97,6 +97,18 @@ int BatchConverterDialogModel::percentDecimals() const {
     return kPercentDecimals;
 }
 
+double BatchConverterDialogModel::minimumMegapixels() const {
+    return kMinimumMegapixels;
+}
+
+double BatchConverterDialogModel::maximumMegapixels() const {
+    return kMaximumMegapixels;
+}
+
+int BatchConverterDialogModel::megapixelDecimals() const {
+    return kMegapixelDecimals;
+}
+
 int BatchConverterDialogModel::minimumSide() const {
     return kMinimumSide;
 }
@@ -143,11 +155,27 @@ bool BatchConverterDialogModel::resizeEnabled() const {
 }
 
 bool BatchConverterDialogModel::byPercent() const {
-    return mDraft.job.resizeByPercent;
+    return mDraft.job.resizeMode == ResizeMode::ByPercent;
+}
+
+bool BatchConverterDialogModel::byAbsoluteSize() const {
+    return mDraft.job.resizeMode == ResizeMode::ByAbsoluteSize;
+}
+
+bool BatchConverterDialogModel::byMegapixels() const {
+    return mDraft.job.resizeMode == ResizeMode::ByMegapixels;
 }
 
 double BatchConverterDialogModel::percent() const {
     return mDraft.job.resizePercent;
+}
+
+double BatchConverterDialogModel::targetMegapixels() const {
+    return mDraft.job.targetMegapixels;
+}
+
+bool BatchConverterDialogModel::useBinaryMegapixel() const {
+    return mDraft.job.useBinaryMegapixel;
 }
 
 int BatchConverterDialogModel::targetWidth() const {
@@ -309,6 +337,7 @@ bool BatchConverterDialogModel::start(const BatchConverterDialogInput &input,
     BatchJob &job = mDraft.job;
     job.format = formatList.first().extension;
     job.resizePercent = kDefaultPercent;
+    job.targetMegapixels = megapixelsForSize(mOriginalSize, job.useBinaryMegapixel);
     job.targetSize = mOriginalSize;
     mFilterIndex = defaultScalingFilterIndex();
     job.scalingFilter = filterList[mFilterIndex].filter;
@@ -413,21 +442,36 @@ void BatchConverterDialogModel::setResizeEnabled(bool enabled) {
     }
     // Enabling the section applies its current mode again, as the widget
     // dialog's radio buttons did.
-    setByPercent(mDraft.job.resizeByPercent);
-    emit settingsChanged();
+    if (mDraft.job.resizeMode == ResizeMode::ByPercent)
+        setByPercent(true);
+    else if (mDraft.job.resizeMode == ResizeMode::ByAbsoluteSize)
+        setByPercent(false);
+    else
+        emit settingsChanged();
 }
 
 void BatchConverterDialogModel::setByPercent(bool byPercent) {
     BatchJob &job = mDraft.job;
-    job.resizeByPercent = byPercent;
     if (byPercent) {
+        job.resizeMode = ResizeMode::ByPercent;
         // The same percent applies to both sides of every file.
         job.keepAspectRatio = true;
         applySize(percentTarget(mOriginalSize, job.resizePercent));
     } else {
+        job.resizeMode = ResizeMode::ByAbsoluteSize;
         applySize(widthEdited(mOriginalSize, job.targetSize, job.targetSize.width(),
                               job.keepAspectRatio));
     }
+}
+
+void BatchConverterDialogModel::setByMegapixels(bool byMegapixels) {
+    if (!byMegapixels) {
+        if (mDraft.job.resizeMode == ResizeMode::ByMegapixels)
+            setByPercent(false);
+        return;
+    }
+    mDraft.job.resizeMode = ResizeMode::ByMegapixels;
+    emit settingsChanged();
 }
 
 void BatchConverterDialogModel::setPercent(double percent) {
@@ -435,20 +479,35 @@ void BatchConverterDialogModel::setPercent(double percent) {
     applySize(percentTarget(mOriginalSize, mDraft.job.resizePercent));
 }
 
+void BatchConverterDialogModel::setTargetMegapixels(double megapixels) {
+    mDraft.job.targetMegapixels =
+        std::clamp(megapixels, kMinimumMegapixels, kMaximumMegapixels);
+    emit settingsChanged();
+}
+
+void BatchConverterDialogModel::setUseBinaryMegapixel(bool useBinaryMegapixel) {
+    mDraft.job.useBinaryMegapixel = useBinaryMegapixel;
+    emit settingsChanged();
+}
+
 void BatchConverterDialogModel::setTargetWidth(int width) {
     const BatchJob &job = mDraft.job;
+    if (job.resizeMode != ResizeMode::ByAbsoluteSize)
+        return;
     applySize(widthEdited(mOriginalSize, job.targetSize,
                           std::clamp(width, kMinimumSide, kMaximumSide), job.keepAspectRatio));
 }
 
 void BatchConverterDialogModel::setTargetHeight(int height) {
     const BatchJob &job = mDraft.job;
+    if (job.resizeMode != ResizeMode::ByAbsoluteSize)
+        return;
     applySize(heightEdited(mOriginalSize, job.targetSize,
                            std::clamp(height, kMinimumSide, kMaximumSide), job.keepAspectRatio));
 }
 
 void BatchConverterDialogModel::setKeepAspectRatio(bool keep) {
-    if (mDraft.job.resizeByPercent)
+    if (mDraft.job.resizeMode != ResizeMode::ByAbsoluteSize)
         return;
     mDraft.job.keepAspectRatio = keep;
     emit settingsChanged();
@@ -478,6 +537,8 @@ void BatchConverterDialogModel::selectCommonSize(int index) {
 void BatchConverterDialogModel::resetSize() {
     mCommonSizeIndex = 0;
     mDraft.job.resizePercent = kDefaultPercent;
+    mDraft.job.targetMegapixels =
+        megapixelsForSize(mOriginalSize, mDraft.job.useBinaryMegapixel);
     applySize(mOriginalSize);
 }
 
@@ -582,7 +643,11 @@ void BatchConverterDialogModel::convert() {
                            .selectedCount = mQueue.selectedCount(),
                            .resize = mDraft.job.doResize,
                            .useUpscayl = mDraft.job.useUpscayl,
-                           .targetSize = mDraft.job.targetSize};
+                           .targetSize = mDraft.job.resizeMode == ResizeMode::ByMegapixels
+                                             ? megapixelTarget(mOriginalSize,
+                                                               mDraft.job.targetMegapixels,
+                                                               mDraft.job.useBinaryMegapixel)
+                                             : mDraft.job.targetSize};
     const StartProblem problem = checkStart(check);
     if (problem != StartProblem::None) {
         showMessage(startProblemMessage(problem, check), true);

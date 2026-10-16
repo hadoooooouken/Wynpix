@@ -15,6 +15,7 @@
 #include <cmath>
 #include <utility>
 #include "components/upscaler/upscaler.h"
+#include "components/batchconverter/batchjobrules.h"
 
 namespace {
 
@@ -142,10 +143,14 @@ public:
         QImage processedImg = srcImg;
 
         QSize targetSize = m_job.targetSize;
-        if (m_job.resizeByPercent) {
+        if (m_job.resizeMode == ResizeMode::ByPercent) {
             double scale = m_job.resizePercent / 100.0;
             targetSize = QSize(qRound(srcImg.width() * scale), qRound(srcImg.height() * scale));
+        } else if (m_job.resizeMode == ResizeMode::ByMegapixels) {
+            targetSize = BatchJobRules::megapixelTarget(srcImg.size(), m_job.targetMegapixels,
+                                                        m_job.useBinaryMegapixel);
         }
+        const bool exactTargetSize = m_job.resizeMode == ResizeMode::ByMegapixels;
 
         if (m_job.colorAdjustments.hasAdjustments()) {
             if (m_cancelFlag->load()) {
@@ -164,8 +169,11 @@ public:
         // force every file in a downscale batch through the (much slower,
         // single-threaded) AI path - fall through to the regular resize
         // below instead.
-        QSize finalTarget = computeAspectFitSize(srcImg.size(), targetSize,
-                                                 m_job.keepAspectRatio, m_job.aspectFitMode);
+        QSize finalTarget = exactTargetSize
+                                ? targetSize
+                                : computeAspectFitSize(srcImg.size(), targetSize,
+                                                       m_job.keepAspectRatio,
+                                                       m_job.aspectFitMode);
         bool wantsUpscayl = m_job.useUpscayl &&
                              (finalTarget.width() > srcImg.width() ||
                               finalTarget.height() > srcImg.height());
@@ -206,7 +214,8 @@ public:
                     notifyStopped();
                     return;
                 }
-                QImage resized = applyResize(processedImg, targetSize, m_job.keepAspectRatio,
+                QImage resized = applyResize(processedImg, targetSize,
+                                             exactTargetSize ? false : m_job.keepAspectRatio,
                                              m_job.aspectFitMode, m_job.scalingFilter);
                 if (resized.isNull()) {
                     if (m_cancelFlag->load()) {
@@ -224,7 +233,8 @@ public:
                 notifyStopped();
                 return;
             }
-            QImage resized = applyResize(processedImg, targetSize, m_job.keepAspectRatio,
+            QImage resized = applyResize(processedImg, targetSize,
+                                         exactTargetSize ? false : m_job.keepAspectRatio,
                                          m_job.aspectFitMode, m_job.scalingFilter);
             if (resized.isNull()) {
                 if (m_cancelFlag->load()) {
@@ -411,7 +421,7 @@ void BatchConverter::start(const QStringList &allPaths, const QList<int> &select
     // never trigger there - keep full parallelism in that case instead of
     // serializing the whole batch because of a stale checkbox state.
     bool upscaylMayRun = job.useUpscayl && job.doResize &&
-                          !(job.resizeByPercent && job.resizePercent <= 100.0);
+                          !(job.resizeMode == ResizeMode::ByPercent && job.resizePercent <= 100.0);
     m_threadPool.setMaxThreadCount(upscaylMayRun ? 1 : QThread::idealThreadCount());
 
     QSet<QString> reservedDestinationKeys;

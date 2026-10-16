@@ -109,6 +109,86 @@ TestCase {
         compare(Fixture.lastDialogAnswer, "batch:0");
     }
 
+    function test_batchResizeModesEnableOnlyTheirControls() {
+        verify(Fixture.requestBatchConversion(sources()));
+        const window = openedWindow(batchIndex);
+        const dialog = Fixture.dialogs.batchConverter;
+        dialog.setResizeEnabled(true);
+
+        const percentMode = findNamed(window.contentItem, "batchPercentMode");
+        const percentControls = findNamed(window.contentItem, "batchPercentControls");
+        const absoluteMode = findNamed(window.contentItem, "batchAbsoluteMode");
+        const absoluteWidthControls = findNamed(window.contentItem, "batchAbsoluteWidthControls");
+        const commonSizeAndHeight = findNamed(
+            window.contentItem, "batchCommonSizeAndHeightControls");
+        const megapixelMode = findNamed(window.contentItem, "batchMegapixelMode");
+        const megapixels = findNamed(window.contentItem, "batchMegapixels");
+        const binaryMegapixel = findNamed(window.contentItem, "batchBinaryMegapixel");
+        const keepAspectRatio = findNamed(window.contentItem, "batchKeepAspectRatio");
+        verify(percentMode !== null);
+        verify(percentControls !== null);
+        verify(absoluteMode !== null);
+        verify(absoluteWidthControls !== null);
+        verify(commonSizeAndHeight !== null);
+        verify(megapixelMode !== null);
+        verify(megapixels !== null);
+        verify(binaryMegapixel !== null);
+        verify(keepAspectRatio !== null);
+        const fitModes = [
+            findNamed(window.contentItem, "batchAspectFit_0"),
+            findNamed(window.contentItem, "batchAspectFit_1"),
+            findNamed(window.contentItem, "batchAspectFit_2")
+        ];
+        verify(fitModes[0] !== null);
+        verify(fitModes[1] !== null);
+        verify(fitModes[2] !== null);
+
+        compare(absoluteMode.checked, true);
+        compare(percentControls.enabled, false);
+        compare(absoluteWidthControls.enabled, true);
+        compare(commonSizeAndHeight.enabled, true);
+        compare(megapixels.enabled, false);
+        compare(binaryMegapixel.enabled, false);
+        compare(keepAspectRatio.enabled, true);
+        compare(fitModes[0].enabled, true);
+        compare(fitModes[1].enabled, true);
+        compare(fitModes[2].enabled, true);
+
+        dialog.setByPercent(true);
+        compare(percentMode.checked, true);
+        compare(percentControls.enabled, true);
+        compare(absoluteMode.checked, false);
+        compare(absoluteWidthControls.enabled, false);
+        compare(commonSizeAndHeight.enabled, false);
+        compare(keepAspectRatio.enabled, false);
+        compare(fitModes[0].enabled, false);
+        compare(fitModes[1].enabled, false);
+        compare(fitModes[2].enabled, false);
+
+        dialog.setByMegapixels(true);
+        compare(megapixelMode.checked, true);
+        compare(percentMode.checked, false);
+        compare(absoluteMode.checked, false);
+        compare(percentControls.enabled, false);
+        compare(absoluteWidthControls.enabled, false);
+        compare(commonSizeAndHeight.enabled, false);
+        compare(megapixels.enabled, true);
+        compare(binaryMegapixel.enabled, true);
+        compare(keepAspectRatio.enabled, false);
+        compare(fitModes[0].enabled, false);
+        compare(fitModes[1].enabled, false);
+        compare(fitModes[2].enabled, false);
+
+        dialog.setUseBinaryMegapixel(true);
+        compare(binaryMegapixel.checked, true);
+        dialog.setResizeEnabled(false);
+        compare(megapixels.enabled, false);
+        compare(binaryMegapixel.enabled, false);
+
+        Fixture.sendKey(window, Qt.Key_Escape);
+        tryCompare(window, "visible", false);
+    }
+
     function test_batchColorSliderDoubleClickResets() {
         verify(Fixture.requestBatchConversion(sources()));
         const window = openedWindow(batchIndex);

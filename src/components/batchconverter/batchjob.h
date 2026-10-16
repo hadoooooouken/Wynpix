@@ -17,6 +17,12 @@ enum class AspectFitMode : uint8_t {
     Height  // Scale is derived from the target height only; width follows proportionally.
 };
 
+enum class ResizeMode : uint8_t {
+    ByAbsoluteSize,
+    ByPercent,
+    ByMegapixels
+};
+
 enum class RotationAngle : uint16_t {
     Rotate0 = 0,    // No rotation (default).
     Rotate90 = 90,
@@ -37,8 +43,10 @@ struct BatchJob {
     QString format;
     int quality = 90;
     bool doResize = false;
-    bool resizeByPercent = false;
+    ResizeMode resizeMode = ResizeMode::ByAbsoluteSize;
     double resizePercent = 100.0;
+    double targetMegapixels = 1.0;
+    bool useBinaryMegapixel = false;
     QSize targetSize;
     bool keepAspectRatio = true;
     AspectFitMode aspectFitMode = AspectFitMode::Auto;

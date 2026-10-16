@@ -46,8 +46,8 @@ struct BatchConverterPreferences {
 
 // The batch converter (BatchConverterDialog.qml), with the rules of the
 // widget BatchConverterDialog (shared through BatchJobRules): output format
-// and quality, resize by percent or to a bounding size with the aspect fit
-// mode, Upscayl, filter, rotation and flips, colour adjustments, output
+// and quality, resize by percent, megapixels, or to a bounding size with the
+// aspect fit mode, Upscayl, filter, rotation and flips, colour adjustments, output
 // folder, file name pattern; the file queue (BatchQueueModel) with progress.
 //
 // The conversion runs through the BatchConversionService the request comes
@@ -71,6 +71,9 @@ class BatchConverterDialogModel final : public DialogSession {
     Q_PROPERTY(double minimumPercent READ minimumPercent CONSTANT FINAL)
     Q_PROPERTY(double maximumPercent READ maximumPercent CONSTANT FINAL)
     Q_PROPERTY(int percentDecimals READ percentDecimals CONSTANT FINAL)
+    Q_PROPERTY(double minimumMegapixels READ minimumMegapixels CONSTANT FINAL)
+    Q_PROPERTY(double maximumMegapixels READ maximumMegapixels CONSTANT FINAL)
+    Q_PROPERTY(int megapixelDecimals READ megapixelDecimals CONSTANT FINAL)
     Q_PROPERTY(int minimumSide READ minimumSide CONSTANT FINAL)
     Q_PROPERTY(int maximumSide READ maximumSide CONSTANT FINAL)
     Q_PROPERTY(QString patternHelp READ patternHelp CONSTANT FINAL)
@@ -84,7 +87,11 @@ class BatchConverterDialogModel final : public DialogSession {
     Q_PROPERTY(QString qualityToolTip READ qualityToolTip NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool resizeEnabled READ resizeEnabled NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool byPercent READ byPercent NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(bool byAbsoluteSize READ byAbsoluteSize NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(bool byMegapixels READ byMegapixels NOTIFY settingsChanged FINAL)
     Q_PROPERTY(double percent READ percent NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(double targetMegapixels READ targetMegapixels NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(bool useBinaryMegapixel READ useBinaryMegapixel NOTIFY settingsChanged FINAL)
     Q_PROPERTY(int targetWidth READ targetWidth NOTIFY settingsChanged FINAL)
     Q_PROPERTY(int targetHeight READ targetHeight NOTIFY settingsChanged FINAL)
     Q_PROPERTY(int originalWidth READ originalWidth NOTIFY settingsChanged FINAL)
@@ -135,6 +142,9 @@ public:
     [[nodiscard]] double minimumPercent() const;
     [[nodiscard]] double maximumPercent() const;
     [[nodiscard]] int percentDecimals() const;
+    [[nodiscard]] double minimumMegapixels() const;
+    [[nodiscard]] double maximumMegapixels() const;
+    [[nodiscard]] int megapixelDecimals() const;
     [[nodiscard]] int minimumSide() const;
     [[nodiscard]] int maximumSide() const;
     [[nodiscard]] QString patternHelp() const;
@@ -149,7 +159,11 @@ public:
     [[nodiscard]] QString qualityToolTip() const;
     [[nodiscard]] bool resizeEnabled() const;
     [[nodiscard]] bool byPercent() const;
+    [[nodiscard]] bool byAbsoluteSize() const;
+    [[nodiscard]] bool byMegapixels() const;
     [[nodiscard]] double percent() const;
+    [[nodiscard]] double targetMegapixels() const;
+    [[nodiscard]] bool useBinaryMegapixel() const;
     [[nodiscard]] int targetWidth() const;
     [[nodiscard]] int targetHeight() const;
     [[nodiscard]] int originalWidth() const;
@@ -202,7 +216,10 @@ public:
     Q_INVOKABLE void setQuality(int quality);
     Q_INVOKABLE void setResizeEnabled(bool enabled);
     Q_INVOKABLE void setByPercent(bool byPercent);
+    Q_INVOKABLE void setByMegapixels(bool byMegapixels);
     Q_INVOKABLE void setPercent(double percent);
+    Q_INVOKABLE void setTargetMegapixels(double megapixels);
+    Q_INVOKABLE void setUseBinaryMegapixel(bool useBinaryMegapixel);
     Q_INVOKABLE void setTargetWidth(int width);
     Q_INVOKABLE void setTargetHeight(int height);
     Q_INVOKABLE void setKeepAspectRatio(bool keep);
