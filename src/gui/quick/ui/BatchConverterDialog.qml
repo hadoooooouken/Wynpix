@@ -279,40 +279,62 @@ Window {
                                 }
                             }
 
-                            RowLayout {
+                            ColumnLayout {
                                 Layout.fillWidth: true
                                 spacing: StyleConstants.dialogSpacing
 
-                                RadioButton {
-                                    Layout.alignment: Qt.AlignTop
-                                    text: qsTr("By Absolute Size:")
-                                    checkable: false
-                                    checked: !root.dialog.byPercent
-                                    onClicked: root.dialog.setByPercent(false)
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: StyleConstants.dialogSpacing
+
+                                    RadioButton {
+                                        text: qsTr("By Absolute Size:")
+                                        checkable: false
+                                        checked: !root.dialog.byPercent
+                                        onClicked: root.dialog.setByPercent(false)
+                                    }
+
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        Layout.leftMargin: root.indent
+                                        spacing: StyleConstants.dialogSpacing
+                                        enabled: !root.dialog.byPercent
+
+                                        Label {
+                                            Layout.fillWidth: true
+                                            horizontalAlignment: Text.AlignRight
+                                            text: qsTr("Max Width:")
+                                        }
+                                        SpinBox {
+                                            id: widthBox
+
+                                            objectName: "batchWidth"
+                                            Layout.preferredWidth: root.fieldWidth
+                                            from: root.dialog.minimumSide
+                                            to: root.dialog.maximumSide
+                                            value: root.dialog.targetWidth
+                                            editable: true
+                                            onValueModified: root.dialog.setTargetWidth(widthBox.value)
+                                        }
+                                    }
                                 }
 
-                                GridLayout {
+                                RowLayout {
                                     Layout.fillWidth: true
-                                    Layout.leftMargin: root.indent
-                                    columns: 2
-                                    columnSpacing: StyleConstants.dialogSpacing
+                                    Layout.leftMargin: StyleConstants.indicatorPadding
+                                                        + StyleConstants.indicatorSize
+                                                        + StyleConstants.indicatorSpacing
+                                    spacing: StyleConstants.dialogSpacing
                                     enabled: !root.dialog.byPercent
 
                                     Label {
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignRight
-                                        text: qsTr("Max Width:")
+                                        text: qsTr("Common sizes:")
                                     }
-                                    SpinBox {
-                                        id: widthBox
-
-                                        objectName: "batchWidth"
+                                    ComboBox {
                                         Layout.preferredWidth: root.fieldWidth
-                                        from: root.dialog.minimumSide
-                                        to: root.dialog.maximumSide
-                                        value: root.dialog.targetWidth
-                                        editable: true
-                                        onValueModified: root.dialog.setTargetWidth(widthBox.value)
+                                        model: root.dialog.commonSizes
+                                        currentIndex: root.dialog.commonSizeIndex
+                                        onActivated: index => root.dialog.selectCommonSize(index)
                                     }
 
                                     Label {
@@ -330,18 +352,46 @@ Window {
                                         editable: true
                                         onValueModified: root.dialog.setTargetHeight(heightBox.value)
                                     }
+                                }
 
-                                    Label {
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: StyleConstants.dialogSpacing
+
+                                    RadioButton {
+                                        text: qsTr("By Megapixels:")
+                                        checkable: false
+                                        enabled: false
+                                    }
+
+                                    RowLayout {
                                         Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignRight
-                                        text: qsTr("Common sizes:")
+                                        Layout.leftMargin: root.indent
+                                        spacing: StyleConstants.dialogSpacing
+                                        enabled: false
+
+                                        Label {
+                                            Layout.fillWidth: true
+                                            horizontalAlignment: Text.AlignRight
+                                            text: qsTr("Megapixels:")
+                                        }
+                                        DoubleSpinBox {
+                                            Layout.preferredWidth: root.fieldWidth
+                                            from: 0
+                                            to: 1000
+                                            decimals: 1
+                                            value: 1.3
+                                            editable: false
+                                        }
                                     }
-                                    ComboBox {
-                                        Layout.preferredWidth: root.fieldWidth
-                                        model: root.dialog.commonSizes
-                                        currentIndex: root.dialog.commonSizeIndex
-                                        onActivated: index => root.dialog.selectCommonSize(index)
-                                    }
+                                }
+
+                                CheckBox {
+                                    Layout.leftMargin: StyleConstants.indicatorPadding
+                                                        + StyleConstants.indicatorSize
+                                                        + StyleConstants.indicatorSpacing
+                                    text: qsTr("Binary (1M = 1024x1024)")
+                                    enabled: false
                                 }
                             }
 
