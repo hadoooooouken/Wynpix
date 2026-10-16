@@ -2,6 +2,9 @@
 
 #include <QThread>
 #include <QtGlobal>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QSemaphore>
 
 #include <algorithm>
 #include <atomic>
@@ -30,6 +33,7 @@ public:
 
     static void beginBatch() {
         const auto limits = defaultLimits();
+        QMutexLocker lock(&g_batchMutex);
         if (g_batchDepth.fetch_add(1, std::memory_order_acq_rel) == 0) {
             g_batchFileConcurrency.store(limits.fileConcurrency, std::memory_order_release);
             g_batchScalingThreads.store(limits.scalingThreads, std::memory_order_release);
@@ -37,9 +41,11 @@ public:
     }
 
     static void endBatch() {
-        const int previousDepth = g_batchDepth.fetch_sub(1, std::memory_order_acq_rel);
-        if (previousDepth <= 1) {
-            g_batchDepth.store(0, std::memory_order_release);
+        QMutexLocker lock(&g_batchMutex);
+        const int depth = g_batchDepth.load(std::memory_order_acquire);
+        if (depth == 0)
+            return;
+        if (g_batchDepth.fetch_sub(1, std::memory_order_acq_rel) == 1) {
             g_batchFileConcurrency.store(0, std::memory_order_release);
             g_batchScalingThreads.store(0, std::memory_order_release);
         }
@@ -70,6 +76,28 @@ public:
         QVariant m_previousValue;
     };
 
+    class FileSlot {
+    public:
+        FileSlot() : m_semaphore(&sharedFileSemaphore()) {
+            m_semaphore->acquire();
+        }
+
+        ~FileSlot() {
+            m_semaphore->release();
+        }
+
+        FileSlot(const FileSlot &) = delete;
+        FileSlot &operator=(const FileSlot &) = delete;
+
+    private:
+        static QSemaphore &sharedFileSemaphore() {
+            static QSemaphore semaphoreInstance(defaultLimits().fileConcurrency);
+            return semaphoreInstance;
+        }
+
+        QSemaphore *m_semaphore;
+    };
+
     static bool isBatchThread() {
         return QThread::currentThread()->property("wynpix.batchThread").toBool();
     }
@@ -90,6 +118,7 @@ public:
     }
 
 private:
+    static inline QMutex g_batchMutex;
     static inline std::atomic<int> g_batchDepth{0};
     static inline std::atomic<int> g_batchFileConcurrency{0};
     static inline std::atomic<int> g_batchScalingThreads{0};

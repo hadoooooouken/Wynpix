@@ -731,6 +731,13 @@ void BatchConverterDialogModel::onFinished(int succeeded, int failed, int total)
 
 void BatchConverterDialogModel::onCancelled(int succeeded, int failed, int total) {
     Q_UNUSED(total)
+    for (int row = 0; row < mQueue.rowCount(); ++row) {
+        if (mQueue.data(mQueue.index(row), BatchQueueModel::StateRole).toInt() ==
+            static_cast<int>(BatchItemState::Processing)) {
+            mQueue.setItemState(row, BatchItemState::Stopped, QString());
+            ++mProcessed;
+        }
+    }
     mRunning = false;
     mCancelling = false;
     setStatusText(stoppedText(succeeded, failed));

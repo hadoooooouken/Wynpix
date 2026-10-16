@@ -116,6 +116,7 @@ public:
     }
 
     void run() override {
+        BatchResourcePolicy::FileSlot fileSlot;
         BatchResourcePolicy::Scope batchScope;
         auto notifyFinished = [this](BatchItemState state, const QString &details) {
             QMetaObject::invokeMethod(
@@ -347,6 +348,11 @@ public:
             return;
         }
 
+        if (m_cancelFlag->load()) {
+            notifyStopped(retainedArtifactDetails(stagedOutput.discard()));
+            return;
+        }
+
         const ImageSaveResult commitResult = stagedOutput.commit();
         if (!commitResult.succeeded()) {
             notifyFinished(BatchItemState::Failed,
@@ -433,7 +439,10 @@ void BatchConverter::start(const QStringList &allPaths, const QList<int> &select
     QSet<QString> reservedDestinationKeys;
     int activeIndex = 0;
     for (int i : selectedIndices) {
-        if (i < 0 || i >= allPaths.size()) continue;
+        if (i < 0 || i >= allPaths.size()) {
+            onTaskFinished(i, BatchItemState::Failed, tr("Invalid source index"));
+            continue;
+        }
 
         QString srcPath = allPaths[i];
 
@@ -487,9 +496,7 @@ void BatchConverter::start(const QStringList &allPaths, const QList<int> &select
 
     if (m_processedFiles >= m_totalFiles) {
         m_isConverting = false;
-        if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel)) {
-            BatchResourcePolicy::endBatch();
-        }
+        endBatchPolicy();
         emit finished(m_successCount, m_failedCount, m_totalFiles);
     }
 }
@@ -513,16 +520,20 @@ void BatchConverter::cancelAndWait() {
     m_threadPool.waitForDone();
     m_isConverting = false;
     m_isCancelling = false;
+    endBatchPolicy();
 }
 
 void BatchConverter::finishCancellation() {
     if (!m_isConverting && !m_isCancelling) return;
     m_isConverting = false;
     m_isCancelling = false;
-    if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel)) {
-        BatchResourcePolicy::endBatch();
-    }
+    endBatchPolicy();
     emit cancelled(m_successCount, m_failedCount, m_totalFiles);
+}
+
+void BatchConverter::endBatchPolicy() {
+    if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel))
+        BatchResourcePolicy::endBatch();
 }
 
 void BatchConverter::onRunnableCreated() {
@@ -555,7 +566,7 @@ void BatchConverter::onTaskFinished(int index, BatchItemState state, QString det
     if (!m_isConverting && !m_isCancelling) return;
 
     if (m_isCancelling) {
-        if (!details.isEmpty())
+        if (state != BatchItemState::Processing)
             emit progressUpdated(index, state, details);
         return;
     }
@@ -571,9 +582,7 @@ void BatchConverter::onTaskFinished(int index, BatchItemState state, QString det
 
     if (m_processedFiles >= m_totalFiles) {
         m_isConverting = false;
-        if (m_batchPolicyActive.exchange(false, std::memory_order_acq_rel)) {
-            BatchResourcePolicy::endBatch();
-        }
+        endBatchPolicy();
         emit finished(m_successCount, m_failedCount, m_totalFiles);
     }
 }

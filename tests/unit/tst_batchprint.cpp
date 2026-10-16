@@ -103,6 +103,19 @@ private slots:
         QCOMPARE(BatchResourcePolicy::limitsForThreadCount(1).cpuBudget, 1);
     }
 
+    void batchResourcePolicyTracksNestedBatches() {
+        QVERIFY(!BatchResourcePolicy::isBatchActive());
+        BatchResourcePolicy::beginBatch();
+        QVERIFY(BatchResourcePolicy::isBatchActive());
+        BatchResourcePolicy::beginBatch();
+        BatchResourcePolicy::endBatch();
+        QVERIFY(BatchResourcePolicy::isBatchActive());
+        BatchResourcePolicy::endBatch();
+        QVERIFY(!BatchResourcePolicy::isBatchActive());
+        BatchResourcePolicy::endBatch();
+        QVERIFY(!BatchResourcePolicy::isBatchActive());
+    }
+
     //--- batch job rules -----------------------------------------------------
     void qualityScalesFollowTheFormat() {
         const SaveQualityDefaults defaults{.jpeg = 95, .png = 3, .modern = 80};
@@ -520,10 +533,13 @@ private slots:
         QVERIFY(dialog.start(batchInput({dir.filePath(u"a.png"_s)}), service));
         dialog.convert();
         QVERIFY(dialog.isRunning());
+        service.reportProgress(0, BatchItemState::Processing);
         dialog.stopOrClose();
         QCOMPARE(service.cancelCount, 1);
         QVERIFY(dialog.isCancelling());
         QCOMPARE(dialog.statusText(), u"Stopping..."_s);
+        QCOMPARE(dialog.queue()->data(dialog.queue()->index(0), BatchQueueModel::StateRole).toInt(),
+                 static_cast<int>(BatchItemState::Processing));
         dialog.stopOrClose();
         QCOMPARE(service.cancelCount, 1);
         QVERIFY(dialog.isOpen());
@@ -531,8 +547,28 @@ private slots:
         QVERIFY(!dialog.isRunning());
         QVERIFY(!dialog.isCancelling());
         QCOMPARE(dialog.statusText(), u"Stopped by user. Success: 0, Failed: 0"_s);
+        QCOMPARE(dialog.progressValue(), 1);
+        QCOMPARE(dialog.queue()->data(dialog.queue()->index(0), BatchQueueModel::StateRole).toInt(),
+                 static_cast<int>(BatchItemState::Stopped));
         dialog.reject();
         QVERIFY(dialog.result().conversionStarted);
+    }
+
+    void batchStopPreservesCompletedFileStates() {
+        BatchConverterDialogModel dialog;
+        FakeBatchConversionService service;
+        QTemporaryDir dir;
+        QVERIFY(dialog.start(batchInput({dir.filePath(u"a.png"_s)}), service));
+        dialog.convert();
+        dialog.stopOrClose();
+        service.reportProgress(0, BatchItemState::Done, u"JPG \u2022 40x20"_s);
+        service.reportCancelled(1, 0, 1);
+
+        QCOMPARE(dialog.queue()->data(dialog.queue()->index(0), BatchQueueModel::StateRole).toInt(),
+                 static_cast<int>(BatchItemState::Done));
+        QCOMPARE(dialog.queue()->data(dialog.queue()->index(0), BatchQueueModel::DetailsRole).toString(),
+                 u"JPG \u2022 40x20"_s);
+        QCOMPARE(dialog.statusText(), u"Stopped by user. Success: 1, Failed: 0"_s);
     }
 
     void batchClosingWhileRunningStopsIt() {

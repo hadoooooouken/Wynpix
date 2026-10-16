@@ -49,6 +49,7 @@ private:
                                const QSet<QString> &reservedDestinationKeys,
                                bool overwrite) const;
     QString createUniqueSubfolder(const QString &baseDir) const;
+    void endBatchPolicy();
 
     QThreadPool m_threadPool;
     std::atomic<bool> m_isConverting{false};
