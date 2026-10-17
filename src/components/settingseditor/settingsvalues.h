@@ -139,6 +139,7 @@ public:
 struct ThemeSettings {
     Q_GADGET
     Q_PROPERTY(int themeMode MEMBER themeMode FINAL)
+    Q_PROPERTY(int textRenderType MEMBER textRenderType FINAL)
     Q_PROPERTY(bool customAccent MEMBER customAccent FINAL)
     Q_PROPERTY(QColor accentColor MEMBER accentColor FINAL)
     Q_PROPERTY(int backgroundOpacityPercent MEMBER backgroundOpacityPercent FINAL)
@@ -147,6 +148,7 @@ struct ThemeSettings {
 
 public:
     int themeMode = 0;           // ThemeMode
+    int textRenderType = 0;      // QuickTextRenderType
     bool customAccent = false;
     QColor accentColor;
     int backgroundOpacityPercent = 0;

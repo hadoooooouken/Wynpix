@@ -325,16 +325,24 @@ void QuickUiHost::applyGraphicsApi() {
 }
 
 //------------------------------------------------------------------------------
-// Must run before the first QQuickWindow is created. The default Qt
-// rendering draws distance-field glyphs without hinting or ClearType, which
-// makes the hinted UI font look smaller and blurrier than in native
-// applications. Native rendering rasterizes each glyph once through
-// DirectWrite into the glyph cache; text that is scaled or rotated at run
-// time (IconGlyph) keeps Text.QtRendering explicitly. A value set by the
-// user is kept.
+// Must run before the first QQuickWindow is created. Applies the configured
+// text render type (Qt, Native, or Curve). An environment variable set by
+// the user is kept.
 void QuickUiHost::applyTextRenderType() {
-  if (!qEnvironmentVariableIsSet(textRenderTypeVariable))
-    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+  if (!qEnvironmentVariableIsSet(textRenderTypeVariable)) {
+    switch (mSettings.quickTextRenderType()) {
+    case TEXT_RENDER_NATIVE:
+      QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+      break;
+    case TEXT_RENDER_CURVE:
+      QQuickWindow::setTextRenderType(QQuickWindow::CurveTextRendering);
+      break;
+    case TEXT_RENDER_QT:
+    default:
+      QQuickWindow::setTextRenderType(QQuickWindow::QtTextRendering);
+      break;
+    }
+  }
 }
 
 //------------------------------------------------------------------------------

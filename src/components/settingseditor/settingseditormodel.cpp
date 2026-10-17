@@ -212,6 +212,10 @@ QVariantList SettingsEditorModel::themeModes() {
     return SettingsOptions::toVariantList(SettingsOptions::themeModes());
 }
 
+QVariantList SettingsEditorModel::textRenderTypes() {
+    return SettingsOptions::toVariantList(SettingsOptions::textRenderTypes());
+}
+
 QVariantList SettingsEditorModel::imageScrollingModes() {
     return SettingsOptions::toVariantList(SettingsOptions::imageScrollingModes());
 }
@@ -326,6 +330,9 @@ void SettingsEditorModel::normalize(SettingsValues &values) const {
     const SettingsOptionList whiteLevels = SettingsOptions::hdrTargetWhiteLevels();
     values.view.hdrTargetWhiteLevel = offeredOr(whiteLevels, values.view.hdrTargetWhiteLevel,
                                                 whiteLevels.constFirst().value.toInt());
+    const SettingsOptionList textTypes = SettingsOptions::textRenderTypes();
+    values.theme.textRenderType = offeredOr(textTypes, values.theme.textRenderType,
+                                            textTypes.constFirst().value.toInt());
 
     const SettingsRanges r = SettingsScales::ranges();
     GeneralSettings &general = values.general;

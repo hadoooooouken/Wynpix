@@ -92,6 +92,24 @@ SettingsPage {
         }
     }
 
+    SettingsSection {
+        RowLayout {
+            spacing: StyleConstants.dialogSpacing
+
+            Label {
+                text: qsTranslate("SettingsDialog", "Text rendering:")
+            }
+            SettingsComboBox {
+                options: root.editor.textRenderTypes
+                value: root.editor.theme.textRenderType
+                onPicked: value => root.editor.theme.textRenderType = value
+            }
+            SettingsNote {
+                text: qsTranslate("SettingsDialog", "Requires application restart")
+            }
+        }
+    }
+
     ColorDialog {
         id: accentDialog
 

@@ -170,6 +170,14 @@ SettingsOptionList themeModes() {
     };
 }
 
+SettingsOptionList textRenderTypes() {
+    return {
+        option(TEXT_RENDER_QT, QT_TRANSLATE_NOOP("SettingsDialog", "Qt")),
+        option(TEXT_RENDER_NATIVE, QT_TRANSLATE_NOOP("SettingsDialog", "Native")),
+        option(TEXT_RENDER_CURVE, QT_TRANSLATE_NOOP("SettingsDialog", "Curve")),
+    };
+}
+
 SettingsOptionList imageScrollingModes() {
     return {
         option(SCROLL_NONE, QT_TRANSLATE_NOOP("SettingsDialog", "None")),

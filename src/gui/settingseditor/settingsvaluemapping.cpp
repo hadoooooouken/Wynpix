@@ -102,6 +102,7 @@ SettingsValues SettingsValueMapping::load() const {
 
     ThemeSettings &theme = v.theme;
     theme.themeMode = s.themeMode();
+    theme.textRenderType = static_cast<int>(s.quickTextRenderType());
     theme.customAccent = s.hasCustomAccent();
     theme.accentColor = s.colorScheme().accent;
     theme.backgroundOpacityPercent = opacityPercent(s.backgroundOpacity());
@@ -210,6 +211,7 @@ void SettingsValueMapping::storeTheme(const ThemeSettings &theme) {
     Settings &s = mSettings;
     s.setBackgroundOpacity(opacity(theme.backgroundOpacityPercent));
     s.setThemeMode(static_cast<ThemeMode>(theme.themeMode));
+    s.setQuickTextRenderType(static_cast<QuickTextRenderType>(theme.textRenderType));
     s.setThumbnailOpacity(opacity(theme.thumbnailOpacityPercent));
     s.setUseBlackBackground(theme.useBlackBackground);
     s.setHasCustomAccent(theme.customAccent);

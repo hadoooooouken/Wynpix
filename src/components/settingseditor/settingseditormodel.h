@@ -57,6 +57,7 @@ class SettingsEditorModel final : public QObject {
     Q_PROPERTY(QVariantList hdrOperators READ hdrOperators CONSTANT FINAL)
     Q_PROPERTY(QVariantList hdrTargetWhiteLevels READ hdrTargetWhiteLevels CONSTANT FINAL)
     Q_PROPERTY(QVariantList themeModes READ themeModes CONSTANT FINAL)
+    Q_PROPERTY(QVariantList textRenderTypes READ textRenderTypes CONSTANT FINAL)
     Q_PROPERTY(QVariantList imageScrollingModes READ imageScrollingModes CONSTANT FINAL)
 
     Q_PROPERTY(QStringList upscaylModels READ upscaylModels NOTIFY environmentChanged FINAL)
@@ -125,6 +126,7 @@ public:
     [[nodiscard]] static QVariantList hdrOperators();
     [[nodiscard]] static QVariantList hdrTargetWhiteLevels();
     [[nodiscard]] static QVariantList themeModes();
+    [[nodiscard]] static QVariantList textRenderTypes();
     [[nodiscard]] static QVariantList imageScrollingModes();
 
     [[nodiscard]] QStringList upscaylModels() const;

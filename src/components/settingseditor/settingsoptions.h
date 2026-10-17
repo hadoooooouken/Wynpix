@@ -41,6 +41,7 @@ inline constexpr QStringView kCustomMonitorProfile = u"Custom";
 [[nodiscard]] SettingsOptionList hdrOperators();
 [[nodiscard]] SettingsOptionList hdrTargetWhiteLevels();
 [[nodiscard]] SettingsOptionList themeModes();
+[[nodiscard]] SettingsOptionList textRenderTypes();
 [[nodiscard]] SettingsOptionList imageScrollingModes();
 
 // Position of value in options, -1 when it is not offered.

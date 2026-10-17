@@ -63,3 +63,11 @@ enum ThemeMode { THEME_AUTO, THEME_DARK, THEME_LIGHT };
 // Graphics API of the Qt Quick UI; applied before its window is
 // created.
 enum class QuickGraphicsApi { Direct3D11, Direct3D12, Vulkan };
+
+// Text rendering technique of the Qt Quick UI; applied before its window is
+// created.
+enum QuickTextRenderType {
+  TEXT_RENDER_QT,
+  TEXT_RENDER_NATIVE,
+  TEXT_RENDER_CURVE
+};

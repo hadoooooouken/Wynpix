@@ -289,6 +289,20 @@ void Settings::setThemeMode(ThemeMode mode) {
   settings->settingsConf->setValue("themeMode", static_cast<int>(mode));
 }
 
+QuickTextRenderType Settings::quickTextRenderType() {
+  int type = settings->settingsConf
+                 ->value("textRenderType", static_cast<int>(TEXT_RENDER_QT))
+                 .toInt();
+  if (type < static_cast<int>(TEXT_RENDER_QT) ||
+      type > static_cast<int>(TEXT_RENDER_CURVE))
+    type = static_cast<int>(TEXT_RENDER_QT);
+  return static_cast<QuickTextRenderType>(type);
+}
+
+void Settings::setQuickTextRenderType(QuickTextRenderType type) {
+  settings->settingsConf->setValue("textRenderType", static_cast<int>(type));
+}
+
 qreal Settings::thumbnailOpacity() {
   bool ok = false;
   qreal value =

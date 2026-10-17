@@ -200,6 +200,9 @@ public:
   ThemeMode themeMode();
   void setThemeMode(ThemeMode mode);
 
+  QuickTextRenderType quickTextRenderType();
+  void setQuickTextRenderType(QuickTextRenderType type);
+
   qreal thumbnailOpacity();
   void setThumbnailOpacity(qreal value);
 
