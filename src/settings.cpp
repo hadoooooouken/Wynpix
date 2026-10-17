@@ -291,11 +291,11 @@ void Settings::setThemeMode(ThemeMode mode) {
 
 QuickTextRenderType Settings::quickTextRenderType() {
   int type = settings->settingsConf
-                 ->value("textRenderType", static_cast<int>(TEXT_RENDER_QT))
+                 ->value("textRenderType", static_cast<int>(kDefaultTextRenderType))
                  .toInt();
   if (type < static_cast<int>(TEXT_RENDER_QT) ||
       type > static_cast<int>(TEXT_RENDER_CURVE))
-    type = static_cast<int>(TEXT_RENDER_QT);
+    type = static_cast<int>(kDefaultTextRenderType);
   return static_cast<QuickTextRenderType>(type);
 }
 

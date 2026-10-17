@@ -71,3 +71,4 @@ enum QuickTextRenderType {
   TEXT_RENDER_NATIVE,
   TEXT_RENDER_CURVE
 };
+inline constexpr QuickTextRenderType kDefaultTextRenderType = TEXT_RENDER_QT;

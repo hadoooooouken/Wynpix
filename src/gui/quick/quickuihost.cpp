@@ -338,7 +338,6 @@ void QuickUiHost::applyTextRenderType() {
       QQuickWindow::setTextRenderType(QQuickWindow::CurveTextRendering);
       break;
     case TEXT_RENDER_QT:
-    default:
       QQuickWindow::setTextRenderType(QQuickWindow::QtTextRendering);
       break;
     }

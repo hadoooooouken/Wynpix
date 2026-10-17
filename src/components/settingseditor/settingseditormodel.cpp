@@ -332,7 +332,7 @@ void SettingsEditorModel::normalize(SettingsValues &values) const {
                                                 whiteLevels.constFirst().value.toInt());
     const SettingsOptionList textTypes = SettingsOptions::textRenderTypes();
     values.theme.textRenderType = offeredOr(textTypes, values.theme.textRenderType,
-                                            textTypes.constFirst().value.toInt());
+                                            static_cast<int>(kDefaultTextRenderType));
 
     const SettingsRanges r = SettingsScales::ranges();
     GeneralSettings &general = values.general;
