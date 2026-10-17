@@ -691,13 +691,17 @@ QDateTime DirectoryManager::lastModified(QString filePath) const {
     return info.lastModified();
 }
 
-inline
+bool DirectoryManager::isCandidateFile(const QString &filePath) const {
+    const QString fileName = QFileInfo(filePath).fileName();
+    return isFile(filePath) && regex.match(fileName).hasMatch() &&
+           matchesNameFilter(fileName, mNameFilter);
+}
+
 bool DirectoryManager::isSupportedFile(QString path) const {
-    const QString fileName = QFileInfo(path).fileName();
-    if (!isFile(path) || !regex.match(fileName).hasMatch() ||
-        !matchesNameFilter(fileName, mNameFilter))
+    if (!isCandidateFile(path))
         return false;
-    return isCandidateFileSupported(path, path);
+    const QString fileName = QFileInfo(path).fileName();
+    return isCandidateFileSupported(fileName, path);
 }
 
 bool DirectoryManager::isFile(QString path) const {
@@ -908,8 +912,15 @@ void DirectoryManager::removeFileEntry(const QString &filePath) {
 }
 
 void DirectoryManager::updateFileEntry(const QString &filePath) {
-    if(!containsFile(filePath))
+    if(!containsFile(filePath)) {
+        if(isSupportedFile(filePath)) {
+            insertFileEntry(filePath);
+        }
+        if(isCandidateFile(filePath) && isFileWriteInProgress(filePath)) {
+            scheduleTransientSettle(filePath);
+        }
         return;
+    }
     FSEntry newEntry(filePath);
     if(newEntry.path.isEmpty() || isFileWriteInProgress(filePath)) {
         qDebug() << "[DirectoryManager] File is still being written, scheduling settle check:"
@@ -932,14 +943,22 @@ void DirectoryManager::renameFileEntry(const QString &oldFilePath, const QString
     QString newFilePath = fi.absolutePath() + "/" + newFileName;
     cancelTransientSettle(newFilePath);
     if(!containsFile(oldFilePath)) {
-        if(containsFile(newFilePath))
+        if(containsFile(newFilePath)) {
             updateFileEntry(newFilePath);
-        else
-            insertFileEntry(newFilePath);
+        } else {
+            if(isSupportedFile(newFilePath)) {
+                insertFileEntry(newFilePath);
+            }
+            if(isCandidateFile(newFilePath) && isFileWriteInProgress(newFilePath)) {
+                scheduleTransientSettle(newFilePath);
+            }
+        }
         return;
     }
     if(!isSupportedFile(newFilePath)) {
         removeFileEntry(oldFilePath);
+        if(isCandidateFile(newFilePath) && isFileWriteInProgress(newFilePath))
+            scheduleTransientSettle(newFilePath);
         return;
     }
     if(containsFile(newFilePath)) {
@@ -1141,7 +1160,7 @@ void DirectoryManager::onTransientSettleTimeout(const QString &filePath) {
     if (it == transientSettleStates.end())
         return;
 
-    if (!containsFile(filePath)) {
+    if (!isFile(filePath)) {
         cancelTransientSettle(filePath);
         return;
     }
@@ -1160,10 +1179,23 @@ void DirectoryManager::onTransientSettleTimeout(const QString &filePath) {
         return;
     }
 
-    // Write lock released: file has genuinely settled.
-    cancelTransientSettle(filePath);
-    FSEntry newEntry(filePath);
-    if (!newEntry.path.isEmpty()) {
+    // Write lock released: attempt to finalize update or deferred insertion.
+    if (containsFile(filePath)) {
+        FSEntry newEntry(filePath);
+        if (newEntry.path.isEmpty()) {
+            // File lock was released, but metadata could not be read yet
+            // (e.g. transient sharing collision or AV scan). Retry without resetting attempts.
+            if (it->attemptsLeft > 0) {
+                --it->attemptsLeft;
+                it->timer->start(kSettlePollIntervalMs);
+                return;
+            }
+            qDebug() << "[DirectoryManager] Failed to read metadata for settled file:" << filePath;
+            cancelTransientSettle(filePath);
+            return;
+        }
+
+        cancelTransientSettle(filePath);
         int index = indexOfFile(filePath);
         if (index >= 0) {
             if (fileEntryVec.at(index).modifyTime != newEntry.modifyTime ||
@@ -1177,6 +1209,23 @@ void DirectoryManager::onTransientSettleTimeout(const QString &filePath) {
             // reload the now-readable file.
             emit fileModified(filePath);
         }
+    } else {
+        // Deferred insertion for candidate files (such as archives) that could not be
+        // verified via isSupportedFile() while write access was active.
+        if (!isSupportedFile(filePath)) {
+            if (it->attemptsLeft > 0) {
+                --it->attemptsLeft;
+                it->timer->start(kSettlePollIntervalMs);
+                return;
+            }
+            qDebug() << "[DirectoryManager] Deferred candidate file unsupported or unreadable:" << filePath;
+            cancelTransientSettle(filePath);
+            return;
+        }
+
+        cancelTransientSettle(filePath);
+        qDebug() << "fileIns deferred settled:" << filePath;
+        insertFileEntry(filePath);
     }
 }
 
@@ -1203,10 +1252,14 @@ void DirectoryManager::onFileAddedExternal(QString fileName) {
         noteSelfWriteActivity(fullPath);
         return;
     }
-    if(isDir(fullPath))
+    if(isDir(fullPath)) {
         insertDirEntry(fullPath);
-    else
+    } else {
         insertFileEntry(fullPath);
+        if (isCandidateFile(fullPath) && isFileWriteInProgress(fullPath)) {
+            scheduleTransientSettle(fullPath);
+        }
+    }
 }
 
 void DirectoryManager::onFileRenamedExternal(QString oldName, QString newName) {
