@@ -157,6 +157,7 @@ Rectangle {
             Layout.fillHeight: true
             visible: root.controller.treeExpanded
             clip: true
+            pixelAligned: true
             model: root.controller.folderTree
             boundsBehavior: Flickable.StopAtBounds
             selectionModel: ItemSelectionModel {
@@ -509,14 +510,14 @@ Rectangle {
             }
 
             IconGlyph {
-                anchors.verticalCenter: parent.verticalCenter
+                y: Math.round((parent.height - height) / 2)
                 icon: FluentIcons.Folder16
                 size: Theme.compactIconSize
                 color: Theme.colors.folderIcons
             }
 
             Label {
-                anchors.verticalCenter: parent.verticalCenter
+                y: Math.round((parent.height - implicitHeight) / 2)
                 text: treeRow.display
                 color: Theme.colors.textHc2
             }
