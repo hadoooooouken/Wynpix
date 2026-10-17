@@ -93,6 +93,12 @@ TestCase {
     function test_batchWindowShowsTheQueue() {
         verify(Fixture.requestBatchConversion(sources()));
         const window = openedWindow(batchIndex);
+        const settingsView = findNamed(window.contentItem, "batchSettingsView");
+        const settingsColumn = findNamed(window.contentItem, "batchSettingsColumn");
+        verify(settingsView !== null);
+        verify(settingsColumn !== null);
+        verify(window.width >= window.minimumWidth);
+        verify(settingsView.width >= settingsColumn.implicitWidth + 2 * window.settingsMargin);
         const queue = findNamed(window.contentItem, "batchQueue");
         verify(queue !== null);
         compare(queue.count, 3);

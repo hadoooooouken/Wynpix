@@ -23,11 +23,16 @@ Window {
 
     readonly property int initialWidth: 1048
     readonly property int initialHeight: 816
-    readonly property int minimumContentWidth: 920
+    readonly property int minimumContentWidth: Math.max(
+        920,
+        root.queueMinimumWidth + root.settingsPreferredWidth + StyleConstants.dialogSpacing
+        + 2 * StyleConstants.dialogPadding)
     readonly property int minimumContentHeight: 600
     readonly property int queueMinimumWidth: 400
     readonly property int settingsWidth: 500
     readonly property int settingsMargin: 14
+    readonly property int settingsPreferredWidth: Math.max(
+        root.settingsWidth, settingsColumn.implicitWidth + 2 * root.settingsMargin)
     readonly property int sectionSpacing: 12
     readonly property int indent: 20
     readonly property int fieldWidth: 120
@@ -38,7 +43,7 @@ Window {
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
     color: Theme.colors.widget
-    width: root.initialWidth
+    width: Math.max(root.initialWidth, root.minimumContentWidth)
     height: root.initialHeight
     minimumWidth: root.minimumContentWidth
     minimumHeight: root.minimumContentHeight
@@ -171,7 +176,8 @@ Window {
                 ScrollView {
                     id: settingsView
 
-                    Layout.preferredWidth: root.settingsWidth
+                    objectName: "batchSettingsView"
+                    Layout.preferredWidth: root.settingsPreferredWidth
                     Layout.fillHeight: true
                     enabled: root.editable
                     contentWidth: availableWidth
@@ -179,6 +185,7 @@ Window {
                     ColumnLayout {
                         id: settingsColumn
 
+                        objectName: "batchSettingsColumn"
                         x: root.settingsMargin
                         width: settingsView.availableWidth - 2 * root.settingsMargin
                         spacing: StyleConstants.dialogSpacing
