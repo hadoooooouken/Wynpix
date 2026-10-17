@@ -3,7 +3,6 @@
 #include <QString>
 
 #define StdString std::wstring
-#define CharType wchar_t
 
 int clamp(int x, int lower, int upper);
 StdString toStdString(QString str);

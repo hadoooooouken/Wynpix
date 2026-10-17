@@ -763,12 +763,6 @@ void Upscaler::triggerUpscaylProcessing(QRect visibleRect, double currentScale, 
 
     latestUpscaylSize = pendingUpscaylSize;
 
-    double scaleX = dpr * currentScale;
-    double scaleY = dpr * currentScale;
-
-    QSize cropTargetSize(qRound(origCrop.width() * scaleX),
-                         qRound(origCrop.height() * scaleY));
-
     UpscalerTaskParams params;
     params.croppedImage = croppedImg;
     if (HdrToneMapper::isHdr(croppedImg))

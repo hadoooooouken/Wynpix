@@ -13,13 +13,8 @@ const QString kTranslationsDirectoryName = QStringLiteral("translations");
 } // namespace
 
 AppTranslator::AppTranslator() {
-    const QString trPathFallback =
+    const QString trPath =
         QCoreApplication::applicationDirPath() + "/" + kTranslationsDirectoryName;
-#ifdef TRANSLATIONS_PATH
-    const QString trPath = QString(TRANSLATIONS_PATH);
-#else
-    const QString trPath = trPathFallback;
-#endif
     QString localeName = settings->language();
     if (localeName == kSystemLocaleName)
         localeName = QLocale::system().name();
@@ -28,13 +23,9 @@ AppTranslator::AppTranslator() {
         return;
 
     const QString trFile = trPath + "/" + localeName;
-    const QString trFileFallback = trPathFallback + "/" + localeName;
     if (!translator.load(trFile)) {
         qWarning() << "Could not load translation file: " << trFile;
-        if (!translator.load(trFileFallback)) {
-            qWarning() << "Could not load translation file: " << trFileFallback;
-            return;
-        }
+        return;
     }
     installed = QCoreApplication::installTranslator(&translator);
     if (!installed)

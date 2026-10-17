@@ -19,7 +19,6 @@ class ImageLib {
             Batch
         };
 
-        static constexpr float kAdjustEpsilon = kColorAdjustmentEpsilon;
         static constexpr double kPi = std::numbers::pi;
 
         static QImage rotatedRaw(const QImage *src, int grad);
@@ -35,7 +34,6 @@ class ImageLib {
         static QImage flippedVRaw(const QImage *src);
         static QImage flippedV(std::shared_ptr<const QImage> src);
 
-        //static QImage *scaled(const QImage *source, QSize destSize, ScalingFilter filter);
         static QImage scaled(std::shared_ptr<const QImage> source, QSize destSize, ScalingFilter filter);
         static QImage scaledForBatch(std::shared_ptr<const QImage> source, QSize destSize,
                                      ScalingFilter filter);

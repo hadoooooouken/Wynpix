@@ -8,14 +8,6 @@ WatcherEvent::WatcherEvent(const QString &name, int timerId, WatcherEvent::Type 
 {
 }
 
-WatcherEvent::WatcherEvent(const QString& name, uint cookie, int timerId, Type type) :
-    mName(name),
-    mCookie(cookie),
-    mTimerId(timerId),
-    mType(type)
-{
-}
-
 WatcherEvent::~WatcherEvent() {
 }
 

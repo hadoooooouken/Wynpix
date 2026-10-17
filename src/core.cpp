@@ -658,8 +658,6 @@ void Core::connectComponents() {
           &Core::onFileRemoved);
   connect(model.get(), &DirectoryModel::fileRenamed, this,
           &Core::onFileRenamed);
-  connect(model.get(), &DirectoryModel::fileModified, this,
-          &Core::onFileModified);
   connect(model.get(), &DirectoryModel::loaded, this, &Core::onModelLoaded);
   connect(model.get(), &DirectoryModel::imageReady, this,
           &Core::onModelItemReady);
@@ -1408,9 +1406,6 @@ void Core::onFileAdded(QString filePath) {
   if (model->fileCount() == 1 && state.currentFilePath == "")
     loadFileIndex(0, false, settings->usePreloader());
 }
-
-// !! fixme
-void Core::onFileModified(QString filePath) { Q_UNUSED(filePath) }
 
 void Core::outputError(const FileOpResult &error) const {
   if (error == FileOpResult::SUCCESS || error == FileOpResult::NOTHING_TO_DO)
@@ -2588,12 +2583,10 @@ void Core::updateInfoString() {
                 desc = "Adobe RGB";
               } else if (cs == QColorSpace(QColorSpace::DisplayP3)) {
                 desc = "Display P3";
-#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
               } else if (cs == QColorSpace(QColorSpace::ProPhotoRgb)) {
                 desc = "ProPhoto RGB";
               } else if (cs == QColorSpace(QColorSpace::Bt2020)) {
                 desc = "BT.2020";
-#endif
               } else {
                 desc = "Custom";
               }

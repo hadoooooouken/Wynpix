@@ -129,9 +129,7 @@ public:
     bool isSelfWrite(const QString &filePath) const;
 
     bool insertDirEntry(const QString &dirPath);
-    //bool forceInsertDirEntry(const QString &dirPath);
     void removeDirEntry(const QString &dirPath);
-    //void updateDirEntry(const QString &dirPath);
     void renameDirEntry(const QString &oldDirPath, const QString &newName);
 
     FileListSource source() const;

@@ -5,14 +5,10 @@
 class WatcherEvent {
 public:
     enum Type {
-        None,
-        MovedFrom,
-        MovedTo,
-        Modify
+        None
     };
 
     WatcherEvent(const QString &name,int timerId, Type type = None);
-    WatcherEvent(const QString& name, uint cookie, int timerId, Type type = None);
     ~WatcherEvent();
 
     QString name() const;
@@ -22,7 +18,6 @@ public:
 
 private:
     QString mName;
-    uint mCookie;
     int mTimerId;
     Type mType;
 

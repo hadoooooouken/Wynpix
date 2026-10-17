@@ -2,8 +2,6 @@
 
 #include "windows/windowswatcher.h"
 
-#define TAG         "[DirectoryWatcher]"
-
 DirectoryWatcherPrivate::DirectoryWatcherPrivate(DirectoryWatcher* qq, WatcherWorker* w) :
     q_ptr(qq),
     worker(w),

@@ -150,7 +150,6 @@ private slots:
     void onFileRemoved(QString filePath, int index);
     void onFileRenamed(QString fromPath, int indexFrom, QString toPath, int indexTo);
     void onFileAdded(QString filePath);
-    void onFileModified(QString filePath);
     void showResizeDialog();
     void showBatchConverter();
     void resize(const ResizeRequest &request);
