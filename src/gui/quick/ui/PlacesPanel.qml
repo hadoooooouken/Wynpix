@@ -167,7 +167,7 @@ Rectangle {
                 }
             }
             // Only the name column (QFileSystemModel has size, type and date).
-            columnWidthProvider: function(column: int): real {
+            columnWidthProvider: function(column) {
                 return column === 0 ? tree.width : 0;
             }
 
