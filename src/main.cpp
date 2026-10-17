@@ -85,8 +85,6 @@ int main(int argc, char *argv[]) {
 
   // force some env variables
   qputenv("QT_PLUGIN_PATH", "");
-  if (!qEnvironmentVariableIsSet("QSG_DISTANCEFIELD_ANTIALIASING"))
-    qputenv("QSG_DISTANCEFIELD_ANTIALIASING", "gray");
 
   QGuiApplication a(argc, argv);
   QCoreApplication::setLibraryPaths(QStringList()
