@@ -27,13 +27,35 @@ T.AbstractButton {
     readonly property int formatColumnWidth: 128
     readonly property int formatColumns: 4
     readonly property int formatIndent: 20
+    // Distances kept between the popup and the window edges or the control.
     readonly property int popupTopGap: 10
-    // Distance kept between the popup and the screen's right edge.
+    readonly property int popupBottomGap: 20
+    readonly property int popupLeftGap: 20
     readonly property int popupRightGap: 20
     readonly property int controlRadius: 4
     readonly property int borderWidth: 2
     // Text and glyph on the accent field (Qt::white in the widget).
     readonly property color limitedContentColor: "white"
+
+    readonly property int popupContentWidth: formatIndent + formatColumns * formatColumnWidth
+                                             + (formatColumns - 1) * popupSpacing
+    readonly property int popupBaseWidth: popupContentWidth + 2 * popupMargin
+
+    readonly property real maxAllowedWidth: {
+        if (!control.Window.window)
+            return control.popupBaseWidth;
+        return Math.max(0, control.Window.window.width - control.popupLeftGap - control.popupRightGap);
+    }
+    readonly property real maxAllowedHeight: {
+        if (!control.Window.window)
+            return popup.implicitHeight;
+        const fieldY = control.mapToItem(null, 0, 0).y;
+        const popupWindowY = fieldY + control.height + control.popupTopGap;
+        return Math.max(0, control.Window.window.height - popupWindowY - control.popupBottomGap);
+    }
+    readonly property bool verticalScrollNeeded: popup.implicitHeight > control.maxAllowedHeight
+    readonly property int targetPopupWidth: popupBaseWidth
+                                            + (verticalScrollNeeded ? StyleConstants.scrollBarThickness : 0)
 
     readonly property real widestText: {
         let width = 0;
@@ -55,6 +77,29 @@ T.AbstractButton {
         id: metrics
 
         font: Theme.fonts.body
+    }
+
+    function repositionPopup() {
+        if (!control.Window.window)
+            return;
+
+        const win = control.Window.window;
+        const fieldPos = control.mapToItem(null, 0, 0);
+        const fieldX = fieldPos.x;
+
+        const rightmostX = win.width - control.popupRightGap - popup.width;
+        const leftmostX = control.popupLeftGap;
+        const targetWindowX = Math.max(leftmostX, Math.min(fieldX, rightmostX));
+        popup.x = targetWindowX - fieldX;
+    }
+
+    Connections {
+        target: control.Window.window
+
+        function onWidthChanged() {
+            if (popup.opened)
+                control.repositionPopup();
+        }
     }
 
     background: Rectangle {
@@ -92,7 +137,11 @@ T.AbstractButton {
     Popup {
         id: popup
 
+        parent: control
+
         y: control.height + control.popupTopGap
+        width: Math.min(control.targetPopupWidth, control.maxAllowedWidth)
+        height: Math.min(implicitHeight, control.maxAllowedHeight)
         popupType: T.Popup.Item
         padding: control.popupMargin
         // Negative insets make the popup window large enough for the shadow;
@@ -103,14 +152,14 @@ T.AbstractButton {
         rightInset: -StyleConstants.popupShadowMargin
         closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent
 
-        // Below the field, shifted left as far as needed to keep the gap to
-        // the screen's right edge.
         onAboutToShow: {
-            const fieldX = control.mapToGlobal(0, 0).x;
-            const screenLeft = control.Screen.virtualX;
-            const screenRight = screenLeft + control.Screen.width;
-            const rightmostX = screenRight - control.popupRightGap - popup.width;
-            popup.x = Math.max(screenLeft, Math.min(fieldX, rightmostX)) - fieldX;
+            if (scrollView.contentItem)
+                scrollView.contentItem.contentY = 0;
+            control.repositionPopup();
+        }
+        onWidthChanged: {
+            if (popup.opened)
+                control.repositionPopup();
         }
 
         background: Item {
@@ -124,61 +173,75 @@ T.AbstractButton {
             }
         }
 
-        contentItem: Column {
-            spacing: control.popupSpacing
+        contentItem: ScrollView {
+            id: scrollView
 
-            ModelCheckBox {
-                text: control.filter.allFormatsLabel
-                font: Theme.fonts.bodyStrong
-                checked: control.filter.allFormats
-                onClicked: control.filter.selectAllFormats()
-            }
+            clip: true
+            T.ScrollBar.horizontal.policy: T.ScrollBar.AlwaysOff
+            T.ScrollBar.vertical.policy: control.verticalScrollNeeded
+                                         ? T.ScrollBar.AsNeeded
+                                         : T.ScrollBar.AlwaysOff
 
-            Rectangle {
-                width: parent.width
-                height: 1
-                color: Theme.colors.widgetBorder
-            }
+            Column {
+                id: contentColumn
 
-            Repeater {
-                model: control.filter
+                width: scrollView.availableWidth
+                spacing: control.popupSpacing
 
-                delegate: Column {
-                    id: category
+                ModelCheckBox {
+                    text: control.filter.allFormatsLabel
+                    font: Theme.fonts.bodyStrong
+                    checked: control.filter.allFormats
+                    onClicked: control.filter.selectAllFormats()
+                }
 
-                    required property int index
-                    required property string label
-                    required property int checkState
-                    required property var formats
+                Rectangle {
+                    width: parent.width
+                    implicitHeight: StyleConstants.separatorThickness
+                    height: implicitHeight
+                    color: Theme.colors.widgetBorder
+                }
 
-                    spacing: control.popupSpacing
+                Repeater {
+                    model: control.filter
 
-                    ModelCheckBox {
-                        text: category.label
-                        font: Theme.fonts.bodyStrong
-                        tristate: true
-                        checkState: category.checkState
-                        onClicked: control.filter.setCategoryChecked(category.index,
-                                                                     category.checkState !== Qt.Checked)
-                    }
+                    delegate: Column {
+                        id: category
 
-                    Grid {
-                        leftPadding: control.formatIndent
-                        columns: control.formatColumns
-                        columnSpacing: control.popupSpacing
-                        rowSpacing: control.popupSpacing
+                        required property int index
+                        required property string label
+                        required property int checkState
+                        required property var formats
 
-                        Repeater {
-                            model: category.formats
+                        spacing: control.popupSpacing
 
-                            delegate: ModelCheckBox {
-                                required property var modelData
+                        ModelCheckBox {
+                            text: category.label
+                            font: Theme.fonts.bodyStrong
+                            tristate: true
+                            checkState: category.checkState
+                            onClicked: control.filter.setCategoryChecked(category.index,
+                                                                         category.checkState !== Qt.Checked)
+                        }
 
-                                width: control.formatColumnWidth
-                                text: modelData.label
-                                checked: modelData.checked
-                                onClicked: control.filter.setFormatChecked(modelData.index,
-                                                                           !modelData.checked)
+                        Grid {
+                            leftPadding: control.formatIndent
+                            columns: control.formatColumns
+                            columnSpacing: control.popupSpacing
+                            rowSpacing: control.popupSpacing
+
+                            Repeater {
+                                model: category.formats
+
+                                delegate: ModelCheckBox {
+                                    required property var modelData
+
+                                    width: control.formatColumnWidth
+                                    text: modelData.label
+                                    checked: modelData.checked
+                                    onClicked: control.filter.setFormatChecked(modelData.index,
+                                                                               !modelData.checked)
+                                }
                             }
                         }
                     }
