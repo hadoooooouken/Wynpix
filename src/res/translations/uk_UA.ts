@@ -124,97 +124,97 @@
 <context>
     <name>BatchConverterDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="37"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="42"/>
         <source>Batch Converter</source>
         <translation>Пакетний конвертер</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="122"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="127"/>
         <source>Select all</source>
         <translation>Виділити все</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="127"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="132"/>
         <source>Deselect all</source>
         <translation>Зняти виділення</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="191"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="198"/>
         <source>Save as type:</source>
         <translation>Тип файлу:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="236"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="243"/>
         <source>Resize</source>
         <translation>Змінити розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="252"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="259"/>
         <source>By Percent:</source>
         <translation>За відсотком:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="301"/>
         <source>By Absolute Size:</source>
         <translation>За абсолютним розміром:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="369"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="376"/>
         <source>By Megapixels:</source>
         <translation>За мегапікселями:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="384"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="391"/>
         <source>Megapixels:</source>
         <translation>Мегапікселі:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="406"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="413"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>Двійковий (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="725"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="732"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="268"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="275"/>
         <source>Percent:</source>
         <translation>Відсоток:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="425"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="432"/>
         <source>Keep aspect ratio</source>
         <translation>Зберігати пропорції</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="486"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="493"/>
         <source>Filter:</source>
         <translation>Фільтр:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="501"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="508"/>
         <source>Model:</source>
         <translation>Модель:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="539"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="546"/>
         <source>Flip horizontal</source>
         <translation>Віддзеркалити горизонтально</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="545"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="552"/>
         <source>Flip vertical</source>
         <translation>Віддзеркалити вертикально</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="343"/>
         <source>Common sizes:</source>
         <translation>Поширені розміри:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="554"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="561"/>
         <source>Color adjustments</source>
         <translation>Корекція кольорів</translation>
     </message>
@@ -249,32 +249,32 @@
         <translation>Насиченість:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="310"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="317"/>
         <source>Max Width:</source>
         <translation>Макс. ширина:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="348"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="355"/>
         <source>Max Height:</source>
         <translation>Макс. висота:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="440"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="440"/>
         <source>Width</source>
         <translation>Ширина</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="440"/>
         <source>Height</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="461"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="468"/>
         <source>Upscayl</source>
         <translation>Використовувати Upscayl</translation>
     </message>
@@ -304,22 +304,22 @@
         <translation>Колірний тон:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="589"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="596"/>
         <source>Output folder:</source>
         <translation>Вихідна папка:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="601"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="608"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="614"/>
         <source>Create subfolder for batch</source>
         <translation>Створити підпапку для пакета</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="613"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="620"/>
         <source>Filename pattern:</source>
         <translation>Шаблон імені файлу:</translation>
     </message>
@@ -334,7 +334,7 @@
         <translation>Доступно: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="628"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="635"/>
         <source>Overwrite existing files</source>
         <translation>Перезаписувати існуючі файли</translation>
     </message>
@@ -344,12 +344,12 @@
         <translation>Готово до конвертації.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
         <source>Convert</source>
         <translation>Конвертувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="673"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -374,12 +374,12 @@
         <translation>Magic Kernel Sharp 2021</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="415"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="422"/>
         <source>Reset: %1 x %2</source>
         <translation>Скинути: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="473"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="480"/>
         <source>No AI models found in models/ directory.</source>
         <translation>Не знайдено моделей ШІ в папці models/.</translation>
     </message>
@@ -389,7 +389,7 @@
         <translation>Вибрано файлів: %1 (%2 МБ)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="677"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="684"/>
         <source>Select Output Directory</source>
         <translation>Вибрати вихідну папку</translation>
     </message>
@@ -404,13 +404,13 @@
         <translation>Якість (1 - найнижча, 100 - найвища)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
         <source>Stopping...</source>
         <translation>Зупинка...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="673"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
@@ -518,7 +518,7 @@ Total files: %3</source>
         <translation>Оригінальний розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="581"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="588"/>
         <source>Reset Color Adjustments</source>
         <translation>Скинути корекцію кольорів</translation>
     </message>
@@ -773,7 +773,7 @@ Total files: %3</source>
         <translation>Видалити назавжди</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="353"/>
+        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="352"/>
         <source>Configure menu</source>
         <translation>Налаштувати меню</translation>
     </message>
@@ -2854,6 +2854,7 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="30"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="108"/>
         <source>Requires application restart</source>
         <translation>Потребує перезапуск програми</translation>
     </message>
@@ -3058,17 +3059,17 @@ Staged copy:
         <translation>Крок зуму:</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsoptions.cpp" line="175"/>
+        <location filename="../../components/settingseditor/settingsoptions.cpp" line="183"/>
         <source>None</source>
         <translation>Нічого</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsoptions.cpp" line="176"/>
+        <location filename="../../components/settingseditor/settingsoptions.cpp" line="184"/>
         <source>Touchpad</source>
         <translation>Трекпад</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsoptions.cpp" line="178"/>
+        <location filename="../../components/settingseditor/settingsoptions.cpp" line="186"/>
         <source>Touchpad &amp; Mouse Wheel</source>
         <translation>Трекпад &amp; колесо миші</translation>
     </message>
@@ -3272,7 +3273,7 @@ Example: %1</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="266"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
         <source>Preferences — </source>
         <translation>Налаштування — </translation>
     </message>
@@ -3287,9 +3288,29 @@ Example: %1</source>
         <translation>Системна (авто)</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="100"/>
+        <source>Text rendering:</source>
+        <translation>Рендеринг тексту:</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/settingsoptions.cpp" line="175"/>
+        <source>Qt</source>
+        <translation>Qt</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/settingsoptions.cpp" line="176"/>
+        <source>Native</source>
+        <translation>Системний</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/settingsoptions.cpp" line="177"/>
+        <source>Curve</source>
+        <translation>Контурний</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="46"/>
         <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="48"/>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="98"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="116"/>
         <source>Accent color</source>
         <translation>Колір акценту</translation>
     </message>
@@ -3399,12 +3420,12 @@ Example: %1</source>
         <translation>Огляд...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="294"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
         <source>Select Monitor Color Profile</source>
         <translation>Виберіть колірний профіль монітора</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="302"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>Колірні профілі (*.icc *.icm)</translation>
     </message>
@@ -3555,7 +3576,7 @@ Example: %1</source>
         <translation>Виключити шляхи з кешування (через крапку з комою «;»):</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="274"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
