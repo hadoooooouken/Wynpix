@@ -1152,12 +1152,10 @@ void DirectoryManager::cancelTransientSettle(const QString &filePath) {
 }
 
 void DirectoryManager::clearTransientSettleStates() {
-    // Immediate delete is safe here because clearTransientSettleStates is only
-    // called during directory switching or destruction, outside of any settle timer slot.
     for (auto it = transientSettleStates.begin(); it != transientSettleStates.end(); ++it) {
         if (it->timer) {
             it->timer->stop();
-            delete it->timer;
+            it->timer->deleteLater();
         }
     }
     transientSettleStates.clear();
@@ -1201,7 +1199,7 @@ void DirectoryManager::clearPendingRemovalStates() {
     for (auto it = pendingRemovalStates.begin(); it != pendingRemovalStates.end(); ++it) {
         if (it->timer) {
             it->timer->stop();
-            delete it->timer;
+            it->timer->deleteLater();
         }
     }
     pendingRemovalStates.clear();
