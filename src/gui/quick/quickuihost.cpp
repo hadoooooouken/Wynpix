@@ -54,6 +54,10 @@ constexpr char noVblankThreadVariable[] = "QT_D3D_NO_VBLANK_THREAD";
 constexpr char noRedirectionSurfaceVariable[] = "QT_QPA_DISABLE_REDIRECTION_SURFACE";
 // Selects the default Qt Quick text render type; read by QQuickWindow.
 constexpr char textRenderTypeVariable[] = "QT_QUICK_DEFAULT_TEXT_RENDER_TYPE";
+// Controls distance-field glyph antialiasing in the Qt Quick scene graph.
+constexpr char distanceFieldAntialiasingVariable[] =
+    "QSG_DISTANCEFIELD_ANTIALIASING";
+constexpr char grayAntialiasing[] = "gray";
 
 // Run-time Qt Quick Controls style. The application's QML selects its style
 // (wynpix.style, based on Basic) at compile time, but Qt's own Quick dialog
@@ -333,6 +337,9 @@ void QuickUiHost::applyGraphicsApi() {
 // time (IconGlyph) keeps Text.QtRendering explicitly. A value set by the
 // user is kept.
 void QuickUiHost::applyTextRenderType() {
+  if (!qEnvironmentVariableIsSet(distanceFieldAntialiasingVariable))
+    qputenv(distanceFieldAntialiasingVariable, grayAntialiasing);
+
   if (!qEnvironmentVariableIsSet(textRenderTypeVariable))
     QQuickWindow::setTextRenderType(QQuickWindow::QtTextRendering);
 }
@@ -342,7 +349,9 @@ void QuickUiHost::applyTextRenderType() {
 // and dialog windows take the application font when they are created, so
 // it becomes the theme's body style (Windows 11 type ramp) for all of them.
 void QuickUiHost::applyApplicationFont() {
-  QGuiApplication::setFont(mThemeBridge.fonts().body);
+  QFont font = mThemeBridge.fonts().body;
+  font.setStyleStrategy(QFont::NoSubpixelAntialias);
+  QGuiApplication::setFont(font);
 }
 
 //------------------------------------------------------------------------------

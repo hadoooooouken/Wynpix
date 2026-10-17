@@ -83,6 +83,7 @@ inline constexpr qreal kLogicalDotsPerInch = 96.0;
   font.setPointSizeF(style.sizePx * textScale * kPointsPerInch /
                      kLogicalDotsPerInch);
   font.setWeight(style.weight);
+  font.setStyleStrategy(QFont::NoSubpixelAntialias);
   return font;
 }
 
