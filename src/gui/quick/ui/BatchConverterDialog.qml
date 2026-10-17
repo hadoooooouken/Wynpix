@@ -148,8 +148,6 @@ Window {
                         border.color: Theme.colors.widgetBorder
 
                         ListView {
-                            id: queueView
-
                             objectName: "batchQueue"
                             anchors.fill: parent
                             anchors.margins: root.queueFrameWidth

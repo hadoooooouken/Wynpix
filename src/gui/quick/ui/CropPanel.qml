@@ -295,8 +295,6 @@ FocusScope {
 
     // A titled group (QGroupBox of the side panel stylesheet).
     component PanelGroup: Rectangle {
-        id: group
-
         property alias title: groupTitle.text
         default property alias content: groupContent.data
 

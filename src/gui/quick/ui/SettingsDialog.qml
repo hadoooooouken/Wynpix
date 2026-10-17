@@ -116,8 +116,6 @@ Window {
                     spacing: StyleConstants.dialogSpacing
 
                     ListView {
-                        id: sidebar
-
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         model: root.pages
@@ -188,8 +186,6 @@ Window {
                 spacing: StyleConstants.dialogSpacing
 
                 Item {
-                    id: pageArea
-
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 

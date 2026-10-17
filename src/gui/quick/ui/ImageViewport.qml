@@ -152,8 +152,6 @@ FocusScope {
     }
 
     Rectangle {
-        id: zoomIndicator
-
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.indicatorBottomMargin
