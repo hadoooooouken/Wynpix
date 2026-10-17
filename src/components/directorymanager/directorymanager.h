@@ -92,6 +92,7 @@ public:
     void removeFileEntry(const QString &filePath);
     void updateFileEntry(const QString &filePath);
     void renameFileEntry(const QString &oldFilePath, const QString &newName);
+    bool isFileRemovalPending(const QString &filePath) const;
 
     // Callers that write filePath themselves (DirectoryModel::saveFile(), via
     // FileOperations) call beginSelfWrite() before the write and
@@ -190,6 +191,16 @@ private:
     static constexpr int kSettlePollIntervalMs = 150;
     static constexpr int kMaxSettleAttempts = 20;
     static constexpr qint64 kMaxTotalSettleDurationMs = 15000;
+
+    struct PendingFileRemovalState {
+        QTimer *timer = nullptr;
+    };
+    QHash<QString, PendingFileRemovalState> pendingRemovalStates;
+    void schedulePendingRemoval(const QString &filePath);
+    void cancelPendingRemoval(const QString &filePath);
+    void clearPendingRemovalStates();
+    void onPendingRemovalTimeout(const QString &filePath);
+    static constexpr int kPendingRemovalDelayMs = 250;
 
     DirectoryWatcher* watcher;
     void readSettings();

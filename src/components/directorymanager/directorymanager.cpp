@@ -231,6 +231,7 @@ DirectoryManager::~DirectoryManager() {
     if (currentScanCancelled) {
         currentScanCancelled->store(true);
     }
+    clearPendingRemovalStates();
     clearTransientSettleStates();
 }
 
@@ -299,6 +300,7 @@ void DirectoryManager::startFileWatcher(QString directoryPath) {
 }
 
 void DirectoryManager::stopFileWatcher() {
+    clearPendingRemovalStates();
     clearTransientSettleStates();
     if(!watcher)
         return;
@@ -384,6 +386,7 @@ bool DirectoryManager::setDirectory(QString dirPath) {
     mListSource = SOURCE_DIRECTORY;
     mDirectoryPath = dirPath;
 
+    clearPendingRemovalStates();
     clearTransientSettleStates();
     fileEntryVec.clear();
     dirEntryVec.clear();
@@ -422,6 +425,7 @@ bool DirectoryManager::setDirectoryRecursive(QString dirPath) {
     mListSource = SOURCE_DIRECTORY_RECURSIVE;
     mDirectoryPath = dirPath;
 
+    clearPendingRemovalStates();
     clearTransientSettleStates();
     fileEntryVec.clear();
     dirEntryVec.clear();
@@ -448,6 +452,7 @@ bool DirectoryManager::setFileList(const QStringList &filePaths) {
         return false;
     }
     stopFileWatcher();
+    clearPendingRemovalStates();
     clearTransientSettleStates();
     fileEntryVec.clear();
     dirEntryVec.clear();
@@ -901,6 +906,7 @@ bool DirectoryManager::forceInsertFileEntry(const QString &filePath) {
 }
 
 void DirectoryManager::removeFileEntry(const QString &filePath) {
+    cancelPendingRemoval(filePath);
     cancelTransientSettle(filePath);
     if(!containsFile(filePath))
         return;
@@ -912,6 +918,7 @@ void DirectoryManager::removeFileEntry(const QString &filePath) {
 }
 
 void DirectoryManager::updateFileEntry(const QString &filePath) {
+    cancelPendingRemoval(filePath);
     if(!containsFile(filePath)) {
         if(isSupportedFile(filePath)) {
             insertFileEntry(filePath);
@@ -939,9 +946,11 @@ void DirectoryManager::updateFileEntry(const QString &filePath) {
 
 void DirectoryManager::renameFileEntry(const QString &oldFilePath, const QString &newFileName) {
     cancelTransientSettle(oldFilePath);
+    cancelPendingRemoval(oldFilePath);
     QFileInfo fi(oldFilePath);
     QString newFilePath = fi.absolutePath() + "/" + newFileName;
     cancelTransientSettle(newFilePath);
+    cancelPendingRemoval(newFilePath);
     if(!containsFile(oldFilePath)) {
         if(containsFile(newFilePath)) {
             updateFileEntry(newFilePath);
@@ -956,7 +965,7 @@ void DirectoryManager::renameFileEntry(const QString &oldFilePath, const QString
         return;
     }
     if(!isSupportedFile(newFilePath)) {
-        removeFileEntry(oldFilePath);
+        schedulePendingRemoval(oldFilePath);
         if(isCandidateFile(newFilePath) && isFileWriteInProgress(newFilePath))
             scheduleTransientSettle(newFilePath);
         return;
@@ -1154,6 +1163,70 @@ void DirectoryManager::clearTransientSettleStates() {
     transientSettleStates.clear();
 }
 
+bool DirectoryManager::isFileRemovalPending(const QString &filePath) const {
+    return pendingRemovalStates.contains(lookupKey(filePath));
+}
+
+void DirectoryManager::schedulePendingRemoval(const QString &filePath) {
+    if (!containsFile(filePath))
+        return;
+
+    const QString key = lookupKey(filePath);
+    auto it = pendingRemovalStates.find(key);
+    if (it == pendingRemovalStates.end()) {
+        PendingFileRemovalState state;
+        state.timer = new QTimer(this);
+        state.timer->setSingleShot(true);
+        connect(state.timer, &QTimer::timeout, this, [this, filePath]() {
+            onPendingRemovalTimeout(filePath);
+        });
+        it = pendingRemovalStates.insert(key, state);
+    }
+    it->timer->start(kPendingRemovalDelayMs);
+}
+
+void DirectoryManager::cancelPendingRemoval(const QString &filePath) {
+    const QString key = lookupKey(filePath);
+    auto it = pendingRemovalStates.find(key);
+    if (it == pendingRemovalStates.end())
+        return;
+    if (it->timer) {
+        it->timer->stop();
+        it->timer->deleteLater();
+    }
+    pendingRemovalStates.erase(it);
+}
+
+void DirectoryManager::clearPendingRemovalStates() {
+    for (auto it = pendingRemovalStates.begin(); it != pendingRemovalStates.end(); ++it) {
+        if (it->timer) {
+            it->timer->stop();
+            delete it->timer;
+        }
+    }
+    pendingRemovalStates.clear();
+}
+
+void DirectoryManager::onPendingRemovalTimeout(const QString &filePath) {
+    const QString key = lookupKey(filePath);
+    auto it = pendingRemovalStates.find(key);
+    if (it == pendingRemovalStates.end())
+        return;
+
+    if (it->timer) {
+        it->timer->deleteLater();
+    }
+    pendingRemovalStates.erase(it);
+
+    if (isFile(filePath)) {
+        qDebug() << "[DirectoryManager] Pending removal file reappeared, updating:" << filePath;
+        updateFileEntry(filePath);
+        return;
+    }
+
+    removeFileEntry(filePath);
+}
+
 void DirectoryManager::onTransientSettleTimeout(const QString &filePath) {
     const QString key = lookupKey(filePath);
     auto it = transientSettleStates.find(key);
@@ -1241,7 +1314,17 @@ void DirectoryManager::onFileRemovedExternal(QString fileName) {
         return;
     }
     removeDirEntry(fullPath);
-    removeFileEntry(fullPath);
+    if (containsFile(fullPath)) {
+        if (isFile(fullPath)) {
+            // The file was already replaced on disk by an atomic write before
+            // this notification arrived. Update the entry instead of removing.
+            updateFileEntry(fullPath);
+        } else {
+            schedulePendingRemoval(fullPath);
+        }
+    } else {
+        removeFileEntry(fullPath);
+    }
 }
 
 void DirectoryManager::onFileAddedExternal(QString fileName) {
@@ -1252,12 +1335,17 @@ void DirectoryManager::onFileAddedExternal(QString fileName) {
         noteSelfWriteActivity(fullPath);
         return;
     }
+    cancelPendingRemoval(fullPath);
     if(isDir(fullPath)) {
         insertDirEntry(fullPath);
     } else {
-        insertFileEntry(fullPath);
-        if (isCandidateFile(fullPath) && isFileWriteInProgress(fullPath)) {
-            scheduleTransientSettle(fullPath);
+        if (containsFile(fullPath)) {
+            updateFileEntry(fullPath);
+        } else {
+            insertFileEntry(fullPath);
+            if (isCandidateFile(fullPath) && isFileWriteInProgress(fullPath)) {
+                scheduleTransientSettle(fullPath);
+            }
         }
     }
 }
@@ -1286,6 +1374,8 @@ void DirectoryManager::onFileRenamedExternal(QString oldName, QString newName) {
     }
     cancelTransientSettle(oldPath);
     cancelTransientSettle(newPath);
+    cancelPendingRemoval(oldPath);
+    cancelPendingRemoval(newPath);
     if(isDir(newPath))
         renameDirEntry(oldPath, newName);
     else
@@ -1300,6 +1390,7 @@ void DirectoryManager::onFileModifiedExternal(QString fileName) {
         noteSelfWriteActivity(fullPath);
         return;
     }
+    cancelPendingRemoval(fullPath);
     updateFileEntry(fullPath);
 }
 
