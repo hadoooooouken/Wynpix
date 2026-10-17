@@ -1312,16 +1312,14 @@ void DirectoryManager::onFileRemovedExternal(QString fileName) {
         return;
     }
     removeDirEntry(fullPath);
-    if (containsFile(fullPath)) {
-        if (isFile(fullPath)) {
-            // The file was already replaced on disk by an atomic write before
-            // this notification arrived. Update the entry instead of removing.
-            updateFileEntry(fullPath);
-        } else {
-            schedulePendingRemoval(fullPath);
-        }
-    } else {
+    if (!containsFile(fullPath)) {
         removeFileEntry(fullPath);
+    } else if (isFile(fullPath)) {
+        // The file was already replaced on disk by an atomic write before
+        // this notification arrived. Update the entry instead of removing.
+        updateFileEntry(fullPath);
+    } else {
+        schedulePendingRemoval(fullPath);
     }
 }
 
