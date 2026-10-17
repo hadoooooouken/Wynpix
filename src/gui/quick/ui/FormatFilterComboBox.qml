@@ -27,11 +27,12 @@ T.AbstractButton {
     readonly property int formatColumnWidth: 128
     readonly property int formatColumns: 4
     readonly property int formatIndent: 20
-    // Distances kept between the popup and the window edges or the control.
+    // Gap between the bottom of the control and the top of the popup frame.
     readonly property int popupTopGap: 10
-    readonly property int popupBottomGap: 20
-    readonly property int popupLeftGap: 20
-    readonly property int popupRightGap: 20
+    // Minimum gaps kept between the outer edge of the popup drop shadow and the window edges.
+    readonly property int popupBottomGap: 10
+    readonly property int popupLeftGap: 10
+    readonly property int popupRightGap: 10
     readonly property int controlRadius: 4
     readonly property int borderWidth: 2
     // Text and glyph on the accent field (Qt::white in the widget).
@@ -44,14 +45,16 @@ T.AbstractButton {
     readonly property real maxAllowedWidth: {
         if (!control.Window.window)
             return control.popupBaseWidth;
-        return Math.max(0, control.Window.window.width - control.popupLeftGap - control.popupRightGap);
+        return Math.max(0, control.Window.window.width - control.popupLeftGap - control.popupRightGap
+                           - 2 * StyleConstants.popupShadowMargin);
     }
     readonly property real maxAllowedHeight: {
         if (!control.Window.window)
             return popup.implicitHeight;
         const fieldY = control.mapToItem(null, 0, 0).y;
         const popupWindowY = fieldY + control.height + control.popupTopGap;
-        return Math.max(0, control.Window.window.height - popupWindowY - control.popupBottomGap);
+        return Math.max(0, control.Window.window.height - popupWindowY
+                           - control.popupBottomGap - StyleConstants.popupShadowMargin);
     }
     readonly property bool verticalScrollNeeded: popup.implicitHeight > control.maxAllowedHeight
     readonly property int targetPopupWidth: popupBaseWidth
@@ -69,6 +72,10 @@ T.AbstractButton {
     focusPolicy: Qt.NoFocus
     hoverEnabled: true
     onClicked: popup.opened ? popup.close() : popup.open()
+    onXChanged: {
+        if (popup.opened)
+            repositionPopup();
+    }
 
     Accessible.role: Accessible.ComboBox
     Accessible.name: filter.displayText
@@ -87,8 +94,8 @@ T.AbstractButton {
         const fieldPos = control.mapToItem(null, 0, 0);
         const fieldX = fieldPos.x;
 
-        const rightmostX = win.width - control.popupRightGap - popup.width;
-        const leftmostX = control.popupLeftGap;
+        const rightmostX = win.width - control.popupRightGap - StyleConstants.popupShadowMargin - popup.width;
+        const leftmostX = control.popupLeftGap + StyleConstants.popupShadowMargin;
         const targetWindowX = Math.max(leftmostX, Math.min(fieldX, rightmostX));
         popup.x = targetWindowX - fieldX;
     }
@@ -177,7 +184,10 @@ T.AbstractButton {
             id: scrollView
 
             clip: true
-            T.ScrollBar.horizontal.policy: T.ScrollBar.AlwaysOff
+            contentWidth: contentColumn.width
+            T.ScrollBar.horizontal.policy: popup.width < control.popupBaseWidth
+                                         ? T.ScrollBar.AsNeeded
+                                         : T.ScrollBar.AlwaysOff
             T.ScrollBar.vertical.policy: control.verticalScrollNeeded
                                          ? T.ScrollBar.AsNeeded
                                          : T.ScrollBar.AlwaysOff
@@ -185,7 +195,7 @@ T.AbstractButton {
             Column {
                 id: contentColumn
 
-                width: scrollView.availableWidth
+                width: Math.max(control.popupContentWidth, scrollView.availableWidth)
                 spacing: control.popupSpacing
 
                 ModelCheckBox {
@@ -197,8 +207,7 @@ T.AbstractButton {
 
                 Rectangle {
                     width: parent.width
-                    implicitHeight: StyleConstants.separatorThickness
-                    height: implicitHeight
+                    height: StyleConstants.separatorThickness
                     color: Theme.colors.widgetBorder
                 }
 
