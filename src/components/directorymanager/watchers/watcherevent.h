@@ -18,12 +18,7 @@ public:
     QString name() const;
     void setName(const QString& name);
 
-    uint cookie() const;
-
-    int timerId() const;
-
     Type type() const;
-    void setType(Type type);
 
 private:
     QString mName;

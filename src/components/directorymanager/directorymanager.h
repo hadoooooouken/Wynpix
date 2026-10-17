@@ -85,7 +85,6 @@ public:
     const FSEntry &fileEntryAt(int index) const;
     QString dirPathAt(int index) const;
     QString dirNameAt(int index) const;
-    bool fileWatcherActive();
 
     bool insertFileEntry(const QString &filePath);
     bool forceInsertFileEntry(const QString &filePath);
@@ -221,8 +220,6 @@ private:
     void startFileWatcher(QString directoryPath);
     void stopFileWatcher();
 
-    void addEntriesFromDirectory(std::vector<FSEntry> &entryVec, QString directoryPath);
-    void addEntriesFromDirectoryRecursive(std::vector<FSEntry> &entryVec, QString directoryPath);
     bool checkFileRange(int index) const;
     bool checkDirRange(int index) const;
 

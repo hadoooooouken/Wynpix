@@ -69,7 +69,6 @@ public:
   // single frame never play.
   void play();
   void pause();
-  void togglePlaying();
   [[nodiscard]] bool isPlaying() const;
 
   // Loop playback (Settings::loopSlideshow() in the widget UI); turning it

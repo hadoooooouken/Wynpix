@@ -16,8 +16,6 @@ public:
     static ScriptManager* getInstance();
     ~ScriptManager();
     void runScript(const QString &scriptName, std::shared_ptr<Image> img);
-    static QString runCommand(QString cmd);
-    static void runCommandDetached(QString cmd);
     bool scriptExists(QString scriptName);
     void readScripts();
     void saveScripts();

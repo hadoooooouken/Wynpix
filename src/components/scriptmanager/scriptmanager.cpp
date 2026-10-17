@@ -125,30 +125,6 @@ void ScriptManager::runScript(const QString &scriptName, std::shared_ptr<Image> 
     }
 }
 
-QString ScriptManager::runCommand(QString cmd) {
-    QStringList cmdSplit = ScriptManager::splitCommandLine(cmd);
-    if(cmdSplit.isEmpty()) {
-        qWarning() << "[ScriptManager] runCommand() called with an empty or unparseable command.";
-        return QString();
-    }
-    QProcess exec;
-    exec.start(cmdSplit.takeAt(0), cmdSplit);
-    if(!exec.waitForFinished(2000)) {
-        exec.kill();
-        exec.waitForFinished();
-    }
-    return exec.readAllStandardOutput();
-}
-
-void ScriptManager::runCommandDetached(QString cmd) {
-    QStringList cmdSplit = ScriptManager::splitCommandLine(cmd);
-    if(cmdSplit.isEmpty()) {
-        qWarning() << "[ScriptManager] runCommandDetached() called with an empty or unparseable command.";
-        return;
-    }
-    QProcess::startDetached(cmdSplit.takeAt(0), cmdSplit);
-}
-
 void ScriptManager::processArguments(QStringList &cmd, std::shared_ptr<Image> img) {
     for (auto &arg : cmd) {
         if (arg.contains("%file%")) {

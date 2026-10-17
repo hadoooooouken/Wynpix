@@ -1324,10 +1324,8 @@ void Core::onDraggedOut(QList<QString> paths) {
       urlList << QUrl::fromLocalFile(path);
     mimeData->setUrls(urlList);
   }
-  // auto thumb = Thumbnailer::getThumbnail(paths.last(), 100);
   mDrag = new QDrag(this);
   mDrag->setMimeData(mimeData);
-  // mDrag->setPixmap(*thumb->pixmap().get());
   mDrag->exec(SupportedFileDragActions, Qt::CopyAction);
   mDrag->deleteLater();
   mDrag = nullptr;

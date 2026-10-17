@@ -57,13 +57,6 @@ void Thumbnailer::clearTasks() {
     mCancellationSource = std::stop_source{};
 }
 
-std::shared_ptr<Thumbnail> Thumbnailer::getThumbnail(QString filePath, int size) {
-    ThumbnailRequest request;
-    request.path = std::move(filePath);
-    request.size = size;
-    return ThumbnailerRunnable::generate(request).thumbnail;
-}
-
 void Thumbnailer::getThumbnailAsync(QString path, int size, bool crop,
                                     bool force, int priority) {
     getThumbnailAsync(ThumbnailSource{std::move(path), std::nullopt}, size,

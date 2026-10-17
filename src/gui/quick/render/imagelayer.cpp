@@ -348,8 +348,6 @@ bool ImageLayer::isEmpty() const { return mTiles.empty(); }
 
 QSize ImageLayer::imageSize() const { return mUploadedSize; }
 
-bool ImageLayer::hasAlpha() const { return mImageHasAlpha; }
-
 std::vector<ImageLayer::GpuTile> &ImageLayer::tiles() { return mTiles; }
 
 void ImageLayer::release() {

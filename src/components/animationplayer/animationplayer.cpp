@@ -75,13 +75,6 @@ void AnimationPlayer::pause() {
   setPlaying(false);
 }
 
-void AnimationPlayer::togglePlaying() {
-  if (mPlaying)
-    pause();
-  else
-    play();
-}
-
 bool AnimationPlayer::isPlaying() const { return mPlaying; }
 
 void AnimationPlayer::setLoop(bool loop) {

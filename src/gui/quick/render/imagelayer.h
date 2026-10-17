@@ -103,7 +103,6 @@ public:
   [[nodiscard]] bool isEmpty() const;
   // Size of the uploaded image.
   [[nodiscard]] QSize imageSize() const;
-  [[nodiscard]] bool hasAlpha() const;
   [[nodiscard]] std::vector<GpuTile> &tiles();
 
   // Builds the filtered textures of the tiles visible with params, writes

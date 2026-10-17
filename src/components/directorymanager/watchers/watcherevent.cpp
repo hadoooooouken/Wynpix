@@ -30,15 +30,3 @@ void WatcherEvent::setName(const QString &name) {
 WatcherEvent::Type WatcherEvent::type() const {
     return mType;
 }
-
-void WatcherEvent::setType(WatcherEvent::Type type) {
-    mType = type;
-}
-
-int WatcherEvent::timerId() const {
-    return mTimerId;
-}
-
-uint WatcherEvent::cookie() const {
-    return mCookie;
-}

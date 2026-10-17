@@ -29,7 +29,6 @@ class Thumbnailer : public QObject
 public:
     explicit Thumbnailer();
     ~Thumbnailer();
-    static std::shared_ptr<Thumbnail> getThumbnail(QString filePath, int size);
     [[nodiscard]] bool clearCache();
     void clearTasks();
     void waitForDone();

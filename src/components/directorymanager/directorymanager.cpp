@@ -736,114 +736,6 @@ bool DirectoryManager::containsDir(QString dirPath) const {
 // ##############################################################
 // ###################### PRIVATE METHODS #######################
 // ##############################################################
-// both directories & files
-void DirectoryManager::addEntriesFromDirectory(std::vector<FSEntry> &entryVec, QString directoryPath) {
-    QRegularExpressionMatch match;
-    std::error_code ec;
-    auto stdPath = toStdString(directoryPath);
-    if(!fs::exists(stdPath, ec) || !fs::is_directory(stdPath, ec)) {
-        return;
-    }
-
-    bool showHiddenFiles = settings->showHiddenFiles();
-    for(const auto & entry : fs::directory_iterator(stdPath, ec)) {
-        if(ec) break;
-        QString name = QString::fromStdWString(entry.path().filename().generic_wstring());
-
-        bool isDir = false;
-        try {
-            isDir = entry.is_directory();
-        } catch (...) {
-            continue;
-        }
-
-        QString path = QString::fromStdWString(entry.path().generic_wstring());
-
-        if(isDir) {
-            if(!showHiddenFiles) {
-                DWORD attributes = GetFileAttributes(entry.path().c_str());
-                if(attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_HIDDEN))
-                    continue;
-            }
-            FSEntry newEntry;
-            try {
-                newEntry.name = name;
-                newEntry.path = path;
-                newEntry.isDirectory = true;
-            } catch (const std::filesystem::filesystem_error &err) {
-                qWarning() << "[DirectoryManager]" << err.what();
-                continue;
-            }
-            dirEntryVec.emplace_back(newEntry);
-        } else {
-            match = regex.match(name);
-            if(match.hasMatch()) {
-                if(!showHiddenFiles) {
-                    DWORD attributes = GetFileAttributes(entry.path().c_str());
-                    if(attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_HIDDEN))
-                        continue;
-                }
-                if(isCandidateFileSupported(name, path)) {
-                    FSEntry newEntry;
-                    try {
-                        newEntry.name = name;
-                        newEntry.path = path;
-                        newEntry.isDirectory = false;
-                        newEntry.size = entry.file_size();
-                        newEntry.modifyTime = entry.last_write_time();
-                    } catch (const std::filesystem::filesystem_error &err) {
-                        qWarning() << "[DirectoryManager]" << err.what();
-                        continue;
-                    }
-                    entryVec.emplace_back(newEntry);
-                }
-            }
-        }
-    }
-}
-
-void DirectoryManager::addEntriesFromDirectoryRecursive(std::vector<FSEntry> &entryVec, QString directoryPath) {
-    QRegularExpressionMatch match;
-    std::error_code ec;
-    auto stdPath = toStdString(directoryPath);
-    if(!fs::exists(stdPath, ec) || !fs::is_directory(stdPath, ec)) {
-        return;
-    }
-
-    for(const auto & entry : fs::recursive_directory_iterator(stdPath, ec)) {
-        if(ec) break;
-        bool isDir = false;
-        try {
-            isDir = entry.is_directory();
-        } catch (...) {
-            continue;
-        }
-
-        if(isDir) {
-            continue;
-        }
-
-        QString name = QString::fromStdWString(entry.path().filename().generic_wstring());
-        match = regex.match(name);
-        if(match.hasMatch()) {
-            QString path = QString::fromStdWString(entry.path().generic_wstring());
-            if(isCandidateFileSupported(name, path)) {
-                FSEntry newEntry;
-                try {
-                    newEntry.name = name;
-                    newEntry.path = path;
-                    newEntry.isDirectory = false;
-                    newEntry.size = entry.file_size();
-                    newEntry.modifyTime = entry.last_write_time();
-                } catch (const std::filesystem::filesystem_error &err) {
-                    qWarning() << "[DirectoryManager]" << err.what();
-                    continue;
-                }
-                entryVec.emplace_back(newEntry);
-            }
-        }
-    }
-}
 
 void DirectoryManager::sortEntryLists() {
     if(settings->sortFolders())
@@ -1057,12 +949,6 @@ QStringList DirectoryManager::fileList() const {
     for(auto const& value : fileEntryVec)
         list << value.path;
     return list;
-}
-
-bool DirectoryManager::fileWatcherActive() {
-    if(!watcher)
-        return false;
-    return watcher->isObserving();
 }
 
 void DirectoryManager::beginSelfWrite(const QString &filePath) {
