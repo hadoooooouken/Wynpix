@@ -334,7 +334,7 @@ void QuickUiHost::applyGraphicsApi() {
 // user is kept.
 void QuickUiHost::applyTextRenderType() {
   if (!qEnvironmentVariableIsSet(textRenderTypeVariable))
-    QQuickWindow::setTextRenderType(QQuickWindow::QtTextRendering);
+    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 }
 
 //------------------------------------------------------------------------------
