@@ -239,7 +239,7 @@ FocusScope {
 
         readonly property bool hasSelection: root.thumbnails.currentIndex >= 0
 
-        popupType: T.Popup.Window
+        popupType: T.Popup.Item
         width: Theme.metrics.contextMenuWidth
 
         MenuRow {

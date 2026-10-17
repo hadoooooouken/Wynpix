@@ -93,7 +93,7 @@ T.AbstractButton {
         id: popup
 
         y: control.height + control.popupTopGap
-        popupType: T.Popup.Window
+        popupType: T.Popup.Item
         padding: control.popupMargin
         // Negative insets make the popup window large enough for the shadow;
         // the frame keeps the popup's own size.

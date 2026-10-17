@@ -10,8 +10,7 @@ import wynpix.style
 // buttons and a row of transform buttons, then the action rows with their
 // shortcuts, "More" expanding the rarely used rows in place and the
 // "Open with..." submenu of scripts. ContextMenuModel holds the rows and
-// decides when the menu opens; the menu is its own window, so it can extend
-// past the main window's edges, and opens at the pointer. Named apart from
+// decides when the menu opens, and opens at the pointer. Named apart from
 // the ContextMenu attached type of Qt Quick Controls; its strings keep the
 // widget menu's translation context.
 Menu {
@@ -35,7 +34,7 @@ Menu {
         return width;
     }
 
-    popupType: T.Popup.Window
+    popupType: T.Popup.Item
     // All rows laid out at once: the style's ListView only lays out the rows
     // in view and estimates the rest, which leaves the window too short
     // once "More" expands. Hidden rows take no space in a Column.
@@ -327,7 +326,7 @@ Menu {
     component ScriptsMenu: Menu {
         id: scriptsMenu
 
-        popupType: T.Popup.Window
+        popupType: T.Popup.Item
 
         required property string entryText
         required property int entryIcon
