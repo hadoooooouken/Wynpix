@@ -32,7 +32,7 @@
 #include "utils/stuff.h"
 #include "sourcecontainers/fsentry.h"
 
-#include "windows.h"
+#include <windows.h>
 
 enum FileListSource {
     SOURCE_DIRECTORY,
@@ -175,6 +175,20 @@ private:
     // scheduleEndSelfWrite() above.
     void noteSelfWriteActivity(const QString &filePath);
     void finalizeSelfWrite(const QString &key);
+
+    struct TransientFileSettleState {
+        int attemptsLeft = 0;
+        QElapsedTimer elapsed;
+        QTimer *timer = nullptr;
+    };
+    QHash<QString, TransientFileSettleState> transientSettleStates;
+    void scheduleTransientSettle(const QString &filePath);
+    void cancelTransientSettle(const QString &filePath);
+    void clearTransientSettleStates();
+    void onTransientSettleTimeout(const QString &filePath);
+    static constexpr int kSettlePollIntervalMs = 150;
+    static constexpr int kMaxSettleAttempts = 20;
+    static constexpr qint64 kMaxTotalSettleDurationMs = 15000;
 
     DirectoryWatcher* watcher;
     void readSettings();

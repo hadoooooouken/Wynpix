@@ -10,8 +10,9 @@ FSEntry::FSEntry(const QString &path) {
     fs::directory_entry stdEntry(toStdString(path), ec);
     if(ec) {
         // File is transiently unreadable (still being written/copied,
-        // share violation, etc). Leave entry default-constructed; the
-        // watcher will fire again once the write settles.
+        // share violation, etc). Leave entry default-constructed;
+        // DirectoryManager schedules a transient settle retry to update it
+        // once the write lock is released.
         return;
     }
 

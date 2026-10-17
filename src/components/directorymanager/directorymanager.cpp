@@ -40,6 +40,32 @@ struct DirectoryScanRequest {
     QRegularExpression formatRegex;
     QString nameFilter;
 };
+
+static bool isFileWriteInProgress(const QString &filePath) {
+    std::error_code ec;
+    auto stdPath = toStdString(filePath);
+    if (!fs::exists(stdPath, ec) || ec)
+        return false;
+
+    // Check if an external writer currently holds an open handle.
+    // Opening with GENERIC_READ and FILE_SHARE_READ (deliberately omitting FILE_SHARE_WRITE)
+    // fails with ERROR_SHARING_VIOLATION if any process holds the file open with write access.
+    HANDLE hFile = CreateFileW(
+        filePath.toStdWString().c_str(),
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        nullptr,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        nullptr);
+    if (hFile != INVALID_HANDLE_VALUE) {
+        CloseHandle(hFile);
+        return false;
+    }
+
+    const DWORD err = GetLastError();
+    return (err == ERROR_SHARING_VIOLATION || err == ERROR_LOCK_VIOLATION);
+}
 }
 
 class DirectoryScanner : public QRunnable {
@@ -205,6 +231,7 @@ DirectoryManager::~DirectoryManager() {
     if (currentScanCancelled) {
         currentScanCancelled->store(true);
     }
+    clearTransientSettleStates();
 }
 
 template< typename T, typename Pred >
@@ -272,6 +299,7 @@ void DirectoryManager::startFileWatcher(QString directoryPath) {
 }
 
 void DirectoryManager::stopFileWatcher() {
+    clearTransientSettleStates();
     if(!watcher)
         return;
 
@@ -356,6 +384,7 @@ bool DirectoryManager::setDirectory(QString dirPath) {
     mListSource = SOURCE_DIRECTORY;
     mDirectoryPath = dirPath;
 
+    clearTransientSettleStates();
     fileEntryVec.clear();
     dirEntryVec.clear();
     fileLookupMap.clear();
@@ -393,6 +422,7 @@ bool DirectoryManager::setDirectoryRecursive(QString dirPath) {
     mListSource = SOURCE_DIRECTORY_RECURSIVE;
     mDirectoryPath = dirPath;
 
+    clearTransientSettleStates();
     fileEntryVec.clear();
     dirEntryVec.clear();
     fileLookupMap.clear();
@@ -418,6 +448,7 @@ bool DirectoryManager::setFileList(const QStringList &filePaths) {
         return false;
     }
     stopFileWatcher();
+    clearTransientSettleStates();
     fileEntryVec.clear();
     dirEntryVec.clear();
     fileLookupMap.clear();
@@ -845,17 +876,28 @@ bool DirectoryManager::forceInsertFileEntry(const QString &filePath) {
     fs::path stdPath(toStdString(filePath));
     QString fileName = QString::fromStdWString(stdPath.filename().wstring());
     
-    FSEntry FSEntry(filePath, fileName, fs::file_size(stdPath, ec), fs::last_write_time(stdPath, ec), false);
+    std::uintmax_t fileSize = fs::file_size(stdPath, ec);
+    const bool sizeFailed = (ec != std::error_code{});
+    if (sizeFailed)
+        fileSize = 0;
+    auto modTime = fs::last_write_time(stdPath, ec);
+    const bool timeFailed = (ec != std::error_code{});
+    if (timeFailed)
+        modTime = std::filesystem::file_time_type{};
+    FSEntry FSEntry(filePath, fileName, fileSize, modTime, false);
     insert_sorted(fileEntryVec, FSEntry, comparator());
     rebuildFileLookupMap();
     if(!directoryPath().isEmpty()) {
         qDebug() << "fileIns" << filePath << directoryPath();
         emit fileAdded(filePath);
     }
+    if (sizeFailed || timeFailed || isFileWriteInProgress(filePath))
+        scheduleTransientSettle(filePath);
     return true;
 }
 
 void DirectoryManager::removeFileEntry(const QString &filePath) {
+    cancelTransientSettle(filePath);
     if(!containsFile(filePath))
         return;
     int index = indexOfFile(filePath);
@@ -869,11 +911,13 @@ void DirectoryManager::updateFileEntry(const QString &filePath) {
     if(!containsFile(filePath))
         return;
     FSEntry newEntry(filePath);
-    if(newEntry.path.isEmpty()) {
-        qWarning() << "[DirectoryManager] Cannot refresh file metadata:"
-                   << filePath;
+    if(newEntry.path.isEmpty() || isFileWriteInProgress(filePath)) {
+        qDebug() << "[DirectoryManager] File is still being written, scheduling settle check:"
+                 << filePath;
+        scheduleTransientSettle(filePath);
         return;
     }
+    cancelTransientSettle(filePath);
     int index = indexOfFile(filePath);
     if(fileEntryVec.at(index).modifyTime != newEntry.modifyTime ||
        fileEntryVec.at(index).size != newEntry.size)
@@ -883,8 +927,10 @@ void DirectoryManager::updateFileEntry(const QString &filePath) {
 }
 
 void DirectoryManager::renameFileEntry(const QString &oldFilePath, const QString &newFileName) {
+    cancelTransientSettle(oldFilePath);
     QFileInfo fi(oldFilePath);
     QString newFilePath = fi.absolutePath() + "/" + newFileName;
+    cancelTransientSettle(newFilePath);
     if(!containsFile(oldFilePath)) {
         if(containsFile(newFilePath))
             updateFileEntry(newFilePath);
@@ -909,11 +955,21 @@ void DirectoryManager::renameFileEntry(const QString &oldFilePath, const QString
     // insert
     std::error_code ec;
     fs::path stdPath(toStdString(newFilePath));
-    FSEntry FSEntry(newFilePath, newFileName, fs::file_size(stdPath, ec), fs::last_write_time(stdPath, ec), false);
+    std::uintmax_t fileSize = fs::file_size(stdPath, ec);
+    const bool sizeFailed = (ec != std::error_code{});
+    if (sizeFailed)
+        fileSize = 0;
+    auto modTime = fs::last_write_time(stdPath, ec);
+    const bool timeFailed = (ec != std::error_code{});
+    if (timeFailed)
+        modTime = std::filesystem::file_time_type{};
+    FSEntry FSEntry(newFilePath, newFileName, fileSize, modTime, false);
     insert_sorted(fileEntryVec, FSEntry, comparator());
     rebuildFileLookupMap();
     qDebug() << "fileRen" << oldFilePath << newFilePath;
     emit fileRenamed(oldFilePath, oldIndex, newFilePath, indexOfFile(newFilePath));
+    if (sizeFailed || timeFailed || isFileWriteInProgress(newFilePath))
+        scheduleTransientSettle(newFilePath);
 }
 
 // ---- dir entries
@@ -1034,6 +1090,96 @@ bool DirectoryManager::isSelfWrite(const QString &filePath) const {
     return selfWriteStates.contains(lookupKey(filePath));
 }
 
+void DirectoryManager::scheduleTransientSettle(const QString &filePath) {
+    const QString key = lookupKey(filePath);
+    auto it = transientSettleStates.find(key);
+    if (it == transientSettleStates.end()) {
+        TransientFileSettleState state;
+        state.attemptsLeft = kMaxSettleAttempts;
+        state.elapsed.start();
+        state.timer = new QTimer(this);
+        state.timer->setSingleShot(true);
+        connect(state.timer, &QTimer::timeout, this, [this, filePath]() {
+            onTransientSettleTimeout(filePath);
+        });
+        it = transientSettleStates.insert(key, state);
+    } else if (it->elapsed.elapsed() < kMaxTotalSettleDurationMs) {
+        it->attemptsLeft = kMaxSettleAttempts;
+    }
+    it->timer->start(kSettlePollIntervalMs);
+}
+
+void DirectoryManager::cancelTransientSettle(const QString &filePath) {
+    const QString key = lookupKey(filePath);
+    auto it = transientSettleStates.find(key);
+    if (it == transientSettleStates.end())
+        return;
+    if (it->timer) {
+        it->timer->stop();
+        // Use deleteLater because cancelTransientSettle can be called
+        // from within onTransientSettleTimeout during the timer's own signal dispatch.
+        it->timer->deleteLater();
+    }
+    transientSettleStates.erase(it);
+}
+
+void DirectoryManager::clearTransientSettleStates() {
+    // Immediate delete is safe here because clearTransientSettleStates is only
+    // called during directory switching or destruction, outside of any settle timer slot.
+    for (auto it = transientSettleStates.begin(); it != transientSettleStates.end(); ++it) {
+        if (it->timer) {
+            it->timer->stop();
+            delete it->timer;
+        }
+    }
+    transientSettleStates.clear();
+}
+
+void DirectoryManager::onTransientSettleTimeout(const QString &filePath) {
+    const QString key = lookupKey(filePath);
+    auto it = transientSettleStates.find(key);
+    if (it == transientSettleStates.end())
+        return;
+
+    if (!containsFile(filePath)) {
+        cancelTransientSettle(filePath);
+        return;
+    }
+
+    if (isFileWriteInProgress(filePath)) {
+        if (it->attemptsLeft > 0) {
+            --it->attemptsLeft;
+            it->timer->start(kSettlePollIntervalMs);
+            return;
+        }
+        // Attempts exhausted while the file is still locked by an external writer.
+        // Stop polling to prevent unbounded timer overhead; subsequent watcher
+        // activity will schedule a fresh cycle when new write flushes occur.
+        qDebug() << "[DirectoryManager] Transient settle timed out for locked file:" << filePath;
+        cancelTransientSettle(filePath);
+        return;
+    }
+
+    // Write lock released: file has genuinely settled.
+    cancelTransientSettle(filePath);
+    FSEntry newEntry(filePath);
+    if (!newEntry.path.isEmpty()) {
+        int index = indexOfFile(filePath);
+        if (index >= 0) {
+            if (fileEntryVec.at(index).modifyTime != newEntry.modifyTime ||
+                fileEntryVec.at(index).size != newEntry.size) {
+                fileEntryVec.at(index) = newEntry;
+            }
+            qDebug() << "fileMod settled:" << filePath;
+            // Always emit fileModified even if size/modifyTime happen to match the initial
+            // placeholder: the file was locked when initially added, causing thumbnailer/viewer
+            // reads to fail. Emitting fileModified tells views to clear their error state and
+            // reload the now-readable file.
+            emit fileModified(filePath);
+        }
+    }
+}
+
 //----------------------------------------------------------------------------
 // fs watcher events  ( onFile___External() )
 // these take file NAMES, not paths
@@ -1085,6 +1231,8 @@ void DirectoryManager::onFileRenamedExternal(QString oldName, QString newName) {
         noteSelfWriteActivity(newPath);
         return;
     }
+    cancelTransientSettle(oldPath);
+    cancelTransientSettle(newPath);
     if(isDir(newPath))
         renameDirEntry(oldPath, newName);
     else
