@@ -92,7 +92,6 @@ public:
     void removeFileEntry(const QString &filePath);
     void updateFileEntry(const QString &filePath);
     void renameFileEntry(const QString &oldFilePath, const QString &newName);
-    bool isFileRemovalPending(const QString &filePath) const;
 
     // Callers that write filePath themselves (DirectoryModel::saveFile(), via
     // FileOperations) call beginSelfWrite() before the write and

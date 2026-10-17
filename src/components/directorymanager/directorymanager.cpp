@@ -1161,10 +1161,6 @@ void DirectoryManager::clearTransientSettleStates() {
     transientSettleStates.clear();
 }
 
-bool DirectoryManager::isFileRemovalPending(const QString &filePath) const {
-    return pendingRemovalStates.contains(lookupKey(filePath));
-}
-
 void DirectoryManager::schedulePendingRemoval(const QString &filePath) {
     if (!containsFile(filePath))
         return;
