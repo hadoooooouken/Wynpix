@@ -81,10 +81,10 @@ Menu {
         }
     }
 
-    // Zoom and transform buttons; they act on press and keep the menu open,
-    // so the image can be zoomed or turned several times. A button that
-    // opens a modal UI (resize) closes it: the modal window would leave the
-    // menu open and unable to take input.
+    // Zoom and transform buttons keep the menu open, so the image can be
+    // zoomed or turned several times. A button that opens a modal UI (resize)
+    // closes it: the modal window would leave the menu open and unable to
+    // take input.
     Column {
         width: root.availableWidth
         spacing: root.buttonRowSpacing
@@ -219,7 +219,7 @@ Menu {
             if (hovered)
                 root.currentIndex = -1;
         }
-        onPressed: {
+        onClicked: {
             if (entryClosesMenu)
                 root.menuModel.trigger(entryAction);
             else

@@ -106,7 +106,7 @@ Item {
             verify(!Fixture.contextMenu.open);
         }
 
-        function test_buttonsActOnPress() {
+        function test_buttonsActOnClick() {
             Fixture.setShortcut("fitWindow", "1");
             openMenu([]);
             const rows = menu.itemAt(0);
@@ -119,11 +119,43 @@ Item {
             verify(fitWindow !== null, "no fitWindow button");
             tryVerify(() => fitWindow.Window.window !== null, timeout, "the button is in no window");
             mousePress(fitWindow);
-            compare(Fixture.lastInvoked, "fitWindow");
+            compare(Fixture.lastInvoked, "");
             mouseRelease(fitWindow);
+            compare(Fixture.lastInvoked, "fitWindow");
             // The menu stays open for further zooming, as the widget menu did.
             verify(menu.opened, "a button closed the menu");
             verify(Fixture.contextMenu.open);
+        }
+
+        function test_cropButtonRunsOnSingleClick() {
+            Fixture.setShortcut("crop", "X");
+            openMenu([]);
+            const transformRow = menu.itemAt(0).children[1];
+            let crop = null;
+            for (let i = 0; i < transformRow.children.length; ++i) {
+                if (transformRow.children[i].entryAction === "crop")
+                    crop = transformRow.children[i];
+            }
+            verify(crop !== null, "no crop button");
+            mouseClick(crop);
+            compare(Fixture.lastInvoked, "crop");
+            verify(menu.opened, "crop closed the menu in the test dispatcher");
+        }
+
+        function test_resizeButtonRunsOnSingleClickAndClosesMenu() {
+            Fixture.setShortcut("resize", "R");
+            openMenu([]);
+            const transformRow = menu.itemAt(0).children[1];
+            let resize = null;
+            for (let i = 0; i < transformRow.children.length; ++i) {
+                if (transformRow.children[i].entryAction === "resize")
+                    resize = transformRow.children[i];
+            }
+            verify(resize !== null, "no resize button");
+            mouseClick(resize);
+            compare(Fixture.lastInvoked, "resize");
+            tryVerify(() => !menu.visible, timeout);
+            verify(!Fixture.contextMenu.open);
         }
 
         function test_moreExpandsInPlace() {
