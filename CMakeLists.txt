@@ -1,7 +1,7 @@
 # wynpix root
 cmake_minimum_required(VERSION 3.25)
 project(wynpix
-    VERSION 1.0.2.0
+    VERSION 1.0.4.0
     HOMEPAGE_URL "https://github.com/hadoooooouken/wynpix"
     LANGUAGES C CXX RC)
 
