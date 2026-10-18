@@ -63,8 +63,14 @@ void CropController::toggle() {
         close();
         return;
     }
-    if (mFolderViewActive || imageSize().isEmpty())
+    if (mFolderViewActive) {
+        qWarning() << "CropController::toggle: ignored, the folder view is active";
         return;
+    }
+    if (imageSize().isEmpty()) {
+        qWarning() << "CropController::toggle: ignored, the image size is not known yet";
+        return;
+    }
     resetSelection();
     setActive(true);
 }

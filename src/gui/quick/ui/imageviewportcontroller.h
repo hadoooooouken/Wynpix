@@ -216,6 +216,9 @@ public:
     Q_INVOKABLE bool pointerPressed(QPointF position, int button, int modifiers);
     Q_INVOKABLE void pointerMoved(QPointF position, int buttons);
     Q_INVOKABLE bool pointerReleased(QPointF position);
+    // The pointer grab was lost (window deactivated, grab taken over) with a
+    // button held; no release follows.
+    Q_INVOKABLE void pointerCanceled();
     Q_INVOKABLE bool pointerDoubleClicked(QPointF position, int button, int modifiers);
     Q_INVOKABLE void pointerEntered(QPointF position);
     Q_INVOKABLE void pointerExited();
@@ -345,6 +348,8 @@ private:
 
     // Pointer.
     void applyInteractionStep(const InteractionStep &step);
+    // Common end of a press-move-release sequence, released or canceled.
+    void endPointerSequence(const ViewportInteraction::Release &release);
     [[nodiscard]] InteractionContext interactionContext() const;
     [[nodiscard]] ClickZone clickZoneAt(QPointF position) const;
     void updateClickZoneHover(QPointF position);

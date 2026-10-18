@@ -488,6 +488,7 @@ void ThumbnailListModel::press(int index, int button, int modifiers, QPointF pos
     const auto mouseButton = static_cast<Qt::MouseButton>(button);
     const auto keyboardModifiers = Qt::KeyboardModifiers::fromInt(modifiers);
     mReleaseSelects = false;
+    mDragOutRequested = false;
     mPressPosition = position;
     mPressIndex = checkRange(index) ? index : -1;
 
@@ -541,14 +542,18 @@ void ThumbnailListModel::move(QPointF position, int buttons) {
     }
     if (mouseButtons != Qt::LeftButton || mSelection.isEmpty())
         return;
-    if (QLineF(mPressPosition, position).length() >= kDragThreshold &&
+    if (!mDragOutRequested && QLineF(mPressPosition, position).length() >= kDragThreshold &&
         mSelection.contains(mPressIndex)) {
+        // The drag runs a modal loop that swallows the release; the latch
+        // keeps hover moves with a stale pressed state from starting it again.
+        mDragOutRequested = true;
         emit dragOutRequested();
     }
 }
 
 void ThumbnailListModel::release(int index, int button, QPointF position) {
     const auto mouseButton = static_cast<Qt::MouseButton>(button);
+    mDragOutRequested = false;
     if (mouseButton == Qt::RightButton) {
         if (!mGestureActive && checkRange(index) && !mSelection.contains(index))
             select(index);

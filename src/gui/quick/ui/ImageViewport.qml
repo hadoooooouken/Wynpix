@@ -69,6 +69,8 @@ FocusScope {
             if (!root.controller.pointerReleased(Qt.point(mouse.x, mouse.y)))
                 Actions.handleMouseRelease(mouse);
         }
+        // The grab was lost with a button held: no release follows.
+        onCanceled: root.controller.pointerCanceled()
         onDoubleClicked: mouse => {
             if (!root.controller.pointerDoubleClicked(Qt.point(mouse.x, mouse.y), mouse.button, mouse.modifiers))
                 Actions.handleMouseDoubleClick(mouse);

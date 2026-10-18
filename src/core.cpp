@@ -1562,13 +1562,15 @@ void Core::copyCurrentFile(QString destDirectory) {
 }
 
 void Core::toggleCropPanel() {
-  if (model->isEmpty())
+  if (model->isEmpty()) {
+    qWarning() << "Core::toggleCropPanel: ignored, the directory model is empty";
     return;
-  if (ui.shell.isCropPanelActive()) {
-    ui.shell.toggleCropPanel();
-  } else if (state.hasActiveImage) {
-    ui.shell.toggleCropPanel();
   }
+  if (!ui.shell.isCropPanelActive() && !state.hasActiveImage) {
+    qWarning() << "Core::toggleCropPanel: ignored, no image is active yet";
+    return;
+  }
+  ui.shell.toggleCropPanel();
 }
 
 void Core::toggleFullscreenInfoBar() { ui.shell.toggleFullscreenInfoBar(); }
@@ -1582,11 +1584,16 @@ void Core::requestSavePath() {
 }
 
 void Core::showResizeDialog() {
-  if (model->isEmpty())
+  if (model->isEmpty()) {
+    qWarning() << "Core::showResizeDialog: ignored, the directory model is empty";
     return;
+  }
   auto img = model->getImage(selectedPath());
-  if (!img)
+  if (!img) {
+    qWarning() << "Core::showResizeDialog: ignored, no image for the selected path"
+               << selectedPath();
     return;
+  }
   const std::optional<ResizeRequest> request = ui.dialogs.requestResize(img->size());
   if (request)
     resize(*request);

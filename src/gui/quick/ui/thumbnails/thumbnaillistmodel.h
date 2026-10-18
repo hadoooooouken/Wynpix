@@ -341,4 +341,6 @@ private:
     int mPressIndex = -1;
     bool mReleaseSelects = false;
     bool mGestureActive = false;
+    // The file drag of the current press started; it starts once per press.
+    bool mDragOutRequested = false;
 };

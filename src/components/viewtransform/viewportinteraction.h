@@ -98,7 +98,10 @@ public:
     // gesture) until the release, except while the file is dragged out.
     [[nodiscard]] bool isBusy() const;
 
-    // A button went down at pos.
+    // A button went down at pos. It starts a new press-move-release sequence:
+    // a mode left over from a sequence whose release never arrived (the file
+    // drag's modal loop swallows it, a lost pointer grab) is dropped, so the
+    // first interaction after it is not ignored.
     void press(QPoint pos);
     // The pointer moved to pos with buttons held.
     [[nodiscard]] InteractionStep move(QPoint pos, Qt::MouseButtons buttons,
@@ -107,12 +110,17 @@ public:
     void beginWheelZoom();
     // The last button was released.
     [[nodiscard]] Release release(bool hasImage);
+    // The pointer grab was lost mid-sequence and no release will follow. Ends
+    // the sequence like release(), but the event is never consumed.
+    [[nodiscard]] Release cancel();
     // Forgets the pressed position (the viewport was resized under it).
     void resetPressPosition(QPoint pos);
 
 private:
     [[nodiscard]] InteractionStep moveLeft(QPoint pos, const InteractionContext &context);
     [[nodiscard]] InteractionStep moveRight(QPoint pos, const InteractionContext &context);
+    // The current mode changed the view quality; a high-quality rescale follows.
+    [[nodiscard]] bool needsRescale() const;
 
     InteractionThresholds mThresholds = InteractionThresholds::forDevicePixelRatio(1.0);
     Mode mMode = Mode::None;

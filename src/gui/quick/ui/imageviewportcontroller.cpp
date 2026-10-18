@@ -1231,14 +1231,22 @@ void ImageViewportController::pointerMoved(QPointF position, int buttons) {
 
 bool ImageViewportController::pointerReleased(QPointF position) {
     mPointerPosition = position;
-    setClickZonePressed(false);
     const ViewportInteraction::Release release = mInteraction.release(hasImage());
+    endPointerSequence(release);
+    return release.consumed;
+}
+
+void ImageViewportController::pointerCanceled() {
+    endPointerSequence(mInteraction.cancel());
+}
+
+void ImageViewportController::endPointerSequence(const ViewportInteraction::Release &release) {
+    setClickZonePressed(false);
     showCursor();
     hideCursorTimed(false);
     updateCursorShape();
     if (release.rescale)
         requestScaling();
-    return release.consumed;
 }
 
 bool ImageViewportController::pointerDoubleClicked(QPointF position, int button, int modifiers) {

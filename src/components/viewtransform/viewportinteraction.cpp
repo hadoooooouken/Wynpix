@@ -46,6 +46,7 @@ bool ViewportInteraction::isBusy() const {
 }
 
 void ViewportInteraction::press(QPoint pos) {
+    mMode = Mode::None;
     mPressPos = pos;
     mLastPos = pos;
 }
@@ -124,11 +125,21 @@ void ViewportInteraction::beginWheelZoom() {
     mMode = Mode::WheelZoom;
 }
 
+bool ViewportInteraction::needsRescale() const {
+    return mMode == Mode::Zoom || mMode == Mode::WheelZoom || mMode == Mode::Pan;
+}
+
 ViewportInteraction::Release ViewportInteraction::release(bool hasImage) {
     const Release result{
         .consumed = hasImage && mMode != Mode::None && mMode != Mode::DragOut,
-        .rescale = mMode == Mode::Zoom || mMode == Mode::WheelZoom || mMode == Mode::Pan,
+        .rescale = needsRescale(),
     };
+    mMode = Mode::None;
+    return result;
+}
+
+ViewportInteraction::Release ViewportInteraction::cancel() {
+    const Release result{.consumed = false, .rescale = needsRescale()};
     mMode = Mode::None;
     return result;
 }
