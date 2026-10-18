@@ -248,17 +248,17 @@ void ContextMenuModel::refreshShortcuts() {
     rebuild();
 }
 
-void ContextMenuModel::toggle() {
-    if (mOpen) {
-        close();
-        return;
-    }
+void ContextMenuModel::show() {
     if (mFolderViewActive || !mInteractionEnabled)
         return;
     if (mMoreExpanded) {
         mMoreExpanded = false;
         rebuild();
         emit moreExpandedChanged();
+    }
+    if (mOpen) {
+        emit repositionRequested();
+        return;
     }
     mOpen = true;
     emit openChanged();

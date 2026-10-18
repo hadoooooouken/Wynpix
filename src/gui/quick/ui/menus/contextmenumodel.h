@@ -77,9 +77,10 @@ private:
 //   CAS settings is listed only while an image is shown with the CAS filter;
 //   trash and delete use the destructive tones;
 // - the menu action (ActionManager::contextMenu) opens the menu at the
-//   pointer in the document view, or closes an open one; it does not open
-//   while the viewer takes no input (crop mode), and the folder view closes
-//   it.
+//   pointer in the document view; an open menu is moved to the pointer
+//   instead of closed, so one right click is enough wherever the menu is
+//   already shown. It does not open while the viewer takes no input (crop
+//   mode), and the folder view closes it.
 // Shortcuts come from the action system (IActionDispatcher::shortcutFor),
 // so they are always the ones ActionManager uses; refreshShortcuts() reads
 // them again after edits.
@@ -127,9 +128,10 @@ public:
     void setScripts(const QStringList &names);
     void refreshShortcuts();
 
-    // The menu action: opens the menu (QML shows it at the pointer) or
-    // closes the open one.
-    void toggle();
+    // The menu action: opens the menu (QML shows it at the pointer). An
+    // open menu stays open and is moved to the pointer
+    // (repositionRequested).
+    void show();
 
     // --- QML ----------------------------------------------------------------
     // The menu was closed (by a row, a click outside or Escape).
@@ -145,6 +147,8 @@ public:
 
 signals:
     void openChanged();
+    // The menu is already open and must appear at the pointer again.
+    void repositionRequested();
     void moreExpandedChanged();
     void scriptSettingsRequested();
 

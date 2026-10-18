@@ -13,13 +13,13 @@ QuickContextMenuActions::QuickContextMenuActions(ActionManager &actions, ScriptM
                                                  ImageViewportController &viewport,
                                                  QObject *parent)
     : QObject(parent), scripts(scripts), menu(menu), viewport(viewport) {
-    connect(&actions, &ActionManager::contextMenu, this, &QuickContextMenuActions::toggleMenu);
+    connect(&actions, &ActionManager::contextMenu, this, &QuickContextMenuActions::showMenu);
     connect(&viewport, &ImageViewportController::imageChanged, this,
             [this]() { this->menu.setImageDisplayed(this->viewport.hasImage()); });
     menu.setImageDisplayed(viewport.hasImage());
 }
 
-void QuickContextMenuActions::toggleMenu() {
+void QuickContextMenuActions::showMenu() {
     QStringList names;
     const QMap<QString, Script> &all = scripts.allScripts();
     for (auto it = all.cbegin(); it != all.cend(); ++it) {
@@ -29,5 +29,5 @@ void QuickContextMenuActions::toggleMenu() {
     menu.setScripts(names);
     menu.setImageDisplayed(viewport.hasImage());
     menu.setCasFilterActive(viewport.scalingFilter() == QI_FILTER_CAS);
-    menu.toggle();
+    menu.show();
 }

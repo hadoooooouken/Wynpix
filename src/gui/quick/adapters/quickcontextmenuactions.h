@@ -8,7 +8,7 @@ class ImageViewportController;
 class ScriptManager;
 
 // Connects the Qt Quick context menu (ContextMenuModel) to the application:
-// the menu action of ActionManager opens or closes it, after the scripts
+// the menu action of ActionManager shows it at the pointer, after the scripts
 // (those with a command, as the widget menu lists them), the displayed-image
 // state and the CAS filter state were brought up to date. The script
 // settings request ("Configure menu") opens the settings window, which the
@@ -23,7 +23,7 @@ public:
                             QObject *parent = nullptr);
 
 private:
-    void toggleMenu();
+    void showMenu();
 
     ScriptManager &scripts;
     ContextMenuModel &menu;

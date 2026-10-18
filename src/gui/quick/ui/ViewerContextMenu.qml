@@ -18,6 +18,10 @@ Menu {
 
     required property ContextMenuModel menuModel
 
+    // Set while an open menu is closed only to be shown again at the
+    // pointer, so the closing does not reach the model.
+    property bool reopening: false
+
     // Items declared before the instantiated rows: the button rows and the
     // separator below them.
     readonly property int fixedItemCount: 2
@@ -62,7 +66,10 @@ Menu {
     // No row is current until the pointer or a key picks one: popup() clears
     // the index, but a row can become current while the window opens.
     onOpened: root.currentIndex = -1
-    onClosed: root.menuModel.close()
+    onClosed: {
+        if (!root.reopening)
+            root.menuModel.close();
+    }
     // Created by the first opening, after the model opened.
     Component.onCompleted: {
         if (root.menuModel.open)
@@ -77,6 +84,15 @@ Menu {
                 root.popup();
             else
                 root.dismiss();
+        }
+
+        // A right click while the menu is open: dismiss() also closes an
+        // open submenu, which popup() alone would leave at the old place.
+        function onRepositionRequested() {
+            root.reopening = true;
+            root.dismiss();
+            root.reopening = false;
+            root.popup();
         }
     }
 
