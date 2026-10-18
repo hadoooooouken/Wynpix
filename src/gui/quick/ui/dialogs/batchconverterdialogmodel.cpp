@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
 
 namespace {
 using namespace BatchJobRules;
@@ -308,15 +309,21 @@ BatchConversionResult BatchConverterDialogModel::result() const {
     return {.conversionStarted = mStarted};
 }
 
-std::optional<BatchConverterPreferences> BatchConverterDialogModel::preferencesToStore() const {
-    return mPreferences;
+BatchConverterPreferences BatchConverterDialogModel::preferencesToStore() const {
+    return {.useUpscayl = mDraft.job.useUpscayl,
+            .upscaylModel = selectedUpscaylModel(),
+            .saved = savedSettingsOf(mDraft, mOriginalSize)};
+}
+
+QString BatchConverterDialogModel::selectedUpscaylModel() const {
+    return isIndexOf(mUpscaylModelIndex, mInput.upscaylModels)
+               ? mInput.upscaylModels[mUpscaylModelIndex]
+               : QString();
 }
 
 BatchJob BatchConverterDialogModel::job() const {
     BatchJobDraft draft = mDraft;
-    draft.job.upscaylModel = isIndexOf(mUpscaylModelIndex, mInput.upscaylModels)
-                                 ? mInput.upscaylModels[mUpscaylModelIndex]
-                                 : QString();
+    draft.job.upscaylModel = selectedUpscaylModel();
     return finalJob(draft);
 }
 
@@ -352,6 +359,8 @@ bool BatchConverterDialogModel::start(const BatchConverterDialogInput &input,
     mCommonSizeIndex = 0;
     mRotationIndex = 0;
     applyFormatQuality();
+    if (input.saved)
+        applySavedSettings(*input.saved);
 
     mRunning = false;
     mCancelling = false;
@@ -361,7 +370,6 @@ bool BatchConverterDialogModel::start(const BatchConverterDialogInput &input,
     mStatusText = readyText();
     mMessageOpen = false;
     mMessage = {};
-    mPreferences.reset();
 
     mQueue.reset(input.filePaths);
     connectService(service);
@@ -418,6 +426,60 @@ void BatchConverterDialogModel::applyFormatQuality() {
     // A format without a quality setting keeps the previous value.
     if (mQualityScale.kind != QualityKind::None)
         mDraft.job.quality = std::clamp(quality, mQualityScale.minimum, mQualityScale.maximum);
+}
+
+void BatchConverterDialogModel::applySavedSettings(const SavedSettings &stored) {
+    const SavedSettings saved = sanitized(stored);
+    BatchJob &job = mDraft.job;
+
+    const QList<OutputFormat> formatList = outputFormats();
+    const auto format = std::ranges::find(formatList, saved.format, &OutputFormat::extension);
+    if (format != formatList.end()) {
+        mFormatIndex = static_cast<int>(std::distance(formatList.begin(), format));
+        job.format = format->extension;
+        applyFormatQuality();
+        if (saved.quality)
+            job.quality = *saved.quality;
+    }
+
+    // The fields are restored as the setters would have left them, in the
+    // order the resize section depends on them.
+    job.doResize = saved.resizeEnabled;
+    job.resizeMode = saved.resizeMode;
+    job.resizePercent = saved.resizePercent;
+    job.useBinaryMegapixel = saved.useBinaryMegapixel;
+    job.targetMegapixels = saved.targetMegapixels.value_or(
+        megapixelsForSize(mOriginalSize, job.useBinaryMegapixel));
+    job.keepAspectRatio = saved.keepAspectRatio;
+    job.aspectFitMode = saved.aspectFitMode;
+    switch (job.resizeMode) {
+    case ResizeMode::ByPercent:
+        // The same percent applies to both sides of every file.
+        job.keepAspectRatio = true;
+        job.targetSize = percentTarget(mOriginalSize, job.resizePercent);
+        break;
+    case ResizeMode::ByAbsoluteSize:
+        if (saved.targetSize.isValid())
+            job.targetSize = saved.targetSize;
+        mCommonSizeIndex = commonSizeIndexFor(job.targetSize);
+        break;
+    case ResizeMode::ByMegapixels:
+        break;
+    }
+
+    if (saved.scalingFilter) {
+        const QList<ScalingFilterOption> filterList = scalingFilters();
+        const auto filter = std::ranges::find(filterList, *saved.scalingFilter,
+                                              &ScalingFilterOption::filter);
+        if (filter != filterList.end()) {
+            mFilterIndex = static_cast<int>(std::distance(filterList.begin(), filter));
+            job.scalingFilter = filter->filter;
+        }
+    }
+
+    if (!saved.pattern.isEmpty())
+        job.pattern = saved.pattern;
+    job.createSubfolder = saved.createSubfolder;
 }
 
 void BatchConverterDialogModel::setQuality(int quality) {
@@ -668,8 +730,6 @@ void BatchConverterDialogModel::convert() {
     mProcessed = 0;
     mProgressMaximum = static_cast<int>(rows.size());
     mStatusText = processingText();
-    mPreferences = BatchConverterPreferences{.useUpscayl = mDraft.job.useUpscayl,
-                                             .upscaylModel = batchJob.upscaylModel};
     emit runChanged();
     mService->start(mQueue.paths(), rows, batchJob);
 }

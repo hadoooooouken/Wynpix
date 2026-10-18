@@ -11,9 +11,10 @@ class Settings;
 // print preferences), opens the dialog through the DialogCoordinator and
 // waits for the answer in a nested event loop (runModalDialog()), so Core
 // keeps its blocking calls as with QDialog::exec(). Stores the Upscayl
-// preferences of an accepted resize and of a started batch, and the print
-// preferences. The batch converter converts through an
-// AppBatchConversionService made for the request.
+// preferences of an accepted resize, those of the batch converter and the
+// print preferences. The batch converter converts through an
+// AppBatchConversionService made for the request; its preferences (Upscayl
+// and the dialog's saved choices) are stored whenever the dialog closes.
 //
 // The coordinator and settings must outlive the port. GUI thread only.
 class QuickDialogPort final : public IDialogPort {

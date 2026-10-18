@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "components/batchconverter/batchsavedsettings.h"
 #include "components/scalingfilter/scalingfilterselection.h"
 #include "utils/formatregistry.h"
 
@@ -491,6 +492,15 @@ void Settings::setBatchUpscaylModel(const QString &model) {
   settings->settingsConf->setValue(
       "batchUpscaylModel",
       normalizedModel.isEmpty() ? upscaylModel() : normalizedModel);
+}
+
+std::optional<BatchJobRules::SavedSettings> Settings::batchConverterSettings() {
+  return BatchSavedSettings::read(*settings->settingsConf);
+}
+
+void Settings::setBatchConverterSettings(
+    const BatchJobRules::SavedSettings &saved) {
+  BatchSavedSettings::write(*settings->settingsConf, saved);
 }
 
 QString Settings::defaultUpscaylModel() {

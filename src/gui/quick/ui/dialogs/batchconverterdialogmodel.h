@@ -33,15 +33,21 @@ struct BatchConverterDialogInput {
     // the batch model.
     bool useUpscayl = false;
     QString upscaylModel;
+    // The choices saved by the previous session; absent before the first one.
+    // Validated by the dialog (BatchJobRules::sanitized()).
+    std::optional<BatchJobRules::SavedSettings> saved;
     // Device pixels per logical pixel of the thumbnails.
     qreal devicePixelRatio = 1.0;
 };
 
-// Preferences to store once a batch started.
+// Preferences to store when the dialog closed, whether or not a batch
+// started.
 struct BatchConverterPreferences {
     bool useUpscayl = false;
     // Empty when no models exist (the stored model is kept then).
     QString upscaylModel;
+    // The dialog's choices as they were when it closed.
+    BatchJobRules::SavedSettings saved;
 };
 
 // The batch converter (BatchConverterDialog.qml), with the rules of the
@@ -52,7 +58,9 @@ struct BatchConverterPreferences {
 //
 // The conversion runs through the BatchConversionService the request comes
 // with. Closing the dialog while a batch runs stops it, as closing the widget
-// dialog did. The result reports whether a batch was started.
+// dialog did. The result reports whether a batch was started. However the
+// dialog closes (Convert, Cancel, Escape, the close button), its choices are
+// handed back as preferences to store, and the next request starts from them.
 //
 // Warnings and the completion message are shown in the dialog's message
 // window (messageOpen) instead of message boxes.
@@ -203,7 +211,9 @@ public:
     [[nodiscard]] QString messageText() const;
 
     [[nodiscard]] BatchConversionResult result() const;
-    [[nodiscard]] std::optional<BatchConverterPreferences> preferencesToStore() const;
+    // The draft as it is now; meant to be read after start() once the dialog
+    // closed.
+    [[nodiscard]] BatchConverterPreferences preferencesToStore() const;
     // The draft as the next batch would start it.
     [[nodiscard]] BatchJob job() const;
 
@@ -263,6 +273,8 @@ private:
     void detachService();
     void applySize(QSize target);
     void applyFormatQuality();
+    void applySavedSettings(const BatchJobRules::SavedSettings &saved);
+    [[nodiscard]] QString selectedUpscaylModel() const;
     void showMessage(const BatchJobRules::Message &message, bool warning);
     void closeMessage();
     void setStatusText(const QString &text);
@@ -295,6 +307,4 @@ private:
     bool mMessageOpen = false;
     bool mMessageIsWarning = false;
     BatchJobRules::Message mMessage;
-
-    std::optional<BatchConverterPreferences> mPreferences;
 };

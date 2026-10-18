@@ -287,6 +287,76 @@ QString initialOutputDirectory(const QString &preferredDirectory, const QString 
 }
 
 //--- start -------------------------------------------------------------------
+SavedSettings savedSettingsOf(const BatchJobDraft &draft, QSize originalSize) {
+    const BatchJob &job = draft.job;
+    SavedSettings saved;
+    saved.format = job.format;
+    if (qualityScaleFor(job.format).kind != QualityKind::None)
+        saved.quality = job.quality;
+    saved.resizeEnabled = job.doResize;
+    saved.resizeMode = job.resizeMode;
+    saved.resizePercent = job.resizePercent;
+    saved.useBinaryMegapixel = job.useBinaryMegapixel;
+    // The fields below start from the first file; a value that still equals
+    // what that file gives was not chosen, so it is not remembered.
+    const double untouchedMegapixels = megapixelsForSize(originalSize, job.useBinaryMegapixel);
+    if (!qFuzzyCompare(job.targetMegapixels, untouchedMegapixels))
+        saved.targetMegapixels = job.targetMegapixels;
+    if (job.resizeMode == ResizeMode::ByAbsoluteSize && job.targetSize != originalSize)
+        saved.targetSize = job.targetSize;
+    saved.keepAspectRatio = job.keepAspectRatio;
+    saved.aspectFitMode = job.aspectFitMode;
+    saved.scalingFilter = static_cast<ScalingFilter>(job.scalingFilter);
+    saved.pattern = job.pattern;
+    saved.createSubfolder = job.createSubfolder;
+    return saved;
+}
+
+SavedSettings sanitized(SavedSettings saved) {
+    const QList<OutputFormat> formats = outputFormats();
+    if (std::ranges::find(formats, saved.format, &OutputFormat::extension) == formats.end())
+        saved.format.clear();
+
+    const QualityScale scale = qualityScaleFor(saved.format);
+    if (scale.kind == QualityKind::None)
+        saved.quality.reset();
+    else if (saved.quality)
+        saved.quality = std::clamp(*saved.quality, scale.minimum, scale.maximum);
+
+    saved.resizePercent = std::isfinite(saved.resizePercent)
+                              ? std::clamp(saved.resizePercent, kMinimumPercent, kMaximumPercent)
+                              : kDefaultPercent;
+    if (saved.targetMegapixels) {
+        if (std::isfinite(*saved.targetMegapixels))
+            saved.targetMegapixels =
+                std::clamp(*saved.targetMegapixels, kMinimumMegapixels, kMaximumMegapixels);
+        else
+            saved.targetMegapixels.reset();
+    }
+    saved.targetSize = saved.targetSize.isValid() && !saved.targetSize.isEmpty()
+                           ? clampedToSideRange(saved.targetSize)
+                           : QSize();
+
+    if (saved.scalingFilter) {
+        const QList<ScalingFilterOption> filters = scalingFilters();
+        if (std::ranges::find(filters, *saved.scalingFilter, &ScalingFilterOption::filter) ==
+            filters.end())
+            saved.scalingFilter.reset();
+    }
+
+    if (saved.pattern.trimmed().isEmpty() || !isPatternSafe(saved.pattern))
+        saved.pattern.clear();
+    return saved;
+}
+
+int commonSizeIndexFor(QSize size) {
+    const QList<CommonSize> sizes = commonSizes();
+    const auto found = std::ranges::find_if(sizes, [size](const CommonSize &common) {
+        return common.size.isValid() && common.size == size;
+    });
+    return found == sizes.end() ? 0 : static_cast<int>(std::distance(sizes.begin(), found));
+}
+
 BatchJob finalJob(const BatchJobDraft &draft) {
     BatchJob job = draft.job;
     job.useUpscayl = job.doResize && job.useUpscayl;

@@ -21,8 +21,10 @@
 #include <QThread>
 #include <QVersionNumber>
 #include <atomic>
+#include <optional>
 #include <QReadWriteLock>
 
+#include "components/batchconverter/batchjobrules.h"
 #include "settings_types.h"
 #include "utils/hdrtonemapper.h"
 
@@ -58,6 +60,10 @@ public:
   void setResizeUpscaylModel(const QString &model);
   QString batchUpscaylModel();
   void setBatchUpscaylModel(const QString &model);
+  // The batch converter dialog's choices, kept in the [BatchConverter]
+  // section of the settings file; absent until they were saved once.
+  std::optional<BatchJobRules::SavedSettings> batchConverterSettings();
+  void setBatchConverterSettings(const BatchJobRules::SavedSettings &saved);
   bool upscaylLimitEnabled();
   void setUpscaylLimitEnabled(bool enabled);
   int upscaylLimitValue();

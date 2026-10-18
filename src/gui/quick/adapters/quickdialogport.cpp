@@ -110,6 +110,7 @@ BatchConversionResult QuickDialogPort::runBatchConverter(const BatchConversionRe
         .upscaylModels = mSettings.availableUpscaylModels(),
         .useUpscayl = mSettings.resizeUseUpscayl(),
         .upscaylModel = mSettings.batchUpscaylModel(),
+        .saved = mSettings.batchConverterSettings(),
         .devicePixelRatio = primaryScreenDevicePixelRatio(),
     };
     // Destroyed after the dialog closed, stopping a batch that still runs.
@@ -117,12 +118,14 @@ BatchConversionResult QuickDialogPort::runBatchConverter(const BatchConversionRe
     if (!dialog.start(input, service))
         return {.conversionStarted = false};
     runModalDialog(dialog);
-    if (const std::optional<BatchConverterPreferences> preferences = dialog.preferencesToStore()) {
-        mSettings.setResizeUseUpscayl(preferences->useUpscayl);
-        if (!preferences->upscaylModel.isEmpty())
-            mSettings.setBatchUpscaylModel(preferences->upscaylModel);
-        mSettings.sync();
-    }
+    // Stored however the dialog closed, so the next one opens as this one was
+    // left.
+    const BatchConverterPreferences preferences = dialog.preferencesToStore();
+    mSettings.setResizeUseUpscayl(preferences.useUpscayl);
+    if (!preferences.upscaylModel.isEmpty())
+        mSettings.setBatchUpscaylModel(preferences.upscaylModel);
+    mSettings.setBatchConverterSettings(preferences.saved);
+    mSettings.sync();
     return dialog.result();
 }
 

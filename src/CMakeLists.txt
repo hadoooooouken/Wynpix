@@ -43,10 +43,12 @@ wynpix_apply_msvc_profile(wynpix_fluenticons)
 add_library(wynpix_viewcomponents STATIC
     components/animationplayer/animationplayer.cpp
     components/animationplayer/animationplayer.h
-    # Rules and job of the batch converter dialog.
+    # Rules, job and saved settings of the batch converter dialog.
     components/batchconverter/batchjob.h
     components/batchconverter/batchjobrules.cpp
     components/batchconverter/batchjobrules.h
+    components/batchconverter/batchsavedsettings.cpp
+    components/batchconverter/batchsavedsettings.h
     components/copytargets/copytargetlist.cpp
     components/copytargets/copytargetlist.h
     # Printing of an image (the print dialog).

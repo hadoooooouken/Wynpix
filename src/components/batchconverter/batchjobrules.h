@@ -8,6 +8,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 
 #include "batchjob.h"
 #include "settings_types.h"
@@ -179,6 +180,40 @@ struct BatchJobDraft {
 // adjustments only when their section is enabled, the output folder
 // trimmed.
 [[nodiscard]] BatchJob finalJob(const BatchJobDraft &draft);
+
+//--- saved settings ----------------------------------------------------------
+// What the dialog remembers between sessions: the choices that describe how
+// to convert, not what happens to the files of one batch. Rotation, flips,
+// colour adjustments, the overwrite switch and the output folder are left
+// out on purpose. A value that depends on the first file (the target size
+// and the target megapixels) is present only when the person changed it, so
+// an untouched field keeps following the files of the next batch.
+struct SavedSettings {
+    QString format;                // BatchJob::format; empty keeps the default.
+    std::optional<int> quality;    // Absent for a format without a quality setting.
+    bool resizeEnabled = false;
+    ResizeMode resizeMode = ResizeMode::ByAbsoluteSize;
+    double resizePercent = kDefaultPercent;
+    std::optional<double> targetMegapixels;
+    bool useBinaryMegapixel = false;
+    QSize targetSize;              // Invalid when not saved; only by absolute size.
+    bool keepAspectRatio = true;
+    AspectFitMode aspectFitMode = AspectFitMode::Auto;
+    std::optional<ScalingFilter> scalingFilter;
+    QString pattern;               // Empty keeps the default.
+    bool createSubfolder = false;
+};
+
+// The settings to remember of draft, whose resize fields started from
+// originalSize.
+[[nodiscard]] SavedSettings savedSettingsOf(const BatchJobDraft &draft, QSize originalSize);
+// saved with every value brought back into what the dialog offers: an
+// unknown format, filter or an unsafe pattern is dropped, numbers are
+// clamped to their limits and the quality to the scale of the format.
+[[nodiscard]] SavedSettings sanitized(SavedSettings saved);
+// Index into commonSizes() of the entry that is exactly size; 0 (the
+// original size) when there is none.
+[[nodiscard]] int commonSizeIndexFor(QSize size);
 
 enum class StartProblem : uint8_t {
     None,
