@@ -22,9 +22,9 @@ Menu {
     // pointer, so the closing does not reach the model.
     property bool reopening: false
 
-    // Items declared before the instantiated rows: the button rows and the
-    // separator below them.
-    readonly property int fixedItemCount: 2
+    // Items declared before the instantiated rows: the zoom row, the
+    // transform row and the separator below them.
+    readonly property int fixedItemCount: 3
     readonly property int buttonRowSpacing: 7
     readonly property int buttonRowInset: 4
 
@@ -102,22 +102,16 @@ Menu {
     // zoomed or turned several times. A button that opens a modal UI (resize)
     // closes it: the modal window would leave the menu open and unable to
     // take input.
-    Column {
-        width: root.availableWidth
-        spacing: root.buttonRowSpacing
-        bottomPadding: root.buttonRowSpacing
+    ButtonRow {
+        id: zoomRow
 
-        ButtonRow {
-            id: zoomRow
+        buttons: root.menuModel.zoomButtons
+    }
 
-            buttons: root.menuModel.zoomButtons
-        }
+    ButtonRow {
+        id: transformRow
 
-        ButtonRow {
-            id: transformRow
-
-            buttons: root.menuModel.transformButtons
-        }
+        buttons: root.menuModel.transformButtons
     }
 
     MenuSeparator {}
@@ -163,28 +157,141 @@ Menu {
 
     // A row of buttons sharing the menu's width equally, as the widget menu's
     // layout stretched them; the menu is at least wide enough for square
-    // buttons.
-    component ButtonRow: Row {
+    // buttons. The row is a menu item so that the arrow keys reach it: Up and
+    // Down arrive at it like at any row, Left and Right pick a button, Return
+    // and Space press it. The row never triggers as a menu item, which would
+    // close the menu; the buttons act on their own.
+    component ButtonRow: MenuItem {
         id: buttonRow
 
         required property var buttons
+        // The button the keys act on and the pointer last touched.
+        property int currentButton: 0
         readonly property real minimumWidth: rowButtons.count * Theme.metrics.contextMenuItemHeight
                                              + leftPadding + rightPadding
         readonly property real buttonWidth: rowButtons.count > 0
                                             ? (width - leftPadding - rightPadding) / rowButtons.count
                                             : 0
+        // Read from the delegates' own flag: the Item's enabled follows this
+        // row, so a disabled row could never become enabled again.
+        readonly property bool anyButtonEnabled: {
+            for (let i = 0; i < rowButtons.count; ++i) {
+                const candidate = rowButtons.itemAt(i) as MenuButton;
+                if (candidate && candidate.entryEnabled)
+                    return true;
+            }
+            return false;
+        }
 
-        width: root.availableWidth
+        topPadding: 0
+        bottomPadding: root.buttonRowSpacing
         leftPadding: root.buttonRowInset
         rightPadding: root.buttonRowInset
+        // The buttons follow the pointer themselves; a hovered row would
+        // become current with a stale button.
+        hoverEnabled: false
+        // Skipped by the arrow keys while no button can act, as the buttons
+        // are drawn disabled then.
+        enabled: anyButtonEnabled
+        background: null
 
-        Repeater {
-            id: rowButtons
+        contentItem: Row {
+            Repeater {
+                id: rowButtons
 
-            model: buttonRow.buttons
-            delegate: MenuButton {
-                width: buttonRow.buttonWidth
+                model: buttonRow.buttons
+                delegate: MenuButton {
+                    width: buttonRow.buttonWidth
+                    keyboardCurrent: buttonRow.highlighted && index === buttonRow.currentButton
+                    onHoveredChanged: buttonRow.buttonHovered(index, hovered)
+                }
             }
+        }
+
+        // Presses in the gaps around the buttons would reach the row, and a
+        // triggered menu item closes the menu.
+        MouseArea {
+            z: -1
+            anchors.fill: parent
+            acceptedButtons: Qt.AllButtons
+        }
+
+        Keys.onLeftPressed: event => {
+            buttonRow.stepButton(-1);
+            event.accepted = true;
+        }
+        Keys.onRightPressed: event => {
+            buttonRow.stepButton(1);
+            event.accepted = true;
+        }
+        Keys.onReturnPressed: event => {
+            buttonRow.pressCurrentButton();
+            event.accepted = true;
+        }
+        Keys.onEnterPressed: event => {
+            buttonRow.pressCurrentButton();
+            event.accepted = true;
+        }
+        Keys.onSpacePressed: event => {
+            buttonRow.pressCurrentButton();
+            event.accepted = true;
+        }
+
+        // A row that is entered by key starts at a button that can act.
+        onHighlightedChanged: {
+            if (highlighted)
+                buttonRow.settleOnEnabledButton();
+        }
+
+        // The row's own index in the menu.
+        function menuIndex(): int {
+            for (let i = 0; i < root.fixedItemCount; ++i) {
+                if (root.itemAt(i) === buttonRow)
+                    return i;
+            }
+            return -1;
+        }
+
+        // The pointer enters a button: the row becomes current with that
+        // button. The pointer leaves it: nothing stays highlighted.
+        function buttonHovered(index: int, entered: bool): void {
+            if (entered) {
+                buttonRow.currentButton = index;
+                root.currentIndex = buttonRow.menuIndex();
+            } else if (buttonRow.highlighted && buttonRow.currentButton === index) {
+                root.currentIndex = -1;
+            }
+        }
+
+        // Moves to the nearest button in direction (-1 or 1) that can act;
+        // stays where it is at either end.
+        function stepButton(direction: int): void {
+            for (let i = buttonRow.currentButton + direction; i >= 0 && i < rowButtons.count; i += direction) {
+                const candidate = rowButtons.itemAt(i) as MenuButton;
+                if (candidate && candidate.entryEnabled) {
+                    buttonRow.currentButton = i;
+                    return;
+                }
+            }
+        }
+
+        function settleOnEnabledButton(): void {
+            const current = rowButtons.itemAt(buttonRow.currentButton) as MenuButton;
+            if (current && current.entryEnabled)
+                return;
+            for (let i = 0; i < rowButtons.count; ++i) {
+                const candidate = rowButtons.itemAt(i) as MenuButton;
+                if (candidate && candidate.entryEnabled) {
+                    buttonRow.currentButton = i;
+                    return;
+                }
+            }
+        }
+
+        function pressCurrentButton(): void {
+            const current = rowButtons.itemAt(buttonRow.currentButton) as MenuButton;
+            if (current && current.entryEnabled)
+                current.activate();
         }
     }
 
@@ -193,11 +300,15 @@ Menu {
     component MenuButton: ToolButton {
         id: button
 
+        required property int index
         required property string entryAction
         required property string entryText
         required property int entryIcon
         required property bool entryEnabled
         required property bool entryClosesMenu
+
+        // The row's keys act on this button.
+        property bool keyboardCurrent: false
 
         implicitHeight: Theme.metrics.contextMenuItemHeight
         // The style sets each side, which overrides padding.
@@ -219,24 +330,21 @@ Menu {
         // The accent highlight of the menu rows, not the panel button tint.
         background: Rectangle {
             radius: StyleConstants.controlRadius
-            color: button.hovered
+            color: button.hovered || button.keyboardCurrent
                    ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
                    : "transparent"
         }
 
         ToolTip {
-            visible: button.hovered
+            visible: button.hovered || button.keyboardCurrent
             text: button.entryText
         }
         Accessible.name: entryText
 
-        // Not a menu item, so the menu would keep the last hovered row
-        // highlighted.
-        onHoveredChanged: {
-            if (hovered)
-                root.currentIndex = -1;
-        }
-        onClicked: {
+        onClicked: button.activate()
+
+        // Runs the button's action; a click and the row's keys both end here.
+        function activate(): void {
             if (entryClosesMenu)
                 root.menuModel.trigger(entryAction);
             else
