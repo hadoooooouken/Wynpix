@@ -4,8 +4,10 @@
 
 namespace {
 // Right-button movement (logical px, scaled by DPR) before it counts as a
-// zoom, and before a horizontal stroke counts as a next/prev gesture.
-constexpr qreal kZoomThresholdPx = 4.0;
+// zoom, and before a horizontal stroke counts as a next/prev gesture. Below
+// it the press stays a plain click, so a slightly shaky hand still opens the
+// context menu instead of starting a zoom.
+constexpr qreal kZoomThresholdPx = 6.0;
 constexpr qreal kGestureThresholdPx = 40.0;
 // Left-button movement (logical px) that starts dragging the file out.
 constexpr int kDragOutThresholdPx = 10;
