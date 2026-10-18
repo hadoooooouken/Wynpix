@@ -16,6 +16,10 @@ QuickContextMenuActions::QuickContextMenuActions(ActionManager &actions, ScriptM
     connect(&actions, &ActionManager::contextMenu, this, &QuickContextMenuActions::showMenu);
     connect(&viewport, &ImageViewportController::imageChanged, this,
             [this]() { this->menu.setImageDisplayed(this->viewport.hasImage()); });
+    // A drag, a gesture zoom or a wheel turn works on the image under the
+    // menu, so the menu is closed as soon as one starts.
+    connect(&viewport, &ImageViewportController::interactionStarted, &menu,
+            &ContextMenuModel::close);
     menu.setImageDisplayed(viewport.hasImage());
 }
 

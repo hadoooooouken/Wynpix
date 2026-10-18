@@ -1241,6 +1241,7 @@ void ImageViewportController::pointerCanceled() {
 }
 
 void ImageViewportController::endPointerSequence(const ViewportInteraction::Release &release) {
+    mInteractionAnnounced = false;
     setClickZonePressed(false);
     showCursor();
     hideCursorTimed(false);
@@ -1282,6 +1283,9 @@ bool ImageViewportController::wheelTurned(QPointF position, QPoint angleDelta, Q
     mPointerPosition = position;
     if (!mInteractionEnabled)
         return false;
+    // A wheel turn has no press-release sequence to announce once, so every
+    // turn announces itself; closing an already closed menu does nothing.
+    emit interactionStarted();
     if (mPanorama) {
         mTransform.zoomPanoramaByWheel(angleDelta.y());
         return true;
@@ -1341,7 +1345,16 @@ void ImageViewportController::pinchFinished() {
     requestScaling();
 }
 
+void ImageViewportController::announceInteraction() {
+    if (mInteractionAnnounced)
+        return;
+    mInteractionAnnounced = true;
+    emit interactionStarted();
+}
+
 void ImageViewportController::applyInteractionStep(const InteractionStep &step) {
+    if (step.kind != InteractionStep::Kind::None)
+        announceInteraction();
     switch (step.kind) {
     case InteractionStep::Kind::None:
         break;

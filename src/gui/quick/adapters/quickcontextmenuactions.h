@@ -12,7 +12,8 @@ class ScriptManager;
 // (those with a command, as the widget menu lists them), the displayed-image
 // state and the CAS filter state were brought up to date. The script
 // settings request ("Configure menu") opens the settings window, which the
-// Quick UI host connects.
+// Quick UI host connects. The menu closes when a pointer interaction with the
+// image starts (a drag, a gesture zoom or a wheel turn).
 //
 // All referenced objects must outlive this object. GUI thread only.
 class QuickContextMenuActions final : public QObject {

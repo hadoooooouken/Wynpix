@@ -253,6 +253,9 @@ signals:
     void draggedOut();
     void nextImageRequested();
     void prevImageRequested();
+    // The pointer started acting on the image: a drag or a gesture zoom
+    // (once per press-move-release sequence) or a wheel turn (every turn).
+    void interactionStarted();
     // Image area on screen after a fit-to-window centring (crop overlay).
     void imageAreaChanged(QRect area);
     void imageGeometryChanged();
@@ -348,6 +351,8 @@ private:
 
     // Pointer.
     void applyInteractionStep(const InteractionStep &step);
+    // Emits interactionStarted() the first time it is called in a sequence.
+    void announceInteraction();
     // Common end of a press-move-release sequence, released or canceled.
     void endPointerSequence(const ViewportInteraction::Release &release);
     [[nodiscard]] InteractionContext interactionContext() const;
@@ -420,6 +425,7 @@ private:
     bool mClickZonesEnabled = false;
     ClickZone mHighlightedZone = ClickZone::None;
     bool mClickZonePressed = false;
+    bool mInteractionAnnounced = false;
     bool mZoomIndicatorVisible = false;
     bool mCursorHidden = false;
     Qt::CursorShape mCursorShape = Qt::ArrowCursor;
