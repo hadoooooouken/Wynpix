@@ -58,7 +58,9 @@ Menu {
 
         hasGlyph: scripts !== null
         glyph: scripts ? scripts.glyph : FluentIcons.OpenWith20
-        enabled: scripts ? scripts.available : true
+        // A hidden row stays disabled: the menu's arrow keys skip disabled
+        // rows but not invisible ones, and would stop on it unseen.
+        enabled: scripts ? scripts.available && scripts.shown : true
         visible: scripts ? scripts.shown : true
         height: visible ? implicitHeight : 0
     }
@@ -264,7 +266,9 @@ Menu {
         glyphColor: toned ? toneColor : Theme.colors.icons
         labelColor: toned ? toneColor : Theme.colors.textHc
         shortcutText: entryShortcut
-        enabled: entryEnabled
+        // A hidden row stays disabled: the menu's arrow keys skip disabled
+        // rows but not invisible ones, and would stop on it unseen.
+        enabled: entryEnabled && entryShown
         visible: entryShown
         height: visible ? implicitHeight : 0
 
