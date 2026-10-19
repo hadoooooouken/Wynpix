@@ -121,6 +121,7 @@ Window {
                     spacing: StyleConstants.dialogSpacing
 
                     RowLayout {
+                        Layout.alignment: Qt.AlignRight
                         spacing: StyleConstants.dialogButtonSpacing
 
                         Button {
@@ -136,6 +137,7 @@ Window {
                     }
 
                     Label {
+                        Layout.alignment: Qt.AlignRight
                         text: root.dialog.queue.selectionText
                         font: Theme.fonts.bodyStrong
                     }
