@@ -251,11 +251,7 @@ void ContextMenuModel::refreshShortcuts() {
 void ContextMenuModel::show() {
     if (mFolderViewActive || !mInteractionEnabled)
         return;
-    if (mMoreExpanded) {
-        mMoreExpanded = false;
-        rebuild();
-        emit moreExpandedChanged();
-    }
+    setMoreExpanded(false);
     if (mOpen) {
         emit repositionRequested();
         return;
@@ -282,8 +278,21 @@ void ContextMenuModel::invoke(const QString &action) {
         qWarning() << "ContextMenuModel: unknown action" << action;
 }
 
-void ContextMenuModel::toggleMore() {
-    mMoreExpanded = !mMoreExpanded;
+void ContextMenuModel::setCurrentRow(int row) {
+    // A closing menu clears its current item; the rows stay as they are.
+    if (!mOpen)
+        return;
+    const std::span<const EntrySpec> specs = kItems;
+    const bool inMore = row >= 0 && static_cast<size_t>(row) < specs.size()
+                        && (specs[static_cast<size_t>(row)].kind == Kind::Expander
+                            || specs[static_cast<size_t>(row)].visibility == Visibility::InMore);
+    setMoreExpanded(inMore);
+}
+
+void ContextMenuModel::setMoreExpanded(bool expanded) {
+    if (mMoreExpanded == expanded)
+        return;
+    mMoreExpanded = expanded;
     rebuild();
     emit moreExpandedChanged();
 }

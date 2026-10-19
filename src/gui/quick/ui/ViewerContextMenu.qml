@@ -8,11 +8,11 @@ import wynpix.style
 
 // The viewer's context menu (ContextMenu in the widget UI): a row of zoom
 // buttons and a row of transform buttons, then the action rows with their
-// shortcuts, "More" expanding the rarely used rows in place and the
-// "Open with..." submenu of scripts. ContextMenuModel holds the rows and
-// decides when the menu opens, and opens at the pointer. Named apart from
-// the ContextMenu attached type of Qt Quick Controls; its strings keep the
-// widget menu's translation context.
+// shortcuts, "More" expanding the rarely used rows in place while it or one
+// of them is current, and the "Open with..." submenu of scripts.
+// ContextMenuModel holds the rows and decides when the menu opens, and opens
+// at the pointer. Named apart from the ContextMenu attached type of Qt Quick
+// Controls; its strings keep the widget menu's translation context.
 Menu {
     id: root
 
@@ -21,6 +21,16 @@ Menu {
     // Set while an open menu is closed only to be shown again at the
     // pointer, so the closing does not reach the model.
     property bool reopening: false
+
+    // Tells the model which of its rows is current; the buttons above the
+    // rows are not rows of the model. No current row while the pointer is
+    // over the menu (on a separator, say) is not a change of row: the rows
+    // stay as they are until the pointer reaches another row or leaves.
+    function reportCurrentRow(): void {
+        if (root.currentIndex < 0 && menuHover.hovered)
+            return;
+        root.menuModel.setCurrentRow(root.currentIndex - root.fixedItemCount);
+    }
 
     // Items declared before the instantiated rows: the zoom row, the
     // transform row and the separator below them.
@@ -46,6 +56,14 @@ Menu {
         Repeater {
             model: root.contentModel
         }
+
+        // Whether the pointer is over the menu, its padding included.
+        HoverHandler {
+            id: menuHover
+
+            margin: Math.max(root.leftPadding, root.rightPadding, root.topPadding, root.bottomPadding)
+            onHoveredChanged: Qt.callLater(root.reportCurrentRow)
+        }
     }
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             widestRow + leftPadding + rightPadding)
@@ -68,6 +86,10 @@ Menu {
     // No row is current until the pointer or a key picks one: popup() clears
     // the index, but a row can become current while the window opens.
     onOpened: root.currentIndex = -1
+    // The model expands "More" for the current row. Reported once the
+    // pointer or a key has settled: a pointer moving from one row to the next
+    // leaves the index at -1 for a moment.
+    onCurrentIndexChanged: Qt.callLater(root.reportCurrentRow)
     onClosed: {
         if (!root.reopening)
             root.menuModel.close();
@@ -396,58 +418,37 @@ Menu {
         height: visible ? implicitHeight : 0
     }
 
-    // "More": expands the rows below in place and keeps the menu open, so it
-    // is not a MenuItem (a triggered MenuItem closes the menu).
-    component ExpanderRow: Item {
+    // "More": the rows below expand in place while it or one of them is the
+    // current row (ContextMenuModel::setCurrentRow), by pointer or by key. It
+    // never triggers: a triggered menu item closes the menu.
+    component ExpanderRow: MenuItem {
         id: expander
 
         required property string entryText
         required property int entryIcon
 
-        implicitWidth: expanderContent.implicitWidth + 2 * StyleConstants.menuItemHorizontalPadding
-        implicitHeight: Theme.metrics.contextMenuItemHeight
-        width: root.availableWidth
+        text: entryText
+        hasGlyph: true
+        glyph: entryIcon
+        glyphColor: Theme.colors.icons
+        labelColor: Theme.colors.textHc
 
-        Rectangle {
-            anchors.fill: parent
-            visible: expanderArea.containsMouse
-            radius: StyleConstants.itemRadius
-            color: Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+        // The highlight follows the pointer, as in the other rows.
+        onHoveredChanged: {
+            if (!hovered && highlighted && menu)
+                menu.currentIndex = -1;
         }
 
-        Row {
-            id: expanderContent
-
-            anchors.left: parent.left
-            anchors.leftMargin: StyleConstants.menuItemHorizontalPadding
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: StyleConstants.menuItemSpacing
-
-            IconGlyph {
-                anchors.verticalCenter: parent.verticalCenter
-                icon: expander.entryIcon
-            }
-
-            Label {
-                anchors.verticalCenter: parent.verticalCenter
-                text: expander.entryText
-                color: Theme.colors.textHc
-            }
-        }
-
+        // Presses and keys would trigger the row.
         MouseArea {
-            id: expanderArea
-
+            z: -1
             anchors.fill: parent
-            hoverEnabled: true
-            // Not a menu item, so the menu would keep the last hovered row
-            // highlighted.
-            onEntered: root.currentIndex = -1
-            onPressed: root.menuModel.toggleMore()
+            acceptedButtons: Qt.AllButtons
         }
 
-        Accessible.role: Accessible.Button
-        Accessible.name: entryText
+        Keys.onReturnPressed: event => event.accepted = true
+        Keys.onEnterPressed: event => event.accepted = true
+        Keys.onSpacePressed: event => event.accepted = true
     }
 
     // "Open with...": the scripts with a command, then "Configure menu".

@@ -71,8 +71,9 @@ private:
 // (ViewerContextMenu.qml), with the rows and rules of the widget ContextMenu:
 // - a row of zoom buttons and a row of transform buttons, then the action
 //   rows with their shortcuts; "More" expands the rarely used rows in place
-//   (collapsed again whenever the menu opens); "Open with..." lists the
-//   scripts that have a command, followed by "Configure menu";
+//   while it or one of them is the current row of the menu (collapsed again
+//   whenever the menu opens); "Open with..." lists the scripts that have a
+//   command, followed by "Configure menu";
 // - rows that act on the current image are disabled while none is shown;
 //   CAS settings is listed only while an image is shown with the CAS filter;
 //   trash and delete use the destructive tones;
@@ -141,7 +142,10 @@ public:
     // Runs action and keeps the menu open (the zoom and transform buttons,
     // except those that close the menu).
     Q_INVOKABLE void invoke(const QString &action);
-    Q_INVOKABLE void toggleMore();
+    // The row of items() the menu's current item is at, -1 for none (the
+    // buttons above the rows do not count). "More" is expanded while it or a
+    // row under it is current.
+    Q_INVOKABLE void setCurrentRow(int row);
     // "Configure menu" of the scripts submenu.
     Q_INVOKABLE void configureScripts();
 
@@ -154,6 +158,7 @@ signals:
 
 private:
     void rebuild();
+    void setMoreExpanded(bool expanded);
     [[nodiscard]] QString shortcutFor(const QString &action) const;
 
     IActionDispatcher &mDispatcher;
