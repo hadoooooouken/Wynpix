@@ -249,7 +249,7 @@ FocusScope {
             onTriggered: Qt.callLater(root.controller.openSelected)
         }
         MenuRow {
-            text: qsTr("Batch convert")
+            text: qsTr("Add to Batch Converter")
             glyph: FluentIcons.BatchConvert20
             enabled: folderMenu.hasSelection
             onTriggered: root.controller.requestBatchConversion()

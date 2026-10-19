@@ -4,12 +4,12 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="353"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="423"/>
         <source>Stopped</source>
         <translation>Зупинено</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="351"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
         <source>Failed</source>
         <translation>Не вдалося</translation>
     </message>
@@ -41,7 +41,7 @@
         <translation>Помилка перетворення</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="349"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="419"/>
         <source>Done</source>
         <translation>Готово</translation>
     </message>
@@ -116,7 +116,7 @@
         <translation>Помилка планування призначення: немає доступного унікального шляху виводу</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="347"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="417"/>
         <source>Processing...</source>
         <translation>Обробка...</translation>
     </message>
@@ -139,82 +139,82 @@
         <translation>Зняти виділення</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="198"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="196"/>
         <source>Save as type:</source>
         <translation>Тип файлу:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="243"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="241"/>
         <source>Resize</source>
         <translation>Змінити розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="259"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="257"/>
         <source>By Percent:</source>
         <translation>За відсотком:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="301"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="299"/>
         <source>By Absolute Size:</source>
         <translation>За абсолютним розміром:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="376"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="374"/>
         <source>By Megapixels:</source>
         <translation>За мегапікселями:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="391"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="389"/>
         <source>Megapixels:</source>
         <translation>Мегапікселі:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="413"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="411"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>Двійковий (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="732"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="730"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="275"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="273"/>
         <source>Percent:</source>
         <translation>Відсоток:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="432"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="430"/>
         <source>Keep aspect ratio</source>
         <translation>Зберігати пропорції</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="493"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="491"/>
         <source>Filter:</source>
         <translation>Фільтр:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="508"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="506"/>
         <source>Model:</source>
         <translation>Модель:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="546"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="544"/>
         <source>Flip horizontal</source>
         <translation>Віддзеркалити горизонтально</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="552"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="550"/>
         <source>Flip vertical</source>
         <translation>Віддзеркалити вертикально</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="343"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="341"/>
         <source>Common sizes:</source>
         <translation>Поширені розміри:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="561"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="559"/>
         <source>Color adjustments</source>
         <translation>Корекція кольорів</translation>
     </message>
@@ -249,32 +249,32 @@
         <translation>Насиченість:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="317"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="315"/>
         <source>Max Width:</source>
         <translation>Макс. ширина:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="355"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="353"/>
         <source>Max Height:</source>
         <translation>Макс. висота:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="440"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="438"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="440"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="438"/>
         <source>Width</source>
         <translation>Ширина</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="440"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="438"/>
         <source>Height</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="468"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="466"/>
         <source>Upscayl</source>
         <translation>Використовувати Upscayl</translation>
     </message>
@@ -304,22 +304,22 @@
         <translation>Колірний тон:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="596"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="594"/>
         <source>Output folder:</source>
         <translation>Вихідна папка:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="608"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="606"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="614"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="612"/>
         <source>Create subfolder for batch</source>
         <translation>Створити підпапку для пакета</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="620"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="618"/>
         <source>Filename pattern:</source>
         <translation>Шаблон імені файлу:</translation>
     </message>
@@ -334,22 +334,22 @@
         <translation>Доступно: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="635"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
         <source>Overwrite existing files</source>
         <translation>Перезаписувати існуючі файли</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="373"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="443"/>
         <source>Ready to convert.</source>
         <translation>Готово до конвертації.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="666"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="664"/>
         <source>Convert</source>
         <translation>Конвертувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="673"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -374,22 +374,22 @@
         <translation>Magic Kernel Sharp 2021</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="422"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="420"/>
         <source>Reset: %1 x %2</source>
         <translation>Скинути: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="480"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="478"/>
         <source>No AI models found in models/ directory.</source>
         <translation>Не знайдено моделей ШІ в папці models/.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="366"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="436"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>Вибрано файлів: %1 (%2 МБ)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="684"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="682"/>
         <source>Select Output Directory</source>
         <translation>Вибрати вихідну папку</translation>
     </message>
@@ -404,53 +404,53 @@
         <translation>Якість (1 - найнижча, 100 - найвища)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="670"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="455"/>
         <source>Stopping...</source>
         <translation>Зупинка...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="673"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
         <source>Invalid Directory</source>
         <translation>Невірна папка</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="315"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
         <source>Please select a valid output directory.</source>
         <translation>Будь ласка, виберіть дійсну вихідну папку.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="317"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
         <source>Invalid Pattern</source>
         <translation>Неправильний шаблон</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="318"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="388"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>Шаблон імені файлу не може містити послідовності переходу по папках (..) або абсолютні шляхи.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="321"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="391"/>
         <source>No files</source>
         <translation>Немає файлів</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="322"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>У черзі немає вибраних файлів. Будь ласка, позначте хоча б один файл.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="325"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="395"/>
         <source>Resolution Limit Exceeded</source>
         <translation>Перевищено ліміт роздільної здатності</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="326"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -465,42 +465,42 @@ Please reduce the percentage or absolute size.</source>
 Будь ласка, зменште відсоток або аболютний розмір.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="377"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="447"/>
         <source>Processing...</source>
         <translation>Обробка...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="463"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>Зупинено користувачем. Успішно: %1, Помилок: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="467"/>
         <source>Batch aborted.</source>
         <translation>Пакетну обробку перервано.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="410"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="480"/>
         <source>Batch Conversion Failed</source>
         <translation>Помилка пакетного перетворення</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="381"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="451"/>
         <source>Processed %1 / %2 files.</source>
         <translation>Оброблено %1 з %2 файлів.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="389"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="459"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>Завершено. Успішно: %1, Помилок: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="471"/>
         <source>Batch Conversion Complete</source>
         <translation>Пакетне перетворення завершено</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="402"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -518,7 +518,7 @@ Total files: %3</source>
         <translation>Оригінальний розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="588"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="586"/>
         <source>Reset Color Adjustments</source>
         <translation>Скинути корекцію кольорів</translation>
     </message>
@@ -526,7 +526,7 @@ Total files: %3</source>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="345"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="415"/>
         <source>Pending</source>
         <translation>Очікування</translation>
     </message>
@@ -773,7 +773,7 @@ Total files: %3</source>
         <translation>Видалити назавжди</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="352"/>
+        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="481"/>
         <source>Configure menu</source>
         <translation>Налаштувати меню</translation>
     </message>
@@ -818,174 +818,174 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="780"/>
+        <location filename="../../core.cpp" line="778"/>
         <source>Updated: </source>
         <translation>Оновлено: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="787"/>
+        <location filename="../../core.cpp" line="785"/>
         <source>Welcome to </source>
         <translation>Ласкаво просимо до </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="788"/>
+        <location filename="../../core.cpp" line="786"/>
         <source> version </source>
         <translation> версія </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="806"/>
+        <location filename="../../core.cpp" line="804"/>
         <source>Shuffle mode: OFF</source>
         <translation>Режим перемішування: Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="809"/>
+        <location filename="../../core.cpp" line="807"/>
         <source>Shuffle mode: ON</source>
         <translation>Режим перемішування: Увімкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="818"/>
+        <location filename="../../core.cpp" line="816"/>
         <source>Slideshow: OFF</source>
         <translation>Слайд-шоу: Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="822"/>
+        <location filename="../../core.cpp" line="820"/>
         <source>Slideshow: ON</source>
         <translation>Слайд-шоу: Увімкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1016"/>
-        <location filename="../../core.cpp" line="1019"/>
-        <location filename="../../core.cpp" line="1022"/>
+        <location filename="../../core.cpp" line="1014"/>
+        <location filename="../../core.cpp" line="1017"/>
+        <location filename="../../core.cpp" line="1020"/>
         <source>Delete </source>
         <translation>Видалити </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1017"/>
+        <location filename="../../core.cpp" line="1015"/>
         <source> folders permanently?</source>
         <translation> папок назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1020"/>
+        <location filename="../../core.cpp" line="1018"/>
         <source> files permanently?</source>
         <translation> файлів назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1023"/>
+        <location filename="../../core.cpp" line="1021"/>
         <source> items permanently?</source>
         <translation> елементів остаточно?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1031"/>
+        <location filename="../../core.cpp" line="1029"/>
         <source>Delete permanently</source>
         <translation>Видалити остаточно</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1051"/>
+        <location filename="../../core.cpp" line="1049"/>
         <source>File removed</source>
         <translation>Файл видалено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1057"/>
-        <location filename="../../core.cpp" line="1060"/>
-        <location filename="../../core.cpp" line="1063"/>
+        <location filename="../../core.cpp" line="1055"/>
+        <location filename="../../core.cpp" line="1058"/>
+        <location filename="../../core.cpp" line="1061"/>
         <source>Removed: </source>
         <translation>Видалено: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1061"/>
-        <location filename="../../core.cpp" line="1130"/>
+        <location filename="../../core.cpp" line="1059"/>
+        <location filename="../../core.cpp" line="1128"/>
         <source> files</source>
         <translation> файлів</translation>
     </message>
     <message>
+        <location filename="../../core.cpp" line="1086"/>
         <location filename="../../core.cpp" line="1088"/>
         <location filename="../../core.cpp" line="1090"/>
-        <location filename="../../core.cpp" line="1092"/>
         <source>Move </source>
         <translation>Помістити </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1092"/>
+        <location filename="../../core.cpp" line="1090"/>
         <source> items to trash?</source>
         <translation> елементів до кошику?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1100"/>
+        <location filename="../../core.cpp" line="1098"/>
         <source>Move to trash</source>
         <translation>Помістити в кошик</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1118"/>
+        <location filename="../../core.cpp" line="1116"/>
         <source>Folder moved to trash</source>
         <translation>Папку поміщено в кошик</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1120"/>
+        <location filename="../../core.cpp" line="1118"/>
         <source>Moved to trash</source>
         <translation>Переміщено в кошик</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1126"/>
-        <location filename="../../core.cpp" line="1129"/>
-        <location filename="../../core.cpp" line="1132"/>
+        <location filename="../../core.cpp" line="1124"/>
+        <location filename="../../core.cpp" line="1127"/>
+        <location filename="../../core.cpp" line="1130"/>
         <source>Moved to trash: </source>
         <translation>Переміщено в кошик: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1213"/>
+        <location filename="../../core.cpp" line="1211"/>
         <source>File copied</source>
         <translation>Файл скопійовано</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1220"/>
+        <location filename="../../core.cpp" line="1218"/>
         <source>Path copied</source>
         <translation>Шлях скопійовано</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1349"/>
-        <location filename="../../core.cpp" line="1538"/>
-        <location filename="../../core.cpp" line="1562"/>
+        <location filename="../../core.cpp" line="1345"/>
+        <location filename="../../core.cpp" line="1531"/>
+        <location filename="../../core.cpp" line="1555"/>
         <source>File exists</source>
         <translation>Файл існує</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1349"/>
+        <location filename="../../core.cpp" line="1345"/>
         <source>Overwrite file?</source>
         <translation>Перезаписати файл?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1444"/>
+        <location filename="../../core.cpp" line="1437"/>
         <source>Add folder</source>
         <translation>Додати папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1444"/>
+        <location filename="../../core.cpp" line="1437"/>
         <source>Folder name:</source>
         <translation>Назва папки:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1451"/>
+        <location filename="../../core.cpp" line="1444"/>
         <source>Folder already exists</source>
         <translation>Папка вже існує</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1460"/>
+        <location filename="../../core.cpp" line="1453"/>
         <source>Failed to create folder</source>
         <translation>Не вдалося створити папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1536"/>
+        <location filename="../../core.cpp" line="1529"/>
         <source>File moved.</source>
         <translation>Файл переміщено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1539"/>
-        <location filename="../../core.cpp" line="1563"/>
+        <location filename="../../core.cpp" line="1532"/>
+        <location filename="../../core.cpp" line="1556"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>Файл існує. Перезаписати?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1560"/>
+        <location filename="../../core.cpp" line="1553"/>
         <source>File copied.</source>
         <translation>Файл скопійовано.</translation>
     </message>
@@ -1231,69 +1231,69 @@ Staged copy:
     </message>
     <message>
         <location filename="../../core.cpp" line="632"/>
-        <location filename="../../core.cpp" line="1501"/>
+        <location filename="../../core.cpp" line="1494"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>Не вдалося очистити кеш ескізів</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1025"/>
         <source>Delete folder permanently?</source>
         <translation>Видалити папку назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1029"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Delete file permanently?</source>
         <translation>Видалити файл назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1049"/>
+        <location filename="../../core.cpp" line="1047"/>
         <source>Folder removed</source>
         <translation>Папку видалено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1058"/>
-        <location filename="../../core.cpp" line="1127"/>
+        <location filename="../../core.cpp" line="1056"/>
+        <location filename="../../core.cpp" line="1125"/>
         <source> folders</source>
         <translation> папок</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1064"/>
-        <location filename="../../core.cpp" line="1133"/>
+        <location filename="../../core.cpp" line="1062"/>
+        <location filename="../../core.cpp" line="1131"/>
         <source> items</source>
         <translation> елементів</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1088"/>
+        <location filename="../../core.cpp" line="1086"/>
         <source> folders to trash?</source>
         <translation> папок у кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1090"/>
+        <location filename="../../core.cpp" line="1088"/>
         <source> files to trash?</source>
         <translation> файлів у кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1096"/>
+        <location filename="../../core.cpp" line="1094"/>
         <source>Move folder to trash?</source>
         <translation>Помістити папку в кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1098"/>
+        <location filename="../../core.cpp" line="1096"/>
         <source>Move file to trash?</source>
         <translation>Помістити файл у кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1483"/>
+        <location filename="../../core.cpp" line="1476"/>
         <source>Moving: %1 (%2)</source>
         <translation>Переміщення: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1484"/>
+        <location filename="../../core.cpp" line="1477"/>
         <source>Copying: %1 (%2)</source>
         <translation>Копіювання: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1493"/>
+        <location filename="../../core.cpp" line="1486"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>Переміщено %n файл</numerusform>
@@ -1302,7 +1302,7 @@ Staged copy:
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1494"/>
+        <location filename="../../core.cpp" line="1487"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>Скопійовано %n файл</numerusform>
@@ -1655,8 +1655,8 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/FolderGridView.qml" line="252"/>
-        <source>Batch convert</source>
-        <translation>Пакетне конвертування</translation>
+        <source>Add to Batch Converter</source>
+        <translation>Додати до пакетного конвертера</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/FolderGridView.qml" line="258"/>
@@ -1772,22 +1772,22 @@ Staged copy:
         <translation>Вийти з Wynpix</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="69"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="70"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="130"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="131"/>
         <source>Filesystem</source>
         <translation>Файлова система</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="132"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="133"/>
         <source>Home</source>
         <translation>Додому</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="216"/>
+        <location filename="../../gui/quick/ui/PlacesPanel.qml" line="217"/>
         <source>Select directory</source>
         <translation>Вибрати папку</translation>
     </message>
@@ -1861,7 +1861,7 @@ Staged copy:
 <context>
     <name>ImageViewport</name>
     <message>
-        <location filename="../../gui/quick/ui/ImageViewport.qml" line="177"/>
+        <location filename="../../gui/quick/ui/ImageViewport.qml" line="194"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
@@ -1869,22 +1869,22 @@ Staged copy:
 <context>
     <name>ImageViewportController</name>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="343"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="339"/>
         <source>Display error: %1</source>
         <translation>Помилка відображення: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="349"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="345"/>
         <source>The graphics device was lost. The view is drawn again on a new device.</source>
         <translation>Графічний пристрій втрачено. Зображення буде перемальовано на новому пристрої.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="460"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="456"/>
         <source>Cannot open the animation %1: %2</source>
         <translation>Не вдалося відкрити анімацію %1: %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="463"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="459"/>
         <source>Cannot decode frame %1 of the animation %2: %3</source>
         <translation>Не вдалося декодувати кадр %1 анімації %2: %3</translation>
     </message>
@@ -3258,17 +3258,17 @@ Example: %1</source>
         <translation>Підтвердження видалення у кошик</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="239"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
         <source>Apply</source>
         <translation>Застосувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="251"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
