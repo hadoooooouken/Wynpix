@@ -102,7 +102,7 @@ FocusScope {
 
         target: grid
         property: "contentY"
-        easing.type: Easing.OutSine
+        easing.type: Easing.OutCubic
         onFinished: root.thumbnails.scrollAnimationFinished()
     }
 

@@ -48,6 +48,7 @@ Rectangle {
     readonly property int treeBranchPadding: 6
     readonly property int treeTextSpacing: 4
     readonly property real collapsedRotation: -StyleConstants.quarterTurn
+    readonly property int treeBranchAnimationDuration: 120
 
     color: Theme.colors.folderView
 
@@ -505,6 +506,13 @@ Rectangle {
                     icon: FluentIcons.ChevronDown12
                     size: StyleConstants.chevronSize
                     rotation: treeRow.expanded ? 0 : root.collapsedRotation
+
+                    Behavior on rotation {
+                        NumberAnimation {
+                            duration: root.treeBranchAnimationDuration
+                            easing.type: Easing.OutCubic
+                        }
+                    }
                 }
             }
 
