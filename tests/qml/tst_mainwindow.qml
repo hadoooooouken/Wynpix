@@ -169,4 +169,22 @@ TestCase {
         compare(Fixture.lastDroppedUrls.length, 1);
         compare(Fixture.lastDroppedUrls[0], testCase.droppedFile);
     }
+
+    function test_sidePanelInsetsWithSidePanel() {
+        Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Left, false);
+        const window = createWindow();
+        const viewport = childOfType(window, "ImageViewport");
+        verify(viewport !== null, "no ImageViewport in the main window");
+        compare(viewport.width, window.width);
+        const mainPanel = childOfType(window, "MainPanel");
+        verify(mainPanel !== null, "no MainPanel in the main window");
+        compare(mainPanel.extent, Fixture.thumbnailPanel.layout.panelExtent);
+        compare(viewport.sidePanelLeftInset, mainPanel.extent);
+
+        // Pinned side panel: viewport geometry docks to reserve panel space.
+        Fixture.configureThumbnailPanel(true, SettingsEnums.PanelPosition.Left, false);
+        Fixture.setPanelWindowSize(window.width, window.height);
+        compare(viewport.width, window.width - Fixture.thumbnailPanel.layout.panelExtent);
+        compare(viewport.sidePanelLeftInset, 0);
+    }
 }

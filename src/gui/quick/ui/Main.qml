@@ -77,6 +77,8 @@ ApplicationWindow {
             anchors.bottomMargin: mainPanel.dockedBottom
             anchors.leftMargin: mainPanel.dockedLeft
             anchors.rightMargin: mainPanel.dockedRight
+            sidePanelLeftInset: !mainPanel.controller.docked && mainPanel.atLeft && mainPanel.controller.enabled ? mainPanel.extent : 0
+            sidePanelRightInset: !mainPanel.controller.docked && mainPanel.atRight && mainPanel.controller.enabled ? mainPanel.extent : 0
             controller: root.viewportController
             backgroundColor: root.translucentBackground ? "transparent" : root.viewerBackground
             focus: parent.visible && !root.overlays.keyboardOverlayOpen && !root.crop.active

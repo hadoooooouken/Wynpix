@@ -86,6 +86,8 @@ class ImageViewportController final : public QObject, private IViewSurface {
     Q_PROPERTY(ClickZone highlightedClickZone READ highlightedClickZone NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(bool clickZonePressed READ isClickZonePressed NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(int clickZoneWidth READ clickZoneWidth CONSTANT FINAL)
+    Q_PROPERTY(int sidePanelLeftInset READ sidePanelLeftInset WRITE setSidePanelLeftInset NOTIFY sidePanelInsetsChanged FINAL)
+    Q_PROPERTY(int sidePanelRightInset READ sidePanelRightInset WRITE setSidePanelRightInset NOTIFY sidePanelInsetsChanged FINAL)
     Q_PROPERTY(bool reducedMotion READ reducedMotion NOTIFY reducedMotionChanged FINAL)
     Q_PROPERTY(bool renderingSettled READ isRenderingSettled NOTIFY renderingSettledChanged FINAL)
 
@@ -205,6 +207,10 @@ public:
     [[nodiscard]] ClickZone highlightedClickZone() const;
     [[nodiscard]] bool isClickZonePressed() const;
     [[nodiscard]] int clickZoneWidth() const;
+    [[nodiscard]] int sidePanelLeftInset() const;
+    void setSidePanelLeftInset(int inset);
+    [[nodiscard]] int sidePanelRightInset() const;
+    void setSidePanelRightInset(int inset);
     // The platform asks for reduced motion: zoom and scroll jump.
     [[nodiscard]] bool reducedMotion() const;
 
@@ -238,6 +244,7 @@ signals:
     void panoramaModeChanged();
     void cursorShapeChanged();
     void clickZonesChanged();
+    void sidePanelInsetsChanged();
     void reducedMotionChanged();
     void renderingSettledChanged();
 
@@ -423,6 +430,8 @@ private:
     QPointF mPointerPosition;
     bool mPointerInside = false;
     bool mClickZonesEnabled = false;
+    int mSidePanelLeftInset = 0;
+    int mSidePanelRightInset = 0;
     ClickZone mHighlightedZone = ClickZone::None;
     bool mClickZonePressed = false;
     bool mInteractionAnnounced = false;

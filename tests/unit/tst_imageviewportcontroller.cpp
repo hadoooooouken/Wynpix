@@ -576,9 +576,48 @@ private slots:
     QVERIFY(!controller.clickZonesEnabled());
     viewport.item.setWidth(kViewport.width());
     QVERIFY(controller.clickZonesEnabled());
+    // Side panel positions keep click zones enabled.
     settings.panel.position = SettingsEnums::PanelPosition::Left;
     controller.applySettings(settings);
+    QVERIFY(controller.clickZonesEnabled());
+    settings.panel.position = SettingsEnums::PanelPosition::Right;
+    controller.applySettings(settings);
+    QVERIFY(controller.clickZonesEnabled());
+
+    // Side panel insets shift the click zone boundaries.
+    controller.setSidePanelRightInset(150);
+    controller.pointerMoved(QPointF(kViewport.width() - 10, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::None);
+    controller.pointerMoved(QPointF(kViewport.width() - 160, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::Right);
+    controller.setSidePanelRightInset(0);
+
+    controller.setSidePanelLeftInset(150);
+    controller.pointerMoved(QPointF(10, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::None);
+    controller.pointerMoved(QPointF(160, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::Left);
+    controller.setSidePanelLeftInset(0);
+
+    // Both side panel insets applied simultaneously.
+    controller.setSidePanelLeftInset(100);
+    controller.setSidePanelRightInset(100);
+    controller.pointerMoved(QPointF(50, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::None);
+    controller.pointerMoved(QPointF(150, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::Left);
+    controller.pointerMoved(QPointF(kViewport.width() - 150, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::Right);
+    controller.pointerMoved(QPointF(kViewport.width() - 50, kViewport.height() / 2), Qt::NoButton);
+    QCOMPARE(controller.highlightedClickZone(), ImageViewportController::ClickZone::None);
+
+    // Overlapping insets that leave insufficient room disable click zones.
+    controller.setSidePanelLeftInset(kViewport.width() / 2);
+    controller.setSidePanelRightInset(kViewport.width() / 2);
     QVERIFY(!controller.clickZonesEnabled());
+    controller.setSidePanelLeftInset(0);
+    controller.setSidePanelRightInset(0);
+    QVERIFY(controller.clickZonesEnabled());
   }
 
   void zoomIndicatorModes() {

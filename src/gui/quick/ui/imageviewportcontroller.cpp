@@ -76,10 +76,6 @@ ViewTransformConfig viewTransformConfigFrom(const ViewerSettings &viewer) {
     return config;
 }
 
-bool panelOccupiesSide(const PanelSettings &panel) {
-    return panel.enabled && (panel.position == SettingsEnums::PanelPosition::Left ||
-                             panel.position == SettingsEnums::PanelPosition::Right);
-}
 
 const QAccessibilityHints *accessibilityHints() {
     const QStyleHints *styleHints = QGuiApplication::styleHints();
@@ -1406,7 +1402,9 @@ bool ImageViewportController::isClickZonePressed() const {
 }
 
 void ImageViewportController::updateClickZonesEnabled() {
-    const bool enabled = mSettings.viewer.clickableEdges && !panelOccupiesSide(mSettings.panel) &&
+    const int availableWidth = viewportSize().width() - mSidePanelLeftInset - mSidePanelRightInset;
+    const bool enabled = mSettings.viewer.clickableEdges &&
+                         availableWidth >= 2 * kClickZoneWidth &&
                          viewportSize().width() > kClickZonesMinViewportWidth;
     if (mClickZonesEnabled == enabled)
         return;
@@ -1419,15 +1417,52 @@ void ImageViewportController::updateClickZonesEnabled() {
     emit clickZonesChanged();
 }
 
+int ImageViewportController::sidePanelLeftInset() const {
+    return mSidePanelLeftInset;
+}
+
+void ImageViewportController::setSidePanelLeftInset(int inset) {
+    if (mSidePanelLeftInset == inset)
+        return;
+    mSidePanelLeftInset = inset;
+    updateClickZonesEnabled();
+    if (mClickZonesEnabled)
+        updateClickZoneHover(mPointerPosition);
+    emit sidePanelInsetsChanged();
+}
+
+int ImageViewportController::sidePanelRightInset() const {
+    return mSidePanelRightInset;
+}
+
+void ImageViewportController::setSidePanelRightInset(int inset) {
+    if (mSidePanelRightInset == inset)
+        return;
+    mSidePanelRightInset = inset;
+    updateClickZonesEnabled();
+    if (mClickZonesEnabled)
+        updateClickZoneHover(mPointerPosition);
+    emit sidePanelInsetsChanged();
+}
+
 ImageViewportController::ClickZone ImageViewportController::clickZoneAt(QPointF position) const {
     const int width = viewportSize().width();
     const int height = viewportSize().height();
     if (position.y() < 0.0 || position.y() >= height)
         return ClickZone::None;
-    if (position.x() >= 0.0 && position.x() < kClickZoneWidth)
+
+    const int leftStart = mSidePanelLeftInset;
+    const int leftEnd = leftStart + kClickZoneWidth;
+    const int rightEnd = width - mSidePanelRightInset;
+    const int rightStart = rightEnd - kClickZoneWidth;
+    if (leftEnd > rightStart)
+        return ClickZone::None;
+
+    if (position.x() >= leftStart && position.x() < leftEnd)
         return ClickZone::Left;
-    if (position.x() >= width - kClickZoneWidth && position.x() < width)
+    if (position.x() >= rightStart && position.x() < rightEnd)
         return ClickZone::Right;
+
     return ClickZone::None;
 }
 

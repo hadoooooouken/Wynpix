@@ -14,6 +14,20 @@ FocusScope {
     required property ImageViewportController controller
     // What the image is drawn over; may be translucent.
     property color backgroundColor: Theme.colors.background
+    property int sidePanelLeftInset: 0
+    property int sidePanelRightInset: 0
+
+    Binding {
+        target: root.controller
+        property: "sidePanelLeftInset"
+        value: root.sidePanelLeftInset
+    }
+
+    Binding {
+        target: root.controller
+        property: "sidePanelRightInset"
+        value: root.sidePanelRightInset
+    }
 
     // Click zone pills (ClickZoneOverlay).
     readonly property int zonePillWidth: 100
@@ -100,8 +114,10 @@ FocusScope {
 
         required property bool rightSide
         required property bool highlighted
-        readonly property int restX: rightSide ? root.width - root.zonePillEdgeMargin - root.zonePillWidth
-                                               : root.zonePillEdgeMargin
+        readonly property int inset: rightSide ? root.sidePanelRightInset : root.sidePanelLeftInset
+        readonly property int restX: rightSide
+            ? root.width - inset - root.zonePillEdgeMargin - root.zonePillWidth
+            : inset + root.zonePillEdgeMargin
         readonly property int slideX: rightSide ? root.zonePillSlide : -root.zonePillSlide
 
         x: highlighted ? restX : restX + slideX
