@@ -37,7 +37,8 @@ FocusScope {
     readonly property int zonePillRadius: 8
     readonly property int zonePillSlide: 12
     readonly property int zoneArrowSize: 48
-    readonly property int zoneFadeDuration: 300
+    readonly property int zoneFadeInDuration: 160
+    readonly property int zoneFadeOutDuration: 120
     readonly property real zoneArrowLightThemeLightness: 0.5
     readonly property color zoneArrowOnLight: "#646464"
     readonly property color zoneArrowOnDark: "#a4a4a4"
@@ -132,14 +133,14 @@ FocusScope {
         Behavior on opacity {
             enabled: !root.controller.reducedMotion
             NumberAnimation {
-                duration: root.zoneFadeDuration
+                duration: pill.highlighted ? root.zoneFadeInDuration : root.zoneFadeOutDuration
                 easing.type: pill.highlighted ? Easing.OutCubic : Easing.InCubic
             }
         }
         Behavior on x {
             enabled: !root.controller.reducedMotion
             NumberAnimation {
-                duration: root.zoneFadeDuration
+                duration: pill.highlighted ? root.zoneFadeInDuration : root.zoneFadeOutDuration
                 easing.type: pill.highlighted ? Easing.OutCubic : Easing.InCubic
             }
         }

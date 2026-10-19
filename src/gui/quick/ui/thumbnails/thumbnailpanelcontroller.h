@@ -53,6 +53,8 @@ class ThumbnailPanelController final : public QObject {
     Q_PROPERTY(bool exitButtonVisible READ isExitButtonVisible NOTIFY exitButtonVisibleChanged FINAL)
     Q_PROPERTY(int slideDistance READ slideDistance CONSTANT FINAL)
     Q_PROPERTY(int animationDuration READ animationDuration CONSTANT FINAL)
+    Q_PROPERTY(int animationInDuration READ animationInDuration CONSTANT FINAL)
+    Q_PROPERTY(int animationOutDuration READ animationOutDuration CONSTANT FINAL)
 
 public:
     static constexpr int kMinimumWindowWidth = 800;
@@ -63,7 +65,9 @@ public:
     static constexpr int kWindowExitMinimumHideDelayMs = 600;
     // The slide: distance and duration of the show and hide animation.
     static constexpr int kSlideDistancePx = 40;
-    static constexpr int kAnimationDurationMs = 300;
+    static constexpr int kAnimationInDurationMs = 250;
+    static constexpr int kAnimationOutDurationMs = 200;
+    static constexpr int kAnimationDurationMs = kAnimationInDurationMs;
     // model must outlive the controller; settings: the initial UI settings.
     ThumbnailPanelController(ThumbnailListModel &model, const UiSettingsSnapshot &settings,
                              QObject *parent = nullptr);
@@ -81,6 +85,8 @@ public:
     [[nodiscard]] bool isExitButtonVisible() const;
     [[nodiscard]] int slideDistance() const;
     [[nodiscard]] int animationDuration() const;
+    [[nodiscard]] int animationInDuration() const;
+    [[nodiscard]] int animationOutDuration() const;
     // Area of the shown panel in window coordinates (the trigger area).
     [[nodiscard]] QRectF panelRect() const;
 

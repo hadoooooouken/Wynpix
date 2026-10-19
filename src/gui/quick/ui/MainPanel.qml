@@ -91,7 +91,10 @@ Item {
                 panel.curve = panel.controller.shown ? Easing.OutCubic : Easing.InCubic;
             slideAnimation.to = target;
             // A reversal takes only the time already spent.
-            slideAnimation.duration = panel.controller.animationDuration * Math.abs(target - panel.progress);
+            const fullDuration = target === 1
+                ? panel.controller.animationInDuration
+                : panel.controller.animationOutDuration;
+            slideAnimation.duration = fullDuration * Math.abs(target - panel.progress);
             slideAnimation.start();
         }
     }

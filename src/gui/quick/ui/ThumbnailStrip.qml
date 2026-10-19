@@ -102,7 +102,7 @@ Item {
         id: scrollAnimation
 
         target: list
-        easing.type: Easing.OutSine
+        easing.type: Easing.OutCubic
         onFinished: strip.thumbnails.scrollAnimationFinished()
     }
 

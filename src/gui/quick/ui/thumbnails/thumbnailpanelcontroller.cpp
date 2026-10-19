@@ -62,6 +62,14 @@ int ThumbnailPanelController::animationDuration() const {
     return kAnimationDurationMs;
 }
 
+int ThumbnailPanelController::animationInDuration() const {
+    return kAnimationInDurationMs;
+}
+
+int ThumbnailPanelController::animationOutDuration() const {
+    return kAnimationOutDurationMs;
+}
+
 QRectF ThumbnailPanelController::panelRect() const {
     const qreal extent = mLayout.panelExtent;
     const qreal width = mWindowSize.width();
