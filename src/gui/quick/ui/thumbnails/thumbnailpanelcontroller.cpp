@@ -84,6 +84,7 @@ QRectF ThumbnailPanelController::panelRect() const {
 
 void ThumbnailPanelController::applySettings(const UiSettingsSnapshot &settings) {
     const bool wasEnabled = mPanel.enabled;
+    const Enums::PanelPosition previousPosition = mPanel.position;
     mPanel = settings.panel;
     mFolderView = settings.folderView;
     mViewer = settings.viewer;
@@ -95,6 +96,8 @@ void ThumbnailPanelController::applySettings(const UiSettingsSnapshot &settings)
         }
     }
     updateLayout();
+    if (previousPosition != mPanel.position)
+        emit positionChanged();
     configureModel();
     updateExitButton();
     setPinned(mPanel.pinned);

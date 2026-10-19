@@ -48,7 +48,7 @@ class ThumbnailPanelController final : public QObject {
     Q_PROPERTY(bool animated READ isAnimated NOTIFY shownChanged FINAL)
     Q_PROPERTY(bool pinned READ isPinned NOTIFY pinnedChanged FINAL)
     Q_PROPERTY(bool docked READ isDocked NOTIFY dockedChanged FINAL)
-    Q_PROPERTY(SettingsEnums::PanelPosition position READ position NOTIFY layoutChanged FINAL)
+    Q_PROPERTY(SettingsEnums::PanelPosition position READ position NOTIFY positionChanged FINAL)
     Q_PROPERTY(ThumbnailStripLayout layout READ layout NOTIFY layoutChanged FINAL)
     Q_PROPERTY(bool exitButtonVisible READ isExitButtonVisible NOTIFY exitButtonVisibleChanged FINAL)
     Q_PROPERTY(int slideDistance READ slideDistance CONSTANT FINAL)
@@ -119,6 +119,9 @@ signals:
     void pinnedChanged();
     void dockedChanged();
     void layoutChanged();
+    // The panel moved to another side of the window; the layout may stay the
+    // same (left and right panels have identical geometry).
+    void positionChanged();
     void exitButtonVisibleChanged();
     // The pin button changed the pinned state; to be stored.
     void pinRequested(bool pinned);
