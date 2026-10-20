@@ -263,7 +263,8 @@ QSize ImageStatic::size() {
   return pixels.size();
 }
 
-bool ImageStatic::setEditedImage(std::unique_ptr<const QImage> imageEditedNew) {
+bool ImageStatic::setEditedImage(std::unique_ptr<const QImage> imageEditedNew,
+                                 ImageEditKind kind) {
   if (imageEditedNew && imageEditedNew->width() != 0) {
     const std::shared_ptr<const QImage> original =
         pixels.sdr(sdrConversionParams());
@@ -272,6 +273,7 @@ bool ImageStatic::setEditedImage(std::unique_ptr<const QImage> imageEditedNew) {
     if (currentImage && *currentImage == *imageEditedNew)
       return true;
 
+    const bool contentEditedBefore = isEdited() && !mOrientationOnlyEdits;
     clearEditedImageState();
     if (original && *original == *imageEditedNew) {
       ++mContentRevision;
@@ -279,10 +281,16 @@ bool ImageStatic::setEditedImage(std::unique_ptr<const QImage> imageEditedNew) {
     }
     imageEdited = std::move(imageEditedNew);
     mEdited = true;
+    mOrientationOnlyEdits =
+        kind == ImageEditKind::Orientation && !contentEditedBefore;
     ++mContentRevision;
     return true;
   }
   return false;
+}
+
+bool ImageStatic::hasOnlyOrientationEdits() const noexcept {
+  return isEdited() && mOrientationOnlyEdits;
 }
 
 bool ImageStatic::discardEditedImage() {
@@ -297,4 +305,5 @@ bool ImageStatic::discardEditedImage() {
 void ImageStatic::clearEditedImageState() noexcept {
   imageEdited.reset();
   mEdited = false;
+  mOrientationOnlyEdits = false;
 }

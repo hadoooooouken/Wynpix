@@ -123,6 +123,12 @@ SettingsPage {
             checked: root.editor.advanced.showSaveOverlay
             onToggled: root.editor.advanced.showSaveOverlay = checked
         }
+        CheckBox {
+            text: qsTranslate("SettingsDialog", "Skip save overlay for rotate/flip only")
+            enabled: root.editor.advanced.showSaveOverlay
+            checked: root.editor.advanced.skipSaveOverlayForOrientationEdits
+            onToggled: root.editor.advanced.skipSaveOverlayForOrientationEdits = checked
+        }
         SettingsSliderRow {
             label: qsTranslate("SettingsDialog", "JPEG save quality:")
             labelWidth: root.sliderLabelWidth

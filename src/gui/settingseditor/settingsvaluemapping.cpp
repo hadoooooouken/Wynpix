@@ -125,6 +125,8 @@ SettingsValues SettingsValueMapping::load() const {
     advanced.excludedCachePaths = s.excludedCachePaths();
     advanced.unloadThumbs = s.unloadThumbs();
     advanced.showSaveOverlay = s.showSaveOverlay();
+    advanced.skipSaveOverlayForOrientationEdits =
+        s.skipSaveOverlayForOrientationEdits();
     advanced.jpegQuality = s.JPEGSaveQuality();
     advanced.modernQuality = s.modernSaveQuality();
     advanced.pngCompression = s.pngSaveQuality();
@@ -244,6 +246,8 @@ void SettingsValueMapping::storeAdvanced(const AdvancedSettings &advanced) {
     s.setExcludedCachePaths(advanced.excludedCachePaths);
     s.setUnloadThumbs(advanced.unloadThumbs);
     s.setShowSaveOverlay(advanced.showSaveOverlay);
+  s.setSkipSaveOverlayForOrientationEdits(
+      advanced.skipSaveOverlayForOrientationEdits);
     s.setJPEGSaveQuality(advanced.jpegQuality);
     s.setModernSaveQuality(advanced.modernQuality);
     s.setPngSaveQuality(advanced.pngCompression);

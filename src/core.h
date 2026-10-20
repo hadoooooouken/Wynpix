@@ -26,6 +26,7 @@
 
 class ColdStartWindowController;
 class ImageStatic;
+enum class ImageEditKind;
 
 struct State {
     bool hasActiveImage = false;
@@ -121,7 +122,10 @@ private:
     QList<QString> currentSelection();
 
     template<typename... Args>
-    bool edit_template(bool save, QString actionName, const std::function<QImage(std::shared_ptr<const QImage>, Args...)>& func, Args&&... as);
+    bool edit_template(bool save, ImageEditKind editKind, QString actionName, const std::function<QImage(std::shared_ptr<const QImage>, Args...)>& func, Args&&... as);
+
+    // True when the save overlay should be offered for the image.
+    [[nodiscard]] bool needsSaveOverlay(const std::shared_ptr<Image> &img) const;
 
 private slots:
     void readSettings();

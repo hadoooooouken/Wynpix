@@ -1661,7 +1661,7 @@ std::shared_ptr<ImageStatic> Core::getEditableImage(const QString &filePath) {
 // edit produced no image is left unchanged and not saved.
 template <typename... Args>
 bool Core::edit_template(
-    bool save, QString action,
+    bool save, ImageEditKind editKind, QString action,
     const std::function<QImage(std::shared_ptr<const QImage>, Args...)>
         &editFunc,
     Args &&...as) {
@@ -1680,7 +1680,8 @@ bool Core::edit_template(
     const std::shared_ptr<const QImage> source = img->getImage();
     if (!source || source->isNull() ||
         !img->setEditedImage(std::make_unique<const QImage>(
-            editFunc(source, std::forward<Args>(as)...)))) {
+                                 editFunc(source, std::forward<Args>(as)...)),
+                             editKind)) {
       allEdited = false;
       continue;
     }
@@ -1700,17 +1701,20 @@ bool Core::edit_template(
 
 void Core::flipH() {
   edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW),
-                tr("Flip horizontal"), {ImageLib::flippedH});
+                ImageEditKind::Orientation, tr("Flip horizontal"),
+                {ImageLib::flippedH});
 }
 
 void Core::flipV() {
-  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW), tr("Flip vertical"),
+  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW),
+                ImageEditKind::Orientation, tr("Flip vertical"),
                 {ImageLib::flippedV});
 }
 
 void Core::rotateByDegrees(int degrees) {
-  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW), tr("Rotate"),
-                {ImageLib::rotated}, degrees);
+  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW),
+                ImageEditKind::Orientation, tr("Rotate"), {ImageLib::rotated},
+                degrees);
 }
 
 void Core::resize(const ResizeRequest &resizeRequest) {
@@ -1753,7 +1757,8 @@ void Core::resize(const ResizeRequest &resizeRequest) {
     // for a same-size or downscale request - don't pay for a full AI model
     // pass in that case, just do the regular (much cheaper) CPU resize.
     if (size.width() <= source->width() && size.height() <= source->height()) {
-      edit_template(false, tr("Resize"), {ImageLib::scaled}, size, filter);
+      edit_template(false, ImageEditKind::Content, tr("Resize"),
+                    {ImageLib::scaled}, size, filter);
       return;
     }
 
@@ -1779,7 +1784,8 @@ void Core::resize(const ResizeRequest &resizeRequest) {
     return;
   }
 
-  edit_template(false, tr("Resize"), {ImageLib::scaled}, size, filter);
+  edit_template(false, ImageEditKind::Content, tr("Resize"),
+                {ImageLib::scaled}, size, filter);
 }
 
 void Core::clearAiResizeBusyUi() {
@@ -1826,7 +1832,8 @@ void Core::onAiResizeFinished(int generation, QString path, QImage image, bool s
     return;
   }
 
-  img->setEditedImage(std::make_unique<const QImage>(std::move(image)));
+  img->setEditedImage(std::make_unique<const QImage>(std::move(image)),
+                      ImageEditKind::Content);
   model->updateImage(path, std::static_pointer_cast<Image>(img));
 
   if (state.hasActiveImage && path == state.currentFilePath) {
@@ -1840,13 +1847,15 @@ void Core::onAiResizeFinished(int generation, QString path, QImage image, bool s
 void Core::crop(QRect rect) {
   if (ui.viewMode.currentViewMode() == MODE_FOLDERVIEW)
     return;
-  edit_template(false, tr("Crop"), {ImageLib::cropped}, rect);
+  edit_template(false, ImageEditKind::Content, tr("Crop"), {ImageLib::cropped},
+                rect);
 }
 
 void Core::cropAndSave(QRect rect) {
   if (ui.viewMode.currentViewMode() == MODE_FOLDERVIEW)
     return;
-  if (!edit_template(false, tr("Crop"), {ImageLib::cropped}, rect))
+  if (!edit_template(false, ImageEditKind::Content, tr("Crop"),
+                     {ImageLib::cropped}, rect))
     return;
   (void)saveFile(selectedPath());
   updateInfoString();
@@ -1870,7 +1879,8 @@ void Core::applyColorAdjustments(const ColorAdjustments &adjustments) {
     return;
   }
 
-  img->setEditedImage(std::make_unique<const QImage>(adjusted));
+  img->setEditedImage(std::make_unique<const QImage>(adjusted),
+                      ImageEditKind::Content);
   model->updateImage(path, std::static_pointer_cast<Image>(img));
   updateInfoString();
 }
@@ -2495,6 +2505,15 @@ void Core::onNameFilterSelected(QString nameFilter) {
   model->setNameFilter(std::move(nameFilter));
 }
 
+bool Core::needsSaveOverlay(const std::shared_ptr<Image> &img) const {
+  if (!img || !img->isEdited())
+    return false;
+  if (!settings->skipSaveOverlayForOrientationEdits())
+    return true;
+  const auto *imgStatic = dynamic_cast<const ImageStatic *>(img.get());
+  return !imgStatic || !imgStatic->hasOnlyOrientationEdits();
+}
+
 void Core::guiSetImage(std::shared_ptr<Image> img) {
   state.hasActiveImage = true;
   if (!img) {
@@ -2512,7 +2531,7 @@ void Core::guiSetImage(std::shared_ptr<Image> img) {
   } else if (type == ANIMATED) {
     ui.viewer.showAnimation(img->filePath(), img->format(), img->size());
   }
-  img->isEdited() ? ui.shell.setSaveOverlayVisible(true) : ui.shell.setSaveOverlayVisible(false);
+  ui.shell.setSaveOverlayVisible(needsSaveOverlay(img));
 
   // EXIF tags don't have a meaningful display order (alphabetical is fine),
   // but generation info does — QList<QPair<>> is used there instead of

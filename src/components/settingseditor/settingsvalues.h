@@ -188,6 +188,7 @@ struct AdvancedSettings {
     Q_PROPERTY(QString excludedCachePaths MEMBER excludedCachePaths FINAL)
     Q_PROPERTY(bool unloadThumbs MEMBER unloadThumbs FINAL)
     Q_PROPERTY(bool showSaveOverlay MEMBER showSaveOverlay FINAL)
+    Q_PROPERTY(bool skipSaveOverlayForOrientationEdits MEMBER skipSaveOverlayForOrientationEdits FINAL)
     Q_PROPERTY(int jpegQuality MEMBER jpegQuality FINAL)
     Q_PROPERTY(int modernQuality MEMBER modernQuality FINAL)
     Q_PROPERTY(int pngCompression MEMBER pngCompression FINAL)
@@ -205,6 +206,7 @@ public:
     QString excludedCachePaths;
     bool unloadThumbs = false;
     bool showSaveOverlay = false;
+    bool skipSaveOverlayForOrientationEdits = false;
     int jpegQuality = 0;
     int modernQuality = 0;
     int pngCompression = 0;

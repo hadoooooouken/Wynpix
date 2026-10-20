@@ -1015,39 +1015,39 @@ Total files: %3</source>
         <translation>Изменения будут сохранены немедленно.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1703"/>
+        <location filename="../../core.cpp" line="1704"/>
         <source>Flip horizontal</source>
         <translation>Отразить по горизонтали</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1707"/>
+        <location filename="../../core.cpp" line="1710"/>
         <source>Flip vertical</source>
         <translation>Отразить по вертикали</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1712"/>
+        <location filename="../../core.cpp" line="1716"/>
         <source>Rotate</source>
         <translation>Повернуть</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1756"/>
-        <location filename="../../core.cpp" line="1782"/>
+        <location filename="../../core.cpp" line="1760"/>
+        <location filename="../../core.cpp" line="1787"/>
         <source>Resize</source>
         <translation>Изменение размера</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1825"/>
+        <location filename="../../core.cpp" line="1831"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>Масштабирование ИИ завершено, но изображение изменилось.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1843"/>
-        <location filename="../../core.cpp" line="1849"/>
+        <location filename="../../core.cpp" line="1850"/>
+        <location filename="../../core.cpp" line="1857"/>
         <source>Crop</source>
         <translation>Обрезать</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1911"/>
+        <location filename="../../core.cpp" line="1921"/>
         <source>File saved</source>
         <translation>Файл сохранен</translation>
     </message>
@@ -1067,19 +1067,19 @@ Total files: %3</source>
         <translation>Не удалось сохранить файл: сбой автоматического восстановления (ошибка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1990"/>
-        <location filename="../../core.cpp" line="1996"/>
+        <location filename="../../core.cpp" line="2000"/>
+        <location filename="../../core.cpp" line="2006"/>
         <source>Set wallpaper: file not supported</source>
         <translation>Установка обоев: файл не поддерживается</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2014"/>
-        <location filename="../../core.cpp" line="2023"/>
+        <location filename="../../core.cpp" line="2024"/>
+        <location filename="../../core.cpp" line="2033"/>
         <source>Could not open image</source>
         <translation>Не удалось открыть изображение</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2018"/>
+        <location filename="../../core.cpp" line="2028"/>
         <source>Can only print static images</source>
         <translation>Печать доступна только для статических изображений</translation>
     </message>
@@ -1326,63 +1326,63 @@ Staged copy:
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1696"/>
+        <location filename="../../core.cpp" line="1697"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1: ошибка, не удалось изменить изображение.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1724"/>
+        <location filename="../../core.cpp" line="1728"/>
         <source>AI resize is already running.</source>
         <translation>Масштабирование ИИ уже запущено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1733"/>
+        <location filename="../../core.cpp" line="1737"/>
         <source>AI resize supports one image at a time.</source>
         <translation>Масштабирование ИИ поддерживает только одно изображение за раз.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1740"/>
-        <location filename="../../core.cpp" line="1746"/>
+        <location filename="../../core.cpp" line="1744"/>
+        <location filename="../../core.cpp" line="1750"/>
         <source>Could not resize image.</source>
         <translation>Не удалось изменить размер изображения.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1772"/>
+        <location filename="../../core.cpp" line="1777"/>
         <source>AI resizing...</source>
         <translation>Масштабирование ИИ...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1807"/>
+        <location filename="../../core.cpp" line="1813"/>
         <source>AI resize failed.</source>
         <translation>Ошибка масштабирования ИИ.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1812"/>
+        <location filename="../../core.cpp" line="1818"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Масштабирование ИИ завершено, но изображения больше нет в списке.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1824"/>
         <source>Could not apply AI resize.</source>
         <translation>Не удалось применить масштабирование ИИ.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1834"/>
+        <location filename="../../core.cpp" line="1841"/>
         <source>AI resize finished.</source>
         <translation>Масштабирование ИИ завершено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1836"/>
+        <location filename="../../core.cpp" line="1843"/>
         <source>AI resize finished for %1.</source>
         <translation>Масштабирование ИИ для %1 завершено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1869"/>
+        <location filename="../../core.cpp" line="1878"/>
         <source>Could not adjust the image colors.</source>
         <translation>Не удалось настроить цвета изображения.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2002"/>
+        <location filename="../../core.cpp" line="2012"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>Установка обоев: не удалось получить изображение</translation>
     </message>
@@ -1392,50 +1392,50 @@ Staged copy:
         <translation>Обои установлены</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2108"/>
+        <location filename="../../core.cpp" line="2118"/>
         <source>Could not open path: </source>
         <translation>Не удалось открыть путь: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2173"/>
+        <location filename="../../core.cpp" line="2183"/>
         <source>Could not load folder: </source>
         <translation>Не удалось загрузить папку: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2232"/>
-        <location filename="../../core.cpp" line="2258"/>
+        <location filename="../../core.cpp" line="2242"/>
+        <location filename="../../core.cpp" line="2268"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>Не удалось получить список соседних папок: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2397"/>
+        <location filename="../../core.cpp" line="2407"/>
         <source>End of directory.</source>
         <translation>Конец папки.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2431"/>
+        <location filename="../../core.cpp" line="2441"/>
         <source>Load failed: </source>
         <translation>Ошибка загрузки: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2501"/>
-        <location filename="../../core.cpp" line="2508"/>
+        <location filename="../../core.cpp" line="2520"/>
+        <location filename="../../core.cpp" line="2527"/>
         <source>Error: could not load image.</source>
         <translation>Ошибка: не удалось загрузить изображение.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2525"/>
+        <location filename="../../core.cpp" line="2544"/>
         <source>HDR Profile</source>
         <translation>Профиль HDR</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2531"/>
+        <location filename="../../core.cpp" line="2550"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2559"/>
-        <location filename="../../core.cpp" line="2582"/>
+        <location filename="../../core.cpp" line="2578"/>
+        <location filename="../../core.cpp" line="2601"/>
         <source>Page %1/%2</source>
         <translation>Страница %1/%2</translation>
     </message>
@@ -3340,26 +3340,31 @@ Example: %1</source>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
+        <source>Skip save overlay for rotate/flip only</source>
+        <translation>Не показывать оверлей сохранения при повороте/отражении</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="133"/>
         <source>JPEG save quality:</source>
         <translation>Качество сохранения JPEG:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="154"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="160"/>
         <source>Confirm moving to trash</source>
         <translation>Подтверждать перемещение в корзину</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="159"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="165"/>
         <source>Confirm file delete (!)</source>
         <translation>Подтверждать удаление файлов (!)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="164"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="170"/>
         <source>Allow multiple instances</source>
         <translation>Разрешить несколько окон</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="172"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="178"/>
         <source>Memory allocation limit per image, MB:</source>
         <translation>Лимит памяти на изображение, МБ:</translation>
     </message>
@@ -3503,12 +3508,12 @@ Wynpix распространяется под лицензией [GNU GPL ве�
         <translation>Контраст:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="135"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="141"/>
         <source>Modern formats quality (WebP, JXL, AVIF):</source>
         <translation>Качество современных форматов (WebP, JXL, AVIF):</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="149"/>
         <source>PNG compression level:</source>
         <translation>Уровень сжатия PNG:</translation>
     </message>

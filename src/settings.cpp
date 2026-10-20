@@ -1122,6 +1122,16 @@ bool Settings::showSaveOverlay() {
 void Settings::setShowSaveOverlay(bool mode) {
   settings->settingsConf->setValue("showSaveOverlay", mode);
 }
+
+bool Settings::skipSaveOverlayForOrientationEdits() {
+  return settings->settingsConf
+      ->value("skipSaveOverlayForOrientationEdits", false)
+      .toBool();
+}
+
+void Settings::setSkipSaveOverlayForOrientationEdits(bool mode) {
+  settings->settingsConf->setValue("skipSaveOverlayForOrientationEdits", mode);
+}
 //------------------------------------------------------------------------------
 bool Settings::confirmDelete() {
   return settings->settingsConf->value("confirmDelete", true).toBool();

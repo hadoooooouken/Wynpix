@@ -1015,39 +1015,39 @@ Total files: %3</source>
         <translation>更改将立即保存.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1703"/>
+        <location filename="../../core.cpp" line="1704"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1707"/>
+        <location filename="../../core.cpp" line="1710"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1712"/>
+        <location filename="../../core.cpp" line="1716"/>
         <source>Rotate</source>
         <translation>旋转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1756"/>
-        <location filename="../../core.cpp" line="1782"/>
+        <location filename="../../core.cpp" line="1760"/>
+        <location filename="../../core.cpp" line="1787"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1825"/>
+        <location filename="../../core.cpp" line="1831"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>AI缩放已完成，但图像已更改。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1843"/>
-        <location filename="../../core.cpp" line="1849"/>
+        <location filename="../../core.cpp" line="1850"/>
+        <location filename="../../core.cpp" line="1857"/>
         <source>Crop</source>
         <translation>裁剪</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1911"/>
+        <location filename="../../core.cpp" line="1921"/>
         <source>File saved</source>
         <translation>文件已保存</translation>
     </message>
@@ -1067,19 +1067,19 @@ Total files: %3</source>
         <translation>不能保存文件: 自动恢复失败 (Windows 错误 %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1990"/>
-        <location filename="../../core.cpp" line="1996"/>
+        <location filename="../../core.cpp" line="2000"/>
+        <location filename="../../core.cpp" line="2006"/>
         <source>Set wallpaper: file not supported</source>
         <translation>设为壁纸: 不支持的文件格式</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2014"/>
-        <location filename="../../core.cpp" line="2023"/>
+        <location filename="../../core.cpp" line="2024"/>
+        <location filename="../../core.cpp" line="2033"/>
         <source>Could not open image</source>
         <translation>不能打开图片</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2018"/>
+        <location filename="../../core.cpp" line="2028"/>
         <source>Can only print static images</source>
         <translation>只能打印静态图片</translation>
     </message>
@@ -1322,63 +1322,63 @@ Staged copy:
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1696"/>
+        <location filename="../../core.cpp" line="1697"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1 失败: 无法编辑图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1724"/>
+        <location filename="../../core.cpp" line="1728"/>
         <source>AI resize is already running.</source>
         <translation>AI缩放已在运行中。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1733"/>
+        <location filename="../../core.cpp" line="1737"/>
         <source>AI resize supports one image at a time.</source>
         <translation>AI缩放一次仅支持一张图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1740"/>
-        <location filename="../../core.cpp" line="1746"/>
+        <location filename="../../core.cpp" line="1744"/>
+        <location filename="../../core.cpp" line="1750"/>
         <source>Could not resize image.</source>
         <translation>无法缩放图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1772"/>
+        <location filename="../../core.cpp" line="1777"/>
         <source>AI resizing...</source>
         <translation>正在进行AI缩放...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1807"/>
+        <location filename="../../core.cpp" line="1813"/>
         <source>AI resize failed.</source>
         <translation>AI缩放失败。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1812"/>
+        <location filename="../../core.cpp" line="1818"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>AI缩放已完成，但该图像已不再列表中。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1824"/>
         <source>Could not apply AI resize.</source>
         <translation>无法应用AI缩放。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1834"/>
+        <location filename="../../core.cpp" line="1841"/>
         <source>AI resize finished.</source>
         <translation>AI缩放已完成。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1836"/>
+        <location filename="../../core.cpp" line="1843"/>
         <source>AI resize finished for %1.</source>
         <translation>%1 的AI缩放已完成。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1869"/>
+        <location filename="../../core.cpp" line="1878"/>
         <source>Could not adjust the image colors.</source>
         <translation>无法调整图像颜色。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2002"/>
+        <location filename="../../core.cpp" line="2012"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>设置壁纸：获取图像失败</translation>
     </message>
@@ -1388,50 +1388,50 @@ Staged copy:
         <translation>壁纸已设置</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2108"/>
+        <location filename="../../core.cpp" line="2118"/>
         <source>Could not open path: </source>
         <translation>不能打开的路径: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2173"/>
+        <location filename="../../core.cpp" line="2183"/>
         <source>Could not load folder: </source>
         <translation>不能载入的目录: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2232"/>
-        <location filename="../../core.cpp" line="2258"/>
+        <location filename="../../core.cpp" line="2242"/>
+        <location filename="../../core.cpp" line="2268"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>无法枚举同级文件夹: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2397"/>
+        <location filename="../../core.cpp" line="2407"/>
         <source>End of directory.</source>
         <translation>目录末尾.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2431"/>
+        <location filename="../../core.cpp" line="2441"/>
         <source>Load failed: </source>
         <translation>加载失败: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2501"/>
-        <location filename="../../core.cpp" line="2508"/>
+        <location filename="../../core.cpp" line="2520"/>
+        <location filename="../../core.cpp" line="2527"/>
         <source>Error: could not load image.</source>
         <translation>错误: 不能载入图片.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2525"/>
+        <location filename="../../core.cpp" line="2544"/>
         <source>HDR Profile</source>
         <translation>HDR 配置文件</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2531"/>
+        <location filename="../../core.cpp" line="2550"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2559"/>
-        <location filename="../../core.cpp" line="2582"/>
+        <location filename="../../core.cpp" line="2578"/>
+        <location filename="../../core.cpp" line="2601"/>
         <source>Page %1/%2</source>
         <translation>第 %1/%2 页</translation>
     </message>
@@ -3121,7 +3121,7 @@ Staged copy:
         <translation>在后台加载相邻的图像</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="133"/>
         <source>JPEG save quality:</source>
         <translation>JPEG 保存质量:</translation>
     </message>
@@ -3181,12 +3181,17 @@ Staged copy:
         <translation>在编辑图像时显示保存覆盖</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
+        <source>Skip save overlay for rotate/flip only</source>
+        <translation>仅在旋转/翻转时跳过保存覆盖</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="42"/>
         <source>Use thumbnail cache (recommended)</source>
         <translation>使用缩略图缓存 (推荐)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="172"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="178"/>
         <source>Memory allocation limit per image, MB:</source>
         <translation>单张图片最大内存分配限制 (MB)：</translation>
     </message>
@@ -3250,17 +3255,17 @@ Example: %1</source>
 例如：%1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="154"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="160"/>
         <source>Confirm moving to trash</source>
         <translation>删除到回收站时需确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="159"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="165"/>
         <source>Confirm file delete (!)</source>
         <translation>确认删除文件 (!)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="164"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="170"/>
         <source>Allow multiple instances</source>
         <translation>允许多个实例</translation>
     </message>
@@ -3347,12 +3352,12 @@ Example: %1</source>
         <translation>对比度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="135"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="141"/>
         <source>Modern formats quality (WebP, JXL, AVIF):</source>
         <translation>现代格式质量 (WebP, JXL, AVIF)：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="149"/>
         <source>PNG compression level:</source>
         <translation>PNG 压缩级别：</translation>
     </message>

@@ -224,6 +224,9 @@ public:
 
   bool showSaveOverlay();
   void setShowSaveOverlay(bool mode);
+  // Skips the save overlay for images that were only rotated or flipped.
+  bool skipSaveOverlayForOrientationEdits();
+  void setSkipSaveOverlayForOrientationEdits(bool mode);
   bool confirmDelete();
   void setConfirmDelete(bool mode);
   bool confirmTrash();

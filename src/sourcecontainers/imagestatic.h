@@ -13,6 +13,10 @@
 #include <settings.h>
 #include <QIcon>
 
+// What an edit changed. Orientation covers rotating and flipping; Content
+// covers every other edit (crop, resize, colour adjustments, ...).
+enum class ImageEditKind { Orientation, Content };
+
 class ImageStatic : public Image {
 public:
     explicit ImageStatic(QString path, DecodeContext context = {});
@@ -32,7 +36,11 @@ public:
     int width();
     QSize size();
 
-    bool setEditedImage(std::unique_ptr<const QImage> imageEditedNew);
+    bool setEditedImage(std::unique_ptr<const QImage> imageEditedNew,
+                        ImageEditKind kind);
+    // True while the image is edited and every edit since it was loaded or
+    // last discarded was a rotation or a flip.
+    [[nodiscard]] bool hasOnlyOrientationEdits() const noexcept;
     bool discardEditedImage();
     void commitEdits();
 
@@ -58,6 +66,7 @@ private:
     DecodedPixels pixels;
     std::shared_ptr<const QImage> imageEdited;
     quint64 mContentRevision = 0;
+    bool mOrientationOnlyEdits = false;
     void clearEditedImageState() noexcept;
     void loadGeneric();
     void loadICO();

@@ -1003,34 +1003,34 @@ Total files: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1703"/>
+        <location filename="../../core.cpp" line="1704"/>
         <source>Flip horizontal</source>
         <translation type="unfinished">Flip horizontal</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1707"/>
+        <location filename="../../core.cpp" line="1710"/>
         <source>Flip vertical</source>
         <translation type="unfinished">Flip vertical</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1712"/>
+        <location filename="../../core.cpp" line="1716"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1756"/>
-        <location filename="../../core.cpp" line="1782"/>
+        <location filename="../../core.cpp" line="1760"/>
+        <location filename="../../core.cpp" line="1787"/>
         <source>Resize</source>
         <translation type="unfinished">Resize</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1843"/>
-        <location filename="../../core.cpp" line="1849"/>
+        <location filename="../../core.cpp" line="1850"/>
+        <location filename="../../core.cpp" line="1857"/>
         <source>Crop</source>
         <translation type="unfinished">Crop</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1911"/>
+        <location filename="../../core.cpp" line="1921"/>
         <source>File saved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1050,13 +1050,13 @@ Total files: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2014"/>
-        <location filename="../../core.cpp" line="2023"/>
+        <location filename="../../core.cpp" line="2024"/>
+        <location filename="../../core.cpp" line="2033"/>
         <source>Could not open image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2018"/>
+        <location filename="../../core.cpp" line="2028"/>
         <source>Can only print static images</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1298,122 +1298,122 @@ Staged copy:
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1696"/>
+        <location filename="../../core.cpp" line="1697"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1724"/>
+        <location filename="../../core.cpp" line="1728"/>
         <source>AI resize is already running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1733"/>
+        <location filename="../../core.cpp" line="1737"/>
         <source>AI resize supports one image at a time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1740"/>
-        <location filename="../../core.cpp" line="1746"/>
+        <location filename="../../core.cpp" line="1744"/>
+        <location filename="../../core.cpp" line="1750"/>
         <source>Could not resize image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1772"/>
+        <location filename="../../core.cpp" line="1777"/>
         <source>AI resizing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1807"/>
+        <location filename="../../core.cpp" line="1813"/>
         <source>AI resize failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1812"/>
+        <location filename="../../core.cpp" line="1818"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1824"/>
         <source>Could not apply AI resize.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1825"/>
+        <location filename="../../core.cpp" line="1831"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1834"/>
+        <location filename="../../core.cpp" line="1841"/>
         <source>AI resize finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1836"/>
+        <location filename="../../core.cpp" line="1843"/>
         <source>AI resize finished for %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1869"/>
+        <location filename="../../core.cpp" line="1878"/>
         <source>Could not adjust the image colors.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1990"/>
-        <location filename="../../core.cpp" line="1996"/>
+        <location filename="../../core.cpp" line="2000"/>
+        <location filename="../../core.cpp" line="2006"/>
         <source>Set wallpaper: file not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2002"/>
+        <location filename="../../core.cpp" line="2012"/>
         <source>Set wallpaper: failed to get image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2108"/>
+        <location filename="../../core.cpp" line="2118"/>
         <source>Could not open path: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2173"/>
+        <location filename="../../core.cpp" line="2183"/>
         <source>Could not load folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2232"/>
-        <location filename="../../core.cpp" line="2258"/>
+        <location filename="../../core.cpp" line="2242"/>
+        <location filename="../../core.cpp" line="2268"/>
         <source>Could not enumerate sibling folders: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2397"/>
+        <location filename="../../core.cpp" line="2407"/>
         <source>End of directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2431"/>
+        <location filename="../../core.cpp" line="2441"/>
         <source>Load failed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2501"/>
-        <location filename="../../core.cpp" line="2508"/>
+        <location filename="../../core.cpp" line="2520"/>
+        <location filename="../../core.cpp" line="2527"/>
         <source>Error: could not load image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2525"/>
+        <location filename="../../core.cpp" line="2544"/>
         <source>HDR Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2531"/>
+        <location filename="../../core.cpp" line="2550"/>
         <source>MaxCLL / MaxFALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2559"/>
-        <location filename="../../core.cpp" line="2582"/>
+        <location filename="../../core.cpp" line="2578"/>
+        <location filename="../../core.cpp" line="2601"/>
         <source>Page %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3466,26 +3466,31 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
+        <source>Skip save overlay for rotate/flip only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="133"/>
         <source>JPEG save quality:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="154"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="160"/>
         <source>Confirm moving to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="159"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="165"/>
         <source>Confirm file delete (!)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="164"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="170"/>
         <source>Allow multiple instances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="172"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="178"/>
         <source>Memory allocation limit per image, MB:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3547,12 +3552,12 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="135"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="141"/>
         <source>Modern formats quality (WebP, JXL, AVIF):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="149"/>
         <source>PNG compression level:</source>
         <translation type="unfinished"></translation>
     </message>

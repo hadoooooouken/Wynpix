@@ -1015,39 +1015,39 @@ Total des fichiers : %3</translation>
         <translation>Les modifications seront immédiatement enregistrées.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1703"/>
+        <location filename="../../core.cpp" line="1704"/>
         <source>Flip horizontal</source>
         <translation>Renversement horizontal</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1707"/>
+        <location filename="../../core.cpp" line="1710"/>
         <source>Flip vertical</source>
         <translation>Renversement vertical</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1712"/>
+        <location filename="../../core.cpp" line="1716"/>
         <source>Rotate</source>
         <translation>Tourner</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1756"/>
-        <location filename="../../core.cpp" line="1782"/>
+        <location filename="../../core.cpp" line="1760"/>
+        <location filename="../../core.cpp" line="1787"/>
         <source>Resize</source>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1825"/>
+        <location filename="../../core.cpp" line="1831"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>Redimensionnement par l&apos;IA terminé, mais l&apos;image a changé.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1843"/>
-        <location filename="../../core.cpp" line="1849"/>
+        <location filename="../../core.cpp" line="1850"/>
+        <location filename="../../core.cpp" line="1857"/>
         <source>Crop</source>
         <translation>Recadrer</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1911"/>
+        <location filename="../../core.cpp" line="1921"/>
         <source>File saved</source>
         <translation>Fichier enregistré</translation>
     </message>
@@ -1067,19 +1067,19 @@ Total des fichiers : %3</translation>
         <translation>Impossible d&apos;enregistrer le fichier : la récupération automatique a échoué (erreur Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1990"/>
-        <location filename="../../core.cpp" line="1996"/>
+        <location filename="../../core.cpp" line="2000"/>
+        <location filename="../../core.cpp" line="2006"/>
         <source>Set wallpaper: file not supported</source>
         <translation>Définir le fond d&apos;écran : fichier non pris en charge</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2014"/>
-        <location filename="../../core.cpp" line="2023"/>
+        <location filename="../../core.cpp" line="2024"/>
+        <location filename="../../core.cpp" line="2033"/>
         <source>Could not open image</source>
         <translation>Impossible d&apos;ouvrir l&apos;image</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2018"/>
+        <location filename="../../core.cpp" line="2028"/>
         <source>Can only print static images</source>
         <translation>Ne peut imprimer que des images statiques</translation>
     </message>
@@ -1324,63 +1324,63 @@ Copie intermédiaire :
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1696"/>
+        <location filename="../../core.cpp" line="1697"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>Échec de %1 : impossible de modifier l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1724"/>
+        <location filename="../../core.cpp" line="1728"/>
         <source>AI resize is already running.</source>
         <translation>Le redimensionnement IA est déjà en cours.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1733"/>
+        <location filename="../../core.cpp" line="1737"/>
         <source>AI resize supports one image at a time.</source>
         <translation>Le redimensionnement IA ne supporte qu&apos;une seule image à la fois.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1740"/>
-        <location filename="../../core.cpp" line="1746"/>
+        <location filename="../../core.cpp" line="1744"/>
+        <location filename="../../core.cpp" line="1750"/>
         <source>Could not resize image.</source>
         <translation>Impossible de redimensionner l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1772"/>
+        <location filename="../../core.cpp" line="1777"/>
         <source>AI resizing...</source>
         <translation>Redimensionnement par l&apos;IA...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1807"/>
+        <location filename="../../core.cpp" line="1813"/>
         <source>AI resize failed.</source>
         <translation>Le redimensionnement par l&apos;IA a échoué.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1812"/>
+        <location filename="../../core.cpp" line="1818"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Redimensionnement par l&apos;IA terminé, mais l&apos;image n&apos;est plus dans la liste.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1824"/>
         <source>Could not apply AI resize.</source>
         <translation>Impossible d&apos;appliquer le redimensionnement par l&apos;IA.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1834"/>
+        <location filename="../../core.cpp" line="1841"/>
         <source>AI resize finished.</source>
         <translation>Redimensionnement par l&apos;IA terminé.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1836"/>
+        <location filename="../../core.cpp" line="1843"/>
         <source>AI resize finished for %1.</source>
         <translation>Redimensionnement par l&apos;IA terminé pour %1.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1869"/>
+        <location filename="../../core.cpp" line="1878"/>
         <source>Could not adjust the image colors.</source>
         <translation>Impossible d&apos;ajuster les couleurs de l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2002"/>
+        <location filename="../../core.cpp" line="2012"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>Définir le fond d&apos;écran : échec de récupération de l&apos;image</translation>
     </message>
@@ -1390,50 +1390,50 @@ Copie intermédiaire :
         <translation>Fond d&apos;écran défini</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2108"/>
+        <location filename="../../core.cpp" line="2118"/>
         <source>Could not open path: </source>
         <translation>Impossible d&apos;ouvrir le chemin : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2173"/>
+        <location filename="../../core.cpp" line="2183"/>
         <source>Could not load folder: </source>
         <translation>Impossible de charger le dossier : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2232"/>
-        <location filename="../../core.cpp" line="2258"/>
+        <location filename="../../core.cpp" line="2242"/>
+        <location filename="../../core.cpp" line="2268"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>Impossible d&apos;énumérer les dossiers voisins : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2397"/>
+        <location filename="../../core.cpp" line="2407"/>
         <source>End of directory.</source>
         <translation>Fin du répertoire.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2431"/>
+        <location filename="../../core.cpp" line="2441"/>
         <source>Load failed: </source>
         <translation>Échec du chargement : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2501"/>
-        <location filename="../../core.cpp" line="2508"/>
+        <location filename="../../core.cpp" line="2520"/>
+        <location filename="../../core.cpp" line="2527"/>
         <source>Error: could not load image.</source>
         <translation>Erreur : impossible de charger l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2525"/>
+        <location filename="../../core.cpp" line="2544"/>
         <source>HDR Profile</source>
         <translation>Profil HDR</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2531"/>
+        <location filename="../../core.cpp" line="2550"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2559"/>
-        <location filename="../../core.cpp" line="2582"/>
+        <location filename="../../core.cpp" line="2578"/>
+        <location filename="../../core.cpp" line="2601"/>
         <source>Page %1/%2</source>
         <translation>Page %1 sur %2</translation>
     </message>
@@ -3323,26 +3323,31 @@ Example: %1</source>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
+        <source>Skip save overlay for rotate/flip only</source>
+        <translation>Ignorer la fenêtre d&apos;enregistrement uniquement pour pivoter/retourner</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="133"/>
         <source>JPEG save quality:</source>
         <translation>Qualité d&apos;enregistrement JPEG :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="154"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="160"/>
         <source>Confirm moving to trash</source>
         <translation>Confirmer le déplacement vers la corbeille</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="159"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="165"/>
         <source>Confirm file delete (!)</source>
         <translation>Confirmer la suppression du fichier (!)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="164"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="170"/>
         <source>Allow multiple instances</source>
         <translation>Autoriser plusieurs instances</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="172"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="178"/>
         <source>Memory allocation limit per image, MB:</source>
         <translation>Limite d&apos;allocation de mémoire par image, en MB :</translation>
     </message>
@@ -3424,12 +3429,12 @@ Example: %1</source>
         <translation>Contraste :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="135"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="141"/>
         <source>Modern formats quality (WebP, JXL, AVIF):</source>
         <translation>Qualité des formats modernes (WebP, JXL, AVIF) :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="149"/>
         <source>PNG compression level:</source>
         <translation>Niveau de compression PNG :</translation>
     </message>
