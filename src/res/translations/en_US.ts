@@ -121,102 +121,107 @@
 <context>
     <name>BatchConverterDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="43"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="44"/>
         <source>Batch Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="130"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="131"/>
         <source>Add more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="140"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="137"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="147"/>
         <source>Select all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="145"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="152"/>
         <source>Deselect all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="210"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="217"/>
         <source>Save as type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="255"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="262"/>
         <source>Resize</source>
         <translation type="unfinished">Resize</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="271"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="278"/>
         <source>By Percent:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="313"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="320"/>
         <source>By Absolute Size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="388"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="395"/>
         <source>By Megapixels:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="403"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="410"/>
         <source>Megapixels:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="425"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="432"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="744"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="751"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="287"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
         <source>Percent:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="444"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="451"/>
         <source>Keep aspect ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="505"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="512"/>
         <source>Filter:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="520"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="527"/>
         <source>Model:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="558"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="565"/>
         <source>Flip horizontal</source>
         <translation>Flip horizontal</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="564"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="571"/>
         <source>Flip vertical</source>
         <translation>Flip vertical</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="355"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="362"/>
         <source>Common sizes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="573"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="580"/>
         <source>Color adjustments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -251,17 +256,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
         <source>Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,22 +276,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="608"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="615"/>
         <source>Output folder:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="620"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="627"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="626"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
         <source>Create subfolder for batch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="632"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
         <source>Filename pattern:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -301,7 +306,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="654"/>
         <source>Overwrite existing files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,32 +316,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="678"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
         <source>Convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
         <source>Reset Color Adjustments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="329"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
         <source>Max Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="367"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="374"/>
         <source>Max Height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="480"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="487"/>
         <source>Upscayl</source>
         <translation type="unfinished"></translation>
     </message>
@@ -386,12 +391,12 @@
         <translation type="unfinished">Original size</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="434"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="441"/>
         <source>Reset: %1 x %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="492"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="499"/>
         <source>No AI models found in models/ directory.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -401,7 +406,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="696"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
         <source>Select Output Directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -416,13 +421,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="684"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="691"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="455"/>
         <source>Stopping...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>

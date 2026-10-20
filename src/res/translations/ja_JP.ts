@@ -124,102 +124,107 @@
 <context>
     <name>BatchConverterDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="43"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="44"/>
         <source>Batch Converter</source>
         <translation>バッチコンバーター</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="130"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="131"/>
         <source>Add more</source>
         <translation>さらに追加</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="140"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="137"/>
+        <source>Clear</source>
+        <translation>クリア</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="147"/>
         <source>Select all</source>
         <translation>すべて選択</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="145"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="152"/>
         <source>Deselect all</source>
         <translation>選択解除</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="210"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="217"/>
         <source>Save as type:</source>
         <translation>ファイルの種類:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="255"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="262"/>
         <source>Resize</source>
         <translation>サイズ変更</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="271"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="278"/>
         <source>By Percent:</source>
         <translation>パーセント指定:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="313"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="320"/>
         <source>By Absolute Size:</source>
         <translation>絶対サイズ指定:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="388"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="395"/>
         <source>By Megapixels:</source>
         <translation>メガピクセル指定:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="403"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="410"/>
         <source>Megapixels:</source>
         <translation>メガピクセル:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="425"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="432"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>バイナリ (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="744"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="751"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="287"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
         <source>Percent:</source>
         <translation>パーセント:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="444"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="451"/>
         <source>Keep aspect ratio</source>
         <translation>縦横比を維持</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="505"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="512"/>
         <source>Filter:</source>
         <translation>フィルター:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="520"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="527"/>
         <source>Model:</source>
         <translation>モデル:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="558"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="565"/>
         <source>Flip horizontal</source>
         <translation>水平反転</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="564"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="571"/>
         <source>Flip vertical</source>
         <translation>垂直反転</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="355"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="362"/>
         <source>Common sizes:</source>
         <translation>一般的なサイズ:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="573"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="580"/>
         <source>Color adjustments</source>
         <translation>色調整</translation>
     </message>
@@ -254,17 +259,17 @@
         <translation>彩度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
         <source>Width</source>
         <translation>幅</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
         <source>Height</source>
         <translation>高さ</translation>
     </message>
@@ -274,22 +279,22 @@
         <translation>色相:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="608"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="615"/>
         <source>Output folder:</source>
         <translation>出力フォルダー:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="620"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="627"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="626"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
         <source>Create subfolder for batch</source>
         <translation>バッチ用のサブフォルダーを作成する</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="632"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
         <source>Filename pattern:</source>
         <translation>ファイル名のパターン:</translation>
     </message>
@@ -304,7 +309,7 @@
         <translation>利用可能: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="654"/>
         <source>Overwrite existing files</source>
         <translation>既存のファイルを上書きする</translation>
     </message>
@@ -314,32 +319,32 @@
         <translation>変換の準備ができました。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="678"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
         <source>Convert</source>
         <translation>変換</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
         <source>Reset Color Adjustments</source>
         <translation>色調整をリセット</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="329"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
         <source>Max Width:</source>
         <translation>最大幅:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="367"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="374"/>
         <source>Max Height:</source>
         <translation>最大高:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="480"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="487"/>
         <source>Upscayl</source>
         <translation>Upscaylを使用する</translation>
     </message>
@@ -389,12 +394,12 @@
         <translation>オリジナルサイズ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="434"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="441"/>
         <source>Reset: %1 x %2</source>
         <translation>リセット: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="492"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="499"/>
         <source>No AI models found in models/ directory.</source>
         <translation>models/ ディレクトリにAIモデルが見つかりません。</translation>
     </message>
@@ -404,7 +409,7 @@
         <translation>選択されたファイル: %1 (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="696"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
         <source>Select Output Directory</source>
         <translation>出力ディレクトリを選択</translation>
     </message>
@@ -419,13 +424,13 @@
         <translation>品質 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="684"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="691"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="455"/>
         <source>Stopping...</source>
         <translation>停止中...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
