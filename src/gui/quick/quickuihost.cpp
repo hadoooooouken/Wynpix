@@ -248,10 +248,17 @@ void QuickUiHost::connectThumbnailPanel() {
 
 //------------------------------------------------------------------------------
 // The grid requests thumbnails for the application's device pixel ratio and
-// lays its labels out with the body style the delegates draw them in.
+// lays its labels out with the body style the delegates draw them in. The
+// batch conversion button stays while the batch converter, hidden by its
+// "Add more" button, keeps a list.
 void QuickUiHost::connectFolderView() {
   mFolderGrid.setLabelFont(mThemeBridge.fonts().body);
   mFolderGrid.setDevicePixelRatio(qGuiApp->devicePixelRatio());
+  BatchConverterDialogModel *batchConverter = mDialogCoordinator.batchConverter();
+  QObject::connect(batchConverter, &BatchConverterDialogModel::listKeptChanged,
+                   &mFolderGrid, [this, batchConverter]() {
+                     mFolderGrid.setBatchListPending(batchConverter->isListKept());
+                   });
 }
 
 //------------------------------------------------------------------------------

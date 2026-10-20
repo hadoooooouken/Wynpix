@@ -252,7 +252,7 @@ FocusScope {
             text: qsTr("Add to Batch Converter")
             glyph: FluentIcons.BatchConvert20
             enabled: folderMenu.hasSelection
-            onTriggered: root.controller.requestBatchConversion()
+            onTriggered: root.controller.requestAddToBatch()
         }
         MenuRow {
             text: qsTr("Add folder")

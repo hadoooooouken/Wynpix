@@ -183,6 +183,7 @@ FocusScope {
                 Layout.rightMargin: root.batchButtonMargin
                 implicitWidth: batchLabel.implicitWidth + root.batchTextPadding + root.batchIconPadding
                 visible: root.gridController.selectedImageCount > 0
+                         || root.gridController.batchListPending
                 focusPolicy: Qt.NoFocus
                 hoverEnabled: true
                 onClicked: root.gridController.requestBatchConversion()

@@ -77,6 +77,8 @@ void QuickFolderViewActions::forwardIntents() {
             &UiEvents::moveUrlsRequested);
     connect(&grid, &FolderGridController::batchConversionRequested, uiEvents,
             &UiEvents::batchConversionRequested);
+    connect(&grid, &FolderGridController::batchAddRequested, uiEvents,
+            &UiEvents::batchAddRequested);
     connect(&folderView, &FolderViewController::filesystemViewReady, uiEvents,
             &UiEvents::filesystemViewReady);
     connect(&gridView, &ThumbnailListModel::visibleThumbnailsReady, uiEvents,

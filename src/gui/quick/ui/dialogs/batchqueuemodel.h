@@ -69,12 +69,14 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
-    // Queues paths, all selected and pending, and starts reading their
-    // headers.
-    void reset(const QStringList &paths);
+    // Queues entries, all pending and selected as each entry says, and
+    // starts reading their headers.
+    void reset(const QList<BatchListEntry> &entries);
     void clear();
 
     [[nodiscard]] QStringList paths() const;
+    // The files with their selection, as reset() takes them.
+    [[nodiscard]] QList<BatchListEntry> entries() const;
     [[nodiscard]] QList<int> selectedRows() const;
     [[nodiscard]] int selectedCount() const;
     [[nodiscard]] QString selectionText() const;

@@ -7,6 +7,7 @@
 #include <memory>
 #include <optional>
 
+#include "components/batchconverter/batchjob.h"
 #include "settings_types.h"
 
 struct ConfirmationRequest {
@@ -79,12 +80,18 @@ struct TextInputResult {
 };
 
 struct BatchConversionRequest {
-    QList<QString> filePaths;
+    // The whole list the dialog opens with.
+    QList<BatchListEntry> files;
     QString defaultOutputDirectory;
 };
 
 struct BatchConversionResult {
     bool conversionStarted = false;
+    // "Add more" closed the dialog: `files` is the list to keep and show
+    // again when the dialog reopens. False for every other way of closing,
+    // which ends the list.
+    bool listKept = false;
+    QList<BatchListEntry> files;
 };
 
 struct PrintRequest {

@@ -14,6 +14,7 @@
 #include <optional>
 #include "appversion.h"
 #include "settings_types.h"
+#include "components/batchconverter/batchstaging.h"
 #include "components/directorymodel.h"
 #include "components/directorypresenter.h"
 #include "components/fileoptask/fileopcontroller.h"
@@ -82,6 +83,10 @@ private:
     std::shared_ptr<Thumbnailer> thumbnailer;
 
     DirectoryPresenter thumbPanelPresenter, folderViewPresenter;
+
+    // Files collected for the batch converter while its dialog is hidden by
+    // "Add more"; empty otherwise.
+    BatchStaging batchStaging;
 
     void rotateByDegrees(int degrees);
     void reset();
@@ -152,6 +157,7 @@ private slots:
     void onFileAdded(QString filePath);
     void showResizeDialog();
     void showBatchConverter();
+    void addToBatchConverter();
     void resize(const ResizeRequest &request);
     void flipH();
     void flipV();
@@ -195,6 +201,9 @@ private slots:
     // selection into a concrete file list; see DirectoryPresenter::
     // requestExpandedSelectedPathsAsync().
     void onBatchConverterPathsReady(QList<QString> filePaths, QString defaultOutputDir);
+    // Runs the dialog over batchStaging's files and keeps or drops them by
+    // how the dialog closed.
+    void openBatchConverter();
     bool loadFileList(const QList<QString> &filePaths, QString activePath = "");
     bool loadFileIndex(int index, bool async, bool preload);
     void enableDocumentView();

@@ -19,7 +19,9 @@
 
 // What the batch converter dialog starts from.
 struct BatchConverterDialogInput {
-    QStringList filePaths;
+    // The list the dialog opens with: the files and which of them are
+    // selected for the batch.
+    QList<BatchListEntry> files;
     // Preferred output folder (the folder view's); falls back to the folder
     // of the first file.
     QString defaultOutputDirectory;
@@ -61,6 +63,12 @@ struct BatchConverterPreferences {
 // dialog did. The result reports whether a batch was started. However the
 // dialog closes (Convert, Cancel, Escape, the close button), its choices are
 // handed back as preferences to store, and the next request starts from them.
+//
+// "Add more" closes the dialog like Cancel but keeps its list: the result
+// then reports listKept and hands the files back, and listKept stays true
+// until the next request starts. The list is gone however else the dialog
+// closes (Cancel, Escape, the close button, a started batch that was closed
+// afterwards).
 //
 // Warnings and the completion message are shown in the dialog's message
 // window (messageOpen) instead of message boxes.
@@ -122,6 +130,9 @@ class BatchConverterDialogModel final : public DialogSession {
     Q_PROPERTY(bool createSubfolder READ createSubfolder NOTIFY settingsChanged FINAL)
     Q_PROPERTY(QString pattern READ pattern NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool overwrite READ overwrite NOTIFY settingsChanged FINAL)
+
+    // The last closing was "Add more": a list waits for the dialog to reopen.
+    Q_PROPERTY(bool listKept READ isListKept NOTIFY listKeptChanged FINAL)
 
     Q_PROPERTY(bool running READ isRunning NOTIFY runChanged FINAL)
     Q_PROPERTY(bool cancelling READ isCancelling NOTIFY runChanged FINAL)
@@ -210,6 +221,7 @@ public:
     [[nodiscard]] QString messageTitle() const;
     [[nodiscard]] QString messageText() const;
 
+    [[nodiscard]] bool isListKept() const;
     [[nodiscard]] BatchConversionResult result() const;
     // The draft as it is now; meant to be read after start() once the dialog
     // closed.
@@ -261,12 +273,16 @@ public:
     // Escape and the window's close button: closes the dialog, stopping a
     // running batch.
     Q_INVOKABLE void reject();
+    // The Add more button: closes the dialog, keeping the list for the next
+    // request. Ignored while a batch runs.
+    Q_INVOKABLE void addMore();
     Q_INVOKABLE void dismissMessage();
 
 signals:
     void settingsChanged();
     void runChanged();
     void messageChanged();
+    void listKeptChanged();
 
 private:
     void connectService(BatchConversionService &service);
@@ -278,6 +294,7 @@ private:
     void showMessage(const BatchJobRules::Message &message, bool warning);
     void closeMessage();
     void setStatusText(const QString &text);
+    void setListKept(bool kept);
 
     void onProgressUpdated(int index, BatchItemState state, const QString &details);
     void onFinished(int succeeded, int failed, int total);
@@ -300,6 +317,10 @@ private:
     bool mRunning = false;
     bool mCancelling = false;
     bool mStarted = false;
+    // The list taken when Add more was pressed (the queue is cleared as the
+    // dialog closes).
+    bool mListKept = false;
+    QList<BatchListEntry> mKeptFiles;
     int mProcessed = 0;
     int mProgressMaximum = 0;
     QString mStatusText;

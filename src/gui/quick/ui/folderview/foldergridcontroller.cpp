@@ -60,6 +60,17 @@ int FolderGridController::selectedImageCount() const {
     return mSelectedImageCount;
 }
 
+bool FolderGridController::batchListPending() const {
+    return mBatchListPending;
+}
+
+void FolderGridController::setBatchListPending(bool pending) {
+    if (mBatchListPending == pending)
+        return;
+    mBatchListPending = pending;
+    emit batchListPendingChanged();
+}
+
 //------------------------------------------------------------------------------
 // Configuration
 
@@ -525,4 +536,8 @@ void FolderGridController::openSelected() {
 
 void FolderGridController::requestBatchConversion() {
     emit batchConversionRequested();
+}
+
+void FolderGridController::requestAddToBatch() {
+    emit batchAddRequested();
 }

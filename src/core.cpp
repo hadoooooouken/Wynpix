@@ -690,6 +690,8 @@ void Core::connectUiEvents() {
           &Core::onClearThumbnailCacheRequested);
   connect(events, &UiEvents::batchConversionRequested, this,
           &Core::showBatchConverter);
+  connect(events, &UiEvents::batchAddRequested, this,
+          &Core::addToBatchConverter);
   connect(events, &UiEvents::renameRequested, this,
           &Core::renameCurrentSelection);
   connect(events, &UiEvents::sortingSelected, this, &Core::sortBy);
@@ -1600,13 +1602,24 @@ void Core::showResizeDialog() {
 }
 
 void Core::showBatchConverter() {
+  // The Batch convert button while files wait in the converter (hidden by
+  // its "Add more" button): reopen it with exactly those files; the
+  // selection is added only by addToBatchConverter().
+  if (!batchStaging.isEmpty()) {
+    openBatchConverter();
+    return;
+  }
+  addToBatchConverter();
+}
+
+void Core::addToBatchConverter() {
   // expandedSelectedPaths() used to run its recursive QDirIterator walk
   // synchronously right here, freezing the UI thread for as long as the
   // selected directories took to walk - the same freeze
   // DirectoryPresenter::onItemActivated()/onOpenSelectedRequested() had
   // before being moved onto DirectoryExpandWorker. Ask the presenter to
   // do the same background scan here instead of blocking; onBatchConverterPathsReady()
-  // opens the dialog once expandedSelectedPathsReady() arrives.
+  // adds the files and opens the dialog once expandedSelectedPathsReady() arrives.
   folderViewPresenter.requestExpandedSelectedPathsAsync();
 }
 
@@ -1616,9 +1629,21 @@ void Core::onBatchConverterPathsReady(QList<QString> filePaths, QString defaultO
   if (filePaths.isEmpty())
     return;
 
-  QString currentDirPath = model->directoryPath();
-  const BatchConversionResult result =
-      ui.dialogs.runBatchConverter({filePaths, defaultOutputDir});
+  batchStaging.append(filePaths, defaultOutputDir);
+  openBatchConverter();
+}
+
+void Core::openBatchConverter() {
+  const QString currentDirPath = model->directoryPath();
+  const BatchConversionResult result = ui.dialogs.runBatchConverter(
+      {.files = batchStaging.entries(),
+       .defaultOutputDirectory = batchStaging.defaultOutputDirectory()});
+  // Only "Add more" keeps the list; every other way of closing the dialog
+  // ends it.
+  if (result.listKept)
+    batchStaging.replace(result.files);
+  else
+    batchStaging.clear();
   if (result.conversionStarted && !currentDirPath.isEmpty()) {
     model->setDirectory(currentDirPath);
   }

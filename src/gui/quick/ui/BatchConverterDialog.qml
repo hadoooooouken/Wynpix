@@ -14,7 +14,8 @@ import wynpix.style
 // folder and file name pattern; below: the progress, the status and Convert
 // / Cancel (Stop while a batch runs). Every decision is the view-model's.
 // Enter converts unless a button has the focus; Escape and the close button
-// close the window, stopping a running batch.
+// close the window, stopping a running batch. Add more closes the window
+// too, but keeps the queue for the next time it opens.
 Window {
     id: root
 
@@ -125,8 +126,10 @@ Window {
                         spacing: StyleConstants.dialogButtonSpacing
 
                         Button {
+                            objectName: "addMoreButton"
                             text: qsTr("Add more")
                             enabled: root.editable
+                            onClicked: root.dialog.addMore()
                         }
 
                         Item {

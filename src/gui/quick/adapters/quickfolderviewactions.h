@@ -31,7 +31,8 @@ struct QuickFolderViewContext {
 // - creates the folder tree (FileSystemModelCustom, folders only) when the
 //   view asks for it on its first activation, and re-reads it on request;
 // - sends sorting, filters, folder selections, copy / move drops, batch
-//   conversion and the readiness of the grid and the tree to Core
+//   conversion (the button and the "Add to Batch Converter" row) and the
+//   readiness of the grid and the tree to Core
 //   (UiEvents);
 // - turns the grid's requests into the directory view's signals (type-ahead,
 //   drag hover, drops, opening the selection) and runs its actions;

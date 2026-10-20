@@ -30,7 +30,8 @@
 // - icon size: 128 - 512, the zoom slider on a log2 scale snapping to 256,
 //   stored when the slider is released;
 // - drops: copy and move onto items or the background;
-// - the number of selected images for the batch conversion button.
+// - the number of selected images and whether files wait in the batch
+//   converter, for the batch conversion button.
 // Requests leave as signals; the Quick UI host connects them to the
 // directory view, Settings and the actions. GUI thread only.
 class FolderGridController : public QObject {
@@ -45,6 +46,8 @@ class FolderGridController : public QObject {
     Q_PROPERTY(int zoomSliderMaximum READ zoomSliderMaximum CONSTANT FINAL)
     Q_PROPERTY(QRectF rubberBand READ rubberBand NOTIFY rubberBandChanged FINAL)
     Q_PROPERTY(int selectedImageCount READ selectedImageCount NOTIFY selectedImageCountChanged FINAL)
+    // Files wait in the batch converter (hidden by its "Add more" button).
+    Q_PROPERTY(bool batchListPending READ batchListPending NOTIFY batchListPendingChanged FINAL)
 
 public:
     // Distance beyond the visible rows in which thumbnails are loaded
@@ -71,6 +74,8 @@ public:
     // The rubber band in view coordinates; empty while none is dragged.
     [[nodiscard]] QRectF rubberBand() const;
     [[nodiscard]] int selectedImageCount() const;
+    [[nodiscard]] bool batchListPending() const;
+    void setBatchListPending(bool pending);
 
     // --- configuration (Quick UI host) -----------------------------------
     void applySettings(const UiSettingsSnapshot &settings);
@@ -108,6 +113,7 @@ public:
     // Context menu rows.
     Q_INVOKABLE void openSelected();
     Q_INVOKABLE void requestBatchConversion();
+    Q_INVOKABLE void requestAddToBatch();
     // Black or white, whichever reads on background (unselected labels).
     [[nodiscard]] Q_INVOKABLE static QColor labelTextColor(const QColor &background);
 
@@ -119,6 +125,7 @@ signals:
     void iconSizeChanged();
     void rubberBandChanged();
     void selectedImageCountChanged();
+    void batchListPendingChanged();
     // The icon size changed by the user; to be stored.
     void iconSizeCommitted(int size);
     // An application action to run ("goUp").
@@ -130,6 +137,7 @@ signals:
     void urlsDropped(const QList<QUrl> &urls, QObject *source, int index, Qt::DropAction action);
     void openSelectedRequested();
     void batchConversionRequested();
+    void batchAddRequested();
 
 private:
     [[nodiscard]] bool checkRange(int index) const;
@@ -169,6 +177,7 @@ private:
     // Column of the item before Down moved into a shorter last row.
     int mShiftedColumn = -1;
     int mSelectedImageCount = 0;
+    bool mBatchListPending = false;
     // Item under the pointer of the drag in progress, -1 for none.
     int mDragTarget = -1;
 

@@ -39,6 +39,13 @@ enum class BatchItemState : uint8_t {
     Stopped      // The batch was cancelled before the file was converted.
 };
 
+// One file of the batch converter's list: where it is and whether it is
+// selected for the batch. What the list keeps while the dialog is hidden.
+struct BatchListEntry {
+    QString path;
+    bool checked = true;
+};
+
 struct BatchJob {
     QString format;
     int quality = 90;

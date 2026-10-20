@@ -49,6 +49,8 @@ add_library(wynpix_viewcomponents STATIC
     components/batchconverter/batchjobrules.h
     components/batchconverter/batchsavedsettings.cpp
     components/batchconverter/batchsavedsettings.h
+    components/batchconverter/batchstaging.cpp
+    components/batchconverter/batchstaging.h
     components/copytargets/copytargetlist.cpp
     components/copytargets/copytargetlist.h
     # Printing of an image (the print dialog).

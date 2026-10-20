@@ -39,7 +39,12 @@ signals:
     void copyUrlsRequested(QList<QString> paths, QString destDirectory);
     void moveUrlsRequested(QList<QString> paths, QString destDirectory);
     void renameRequested(QString newName);
+    // The Batch convert button: opens the converter with the files collected
+    // so far, or with the selection when none were collected.
     void batchConversionRequested();
+    // The "Add to Batch Converter" menu row: adds the selection to the
+    // collected files and opens the converter.
+    void batchAddRequested();
 
     // Editing and saving
     void cropRequested(QRect rect);

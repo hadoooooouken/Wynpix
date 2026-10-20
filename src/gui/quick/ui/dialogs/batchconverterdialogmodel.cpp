@@ -305,8 +305,12 @@ QString BatchConverterDialogModel::messageText() const {
     return mMessage.text;
 }
 
+bool BatchConverterDialogModel::isListKept() const {
+    return mListKept;
+}
+
 BatchConversionResult BatchConverterDialogModel::result() const {
-    return {.conversionStarted = mStarted};
+    return {.conversionStarted = mStarted, .listKept = mListKept, .files = mKeptFiles};
 }
 
 BatchConverterPreferences BatchConverterDialogModel::preferencesToStore() const {
@@ -354,7 +358,7 @@ bool BatchConverterDialogModel::start(const BatchConverterDialogInput &input,
                                             : -1;
     job.pattern = defaultPattern();
     job.outputDir = initialOutputDirectory(
-        input.defaultOutputDirectory, input.filePaths.isEmpty() ? QString() : input.filePaths.first());
+        input.defaultOutputDirectory, input.files.isEmpty() ? QString() : input.files.first().path);
     mFormatIndex = 0;
     mCommonSizeIndex = 0;
     mRotationIndex = 0;
@@ -365,17 +369,19 @@ bool BatchConverterDialogModel::start(const BatchConverterDialogInput &input,
     mRunning = false;
     mCancelling = false;
     mStarted = false;
+    mKeptFiles.clear();
+    setListKept(false);
     mProcessed = 0;
     mProgressMaximum = kIdleProgressMaximum;
     mStatusText = readyText();
     mMessageOpen = false;
     mMessage = {};
 
-    mQueue.reset(input.filePaths);
+    mQueue.reset(input.files);
     connectService(service);
     const int thumbnailExtent =
         static_cast<int>(std::lround(kThumbnailSize * std::max(input.devicePixelRatio, 1.0)));
-    service.requestThumbnails(input.filePaths, thumbnailExtent);
+    service.requestThumbnails(mQueue.paths(), thumbnailExtent);
 
     emit settingsChanged();
     emit runChanged();
@@ -749,6 +755,21 @@ void BatchConverterDialogModel::stopOrClose() {
 
 void BatchConverterDialogModel::reject() {
     conclude();
+}
+
+void BatchConverterDialogModel::addMore() {
+    if (!isOpen() || mRunning || mCancelling)
+        return;
+    mKeptFiles = mQueue.entries();
+    setListKept(true);
+    conclude();
+}
+
+void BatchConverterDialogModel::setListKept(bool kept) {
+    if (mListKept == kept)
+        return;
+    mListKept = kept;
+    emit listKeptChanged();
 }
 
 void BatchConverterDialogModel::showMessage(const Message &message, bool warning) {

@@ -90,18 +90,18 @@ BatchConversionResult QuickDialogPort::runBatchConverter(const BatchConversionRe
     // Drop files the batch converter cannot handle (containers, multi-page
     // documents, fonts, Blender projects) so the queue shows only
     // actionable items.
-    QList<QString> convertiblePaths;
-    convertiblePaths.reserve(request.filePaths.size());
-    for (const QString &path : request.filePaths) {
-        if (BatchJobRules::isBatchConvertible(path))
-            convertiblePaths.append(path);
+    QList<BatchListEntry> convertibleFiles;
+    convertibleFiles.reserve(request.files.size());
+    for (const BatchListEntry &file : request.files) {
+        if (BatchJobRules::isBatchConvertible(file.path))
+            convertibleFiles.append(file);
     }
-    if (convertiblePaths.isEmpty())
-        return {.conversionStarted = false};
+    if (convertibleFiles.isEmpty())
+        return {};
     // The resize fields start from the first file, as in the widget dialog.
-    const QSize originalSize = QImageReader(convertiblePaths.first()).size();
+    const QSize originalSize = QImageReader(convertibleFiles.first().path).size();
     const BatchConverterDialogInput input{
-        .filePaths = convertiblePaths,
+        .files = convertibleFiles,
         .defaultOutputDirectory = request.defaultOutputDirectory,
         .originalSize = originalSize,
         .saveQualities = {.jpeg = mSettings.JPEGSaveQuality(),
@@ -116,7 +116,7 @@ BatchConversionResult QuickDialogPort::runBatchConverter(const BatchConversionRe
     // Destroyed after the dialog closed, stopping a batch that still runs.
     AppBatchConversionService service;
     if (!dialog.start(input, service))
-        return {.conversionStarted = false};
+        return {};
     runModalDialog(dialog);
     // Stored however the dialog closed, so the next one opens as this one was
     // left.

@@ -73,17 +73,21 @@ QHash<int, QByteArray> BatchQueueModel::roleNames() const {
             {ThumbnailRole, "thumbnail"}};
 }
 
-void BatchQueueModel::reset(const QStringList &paths) {
+void BatchQueueModel::reset(const QList<BatchListEntry> &entries) {
     cancelSourceScan();
     beginResetModel();
     mItems.clear();
     mRowsByPath.clear();
-    mItems.reserve(paths.size());
-    for (const QString &path : paths) {
-        mRowsByPath.insert(path, static_cast<int>(mItems.size()));
-        mItems.append({.path = path, .name = QFileInfo(path).fileName()});
+    mItems.reserve(entries.size());
+    mSelectedCount = 0;
+    for (const BatchListEntry &entry : entries) {
+        mRowsByPath.insert(entry.path, static_cast<int>(mItems.size()));
+        mItems.append({.path = entry.path,
+                       .name = QFileInfo(entry.path).fileName(),
+                       .checked = entry.checked});
+        if (entry.checked)
+            ++mSelectedCount;
     }
-    mSelectedCount = static_cast<int>(mItems.size());
     mSelectedBytes = 0;
     mSourceInfoCount = 0;
     endResetModel();
@@ -101,6 +105,14 @@ QStringList BatchQueueModel::paths() const {
     result.reserve(mItems.size());
     for (const Item &item : mItems)
         result.append(item.path);
+    return result;
+}
+
+QList<BatchListEntry> BatchQueueModel::entries() const {
+    QList<BatchListEntry> result;
+    result.reserve(mItems.size());
+    for (const Item &item : mItems)
+        result.append({.path = item.path, .checked = item.checked});
     return result;
 }
 
