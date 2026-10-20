@@ -58,6 +58,8 @@ QVariant BatchQueueModel::data(const QModelIndex &index, int role) const {
     case ThumbnailRole:
         return QVariant::fromValue(
             ThumbnailHandle{.image = item.thumbnail, .sourceSize = item.sourceInfo.imageSize});
+    case AnimatedRole:
+        return item.animated;
     default:
         return {};
     }
@@ -70,7 +72,8 @@ QHash<int, QByteArray> BatchQueueModel::roleNames() const {
             {StateRole, "itemState"},
             {StateTextRole, "stateText"},
             {DetailsRole, "details"},
-            {ThumbnailRole, "thumbnail"}};
+            {ThumbnailRole, "thumbnail"},
+            {AnimatedRole, "animated"}};
 }
 
 void BatchQueueModel::reset(const QList<BatchListEntry> &entries) {
@@ -158,6 +161,16 @@ void BatchQueueModel::setThumbnail(const QString &path, const QImage &image) {
     for (const int row : rows) {
         mItems[row].thumbnail = image;
         notifyRowChanged(row, {ThumbnailRole});
+    }
+}
+
+void BatchQueueModel::setAnimated(const QString &path) {
+    const QList<int> rows = mRowsByPath.values(path);
+    for (const int row : rows) {
+        if (mItems[row].animated)
+            continue;
+        mItems[row].animated = true;
+        notifyRowChanged(row, {AnimatedRole});
     }
 }
 

@@ -31,6 +31,10 @@ public:
     virtual void cancel() = 0;
     // Square thumbnails of extent device pixels, delivered by thumbnailReady.
     virtual void requestThumbnails(const QStringList &paths, int extent) = 0;
+    // Looks for animated images among paths (only the first frame of those is
+    // converted); each is reported by animationFound. A service that cannot
+    // tell reports nothing.
+    virtual void requestAnimationCheck(const QStringList &paths) { Q_UNUSED(paths) }
 
 signals:
     void progressUpdated(int index, BatchItemState state, QString details);
@@ -38,6 +42,7 @@ signals:
     void cancelled(int succeeded, int failed, int total);
     void startFailed(QString reason);
     void thumbnailReady(QString path, QImage image);
+    void animationFound(QString path);
 
 protected:
     explicit BatchConversionService(QObject *parent = nullptr);

@@ -26,7 +26,8 @@ struct BatchSourceInfo {
 
 // The files of the batch converter dialog (BatchItemWidget rows of the
 // widget dialog): name, source format / size, whether the file is selected
-// for the batch, its state and what happened to it, and its thumbnail.
+// for the batch, its state and what happened to it, its thumbnail and
+// whether it is an animated image.
 //
 // The image headers and file sizes are read on a worker thread of the model
 // and applied in groups, so a large selection does not hold up the window;
@@ -48,7 +49,8 @@ public:
         StateRole,
         StateTextRole,
         DetailsRole,
-        ThumbnailRole
+        ThumbnailRole,
+        AnimatedRole
     };
     Q_ENUM(Role)
 
@@ -90,6 +92,9 @@ public:
     void setItemState(int row, BatchItemState state, const QString &details);
     // Sets the thumbnail of every row of path.
     void setThumbnail(const QString &path, const QImage &image);
+    // Marks every row of path as an animated image: only its first frame is
+    // converted.
+    void setAnimated(const QString &path);
 
     Q_INVOKABLE void setChecked(int row, bool checked);
     Q_INVOKABLE void setAllChecked(bool checked);
@@ -109,6 +114,7 @@ private:
         bool hasSourceInfo = false;
         BatchSourceInfo sourceInfo;
         QImage thumbnail;
+        bool animated = false;
     };
 
     struct SourceInfoResult {

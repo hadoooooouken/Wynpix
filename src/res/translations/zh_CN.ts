@@ -124,107 +124,107 @@
 <context>
     <name>BatchConverterDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="42"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="43"/>
         <source>Batch Converter</source>
         <translation>批量转换器</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="128"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="130"/>
         <source>Add more</source>
         <translation>添加更多</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="137"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="140"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="142"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="145"/>
         <source>Deselect all</source>
         <translation>取消全选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="207"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="210"/>
         <source>Save as type:</source>
         <translation>保存类型：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="252"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="255"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="268"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="271"/>
         <source>By Percent:</source>
         <translation>按百分比：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="310"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="313"/>
         <source>By Absolute Size:</source>
         <translation>按绝对大小：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="385"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="388"/>
         <source>By Megapixels:</source>
         <translation>按百万像素：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="400"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="403"/>
         <source>Megapixels:</source>
         <translation>百万像素：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="422"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="425"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>二进制 (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="741"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="744"/>
         <source>OK</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="284"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="287"/>
         <source>Percent:</source>
         <translation>百分比：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="441"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="444"/>
         <source>Keep aspect ratio</source>
         <translation>保持长宽比</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="477"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="480"/>
         <source>Upscayl</source>
         <translation>使用 Upscayl</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="502"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="505"/>
         <source>Filter:</source>
         <translation>过滤器：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="517"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="520"/>
         <source>Model:</source>
         <translation>模型：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="555"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="558"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="561"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="564"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="352"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="355"/>
         <source>Common sizes:</source>
         <translation>常用尺寸：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="570"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="573"/>
         <source>Color adjustments</source>
         <translation>颜色调整</translation>
     </message>
@@ -259,17 +259,17 @@
         <translation>饱和度：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
         <source>Width</source>
         <translation>宽度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="452"/>
         <source>Height</source>
         <translation>高度</translation>
     </message>
@@ -279,22 +279,22 @@
         <translation>色相：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="605"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="608"/>
         <source>Output folder:</source>
         <translation>输出文件夹：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="617"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="620"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="623"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="626"/>
         <source>Create subfolder for batch</source>
         <translation>为批量任务创建子文件夹</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="629"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="632"/>
         <source>Filename pattern:</source>
         <translation>文件名模板：</translation>
     </message>
@@ -309,7 +309,7 @@
         <translation>可用变量：{name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="644"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
         <source>Overwrite existing files</source>
         <translation>覆盖现有文件</translation>
     </message>
@@ -319,27 +319,27 @@
         <translation>准备转换。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="675"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="678"/>
         <source>Convert</source>
         <translation>转换</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="682"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
         <source>Reset Color Adjustments</source>
         <translation>重置颜色调整</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="326"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="329"/>
         <source>Max Width:</source>
         <translation>最大宽度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="364"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="367"/>
         <source>Max Height:</source>
         <translation>最大高度:</translation>
     </message>
@@ -389,12 +389,12 @@
         <translation>原始大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="431"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="434"/>
         <source>Reset: %1 x %2</source>
         <translation>重置：%1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="489"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="492"/>
         <source>No AI models found in models/ directory.</source>
         <translation>在 models/ 目录中未找到 AI 模型。</translation>
     </message>
@@ -404,7 +404,7 @@
         <translation>已选择 %1 个文件 (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="693"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="696"/>
         <source>Select Output Directory</source>
         <translation>选择输出目录</translation>
     </message>
@@ -419,13 +419,13 @@
         <translation>质量 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="681"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="684"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="455"/>
         <source>Stopping...</source>
         <translation>正在停止...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="682"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
@@ -534,6 +534,11 @@ Total files: %3</source>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="415"/>
         <source>Pending</source>
         <translation>等待中</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchItemWidget.qml" line="96"/>
+        <source>Animated image: only the first frame is converted</source>
+        <translation>动画图像：仅转换第一帧</translation>
     </message>
 </context>
 <context>
@@ -823,221 +828,221 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="778"/>
+        <location filename="../../core.cpp" line="780"/>
         <source>Updated: </source>
         <translation>更新到: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="785"/>
+        <location filename="../../core.cpp" line="787"/>
         <source>Welcome to </source>
         <translation>欢迎使用 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="786"/>
+        <location filename="../../core.cpp" line="788"/>
         <source> version </source>
         <translation> 版本 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="804"/>
+        <location filename="../../core.cpp" line="806"/>
         <source>Shuffle mode: OFF</source>
         <translation>随机模式: 关闭</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="807"/>
+        <location filename="../../core.cpp" line="809"/>
         <source>Shuffle mode: ON</source>
         <translation>随机模式: 启用</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="816"/>
+        <location filename="../../core.cpp" line="818"/>
         <source>Slideshow: OFF</source>
         <translation>幻灯片播放：关闭</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="820"/>
+        <location filename="../../core.cpp" line="822"/>
         <source>Slideshow: ON</source>
         <translation>幻灯片播放：启用</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1014"/>
-        <location filename="../../core.cpp" line="1017"/>
-        <location filename="../../core.cpp" line="1020"/>
+        <location filename="../../core.cpp" line="1016"/>
+        <location filename="../../core.cpp" line="1019"/>
+        <location filename="../../core.cpp" line="1022"/>
         <source>Delete </source>
         <translation>永久删除 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1015"/>
+        <location filename="../../core.cpp" line="1017"/>
         <source> folders permanently?</source>
         <translation> 文件夹吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1018"/>
+        <location filename="../../core.cpp" line="1020"/>
         <source> files permanently?</source>
         <translation> 文件吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1021"/>
+        <location filename="../../core.cpp" line="1023"/>
         <source> items permanently?</source>
         <translation> 个项目?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1029"/>
+        <location filename="../../core.cpp" line="1031"/>
         <source>Delete permanently</source>
         <translation>永久删除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1049"/>
+        <location filename="../../core.cpp" line="1051"/>
         <source>File removed</source>
         <translation>文件已删除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1055"/>
-        <location filename="../../core.cpp" line="1058"/>
-        <location filename="../../core.cpp" line="1061"/>
+        <location filename="../../core.cpp" line="1057"/>
+        <location filename="../../core.cpp" line="1060"/>
+        <location filename="../../core.cpp" line="1063"/>
         <source>Removed: </source>
         <translation>成功删除: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1059"/>
-        <location filename="../../core.cpp" line="1128"/>
+        <location filename="../../core.cpp" line="1061"/>
+        <location filename="../../core.cpp" line="1130"/>
         <source> files</source>
         <translation> 个文件</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1086"/>
         <location filename="../../core.cpp" line="1088"/>
         <location filename="../../core.cpp" line="1090"/>
+        <location filename="../../core.cpp" line="1092"/>
         <source>Move </source>
         <translation>移动 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1090"/>
+        <location filename="../../core.cpp" line="1092"/>
         <source> items to trash?</source>
         <translation> 个项目到回收站?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1098"/>
+        <location filename="../../core.cpp" line="1100"/>
         <source>Move to trash</source>
         <translation>删除到回收站</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1116"/>
+        <location filename="../../core.cpp" line="1118"/>
         <source>Folder moved to trash</source>
         <translation>文件夹已移至回收站</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1118"/>
+        <location filename="../../core.cpp" line="1120"/>
         <source>Moved to trash</source>
         <translation>删除到回收站</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1124"/>
-        <location filename="../../core.cpp" line="1127"/>
-        <location filename="../../core.cpp" line="1130"/>
+        <location filename="../../core.cpp" line="1126"/>
+        <location filename="../../core.cpp" line="1129"/>
+        <location filename="../../core.cpp" line="1132"/>
         <source>Moved to trash: </source>
         <translation>移动到回收站： </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1211"/>
+        <location filename="../../core.cpp" line="1213"/>
         <source>File copied</source>
         <translation>文件已拷贝</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1218"/>
+        <location filename="../../core.cpp" line="1220"/>
         <source>Path copied</source>
         <translation>目录已拷贝</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1345"/>
-        <location filename="../../core.cpp" line="1531"/>
-        <location filename="../../core.cpp" line="1555"/>
+        <location filename="../../core.cpp" line="1347"/>
+        <location filename="../../core.cpp" line="1533"/>
+        <location filename="../../core.cpp" line="1557"/>
         <source>File exists</source>
         <translation>文件已经存在</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1345"/>
+        <location filename="../../core.cpp" line="1347"/>
         <source>Overwrite file?</source>
         <translation>覆盖文件吗?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1437"/>
+        <location filename="../../core.cpp" line="1439"/>
         <source>Add folder</source>
         <translation>新建文件夹</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1437"/>
+        <location filename="../../core.cpp" line="1439"/>
         <source>Folder name:</source>
         <translation>文件夹名称:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1444"/>
+        <location filename="../../core.cpp" line="1446"/>
         <source>Folder already exists</source>
         <translation>文件夹已存在</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1453"/>
+        <location filename="../../core.cpp" line="1455"/>
         <source>Failed to create folder</source>
         <translation>新建文件夹失败</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1529"/>
+        <location filename="../../core.cpp" line="1531"/>
         <source>File moved.</source>
         <translation>文件已移动.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1532"/>
-        <location filename="../../core.cpp" line="1556"/>
+        <location filename="../../core.cpp" line="1534"/>
+        <location filename="../../core.cpp" line="1558"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>目标文件已经存在. 覆盖吗?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1553"/>
+        <location filename="../../core.cpp" line="1555"/>
         <source>File copied.</source>
         <translation>文件已拷贝.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1646"/>
+        <location filename="../../core.cpp" line="1671"/>
         <source>Perform action &quot;</source>
         <translation>执行操作 \&quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1647"/>
+        <location filename="../../core.cpp" line="1672"/>
         <source>Changes will be saved immediately.</source>
         <translation>更改将立即保存.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1678"/>
+        <location filename="../../core.cpp" line="1703"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1682"/>
+        <location filename="../../core.cpp" line="1707"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1687"/>
+        <location filename="../../core.cpp" line="1712"/>
         <source>Rotate</source>
         <translation>旋转</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1731"/>
-        <location filename="../../core.cpp" line="1757"/>
+        <location filename="../../core.cpp" line="1756"/>
+        <location filename="../../core.cpp" line="1782"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1800"/>
+        <location filename="../../core.cpp" line="1825"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>AI缩放已完成，但图像已更改。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1818"/>
-        <location filename="../../core.cpp" line="1824"/>
+        <location filename="../../core.cpp" line="1843"/>
+        <location filename="../../core.cpp" line="1849"/>
         <source>Crop</source>
         <translation>裁剪</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1886"/>
+        <location filename="../../core.cpp" line="1911"/>
         <source>File saved</source>
         <translation>文件已保存</translation>
     </message>
@@ -1057,19 +1062,19 @@ Total files: %3</source>
         <translation>不能保存文件: 自动恢复失败 (Windows 错误 %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1965"/>
-        <location filename="../../core.cpp" line="1971"/>
+        <location filename="../../core.cpp" line="1990"/>
+        <location filename="../../core.cpp" line="1996"/>
         <source>Set wallpaper: file not supported</source>
         <translation>设为壁纸: 不支持的文件格式</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1989"/>
-        <location filename="../../core.cpp" line="1998"/>
+        <location filename="../../core.cpp" line="2014"/>
+        <location filename="../../core.cpp" line="2023"/>
         <source>Could not open image</source>
         <translation>不能打开图片</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1993"/>
+        <location filename="../../core.cpp" line="2018"/>
         <source>Can only print static images</source>
         <translation>只能打印静态图片</translation>
     </message>
@@ -1236,139 +1241,139 @@ Staged copy:
     </message>
     <message>
         <location filename="../../core.cpp" line="632"/>
-        <location filename="../../core.cpp" line="1494"/>
+        <location filename="../../core.cpp" line="1496"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>无法清除缩略图缓存</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1025"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Delete folder permanently?</source>
         <translation>永久删除文件夹吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1029"/>
         <source>Delete file permanently?</source>
         <translation>永久删除文件吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1047"/>
+        <location filename="../../core.cpp" line="1049"/>
         <source>Folder removed</source>
         <translation>文件夹已移除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1056"/>
-        <location filename="../../core.cpp" line="1125"/>
+        <location filename="../../core.cpp" line="1058"/>
+        <location filename="../../core.cpp" line="1127"/>
         <source> folders</source>
         <translation> 文件夹</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1062"/>
-        <location filename="../../core.cpp" line="1131"/>
+        <location filename="../../core.cpp" line="1064"/>
+        <location filename="../../core.cpp" line="1133"/>
         <source> items</source>
         <translation> 项</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1086"/>
+        <location filename="../../core.cpp" line="1088"/>
         <source> folders to trash?</source>
         <translation> 文件夹至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1088"/>
+        <location filename="../../core.cpp" line="1090"/>
         <source> files to trash?</source>
         <translation> 文件至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1094"/>
+        <location filename="../../core.cpp" line="1096"/>
         <source>Move folder to trash?</source>
         <translation>移动文件夹至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1096"/>
+        <location filename="../../core.cpp" line="1098"/>
         <source>Move file to trash?</source>
         <translation>移动文件至回收站吗？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1476"/>
+        <location filename="../../core.cpp" line="1478"/>
         <source>Moving: %1 (%2)</source>
         <translation>正在移动: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1477"/>
+        <location filename="../../core.cpp" line="1479"/>
         <source>Copying: %1 (%2)</source>
         <translation>正在复制: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1486"/>
+        <location filename="../../core.cpp" line="1488"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>已移动 %n 个文件</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1487"/>
+        <location filename="../../core.cpp" line="1489"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>已复制 %n 个文件</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1671"/>
+        <location filename="../../core.cpp" line="1696"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1 失败: 无法编辑图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1699"/>
+        <location filename="../../core.cpp" line="1724"/>
         <source>AI resize is already running.</source>
         <translation>AI缩放已在运行中。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1708"/>
+        <location filename="../../core.cpp" line="1733"/>
         <source>AI resize supports one image at a time.</source>
         <translation>AI缩放一次仅支持一张图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1715"/>
-        <location filename="../../core.cpp" line="1721"/>
+        <location filename="../../core.cpp" line="1740"/>
+        <location filename="../../core.cpp" line="1746"/>
         <source>Could not resize image.</source>
         <translation>无法缩放图像。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1747"/>
+        <location filename="../../core.cpp" line="1772"/>
         <source>AI resizing...</source>
         <translation>正在进行AI缩放...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1782"/>
+        <location filename="../../core.cpp" line="1807"/>
         <source>AI resize failed.</source>
         <translation>AI缩放失败。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1787"/>
+        <location filename="../../core.cpp" line="1812"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>AI缩放已完成，但该图像已不再列表中。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1793"/>
+        <location filename="../../core.cpp" line="1818"/>
         <source>Could not apply AI resize.</source>
         <translation>无法应用AI缩放。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1809"/>
+        <location filename="../../core.cpp" line="1834"/>
         <source>AI resize finished.</source>
         <translation>AI缩放已完成。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1811"/>
+        <location filename="../../core.cpp" line="1836"/>
         <source>AI resize finished for %1.</source>
         <translation>%1 的AI缩放已完成。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1844"/>
+        <location filename="../../core.cpp" line="1869"/>
         <source>Could not adjust the image colors.</source>
         <translation>无法调整图像颜色。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1977"/>
+        <location filename="../../core.cpp" line="2002"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>设置壁纸：获取图像失败</translation>
     </message>
@@ -1378,50 +1383,50 @@ Staged copy:
         <translation>壁纸已设置</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2083"/>
+        <location filename="../../core.cpp" line="2108"/>
         <source>Could not open path: </source>
         <translation>不能打开的路径: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2148"/>
+        <location filename="../../core.cpp" line="2173"/>
         <source>Could not load folder: </source>
         <translation>不能载入的目录: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2207"/>
-        <location filename="../../core.cpp" line="2233"/>
+        <location filename="../../core.cpp" line="2232"/>
+        <location filename="../../core.cpp" line="2258"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>无法枚举同级文件夹: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2372"/>
+        <location filename="../../core.cpp" line="2397"/>
         <source>End of directory.</source>
         <translation>目录末尾.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2406"/>
+        <location filename="../../core.cpp" line="2431"/>
         <source>Load failed: </source>
         <translation>加载失败: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2476"/>
-        <location filename="../../core.cpp" line="2483"/>
+        <location filename="../../core.cpp" line="2501"/>
+        <location filename="../../core.cpp" line="2508"/>
         <source>Error: could not load image.</source>
         <translation>错误: 不能载入图片.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2500"/>
+        <location filename="../../core.cpp" line="2525"/>
         <source>HDR Profile</source>
         <translation>HDR 配置文件</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2506"/>
+        <location filename="../../core.cpp" line="2531"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2534"/>
-        <location filename="../../core.cpp" line="2557"/>
+        <location filename="../../core.cpp" line="2559"/>
+        <location filename="../../core.cpp" line="2582"/>
         <source>Page %1/%2</source>
         <translation>第 %1/%2 页</translation>
     </message>
@@ -1693,12 +1698,12 @@ Staged copy:
         <translation>向上</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="202"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="203"/>
         <source>Batch convert</source>
         <translation>批量转换</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="217"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="218"/>
         <source>Grid size</source>
         <translation>网格大小</translation>
     </message>
@@ -1733,42 +1738,42 @@ Staged copy:
         <translation>最新</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="238"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="239"/>
         <source>Folder icon sorting</source>
         <translation>文件夹图标排序</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="247"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="248"/>
         <source>Sort folders and images</source>
         <translation>对文件夹和图像进行排序</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="263"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="264"/>
         <source>Filter by file format</source>
         <translation>按文件格式筛选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="276"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="277"/>
         <source>Name filter</source>
         <translation>名称筛选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="282"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="283"/>
         <source>Filter images by name</source>
         <translation>按名称筛选图像</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="290"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="291"/>
         <source>Viewer</source>
         <translation>查看器</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="298"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="299"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="306"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="307"/>
         <source>Quit Wynpix</source>
         <translation>退出 Wynpix</translation>
     </message>

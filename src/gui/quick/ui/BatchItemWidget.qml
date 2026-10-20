@@ -18,6 +18,7 @@ Item {
     required property string stateText
     required property string details
     required property thumbnailHandle thumbnail
+    required property bool animated
 
     required property BatchQueueModel queue
     required property int thumbnailSize
@@ -87,6 +88,14 @@ Item {
                 text: root.sourceInfo
                 elide: Text.ElideRight
                 color: Theme.colors.textLc
+                font: Theme.fonts.caption
+            }
+            Text {
+                Layout.fillWidth: true
+                visible: root.animated
+                text: qsTr("Animated image: only the first frame is converted")
+                elide: Text.ElideRight
+                color: Theme.colors.statusPending
                 font: Theme.fonts.caption
             }
         }

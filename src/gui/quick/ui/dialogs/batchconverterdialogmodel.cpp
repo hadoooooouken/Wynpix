@@ -382,6 +382,7 @@ bool BatchConverterDialogModel::start(const BatchConverterDialogInput &input,
     const int thumbnailExtent =
         static_cast<int>(std::lround(kThumbnailSize * std::max(input.devicePixelRatio, 1.0)));
     service.requestThumbnails(mQueue.paths(), thumbnailExtent);
+    service.requestAnimationCheck(mQueue.paths());
 
     emit settingsChanged();
     emit runChanged();
@@ -403,6 +404,8 @@ void BatchConverterDialogModel::connectService(BatchConversionService &service) 
             &BatchConverterDialogModel::onStartFailed);
     connect(&service, &BatchConversionService::thumbnailReady, &mQueue,
             &BatchQueueModel::setThumbnail);
+    connect(&service, &BatchConversionService::animationFound, &mQueue,
+            &BatchQueueModel::setAnimated);
 }
 
 void BatchConverterDialogModel::detachService() {

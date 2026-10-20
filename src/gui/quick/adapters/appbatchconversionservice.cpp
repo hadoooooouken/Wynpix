@@ -6,16 +6,21 @@
 
 #include "components/batchconverter/batchconverter.h"
 #include "components/thumbnailer/thumbnailer.h"
+#include "sourcecontainers/documentinfo.h"
 #include "sourcecontainers/thumbnail.h"
 
 namespace {
 // The queue shows square thumbnails, as the widget dialog did.
 constexpr bool kCropThumbnails = true;
 constexpr bool kForceThumbnails = false;
+// The files are examined one after the other, so the disk access stays
+// sequential.
+constexpr int kCheckThreads = 1;
 } // namespace
 
 AppBatchConversionService::AppBatchConversionService(QObject *parent)
     : BatchConversionService(parent), mConverter(new BatchConverter(this)) {
+    mCheckPool.setMaxThreadCount(kCheckThreads);
     connect(mConverter, &BatchConverter::progressUpdated, this,
             &BatchConversionService::progressUpdated);
     connect(mConverter, &BatchConverter::finished, this, &BatchConversionService::finished);
@@ -25,6 +30,9 @@ AppBatchConversionService::AppBatchConversionService(QObject *parent)
 }
 
 AppBatchConversionService::~AppBatchConversionService() {
+    // The worker posts to this object: let it finish before anything goes.
+    mChecksStopped->store(true);
+    mCheckPool.waitForDone();
     if (mConverter) {
         disconnect(mConverter, nullptr, this, nullptr);
         mConverter->cancel();
@@ -63,4 +71,23 @@ void AppBatchConversionService::requestThumbnails(const QStringList &paths, int 
     }
     for (const QString &path : paths)
         mThumbnailer->getThumbnailAsync(path, extent, kCropThumbnails, kForceThumbnails);
+}
+
+void AppBatchConversionService::requestAnimationCheck(const QStringList &paths) {
+    const std::shared_ptr<std::atomic<bool>> stopped = mChecksStopped;
+    mCheckPool.start([this, paths, stopped]() {
+        for (const QString &path : paths) {
+            if (stopped->load())
+                return;
+            if (DocumentInfo(path).type() != DocumentType::ANIMATED)
+                continue;
+            QMetaObject::invokeMethod(
+                this,
+                [this, path, stopped]() {
+                    if (!stopped->load())
+                        emit animationFound(path);
+                },
+                Qt::QueuedConnection);
+        }
+    });
 }
