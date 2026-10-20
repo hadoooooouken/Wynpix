@@ -64,11 +64,11 @@ struct BatchConverterPreferences {
 // dialog closes (Convert, Cancel, Escape, the close button), its choices are
 // handed back as preferences to store, and the next request starts from them.
 //
-// "Add more" closes the dialog like Cancel but keeps its list: the result
-// then reports listKept and hands the files back, and listKept stays true
-// until the next request starts. The list is gone however else the dialog
-// closes (Cancel, Escape, the close button, a started batch that was closed
-// afterwards).
+// The list outlives the dialog: Cancel, Escape, the close button and "Add
+// more" all keep it. The result then reports listKept and hands the files
+// back, and listKept stays true until the next request starts. Only the
+// "Clear" button empties the list; it is also gone once a batch was started
+// (the files were converted) and when the dialog closes with an empty list.
 //
 // Warnings and the completion message are shown in the dialog's message
 // window (messageOpen) instead of message boxes.
@@ -271,11 +271,14 @@ public:
     // otherwise.
     Q_INVOKABLE void stopOrClose();
     // Escape and the window's close button: closes the dialog, stopping a
-    // running batch.
+    // running batch. The list is kept unless a batch was started.
     Q_INVOKABLE void reject();
     // The Add more button: closes the dialog, keeping the list for the next
     // request. Ignored while a batch runs.
     Q_INVOKABLE void addMore();
+    // The Clear button: empties the list (the dialog stays open). Ignored
+    // while a batch runs.
+    Q_INVOKABLE void clearList();
     Q_INVOKABLE void dismissMessage();
 
 signals:
@@ -317,8 +320,7 @@ private:
     bool mRunning = false;
     bool mCancelling = false;
     bool mStarted = false;
-    // The list taken when Add more was pressed (the queue is cleared as the
-    // dialog closes).
+    // The list taken as the dialog closed (the queue is cleared right after).
     bool mListKept = false;
     QList<BatchListEntry> mKeptFiles;
     int mProcessed = 0;

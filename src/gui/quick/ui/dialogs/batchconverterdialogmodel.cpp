@@ -30,6 +30,13 @@ BatchConverterDialogModel::BatchConverterDialogModel(QObject *parent)
     connect(this, &DialogSession::finished, this, [this]() {
         detachService();
         closeMessage();
+        // Cancel, Escape and the close button keep the list for the next time
+        // the dialog opens (Add more already took it). It ends once a batch
+        // was started, and Clear leaves nothing to keep.
+        if (!mListKept && !mStarted && mQueue.rowCount() > 0) {
+            mKeptFiles = mQueue.entries();
+            setListKept(true);
+        }
         mQueue.clear();
         mRunning = false;
         mCancelling = false;
@@ -764,8 +771,20 @@ void BatchConverterDialogModel::addMore() {
     if (!isOpen() || mRunning || mCancelling)
         return;
     mKeptFiles = mQueue.entries();
-    setListKept(true);
+    setListKept(!mKeptFiles.isEmpty());
     conclude();
+}
+
+void BatchConverterDialogModel::clearList() {
+    if (!isOpen() || mRunning || mCancelling)
+        return;
+    mQueue.clear();
+    // Whatever a finished batch left behind goes with the files.
+    mProcessed = 0;
+    mProgressMaximum = kIdleProgressMaximum;
+    mStatusText = readyText();
+    closeMessage();
+    emit runChanged();
 }
 
 void BatchConverterDialogModel::setListKept(bool kept) {

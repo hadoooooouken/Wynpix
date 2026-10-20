@@ -13,9 +13,10 @@ import wynpix.style
 // format and quality, resize, rotation and flips, colour adjustments, output
 // folder and file name pattern; below: the progress, the status and Convert
 // / Cancel (Stop while a batch runs). Every decision is the view-model's.
-// Enter converts unless a button has the focus; Escape and the close button
-// close the window, stopping a running batch. Add more closes the window
-// too, but keeps the queue for the next time it opens.
+// Enter converts unless a button has the focus; Escape, Cancel and the close
+// button close the window, stopping a running batch. Closing keeps the queue
+// for the next time the window opens (a batch that ran ends it); Add more
+// closes the window the same way, and only Clear empties the queue.
 Window {
     id: root
 
@@ -130,6 +131,12 @@ Window {
                             text: qsTr("Add more")
                             enabled: root.editable
                             onClicked: root.dialog.addMore()
+                        }
+                        Button {
+                            objectName: "clearButton"
+                            text: qsTr("Clear")
+                            enabled: root.editable && root.dialog.queue.count > 0
+                            onClicked: root.dialog.clearList()
                         }
 
                         Item {
