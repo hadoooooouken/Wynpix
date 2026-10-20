@@ -121,8 +121,17 @@ Window {
                     spacing: StyleConstants.dialogSpacing
 
                     RowLayout {
-                        Layout.alignment: Qt.AlignRight
+                        Layout.fillWidth: true
                         spacing: StyleConstants.dialogButtonSpacing
+
+                        Button {
+                            text: qsTr("Add more")
+                            enabled: root.editable
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
 
                         Button {
                             text: qsTr("Select all")

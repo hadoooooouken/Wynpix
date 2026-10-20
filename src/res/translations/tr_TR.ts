@@ -129,92 +129,97 @@
         <translation>Toplu Dönüştürücü</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="127"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="128"/>
+        <source>Add more</source>
+        <translation>Daha fazla ekle</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="137"/>
         <source>Select all</source>
         <translation>Tümünü seç</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="132"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="142"/>
         <source>Deselect all</source>
         <translation>Tümünü seçme</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="196"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="207"/>
         <source>Save as type:</source>
         <translation>Tür olarak kaydet:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="241"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="252"/>
         <source>Resize</source>
         <translation>Yeniden Boyutlandır</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="257"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="268"/>
         <source>By Percent:</source>
         <translation>Yüzdeye göre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="299"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="310"/>
         <source>By Absolute Size:</source>
         <translation>Mutlak boyuta göre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="374"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="385"/>
         <source>By Megapixels:</source>
         <translation>Megapiksele göre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="389"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="400"/>
         <source>Megapixels:</source>
         <translation>Megapiksel:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="411"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="422"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>İkili (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="730"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="741"/>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="273"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="284"/>
         <source>Percent:</source>
         <translation>Yüzde:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="430"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="441"/>
         <source>Keep aspect ratio</source>
         <translation>En boy oranını koru</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="491"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="502"/>
         <source>Filter:</source>
         <translation>Filtre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="506"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="517"/>
         <source>Model:</source>
         <translation>Model:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="544"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="555"/>
         <source>Flip horizontal</source>
         <translation>Yatay çevir</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="550"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="561"/>
         <source>Flip vertical</source>
         <translation>Dikey çevir</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="341"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="352"/>
         <source>Common sizes:</source>
         <translation>Ortak boyutlar:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="559"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="570"/>
         <source>Color adjustments</source>
         <translation>Renk ayarları</translation>
     </message>
@@ -249,17 +254,17 @@
         <translation>Doygunluk:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="438"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="438"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
         <source>Width</source>
         <translation>Genişlik</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="438"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
         <source>Height</source>
         <translation>Yükseklik</translation>
     </message>
@@ -269,22 +274,22 @@
         <translation>Renk tonu:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="594"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="605"/>
         <source>Output folder:</source>
         <translation>Çıkış klasörü:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="606"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="617"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="612"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="623"/>
         <source>Create subfolder for batch</source>
         <translation>Toplu işlem için alt klasör oluştur</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="618"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="629"/>
         <source>Filename pattern:</source>
         <translation>Dosya adı şablonu:</translation>
     </message>
@@ -299,7 +304,7 @@
         <translation>Kullanılabilir: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="644"/>
         <source>Overwrite existing files</source>
         <translation>Mevcut dosyaların üzerine yaz</translation>
     </message>
@@ -309,32 +314,32 @@
         <translation>Dönüştürmeye hazır.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="664"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="675"/>
         <source>Convert</source>
         <translation>Dönüştür</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="682"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="586"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
         <source>Reset Color Adjustments</source>
         <translation>Renk Ayarlarını Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="315"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="326"/>
         <source>Max Width:</source>
         <translation>Maks. Genişlik:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="353"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="364"/>
         <source>Max Height:</source>
         <translation>Maks. Yükseklik:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="466"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="477"/>
         <source>Upscayl</source>
         <translation>Upscayl kullan</translation>
     </message>
@@ -384,12 +389,12 @@
         <translation>Orijinal boyut</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="420"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="431"/>
         <source>Reset: %1 x %2</source>
         <translation>Sıfırla: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="478"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="489"/>
         <source>No AI models found in models/ directory.</source>
         <translation>models/ dizininde Yapay Zekâ modeli bulunamadı.</translation>
     </message>
@@ -399,7 +404,7 @@
         <translation>%1 dosya seçildi (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="682"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="693"/>
         <source>Select Output Directory</source>
         <translation>Çıkış Dizinini Seçin</translation>
     </message>
@@ -414,13 +419,13 @@
         <translation>Kalite (1 - en düşük, 100 - en yüksek)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="670"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="681"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="455"/>
         <source>Stopping...</source>
         <translation>Durduruluyor...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="682"/>
         <source>Stop</source>
         <translation>Durdur</translation>
     </message>
