@@ -113,7 +113,8 @@ public:
   void setSavedPaths(QStringList paths);
   QString tmpDir();
   QString thumbnailCacheDir();
-  [[nodiscard]] static int computeDefaultThumbnailResolution(double dpr);
+  [[nodiscard]] static int computeDefaultThumbnailResolution(
+      double dpr = DefaultDevicePixelRatio);
   int thumbnailResolution();
   void setThumbnailResolution(int size);
   int thumbnailerThreadCount();

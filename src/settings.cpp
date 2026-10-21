@@ -73,9 +73,10 @@ void Settings::initCache() {
   else if (limit > 8192) limit = 8192;
   mCachedMemoryAllocationLimit.store(limit, std::memory_order_relaxed);
 
-  const double dpr =
-      qGuiApp != nullptr ? qGuiApp->devicePixelRatio() : DefaultDevicePixelRatio;
-  const int defaultThumbnailResolution = computeDefaultThumbnailResolution(dpr);
+  const int defaultThumbnailResolution =
+      qGuiApp != nullptr
+          ? computeDefaultThumbnailResolution(qGuiApp->devicePixelRatio())
+          : computeDefaultThumbnailResolution();
   bool ok = false;
   const int configuredThumbnailResolution =
       settingsConf->value("thumbnailResolution", defaultThumbnailResolution)

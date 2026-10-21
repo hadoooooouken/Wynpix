@@ -432,6 +432,11 @@ private slots:
   }
 
   void defaultThumbnailResolutionDependsOnDpr() {
+    // Default parameter uses DefaultDevicePixelRatio (1.0 -> 256)
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(), Settings::DefaultThumbnailResolution);
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(Settings::DefaultDevicePixelRatio),
+             Settings::DefaultThumbnailResolution);
+
     // 100% -> 256
     QCOMPARE(Settings::computeDefaultThumbnailResolution(1.0), 256);
     // 125% -> 320
@@ -454,6 +459,12 @@ private slots:
     // Clamping to bounds [128, 2048]
     QCOMPARE(Settings::computeDefaultThumbnailResolution(0.1), Settings::MinThumbnailResolution);
     QCOMPARE(Settings::computeDefaultThumbnailResolution(10.0), Settings::MaxThumbnailResolution);
+
+    // Infinity
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(std::numeric_limits<double>::infinity()),
+             Settings::MaxThumbnailResolution);
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(-std::numeric_limits<double>::infinity()),
+             Settings::DefaultThumbnailResolution);
 
     // Invalid / fallback values
     QCOMPARE(Settings::computeDefaultThumbnailResolution(0.0), Settings::DefaultThumbnailResolution);
