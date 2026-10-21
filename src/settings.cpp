@@ -76,11 +76,15 @@ void Settings::initCache() {
   const double dpr =
       qGuiApp != nullptr ? qGuiApp->devicePixelRatio() : DefaultDevicePixelRatio;
   const int defaultThumbnailResolution = computeDefaultThumbnailResolution(dpr);
+  bool ok = false;
   const int configuredThumbnailResolution =
       settingsConf->value("thumbnailResolution", defaultThumbnailResolution)
-          .toInt();
+          .toInt(&ok);
+  const int effectiveThumbnailResolution =
+      (ok && configuredThumbnailResolution > 0) ? configuredThumbnailResolution
+                                                : defaultThumbnailResolution;
   mCachedThumbnailResolution.store(
-      std::clamp(configuredThumbnailResolution, MinThumbnailResolution,
+      std::clamp(effectiveThumbnailResolution, MinThumbnailResolution,
                  MaxThumbnailResolution),
       std::memory_order_relaxed);
   mCachedThumbnailCacheMaxSizeMB.store(
