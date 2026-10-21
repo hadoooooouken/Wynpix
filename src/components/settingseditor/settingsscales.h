@@ -104,7 +104,7 @@ inline constexpr int kMinThumbnailerThreads = 1;
 inline constexpr int kMaxThumbnailerThreads = 32;
 
 inline constexpr int kMinThumbnailResolution = 128;
-inline constexpr int kMaxThumbnailResolution = 512;
+inline constexpr int kMaxThumbnailResolution = 2048;
 inline constexpr int kThumbnailResolutionStep = 16;
 
 inline constexpr int kMaxThumbnailCacheSizeMB = 102'400;

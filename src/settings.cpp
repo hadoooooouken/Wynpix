@@ -155,7 +155,7 @@ int Settings::thumbnailResolution() {
 }
 
 void Settings::setThumbnailResolution(int size) {
-  size = qBound(128, size, 512);
+  size = std::clamp(size, MinThumbnailResolution, MaxThumbnailResolution);
   settings->settingsConf->setValue("thumbnailResolution", size);
   mCachedThumbnailResolution.store(size, std::memory_order_relaxed);
 }

@@ -9,6 +9,9 @@ static_assert(SettingsScales::kMaxThumbnailerThreads == Settings::MaxThumbnailer
 static_assert(SettingsScales::kMinPanelHideDelayMs == Settings::MinPanelHideDelayMs);
 static_assert(SettingsScales::kMaxPanelHideDelayMs == Settings::MaxPanelHideDelayMs);
 static_assert(SettingsScales::kPanelHideDelayStepMs == Settings::PanelHideDelayStepMs);
+static_assert(SettingsScales::kMinThumbnailResolution == Settings::MinThumbnailResolution);
+static_assert(SettingsScales::kMaxThumbnailResolution == Settings::MaxThumbnailResolution);
+static_assert(SettingsScales::kThumbnailResolutionStep == Settings::ThumbnailResolutionStep);
 
 namespace {
 using namespace SettingsScales;

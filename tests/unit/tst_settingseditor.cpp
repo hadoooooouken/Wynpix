@@ -202,6 +202,14 @@ private slots:
         QCOMPARE(editor.upscale().limitPercent, SettingsScales::kMaxUpscaylLimitPercent);
         QCOMPARE(editor.view().zoomStepPercent, SettingsScales::kMinZoomStepPercent);
         QCOMPARE(editor.advanced().memoryLimitMB, SettingsScales::kMinMemoryLimitMB);
+
+        f.values.stored.advanced.thumbnailResolution = 3000;
+        editor.load();
+        QCOMPARE(editor.advanced().thumbnailResolution, SettingsScales::kMaxThumbnailResolution);
+
+        f.values.stored.advanced.thumbnailResolution = 50;
+        editor.load();
+        QCOMPARE(editor.advanced().thumbnailResolution, SettingsScales::kMinThumbnailResolution);
     }
 
     void withoutUpscaylModelsEveryUpscaylOptionIsOff() {

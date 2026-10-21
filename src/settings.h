@@ -38,6 +38,9 @@ public:
   static constexpr int PanelHideDelayStepMs = 100;
   static constexpr int DefaultPanelHideDelayMs = 600;
   static constexpr int DefaultThumbnailCacheMaxSizeMB = 512;
+  static constexpr int MinThumbnailResolution = 128;
+  static constexpr int MaxThumbnailResolution = 2048;
+  static constexpr int ThumbnailResolutionStep = 16;
   static constexpr int DefaultThumbnailResolution = 256;
   static constexpr int DefaultPanelPreviewsSize = 256;
   static constexpr int DefaultFolderViewIconSize = 256;
