@@ -712,7 +712,7 @@ void BridgeTestFixture::selectThumbnail(int index) {
 
 int BridgeTestFixture::deliverRequestedThumbnails() {
   const QList<int> indices = std::exchange(mUnansweredThumbnails, {});
-  const int size = mThumbnails.requestConfig().pixelSize;
+  const QSize targetSize = mThumbnails.requestConfig().targetSize;
   for (const int index : indices) {
     QImage image(kTestThumbnailWidth, kTestThumbnailHeight,
                  QImage::Format_ARGB32_Premultiplied);
@@ -723,7 +723,7 @@ int BridgeTestFixture::deliverRequestedThumbnails() {
         ThumbnailEntry{.handle = {.image = image, .sourceSize = kTestSourceSize},
                        .name = u"item %1"_s.arg(index),
                        .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight)},
-        size);
+        targetSize);
   }
   return static_cast<int>(indices.count());
 }
@@ -801,7 +801,7 @@ void BridgeTestFixture::populateFolder(int count, int dirCount, const QString &p
 
 int BridgeTestFixture::deliverFolderThumbnails() {
   const QList<int> indices = std::exchange(mUnansweredFolderThumbnails, {});
-  const int size = mFolderThumbnails.requestConfig().pixelSize;
+  const QSize targetSize = mFolderThumbnails.requestConfig().targetSize;
   for (const int index : indices) {
     QImage image(kTestThumbnailWidth, kTestThumbnailHeight, QImage::Format_ARGB32_Premultiplied);
     image.fill(QColor::fromHsv((index * kHueStride) % kHueSteps, kThumbnailSaturation,
@@ -811,7 +811,7 @@ int BridgeTestFixture::deliverFolderThumbnails() {
         ThumbnailEntry{.handle = {.image = image, .sourceSize = kTestSourceSize},
                        .name = u"file %1"_s.arg(index),
                        .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight)},
-        size);
+        targetSize);
   }
   return static_cast<int>(indices.count());
 }

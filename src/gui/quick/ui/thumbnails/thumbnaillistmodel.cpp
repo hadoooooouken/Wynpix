@@ -141,12 +141,12 @@ void ThumbnailListModel::populate(int count) {
     notifyIfVisibleThumbnailsReady();
 }
 
-void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry, int size) {
+void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry, QSize targetSize) {
     // The thumbnailer publishes to every view, and another view may request
-    // the same path and size with the other crop (the folder grid never
+    // the same path and box with the other crop (the folder grid never
     // crops, the strip follows squareThumbnails).
     const bool otherCrop = entry.cropped.has_value() && *entry.cropped != mRequest.crop;
-    if (size != mRequest.pixelSize || otherCrop || !checkRange(pos))
+    if (targetSize != mRequest.targetSize || otherCrop || !checkRange(pos))
         return;
     mRequested.remove(pos);
     mUnavailable.remove(pos);
@@ -171,8 +171,8 @@ void ThumbnailListModel::setThumbnailPending(int pos, bool pending) {
     notifyIfVisibleThumbnailsReady();
 }
 
-void ThumbnailListModel::setThumbnailUnavailable(int pos, int size) {
-    if (size != mRequest.pixelSize || !checkRange(pos))
+void ThumbnailListModel::setThumbnailUnavailable(int pos, QSize targetSize) {
+    if (targetSize != mRequest.targetSize || !checkRange(pos))
         return;
     mRequested.remove(pos);
     mUnavailable.insert(pos);
@@ -304,7 +304,7 @@ void ThumbnailListModel::reloadItem(int index) {
     mUnavailable.remove(index);
     mRequested.insert(index);
     emitRowChanged(index, kThumbnailRoles);
-    emit thumbnailsNeeded({index}, mRequest.pixelSize, mRequest.crop, true);
+    emit thumbnailsNeeded({index}, mRequest.targetSize, mRequest.crop, true);
 }
 
 void ThumbnailListModel::setDragHover(int index) {
@@ -336,7 +336,7 @@ void ThumbnailListModel::setDirCount(int count) {
 void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
     if (config == mRequest)
         return;
-    const bool unload = config.pixelSize != mRequest.pixelSize ||
+    const bool unload = config.targetSize != mRequest.targetSize ||
                         config.crop != mRequest.crop ||
                         config.cacheResolution != mRequest.cacheResolution;
     mRequest = config;
@@ -685,7 +685,7 @@ void ThumbnailListModel::requestMissingThumbnails(ItemRange range) {
         std::reverse(loadList.begin(), loadList.end());
     for (const int index : std::as_const(loadList))
         mRequested.insert(index);
-    emit thumbnailsNeeded(loadList, mRequest.pixelSize, mRequest.crop, false);
+    emit thumbnailsNeeded(loadList, mRequest.targetSize, mRequest.crop, false);
 }
 
 // A view that was never laid out (the strip before its first creation) has

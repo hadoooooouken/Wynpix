@@ -124,7 +124,8 @@ private slots:
     GridFixture fixture;
     fixture.grid.setDevicePixelRatio(1.5);
     const ThumbnailRequestConfig request = fixture.model.requestConfig();
-    QCOMPARE(request.pixelSize, static_cast<int>(1.5 * kIconSize));
+    // The image area of a 128 px icon is 128 x 96; the box is that at 1.5.
+    QCOMPARE(request.targetSize, QSize(192, 144));
     QVERIFY(!request.crop);
     const ThumbnailScrollConfig scroll = fixture.model.scrollConfig();
     QCOMPARE(scroll.columns, 4);
@@ -292,7 +293,9 @@ private slots:
     QCOMPARE(committed.count(), 1);
     QCOMPARE(committed.first().at(0).toInt(), kIconSize + FolderGridLayout::kZoomStep);
     // The thumbnails are requested again at the new size.
-    QCOMPARE(fixture.model.requestConfig().pixelSize, kIconSize + FolderGridLayout::kZoomStep);
+    const int zoomedSize = kIconSize + FolderGridLayout::kZoomStep;
+    QCOMPARE(fixture.model.requestConfig().targetSize,
+             QSize(zoomedSize, qRound(zoomedSize * ThumbnailStripLayout::kImageAspect)));
     fixture.grid.wheel({0, -kWheelStep}, {}, Qt::ControlModifier);
     fixture.grid.wheel({0, -kWheelStep}, {}, Qt::ControlModifier);
     QCOMPARE(fixture.grid.iconSize(), FolderGridLayout::kMinimumIconSize);

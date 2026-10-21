@@ -7,6 +7,7 @@
 #include <QPoint>
 #include <QPointF>
 #include <QSet>
+#include <QSize>
 #include <QString>
 #include <QTimer>
 #include <QtQml/qqmlregistration.h>
@@ -25,11 +26,12 @@ struct ThumbnailEntry {
     std::optional<bool> cropped;
 };
 
-// How thumbnails are requested: the size in device pixels, square crop, and
-// whether thumbnails outside the preloaded range are dropped. Changing the
-// size, the crop or the thumbnail cache resolution unloads every thumbnail.
+// How thumbnails are requested: the target box in device pixels (the image
+// area of a cell times the device pixel ratio), square crop, and whether
+// thumbnails outside the preloaded range are dropped. Changing the box, the
+// crop or the thumbnail cache resolution unloads every thumbnail.
 struct ThumbnailRequestConfig {
-    int pixelSize = 0;
+    QSize targetSize;
     bool crop = false;
     bool unloadOffscreen = false;
     // The thumbnailResolution setting (size of the cached thumbnails).
@@ -181,11 +183,12 @@ public:
 
     // --- directory view (IDirectoryView) ---------------------------------
     void populate(int count);
-    // Ignored unless size is the requested size, the entry is made for the
-    // requested crop (or either) and pos is an item.
-    void setThumbnail(int pos, const ThumbnailEntry &entry, int size);
+    // Ignored unless targetSize is the requested target box (the box the
+    // request was made for, whatever the pixel size of the entry is), the
+    // entry is made for the requested crop (or either) and pos is an item.
+    void setThumbnail(int pos, const ThumbnailEntry &entry, QSize targetSize);
     void setThumbnailPending(int pos, bool pending);
-    void setThumbnailUnavailable(int pos, int size);
+    void setThumbnailUnavailable(int pos, QSize targetSize);
     // Items out of range are dropped.
     void select(QList<int> indices);
     // An item out of range selects the first one.
@@ -247,8 +250,8 @@ signals:
     void countChanged();
     void dirCountChanged();
     void selectionChanged();
-    // Requests the thumbnails of indices at size (device pixels).
-    void thumbnailsNeeded(const QList<int> &indices, int size, bool crop, bool force);
+    // Requests the thumbnails of indices for the target box (device pixels).
+    void thumbnailsNeeded(const QList<int> &indices, QSize targetSize, bool crop, bool force);
     void activated(int index);
     void dragOutRequested();
     void backNavigationRequested();

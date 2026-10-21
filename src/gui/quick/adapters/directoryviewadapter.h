@@ -26,7 +26,7 @@ public:
     void populate(int count) override;
     void setThumbnail(int pos, std::shared_ptr<Thumbnail> thumb) override;
     void setThumbnailPending(int pos, bool pending) override;
-    void setThumbnailUnavailable(int pos, int size) override;
+    void setThumbnailUnavailable(int pos, QSize targetSize) override;
     void select(QList<int> indices) override;
     void select(int index) override;
     void focusOn(int index) override;
@@ -42,7 +42,7 @@ public:
 signals:
     // IDirectoryView
     void itemActivated(int) override;
-    void thumbnailsRequested(QList<int>, int, bool, bool) override;
+    void thumbnailsRequested(QList<int>, QSize, bool, bool) override;
     void draggedOut() override;
     void draggedOver(int) override;
     void droppedInto(const QMimeData *, QObject *, int, Qt::DropAction) override;

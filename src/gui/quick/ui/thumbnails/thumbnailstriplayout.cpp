@@ -14,6 +14,11 @@ QColor thumbnailLabelColor(const QColor &background) {
     return qGray(background.rgb()) > kLightSurfaceGray ? QColor(Qt::black) : QColor(Qt::white);
 }
 
+QSize ThumbnailStripLayout::imageTargetSize(qreal devicePixelRatio) const {
+    return QSize(qRound(devicePixelRatio * imageArea.width()),
+                 qRound(devicePixelRatio * imageArea.height()));
+}
+
 ThumbnailStripLayout thumbnailStripLayoutFor(const ThumbnailStripLayoutInput &input) {
     ThumbnailStripLayout layout;
     layout.horizontal =

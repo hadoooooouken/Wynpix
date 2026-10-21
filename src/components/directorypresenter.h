@@ -14,6 +14,7 @@
 #include <QMimeData>
 #include <QPixmap>
 #include <QPointer>
+#include <QSize>
 #include <QThread>
 #include <QtSvg/QSvgRenderer>
 
@@ -94,9 +95,9 @@ public slots:
 
 private slots:
     void onSettingsChanged();
-    void generateThumbnails(QList<int>, int, bool, bool);
+    void generateThumbnails(QList<int>, QSize, bool, bool);
     void onThumbnailReady(std::shared_ptr<Thumbnail> thumb, QString filePath);
-    void onThumbnailFailed(QString filePath, int size);
+    void onThumbnailFailed(QString filePath, QSize targetSize);
     void onFolderCoverResolved(FolderCoverResult result);
     void populateView();
     void onItemActivated(int absoluteIndex);
@@ -123,21 +124,24 @@ private:
 
     struct PendingFolderThumbnail {
         QString folderPath;
-        int thumbnailSize = 0;
+        // The target box the view asked for; it labels the published
+        // thumbnail.
+        QSize targetSize;
         quint64 generation = 0;
     };
 
+    // The folder icon is drawn from the width of the target box.
     struct DefaultFolderIconKey {
-        int thumbnailSize = 0;
+        int boxWidth = 0;
         qreal devicePixelRatio = 1.0;
         QRgb color = {};
 
         friend bool operator<(const DefaultFolderIconKey &left,
                               const DefaultFolderIconKey &right)
         {
-            return std::tie(left.thumbnailSize, left.devicePixelRatio,
+            return std::tie(left.boxWidth, left.devicePixelRatio,
                             left.color) <
-                   std::tie(right.thumbnailSize, right.devicePixelRatio,
+                   std::tie(right.boxWidth, right.devicePixelRatio,
                             right.color);
         }
     };
@@ -161,12 +165,17 @@ private:
     quint64 folderThumbnailGeneration = {};
     SortingMode lastFolderIconSort;
     int lastFolderViewIconSize;
+    // The target box of the last thumbnail request of the view. Only the
+    // view knows the device pixel ratio and the cell layout, so the folder
+    // thumbnails that must be made again without a new request (a changed
+    // cover sorting) use it.
+    QSize lastThumbnailTargetSize;
 
-    std::shared_ptr<QPixmap> defaultFolderPixmap(int size);
+    std::shared_ptr<QPixmap> defaultFolderPixmap(QSize targetSize);
     std::shared_ptr<Thumbnail>
-    defaultFolderThumbnail(int size, const QString &dirName);
+    defaultFolderThumbnail(QSize targetSize, const QString &dirName);
     std::shared_ptr<Thumbnail> composeFolderThumbnail(
-        int size, const QString &dirName, const QPixmap &innerThumb);
+        QSize targetSize, const QString &dirName, const QPixmap &innerThumb);
     static QString thumbnailPathKey(const QString &path);
     int directoryIndexForPath(const QString &path) const;
     void invalidateFolderThumbnailRequests();

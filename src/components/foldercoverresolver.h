@@ -7,6 +7,7 @@
 #include <QMetaType>
 #include <QObject>
 #include <QPair>
+#include <QSize>
 #include <QSet>
 #include <QString>
 #include <QThreadPool>
@@ -17,7 +18,8 @@
 struct FolderCoverRequest {
     QString folderPath;
     SortingMode sortingMode = SORT_TIME_DESC;
-    int thumbnailSize = 0;
+    // The target box, in device pixels, of the thumbnail the cover is for.
+    QSize targetSize;
     quint64 generation = 0;
 };
 

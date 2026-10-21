@@ -91,6 +91,11 @@ public:
     // Size of a cell along the strip.
     [[nodiscard]] int itemExtent() const { return horizontal ? cellWidth : cellHeight; }
 
+    // The box, in device pixels, thumbnails are made for: the image area
+    // times the device pixel ratio. A thumbnail of this size is drawn into
+    // the area without a resize.
+    [[nodiscard]] QSize imageTargetSize(qreal devicePixelRatio) const;
+
     friend bool operator==(const ThumbnailStripLayout &, const ThumbnailStripLayout &) = default;
 };
 

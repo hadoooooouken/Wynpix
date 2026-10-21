@@ -6,11 +6,11 @@ const QString kOriginalWidthMetadataKey = QStringLiteral("originalWidth");
 const QString kOriginalHeightMetadataKey = QStringLiteral("originalHeight");
 }
 
-Thumbnail::Thumbnail(QString _name, QString _info, int _size, std::shared_ptr<QPixmap> _pixmap)
+Thumbnail::Thumbnail(QString _name, QString _info, QSize _targetSize, std::shared_ptr<QPixmap> _pixmap)
     : mName(_name),
       mInfo(_info),
       mPixmap(_pixmap),
-      mSize(_size)
+      mTargetSize(_targetSize)
 {
     if(_pixmap) {
         mHasAlphaChannel = _pixmap->hasAlphaChannel();
@@ -18,11 +18,11 @@ Thumbnail::Thumbnail(QString _name, QString _info, int _size, std::shared_ptr<QP
     }
 }
 
-Thumbnail::Thumbnail(QString _name, QString _info, int _size, QImage _image)
+Thumbnail::Thumbnail(QString _name, QString _info, QSize _targetSize, QImage _image)
     : mName(_name),
       mInfo(_info),
       mImage(_image),
-      mSize(_size),
+      mTargetSize(_targetSize),
       mHasAlphaChannel(_image.hasAlphaChannel())
 {
     const QSize metadataSourceSize(
@@ -41,8 +41,8 @@ QString Thumbnail::info() {
     return mInfo;
 }
 
-int Thumbnail::size() {
-    return mSize;
+QSize Thumbnail::targetSize() const {
+    return mTargetSize;
 }
 
 bool Thumbnail::hasAlphaChannel() {

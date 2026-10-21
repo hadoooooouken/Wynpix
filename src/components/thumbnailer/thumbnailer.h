@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QMap>
 #include <QPair>
+#include <QSize>
 #include <QThreadPool>
 #include "components/cache/thumbnailcache.h"
 #include "components/cache/thumbnailcachewriter.h"
@@ -33,14 +34,33 @@ public:
     void clearTasks();
     void waitForDone();
     void enableSelfDestruct();
-    void getThumbnailAsync(QString path, int size, bool crop, bool force,
-                           int priority = kDefaultThumbnailPriority);
-    void getThumbnailAsync(ThumbnailSource source, int size, bool crop,
+    // targetSize is the box, in device pixels, the thumbnail is made for: the
+    // image is scaled to fit it, or cropped to the square of its shorter side.
+    void getThumbnailAsync(QString path, QSize targetSize, bool crop,
                            bool force,
+                           int priority = kDefaultThumbnailPriority);
+    void getThumbnailAsync(ThumbnailSource source, QSize targetSize, bool crop,
+                           bool force,
+                           int priority = kDefaultThumbnailPriority);
+    // Square target box of size x size device pixels (command line, batch
+    // converter).
+    void getThumbnailAsync(QString path, int size, bool crop, bool force,
                            int priority = kDefaultThumbnailPriority);
 
 private:
-    using TaskKey = QPair<QString, int>;
+    // A logical task: one source in one target box.
+    struct TaskKey {
+        QString path;
+        QSize box;
+
+        friend bool operator<(const TaskKey &left, const TaskKey &right) {
+            if (left.path != right.path)
+                return left.path < right.path;
+            if (left.box.width() != right.box.width())
+                return left.box.width() < right.box.width();
+            return left.box.height() < right.box.height();
+        }
+    };
 
     struct IndexedTask {
         bool crop = false;
@@ -57,8 +77,8 @@ private:
     ThumbnailTaskNotifier taskNotifier;
     std::stop_source mCancellationSource;
     std::unique_ptr<QThreadPool> pool;
-    void startThumbnailerThread(ThumbnailSource source, int size, bool crop,
-                                bool force, int priority);
+    void startThumbnailerThread(ThumbnailSource source, QSize targetSize,
+                                bool crop, bool force, int priority);
     [[nodiscard]] quint64 nextTaskId();
     void removeLogicalTask(const TaskRecord &record, quint64 taskId);
     void scheduleSelfDestructIfIdle();
@@ -83,5 +103,5 @@ private slots:
 
 signals:
     void thumbnailReady(std::shared_ptr<Thumbnail> thumbnail, QString filePath);
-    void thumbnailFailed(QString filePath, int size);
+    void thumbnailFailed(QString filePath, QSize targetSize);
 };

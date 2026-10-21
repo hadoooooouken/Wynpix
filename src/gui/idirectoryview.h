@@ -2,6 +2,7 @@
 
 #include <QtPlugin>
 #include <QList>
+#include <QSize>
 #include <memory>
 
 #include <QDropEvent>
@@ -20,7 +21,8 @@ public:
         Q_UNUSED(pos)
         Q_UNUSED(pending)
     }
-    virtual void setThumbnailUnavailable(int pos, int size) = 0;
+    // targetSize is the target box of the failed request.
+    virtual void setThumbnailUnavailable(int pos, QSize targetSize) = 0;
     virtual void select(QList<int>) = 0;
     virtual void select(int) = 0;
     virtual void focusOn(int) = 0;
@@ -35,7 +37,8 @@ public:
 
 //signals
     virtual void itemActivated(int) = 0;
-    virtual void thumbnailsRequested(QList<int>, int, bool, bool) = 0;
+    // Indices, target box in device pixels, crop, force.
+    virtual void thumbnailsRequested(QList<int>, QSize, bool, bool) = 0;
     virtual void draggedOut() = 0;
     virtual void draggedOver(int) = 0;
     virtual void droppedInto(const QMimeData*, QObject*, int, Qt::DropAction) = 0;

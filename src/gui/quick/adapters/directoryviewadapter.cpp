@@ -32,15 +32,15 @@ void DirectoryViewAdapter::setThumbnail(int pos, std::shared_ptr<Thumbnail> thum
             .info = thumb->info(),
             .cropped = thumb->cropped(),
         },
-        thumb->size());
+        thumb->targetSize());
 }
 
 void DirectoryViewAdapter::setThumbnailPending(int pos, bool pending) {
     ThumbnailListModel::setThumbnailPending(pos, pending);
 }
 
-void DirectoryViewAdapter::setThumbnailUnavailable(int pos, int size) {
-    ThumbnailListModel::setThumbnailUnavailable(pos, size);
+void DirectoryViewAdapter::setThumbnailUnavailable(int pos, QSize targetSize) {
+    ThumbnailListModel::setThumbnailUnavailable(pos, targetSize);
 }
 
 void DirectoryViewAdapter::select(QList<int> indices) {

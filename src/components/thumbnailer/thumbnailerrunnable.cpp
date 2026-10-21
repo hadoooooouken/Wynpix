@@ -1,5 +1,6 @@
 #include "thumbnailerrunnable.h"
 #include "settings.h"
+#include "thumbnailgeometry.h"
 #include "utils/blendreader.h"
 #include "utils/colormanager.h"
 #include "utils/djvureader.h"
@@ -59,7 +60,7 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
 
   const QString &path = request.path;
   const QString fileName = QFileInfo(path).fileName();
-  const int size = request.size;
+  const QSize targetSize = request.targetSize;
   const bool crop = request.crop;
   QString thumbnailId = generateIdString(path, settings->thumbnailResolution(), false);
   std::unique_ptr<QImage> image;
@@ -104,7 +105,7 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
     DocumentInfo imgInfo(path);
     if (imgInfo.type() == DocumentType::NONE) {
       return {
-          std::make_shared<Thumbnail>(fileName, QString(), size, nullptr),
+          std::make_shared<Thumbnail>(fileName, QString(), targetSize, nullptr),
           std::nullopt};
     }
     const QString format = imgInfo.format();
@@ -204,29 +205,30 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
 
   if (!image) {
     return {
-        std::make_shared<Thumbnail>(fileName, QStringLiteral("error"), size,
-                                    nullptr),
+        std::make_shared<Thumbnail>(fileName, QStringLiteral("error"),
+                                    targetSize, nullptr),
         std::nullopt};
   }
   if (request.decodeContext.isCancellationRequested())
     return {};
 
-  // scale and crop to the requested grid size
+  // scale and crop to the requested target box; a cropped thumbnail is the
+  // square of the box's shorter side
+  const QSize outputBox = ThumbnailGeometry::outputBox(targetSize, crop);
   Qt::AspectRatioMode ARMode = crop ? (Qt::KeepAspectRatioByExpanding) : (Qt::KeepAspectRatio);
-  QSize targetSize = noUpscaleScaledSize(image->size(), size, ARMode);
-  bool needsScaling = (image->size() != targetSize);
+  const QSize scaledSize =
+      ThumbnailGeometry::noUpscaleScaledSize(image->size(), outputBox, ARMode);
+  bool needsScaling = (image->size() != scaledSize);
   if (needsScaling) {
-    QImage scaled = image->scaled(targetSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage scaled = image->scaled(scaledSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     for (const QString &key : image->textKeys()) {
       scaled.setText(key, image->text(key));
     }
     
     if (crop) {
-      QRect clip(0, 0, size, size);
-      QRect scaledRect(QPoint(0, 0), scaled.size());
-      clip.moveCenter(scaledRect.center());
-      
+      const QRect clip = ThumbnailGeometry::cropRect(scaled.size(), outputBox);
+
       QImage croppedVal = ImageLib::croppedRaw(&scaled, clip);
       if (!croppedVal.isNull()) {
         std::unique_ptr<QImage> cropped = std::make_unique<QImage>(croppedVal);
@@ -235,7 +237,7 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
         }
         image = std::move(cropped);
       } else {
-        // source too small to fill the size x size crop box without
+        // source too small to fill the crop box without
         // upscaling - keep it uncropped at native resolution instead
         image = std::make_unique<QImage>(scaled);
       }
@@ -267,7 +269,7 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
             image->text(QStringLiteral("label"));
   }
   return {
-      std::make_shared<Thumbnail>(fileName, label, size, colorManaged),
+      std::make_shared<Thumbnail>(fileName, label, targetSize, colorManaged),
       std::move(cacheCandidate),
       std::move(accessTouch)};
 }
@@ -291,22 +293,8 @@ bool ThumbnailerRunnable::isToneMapCacheStale(
 
 QSize ThumbnailerRunnable::noUpscaleScaledSize(QSize originalSize, int size,
                                                Qt::AspectRatioMode mode) {
-  if (!originalSize.isValid())
-    return originalSize;
-
-  if (mode == Qt::KeepAspectRatioByExpanding) {
-    // "Expanding" mode always wants to cover the size x size box completely,
-    // which forces an upscale once the source is smaller than that box in
-    // both dimensions. In that case just keep native resolution instead.
-    if (originalSize.width() < size && originalSize.height() < size)
-      return originalSize;
-  } else {
-    // KeepAspectRatio / IgnoreAspectRatio: no scaling is needed at all (and
-    // no upscaling happens) once the source already fits within the box.
-    if (originalSize.width() <= size && originalSize.height() <= size)
-      return originalSize;
-  }
-  return originalSize.scaled(size, size, mode);
+  return ThumbnailGeometry::noUpscaleScaledSize(originalSize,
+                                                QSize(size, size), mode);
 }
 
 std::pair<QImage, QSize>

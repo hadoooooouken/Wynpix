@@ -7,6 +7,7 @@
 #include <QMetaType>
 #include <QObject>
 #include <QRunnable>
+#include <QSize>
 #include <memory>
 #include <optional>
 #include <utility>
@@ -17,7 +18,8 @@ struct ThumbnailRequest {
     ThumbnailCache *cache = nullptr;
     QString path;
     std::optional<ThumbnailSourceStamp> sourceStamp;
-    int size = 0;
+    // The box, in device pixels, the thumbnail is made for.
+    QSize targetSize;
     bool crop = false;
     bool force = false;
     quint64 cacheGeneration = 0;
@@ -72,9 +74,8 @@ private:
     static std::pair<QImage, QSize>
     createThumbnail(QString path, const char *format, int size, bool crop,
                     const DecodeContext &context);
-    // Same as QSize::scaled(size, size, mode), but never enlarges an image
-    // that is already smaller than the target box - avoids blurry upscaled
-    // thumbnails for tiny source images (icons, small screenshots, etc).
+    // ThumbnailGeometry::noUpscaleScaledSize() for the square box the images
+    // are decoded into.
     static QSize noUpscaleScaledSize(QSize originalSize, int size, Qt::AspectRatioMode mode);
     // Whether a cache hit's tone-map metadata (as recorded at generation
     // time) still matches the current HDR tone-mapping settings. Returns

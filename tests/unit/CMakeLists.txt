@@ -22,6 +22,7 @@ qt_add_executable(wynpix_tests
     tst_uimetrics.cpp
     tst_overlays.cpp
     tst_thumbnailstrip.cpp
+    tst_thumbnailgeometry.cpp
     tst_folderview.cpp
     tst_contextmenu.cpp
     tst_crop.cpp
@@ -47,6 +48,7 @@ qt_add_executable(wynpix_tests
     # ImageLib scalers and colour adjustments (tst_imagelib.cpp).
     "${WYNPIX_APP_SOURCE_DIR}/utils/imagelib.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/sourcecontainers/thumbnail.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/components/thumbnailer/thumbnailgeometry.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/quick/adapters/directoryviewadapter.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/quick/adapters/themesnapshotbuilder.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/themestore.cpp"

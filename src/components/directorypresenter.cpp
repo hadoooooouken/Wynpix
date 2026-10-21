@@ -111,9 +111,16 @@ void DirectoryPresenter::setView(std::shared_ptr<IDirectoryView> _view) {
     view->populate(mShowDirs ? model->totalCount() : model->fileCount());
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(itemActivated(int)), this,
           SLOT(onItemActivated(int)));
-  connect(dynamic_cast<QObject *>(view.get()),
-          SIGNAL(thumbnailsRequested(QList<int>, int, bool, bool)), this,
-          SLOT(generateThumbnails(QList<int>, int, bool, bool)));
+  // A string-based connection fails silently when the signatures differ, and
+  // then no thumbnail is ever requested: report it.
+  const QMetaObject::Connection requestsConnection =
+      connect(dynamic_cast<QObject *>(view.get()),
+              SIGNAL(thumbnailsRequested(QList<int>, QSize, bool, bool)), this,
+              SLOT(generateThumbnails(QList<int>, QSize, bool, bool)));
+  if (!requestsConnection)
+    qWarning() << "[DirectoryPresenter] The view's thumbnailsRequested signal"
+                  " is not connected to generateThumbnails; no thumbnails will"
+                  " be generated";
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(draggedOut()), this,
           SLOT(onDraggedOut()));
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(draggedOver(int)), this,
@@ -289,16 +296,19 @@ QList<QString> DirectoryPresenter::selectedPaths() const {
   return paths;
 }
 
-void DirectoryPresenter::generateThumbnails(QList<int> indexes, int size,
-                                            bool crop, bool force) {
+void DirectoryPresenter::generateThumbnails(QList<int> indexes,
+                                            QSize targetSize, bool crop,
+                                            bool force) {
   if (!view || !model)
     return;
+  lastThumbnailTargetSize = targetSize;
   if (!mShowDirs) {
     for (int i : indexes) {
       if (i < 0 || i >= model->fileCount())
         continue;
       thumbnailer->getThumbnailAsync(
-          thumbnailSourceFromEntry(model->fileEntryAt(i)), size, crop, force);
+          thumbnailSourceFromEntry(model->fileEntryAt(i)), targetSize, crop,
+          force);
     }
     return;
   }
@@ -315,13 +325,13 @@ void DirectoryPresenter::generateThumbnails(QList<int> indexes, int size,
       // so directory enumeration can never delay the first visible icon.
       view->setThumbnailPending(i, true);
       view->setThumbnail(
-          i, defaultFolderThumbnail(size, model->dirNameAt(i)));
+          i, defaultFolderThumbnail(targetSize, model->dirNameAt(i)));
 
       folderCoverResolver->resolve(
           FolderCoverRequest{
               dirPath,
               folderIconSort,
-              size,
+              targetSize,
               folderThumbnailGeneration
           });
     } else {
@@ -329,8 +339,8 @@ void DirectoryPresenter::generateThumbnails(QList<int> indexes, int size,
       if (fileIndex < 0 || fileIndex >= model->fileCount())
         continue;
       thumbnailer->getThumbnailAsync(
-          thumbnailSourceFromEntry(model->fileEntryAt(fileIndex)), size, crop,
-          force);
+          thumbnailSourceFromEntry(model->fileEntryAt(fileIndex)), targetSize,
+          crop, force);
     }
   }
 }
@@ -362,14 +372,14 @@ void DirectoryPresenter::onFolderCoverResolved(FolderCoverResult result)
   QList<PendingFolderThumbnail> &pending = dirThumbnailTasks[coverKey];
   const PendingFolderThumbnail newRequest{
       result.request.folderPath,
-      result.request.thumbnailSize,
+      result.request.targetSize,
       result.request.generation
   };
   bool alreadyPending = false;
   for (const PendingFolderThumbnail &existing : std::as_const(pending)) {
     if (thumbnailPathKey(existing.folderPath) ==
             thumbnailPathKey(newRequest.folderPath) &&
-        existing.thumbnailSize == newRequest.thumbnailSize &&
+        existing.targetSize == newRequest.targetSize &&
         existing.generation == newRequest.generation) {
       alreadyPending = true;
       break;
@@ -380,7 +390,7 @@ void DirectoryPresenter::onFolderCoverResolved(FolderCoverResult result)
 
   pending.append(newRequest);
   thumbnailer->getThumbnailAsync(
-      result.coverPath, result.request.thumbnailSize, false, false,
+      result.coverPath, result.request.targetSize, false, false,
       kFolderCoverThumbnailPriority);
 }
 
@@ -402,7 +412,7 @@ void DirectoryPresenter::onThumbnailReady(std::shared_ptr<Thumbnail> thumb,
     const std::shared_ptr<QPixmap> innerPixmap = thumb->pixmap();
     for (const PendingFolderThumbnail &task :
          std::as_const(folderTasks.value())) {
-      if (task.thumbnailSize != thumb->size()) {
+      if (task.targetSize != thumb->targetSize()) {
         remaining.append(task);
         continue;
       }
@@ -417,7 +427,7 @@ void DirectoryPresenter::onThumbnailReady(std::shared_ptr<Thumbnail> thumb,
         view->setThumbnail(
             directoryIndex,
             composeFolderThumbnail(
-                task.thumbnailSize, model->dirNameAt(directoryIndex),
+                task.targetSize, model->dirNameAt(directoryIndex),
                 *innerPixmap));
       }
       view->setThumbnailPending(directoryIndex, false);
@@ -435,7 +445,7 @@ void DirectoryPresenter::onThumbnailReady(std::shared_ptr<Thumbnail> thumb,
   view->setThumbnail(mShowDirs ? model->dirCount() + index : index, thumb);
 }
 
-void DirectoryPresenter::onThumbnailFailed(QString filePath, int size) {
+void DirectoryPresenter::onThumbnailFailed(QString filePath, QSize targetSize) {
   if (!view || !model) {
     qWarning() << "Cannot publish thumbnail failure without a directory view"
                   " and model for"
@@ -449,7 +459,7 @@ void DirectoryPresenter::onThumbnailFailed(QString filePath, int size) {
     QList<PendingFolderThumbnail> remaining;
     for (const PendingFolderThumbnail &task :
          std::as_const(folderTasks.value())) {
-      if (task.thumbnailSize != size) {
+      if (task.targetSize != targetSize) {
         remaining.append(task);
       } else if (task.generation == folderThumbnailGeneration && mShowDirs) {
         const int directoryIndex = directoryIndexForPath(task.folderPath);
@@ -468,7 +478,7 @@ void DirectoryPresenter::onThumbnailFailed(QString filePath, int size) {
     return;
 
   view->setThumbnailUnavailable(
-      mShowDirs ? model->dirCount() + index : index, size);
+      mShowDirs ? model->dirCount() + index : index, targetSize);
 }
 
 void DirectoryPresenter::onItemActivated(int absoluteIndex) {
@@ -869,16 +879,21 @@ void DirectoryPresenter::onTypeAheadTextEntered(QString text) {
 }
 
 std::shared_ptr<Thumbnail>
-DirectoryPresenter::defaultFolderThumbnail(int size, const QString &dirName)
+DirectoryPresenter::defaultFolderThumbnail(QSize targetSize,
+                                           const QString &dirName)
 {
   return std::make_shared<Thumbnail>(
-      dirName, tr("Folder"), size, defaultFolderPixmap(size));
+      dirName, tr("Folder"), targetSize, defaultFolderPixmap(targetSize));
 }
 
 std::shared_ptr<QPixmap>
-DirectoryPresenter::defaultFolderPixmap(int size)
+DirectoryPresenter::defaultFolderPixmap(QSize targetSize)
 {
-  if (size <= 0 || !folderIconRenderer.isValid() ||
+  // The icon is scaled by whole multiples of its default size from the width
+  // of the target box. Its default size has the aspect of the thumbnail area
+  // (4:3), so the icon fills the area and is never enlarged beyond it.
+  const int boxWidth = targetSize.width();
+  if (boxWidth <= 0 || !folderIconRenderer.isValid() ||
       folderIconRenderer.defaultSize().width() <= 0)
     return {};
 
@@ -891,7 +906,7 @@ DirectoryPresenter::defaultFolderPixmap(int size)
   const QColor iconColor =
       settings->colorScheme().thumbnail_folder_icons;
   const DefaultFolderIconKey key{
-      size,
+      boxWidth,
       devicePixelRatio,
       iconColor.rgba()
   };
@@ -900,7 +915,7 @@ DirectoryPresenter::defaultFolderPixmap(int size)
     return cachedIcon.value();
 
   const int scaleFactor =
-      qMax(1, size / folderIconRenderer.defaultSize().width());
+      qMax(1, boxWidth / folderIconRenderer.defaultSize().width());
   const QSize baseSize =
       folderIconRenderer.defaultSize() * scaleFactor;
   if (baseSize.isEmpty())
@@ -928,13 +943,14 @@ DirectoryPresenter::defaultFolderPixmap(int size)
 }
 
 std::shared_ptr<Thumbnail>
-DirectoryPresenter::composeFolderThumbnail(int size, const QString &dirName,
+DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
+                                           const QString &dirName,
                                            const QPixmap &innerThumb) {
   const std::shared_ptr<QPixmap> defaultPixmap =
-      defaultFolderPixmap(size);
+      defaultFolderPixmap(targetSize);
   if (!defaultPixmap)
     return std::make_shared<Thumbnail>(
-        dirName, tr("Folder"), size, std::shared_ptr<QPixmap>{});
+        dirName, tr("Folder"), targetSize, std::shared_ptr<QPixmap>{});
 
   const qreal devicePixelRatio =
       defaultPixmap->devicePixelRatioF() > 0
@@ -979,7 +995,7 @@ DirectoryPresenter::composeFolderThumbnail(int size, const QString &dirName,
     qWarning() << "Folder cover for" << dirName
                << "has no drawable size; showing the plain folder icon";
     return std::make_shared<Thumbnail>(
-        dirName, tr("Folder"), size,
+        dirName, tr("Folder"), targetSize,
         std::make_shared<QPixmap>(*defaultPixmap));
   }
 
@@ -1008,7 +1024,7 @@ DirectoryPresenter::composeFolderThumbnail(int size, const QString &dirName,
 
   canvas.setDevicePixelRatio(devicePixelRatio);
   return std::make_shared<Thumbnail>(
-      dirName, tr("Folder"), size,
+      dirName, tr("Folder"), targetSize,
       std::make_shared<QPixmap>(QPixmap::fromImage(std::move(canvas))));
 }
 
@@ -1055,9 +1071,12 @@ void DirectoryPresenter::onSettingsChanged() {
   if (!view || !model || !mShowDirs)
     return;
   invalidateFolderThumbnailRequests();
+  // Nothing was requested yet: the view requests the folders itself.
+  if (lastThumbnailTargetSize.isEmpty())
+    return;
   QList<int> folderIndexes;
   for (int i = 0; i < model->dirCount(); ++i) {
     folderIndexes.append(i);
   }
-  generateThumbnails(folderIndexes, currentSize, false, true);
+  generateThumbnails(folderIndexes, lastThumbnailTargetSize, false, true);
 }

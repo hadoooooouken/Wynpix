@@ -57,13 +57,19 @@ void Thumbnailer::clearTasks() {
     mCancellationSource = std::stop_source{};
 }
 
-void Thumbnailer::getThumbnailAsync(QString path, int size, bool crop,
+void Thumbnailer::getThumbnailAsync(QString path, QSize targetSize, bool crop,
                                     bool force, int priority) {
-    getThumbnailAsync(ThumbnailSource{std::move(path), std::nullopt}, size,
-                      crop, force, priority);
+    getThumbnailAsync(ThumbnailSource{std::move(path), std::nullopt},
+                      targetSize, crop, force, priority);
 }
 
-void Thumbnailer::getThumbnailAsync(ThumbnailSource source, int size,
+void Thumbnailer::getThumbnailAsync(QString path, int size, bool crop,
+                                    bool force, int priority) {
+    getThumbnailAsync(std::move(path), QSize(size, size), crop, force,
+                      priority);
+}
+
+void Thumbnailer::getThumbnailAsync(ThumbnailSource source, QSize targetSize,
                                     bool crop, bool force, int priority) {
     if (m_selfDestructOnFinished) {
         qWarning() << "Ignoring thumbnail request after self-destruct was enabled"
@@ -71,7 +77,7 @@ void Thumbnailer::getThumbnailAsync(ThumbnailSource source, int size,
         return;
     }
 
-    const TaskKey key = qMakePair(source.path, size);
+    const TaskKey key{source.path, targetSize};
     const auto activeTask = activeTasks.constFind(key);
 
     // Identical non-forced consumers can share the source revision carried
@@ -100,19 +106,21 @@ void Thumbnailer::getThumbnailAsync(ThumbnailSource source, int size,
         return;
     }
 
-    startThumbnailerThread(std::move(source), size, crop, force, priority);
+    startThumbnailerThread(std::move(source), targetSize, crop, force,
+                           priority);
 }
 
-void Thumbnailer::startThumbnailerThread(ThumbnailSource source, int size,
-                                         bool crop, bool force, int priority) {
-    const TaskKey key = qMakePair(source.path, size);
+void Thumbnailer::startThumbnailerThread(ThumbnailSource source,
+                                         QSize targetSize, bool crop,
+                                         bool force, int priority) {
+    const TaskKey key{source.path, targetSize};
     const quint64 taskId = nextTaskId();
 
     ThumbnailRequest request;
     request.cache = settings->useThumbnailCache() ? cache.get() : nullptr;
     request.path = std::move(source.path);
     request.sourceStamp = std::move(source.stamp);
-    request.size = size;
+    request.targetSize = targetSize;
     request.crop = crop;
     request.force = force;
     request.cacheGeneration = cacheWriter->currentGeneration();
@@ -149,8 +157,8 @@ void Thumbnailer::onTaskCompleted(ThumbnailTaskCompletion completion) {
         return;
 
     const TaskKey key = task->key;
-    const QString filePath = key.first;
-    const int size = key.second;
+    const QString filePath = key.path;
+    const QSize targetSize = key.box;
     const bool cancelled = task->cancellationRequested;
 
     removeLogicalTask(*task, completion.taskId);
@@ -164,7 +172,7 @@ void Thumbnailer::onTaskCompleted(ThumbnailTaskCompletion completion) {
     if (completion.status != ThumbnailTaskCompletionStatus::Finished) {
         qWarning() << "Thumbnail task was removed before execution"
                    << filePath;
-        emit thumbnailFailed(filePath, size);
+        emit thumbnailFailed(filePath, targetSize);
         scheduleSelfDestructIfIdle();
         return;
     }
@@ -177,8 +185,8 @@ void Thumbnailer::onTaskCompleted(ThumbnailTaskCompletion completion) {
         // Register the follow-up before publishing the completed result so a
         // synchronous receiver cannot start a duplicate task for this key.
         startThumbnailerThread(
-            ThumbnailSource{filePath, std::move(rerun.sourceStamp)}, size,
-            rerun.crop, rerun.force, rerun.priority);
+            ThumbnailSource{filePath, std::move(rerun.sourceStamp)},
+            targetSize, rerun.crop, rerun.force, rerun.priority);
     }
 
     ThumbnailTaskResult result = std::move(completion.result);
@@ -191,7 +199,7 @@ void Thumbnailer::onTaskCompleted(ThumbnailTaskCompletion completion) {
     if (thumbnail) {
         emit thumbnailReady(thumbnail, filePath);
     } else {
-        emit thumbnailFailed(filePath, size);
+        emit thumbnailFailed(filePath, targetSize);
     }
     if (result.cacheCandidate &&
         !cacheWriter->enqueue(std::move(*result.cacheCandidate))) {

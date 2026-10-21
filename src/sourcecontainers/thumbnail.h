@@ -3,16 +3,22 @@
 #include <QString>
 #include <QPixmap>
 #include <QImage>
+#include <QSize>
 #include <memory>
 #include <optional>
 
 class Thumbnail {
 public:
-    Thumbnail(QString _name, QString _info, int _size, std::shared_ptr<QPixmap> _pixmap);
-    Thumbnail(QString _name, QString _info, int _size, QImage _image);
+    Thumbnail(QString _name, QString _info, QSize _targetSize, std::shared_ptr<QPixmap> _pixmap);
+    Thumbnail(QString _name, QString _info, QSize _targetSize, QImage _image);
     QString name();
     QString info();
-    int size();
+    // The target box (device pixels) of the request this thumbnail answers.
+    // It identifies the request, so a view takes the thumbnails of its own
+    // box; it is set by whoever answers the request and is not derived from
+    // the pixels (a folder icon and a cropped thumbnail have other pixel
+    // sizes than the box they were made for).
+    QSize targetSize() const;
     bool hasAlphaChannel();
     QSize sourceSize() const;
     std::shared_ptr<QPixmap> pixmap();
@@ -31,7 +37,7 @@ private:
     std::shared_ptr<QPixmap> mPixmap;
     QImage mImage;
     QSize mSourceSize;
-    int mSize;
+    QSize mTargetSize;
     bool mHasAlphaChannel = false;
     std::optional<bool> mCropped;
 };

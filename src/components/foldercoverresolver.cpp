@@ -293,10 +293,10 @@ void FolderCoverResolver::resolve(FolderCoverRequest request)
             QStringLiteral("Folder cover request has an empty path.")));
         return;
     }
-    if (request.thumbnailSize <= 0) {
+    if (request.targetSize.isEmpty()) {
         emitQueued(readError(
             std::move(request),
-            QStringLiteral("Folder cover request has an invalid thumbnail size.")));
+            QStringLiteral("Folder cover request has an invalid thumbnail target size.")));
         return;
     }
     if (!isSupportedSortingMode(request.sortingMode)) {
@@ -328,7 +328,7 @@ void FolderCoverResolver::resolve(FolderCoverRequest request)
         pending->folderRevision == folderRevision) {
         for (const FolderCoverRequest &existing :
              std::as_const(pending->requests)) {
-            if (existing.thumbnailSize == request.thumbnailSize &&
+            if (existing.targetSize == request.targetSize &&
                 existing.generation == request.generation)
                 return;
         }

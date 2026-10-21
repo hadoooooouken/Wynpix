@@ -158,11 +158,11 @@ void FolderGridController::updateLayout() {
     configureModel();
 }
 
-// The widget grid requests the logical icon size times the device pixel
+// The grid requests thumbnails for the image area times the device pixel
 // ratio and never crops (the squareThumbnails setting is the strip's).
 void FolderGridController::configureModel() {
     mModel.configure({
-        .pixelSize = static_cast<int>(mDevicePixelRatio * mIconSize),
+        .targetSize = mLayout.cell.imageTargetSize(mDevicePixelRatio),
         .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,

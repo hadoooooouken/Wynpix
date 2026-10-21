@@ -308,10 +308,10 @@ void ThumbnailPanelController::updateLayout() {
 }
 
 // ThumbnailStrip::readSettings() and ThumbnailView: thumbnails are requested
-// at the logical size times the device pixel ratio.
+// for the image area times the device pixel ratio.
 void ThumbnailPanelController::configureModel() {
     mModel.configure({
-        .pixelSize = static_cast<int>(mDevicePixelRatio * mLayout.thumbnailSize),
+        .targetSize = mLayout.imageTargetSize(mDevicePixelRatio),
         .crop = mFolderView.squareThumbnails,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,

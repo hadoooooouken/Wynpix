@@ -16,7 +16,8 @@ namespace {
 using namespace Qt::StringLiterals;
 namespace Enums = SettingsEnums;
 
-constexpr int kRequestSize = 100;
+// A 4:3 target box in device pixels, like the image area of a cell.
+constexpr QSize kRequestSize(100, 75);
 constexpr int kItemExtent = 100;
 constexpr int kThumbnailSize = 80;
 constexpr qreal kViewExtent = 500.0;
@@ -40,7 +41,7 @@ ThumbnailEntry entryOf(int width, int height) {
 // A model of count items, configured with kRequestSize thumbnails and
 // kItemExtent cells, active over a view of kViewExtent at offset 0.
 void prepare(ThumbnailListModel &model, int count, bool active = true) {
-  model.configure({.pixelSize = kRequestSize});
+  model.configure({.targetSize = kRequestSize});
   model.setScrollConfig({.itemExtent = kItemExtent, .thumbnailSize = kThumbnailSize});
   model.populate(count);
   model.setViewport(0.0, kViewExtent);
@@ -154,7 +155,7 @@ private slots:
     QCOMPARE(indices.first(), 0);
     QCOMPARE(indices.last(), 35);
     QCOMPARE(indices.count(), 36);
-    QCOMPARE(requests.first().at(1).toInt(), kRequestSize);
+    QCOMPARE(requests.first().at(1).toSize(), kRequestSize);
     QCOMPARE(requests.first().at(3).toBool(), false);
 
     // Requested items are not requested again.
@@ -198,8 +199,8 @@ private slots:
     QCOMPARE(ready.count(), 0);
     model.setThumbnail(0, entryOf(4, 3), kRequestSize);
     model.setThumbnailUnavailable(1, kRequestSize);
-    // Another size is not the requested thumbnail.
-    model.setThumbnail(2, entryOf(4, 3), kRequestSize + 1);
+    // Another target box is not the requested thumbnail.
+    model.setThumbnail(2, entryOf(4, 3), kRequestSize + QSize(1, 1));
     QCOMPARE(ready.count(), 0);
     QVERIFY(!isLoaded(model, 2));
     model.setThumbnail(2, entryOf(4, 3), kRequestSize);
@@ -266,7 +267,7 @@ private slots:
 
   void unloadsThumbnailsFarOutOfView() {
     ThumbnailListModel model;
-    model.configure({.pixelSize = kRequestSize, .unloadOffscreen = true});
+    model.configure({.targetSize = kRequestSize, .unloadOffscreen = true});
     model.setScrollConfig({.itemExtent = kItemExtent, .thumbnailSize = kThumbnailSize});
     model.populate(1000);
     model.setViewport(0.0, kViewExtent);
@@ -283,7 +284,7 @@ private slots:
   void inactiveViewKeepsThumbnailsWithinItsRange() {
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
-    model.configure({.pixelSize = kRequestSize, .unloadOffscreen = true});
+    model.configure({.targetSize = kRequestSize, .unloadOffscreen = true});
     model.setScrollConfig({.itemExtent = kItemExtent, .thumbnailSize = kThumbnailSize});
     model.populate(1000);
     model.setViewport(0.0, kViewExtent);
@@ -307,7 +308,7 @@ private slots:
     constexpr int kCount = 1000;
     constexpr qreal kEndOffset = kCount * kItemExtent - kViewExtent;
     ThumbnailListModel model;
-    model.configure({.pixelSize = kRequestSize, .unloadOffscreen = true});
+    model.configure({.targetSize = kRequestSize, .unloadOffscreen = true});
     model.setScrollConfig({.itemExtent = kItemExtent,
                            .thumbnailSize = kThumbnailSize,
                            .centerSelection = true,
@@ -334,7 +335,7 @@ private slots:
     constexpr qreal kEndOffset = kCount * kItemExtent - kViewExtent;
     constexpr qreal kPressX = 200.0;
     ThumbnailListModel model;
-    model.configure({.pixelSize = kRequestSize, .unloadOffscreen = true});
+    model.configure({.targetSize = kRequestSize, .unloadOffscreen = true});
     model.setScrollConfig({.itemExtent = kItemExtent,
                            .thumbnailSize = kThumbnailSize,
                            .centerSelection = true});
@@ -371,7 +372,7 @@ private slots:
 
   void ignoresThumbnailsOfTheOtherCrop() {
     ThumbnailListModel model;
-    model.configure({.pixelSize = kRequestSize, .crop = true});
+    model.configure({.targetSize = kRequestSize, .crop = true});
     model.setScrollConfig({.itemExtent = kItemExtent, .thumbnailSize = kThumbnailSize});
     model.populate(2);
     model.setViewport(0.0, kViewExtent);
@@ -398,7 +399,7 @@ private slots:
     constexpr int kFirstFocusedItem = 496;
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
-    model.configure({.pixelSize = kRequestSize, .unloadOffscreen = true});
+    model.configure({.targetSize = kRequestSize, .unloadOffscreen = true});
     model.setScrollConfig({.itemExtent = kItemExtent, .thumbnailSize = kThumbnailSize});
     model.setInactivePrefetch(true);
     model.populate(1000);
@@ -454,7 +455,7 @@ private slots:
     prepare(model, 2);
     model.setThumbnail(0, entryOf(4, 3), kRequestSize);
     requests.clear();
-    model.configure({.pixelSize = kRequestSize, .crop = true});
+    model.configure({.targetSize = kRequestSize, .crop = true});
     QVERIFY(!isLoaded(model, 0));
     QCOMPARE(requests.count(), 1);
     QCOMPARE(requests.first().at(0).value<QList<int>>(), (QList<int>{0, 1}));
@@ -670,7 +671,7 @@ private slots:
     constexpr int kLeadingSpace = 6;
     constexpr int kPreloadDistance = 200;
     ThumbnailListModel model;
-    model.configure({.pixelSize = kRequestSize});
+    model.configure({.targetSize = kRequestSize});
     model.setScrollConfig({.horizontal = false,
                            .itemExtent = kItemExtent,
                            .columns = kColumns,
@@ -692,7 +693,7 @@ private slots:
     constexpr int kColumns = 4;
     constexpr int kLeadingSpace = 6;
     ThumbnailListModel model;
-    model.configure({.pixelSize = kRequestSize});
+    model.configure({.targetSize = kRequestSize});
     model.setScrollConfig({.horizontal = false,
                            .itemExtent = kItemExtent,
                            .columns = kColumns,
@@ -879,6 +880,49 @@ private slots:
     QVERIFY(panel.isDocked());
   }
 
+  void matchesThumbnailsByTheTargetBoxNotByTheirPixels() {
+    ThumbnailListModel model;
+    QSignalSpy ready(&model, &ThumbnailListModel::visibleThumbnailsReady);
+    prepare(model, 4);
+    // A thumbnail whose pixels are not the box (a square image, a folder
+    // icon, a cropped image) is the answer to the request it is labelled
+    // with.
+    model.setThumbnail(0, entryOf(75, 75), kRequestSize);
+    model.setThumbnail(1, entryOf(100, 100), kRequestSize);
+    QVERIFY(isLoaded(model, 0));
+    QVERIFY(isLoaded(model, 1));
+    // The box of another request is rejected whatever its pixels are, also
+    // when only one side or only the order of the sides differs.
+    model.setThumbnail(2, entryOf(100, 75), QSize(100, 100));
+    model.setThumbnail(2, entryOf(100, 75), QSize(75, 100));
+    model.setThumbnail(2, entryOf(100, 75), QSize(100, 76));
+    QVERIFY(!isLoaded(model, 2));
+    model.setThumbnailUnavailable(2, QSize(100, 100));
+    QVERIFY(!model.data(model.index(2), ThumbnailListModel::UnavailableRole).toBool());
+    QCOMPARE(ready.count(), 0);
+    model.setThumbnail(2, entryOf(100, 75), kRequestSize);
+    model.setThumbnailUnavailable(3, kRequestSize);
+    QCOMPARE(ready.count(), 1);
+  }
+
+  void changingTheTargetBoxUnloadsAndRequestsAgain() {
+    ThumbnailListModel model;
+    QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
+    prepare(model, 2);
+    QCOMPARE(requests.count(), 1);
+    model.setThumbnail(0, entryOf(100, 75), kRequestSize);
+    QVERIFY(isLoaded(model, 0));
+    // Same width, other height: another request.
+    const QSize taller(kRequestSize.width(), kRequestSize.height() + 1);
+    model.configure({.targetSize = taller});
+    QVERIFY(!isLoaded(model, 0));
+    QCOMPARE(requests.count(), 2);
+    QCOMPARE(requests.last().at(1).toSize(), taller);
+    // The answer to the old request arrives late and is ignored.
+    model.setThumbnail(0, entryOf(100, 75), kRequestSize);
+    QVERIFY(!isLoaded(model, 0));
+  }
+
   void panelConfiguresTheModel() {
     ThumbnailListModel model;
     UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Left);
@@ -887,7 +931,8 @@ private slots:
     settings.panel.centerSelection = true;
     ThumbnailPanelController panel(model, settings);
     panel.setDevicePixelRatio(1.5);
-    QCOMPARE(model.requestConfig().pixelSize, static_cast<int>(1.5 * kThumbnailSize));
+    // The image area of an 80 px cell is 80 x 60; the box is that at 1.5.
+    QCOMPARE(model.requestConfig().targetSize, QSize(120, 90));
     QVERIFY(model.requestConfig().crop);
     QVERIFY(model.requestConfig().unloadOffscreen);
     QVERIFY(!model.scrollConfig().horizontal);
@@ -895,7 +940,7 @@ private slots:
     QVERIFY(model.scrollConfig().centerSelection);
     // The slide blocks the requests.
     prepare(model, 3, false);
-    model.configure({.pixelSize = kRequestSize});
+    model.configure({.targetSize = kRequestSize});
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     panel.setAnimationRunning(true);
     model.setActive(true);
@@ -911,13 +956,31 @@ private slots:
     QCOMPARE(panel.labelTextColor(QColor(32, 32, 32)), QColor(Qt::white));
   }
 
+  void targetSizeIsTheImageAreaTimesTheDevicePixelRatio() {
+    const ThumbnailStripLayout layout = thumbnailStripLayoutFor(
+        {.previewsSize = 120, .style = Enums::PanelStyle::Simple,
+         .position = Enums::PanelPosition::Bottom, .textHeight = kTextHeight});
+    QCOMPARE(layout.imageArea, QSize(120, 90));
+    QCOMPARE(layout.imageTargetSize(1.0), QSize(120, 90));
+    QCOMPARE(layout.imageTargetSize(2.0), QSize(240, 180));
+    // Both sides are rounded, not truncated: 120 * 1.25 = 150, 90 * 1.25 =
+    // 112.5.
+    QCOMPARE(layout.imageTargetSize(1.25), QSize(150, 113));
+    // The image area height is rounded first: 101 * 3 / 4 = 75.75.
+    const ThumbnailStripLayout odd = thumbnailStripLayoutFor(
+        {.previewsSize = 101, .style = Enums::PanelStyle::Simple,
+         .position = Enums::PanelPosition::Bottom, .textHeight = kTextHeight});
+    QCOMPARE(odd.imageArea, QSize(101, 76));
+    QCOMPARE(odd.imageTargetSize(1.5), QSize(152, 114));
+  }
+
   //--- adapter ----------------------------------------------------------------
   void adapterPublishesThumbnailsAndRequests() {
     DirectoryViewAdapter adapter;
     IDirectoryView &view = adapter;
     QSignalSpy requests(&adapter, &DirectoryViewAdapter::thumbnailsRequested);
     QSignalSpy activated(&adapter, &DirectoryViewAdapter::itemActivated);
-    adapter.configure({.pixelSize = kRequestSize});
+    adapter.configure({.targetSize = kRequestSize});
     adapter.setScrollConfig({.itemExtent = kItemExtent, .thumbnailSize = kThumbnailSize});
     view.populate(3);
     view.setDirCount(1);
@@ -935,6 +998,15 @@ private slots:
     QCOMPARE(handle.image.cacheKey(), image.cacheKey());
     QVERIFY(adapter.data(adapter.index(0), ThumbnailListModel::DirectoryRole).toBool());
     QVERIFY(!adapter.data(adapter.index(1), ThumbnailListModel::DirectoryRole).toBool());
+
+    // A folder icon is square-ish in pixels but labelled with the box it was
+    // requested for: the adapter hands that box to the model.
+    QImage icon(60, 60, QImage::Format_ARGB32);
+    icon.fill(Qt::gray);
+    view.setThumbnail(0, std::make_shared<Thumbnail>(u"dir"_s, u"Folder"_s, kRequestSize, icon));
+    QVERIFY(isLoaded(adapter, 0));
+    view.setThumbnailUnavailable(1, kRequestSize);
+    QVERIFY(adapter.data(adapter.index(1), ThumbnailListModel::UnavailableRole).toBool());
 
     adapter.press(1, Qt::LeftButton, Qt::NoModifier, {});
     QCOMPARE(activated.count(), 1);
