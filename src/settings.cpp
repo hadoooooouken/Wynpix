@@ -72,7 +72,7 @@ void Settings::initCache() {
   else if (limit > 8192) limit = 8192;
   mCachedMemoryAllocationLimit.store(limit, std::memory_order_relaxed);
 
-  mCachedThumbnailResolution.store(settingsConf->value("thumbnailResolution", 256).toInt(), std::memory_order_relaxed);
+  mCachedThumbnailResolution.store(settingsConf->value("thumbnailResolution", DefaultThumbnailResolution).toInt(), std::memory_order_relaxed);
   mCachedThumbnailCacheMaxSizeMB.store(
       qMax(0, settingsConf
                   ->value("thumbnailCacheMaxSizeMB",
@@ -410,9 +410,9 @@ void Settings::setThumbPanelStyle(ThumbPanelStyle mode) {
 //------------------------------------------------------------------------------
 int Settings::panelPreviewsSize() {
   bool ok = true;
-  int size = settings->settingsConf->value("panelPreviewsSize", 256).toInt(&ok);
+  int size = settings->settingsConf->value("panelPreviewsSize", DefaultPanelPreviewsSize).toInt(&ok);
   if (!ok)
-    size = 256;
+    size = DefaultPanelPreviewsSize;
   size = qBound(100, size, 256);
   return size;
 }
@@ -1001,7 +1001,7 @@ void Settings::setThumbnailerThreadCount(int count) {
 
 //------------------------------------------------------------------------------
 int Settings::folderViewIconSize() {
-  return settings->settingsConf->value("folderViewIconSize", 256).toInt();
+  return settings->settingsConf->value("folderViewIconSize", DefaultFolderViewIconSize).toInt();
 }
 
 void Settings::setFolderViewIconSize(int value) {

@@ -38,6 +38,9 @@ public:
   static constexpr int PanelHideDelayStepMs = 100;
   static constexpr int DefaultPanelHideDelayMs = 600;
   static constexpr int DefaultThumbnailCacheMaxSizeMB = 512;
+  static constexpr int DefaultThumbnailResolution = 256;
+  static constexpr int DefaultPanelPreviewsSize = 256;
+  static constexpr int DefaultFolderViewIconSize = 256;
   static constexpr qint64 DefaultThumbnailCacheMaxEntries = 100'000;
 
   static Settings *getInstance();
@@ -342,7 +345,7 @@ private:
   std::atomic<bool> mCachedUpscaylLimitEnabled{false};
   std::atomic<int> mCachedUpscaylLimitValue{200};
   std::atomic<int> mCachedMemoryAllocationLimit{2048};
-  std::atomic<int> mCachedThumbnailResolution{256};
+  std::atomic<int> mCachedThumbnailResolution{DefaultThumbnailResolution};
   std::atomic<int> mCachedThumbnailCacheMaxSizeMB{
       DefaultThumbnailCacheMaxSizeMB};
   std::atomic<qint64> mCachedThumbnailCacheMaxEntries{
