@@ -42,6 +42,7 @@ public:
   static constexpr int MaxThumbnailResolution = 2048;
   static constexpr int ThumbnailResolutionStep = 16;
   static constexpr int DefaultThumbnailResolution = 256;
+  static constexpr double DefaultDevicePixelRatio = 1.0;
   static constexpr int DefaultPanelPreviewsSize = 256;
   static constexpr int DefaultFolderViewIconSize = 256;
   static constexpr qint64 DefaultThumbnailCacheMaxEntries = 100'000;
@@ -112,6 +113,7 @@ public:
   void setSavedPaths(QStringList paths);
   QString tmpDir();
   QString thumbnailCacheDir();
+  [[nodiscard]] static int computeDefaultThumbnailResolution(double dpr);
   int thumbnailResolution();
   void setThumbnailResolution(int size);
   int thumbnailerThreadCount();

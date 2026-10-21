@@ -4,6 +4,7 @@
 #include "utils/formatregistry.h"
 
 #include <algorithm>
+#include <cmath>
 
 Settings *settings = nullptr;
 
@@ -72,7 +73,16 @@ void Settings::initCache() {
   else if (limit > 8192) limit = 8192;
   mCachedMemoryAllocationLimit.store(limit, std::memory_order_relaxed);
 
-  mCachedThumbnailResolution.store(settingsConf->value("thumbnailResolution", DefaultThumbnailResolution).toInt(), std::memory_order_relaxed);
+  const double dpr =
+      qGuiApp != nullptr ? qGuiApp->devicePixelRatio() : DefaultDevicePixelRatio;
+  const int defaultThumbnailResolution = computeDefaultThumbnailResolution(dpr);
+  const int configuredThumbnailResolution =
+      settingsConf->value("thumbnailResolution", defaultThumbnailResolution)
+          .toInt();
+  mCachedThumbnailResolution.store(
+      std::clamp(configuredThumbnailResolution, MinThumbnailResolution,
+                 MaxThumbnailResolution),
+      std::memory_order_relaxed);
   mCachedThumbnailCacheMaxSizeMB.store(
       qMax(0, settingsConf
                   ->value("thumbnailCacheMaxSizeMB",
@@ -149,6 +159,21 @@ void Settings::sync() {
 }
 //------------------------------------------------------------------------------
 QString Settings::thumbnailCacheDir() { return mThumbCacheDir->path() + "/"; }
+//------------------------------------------------------------------------------
+int Settings::computeDefaultThumbnailResolution(double dpr) {
+  if (dpr <= 0.0 || std::isnan(dpr))
+    return DefaultThumbnailResolution;
+
+  const double raw = DefaultThumbnailResolution * dpr;
+  if (raw >= MaxThumbnailResolution)
+    return MaxThumbnailResolution;
+
+  const int rounded = static_cast<int>(std::round(raw));
+  const int remainder = rounded % ThumbnailResolutionStep;
+  const int stepped =
+      remainder == 0 ? rounded : rounded + (ThumbnailResolutionStep - remainder);
+  return std::clamp(stepped, MinThumbnailResolution, MaxThumbnailResolution);
+}
 //------------------------------------------------------------------------------
 int Settings::thumbnailResolution() {
   return mCachedThumbnailResolution.load(std::memory_order_relaxed);

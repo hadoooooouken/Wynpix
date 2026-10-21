@@ -4,6 +4,7 @@
 #include <QVariant>
 
 #include <cmath>
+#include <limits>
 
 #include "gui/settingseditor/settingsvaluemapping.h"
 #include "settings.h"
@@ -428,6 +429,37 @@ private slots:
       QCOMPARE(loaded.advanced, expected.advanced);
       QCOMPARE(loaded.upscale, expected.upscale);
     }
+  }
+
+  void defaultThumbnailResolutionDependsOnDpr() {
+    // 100% -> 256
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.0), 256);
+    // 125% -> 320
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.25), 320);
+    // 150% -> 384
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.5), 384);
+    // 175% -> 448
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.75), 448);
+    // 200% -> 512
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(2.0), 512);
+
+    // Floating-point noise around standard scale factors
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.2500000001), 320);
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.2499999999), 320);
+
+    // Rounding up to step 16
+    // 256 * 1.33 = 340.48 -> round 340 -> step up 352
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(1.33), 352);
+
+    // Clamping to bounds [128, 2048]
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(0.1), Settings::MinThumbnailResolution);
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(10.0), Settings::MaxThumbnailResolution);
+
+    // Invalid / fallback values
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(0.0), Settings::DefaultThumbnailResolution);
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(-1.5), Settings::DefaultThumbnailResolution);
+    QCOMPARE(Settings::computeDefaultThumbnailResolution(std::numeric_limits<double>::quiet_NaN()),
+             Settings::DefaultThumbnailResolution);
   }
 
 private:
