@@ -8,8 +8,27 @@ namespace {
 // Percentage of pixels to ignore at top and bottom of histogram (0.05% threshold).
 constexpr double kPercentIgnore = 0.0005;
 constexpr int kHistogramBins = 256;
-constexpr float kMinChannelDiff = 0.001f;
+constexpr int kMaxBinIndex = 255;
+constexpr int kMinDynamicRangeBins = 16;
 constexpr int kMaxDimensionSamples = 256;
+
+void computeChannelFactors(int minVal, int maxVal, float &scale, float &bias) {
+    const int range = maxVal - minVal;
+    if (range < kMinDynamicRangeBins) {
+        // Channel dynamic range is too narrow (e.g. flat image, monochrome or noise).
+        // Keep neutral coefficients to prevent turning flat images black or blowing up noise.
+        scale = 1.0f;
+        bias = 0.0f;
+        return;
+    }
+
+    const float minNorm = minVal / 255.0f;
+    const float maxNorm = maxVal / 255.0f;
+    const float diff = maxNorm - minNorm;
+
+    scale = 1.0f / diff;
+    bias = -minNorm / diff;
+}
 } // namespace
 
 WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
@@ -44,7 +63,8 @@ WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
         return factors;
     }
 
-    const auto threshold = static_cast<std::uint64_t>(totalSampled * kPercentIgnore);
+    // Ensure threshold is at least 1 when totalSampled is non-zero.
+    const auto threshold = std::max<std::uint64_t>(1, static_cast<std::uint64_t>(totalSampled * kPercentIgnore));
 
     // Find min bounds (accumulating from 0 upwards).
     const auto findMin = [threshold](const std::uint32_t hist[kHistogramBins]) -> int {
@@ -61,43 +81,26 @@ WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
     // Find max bounds (accumulating from 255 downwards).
     const auto findMax = [threshold](const std::uint32_t hist[kHistogramBins]) -> int {
         std::uint64_t tally = 0;
-        for (int i = kHistogramBins - 1; i >= 0; --i) {
+        for (int i = kMaxBinIndex; i >= 0; --i) {
             if (tally + hist[i] >= threshold) {
                 return i;
             }
             tally += hist[i];
         }
-        return kHistogramBins - 1;
+        return kMaxBinIndex;
     };
 
-    const int rMin = findMin(rHist);
-    const int gMin = findMin(gHist);
-    const int bMin = findMin(bHist);
+    const int rMin = std::clamp(findMin(rHist), 0, kMaxBinIndex);
+    const int gMin = std::clamp(findMin(gHist), 0, kMaxBinIndex);
+    const int bMin = std::clamp(findMin(bHist), 0, kMaxBinIndex);
 
-    const int rMax = std::max(rMin + 1, findMax(rHist));
-    const int gMax = std::max(gMin + 1, findMax(gHist));
-    const int bMax = std::max(bMin + 1, findMax(bHist));
+    const int rMax = std::clamp(findMax(rHist), 0, kMaxBinIndex);
+    const int gMax = std::clamp(findMax(gHist), 0, kMaxBinIndex);
+    const int bMax = std::clamp(findMax(bHist), 0, kMaxBinIndex);
 
-    const float rMinNorm = rMin / 255.0f;
-    const float gMinNorm = gMin / 255.0f;
-    const float bMinNorm = bMin / 255.0f;
-
-    const float rMaxNorm = rMax / 255.0f;
-    const float gMaxNorm = gMax / 255.0f;
-    const float bMaxNorm = bMax / 255.0f;
-
-    const float rDiff = std::max(kMinChannelDiff, rMaxNorm - rMinNorm);
-    const float gDiff = std::max(kMinChannelDiff, gMaxNorm - gMinNorm);
-    const float bDiff = std::max(kMinChannelDiff, bMaxNorm - bMinNorm);
-
-    factors.scale[0] = 1.0f / rDiff;
-    factors.bias[0]  = -rMinNorm / rDiff;
-
-    factors.scale[1] = 1.0f / gDiff;
-    factors.bias[1]  = -gMinNorm / gDiff;
-
-    factors.scale[2] = 1.0f / bDiff;
-    factors.bias[2]  = -bMinNorm / bDiff;
+    computeChannelFactors(rMin, rMax, factors.scale[0], factors.bias[0]);
+    computeChannelFactors(gMin, gMax, factors.scale[1], factors.bias[1]);
+    computeChannelFactors(bMin, bMax, factors.scale[2], factors.bias[2]);
 
     return factors;
 }
