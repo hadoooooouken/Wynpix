@@ -4,12 +4,12 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="423"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="425"/>
         <source>Stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="423"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -41,7 +41,7 @@
         <translation>Transform Error</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="419"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -113,7 +113,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="417"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="419"/>
         <source>Processing...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -227,31 +227,36 @@
     </message>
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="225"/>
-        <source>Exposure:</source>
+        <source>Smart Enhance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="226"/>
-        <source>Contrast:</source>
+        <source>Exposure:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="227"/>
-        <source>Brightness:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
-        <source>Temperature:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
-        <source>Tint:</source>
+        <source>Contrast:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="228"/>
+        <source>Brightness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
+        <source>Temperature:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="232"/>
+        <source>Tint:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
         <source>Saturation:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,7 +276,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
         <source>Hue:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,12 +301,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="263"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="265"/>
         <source>{name}_converted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="267"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="269"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,7 +316,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="443"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="445"/>
         <source>Ready to convert.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -401,7 +406,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="436"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="438"/>
         <source>%1 files selected (%2 MB)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -422,7 +427,7 @@
     </message>
     <message>
         <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="691"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="455"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="457"/>
         <source>Stopping...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -432,42 +437,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
         <source>Invalid Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="385"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
         <source>Please select a valid output directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="389"/>
         <source>Invalid Pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="388"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="391"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
         <source>No files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="394"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="395"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
         <source>Resolution Limit Exceeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="398"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -477,42 +482,42 @@ Please reduce the percentage or absolute size.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="447"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="449"/>
         <source>Processing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="463"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="465"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="467"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="469"/>
         <source>Batch aborted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="480"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="482"/>
         <source>Batch Conversion Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="451"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="453"/>
         <source>Processed %1 / %2 files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="459"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="461"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="471"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="473"/>
         <source>Batch Conversion Complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="474"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -524,7 +529,7 @@ Total files: %3</source>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="415"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="417"/>
         <source>Pending</source>
         <translation type="unfinished"></translation>
     </message>
@@ -565,37 +570,42 @@ Total files: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="33"/>
-        <source>Exposure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="35"/>
-        <source>Brightness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="34"/>
-        <source>Contrast</source>
+        <source>Smart Enhance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="36"/>
-        <source>Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="37"/>
-        <source>Tint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="39"/>
-        <source>Hue</source>
+        <source>Exposure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="38"/>
+        <source>Brightness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="37"/>
+        <source>Contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="39"/>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="40"/>
+        <source>Tint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="42"/>
+        <source>Hue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="41"/>
         <source>Saturation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -821,216 +831,216 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="780"/>
+        <location filename="../../core.cpp" line="776"/>
         <source>Updated: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="787"/>
+        <location filename="../../core.cpp" line="783"/>
         <source>Welcome to </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="788"/>
+        <location filename="../../core.cpp" line="784"/>
         <source> version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="806"/>
+        <location filename="../../core.cpp" line="802"/>
         <source>Shuffle mode: OFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="809"/>
+        <location filename="../../core.cpp" line="805"/>
         <source>Shuffle mode: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="818"/>
+        <location filename="../../core.cpp" line="814"/>
         <source>Slideshow: OFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="822"/>
+        <location filename="../../core.cpp" line="818"/>
         <source>Slideshow: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1016"/>
-        <location filename="../../core.cpp" line="1019"/>
-        <location filename="../../core.cpp" line="1022"/>
+        <location filename="../../core.cpp" line="1012"/>
+        <location filename="../../core.cpp" line="1015"/>
+        <location filename="../../core.cpp" line="1018"/>
         <source>Delete </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1017"/>
+        <location filename="../../core.cpp" line="1013"/>
         <source> folders permanently?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1020"/>
+        <location filename="../../core.cpp" line="1016"/>
         <source> files permanently?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1023"/>
+        <location filename="../../core.cpp" line="1019"/>
         <source> items permanently?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1031"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Delete permanently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1051"/>
+        <location filename="../../core.cpp" line="1047"/>
         <source>File removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1057"/>
-        <location filename="../../core.cpp" line="1060"/>
-        <location filename="../../core.cpp" line="1063"/>
+        <location filename="../../core.cpp" line="1053"/>
+        <location filename="../../core.cpp" line="1056"/>
+        <location filename="../../core.cpp" line="1059"/>
         <source>Removed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1061"/>
-        <location filename="../../core.cpp" line="1130"/>
+        <location filename="../../core.cpp" line="1057"/>
+        <location filename="../../core.cpp" line="1126"/>
         <source> files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../core.cpp" line="1084"/>
+        <location filename="../../core.cpp" line="1086"/>
         <location filename="../../core.cpp" line="1088"/>
-        <location filename="../../core.cpp" line="1090"/>
-        <location filename="../../core.cpp" line="1092"/>
         <source>Move </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1092"/>
+        <location filename="../../core.cpp" line="1088"/>
         <source> items to trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1100"/>
+        <location filename="../../core.cpp" line="1096"/>
         <source>Move to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1118"/>
+        <location filename="../../core.cpp" line="1114"/>
         <source>Folder moved to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1120"/>
+        <location filename="../../core.cpp" line="1116"/>
         <source>Moved to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1126"/>
-        <location filename="../../core.cpp" line="1129"/>
-        <location filename="../../core.cpp" line="1132"/>
+        <location filename="../../core.cpp" line="1122"/>
+        <location filename="../../core.cpp" line="1125"/>
+        <location filename="../../core.cpp" line="1128"/>
         <source>Moved to trash: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1213"/>
+        <location filename="../../core.cpp" line="1209"/>
         <source>File copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1220"/>
+        <location filename="../../core.cpp" line="1216"/>
         <source>Path copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1347"/>
-        <location filename="../../core.cpp" line="1533"/>
-        <location filename="../../core.cpp" line="1557"/>
+        <location filename="../../core.cpp" line="1343"/>
+        <location filename="../../core.cpp" line="1529"/>
+        <location filename="../../core.cpp" line="1553"/>
         <source>File exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1347"/>
+        <location filename="../../core.cpp" line="1343"/>
         <source>Overwrite file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1439"/>
+        <location filename="../../core.cpp" line="1435"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1439"/>
+        <location filename="../../core.cpp" line="1435"/>
         <source>Folder name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1446"/>
+        <location filename="../../core.cpp" line="1442"/>
         <source>Folder already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1455"/>
+        <location filename="../../core.cpp" line="1451"/>
         <source>Failed to create folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1531"/>
+        <location filename="../../core.cpp" line="1527"/>
         <source>File moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1534"/>
-        <location filename="../../core.cpp" line="1558"/>
+        <location filename="../../core.cpp" line="1530"/>
+        <location filename="../../core.cpp" line="1554"/>
         <source>Destination file exists. Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1555"/>
+        <location filename="../../core.cpp" line="1551"/>
         <source>File copied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1671"/>
+        <location filename="../../core.cpp" line="1667"/>
         <source>Perform action &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1672"/>
+        <location filename="../../core.cpp" line="1668"/>
         <source>Changes will be saved immediately.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1704"/>
+        <location filename="../../core.cpp" line="1700"/>
         <source>Flip horizontal</source>
         <translation type="unfinished">Flip horizontal</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1710"/>
+        <location filename="../../core.cpp" line="1706"/>
         <source>Flip vertical</source>
         <translation type="unfinished">Flip vertical</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1716"/>
+        <location filename="../../core.cpp" line="1712"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1760"/>
-        <location filename="../../core.cpp" line="1787"/>
+        <location filename="../../core.cpp" line="1756"/>
+        <location filename="../../core.cpp" line="1783"/>
         <source>Resize</source>
         <translation type="unfinished">Resize</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1850"/>
-        <location filename="../../core.cpp" line="1857"/>
+        <location filename="../../core.cpp" line="1846"/>
+        <location filename="../../core.cpp" line="1853"/>
         <source>Crop</source>
         <translation type="unfinished">Crop</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1921"/>
+        <location filename="../../core.cpp" line="1917"/>
         <source>File saved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1050,18 +1060,18 @@ Total files: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2024"/>
-        <location filename="../../core.cpp" line="2033"/>
+        <location filename="../../core.cpp" line="2020"/>
+        <location filename="../../core.cpp" line="2029"/>
         <source>Could not open image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2028"/>
+        <location filename="../../core.cpp" line="2024"/>
         <source>Can only print static images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="296"/>
+        <location filename="../../core.cpp" line="295"/>
         <source>AI Upscaling...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1204,85 +1214,85 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="271"/>
+        <location filename="../../core.cpp" line="270"/>
         <source>Failed to clean up temporary image-transfer data: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="279"/>
+        <location filename="../../core.cpp" line="278"/>
         <source>Wallpaper set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="291"/>
+        <location filename="../../core.cpp" line="290"/>
         <source>Set wallpaper: failed to clean up wallpaper file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="632"/>
-        <location filename="../../core.cpp" line="1496"/>
+        <location filename="../../core.cpp" line="629"/>
+        <location filename="../../core.cpp" line="1492"/>
         <source>Failed to clear thumbnail cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1023"/>
         <source>Delete folder permanently?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1029"/>
+        <location filename="../../core.cpp" line="1025"/>
         <source>Delete file permanently?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1049"/>
+        <location filename="../../core.cpp" line="1045"/>
         <source>Folder removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1058"/>
-        <location filename="../../core.cpp" line="1127"/>
+        <location filename="../../core.cpp" line="1054"/>
+        <location filename="../../core.cpp" line="1123"/>
         <source> folders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1064"/>
-        <location filename="../../core.cpp" line="1133"/>
+        <location filename="../../core.cpp" line="1060"/>
+        <location filename="../../core.cpp" line="1129"/>
         <source> items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1088"/>
+        <location filename="../../core.cpp" line="1084"/>
         <source> folders to trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1090"/>
+        <location filename="../../core.cpp" line="1086"/>
         <source> files to trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1096"/>
+        <location filename="../../core.cpp" line="1092"/>
         <source>Move folder to trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1098"/>
+        <location filename="../../core.cpp" line="1094"/>
         <source>Move file to trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1478"/>
+        <location filename="../../core.cpp" line="1474"/>
         <source>Moving: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1479"/>
+        <location filename="../../core.cpp" line="1475"/>
         <source>Copying: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1488"/>
+        <location filename="../../core.cpp" line="1484"/>
         <source>Moved %n file(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1290,7 +1300,7 @@ Staged copy:
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1489"/>
+        <location filename="../../core.cpp" line="1485"/>
         <source>Copied %n file(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1298,122 +1308,122 @@ Staged copy:
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1697"/>
+        <location filename="../../core.cpp" line="1693"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1728"/>
+        <location filename="../../core.cpp" line="1724"/>
         <source>AI resize is already running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1737"/>
+        <location filename="../../core.cpp" line="1733"/>
         <source>AI resize supports one image at a time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1744"/>
-        <location filename="../../core.cpp" line="1750"/>
+        <location filename="../../core.cpp" line="1740"/>
+        <location filename="../../core.cpp" line="1746"/>
         <source>Could not resize image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1777"/>
+        <location filename="../../core.cpp" line="1773"/>
         <source>AI resizing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1813"/>
+        <location filename="../../core.cpp" line="1809"/>
         <source>AI resize failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1818"/>
+        <location filename="../../core.cpp" line="1814"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1824"/>
+        <location filename="../../core.cpp" line="1820"/>
         <source>Could not apply AI resize.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1831"/>
+        <location filename="../../core.cpp" line="1827"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1841"/>
+        <location filename="../../core.cpp" line="1837"/>
         <source>AI resize finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1843"/>
+        <location filename="../../core.cpp" line="1839"/>
         <source>AI resize finished for %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1878"/>
+        <location filename="../../core.cpp" line="1874"/>
         <source>Could not adjust the image colors.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2000"/>
-        <location filename="../../core.cpp" line="2006"/>
+        <location filename="../../core.cpp" line="1996"/>
+        <location filename="../../core.cpp" line="2002"/>
         <source>Set wallpaper: file not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2012"/>
+        <location filename="../../core.cpp" line="2008"/>
         <source>Set wallpaper: failed to get image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2118"/>
+        <location filename="../../core.cpp" line="2114"/>
         <source>Could not open path: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2183"/>
+        <location filename="../../core.cpp" line="2179"/>
         <source>Could not load folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2242"/>
-        <location filename="../../core.cpp" line="2268"/>
+        <location filename="../../core.cpp" line="2238"/>
+        <location filename="../../core.cpp" line="2264"/>
         <source>Could not enumerate sibling folders: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2407"/>
+        <location filename="../../core.cpp" line="2403"/>
         <source>End of directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2441"/>
+        <location filename="../../core.cpp" line="2437"/>
         <source>Load failed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2520"/>
-        <location filename="../../core.cpp" line="2527"/>
+        <location filename="../../core.cpp" line="2516"/>
+        <location filename="../../core.cpp" line="2523"/>
         <source>Error: could not load image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2544"/>
+        <location filename="../../core.cpp" line="2540"/>
         <source>HDR Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2550"/>
+        <location filename="../../core.cpp" line="2546"/>
         <source>MaxCLL / MaxFALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2578"/>
-        <location filename="../../core.cpp" line="2601"/>
+        <location filename="../../core.cpp" line="2574"/>
+        <location filename="../../core.cpp" line="2597"/>
         <source>Page %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1524,20 +1534,20 @@ Staged copy:
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="607"/>
+        <location filename="../../components/directorypresenter.cpp" line="617"/>
         <source>Directory expansion failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="651"/>
+        <location filename="../../components/directorypresenter.cpp" line="661"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="875"/>
-        <location filename="../../components/directorypresenter.cpp" line="937"/>
-        <location filename="../../components/directorypresenter.cpp" line="982"/>
-        <location filename="../../components/directorypresenter.cpp" line="1011"/>
+        <location filename="../../components/directorypresenter.cpp" line="886"/>
+        <location filename="../../components/directorypresenter.cpp" line="953"/>
+        <location filename="../../components/directorypresenter.cpp" line="1007"/>
+        <location filename="../../components/directorypresenter.cpp" line="1038"/>
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2902,26 +2912,21 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="143"/>
-        <source>Crop previews</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="148"/>
         <source>Pinned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="153"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="148"/>
         <source>Disable in windowed mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="153"/>
         <source>Center selected image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="163"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="158"/>
         <source>Show subfolders</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2936,7 +2941,7 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="177"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="172"/>
         <source>Display style:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2946,7 +2951,7 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="169"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="164"/>
         <source>Hide delay:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2961,12 +2966,12 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="184"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="179"/>
         <source>Preview size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="195"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="190"/>
         <source>Position:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2992,7 +2997,7 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="202"/>
         <source>Folder navigation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3012,12 +3017,12 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="205"/>
         <source>After reaching the end:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="220"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="215"/>
         <source>Default sorting mode:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3052,7 +3057,7 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="229"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="224"/>
         <source>Apply sorting to folders</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3138,22 +3143,22 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="241"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="236"/>
         <source>Slideshow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="247"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="242"/>
         <source>Switch interval:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="256"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="251"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="261"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="256"/>
         <source>Loop slideshow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3419,7 +3424,7 @@ Example: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="234"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="229"/>
         <source>Show hidden files</source>
         <translation type="unfinished"></translation>
     </message>
