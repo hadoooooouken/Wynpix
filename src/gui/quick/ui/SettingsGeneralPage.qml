@@ -140,11 +140,6 @@ SettingsPage {
                 columnSpacing: StyleConstants.dialogSpacing
 
                 CheckBox {
-                    text: qsTranslate("SettingsDialog", "Crop previews")
-                    checked: root.editor.general.squareThumbnails
-                    onToggled: root.editor.general.squareThumbnails = checked
-                }
-                CheckBox {
                     text: qsTranslate("SettingsDialog", "Pinned")
                     checked: root.editor.general.panelPinned
                     onToggled: root.editor.general.panelPinned = checked

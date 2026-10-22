@@ -907,13 +907,6 @@ void Settings::saveScripts(const QMap<QString, Script> &scripts) {
   settings->settingsConf->endGroup();
 }
 //------------------------------------------------------------------------------
-bool Settings::squareThumbnails() {
-  return settings->settingsConf->value("squareThumbnails", false).toBool();
-}
-
-void Settings::setSquareThumbnails(bool mode) {
-  settings->settingsConf->setValue("squareThumbnails", mode);
-}
 //------------------------------------------------------------------------------
 bool Settings::transparencyGrid() {
   return settings->settingsConf->value("drawTransparencyGrid", false).toBool();

@@ -99,8 +99,6 @@ public:
   void setPanelEnabled(bool mode);
   int lastDisplay();
   void setLastDisplay(int display);
-  bool squareThumbnails();
-  void setSquareThumbnails(bool mode);
   bool transparencyGrid();
   void setTransparencyGrid(bool mode);
   bool enableSmoothScroll();

@@ -159,7 +159,7 @@ void FolderGridController::updateLayout() {
 }
 
 // The grid requests thumbnails for the image area times the device pixel
-// ratio and never crops (the squareThumbnails setting is the strip's).
+// ratio and never crops.
 void FolderGridController::configureModel() {
     mModel.configure({
         .targetSize = mLayout.cell.imageTargetSize(mDevicePixelRatio),

@@ -94,7 +94,6 @@ void ThumbnailPanelController::applySettings(const UiSettingsSnapshot &settings)
     const bool wasEnabled = mPanel.enabled;
     const Enums::PanelPosition previousPosition = mPanel.position;
     mPanel = settings.panel;
-    mFolderView = settings.folderView;
     mViewer = settings.viewer;
     if (wasEnabled != mPanel.enabled) {
         emit enabledChanged();
@@ -312,7 +311,7 @@ void ThumbnailPanelController::updateLayout() {
 void ThumbnailPanelController::configureModel() {
     mModel.configure({
         .targetSize = mLayout.imageTargetSize(mDevicePixelRatio),
-        .crop = mFolderView.squareThumbnails,
+        .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,
     });

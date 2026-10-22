@@ -143,8 +143,7 @@ void ThumbnailListModel::populate(int count) {
 
 void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry, QSize targetSize) {
     // The thumbnailer publishes to every view, and another view may request
-    // the same path and box with the other crop (the folder grid never
-    // crops, the strip follows squareThumbnails).
+    // the same path and box with the other crop.
     const bool otherCrop = entry.cropped.has_value() && *entry.cropped != mRequest.crop;
     if (targetSize != mRequest.targetSize || otherCrop || !checkRange(pos))
         return;

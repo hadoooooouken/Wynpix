@@ -56,7 +56,6 @@ UiSettingsSnapshot BridgeSnapshots::readUiSettings(Settings &settings) {
       .folderView =
           {
               .iconSize = settings.folderViewIconSize(),
-              .squareThumbnails = settings.squareThumbnails(),
               .sortingMode = static_cast<Enums::SortingMode>(settings.sortingMode()),
               .folderSortingMode =
                   static_cast<Enums::SortingMode>(settings.folderIconSortingMode()),

@@ -926,14 +926,14 @@ private slots:
   void panelConfiguresTheModel() {
     ThumbnailListModel model;
     UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Left);
-    settings.folderView.squareThumbnails = true;
     settings.panel.unloadThumbnails = true;
     settings.panel.centerSelection = true;
     ThumbnailPanelController panel(model, settings);
     panel.setDevicePixelRatio(1.5);
     // The image area of an 80 px cell is 80 x 60; the box is that at 1.5.
     QCOMPARE(model.requestConfig().targetSize, QSize(120, 90));
-    QVERIFY(model.requestConfig().crop);
+    // The strip never crops.
+    QVERIFY(!model.requestConfig().crop);
     QVERIFY(model.requestConfig().unloadOffscreen);
     QVERIFY(!model.scrollConfig().horizontal);
     QCOMPARE(model.scrollConfig().itemExtent, panel.layout().cellHeight);

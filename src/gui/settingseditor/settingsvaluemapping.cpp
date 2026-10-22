@@ -66,7 +66,6 @@ SettingsValues SettingsValueMapping::load() const {
     general.autoResizeWindow = s.autoResizeWindow();
     general.autoResizeLimitStep = autoResizeLimitStep(s.autoResizeLimit());
     general.panelEnabled = s.panelEnabled();
-    general.squareThumbnails = s.squareThumbnails();
     general.panelPinned = s.panelPinned();
     general.panelFullscreenOnly = s.panelFullscreenOnly();
     general.panelCenterSelection = s.panelCenterSelection();
@@ -172,7 +171,6 @@ void SettingsValueMapping::storeGeneral(const GeneralSettings &general) {
     s.setAutoResizeWindow(general.autoResizeWindow);
     s.setAutoResizeLimit(autoResizeLimitPercent(general.autoResizeLimitStep));
     s.setPanelEnabled(general.panelEnabled);
-    s.setSquareThumbnails(general.squareThumbnails);
     s.setPanelPinned(general.panelPinned);
     s.setPanelFullscreenOnly(general.panelFullscreenOnly);
     s.setPanelCenterSelection(general.panelCenterSelection);

@@ -152,7 +152,6 @@ private:
 
     ThumbnailListModel &mModel;
     PanelSettings mPanel;
-    FolderViewSettings mFolderView;
     ViewerSettings mViewer;
     QFont mLabelFont;
     qreal mDevicePixelRatio = 1.0;

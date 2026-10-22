@@ -34,7 +34,6 @@ struct GeneralSettings {
     Q_PROPERTY(bool autoResizeWindow MEMBER autoResizeWindow FINAL)
     Q_PROPERTY(int autoResizeLimitStep MEMBER autoResizeLimitStep FINAL)
     Q_PROPERTY(bool panelEnabled MEMBER panelEnabled FINAL)
-    Q_PROPERTY(bool squareThumbnails MEMBER squareThumbnails FINAL)
     Q_PROPERTY(bool panelPinned MEMBER panelPinned FINAL)
     Q_PROPERTY(bool panelFullscreenOnly MEMBER panelFullscreenOnly FINAL)
     Q_PROPERTY(bool panelCenterSelection MEMBER panelCenterSelection FINAL)
@@ -66,7 +65,6 @@ public:
     bool autoResizeWindow = false;
     int autoResizeLimitStep = 0; // SettingsScales::autoResizeLimit*
     bool panelEnabled = false;
-    bool squareThumbnails = false;
     bool panelPinned = false;
     bool panelFullscreenOnly = false;
     bool panelCenterSelection = false;

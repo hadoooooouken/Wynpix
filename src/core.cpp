@@ -210,7 +210,6 @@ Core::Core(const UiPorts &ports)
   lastHdrWhite = settings->hdrTargetWhiteLevel();
   lastThumbnailResolution = settings->thumbnailResolution();
   lastShowSubfoldersInPanel = settings->showSubfoldersInPanel();
-  lastSquareThumbnails = settings->squareThumbnails();
   lastShowHiddenFiles = settings->showHiddenFiles();
   lastPanelPreviewsSize = settings->panelPreviewsSize();
   lastSortFolders = settings->sortFolders();
@@ -610,7 +609,6 @@ void Core::connectComponents() {
 
       int newThumbnailResolution = settings->thumbnailResolution();
       bool newShowSubfoldersInPanel = settings->showSubfoldersInPanel();
-      bool newSquareThumbnails = settings->squareThumbnails();
       bool newShowHiddenFiles = settings->showHiddenFiles();
       int newPanelPreviewsSize = settings->panelPreviewsSize();
       bool newSortFolders = settings->sortFolders();
@@ -621,7 +619,6 @@ void Core::connectComponents() {
           newThumbnailResolution != lastThumbnailResolution;
       bool layoutChanged = thumbnailResolutionChanged ||
                            (newShowSubfoldersInPanel != lastShowSubfoldersInPanel) ||
-                           (newSquareThumbnails != lastSquareThumbnails) ||
                            (newShowHiddenFiles != lastShowHiddenFiles) ||
                            (newPanelPreviewsSize != lastPanelPreviewsSize) ||
                            (newSortFolders != lastSortFolders) ||
@@ -637,7 +634,6 @@ void Core::connectComponents() {
 
           lastThumbnailResolution = newThumbnailResolution;
           lastShowSubfoldersInPanel = newShowSubfoldersInPanel;
-          lastSquareThumbnails = newSquareThumbnails;
           lastShowHiddenFiles = newShowHiddenFiles;
           lastPanelPreviewsSize = newPanelPreviewsSize;
           lastSortFolders = newSortFolders;

@@ -113,7 +113,6 @@ struct FolderViewSettings {
   QML_VALUE_TYPE(folderViewSettings)
   QML_UNCREATABLE("Provided by AppSettings.folderView")
   Q_PROPERTY(int iconSize MEMBER iconSize)
-  Q_PROPERTY(bool squareThumbnails MEMBER squareThumbnails)
   Q_PROPERTY(SettingsEnums::SortingMode sortingMode MEMBER sortingMode)
   Q_PROPERTY(SettingsEnums::SortingMode folderSortingMode MEMBER folderSortingMode)
   Q_PROPERTY(QStringList formatFilter MEMBER formatFilter)
@@ -125,7 +124,6 @@ struct FolderViewSettings {
 
 public:
   int iconSize{};
-  bool squareThumbnails{};
   SettingsEnums::SortingMode sortingMode{};
   // Sorting of the folder icons (folderIconSortingMode).
   SettingsEnums::SortingMode folderSortingMode{};

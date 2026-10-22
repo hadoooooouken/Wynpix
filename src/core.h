@@ -308,7 +308,6 @@ private:
     int lastHdrWhite = 203;
     int lastThumbnailResolution = 0;
     bool lastShowSubfoldersInPanel = false;
-    bool lastSquareThumbnails = false;
     bool lastShowHiddenFiles = false;
     int lastPanelPreviewsSize = 0;
     bool lastSortFolders = false;

@@ -1327,8 +1327,8 @@ test QML scene and by `--ui=quick`. The widget viewer is not modified.
 
     The pin button publishes `pinRequested`, which the host stores. The
     controller configures the model: request size `dpr * thumbnailSize`
-    (the application's device pixel ratio, like the widget strip), crop
-    (`squareThumbnails`), unloading, and the scroll settings.
+    (the application's device pixel ratio, like the widget strip), uncropped
+    previews, unloading, and the scroll settings.
   - **`ThumbnailItem`** (`wynpix.render`): creates its texture from the
     decoded `QImage` with `QQuickWindow::createTextureFromImage()` in
     `updatePaintNode()`, and only again when `QImage::cacheKey()` changes.
