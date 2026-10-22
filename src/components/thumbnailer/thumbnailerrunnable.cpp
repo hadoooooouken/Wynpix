@@ -17,6 +17,24 @@
 
 #include <QColorSpace>
 
+namespace {
+[[nodiscard]] QImage toPremultipliedThumbnail(QImage image) {
+  if (!image.hasAlphaChannel())
+    return image;
+
+  switch (image.format()) {
+  case QImage::Format_ARGB32_Premultiplied:
+  case QImage::Format_RGBA8888_Premultiplied:
+    return image;
+  case QImage::Format_RGBA8888:
+    return image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
+  case QImage::Format_ARGB32:
+  default:
+    return image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+  }
+}
+} // namespace
+
 void ThumbnailTaskNotifier::reportCompletion(
     ThumbnailTaskCompletion completion) {
   emit taskCompleted(std::move(completion));
@@ -259,6 +277,8 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
 
   if (request.decodeContext.isCancellationRequested())
     return {};
+
+  colorManaged = toPremultipliedThumbnail(std::move(colorManaged));
 
   QString label;
   if (colorManaged.width() == 0) {
