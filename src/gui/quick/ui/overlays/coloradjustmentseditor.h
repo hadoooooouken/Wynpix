@@ -19,8 +19,8 @@ class ColorAdjustmentsEditor final : public AdjustmentSliderModel {
     QML_UNCREATABLE("Provided by OverlayCoordinator")
 
 public:
-    // Row order of the overlay.
-    enum Row { SmartEnhance, Exposure, Contrast, Brightness, Temperature, Tint, Saturation, Hue, RowCount };
+    // Row order of the overlay; the batch converter uses the same order.
+    enum Row { SmartEnhance, Exposure, Contrast, Brightness, Temperature, Tint, Hue, Saturation, RowCount };
     Q_ENUM(Row)
 
     explicit ColorAdjustmentsEditor(QObject *parent = nullptr);

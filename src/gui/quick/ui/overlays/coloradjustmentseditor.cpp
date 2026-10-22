@@ -38,8 +38,8 @@ QList<SliderSpec> colorAdjustmentSpecs() {
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Brightness")), -kBrightnessLimit, kBrightnessLimit, kNeutral, SliderValueFormat::Percent},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Temperature")), -kColorShiftLimit, kColorShiftLimit, kNeutral, SliderValueFormat::Integer},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Tint")), -kColorShiftLimit, kColorShiftLimit, kNeutral, SliderValueFormat::Integer},
-        {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Saturation")), kMultiplierMin, kSaturationMax, kNeutralMultiplier, SliderValueFormat::Percent},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Hue")), -kHueLimit, kHueLimit, kNeutral, SliderValueFormat::Degrees},
+        {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Saturation")), kMultiplierMin, kSaturationMax, kNeutralMultiplier, SliderValueFormat::Percent},
     };
 }
 } // namespace

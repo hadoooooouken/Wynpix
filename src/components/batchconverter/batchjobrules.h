@@ -128,10 +128,10 @@ enum class ColorSlider : uint8_t {
     Exposure,
     Contrast,
     Brightness,
-    Saturation,
-    Hue,
     Temperature,
     Tint,
+    Hue,
+    Saturation,
     Count
 };
 
