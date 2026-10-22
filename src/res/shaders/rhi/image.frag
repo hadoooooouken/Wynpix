@@ -41,6 +41,10 @@ layout(std140, binding = 0) uniform TileParams {
     // below 1:1: the sharpening taps are widened and sampled from a sharper
     // mip level.
     int downscaleTaps;
+    float smartEnhance;
+    int smartEnhanceEnabled;
+    vec4 wbScale;
+    vec4 wbBias;
 };
 
 layout(binding = 1) uniform sampler2D imageTexture;
@@ -170,6 +174,70 @@ vec3 applySmart(vec2 uv)
     return clamp(c + lap * kSmartLaplacianAmount, 0.0, 1.0);
 }
 
+vec3 overlayBlend(vec3 src, vec3 blend)
+{
+    return mix(2.0 * src * blend,
+               vec3(1.0) - 2.0 * (vec3(1.0) - src) * (vec3(1.0) - blend),
+               step(vec3(0.5), src));
+}
+
+vec3 sampleLocalBlur(vec2 uv)
+{
+    vec2 off = texelStep * 12.0;
+    vec3 c = texture(imageTexture, uv).rgb * 0.28;
+    c += (texture(imageTexture, uv + vec2(-off.x, 0.0)).rgb +
+          texture(imageTexture, uv + vec2( off.x, 0.0)).rgb +
+          texture(imageTexture, uv + vec2(0.0, -off.y)).rgb +
+          texture(imageTexture, uv + vec2(0.0,  off.y)).rgb) * 0.12;
+    c += (texture(imageTexture, uv + vec2(-off.x, -off.y)).rgb +
+          texture(imageTexture, uv + vec2( off.x, -off.y)).rgb +
+          texture(imageTexture, uv + vec2(-off.x,  off.y)).rgb +
+          texture(imageTexture, uv + vec2( off.x,  off.y)).rgb) * 0.06;
+    return c;
+}
+
+vec3 applySmartEnhance(vec3 color, vec2 uv)
+{
+    // 1. Auto White Balance: per-channel histogram stretch (0.05% cutoff).
+    vec3 wbColor = clamp(color * wbScale.xyz + wbBias.xyz, 0.0, 1.0);
+
+    // 2. Spatial luminance blur approximation (wide radius Gaussian blur).
+    vec3 blurColor = sampleLocalBlur(uv);
+    vec3 wbBlurColor = clamp(blurColor * wbScale.xyz + wbBias.xyz, 0.0, 1.0);
+    float blurLum = dot(wbBlurColor, kLuma);
+
+    // 3. Shadows recovery: power curve when blurLum < 0.392.
+    const float kShadowCutoff = 0.392;
+    float shadowWeight = 0.0;
+    if (blurLum < kShadowCutoff) {
+        float t = blurLum / kShadowCutoff;
+        shadowWeight = 1.0 - t * t;
+    }
+    vec3 shadowOverlay = overlayBlend(wbColor, vec3(1.0) - wbBlurColor);
+
+    // 4. Highlights recovery: power curve when blurLum > 0.608.
+    const float kHighlightCutoff = 0.608;
+    float highlightWeight = 0.0;
+    if (blurLum > kHighlightCutoff) {
+        float t = (1.0 - blurLum) / (1.0 - kHighlightCutoff);
+        highlightWeight = 1.0 - t * t;
+    }
+    vec3 highlightOverlay = overlayBlend(wbColor, wbBlurColor);
+
+    // Adaptive amounts for shadow lift and highlight compression.
+    const float kShadowAmount = 0.25;
+    const float kHighlightAmount = 0.25;
+
+    vec3 adjusted = wbColor;
+    adjusted = mix(adjusted, shadowOverlay, kShadowAmount * shadowWeight);
+    adjusted = mix(adjusted, highlightOverlay, kHighlightAmount * highlightWeight);
+
+    // 5. Midtone clarity and S-curve boost.
+    vec3 midDist = adjusted - vec3(0.5);
+    vec3 midtoneBoost = adjusted + midDist * (vec3(1.0) - 4.0 * midDist * midDist) * 0.10;
+    return clamp(midtoneBoost, 0.0, 1.0);
+}
+
 void main()
 {
     vec4 color = texture(imageTexture, texCoord);
@@ -186,6 +254,14 @@ void main()
         sharpened = applySmart(texCoord);
     if (a >= kOpaqueAlphaThreshold)
         rgb = sharpened;
+
+    // Smart Enhance adaptive local tone mapping on straight colour.
+    if (smartEnhanceEnabled != 0 && smartEnhance > kSharpenEpsilon) {
+        vec3 straight = (a > kMinUnpremultiplyAlpha) ? rgb / a : rgb;
+        vec3 enhanced = applySmartEnhance(straight, texCoord);
+        straight = mix(straight, enhanced, clamp(smartEnhance, 0.0, 1.0));
+        rgb = straight * a;
+    }
 
     // The adjustments are defined on straight colour: un-premultiply, apply,
     // premultiply again.

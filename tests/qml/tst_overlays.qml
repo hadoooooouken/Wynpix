@@ -217,9 +217,9 @@ Item {
         function test_colorAdjustmentSliderDoubleClickResetsAfterSliderInput() {
             Fixture.toggleColorAdjustments();
             const adjustments = overlay(colorAdjustmentsLoader);
-            const slider = findObject(adjustments, "adjustmentSlider_0");
-            const label = findObject(adjustments, "adjustmentLabel_0");
-            const valueText = findObject(adjustments, "adjustmentValue_0");
+            const slider = findObject(adjustments, "adjustmentSlider_1");
+            const label = findObject(adjustments, "adjustmentLabel_1");
+            const valueText = findObject(adjustments, "adjustmentValue_1");
             verify(slider !== null);
             verify(label !== null);
             verify(valueText !== null);
@@ -227,7 +227,7 @@ Item {
             mouseClick(slider, slider.width - 1, slider.height / 2);
             tryVerify(() => slider.value > 100);
 
-            Fixture.overlays.colorAdjustmentsEditor.setValue(0, 150);
+            Fixture.overlays.colorAdjustmentsEditor.setValue(1, 150);
             compare(slider.value, 150);
 
             mouseDoubleClickSequence(slider, slider.width / 2, slider.height / 2);
@@ -235,11 +235,11 @@ Item {
             tryCompare(slider, "value", 0);
             verify(findText(adjustments, "+0.00") !== null);
 
-            Fixture.overlays.colorAdjustmentsEditor.setValue(0, 150);
+            Fixture.overlays.colorAdjustmentsEditor.setValue(1, 150);
             mouseDoubleClickSequence(label, label.width / 2, label.height / 2);
             tryCompare(slider, "value", 0);
 
-            Fixture.overlays.colorAdjustmentsEditor.setValue(0, 150);
+            Fixture.overlays.colorAdjustmentsEditor.setValue(1, 150);
             mouseDoubleClickSequence(valueText, valueText.width / 2, valueText.height / 2);
             tryCompare(slider, "value", 0);
         }
@@ -247,9 +247,9 @@ Item {
         function test_colorAdjustmentWheelOverParameterChangesItsValue() {
             Fixture.toggleColorAdjustments();
             const adjustments = overlay(colorAdjustmentsLoader);
-            const label = findObject(adjustments, "adjustmentLabel_0");
-            const slider = findObject(adjustments, "adjustmentSlider_0");
-            const valueText = findObject(adjustments, "adjustmentValue_0");
+            const label = findObject(adjustments, "adjustmentLabel_1");
+            const slider = findObject(adjustments, "adjustmentSlider_1");
+            const valueText = findObject(adjustments, "adjustmentValue_1");
             verify(label !== null);
             verify(slider !== null);
             verify(valueText !== null);

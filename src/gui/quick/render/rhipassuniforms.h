@@ -70,7 +70,11 @@ struct TileUniforms {
   qint32 colorEnabled = kDisabled;
   qint32 sharpenMode = static_cast<qint32>(RenderEnums::Sharpening::None);
   qint32 downscaleTaps = kDisabled;
-  qint32 padding[3]{};
+  float smartEnhance = 0.0f;
+  qint32 smartEnhanceEnabled = kDisabled;
+  qint32 padding{};
+  float wbScale[4] = {1.0f, 1.0f, 1.0f, 0.0f};
+  float wbBias[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 };
 static_assert(offsetof(TileUniforms, targetRect) == 64);
 static_assert(offsetof(TileUniforms, texRect) == 80);
@@ -90,6 +94,10 @@ static_assert(offsetof(TileUniforms, checkerEnabled) == 212);
 static_assert(offsetof(TileUniforms, colorEnabled) == 216);
 static_assert(offsetof(TileUniforms, sharpenMode) == 220);
 static_assert(offsetof(TileUniforms, downscaleTaps) == 224);
+static_assert(offsetof(TileUniforms, smartEnhance) == 228);
+static_assert(offsetof(TileUniforms, smartEnhanceEnabled) == 232);
+static_assert(offsetof(TileUniforms, wbScale) == 240);
+static_assert(offsetof(TileUniforms, wbBias) == 256);
 static_assert(sizeof(TileUniforms) % 16 == 0);
 
 // Mirror of the PanoramaParams block in panorama.vert/.frag. One draw per

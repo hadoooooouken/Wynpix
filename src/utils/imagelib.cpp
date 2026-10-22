@@ -1,5 +1,6 @@
 #include "imagelib.h"
 #include "settings.h"
+#include "utils/autocoloradjustments.h"
 #include "utils/batchresourcepolicy.h"
 #include <array>
 #include <thread>
@@ -1307,6 +1308,88 @@ QImage ImageLib::applyColorAdjustmentsForBatch(
   return applyColorAdjustmentsWithMode(std::move(source), adjustments, ExecutionMode::Batch);
 }
 
+namespace {
+void applySmartEnhanceToImage(QImage &image, float amount) {
+  if (std::abs(amount) <= kColorAdjustmentEpsilon)
+    return;
+  const int width = image.width();
+  const int height = image.height();
+  const int bytesPerLine = image.bytesPerLine();
+  uchar *bits = image.bits();
+
+  const WhiteBalanceFactors wb = calculateWhiteBalanceFactors(&image);
+
+  constexpr float kShadowCutoff = 0.392f;
+  constexpr float kHighlightCutoff = 0.608f;
+  constexpr float kShadowAmount = 0.25f;
+  constexpr float kHighlightAmount = 0.25f;
+  const float strength = std::clamp(amount, 0.0f, 1.0f);
+
+  const auto overlay = [](float s, float b) noexcept {
+    return s < 0.5f ? 2.0f * s * b : 1.0f - 2.0f * (1.0f - s) * (1.0f - b);
+  };
+
+  for (int y = 0; y < height; ++y) {
+    QRgb *line = reinterpret_cast<QRgb*>(bits + y * bytesPerLine);
+    for (int x = 0; x < width; ++x) {
+      QRgb pixel = line[x];
+      float origR = qRed(pixel) / 255.0f;
+      float origG = qGreen(pixel) / 255.0f;
+      float origB = qBlue(pixel) / 255.0f;
+
+      // 1. Auto White Balance per-channel stretch
+      float r = std::clamp(origR * wb.scale[0] + wb.bias[0], 0.0f, 1.0f);
+      float g = std::clamp(origG * wb.scale[1] + wb.bias[1], 0.0f, 1.0f);
+      float b = std::clamp(origB * wb.scale[2] + wb.bias[2], 0.0f, 1.0f);
+
+      float lum = 0.2126f * r + 0.7152f * g + 0.0722f * b;
+
+      float shadowWeight = 0.0f;
+      if (lum < kShadowCutoff) {
+        float t = lum / kShadowCutoff;
+        shadowWeight = 1.0f - t * t;
+      }
+
+      float highlightWeight = 0.0f;
+      if (lum > kHighlightCutoff) {
+        float t = (1.0f - lum) / (1.0f - kHighlightCutoff);
+        highlightWeight = 1.0f - t * t;
+      }
+
+      float rAdj = r;
+      float gAdj = g;
+      float bAdj = b;
+
+      float sR = overlay(r, 1.0f - lum);
+      float sG = overlay(g, 1.0f - lum);
+      float sB = overlay(b, 1.0f - lum);
+      rAdj = std::lerp(rAdj, sR, kShadowAmount * shadowWeight);
+      gAdj = std::lerp(gAdj, sG, kShadowAmount * shadowWeight);
+      bAdj = std::lerp(bAdj, sB, kShadowAmount * shadowWeight);
+
+      float hR = overlay(r, lum);
+      float hG = overlay(g, lum);
+      float hB = overlay(b, lum);
+      rAdj = std::lerp(rAdj, hR, kHighlightAmount * highlightWeight);
+      gAdj = std::lerp(gAdj, hG, kHighlightAmount * highlightWeight);
+      bAdj = std::lerp(bAdj, hB, kHighlightAmount * highlightWeight);
+
+      float midR = rAdj - 0.5f;
+      float midG = gAdj - 0.5f;
+      float midB = bAdj - 0.5f;
+      rAdj = std::clamp(rAdj + midR * (1.0f - 4.0f * midR * midR) * 0.10f, 0.0f, 1.0f);
+      gAdj = std::clamp(gAdj + midG * (1.0f - 4.0f * midG * midG) * 0.10f, 0.0f, 1.0f);
+      bAdj = std::clamp(bAdj + midB * (1.0f - 4.0f * midB * midB) * 0.10f, 0.0f, 1.0f);
+
+      int finalR = std::clamp(static_cast<int>(std::round(std::lerp(origR, rAdj, strength) * 255.0f)), 0, 255);
+      int finalG = std::clamp(static_cast<int>(std::round(std::lerp(origG, gAdj, strength) * 255.0f)), 0, 255);
+      int finalB = std::clamp(static_cast<int>(std::round(std::lerp(origB, bAdj, strength) * 255.0f)), 0, 255);
+      line[x] = (pixel & 0xFF000000) | (finalR << 16) | (finalG << 8) | finalB;
+    }
+  }
+}
+} // namespace
+
 QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> source,
                                                const ColorAdjustments &adjustments,
                                                ExecutionMode executionMode) {
@@ -1314,6 +1397,9 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
     return QImage();
 
   QImage dst = source->convertToFormat(QImage::Format_ARGB32);
+  if (std::abs(adjustments.smartEnhance) > kColorAdjustmentEpsilon) {
+    applySmartEnhanceToImage(dst, adjustments.smartEnhance);
+  }
   ColorMatrix cm = colorAdjustmentMatrix(adjustments);
 
   int height = dst.height();

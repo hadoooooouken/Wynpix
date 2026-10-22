@@ -28,8 +28,11 @@ QList<SliderSpec> colorAdjustmentSpecs() {
     constexpr int kSaturationMax = 200;
     // Hue rotation: a half turn either way.
     constexpr int kHueLimit = 180;
+    // Smart Enhance: 0% to 100%.
+    constexpr int kSmartEnhanceMax = 100;
     constexpr int kMultiplierMin = 0;
     return {
+        {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Smart Enhance")), kMultiplierMin, kSmartEnhanceMax, kNeutral, SliderValueFormat::Percent},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Exposure")), -kExposureLimit, kExposureLimit, kNeutral, SliderValueFormat::SignedHundredths},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Contrast")), kMultiplierMin, kContrastMax, kNeutralMultiplier, SliderValueFormat::Percent},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Brightness")), -kBrightnessLimit, kBrightnessLimit, kNeutral, SliderValueFormat::Percent},
@@ -47,6 +50,7 @@ ColorAdjustmentsEditor::ColorAdjustmentsEditor(QObject *parent)
 ColorAdjustments ColorAdjustmentsEditor::adjustments() const {
     const auto scaled = [this](Row row) { return value(row) / kSliderUnitsPerUnit; };
     return {
+        .smartEnhance = scaled(SmartEnhance),
         .exposure = scaled(Exposure),
         .contrast = scaled(Contrast),
         .brightness = scaled(Brightness),

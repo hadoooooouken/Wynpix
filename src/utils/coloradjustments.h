@@ -17,7 +17,9 @@ struct ColorAdjustments {
     static constexpr float kNeutralTint = 0.0f;
     static constexpr float kNeutralSaturation = 1.0f;
     static constexpr float kNeutralHue = 0.0f;
+    static constexpr float kNeutralSmartEnhance = 0.0f;
 
+    float smartEnhance = kNeutralSmartEnhance; // 0.0 to 1.0 (0% to 100%)
     float exposure = kNeutralExposure;       // stops
     float contrast = kNeutralContrast;       // multiplier
     float brightness = kNeutralBrightness;   // offset
@@ -34,7 +36,8 @@ struct ColorAdjustments {
                std::abs(temperature - kNeutralTemperature) > kColorAdjustmentEpsilon ||
                std::abs(tint - kNeutralTint) > kColorAdjustmentEpsilon ||
                std::abs(saturation - kNeutralSaturation) > kColorAdjustmentEpsilon ||
-               std::abs(hue - kNeutralHue) > kColorAdjustmentEpsilon;
+               std::abs(hue - kNeutralHue) > kColorAdjustmentEpsilon ||
+               std::abs(smartEnhance - kNeutralSmartEnhance) > kColorAdjustmentEpsilon;
     }
 
     friend bool operator==(const ColorAdjustments &,

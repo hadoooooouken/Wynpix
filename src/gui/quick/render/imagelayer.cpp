@@ -237,6 +237,16 @@ TileUniforms layerUniforms(const RenderFrame &frame,
     setUniformRow(uniforms.colorRow2, matrix.m[2]);
     uniforms.colorOffset = matrix.offset;
     uniforms.colorEnabled = TileUniforms::kEnabled;
+    if (std::abs(imageFilter.colorAdjustments.smartEnhance) > kColorAdjustmentEpsilon) {
+      uniforms.smartEnhance = imageFilter.colorAdjustments.smartEnhance;
+      uniforms.smartEnhanceEnabled = TileUniforms::kEnabled;
+      uniforms.wbScale[0] = imageFilter.wbScale[0];
+      uniforms.wbScale[1] = imageFilter.wbScale[1];
+      uniforms.wbScale[2] = imageFilter.wbScale[2];
+      uniforms.wbBias[0] = imageFilter.wbBias[0];
+      uniforms.wbBias[1] = imageFilter.wbBias[1];
+      uniforms.wbBias[2] = imageFilter.wbBias[2];
+    }
   }
   if (filter.sharpen) {
     uniforms.sharpenMode = static_cast<qint32>(imageFilter.sharpening);

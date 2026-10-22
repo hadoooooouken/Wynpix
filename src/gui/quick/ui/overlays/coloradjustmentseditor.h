@@ -20,7 +20,7 @@ class ColorAdjustmentsEditor final : public AdjustmentSliderModel {
 
 public:
     // Row order of the overlay.
-    enum Row { Exposure, Contrast, Brightness, Temperature, Tint, Saturation, Hue, RowCount };
+    enum Row { SmartEnhance, Exposure, Contrast, Brightness, Temperature, Tint, Saturation, Hue, RowCount };
     Q_ENUM(Row)
 
     explicit ColorAdjustmentsEditor(QObject *parent = nullptr);

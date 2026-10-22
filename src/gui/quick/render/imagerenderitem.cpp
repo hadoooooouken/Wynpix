@@ -7,6 +7,7 @@
 
 #include "gui/quick/render/colorlutbuilder.h"
 #include "gui/quick/render/imagerenderer.h"
+#include "utils/autocoloradjustments.h"
 #include "utils/hdrsource.h"
 #include "utils/hdrtonemapper.h"
 
@@ -77,6 +78,22 @@ void ImageRenderItem::setImage(std::shared_ptr<const QImage> image,
     mImageTraits = SourceTraits::of(mImage.get());
   if (!mImageIsAnimationFrame)
     clearUpscaledCrop();
+  if (mImage) {
+    const WhiteBalanceFactors wb = calculateWhiteBalanceFactors(mImage.get());
+    mFilter.wbScale[0] = wb.scale[0];
+    mFilter.wbScale[1] = wb.scale[1];
+    mFilter.wbScale[2] = wb.scale[2];
+    mFilter.wbBias[0] = wb.bias[0];
+    mFilter.wbBias[1] = wb.bias[1];
+    mFilter.wbBias[2] = wb.bias[2];
+  } else {
+    mFilter.wbScale[0] = 1.0f;
+    mFilter.wbScale[1] = 1.0f;
+    mFilter.wbScale[2] = 1.0f;
+    mFilter.wbBias[0] = 0.0f;
+    mFilter.wbBias[1] = 0.0f;
+    mFilter.wbBias[2] = 0.0f;
+  }
   refreshConversion();
   QQuickItem::update();
   if (imageSize() != previousSize)

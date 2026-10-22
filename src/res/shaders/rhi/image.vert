@@ -30,6 +30,10 @@ layout(std140, binding = 0) uniform TileParams {
     int colorEnabled;
     int sharpenMode;
     int downscaleTaps;
+    float smartEnhance;
+    int smartEnhanceEnabled;
+    vec4 wbScale;
+    vec4 wbBias;
 };
 
 void main()

@@ -16,6 +16,8 @@ target_link_libraries(wynpix PRIVATE "${WYNPIX_ZSTD_LIBRARY}")
 
 target_sources(wynpix PRIVATE
     actions.cpp
+    autocoloradjustments.cpp
+    autocoloradjustments.h
     blendreader.cpp
     coloradjustments.h
     decodecontext.h

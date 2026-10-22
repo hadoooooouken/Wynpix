@@ -139,6 +139,8 @@ struct ImageFilter {
   // CAS contrast adaptation in [0, 1].
   float casContrast = kDefaultCasContrast;
   ColorAdjustments colorAdjustments;
+  float wbScale[3] = {1.0f, 1.0f, 1.0f};
+  float wbBias[3] = {0.0f, 0.0f, 0.0f};
 
   friend bool operator==(const ImageFilter &, const ImageFilter &) = default;
 };

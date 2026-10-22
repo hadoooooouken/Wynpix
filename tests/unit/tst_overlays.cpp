@@ -183,6 +183,11 @@ private slots:
 
     editor.resetValue(ColorAdjustmentsEditor::Hue);
     QCOMPARE(editor.adjustments().hue, ColorAdjustments::kNeutralHue);
+
+    editor.setValue(ColorAdjustmentsEditor::SmartEnhance, 80);
+    QVERIFY(fuzzyEqual(editor.adjustments().smartEnhance, 0.8f));
+    editor.resetValue(ColorAdjustmentsEditor::SmartEnhance);
+    QCOMPARE(editor.adjustments().smartEnhance, ColorAdjustments::kNeutralSmartEnhance);
   }
 
   void colorAdjustmentsCompareShowsTheOriginal() {
