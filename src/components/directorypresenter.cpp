@@ -983,13 +983,22 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
   // The cover's native size in the folder pixmap's device pixels.
   QSize coverSize(qRound(innerThumb.width() * devicePixelRatio / innerDpr),
                   qRound(innerThumb.height() * devicePixelRatio / innerDpr));
-  const QSize windowSize = windowRect.size().toSize();
+  auto toEvenSize = [](QSize size) noexcept {
+    return QSize(size.width() > 1 ? (size.width() & ~1) : size.width(),
+                 size.height() > 1 ? (size.height() & ~1) : size.height());
+  };
+
+  const QSize windowSize = toEvenSize(windowRect.size().toSize());
+
   // Keep tiny source images at their native size. Scaling them up here would
   // bake the enlargement into the composed folder pixmap, so the no-upscale
   // logic in ThumbnailItem could no longer recover the original dimensions.
   if (coverSize.width() > windowSize.width() ||
       coverSize.height() > windowSize.height()) {
     coverSize.scale(windowSize, Qt::KeepAspectRatio);
+    // Scaled covers are rounded to even dimensions to preserve symmetric
+    // margins inside the folder icon without affecting tiny native icons.
+    coverSize = toEvenSize(coverSize);
   }
   if (coverSize.isEmpty()) {
     qWarning() << "Folder cover for" << dirName
@@ -1006,8 +1015,10 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
   }
   cover.setDevicePixelRatio(kDefaultDevicePixelRatio);
 
-  QRect targetRect(QPoint(0, 0), coverSize);
-  targetRect.moveCenter(windowRect.center().toPoint());
+  const QPoint windowCenter = windowRect.center().toPoint();
+  const QRect targetRect(windowCenter.x() - coverSize.width() / 2,
+                         windowCenter.y() - coverSize.height() / 2,
+                         coverSize.width(), coverSize.height());
 
   {
     QPainter painter(&canvas);
