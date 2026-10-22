@@ -37,7 +37,11 @@ struct ColorAdjustments {
                std::abs(tint - kNeutralTint) > kColorAdjustmentEpsilon ||
                std::abs(saturation - kNeutralSaturation) > kColorAdjustmentEpsilon ||
                std::abs(hue - kNeutralHue) > kColorAdjustmentEpsilon ||
-               std::abs(smartEnhance - kNeutralSmartEnhance) > kColorAdjustmentEpsilon;
+               hasSmartEnhance();
+    }
+
+    [[nodiscard]] bool hasSmartEnhance() const noexcept {
+        return std::abs(smartEnhance - kNeutralSmartEnhance) > kColorAdjustmentEpsilon;
     }
 
     friend bool operator==(const ColorAdjustments &,

@@ -74,26 +74,13 @@ void ImageRenderItem::setImage(std::shared_ptr<const QImage> image,
   ++mImageGeneration;
   mImageIsAnimationFrame = update == ImageUpdate::AnimationFrame;
   // Frames of one animation share their colour space and encoding.
-  if (!mImageIsAnimationFrame || !hadImage || previousSize != imageSize())
+  if (!mImageIsAnimationFrame || !hadImage || previousSize != imageSize()) {
     mImageTraits = SourceTraits::of(mImage.get());
+    mWbFactorsValid = false;
+  }
   if (!mImageIsAnimationFrame)
     clearUpscaledCrop();
-  if (mImage) {
-    const WhiteBalanceFactors wb = calculateWhiteBalanceFactors(mImage.get());
-    mFilter.wbScale[0] = wb.scale[0];
-    mFilter.wbScale[1] = wb.scale[1];
-    mFilter.wbScale[2] = wb.scale[2];
-    mFilter.wbBias[0] = wb.bias[0];
-    mFilter.wbBias[1] = wb.bias[1];
-    mFilter.wbBias[2] = wb.bias[2];
-  } else {
-    mFilter.wbScale[0] = 1.0f;
-    mFilter.wbScale[1] = 1.0f;
-    mFilter.wbScale[2] = 1.0f;
-    mFilter.wbBias[0] = 0.0f;
-    mFilter.wbBias[1] = 0.0f;
-    mFilter.wbBias[2] = 0.0f;
-  }
+  updateWhiteBalanceFactors();
   refreshConversion();
   QQuickItem::update();
   if (imageSize() != previousSize)
@@ -186,11 +173,41 @@ void ImageRenderItem::applySettings(const RenderSettings &settings) {
     emit transparencyGridChanged();
 }
 
-//------------------------------------------------------------------------------
-void ImageRenderItem::setImageFilter(const ImageFilter &filter) {
-  if (mFilter == filter)
+void ImageRenderItem::applyWhiteBalance(ImageFilter &filter) {
+  const bool smartEnhanceActive = filter.colorAdjustments.hasSmartEnhance();
+  if (!smartEnhanceActive || !mImage) {
+    filter.wbScale[0] = 1.0f;
+    filter.wbScale[1] = 1.0f;
+    filter.wbScale[2] = 1.0f;
+    filter.wbBias[0] = 0.0f;
+    filter.wbBias[1] = 0.0f;
+    filter.wbBias[2] = 0.0f;
     return;
-  mFilter = filter;
+  }
+
+  if (!mWbFactorsValid) {
+    mWbFactors = calculateWhiteBalanceFactors(mImage.get());
+    mWbFactorsValid = true;
+  }
+
+  filter.wbScale[0] = mWbFactors.scale[0];
+  filter.wbScale[1] = mWbFactors.scale[1];
+  filter.wbScale[2] = mWbFactors.scale[2];
+  filter.wbBias[0] = mWbFactors.bias[0];
+  filter.wbBias[1] = mWbFactors.bias[1];
+  filter.wbBias[2] = mWbFactors.bias[2];
+}
+
+void ImageRenderItem::updateWhiteBalanceFactors() {
+  applyWhiteBalance(mFilter);
+}
+
+void ImageRenderItem::setImageFilter(const ImageFilter &filter) {
+  ImageFilter updated = filter;
+  applyWhiteBalance(updated);
+  if (mFilter == updated)
+    return;
+  mFilter = updated;
   update();
   emit imageFilterChanged();
 }

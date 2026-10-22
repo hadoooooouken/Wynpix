@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "gui/quick/render/imagefiltermode.h"
+#include "gui/quick/render/imagerenderitem.h"
 #include "gui/quick/render/resamplegrid.h"
 #include "testsuites.h"
 #include "utils/coloradjustments.h"
@@ -21,6 +22,33 @@ constexpr float kNoSaturation = 0.0f;
 // A third of a turn around the grey axis maps blue -> red -> green -> blue.
 constexpr float kThirdTurnDegrees = 120.0f;
 constexpr float kLuma[3] = {0.2126f, 0.7152f, 0.0722f};
+
+constexpr int kTestImageDimension = 64;
+constexpr int kFirstChannelBase = 40;
+constexpr int kFirstChannelStep = 2;
+constexpr int kSecondChannelBase = 10;
+constexpr int kSecondChannelStep = 3;
+constexpr int kBlueBase = 50;
+constexpr int kSecondImageRedOffset = 10;
+constexpr int kSecondImageGreenOffset = 100;
+constexpr float kSmartEnhanceHalf = 0.5f;
+constexpr float kSmartEnhanceHigh = 0.8f;
+constexpr float kSmartEnhanceOff = 0.0f;
+constexpr float kIdentityScale = 1.0f;
+constexpr float kIdentityBias = 0.0f;
+
+QImage makeDynamicRangeImage(int rOffset, int gOffset) {
+  QImage img(kTestImageDimension, kTestImageDimension, QImage::Format_ARGB32_Premultiplied);
+  for (int y = 0; y < kTestImageDimension; ++y) {
+    for (int x = 0; x < kTestImageDimension; ++x) {
+      const int r = std::clamp(rOffset + x * kFirstChannelStep, 0, 255);
+      const int g = std::clamp(gOffset + y * kSecondChannelStep, 0, 255);
+      const int b = std::clamp(kBlueBase + (x + y), 0, 255);
+      img.setPixel(x, y, qRgb(r, g, b));
+    }
+  }
+  return img;
+}
 
 bool near(float actual, float expected) {
   return std::abs(actual - expected) <= kMatrixTolerance;
@@ -204,6 +232,69 @@ private slots:
       QCOMPARE(covered, QRegion(expected));
       QCOMPARE(area, qint64(expected.width()) * expected.height());
     }
+  }
+
+  void smartEnhanceDetection() {
+    const ColorAdjustments neutral;
+    QVERIFY(!neutral.hasSmartEnhance());
+    ColorAdjustments withEnhance;
+    withEnhance.smartEnhance = kSmartEnhanceHalf;
+    QVERIFY(withEnhance.hasSmartEnhance());
+    QVERIFY(withEnhance.hasAdjustments());
+  }
+
+  void renderItemCalculatesWhiteBalanceOnDemandAndCaches() {
+    const QImage img1 = makeDynamicRangeImage(kFirstChannelBase, kSecondChannelBase);
+    ImageRenderItem item;
+    item.setImage(std::make_shared<const QImage>(img1));
+
+    // Initially Smart Enhance is neutral: factors must remain identity.
+    QVERIFY(!item.imageFilter().colorAdjustments.hasSmartEnhance());
+    QCOMPARE(item.imageFilter().wbScale[0], kIdentityScale);
+    QCOMPARE(item.imageFilter().wbScale[1], kIdentityScale);
+    QCOMPARE(item.imageFilter().wbScale[2], kIdentityScale);
+    QCOMPARE(item.imageFilter().wbBias[0], kIdentityBias);
+    QCOMPARE(item.imageFilter().wbBias[1], kIdentityBias);
+    QCOMPARE(item.imageFilter().wbBias[2], kIdentityBias);
+
+    // Turn Smart Enhance on: factors must be calculated on demand.
+    ColorAdjustments adjustments;
+    adjustments.smartEnhance = kSmartEnhanceHalf;
+    item.setColorAdjustments(adjustments);
+
+    const float initialScaleR = item.imageFilter().wbScale[0];
+    const float initialBiasR = item.imageFilter().wbBias[0];
+    QVERIFY(initialScaleR != kIdentityScale || initialBiasR != kIdentityBias);
+
+    // Adjusting the slider value should reuse cached factors without recalculating.
+    adjustments.smartEnhance = kSmartEnhanceHigh;
+    item.setColorAdjustments(adjustments);
+    QCOMPARE(item.imageFilter().wbScale[0], initialScaleR);
+    QCOMPARE(item.imageFilter().wbBias[0], initialBiasR);
+
+    // An animation frame arrives: factors must stay stable and cached.
+    const QImage img2 = makeDynamicRangeImage(kSecondImageRedOffset, kSecondImageGreenOffset);
+    item.setImage(std::make_shared<const QImage>(img2),
+                  ImageRenderItem::ImageUpdate::AnimationFrame);
+    QCOMPARE(item.imageFilter().wbScale[0], initialScaleR);
+    QCOMPARE(item.imageFilter().wbBias[0], initialBiasR);
+
+    // A new image arrives: cache must be invalidated and factors recalculated.
+    item.setImage(std::make_shared<const QImage>(img2),
+                  ImageRenderItem::ImageUpdate::NewImage);
+    const float newScaleR = item.imageFilter().wbScale[0];
+    const float newBiasR = item.imageFilter().wbBias[0];
+    QVERIFY(newScaleR != initialScaleR || newBiasR != initialBiasR);
+
+    // Turning Smart Enhance off restores identity factors.
+    adjustments.smartEnhance = kSmartEnhanceOff;
+    item.setColorAdjustments(adjustments);
+    QCOMPARE(item.imageFilter().wbScale[0], kIdentityScale);
+    QCOMPARE(item.imageFilter().wbScale[1], kIdentityScale);
+    QCOMPARE(item.imageFilter().wbScale[2], kIdentityScale);
+    QCOMPARE(item.imageFilter().wbBias[0], kIdentityBias);
+    QCOMPARE(item.imageFilter().wbBias[1], kIdentityBias);
+    QCOMPARE(item.imageFilter().wbBias[2], kIdentityBias);
   }
 };
 

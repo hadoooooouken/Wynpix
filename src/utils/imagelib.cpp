@@ -1397,7 +1397,7 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
     return QImage();
 
   QImage dst = source->convertToFormat(QImage::Format_ARGB32);
-  if (std::abs(adjustments.smartEnhance) > kColorAdjustmentEpsilon) {
+  if (adjustments.hasSmartEnhance()) {
     applySmartEnhanceToImage(dst, adjustments.smartEnhance);
   }
   ColorMatrix cm = colorAdjustmentMatrix(adjustments);

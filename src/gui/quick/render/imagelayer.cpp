@@ -237,7 +237,7 @@ TileUniforms layerUniforms(const RenderFrame &frame,
     setUniformRow(uniforms.colorRow2, matrix.m[2]);
     uniforms.colorOffset = matrix.offset;
     uniforms.colorEnabled = TileUniforms::kEnabled;
-    if (std::abs(imageFilter.colorAdjustments.smartEnhance) > kColorAdjustmentEpsilon) {
+    if (imageFilter.colorAdjustments.hasSmartEnhance()) {
       uniforms.smartEnhance = imageFilter.colorAdjustments.smartEnhance;
       uniforms.smartEnhanceEnabled = TileUniforms::kEnabled;
       uniforms.wbScale[0] = imageFilter.wbScale[0];

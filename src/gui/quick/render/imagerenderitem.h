@@ -12,6 +12,7 @@
 #include "gui/quick/render/renderframe.h"
 #include "gui/quick/render/rendererrorchannel.h"
 #include "gui/quick/render/renderstatistics.h"
+#include "utils/autocoloradjustments.h"
 
 class ColorLutBuilder;
 class QImage;
@@ -218,11 +219,15 @@ private:
   // GUI-thread failures of the conversion setup, reported like render
   // errors, once per distinct message.
   void reportConversionError(const QString &message);
+  void applyWhiteBalance(ImageFilter &filter);
+  void updateWhiteBalanceFactors();
 
   std::shared_ptr<const QImage> mImage;
   quint64 mImageGeneration = 0;
   bool mImageIsAnimationFrame = false;
   SourceTraits mImageTraits;
+  bool mWbFactorsValid = false;
+  WhiteBalanceFactors mWbFactors;
   std::shared_ptr<const QImage> mCrop;
   quint64 mCropGeneration = 0;
   QRect mCropSourceRect;
