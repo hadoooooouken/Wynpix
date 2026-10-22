@@ -1310,12 +1310,16 @@ QImage ImageLib::applyColorAdjustmentsForBatch(
 
 namespace {
 void applySmartEnhanceToImage(QImage &image, float amount) {
-  if (std::abs(amount) <= kColorAdjustmentEpsilon)
+  if (std::abs(amount) <= kColorAdjustmentEpsilon || image.isNull())
     return;
   const int width = image.width();
   const int height = image.height();
+  if (width <= 0 || height <= 0)
+    return;
   const int bytesPerLine = image.bytesPerLine();
   uchar *bits = image.bits();
+  if (!bits)
+    return;
 
   const WhiteBalanceFactors wb = calculateWhiteBalanceFactors(&image);
 
@@ -1399,6 +1403,9 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
   QImage dst = source->convertToFormat(QImage::Format_ARGB32);
   if (adjustments.hasSmartEnhance()) {
     applySmartEnhanceToImage(dst, adjustments.smartEnhance);
+  }
+  if (!adjustments.hasMatrixAdjustments()) {
+    return dst;
   }
   ColorMatrix cm = colorAdjustmentMatrix(adjustments);
 

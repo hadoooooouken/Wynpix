@@ -28,16 +28,19 @@ struct ColorAdjustments {
     float saturation = kNeutralSaturation;   // multiplier
     float hue = kNeutralHue;                 // degrees
 
-    // True when at least one component differs from the identity transform.
-    [[nodiscard]] bool hasAdjustments() const noexcept {
+    [[nodiscard]] bool hasMatrixAdjustments() const noexcept {
         return std::abs(exposure - kNeutralExposure) > kColorAdjustmentEpsilon ||
                std::abs(contrast - kNeutralContrast) > kColorAdjustmentEpsilon ||
                std::abs(brightness - kNeutralBrightness) > kColorAdjustmentEpsilon ||
                std::abs(temperature - kNeutralTemperature) > kColorAdjustmentEpsilon ||
                std::abs(tint - kNeutralTint) > kColorAdjustmentEpsilon ||
                std::abs(saturation - kNeutralSaturation) > kColorAdjustmentEpsilon ||
-               std::abs(hue - kNeutralHue) > kColorAdjustmentEpsilon ||
-               hasSmartEnhance();
+               std::abs(hue - kNeutralHue) > kColorAdjustmentEpsilon;
+    }
+
+    // True when at least one component differs from the identity transform.
+    [[nodiscard]] bool hasAdjustments() const noexcept {
+        return hasMatrixAdjustments() || hasSmartEnhance();
     }
 
     [[nodiscard]] bool hasSmartEnhance() const noexcept {

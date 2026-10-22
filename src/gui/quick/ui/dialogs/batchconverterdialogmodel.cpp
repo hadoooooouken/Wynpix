@@ -88,7 +88,8 @@ QVariantList BatchConverterDialogModel::colorSliders() const {
                                    {u"defaultValue"_s, spec.defaultValue},
                                    {u"step"_s, spec.step},
                                    {u"decimals"_s, spec.decimals},
-                                   {u"suffix"_s, spec.suffix}});
+                                   {u"suffix"_s, spec.suffix},
+                                   {u"signedValue"_s, spec.signedValue}});
     }
     return sliders;
 }

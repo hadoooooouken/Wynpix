@@ -11,13 +11,13 @@ RowLayout {
     required property var spec
     required property real value
 
-    readonly property int labelWidth: 80
+    readonly property int labelWidth: 115
     readonly property int valueTextWidth: 45
     readonly property int formFieldSpacing: 6
 
     readonly property string valueText: {
         const number = Number(root.value).toFixed(root.spec.decimals);
-        const signedNumber = root.rowIndex === 0 && root.value >= 0 ? "+" + number : number;
+        const signedNumber = (root.spec.signedValue ?? false) && root.value >= 0 ? "+" + number : number;
         return signedNumber + root.spec.suffix;
     }
 
@@ -36,6 +36,7 @@ RowLayout {
         objectName: "batchColorLabel_" + root.rowIndex
         Layout.preferredWidth: root.labelWidth
         text: root.spec.label
+        elide: Text.ElideRight
 
         MouseArea {
             anchors.fill: parent

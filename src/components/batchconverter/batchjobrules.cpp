@@ -222,13 +222,14 @@ QList<ColorSliderSpec> colorSliders() {
     const QString percent = u"%"_s;
     const QString degree = u"°"_s;
     return {
-        {QCoreApplication::translate("BatchConverterDialog", "Exposure:"), -2.0, 2.0, 0.0, 0.01, 2, {}},
-        {QCoreApplication::translate("BatchConverterDialog", "Contrast:"), 0.0, 300.0, 100.0, 1.0, 0, percent},
-        {QCoreApplication::translate("BatchConverterDialog", "Brightness:"), -100.0, 100.0, 0.0, 1.0, 0, percent},
-        {QCoreApplication::translate("BatchConverterDialog", "Saturation:"), 0.0, 200.0, 100.0, 1.0, 0, percent},
-        {QCoreApplication::translate("BatchConverterDialog", "Hue:"), -180.0, 180.0, 0.0, 1.0, 0, degree},
-        {QCoreApplication::translate("BatchConverterDialog", "Temperature:"), -50.0, 50.0, 0.0, 1.0, 0, {}},
-        {QCoreApplication::translate("BatchConverterDialog", "Tint:"), -50.0, 50.0, 0.0, 1.0, 0, {}},
+        {QCoreApplication::translate("BatchConverterDialog", "Smart Enhance:"), 0.0, 100.0, 0.0, 1.0, 0, percent, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Exposure:"), -2.0, 2.0, 0.0, 0.01, 2, {}, true},
+        {QCoreApplication::translate("BatchConverterDialog", "Contrast:"), 0.0, 300.0, 100.0, 1.0, 0, percent, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Brightness:"), -100.0, 100.0, 0.0, 1.0, 0, percent, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Saturation:"), 0.0, 200.0, 100.0, 1.0, 0, percent, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Hue:"), -180.0, 180.0, 0.0, 1.0, 0, degree, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Temperature:"), -50.0, 50.0, 0.0, 1.0, 0, {}, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Tint:"), -50.0, 50.0, 0.0, 1.0, 0, {}, false},
     };
 }
 
@@ -248,6 +249,7 @@ ColorAdjustments colorAdjustmentsFor(const ColorSliderValues &values) {
         return static_cast<float>(value(slider) / kPercentPerUnit);
     };
     ColorAdjustments adjustments;
+    adjustments.smartEnhance = fraction(ColorSlider::SmartEnhance);
     adjustments.exposure = static_cast<float>(value(ColorSlider::Exposure));
     adjustments.contrast = fraction(ColorSlider::Contrast);
     adjustments.brightness = fraction(ColorSlider::Brightness);

@@ -124,6 +124,7 @@ inline constexpr std::array<RotationAngle, 4> kRotations{
 
 //--- colour adjustments -----------------------------------------------------
 enum class ColorSlider : uint8_t {
+    SmartEnhance,
     Exposure,
     Contrast,
     Brightness,
@@ -146,6 +147,7 @@ struct ColorSliderSpec {
     double step = 1.0;
     int decimals = 0;
     QString suffix;
+    bool signedValue = false;
 };
 
 using ColorSliderValues = std::array<double, kColorSliderCount>;

@@ -156,7 +156,7 @@ public:
     [[nodiscard]] QStringList commonSizes() const;
     [[nodiscard]] QStringList rotations() const;
     // One map per BatchJobRules::ColorSlider: label, minimum, maximum,
-    // defaultValue, step, decimals, suffix.
+    // defaultValue, step, decimals, suffix, signedValue.
     [[nodiscard]] QVariantList colorSliders() const;
     [[nodiscard]] double minimumPercent() const;
     [[nodiscard]] double maximumPercent() const;
