@@ -181,19 +181,19 @@ vec3 overlayBlend(vec3 src, vec3 blend)
                step(vec3(0.5), src));
 }
 
-vec3 sampleLocalBlur(vec2 uv)
+vec3 sampleLocalBlur(vec2 uv, vec3 fallbackColor)
 {
     vec2 off = texelStep * 12.0;
-    vec3 c = texture(imageTexture, uv).rgb * 0.28;
-    c += (texture(imageTexture, uv + vec2(-off.x, 0.0)).rgb +
-          texture(imageTexture, uv + vec2( off.x, 0.0)).rgb +
-          texture(imageTexture, uv + vec2(0.0, -off.y)).rgb +
-          texture(imageTexture, uv + vec2(0.0,  off.y)).rgb) * 0.12;
-    c += (texture(imageTexture, uv + vec2(-off.x, -off.y)).rgb +
-          texture(imageTexture, uv + vec2( off.x, -off.y)).rgb +
-          texture(imageTexture, uv + vec2(-off.x,  off.y)).rgb +
-          texture(imageTexture, uv + vec2( off.x,  off.y)).rgb) * 0.06;
-    return c;
+    vec4 acc = texture(imageTexture, uv) * 0.28;
+    acc += (texture(imageTexture, uv + vec2(-off.x, 0.0)) +
+            texture(imageTexture, uv + vec2( off.x, 0.0)) +
+            texture(imageTexture, uv + vec2(0.0, -off.y)) +
+            texture(imageTexture, uv + vec2(0.0,  off.y))) * 0.12;
+    acc += (texture(imageTexture, uv + vec2(-off.x, -off.y)) +
+            texture(imageTexture, uv + vec2( off.x, -off.y)) +
+            texture(imageTexture, uv + vec2(-off.x,  off.y)) +
+            texture(imageTexture, uv + vec2( off.x,  off.y))) * 0.06;
+    return (acc.a > kMinUnpremultiplyAlpha) ? clamp(acc.rgb / acc.a, 0.0, 1.0) : fallbackColor;
 }
 
 vec3 applySmartEnhance(vec3 color, vec2 uv)
@@ -202,7 +202,7 @@ vec3 applySmartEnhance(vec3 color, vec2 uv)
     vec3 wbColor = clamp(color * wbScale.xyz + wbBias.xyz, 0.0, 1.0);
 
     // 2. Spatial luminance blur approximation (wide radius Gaussian blur).
-    vec3 blurColor = sampleLocalBlur(uv);
+    vec3 blurColor = sampleLocalBlur(uv, color);
     vec3 wbBlurColor = clamp(blurColor * wbScale.xyz + wbBias.xyz, 0.0, 1.0);
     float blurLum = dot(wbBlurColor, kLuma);
 
