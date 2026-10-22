@@ -34,7 +34,8 @@ Window {
     readonly property int settingsWidth: 500
     readonly property int settingsMargin: 14
     readonly property int settingsPreferredWidth: Math.max(
-        root.settingsWidth, settingsColumn.implicitWidth + 2 * root.settingsMargin)
+        root.settingsWidth,
+        settingsColumn.implicitWidth + 2 * root.settingsMargin + StyleConstants.scrollBarThickness)
     readonly property int sectionSpacing: 12
     readonly property int indent: 20
     readonly property int fieldWidth: 120
@@ -51,9 +52,15 @@ Window {
     minimumHeight: root.minimumContentHeight
     visible: root.dialog.open
 
+    onMinimumContentWidthChanged: {
+        if (root.visible && root.width < root.minimumContentWidth)
+            root.fitSettingsWidth();
+    }
+
     onVisibleChanged: {
         if (!root.visible)
             return;
+        root.fitSettingsWidth();
         root.fitSettingsHeight();
         const owner = root.transientParent;
         if (owner) {
@@ -62,6 +69,16 @@ Window {
         }
         keyScope.forceActiveFocus();
         root.requestActivate();
+    }
+
+    // Opens wide enough to fit the queue and the settings, within the screen's
+    // available width.
+    function fitSettingsWidth() {
+        const neededWidth = Math.max(root.initialWidth, root.minimumContentWidth);
+        const availableWidth = root.screen ? root.screen.desktopAvailableWidth : neededWidth;
+        root.width = Math.max(root.width, Math.min(neededWidth, availableWidth));
+        if (root.screen && root.x + root.width > root.screen.desktopAvailableWidth)
+            root.x = Math.max(0, root.screen.desktopAvailableWidth - root.width);
     }
 
     // Opens tall enough to show every setting without the scroll bar, within
