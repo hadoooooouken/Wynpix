@@ -261,7 +261,7 @@
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="232"/>
         <source>Tint:</source>
-        <translation>Farbton:</translation>
+        <translation>Farbstich:</translation>
     </message>
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
@@ -286,7 +286,7 @@
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
         <source>Hue:</source>
-        <translation>Farbton (Hue):</translation>
+        <translation>Farbverschiebung:</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="615"/>
@@ -609,12 +609,12 @@ Gesamtdateien: %3</translation>
     <message>
         <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="40"/>
         <source>Tint</source>
-        <translation>Farbton</translation>
+        <translation>Farbstich</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="42"/>
         <source>Hue</source>
-        <translation>Farbton</translation>
+        <translation>Farbverschiebung</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="41"/>
