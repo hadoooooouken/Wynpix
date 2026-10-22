@@ -11,11 +11,13 @@ constexpr int kHistogramBins = 256;
 constexpr int kMaxBinIndex = 255;
 constexpr int kMinDynamicRangeBins = 16;
 constexpr int kMaxDimensionSamples = 256;
+constexpr float kMaxGain = 2.5f;
+constexpr float kMinRelativeRangeRatio = 0.20f;
 
-void computeChannelFactors(int minVal, int maxVal, float &scale, float &bias) {
+void computeChannelFactors(int minVal, int maxVal, int minRequiredRange, float &scale, float &bias) {
     const int range = maxVal - minVal;
-    if (range < kMinDynamicRangeBins) {
-        // Channel dynamic range is too narrow (e.g. flat image, monochrome or noise).
+    if (range < minRequiredRange) {
+        // Channel dynamic range is too narrow (e.g. flat image, monochrome, noise, or subordinate channel).
         // Keep neutral coefficients to prevent turning flat images black or blowing up noise.
         scale = 1.0f;
         bias = 0.0f;
@@ -26,8 +28,8 @@ void computeChannelFactors(int minVal, int maxVal, float &scale, float &bias) {
     const float maxNorm = maxVal / 255.0f;
     const float diff = maxNorm - minNorm;
 
-    scale = 1.0f / diff;
-    bias = -minNorm / diff;
+    scale = std::min(1.0f / diff, kMaxGain);
+    bias = -minNorm * scale;
 }
 } // namespace
 
@@ -98,9 +100,17 @@ WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
     const int gMax = std::clamp(findMax(gHist), 0, kMaxBinIndex);
     const int bMax = std::clamp(findMax(bHist), 0, kMaxBinIndex);
 
-    computeChannelFactors(rMin, rMax, factors.scale[0], factors.bias[0]);
-    computeChannelFactors(gMin, gMax, factors.scale[1], factors.bias[1]);
-    computeChannelFactors(bMin, bMax, factors.scale[2], factors.bias[2]);
+    const int rRange = rMax - rMin;
+    const int gRange = gMax - gMin;
+    const int bRange = bMax - bMin;
+    const int maxRange = std::max({rRange, gRange, bRange});
+    const int minRequiredRange = std::max(
+        kMinDynamicRangeBins,
+        static_cast<int>(std::round(maxRange * kMinRelativeRangeRatio)));
+
+    computeChannelFactors(rMin, rMax, minRequiredRange, factors.scale[0], factors.bias[0]);
+    computeChannelFactors(gMin, gMax, minRequiredRange, factors.scale[1], factors.bias[1]);
+    computeChannelFactors(bMin, bMax, minRequiredRange, factors.scale[2], factors.bias[2]);
 
     return factors;
 }

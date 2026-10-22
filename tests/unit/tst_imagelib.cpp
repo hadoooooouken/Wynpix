@@ -144,6 +144,66 @@ private slots:
     QCOMPARE(qGreen(redResult.pixel(0, 0)), 0);
     QCOMPARE(qBlue(redResult.pixel(0, 0)), 0);
   }
+
+  void smartEnhancePreservesMonochromaticImagesWithNoise() {
+    constexpr int kWidth = 64;
+    constexpr int kHeight = 64;
+    ColorAdjustments adj;
+    adj.smartEnhance = 1.0f;
+
+    // Test each primary channel as the dominant color (red, green, blue)
+    // against dark regions containing small non-zero noise in secondary channels.
+    for (int dominantChannel = 0; dominantChannel < 3; ++dominantChannel) {
+      QImage image(kWidth, kHeight, QImage::Format_ARGB32);
+
+      for (int y = 0; y < kHeight; ++y) {
+        for (int x = 0; x < kWidth; ++x) {
+          if (x < kWidth / 2) {
+            const int noise = 5 + (x + y) % 14;
+            image.setPixel(x, y, qRgba(noise, noise, noise, kOpaque));
+          } else {
+            const int dominantVal = 200 + (x % 21);
+            const int r = (dominantChannel == 0) ? dominantVal : 0;
+            const int g = (dominantChannel == 1) ? dominantVal : 0;
+            const int b = (dominantChannel == 2) ? dominantVal : 0;
+            image.setPixel(x, y, qRgba(r, g, b, kOpaque));
+          }
+        }
+      }
+
+      const QImage result = ImageLib::applyColorAdjustments(
+          std::make_shared<const QImage>(image), adj);
+      QCOMPARE(result.size(), image.size());
+
+      // Dark region: subordinate channels must remain bounded noise floor (<= 30),
+      // preventing blowout into complementary color casts (cyan, magenta, yellow).
+      for (int y = 0; y < kHeight; ++y) {
+        for (int x = 0; x < kWidth / 2; ++x) {
+          const QRgb pixel = result.pixel(x, y);
+          if (dominantChannel != 0)
+            QVERIFY2(qRed(pixel) <= 30, "Red channel blown up in dark area");
+          if (dominantChannel != 1)
+            QVERIFY2(qGreen(pixel) <= 30, "Green channel blown up in dark area");
+          if (dominantChannel != 2)
+            QVERIFY2(qBlue(pixel) <= 30, "Blue channel blown up in dark area");
+        }
+      }
+
+      // Saturated region: dominant channel remains strong, subordinate channels near zero.
+      for (int y = 0; y < kHeight; ++y) {
+        for (int x = kWidth / 2; x < kWidth; ++x) {
+          const QRgb pixel = result.pixel(x, y);
+          const int dom = (dominantChannel == 0) ? qRed(pixel)
+                        : (dominantChannel == 1) ? qGreen(pixel) : qBlue(pixel);
+          const int sub1 = (dominantChannel == 0) ? qGreen(pixel) : qRed(pixel);
+          const int sub2 = (dominantChannel == 2) ? qGreen(pixel) : qBlue(pixel);
+          QVERIFY(dom >= 190);
+          QVERIFY(sub1 <= 5);
+          QVERIFY(sub2 <= 5);
+        }
+      }
+    }
+  }
 };
 
 int runImageLibTests(int argc, char **argv) {
