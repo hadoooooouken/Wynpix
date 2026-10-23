@@ -13,7 +13,7 @@ This guide walks you through building Wynpix and all its dependencies on Windows
 | **Vulkan SDK** | Latest | [vulkan.lunarg.com](https://vulkan.lunarg.com/sdk/home) | Required for upscayl-ncnn (AI upscaling) |
 | **MSYS2** | Latest | [msys2.org](https://www.msys2.org/) | Only needed for building FFmpeg (provides bash/make) |
 | **Python 3** | 3.10+ | [python.org](https://www.python.org/) | Only needed for building FFmpeg |
-| **Inno Setup** | 6.x | [jrsoftware.org](https://jrsoftware.org/isdl.php) | Required for packaging release installers (`iscc`) |
+| **Inno Setup** | 7.x | [jrsoftware.org](https://jrsoftware.org/isdl.php) | Required for packaging release installers (`iscc`) |
 | **7-Zip** | 21.x+ | [7-zip.org](https://www.7-zip.org/) | Required for packaging portable release archives (`7z`) |
 | **Intel SDE** | 9.x+ | [intel.com](https://www.intel.com/content/www/us/en/developer/articles/tool/software-development-emulator.html) | Optional; for SSE2 CPU emulation and smoke testing |
 
