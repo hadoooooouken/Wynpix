@@ -15,6 +15,13 @@ T.Slider {
 
     padding: 0
 
+    // Optional custom track gradient. When set, renders the full-width
+    // gradient without the filled highlight segment.
+    property var trackGradient: null
+    // Base color beneath trackGradient, used to blend the gradient with
+    // Theme.colors.accent (e.g. for exposure, contrast and brightness).
+    property color trackBaseColor: "transparent"
+
     handle: Rectangle {
         x: control.leftPadding + (control.horizontal
                                   ? control.visualPosition * (control.availableWidth - width)
@@ -42,11 +49,22 @@ T.Slider {
         width: control.horizontal ? control.availableWidth : StyleConstants.sliderGrooveThickness
         height: control.horizontal ? StyleConstants.sliderGrooveThickness : control.availableHeight
         radius: StyleConstants.sliderGrooveThickness / 2
-        color: Theme.surfaces.tintedHc2
+        color: control.trackGradient !== null
+             ? control.trackBaseColor
+             : Theme.surfaces.tintedHc2
         scale: control.horizontal && control.mirrored ? -1 : 1
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            visible: control.trackGradient !== null
+            opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
+            gradient: control.trackGradient
+        }
 
         // Filled part, from the start of the range to the handle.
         Rectangle {
+            visible: control.trackGradient === null
             y: control.horizontal ? 0 : control.visualPosition * parent.height
             width: control.horizontal ? control.position * parent.width : parent.width
             height: control.horizontal ? parent.height : control.position * parent.height

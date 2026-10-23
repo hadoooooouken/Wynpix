@@ -13,6 +13,10 @@ GridLayout {
 
     required property AdjustmentSliderModel sliders
 
+    // Optional list of track gradient descriptors: { gradient: Gradient, baseColor: color }
+    // or null for default sliders.
+    property var trackGradients: null
+
     readonly property int valueTextMinimumWidth: 45
     readonly property int formRowSpacing: 10
     readonly property int formFieldSpacing: 6
@@ -66,12 +70,17 @@ GridLayout {
             required property int index
             required property var model
 
+            readonly property var trackSpec: grid.trackGradients && slider.index < grid.trackGradients.length
+                                            ? grid.trackGradients[slider.index] : null
+
             from: slider.model.minimum
             to: slider.model.maximum
             value: slider.model.value
             stepSize: 1
             snapMode: Slider.SnapAlways
             focusPolicy: Qt.NoFocus
+            trackGradient: slider.trackSpec ? slider.trackSpec.gradient : null
+            trackBaseColor: slider.trackSpec && slider.trackSpec.baseColor ? slider.trackSpec.baseColor : "transparent"
             objectName: "adjustmentSlider_" + index
             Layout.row: index
             Layout.column: 1
