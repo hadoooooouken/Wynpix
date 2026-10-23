@@ -1,5 +1,5 @@
 #define MyAppName "Wynpix"
-#define MyAppVersion "1.1.0.0"
+#define MyAppVersion "1.1.1.0"
 #define MyAppPublisher "hadoooooouken"
 #define MyAppURL "https://github.com/hadoooooouken/wynpix"
 #define MyAppExeName "wynpix.exe"
