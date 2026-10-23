@@ -162,7 +162,14 @@ private slots:
           std::make_shared<const QImage>(source), adj);
       QCOMPARE(result.size(), source.size());
       QCOMPARE(qAlpha(result.pixel(1, 1)), kAlpha);
-      QVERIFY(qRed(result.pixel(1, 1)) > qRed(source.pixel(1, 1)));
+      if (contrast == ColorAdjustments::kNeutralContrast) {
+        // Vibrance alone pivots on the peak channel (red here), which must
+        // not move at all.
+        QCOMPARE(qRed(result.pixel(1, 1)), qRed(source.pixel(1, 1)));
+      } else {
+        // With the contrast matrix the red peak is lifted by the matrix.
+        QVERIFY(qRed(result.pixel(1, 1)) > qRed(source.pixel(1, 1)));
+      }
       QVERIFY(qGreen(result.pixel(1, 1)) < qGreen(source.pixel(1, 1)));
       QCOMPARE(qRed(result.pixel(0, 0)), qGreen(result.pixel(0, 0)));
       QCOMPARE(qGreen(result.pixel(0, 0)), qBlue(result.pixel(0, 0)));

@@ -120,16 +120,32 @@ private slots:
     applyColorAdjustmentVibrance(muted, kFullVibrance);
     applyColorAdjustmentVibrance(saturated, kFullVibrance);
     applyColorAdjustmentVibrance(grey, kFullVibrance);
-    // The muted red moves away from luma; fully saturated and grey pixels
-    // stay as they are.
-    QVERIFY(muted[0] > 0.6f + kMatrixTolerance);
+    // Positive vibrance pivots on the peak channel (as Photoshop does): the
+    // weaker channels of the muted red are pushed down while the peak stays;
+    // fully saturated and grey pixels stay as they are.
+    QVERIFY(near(muted[0], 0.6f));
     QVERIFY(muted[1] < 0.5f - kMatrixTolerance);
+    QVERIFY(muted[2] < 0.5f - kMatrixTolerance);
     QVERIFY(near(saturated[0], 1.0f) && near(saturated[1], 0.0f) && near(saturated[2], 0.0f));
     QVERIFY(near(grey[0], 0.5f) && near(grey[1], 0.5f) && near(grey[2], 0.5f));
 
     float mutedAgain[3] = {0.6f, 0.5f, 0.5f};
     applyColorAdjustmentVibrance(mutedAgain, -kFullVibrance);
     QVERIFY(mutedAgain[0] < 0.6f - kMatrixTolerance);
+  }
+
+  void fullVibranceStaysCloseToPhotoshopSaturationLift() {
+    // Photoshop's Vibrance +100 lifts HSV saturation by roughly 1.3x on
+    // mid-saturated colours (skin, denim), never by 2x or more.
+    constexpr float kMaxExpectedLift = 1.45f;
+    constexpr float kMinExpectedLift = 1.15f;
+    float skin[3] = {0.80f, 0.55f, 0.40f};
+    const float satBefore = (skin[0] - skin[2]) / skin[0];
+    applyColorAdjustmentVibrance(skin, 1.0f);
+    const float satAfter = (skin[0] - skin[2]) / skin[0];
+    QVERIFY(satAfter / satBefore < kMaxExpectedLift);
+    QVERIFY(satAfter / satBefore > kMinExpectedLift);
+    QVERIFY(near(skin[0], 0.80f));
   }
 
   void negativeVibrancePreservesChromaMonotonicity() {

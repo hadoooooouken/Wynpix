@@ -1502,14 +1502,22 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
         const __m256 v_offset_scaled = _mm256_set1_ps(cm.offset * 255.0f);
 
         // Vibrance (see applyColorAdjustmentVibrance()), computed on the
-        // [0, 255] scale: factor = max(0, base + slope * (peak - low)).
+        // [0, 255] scale.
+        // Negative: luma pivot, factor = max(0, base + slope * (peak - low)).
         const __m256 v_luma_r = _mm256_set1_ps(kColorLumaR);
         const __m256 v_luma_g = _mm256_set1_ps(kColorLumaG);
         const __m256 v_luma_b = _mm256_set1_ps(kColorLumaB);
-        const float vibW0 = (vibrance >= 0.0f) ? kVibrancePosBase : kVibranceNegBase;
-        const float vibW1 = (vibrance >= 0.0f) ? kVibrancePosSlope : kVibranceNegSlope;
-        const __m256 v_vib_base = _mm256_set1_ps(1.0f + vibrance * vibW0);
-        const __m256 v_vib_slope = _mm256_set1_ps((vibrance * vibW1) / 255.0f);
+        const __m256 v_vib_base = _mm256_set1_ps(1.0f + vibrance * kVibranceNegBase);
+        const __m256 v_vib_slope = _mm256_set1_ps((vibrance * kVibranceNegSlope) / 255.0f);
+        // Positive: peak pivot, factor = (1 + v * boost) - v * falloff * t,
+        // t = clamp(S * tScale + tOffset, 0, 1).
+        const bool vibPositive = vibrance >= 0.0f;
+        const __m256 v_one = _mm256_set1_ps(1.0f);
+        const __m256 v_min_peak = _mm256_set1_ps(kVibranceMinPeak * 255.0f);
+        const __m256 v_pos_base = _mm256_set1_ps(1.0f + vibrance * kVibrancePosBoost);
+        const __m256 v_pos_falloff = _mm256_set1_ps(vibrance * kVibrancePosFalloff);
+        const __m256 v_t_scale = _mm256_set1_ps(1.0f / (1.0f - kVibrancePosFalloffStart));
+        const __m256 v_t_offset = _mm256_set1_ps(-kVibrancePosFalloffStart / (1.0f - kVibrancePosFalloffStart));
 #endif
 
         for (int y = y_start; y < y_end; ++y) {
@@ -1552,14 +1560,24 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
               const __m256 peak = _mm256_max_ps(out_r, _mm256_max_ps(out_g, out_b));
               const __m256 low = _mm256_min_ps(out_r, _mm256_min_ps(out_g, out_b));
               const __m256 chroma = _mm256_sub_ps(peak, low);
-              const __m256 factor = _mm256_max_ps(
-                  v_zero, _mm256_fmadd_ps(v_vib_slope, chroma, v_vib_base));
-              const __m256 luma = _mm256_fmadd_ps(
-                  v_luma_r, out_r,
-                  _mm256_fmadd_ps(v_luma_g, out_g, _mm256_mul_ps(v_luma_b, out_b)));
-              out_r = _mm256_fmadd_ps(_mm256_sub_ps(out_r, luma), factor, luma);
-              out_g = _mm256_fmadd_ps(_mm256_sub_ps(out_g, luma), factor, luma);
-              out_b = _mm256_fmadd_ps(_mm256_sub_ps(out_b, luma), factor, luma);
+              __m256 factor;
+              __m256 pivot;
+              if (vibPositive) {
+                const __m256 sat = _mm256_div_ps(chroma, _mm256_max_ps(peak, v_min_peak));
+                const __m256 t = _mm256_min_ps(
+                    v_one, _mm256_max_ps(v_zero, _mm256_fmadd_ps(sat, v_t_scale, v_t_offset)));
+                factor = _mm256_fnmadd_ps(v_pos_falloff, t, v_pos_base);
+                pivot = peak;
+              } else {
+                factor = _mm256_max_ps(
+                    v_zero, _mm256_fmadd_ps(v_vib_slope, chroma, v_vib_base));
+                pivot = _mm256_fmadd_ps(
+                    v_luma_r, out_r,
+                    _mm256_fmadd_ps(v_luma_g, out_g, _mm256_mul_ps(v_luma_b, out_b)));
+              }
+              out_r = _mm256_fmadd_ps(_mm256_sub_ps(out_r, pivot), factor, pivot);
+              out_g = _mm256_fmadd_ps(_mm256_sub_ps(out_g, pivot), factor, pivot);
+              out_b = _mm256_fmadd_ps(_mm256_sub_ps(out_b, pivot), factor, pivot);
               out_r = _mm256_min_ps(_mm256_max_ps(out_r, v_zero), v_255);
               out_g = _mm256_min_ps(_mm256_max_ps(out_g, v_zero), v_255);
               out_b = _mm256_min_ps(_mm256_max_ps(out_b, v_zero), v_255);

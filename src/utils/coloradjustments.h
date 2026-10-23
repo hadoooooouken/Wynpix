@@ -11,14 +11,24 @@ inline constexpr float kColorAdjustmentEpsilon = 0.001f;
 inline constexpr float kColorLumaR = 0.2126f;
 inline constexpr float kColorLumaG = 0.7152f;
 inline constexpr float kColorLumaB = 0.0722f;
-// Vibrance chroma-weight curve: weight(c) = base + slope * c.
-// Positive vibrance boosts muted colours strongly while still lifting vivid
-// ones; negative vibrance damps vivid colours into pastel without inverting
-// gradients (base + 2 * slope <= 1) or draining skin tones.
-inline constexpr float kVibrancePosBase = 1.8f;
-inline constexpr float kVibrancePosSlope = -1.4f;
+// Positive vibrance scales the HSV saturation S = (peak - low) / peak around
+// the peak channel (the peak itself stays put) by 1 + vibrance * boost(S),
+// boost(S) = kVibrancePosBoost - kVibrancePosFalloff * t,
+// t = clamp((S - kVibrancePosFalloffStart) / (1 - kVibrancePosFalloffStart), 0, 1).
+// So +100 % is a roughly constant ~1.3x saturation lift that fades to exactly
+// 1.0x for fully saturated colours. Fitted to Photoshop's Vibrance +100.
+// Falloff == boost keeps S * factor <= 1 for every S and vibrance, so the low
+// channel never hits the 0 clamp (which would shift the hue of near-pure colours).
+inline constexpr float kVibrancePosBoost = 0.28f;
+inline constexpr float kVibrancePosFalloff = 0.28f;
+inline constexpr float kVibrancePosFalloffStart = 0.6f;
+// Negative vibrance damps vivid colours into pastel around luma: weight(c) =
+// base + slope * c, without inverting gradients (base + 2 * slope <= 1) or
+// draining skin tones.
 inline constexpr float kVibranceNegBase = 0.5f;
 inline constexpr float kVibranceNegSlope = 0.25f;
+// Guards the S = chroma / peak division for black pixels.
+inline constexpr float kVibranceMinPeak = 1e-4f;
 
 // Interactive colour adjustments applied by the viewer (GPU preview), by
 // ImageLib::applyColorAdjustments() (CPU apply/export) and by the batch
@@ -184,10 +194,20 @@ inline void applyColorAdjustmentVibrance(float (&rgb)[3], float vibrance) {
     const float peak = std::max({rgb[0], rgb[1], rgb[2]});
     const float low = std::min({rgb[0], rgb[1], rgb[2]});
     const float chroma = peak - low;
+    if (vibrance >= 0.0f) {
+        // Pivot on the peak channel: only the weaker channels move.
+        const float saturation = chroma / std::max(peak, kVibranceMinPeak);
+        const float t = std::clamp((saturation - kVibrancePosFalloffStart) /
+                                       (1.0f - kVibrancePosFalloffStart),
+                                   0.0f, 1.0f);
+        const float factor = 1.0f + vibrance * (kVibrancePosBoost - kVibrancePosFalloff * t);
+        for (float &channel : rgb) {
+            channel = std::clamp(peak + (channel - peak) * factor, 0.0f, 1.0f);
+        }
+        return;
+    }
     const float luma = kColorLumaR * rgb[0] + kColorLumaG * rgb[1] + kColorLumaB * rgb[2];
-    const float weight = (vibrance >= 0.0f)
-                             ? (kVibrancePosBase + kVibrancePosSlope * chroma)
-                             : (kVibranceNegBase + kVibranceNegSlope * chroma);
+    const float weight = kVibranceNegBase + kVibranceNegSlope * chroma;
     const float factor = std::max(0.0f, 1.0f + vibrance * weight);
     for (float &channel : rgb) {
         channel = std::clamp(luma + (channel - luma) * factor, 0.0f, 1.0f);

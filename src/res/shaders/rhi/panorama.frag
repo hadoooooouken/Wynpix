@@ -55,6 +55,13 @@ const float kMinUnpremultiplyAlpha = 0.0001;
 // Rec.709 luma weights and the vibrance thresholds of image.frag.
 const vec3 kLuma = vec3(0.2126, 0.7152, 0.0722);
 const float kVibranceEpsilon = 0.001;
+// Vibrance curve constants, mirrors of utils/coloradjustments.h.
+const float kVibrancePosBoost = 0.28;
+const float kVibrancePosFalloff = 0.28;
+const float kVibrancePosFalloffStart = 0.6;
+const float kVibranceNegBase = 0.5;
+const float kVibranceNegSlope = 0.25;
+const float kVibranceMinPeak = 1e-4;
 // Longitude differences of neighbouring pixels larger than half the image
 // width are the wrap at the seam, not a footprint.
 const float kHalfTurn = 0.5;
@@ -65,8 +72,16 @@ vec3 applyVibrance(vec3 color, float amount)
     float peak = max(color.r, max(color.g, color.b));
     float low = min(color.r, min(color.g, color.b));
     float chroma = peak - low;
+    if (amount >= 0.0) {
+        // Positive: scale HSV saturation around the peak channel.
+        float sat = chroma / max(peak, kVibranceMinPeak);
+        float t = clamp((sat - kVibrancePosFalloffStart) / (1.0 - kVibrancePosFalloffStart),
+                        0.0, 1.0);
+        float factor = 1.0 + amount * (kVibrancePosBoost - kVibrancePosFalloff * t);
+        return clamp(vec3(peak) + (color - vec3(peak)) * factor, 0.0, 1.0);
+    }
     float luma = dot(color, kLuma);
-    float weight = (amount >= 0.0) ? (1.8 - 1.4 * chroma) : (0.5 + 0.25 * chroma);
+    float weight = kVibranceNegBase + kVibranceNegSlope * chroma;
     float factor = max(0.0, 1.0 + amount * weight);
     return clamp(vec3(luma) + (color - vec3(luma)) * factor, 0.0, 1.0);
 }
