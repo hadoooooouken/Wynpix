@@ -204,6 +204,7 @@ public:
     void setDragHover(int index);
     // The first count items are directories.
     void setDirCount(int count);
+    [[nodiscard]] bool hasThumbnail(int pos) const;
 
     // --- configuration (ThumbnailPanelController) ------------------------
     void configure(const ThumbnailRequestConfig &config);

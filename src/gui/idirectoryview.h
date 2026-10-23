@@ -34,6 +34,7 @@ public:
     virtual void reloadItem(int index) = 0;
     virtual void setDragHover(int index) = 0;
     virtual void setDirCount(int count) { Q_UNUSED(count) }
+    [[nodiscard]] virtual bool hasThumbnail(int pos) const { Q_UNUSED(pos); return false; }
 
 //signals
     virtual void itemActivated(int) = 0;

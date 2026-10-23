@@ -87,3 +87,7 @@ void DirectoryViewAdapter::setDragHover(int index) {
 void DirectoryViewAdapter::setDirCount(int count) {
     ThumbnailListModel::setDirCount(count);
 }
+
+bool DirectoryViewAdapter::hasThumbnail(int pos) const {
+    return ThumbnailListModel::hasThumbnail(pos);
+}

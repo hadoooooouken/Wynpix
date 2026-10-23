@@ -38,6 +38,7 @@ public:
     void reloadItem(int index) override;
     void setDragHover(int index) override;
     void setDirCount(int count) override;
+    [[nodiscard]] bool hasThumbnail(int pos) const override;
 
 signals:
     // IDirectoryView

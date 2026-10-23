@@ -323,9 +323,12 @@ void DirectoryPresenter::generateThumbnails(QList<int> indexes,
 
       // The prepared default is published before cover discovery is queued,
       // so directory enumeration can never delay the first visible icon.
+      // Existing thumbnails are kept so resizing doesn't flash the plain folder icon.
       view->setThumbnailPending(i, true);
-      view->setThumbnail(
-          i, defaultFolderThumbnail(targetSize, model->dirNameAt(i)));
+      if (!view->hasThumbnail(i)) {
+        view->setThumbnail(
+            i, defaultFolderThumbnail(targetSize, model->dirNameAt(i)));
+      }
 
       folderCoverResolver->resolve(
           FolderCoverRequest{
@@ -358,8 +361,13 @@ void DirectoryPresenter::onFolderCoverResolved(FolderCoverResult result)
       result.coverPath.isEmpty()) {
     const int directoryIndex =
         directoryIndexForPath(result.request.folderPath);
-    if (directoryIndex >= 0)
+    if (directoryIndex >= 0) {
       view->setThumbnailPending(directoryIndex, false);
+      view->setThumbnail(
+          directoryIndex,
+          defaultFolderThumbnail(result.request.targetSize,
+                                 model->dirNameAt(directoryIndex)));
+    }
     return;
   }
 

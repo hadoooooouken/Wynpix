@@ -329,6 +329,10 @@ void ThumbnailListModel::setDirCount(int count) {
     emit dirCountChanged();
 }
 
+bool ThumbnailListModel::hasThumbnail(int pos) const {
+    return mLoaded.contains(pos);
+}
+
 //------------------------------------------------------------------------------
 // Configuration
 
@@ -364,7 +368,8 @@ void ThumbnailListModel::setScrollConfig(const ThumbnailScrollConfig &config) {
         return;
     mScroll = config;
     focusOnSelection();
-    loadVisibleThumbnails();
+    if (!mLoadTimer.isActive())
+        loadVisibleThumbnails();
 }
 
 void ThumbnailListModel::setLoadingBlocked(bool blocked) {
