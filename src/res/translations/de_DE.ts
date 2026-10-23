@@ -4,12 +4,12 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="425"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
         <source>Stopped</source>
         <translation>Angehalten</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="423"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="426"/>
         <source>Failed</source>
         <translation>Fehlgeschlagen</translation>
     </message>
@@ -41,7 +41,7 @@
         <translation>Transformationsfehler</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
         <source>Done</source>
         <translation>Fertig</translation>
     </message>
@@ -116,7 +116,7 @@
         <translation>Zielplanung fehlgeschlagen: kein eindeutiger Ausgabepfad verfügbar</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="419"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="422"/>
         <source>Processing...</source>
         <translation>Verarbeitung...</translation>
     </message>
@@ -124,112 +124,112 @@
 <context>
     <name>BatchConverterDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="44"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="45"/>
         <source>Batch Converter</source>
         <translation>Stapelkonvertierung</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="131"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="148"/>
         <source>Add more</source>
         <translation>Weitere hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="137"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="154"/>
         <source>Clear</source>
         <translation>Leeren</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="147"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="164"/>
         <source>Select all</source>
         <translation>Alle auswählen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="152"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="169"/>
         <source>Deselect all</source>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="217"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="234"/>
         <source>Save as type:</source>
         <translation>Speichern als Typ:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="262"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="279"/>
         <source>Resize</source>
         <translation>Größe ändern</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="278"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="295"/>
         <source>By Percent:</source>
         <translation>In Prozent:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="320"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="337"/>
         <source>By Absolute Size:</source>
         <translation>In absoluter Größe:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="395"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="412"/>
         <source>By Megapixels:</source>
         <translation>In Megapixeln:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="410"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="427"/>
         <source>Megapixels:</source>
         <translation>Megapixel:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="432"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>Binär (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="751"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="773"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="311"/>
         <source>Percent:</source>
         <translation>Prozent:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="451"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="468"/>
         <source>Keep aspect ratio</source>
         <translation>Seitenverhältnis beibehalten</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="487"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="504"/>
         <source>Upscayl</source>
         <translation>Upscayl verwenden</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="512"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="529"/>
         <source>Filter:</source>
         <translation>Filter:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="527"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="544"/>
         <source>Model:</source>
         <translation>Modell:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="565"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="582"/>
         <source>Flip horizontal</source>
         <translation>Horizontal spiegeln</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="571"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="588"/>
         <source>Flip vertical</source>
         <translation>Vertikal spiegeln</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="362"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="379"/>
         <source>Common sizes:</source>
         <translation>Häufige Größen:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="580"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
         <source>Color adjustments</source>
         <translation>Farbanpassungen</translation>
     </message>
@@ -254,102 +254,107 @@
         <translation>Helligkeit:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
         <source>Temperature:</source>
         <translation>Temperatur:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="232"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
         <source>Tint:</source>
         <translation>Farbstich:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="233"/>
         <source>Saturation:</source>
         <translation>Sättigung:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
         <source>Width</source>
         <translation>Breite</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
         <source>Height</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
         <source>Hue:</source>
         <translation>Farbverschiebung:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="615"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="232"/>
+        <source>Vibrance:</source>
+        <translation>Dynamik:</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
         <source>Output folder:</source>
         <translation>Ausgabeordner:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="627"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="645"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="651"/>
         <source>Create subfolder for batch</source>
         <translation>Unterordner für Stapel erstellen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="657"/>
         <source>Filename pattern:</source>
         <translation>Dateinamen-Muster:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="265"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="268"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="269"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="272"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>Verfügbar: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="654"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
         <source>Overwrite existing files</source>
         <translation>Existierende Dateien überschreiben</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="445"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
         <source>Ready to convert.</source>
         <translation>Bereit zum Konvertieren.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
         <source>Convert</source>
         <translation>Konvertieren</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="625"/>
         <source>Reset Color Adjustments</source>
         <translation>Farbanpassungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="353"/>
         <source>Max Width:</source>
         <translation>Max. Breite:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="374"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="391"/>
         <source>Max Height:</source>
         <translation>Max. Höhe:</translation>
     </message>
@@ -399,22 +404,22 @@
         <translation>Originalgröße</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="441"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="458"/>
         <source>Reset: %1 x %2</source>
         <translation>Zurücksetzen: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="499"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="516"/>
         <source>No AI models found in models/ directory.</source>
         <translation>Keine KI-Modelle im Ordner models/ gefunden.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="438"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="441"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>%1 Dateien ausgewählt (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="721"/>
         <source>Select Output Directory</source>
         <translation>Ausgabeordner auswählen</translation>
     </message>
@@ -429,53 +434,53 @@
         <translation>Qualität (1 - niedrigste, 100 - höchste)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="691"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="457"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="709"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="460"/>
         <source>Stopping...</source>
         <translation>Anhalten...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
         <source>Invalid Directory</source>
         <translation>Ungültiger Ordner</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
         <source>Please select a valid output directory.</source>
         <translation>Bitte wählen Sie einen gültigen Ausgabeordner.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="389"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
         <source>Invalid Pattern</source>
         <translation>Ungültiges Muster</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>Der Dateinamen-Muster darf keine Pfaddurchlaufsequenzen (..) oder absolute Pfade enthalten.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
         <source>No files</source>
         <translation>Keine Dateien</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="394"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>Keine Dateien in der Warteschlange ausgewählt. Bitte wählen Sie mindestens eine Datei aus.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="400"/>
         <source>Resolution Limit Exceeded</source>
         <translation>Auflösungsgrenze überschritten</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="398"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -490,42 +495,42 @@ Maximal zulässige Pixelanzahl: %4 MP
 Bitte verringern Sie den Prozentsatz oder die absolute Größe.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="449"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
         <source>Processing...</source>
         <translation>Verarbeitung...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="465"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="468"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>Vom Benutzer angehalten. Erfolgreich: %1, Fehlgeschlagen: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="469"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
         <source>Batch aborted.</source>
         <translation>Stapel abgebrochen.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="482"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="485"/>
         <source>Batch Conversion Failed</source>
         <translation>Stapelkonvertierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="453"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
         <source>Processed %1 / %2 files.</source>
         <translation>%1 / %2 Dateien verarbeitet.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="461"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="464"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>Fertiggestellt. Erfolgreich: %1, Fehlgeschlagen: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="473"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
         <source>Batch Conversion Complete</source>
         <translation>Stapelkonvertierung abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="474"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="477"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -541,7 +546,7 @@ Gesamtdateien: %3</translation>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="417"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
         <source>Pending</source>
         <translation>Wartend</translation>
     </message>
@@ -577,62 +582,67 @@ Gesamtdateien: %3</translation>
 <context>
     <name>ColorAdjustmentsOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="34"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="38"/>
         <source>Color adjustments</source>
         <translation>Farbanpassungen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="35"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="37"/>
         <source>Smart Enhance</source>
         <translation>Intelligente Verbesserung</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="36"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="38"/>
         <source>Exposure</source>
         <translation>Belichtung</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="38"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="40"/>
         <source>Brightness</source>
         <translation>Helligkeit</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="37"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="39"/>
         <source>Contrast</source>
         <translation>Kontrast</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="39"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="41"/>
         <source>Temperature</source>
         <translation>Temperatur</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="40"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="42"/>
         <source>Tint</source>
         <translation>Farbstich</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="42"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="43"/>
         <source>Hue</source>
         <translation>Farbverschiebung</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="41"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="44"/>
+        <source>Vibrance</source>
+        <translation>Dynamik</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="45"/>
         <source>Saturation</source>
         <translation>Sättigung</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="65"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="58"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="63"/>
         <source>Compare</source>
         <translation>Vergleichen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="75"/>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>

@@ -4,12 +4,12 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="425"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
         <source>Stopped</source>
         <translation>已停止</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="423"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="426"/>
         <source>Failed</source>
         <translation>失败</translation>
     </message>
@@ -41,7 +41,7 @@
         <translation>变换错误</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
@@ -116,7 +116,7 @@
         <translation>目标规划失败: 没有可用的唯一输出路径</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="419"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="422"/>
         <source>Processing...</source>
         <translation>正在处理...</translation>
     </message>
@@ -124,112 +124,112 @@
 <context>
     <name>BatchConverterDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="44"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="45"/>
         <source>Batch Converter</source>
         <translation>批量转换器</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="131"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="148"/>
         <source>Add more</source>
         <translation>添加更多</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="137"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="154"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="147"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="164"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="152"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="169"/>
         <source>Deselect all</source>
         <translation>取消全选</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="217"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="234"/>
         <source>Save as type:</source>
         <translation>保存类型：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="262"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="279"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="278"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="295"/>
         <source>By Percent:</source>
         <translation>按百分比：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="320"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="337"/>
         <source>By Absolute Size:</source>
         <translation>按绝对大小：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="395"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="412"/>
         <source>By Megapixels:</source>
         <translation>按百万像素：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="410"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="427"/>
         <source>Megapixels:</source>
         <translation>百万像素：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="432"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>二进制 (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="751"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="773"/>
         <source>OK</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="294"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="311"/>
         <source>Percent:</source>
         <translation>百分比：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="451"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="468"/>
         <source>Keep aspect ratio</source>
         <translation>保持长宽比</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="487"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="504"/>
         <source>Upscayl</source>
         <translation>使用 Upscayl</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="512"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="529"/>
         <source>Filter:</source>
         <translation>过滤器：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="527"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="544"/>
         <source>Model:</source>
         <translation>模型：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="565"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="582"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="571"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="588"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="362"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="379"/>
         <source>Common sizes:</source>
         <translation>常用尺寸：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="580"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
         <source>Color adjustments</source>
         <translation>颜色调整</translation>
     </message>
@@ -254,102 +254,107 @@
         <translation>亮度：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
         <source>Temperature:</source>
         <translation>温度：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="232"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
         <source>Tint:</source>
         <translation>色调：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="229"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="233"/>
         <source>Saturation:</source>
         <translation>饱和度：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
         <source>Width</source>
         <translation>宽度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="459"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
         <source>Height</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="230"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="231"/>
         <source>Hue:</source>
         <translation>色相：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="615"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="232"/>
+        <source>Vibrance:</source>
+        <translation>自然饱和度：</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
         <source>Output folder:</source>
         <translation>输出文件夹：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="627"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="645"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="651"/>
         <source>Create subfolder for batch</source>
         <translation>为批量任务创建子文件夹</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="657"/>
         <source>Filename pattern:</source>
         <translation>文件名模板：</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="265"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="268"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="269"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="272"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>可用变量：{name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="654"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
         <source>Overwrite existing files</source>
         <translation>覆盖现有文件</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="445"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
         <source>Ready to convert.</source>
         <translation>准备转换。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="685"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
         <source>Convert</source>
         <translation>转换</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="607"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="625"/>
         <source>Reset Color Adjustments</source>
         <translation>重置颜色调整</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="336"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="353"/>
         <source>Max Width:</source>
         <translation>最大宽度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="374"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="391"/>
         <source>Max Height:</source>
         <translation>最大高度:</translation>
     </message>
@@ -399,22 +404,22 @@
         <translation>原始大小</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="441"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="458"/>
         <source>Reset: %1 x %2</source>
         <translation>重置：%1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="499"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="516"/>
         <source>No AI models found in models/ directory.</source>
         <translation>在 models/ 目录中未找到 AI 模型。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="438"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="441"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>已选择 %1 个文件 (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="721"/>
         <source>Select Output Directory</source>
         <translation>选择输出目录</translation>
     </message>
@@ -429,53 +434,53 @@
         <translation>质量 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="691"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="457"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="709"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="460"/>
         <source>Stopping...</source>
         <translation>正在停止...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
         <source>Invalid Directory</source>
         <translation>无效目录</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="387"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
         <source>Please select a valid output directory.</source>
         <translation>请选择一个有效的输出目录。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="389"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
         <source>Invalid Pattern</source>
         <translation>格式无效</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>文件名格式不能包含路径遍历序列 (..) 或绝对路径。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
         <source>No files</source>
         <translation>无文件</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="394"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>队列中未选择任何文件。请至少勾选一个文件。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="400"/>
         <source>Resolution Limit Exceeded</source>
         <translation>超出分辨率限制</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="398"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -490,42 +495,42 @@ Please reduce the percentage or absolute size.</source>
 请降低百分比或绝对大小。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="449"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
         <source>Processing...</source>
         <translation>正在处理...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="465"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="468"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>被用户停止。成功: %1，失败: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="469"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
         <source>Batch aborted.</source>
         <translation>批量任务已中止。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="482"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="485"/>
         <source>Batch Conversion Failed</source>
         <translation>批量转换失败</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="453"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
         <source>Processed %1 / %2 files.</source>
         <translation>已处理 %1 / %2 个文件。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="461"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="464"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>已完成。成功：%1，失败：%2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="473"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
         <source>Batch Conversion Complete</source>
         <translation>批量转换完成</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="474"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="477"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -541,7 +546,7 @@ Total files: %3</source>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="417"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
         <source>Pending</source>
         <translation>等待中</translation>
     </message>
@@ -577,62 +582,67 @@ Total files: %3</source>
 <context>
     <name>ColorAdjustmentsOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="34"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="38"/>
         <source>Color adjustments</source>
         <translation>颜色微调</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="35"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="37"/>
         <source>Smart Enhance</source>
         <translation>智能增强</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="36"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="38"/>
         <source>Exposure</source>
         <translation>曝光</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="38"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="40"/>
         <source>Brightness</source>
         <translation>亮度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="37"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="39"/>
         <source>Contrast</source>
         <translation>对比度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="39"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="41"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="40"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="42"/>
         <source>Tint</source>
         <translation>色调</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="42"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="43"/>
         <source>Hue</source>
         <translation>色调</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="41"/>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="44"/>
+        <source>Vibrance</source>
+        <translation>自然饱和度</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="45"/>
         <source>Saturation</source>
         <translation>饱和度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="65"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="58"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="63"/>
         <source>Compare</source>
         <translation>对比</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="75"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
