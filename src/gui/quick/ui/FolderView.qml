@@ -217,9 +217,20 @@ FocusScope {
                 visible: !root.controller.compactTopBar
                 text: qsTr("Grid size")
                 color: Theme.colors.textHc
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton
+                    onDoubleClicked: mouse => {
+                        mouse.accepted = true;
+                        root.gridController.resetIconSize();
+                    }
+                }
             }
 
             Slider {
+                id: zoomSlider
+
                 Layout.preferredWidth: root.sliderWidth
                 Layout.rightMargin: root.sliderSpacing
                 visible: !root.controller.compactTopBar
@@ -228,8 +239,38 @@ FocusScope {
                 to: root.gridController.zoomSliderMaximum
                 stepSize: 1
                 value: root.gridController.zoomSliderValue
-                onMoved: root.gridController.setZoomSliderValue(value)
-                onPressedChanged: root.gridController.setZoomSliderPressed(pressed)
+
+                function setValueAt(x) {
+                    const handleRadius = zoomSlider.handle.width / 2;
+                    const trackLength = zoomSlider.availableWidth - zoomSlider.handle.width;
+                    if (trackLength <= 0)
+                        return;
+                    const position = Math.max(0, Math.min(1,
+                        (x - handleRadius - zoomSlider.leftPadding) / trackLength));
+                    const logicalPosition = zoomSlider.mirrored ? 1 - position : position;
+                    const rawValue = zoomSlider.valueAt(logicalPosition);
+                    root.gridController.setZoomSliderValue(Math.round(rawValue));
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    z: 1
+                    acceptedButtons: Qt.LeftButton
+                    onPressed: mouse => {
+                        root.gridController.setZoomSliderPressed(true);
+                        zoomSlider.setValueAt(mouse.x);
+                    }
+                    onPositionChanged: mouse => {
+                        if (pressed)
+                            zoomSlider.setValueAt(mouse.x);
+                    }
+                    onReleased: root.gridController.setZoomSliderPressed(false)
+                    onCanceled: root.gridController.setZoomSliderPressed(false)
+                    onDoubleClicked: mouse => {
+                        mouse.accepted = true;
+                        root.gridController.resetIconSize();
+                    }
+                }
             }
 
             PanelComboBox {

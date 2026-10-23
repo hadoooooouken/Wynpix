@@ -27,8 +27,8 @@
 //   away from), Page Up / Down by four rows, Home / End, Shift ranges,
 //   Ctrl+A, Enter activates, Backspace goes up, printable text goes to the
 //   type-ahead; everything else is left to the action shortcuts;
-// - icon size: 128 - 512, the zoom slider on a log2 scale snapping to 256,
-//   stored when the slider is released;
+// - icon size: 128 - 512, the zoom slider on a log2 scale, reset to default
+//   (256) on double-click, stored when the slider is released;
 // - drops: copy and move onto items or the background;
 // - the number of selected images and whether files wait in the batch
 //   converter, for the batch conversion button.
@@ -55,11 +55,8 @@ public:
     static constexpr int kPreloadDistance = 2300;
     // Rows that Page Up / Page Down move.
     static constexpr int kPageRows = 4;
-    // Zoom slider: hundredths of log2 of the icon size; values within
-    // kSliderSnapRange of the snap point give 256 px.
+    // Zoom slider: hundredths of log2 of the icon size.
     static constexpr int kSliderScale = 100;
-    static constexpr int kSliderSnapValue = 800;
-    static constexpr int kSliderSnapRange = 8;
 
     // model must outlive the controller; settings: the initial UI settings.
     FolderGridController(ThumbnailListModel &model, const UiSettingsSnapshot &settings,
@@ -87,6 +84,7 @@ public:
     // Width of the grid area without the scroll bar.
     Q_INVOKABLE void setViewWidth(qreal width);
     Q_INVOKABLE void setIconSize(int size);
+    Q_INVOKABLE void resetIconSize();
     Q_INVOKABLE void setZoomSliderValue(int value);
     // The icon size is stored when the slider is released.
     Q_INVOKABLE void setZoomSliderPressed(bool pressed);

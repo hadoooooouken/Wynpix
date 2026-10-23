@@ -120,16 +120,14 @@ void FolderGridController::setIconSize(int size) {
         emit iconSizeCommitted(mIconSize);
 }
 
+void FolderGridController::resetIconSize() {
+    setIconSize(FolderGridLayout::kDefaultIconSize);
+}
+
 // FolderView::onZoomSliderValueChanged().
 void FolderGridController::setZoomSliderValue(int value) {
-    if (std::abs(value - kSliderSnapValue) <= kSliderSnapRange)
-        value = kSliderSnapValue;
     const int size = static_cast<int>(std::lround(std::pow(2.0, value / static_cast<double>(kSliderScale))));
-    const int previous = mIconSize;
     setIconSize(size);
-    // A snapped value moves the slider back to the snap point.
-    if (mIconSize == previous)
-        emit iconSizeChanged();
 }
 
 void FolderGridController::setZoomSliderPressed(bool pressed) {

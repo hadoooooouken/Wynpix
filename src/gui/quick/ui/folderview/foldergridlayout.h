@@ -38,6 +38,7 @@ struct FolderGridLayout {
 public:
     static constexpr int kMinimumIconSize = 128;
     static constexpr int kMaximumIconSize = 512;
+    static constexpr int kDefaultIconSize = 256;
     // Ctrl + wheel changes the icon size by this step.
     static constexpr int kZoomStep = 16;
     static constexpr int kLeftMargin = 9;
