@@ -1403,6 +1403,10 @@ void applySmartEnhanceToImage(QImage &image, float amount,
 
   // Same row split as the colour matrix pass below.
   const int numThreads = scalingThreadCount(executionMode);
+  if (numThreads <= 1) {
+    smartEnhanceRows(bits, bytesPerLine, width, 0, height, wb, strength);
+    return;
+  }
   QThreadPool *pool = getScalingThreadPool(executionMode);
   QSemaphore semaphore;
   int rowsPerThread = height / numThreads;
