@@ -10,6 +10,7 @@
 #include "sourcecontainers/documentinfo.h"
 #include "settings_types.h"
 #include "utils/coloradjustments.h"
+#include "utils/autocoloradjustments.h"
 
 
 class ImageLib {
@@ -53,8 +54,13 @@ class ImageLib {
         static void recolor(QPixmap &pixmap, QColor color);
         static QImage applyColorAdjustments(std::shared_ptr<const QImage> source,
                                             const ColorAdjustments &adjustments);
+        // wbOverride: precomputed Smart Enhance white-balance factors. When null
+        // they are measured on `source` itself. The batch converter passes the
+        // factors of the full-size original when it colours an already
+        // downscaled image, so the result matches the full-size path.
         static QImage applyColorAdjustmentsForBatch(
-            std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments);
+            std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments,
+            const WhiteBalanceFactors *wbOverride = nullptr);
         static QImage loadICO(const QString &path);
 
     private:
@@ -66,7 +72,8 @@ class ImageLib {
                                              ExecutionMode executionMode);
         static QImage applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> source,
                                                      const ColorAdjustments &adjustments,
-                                                     ExecutionMode executionMode);
+                                                     ExecutionMode executionMode,
+                                                     const WhiteBalanceFactors *wbOverride = nullptr);
 };
 
 

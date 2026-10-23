@@ -228,6 +228,45 @@ private slots:
       }
     }
   }
+
+  void smartEnhanceUsesProvidedWhiteBalanceFactors() {
+    constexpr int kWidth = 64;
+    constexpr int kHeight = 8;
+    constexpr int kFirstLevel = 40;
+    constexpr int kLevelStep = 2;
+    // Low-contrast ramp: the measured stretch factors are clearly not neutral.
+    QImage source(kWidth, kHeight, QImage::Format_ARGB32);
+    for (int y = 0; y < kHeight; ++y)
+      for (int x = 0; x < kWidth; ++x) {
+        const int level = kFirstLevel + x * kLevelStep;
+        source.setPixel(x, y, qRgba(level, level, level, kOpaque));
+      }
+    ColorAdjustments adj;
+    adj.smartEnhance = 1.0f;
+    const auto sourcePtr = std::make_shared<const QImage>(source);
+
+    const WhiteBalanceFactors measured = calculateWhiteBalanceFactors(&source);
+    QVERIFY(measured.scale[0] > 1.5f);
+
+    const QImage implicitResult = ImageLib::applyColorAdjustmentsForBatch(sourcePtr, adj);
+    const QImage explicitResult =
+        ImageLib::applyColorAdjustmentsForBatch(sourcePtr, adj, &measured);
+    const WhiteBalanceFactors neutral;
+    const QImage neutralResult =
+        ImageLib::applyColorAdjustmentsForBatch(sourcePtr, adj, &neutral);
+
+    // Passing the factors the function would measure itself changes nothing...
+    QCOMPARE(explicitResult, implicitResult);
+    // ...while other factors are really used.
+    QVERIFY(neutralResult != implicitResult);
+
+    // The factors of the full-size image can be reused on a downscaled copy.
+    const QImage small = source.scaled(kWidth / 2, kHeight / 2);
+    const QImage smallResult = ImageLib::applyColorAdjustmentsForBatch(
+        std::make_shared<const QImage>(small), adj, &measured);
+    QCOMPARE(smallResult.size(), small.size());
+    QVERIFY(qRed(smallResult.pixel(0, 0)) < qRed(small.pixel(0, 0)));
+  }
 };
 
 int runImageLibTests(int argc, char **argv) {

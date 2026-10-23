@@ -13,6 +13,7 @@
 #include <QThread>
 #include <QSet>
 #include <cmath>
+#include <optional>
 #include <utility>
 #include "components/upscaler/upscaler.h"
 #include "components/batchconverter/batchjobrules.h"
@@ -155,19 +156,6 @@ public:
         }
         const bool exactTargetSize = m_job.resizeMode == ResizeMode::ByMegapixels;
 
-        if (m_job.colorAdjustments.hasAdjustments()) {
-            if (m_cancelFlag->load()) {
-                notifyStopped();
-                return;
-            }
-            std::shared_ptr<const QImage> srcPtr = std::make_shared<const QImage>(processedImg);
-            QImage adj = ImageLib::applyColorAdjustmentsForBatch(srcPtr,
-                                                                 m_job.colorAdjustments);
-            if (!adj.isNull()) {
-                processedImg = adj;
-            }
-        }
-
         // "Upscayl" only makes sense when the target is actually larger
         // than this source image. A stale/persisted checkbox state must not
         // force every file in a downscale batch through the (much slower,
@@ -181,6 +169,42 @@ public:
         bool wantsUpscayl = m_job.useUpscayl &&
                              (finalTarget.width() > srcImg.width() ||
                               finalTarget.height() > srcImg.height());
+
+        // Colour correction cost is proportional to the pixel count, so it runs
+        // on the smaller image: before Upscayl / an upscale (the source is
+        // smaller), after a downscale (the result is smaller). Every colour
+        // stage is per-pixel except the Smart Enhance white-balance factors,
+        // which are measured on the original here and reused on the resized
+        // image, so they match the viewer preview and do not depend on the
+        // order. (The non-linear stages still differ from colouring first by
+        // a rounding-level amount at edges.)
+        const bool hasColorAdjustments = m_job.colorAdjustments.hasAdjustments();
+        const qint64 sourcePixels = static_cast<qint64>(srcImg.width()) * srcImg.height();
+        const qint64 targetPixels = static_cast<qint64>(finalTarget.width()) * finalTarget.height();
+        const bool colorAfterResize = hasColorAdjustments && m_job.doResize &&
+                                      !wantsUpscayl && targetPixels < sourcePixels;
+        std::optional<WhiteBalanceFactors> originalWhiteBalance;
+        if (colorAfterResize && m_job.colorAdjustments.hasSmartEnhance()) {
+            originalWhiteBalance = calculateWhiteBalanceFactors(&srcImg);
+        }
+        // Returns false when the job was cancelled (already reported).
+        const auto applyColorStage = [&]() -> bool {
+            if (m_cancelFlag->load()) {
+                notifyStopped();
+                return false;
+            }
+            std::shared_ptr<const QImage> colorSrc = std::make_shared<const QImage>(processedImg);
+            QImage adj = ImageLib::applyColorAdjustmentsForBatch(
+                colorSrc, m_job.colorAdjustments,
+                originalWhiteBalance ? &*originalWhiteBalance : nullptr);
+            if (!adj.isNull()) {
+                processedImg = adj;
+            }
+            return true;
+        };
+        if (hasColorAdjustments && !colorAfterResize && !applyColorStage()) {
+            return;
+        }
 
         if (wantsUpscayl) {
             if (m_cancelFlag->load()) {
@@ -250,6 +274,10 @@ public:
                 return;
             }
             processedImg = resized;
+        }
+
+        if (colorAfterResize && !applyColorStage()) {
+            return;
         }
 
         if (m_job.rotation != RotationAngle::Rotate0) {

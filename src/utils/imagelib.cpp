@@ -1304,36 +1304,26 @@ QImage ImageLib::applyColorAdjustments(std::shared_ptr<const QImage> source,
 }
 
 QImage ImageLib::applyColorAdjustmentsForBatch(
-    std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments) {
-  return applyColorAdjustmentsWithMode(std::move(source), adjustments, ExecutionMode::Batch);
+    std::shared_ptr<const QImage> source, const ColorAdjustments &adjustments,
+    const WhiteBalanceFactors *wbOverride) {
+  return applyColorAdjustmentsWithMode(std::move(source), adjustments,
+                                       ExecutionMode::Batch, wbOverride);
 }
 
 namespace {
-void applySmartEnhanceToImage(QImage &image, float amount) {
-  if (std::abs(amount) <= kColorAdjustmentEpsilon || image.isNull())
-    return;
-  const int width = image.width();
-  const int height = image.height();
-  if (width <= 0 || height <= 0)
-    return;
-  const int bytesPerLine = image.bytesPerLine();
-  uchar *bits = image.bits();
-  if (!bits)
-    return;
-
-  const WhiteBalanceFactors wb = calculateWhiteBalanceFactors(&image);
-
+// Smart Enhance of the rows [yStart, yEnd) of an ARGB32 image. Every pixel
+// depends only on itself and wb, so disjoint row ranges can run in parallel.
+void smartEnhanceRows(uchar *bits, int bytesPerLine, int width, int yStart,
+                      int yEnd, const WhiteBalanceFactors &wb, float strength) {
   constexpr float kShadowCutoff = 0.392f;
   constexpr float kHighlightCutoff = 0.608f;
   constexpr float kShadowAmount = 0.25f;
   constexpr float kHighlightAmount = 0.25f;
-  const float strength = std::clamp(amount, 0.0f, 1.0f);
-
   const auto overlay = [](float s, float b) noexcept {
     return s < 0.5f ? 2.0f * s * b : 1.0f - 2.0f * (1.0f - s) * (1.0f - b);
   };
 
-  for (int y = 0; y < height; ++y) {
+  for (int y = yStart; y < yEnd; ++y) {
     QRgb *line = reinterpret_cast<QRgb*>(bits + y * bytesPerLine);
     for (int x = 0; x < width; ++x) {
       QRgb pixel = line[x];
@@ -1392,25 +1382,70 @@ void applySmartEnhanceToImage(QImage &image, float amount) {
     }
   }
 }
+
+void applySmartEnhanceToImage(QImage &image, float amount,
+                              ImageLib::ExecutionMode executionMode,
+                              const WhiteBalanceFactors *wbOverride) {
+  if (std::abs(amount) <= kColorAdjustmentEpsilon || image.isNull())
+    return;
+  const int width = image.width();
+  const int height = image.height();
+  if (width <= 0 || height <= 0)
+    return;
+  const int bytesPerLine = image.bytesPerLine();
+  uchar *bits = image.bits();
+  if (!bits)
+    return;
+
+  const WhiteBalanceFactors wb =
+      wbOverride ? *wbOverride : calculateWhiteBalanceFactors(&image);
+  const float strength = std::clamp(amount, 0.0f, 1.0f);
+
+  // Same row split as the colour matrix pass below.
+  const int numThreads = scalingThreadCount(executionMode);
+  QThreadPool *pool = getScalingThreadPool(executionMode);
+  QSemaphore semaphore;
+  int rowsPerThread = height / numThreads;
+  if (rowsPerThread == 0)
+    rowsPerThread = 1;
+
+  int numTasks = 0;
+  for (int i = 0; i < numThreads; ++i) {
+    const int y_start = i * rowsPerThread;
+    const int y_end = (i == numThreads - 1) ? height : (i + 1) * rowsPerThread;
+    if (y_start >= height)
+      break;
+
+    numTasks++;
+    pool->start(new ScalerTask([bits, bytesPerLine, width, y_start, y_end, &wb,
+                                strength, &semaphore]() {
+      smartEnhanceRows(bits, bytesPerLine, width, y_start, y_end, wb, strength);
+      semaphore.release(1);
+    }));
+  }
+  semaphore.acquire(numTasks);
+}
 } // namespace
 
 QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> source,
                                                const ColorAdjustments &adjustments,
-                                               ExecutionMode executionMode) {
+                                               ExecutionMode executionMode,
+                                               const WhiteBalanceFactors *wbOverride) {
   if (!source)
     return QImage();
 
   QImage dst = source->convertToFormat(QImage::Format_ARGB32);
   if (adjustments.hasSmartEnhance()) {
-    applySmartEnhanceToImage(dst, adjustments.smartEnhance);
+    applySmartEnhanceToImage(dst, adjustments.smartEnhance, executionMode, wbOverride);
   }
   const bool vibranceActive = adjustments.hasVibrance();
   if (!adjustments.hasMatrixAdjustments() && !vibranceActive) {
     return dst;
   }
-  // Neutral matrix adjustments give the identity, so vibrance alone runs the
-  // same single pass: matrix, clamp, vibrance, one rounding (as the GPU does).
-  ColorMatrix cm = colorAdjustmentMatrix(adjustments);
+  // One pass: matrix, clamp, vibrance, one rounding (as the GPU does). Vibrance
+  // alone skips the matrix: the identity would leave every value unchanged.
+  const bool matrixActive = adjustments.hasMatrixAdjustments();
+  ColorMatrix cm = matrixActive ? colorAdjustmentMatrix(adjustments) : ColorMatrix{};
   const float vibrance = adjustments.vibrance;
 
   int height = dst.height();
@@ -1436,7 +1471,7 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
       if (y_start >= height) break;
 
       numTasks++;
-      pool->start(new ScalerTask([bits, bytesPerLine, cm, vibrance, vibranceActive, width, y_start, y_end, &semaphore]() {
+      pool->start(new ScalerTask([bits, bytesPerLine, cm, matrixActive, vibrance, vibranceActive, width, y_start, y_end, &semaphore]() {
 #if defined(__AVX2__)
         // Set up AVX2 constants
         const __m256i mask_b_i = _mm256_set1_epi32(0x000000FF);
@@ -1493,15 +1528,21 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
             __m256 g_f = _mm256_cvtepi32_ps(g_i);
             __m256 r_f = _mm256_cvtepi32_ps(r_i);
 
-            // Apply matrix: out = M * in + pre_scaled_offset
-            __m256 out_r = _mm256_fmadd_ps(v_m00, r_f, _mm256_fmadd_ps(v_m01, g_f, _mm256_fmadd_ps(v_m02, b_f, v_offset_scaled)));
-            __m256 out_g = _mm256_fmadd_ps(v_m10, r_f, _mm256_fmadd_ps(v_m11, g_f, _mm256_fmadd_ps(v_m12, b_f, v_offset_scaled)));
-            __m256 out_b = _mm256_fmadd_ps(v_m20, r_f, _mm256_fmadd_ps(v_m21, g_f, _mm256_fmadd_ps(v_m22, b_f, v_offset_scaled)));
+            // Apply matrix: out = M * in + pre_scaled_offset. Without it the
+            // values are the unpacked bytes, already within [0, 255].
+            __m256 out_r = r_f;
+            __m256 out_g = g_f;
+            __m256 out_b = b_f;
+            if (matrixActive) {
+              out_r = _mm256_fmadd_ps(v_m00, r_f, _mm256_fmadd_ps(v_m01, g_f, _mm256_fmadd_ps(v_m02, b_f, v_offset_scaled)));
+              out_g = _mm256_fmadd_ps(v_m10, r_f, _mm256_fmadd_ps(v_m11, g_f, _mm256_fmadd_ps(v_m12, b_f, v_offset_scaled)));
+              out_b = _mm256_fmadd_ps(v_m20, r_f, _mm256_fmadd_ps(v_m21, g_f, _mm256_fmadd_ps(v_m22, b_f, v_offset_scaled)));
 
-            // Clamp to [0, 255]
-            out_r = _mm256_min_ps(_mm256_max_ps(out_r, v_zero), v_255);
-            out_g = _mm256_min_ps(_mm256_max_ps(out_g, v_zero), v_255);
-            out_b = _mm256_min_ps(_mm256_max_ps(out_b, v_zero), v_255);
+              // Clamp to [0, 255]
+              out_r = _mm256_min_ps(_mm256_max_ps(out_r, v_zero), v_255);
+              out_g = _mm256_min_ps(_mm256_max_ps(out_g, v_zero), v_255);
+              out_b = _mm256_min_ps(_mm256_max_ps(out_b, v_zero), v_255);
+            }
 
             if (vibranceActive) {
               const __m256 peak = _mm256_max_ps(out_r, _mm256_max_ps(out_g, out_b));
@@ -1544,9 +1585,14 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
             float g = ((pixel >> 8) & 0xFF);
             float b = (pixel & 0xFF);
 
-            float out_r = cm.m[0][0] * r + cm.m[0][1] * g + cm.m[0][2] * b + cm.offset * 255.0f;
-            float out_g = cm.m[1][0] * r + cm.m[1][1] * g + cm.m[1][2] * b + cm.offset * 255.0f;
-            float out_b = cm.m[2][0] * r + cm.m[2][1] * g + cm.m[2][2] * b + cm.offset * 255.0f;
+            float out_r = r;
+            float out_g = g;
+            float out_b = b;
+            if (matrixActive) {
+              out_r = cm.m[0][0] * r + cm.m[0][1] * g + cm.m[0][2] * b + cm.offset * 255.0f;
+              out_g = cm.m[1][0] * r + cm.m[1][1] * g + cm.m[1][2] * b + cm.offset * 255.0f;
+              out_b = cm.m[2][0] * r + cm.m[2][1] * g + cm.m[2][2] * b + cm.offset * 255.0f;
+            }
 
             if (vibranceActive) {
               constexpr float kByteMax = 255.0f;
