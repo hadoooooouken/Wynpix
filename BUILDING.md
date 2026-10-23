@@ -14,6 +14,7 @@ This guide walks you through building Wynpix and all its dependencies on Windows
 | **MSYS2** | Latest | [msys2.org](https://www.msys2.org/) | Only needed for building FFmpeg (provides bash/make) |
 | **Python 3** | 3.10+ | [python.org](https://www.python.org/) | Only needed for building FFmpeg |
 | **Inno Setup** | 6.x | [jrsoftware.org](https://jrsoftware.org/isdl.php) | Required for packaging release installers (`iscc`) |
+| **7-Zip** | 21.x+ | [7-zip.org](https://www.7-zip.org/) | Required for packaging portable release archives (`7z`) |
 | **Intel SDE** | 9.x+ | [intel.com](https://www.intel.com/content/www/us/en/developer/articles/tool/software-development-emulator.html) | Optional; for SSE2 CPU emulation and smoke testing |
 
 ### Minimum Hardware
@@ -131,9 +132,12 @@ wynpix/
 │   ├── exiv2/                 # EXIF metadata (static, linked into the exe)
 │   ├── nasm/                  # NASM assembler (tool binary)
 │   └── ninja/                 # Ninja build tool (tool binary)
-├── build_scripts/             # Dependency build automation
+├── build_scripts/             # Dependency and release build automation
 │   ├── msvc-release-policy.json # Shared compiler/linker/ISA policy
 │   ├── MsvcPolicy.ps1         # Policy helpers (Get-IsaFolderName, etc.)
+│   ├── build-release.ps1      # Automated release builder (AVX2 + SSE2, 7z + installers)
+│   ├── build-release-no-isa-check.ps1 # Fast release builder without ISA verification
+│   ├── build-release-preserve-cache.ps1 # Incremental release builder preserving CMake cache
 │   ├── rebuild-all.ps1        # Batch builder for format libraries
 │   ├── build_qtiff_jpeg.ps1
 │   ├── build_qpng_spng.ps1
@@ -146,7 +150,7 @@ wynpix/
 │   └── setup-deps.ps1
 ├── release/                   # AVX2 output directory
 ├── release-sse2/              # SSE2 output directory
-├── INSTALL/                   # Packaged installer executables
+├── INSTALL/                   # Packaged release artifacts (installers and portable .7z)
 ├── patches/                   # Local patch files for dependencies
 │   ├── *.patch                # Single-file patches
 │   ├── kimageformats/         # Patch series (10 commits past v6.26.0)
@@ -336,13 +340,43 @@ cd ..
 
 ## Dual AVX2 / SSE2 Release Procedure
 
-Wynpix supports building and shipping two official installer variants from a single source tree:
-- **AVX2 build** (`release/`, packaged as `wynpix-setup.exe`): Target baseline for modern CPUs with AVX2 support.
-- **SSE2 build** (`release-sse2/`, packaged as `wynpix-setup-sse2.exe`): Target baseline for x86-64 CPUs without AVX2. The minimum CPU is Intel Core 2 (Merom: SSE3/SSSE3, no SSE4.1); this covers e.g. Core 2 Duo, Core i 1st-3rd generation, AMD FX and Celeron/Pentium models without AVX. AMD CPUs before Bulldozer (Athlon 64, Phenom) lack SSSE3 and are not a target.
+Wynpix supports building and shipping two official release variants from a single source tree:
+- **AVX2 build** (`release/`, packaged as `wynpix-setup.exe` and `wynpix-portable.7z`): Target baseline for modern CPUs with AVX2 support.
+- **SSE2 build** (`release-sse2/`, packaged as `wynpix-setup-sse2.exe` and `wynpix-portable-sse2.7z`): Target baseline for x86-64 CPUs without AVX2. The minimum CPU is Intel Core 2 (Merom: SSE3/SSSE3, no SSE4.1); this covers e.g. Core 2 Duo, Core i 1st-3rd generation, AMD FX and Celeron/Pentium models without AVX. AMD CPUs before Bulldozer (Athlon 64, Phenom) lack SSSE3 and are not a target.
 
 Each variant maintains its own isolated CMake build directory (`out/build/wynpix-x64-release` vs `out/build/wynpix-x64-release-sse2`), dependency install trees (`formats/<lib>/install` vs `formats/<lib>/install-sse2`), and output folder (`release` vs `release-sse2`).
 
-Follow these four steps to produce and verify an official release:
+Release packaging can be performed automatically in a single command using `build-release.ps1`, or manually step-by-step.
+
+### Automated Release Pipeline (Recommended)
+
+Once dependencies for both AVX2 and SSE2 have been built (see Step 1 below), you can produce, verify, and package all official release artifacts by running `build-release.ps1` from a PowerShell prompt:
+
+```powershell
+.\build_scripts\build-release.ps1
+```
+
+The script automates the complete release workflow:
+1. **Tool Discovery & Environment**: Resolves `cmake`, `7z` (or `7zz`), and Inno Setup `ISCC.exe`. Automatically imports the Visual Studio x64 compiler environment (`vcvarsall.bat x64`) via `vswhere` if `cl.exe` is not already on `PATH`.
+2. **Lock Checks & Cleaning**: Ensures no running processes have locked files in `release/` or `release-sse2/`, then cleans old release files and existing packages in `INSTALL/`.
+3. **Clean Build**: Executes `cmake --fresh --preset <preset>` and `cmake --build --preset <preset>` for both AVX2 and SSE2 targets.
+4. **ISA Verification**: Runs `check-isa.ps1` against both variants to verify strict instruction set compliance.
+5. **Portable Packaging**: Creates ultra-compressed `.7z` archives (`wynpix-portable.7z` and `wynpix-portable-sse2.7z`) with `-mx=9`, unpacks them to a temporary location, and verifies every extracted file against the source release directory by file count, file size, and SHA-256 hash.
+6. **Installer Compilation**: Compiles Inno Setup installers (`wynpix-setup.exe` and `wynpix-setup-sse2.exe`) using `iscc /DIsa=<ISA> src\wynpix.iss`.
+7. **Verification & Checksums**: Verifies all four artifacts in `INSTALL/` and prints their exact sizes and SHA-256 checksums.
+
+#### Faster / Incremental Release Scripts
+
+For development and testing, two companion scripts are available:
+
+- **`build-release-no-isa-check.ps1`**: Same clean `--fresh` build and packaging pipeline as `build-release.ps1`, but skips the ISA scan step for faster packaging turnaround.
+- **`build-release-preserve-cache.ps1`**: Incremental packaging script that omits `--fresh` (preserves existing CMake configure caches) and skips ISA verification, allowing fast repackaging after minor code updates.
+
+---
+
+### Manual Release Procedure (Step-by-Step)
+
+Follow these four steps to produce and verify an official release manually:
 
 ### 1. Dependencies
 
