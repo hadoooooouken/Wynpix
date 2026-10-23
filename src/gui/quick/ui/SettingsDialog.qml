@@ -32,7 +32,7 @@ Window {
     readonly property int sidebarEntryRadius: 5
     // Version badges under the sidebar: logo sizes and the gap between the
     // application and the Qt badge.
-    readonly property size appLogoSize: Qt.size(22, 22)
+    readonly property size appLogoSize: Qt.size(20, 22)
     readonly property size qtLogoSize: Qt.size(22, 16)
     readonly property int versionBadgeSpacing: 4
     readonly property int versionBadgeGap: 7
@@ -161,6 +161,7 @@ Window {
                         Image {
                             source: root.appLogoSource
                             sourceSize: root.appLogoSize
+                            fillMode: Image.PreserveAspectFit
                         }
                         Label {
                             text: root.editor.applicationVersion
@@ -170,6 +171,7 @@ Window {
                             Layout.leftMargin: root.versionBadgeGap
                             source: root.qtLogoSource
                             sourceSize: root.qtLogoSize
+                            fillMode: Image.PreserveAspectFit
                         }
                         Label {
                             text: root.editor.qtVersion
