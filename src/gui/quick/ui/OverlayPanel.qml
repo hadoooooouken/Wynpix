@@ -22,6 +22,8 @@ Item {
     // Placement while not dragged.
     property real placementX: 0
     property real placementY: 0
+    property bool collapsible: false
+    property bool collapsed: false
     default property alias content: body.data
 
     signal closeClicked()
@@ -34,6 +36,11 @@ Item {
     x: placementX
     y: placementY
     implicitHeight: header.height + body.implicitHeight + bottomPadding
+
+    onHeightChanged: {
+        if (parent && y + height > parent.height)
+            y = Math.max(0, parent.height - height);
+    }
 
     PopupBackground {
         anchors.fill: parent
@@ -71,6 +78,18 @@ Item {
             }
 
             OverlayHeaderButton {
+                id: collapseButton
+
+                visible: panel.collapsible
+                glyph: panel.collapsed ? FluentIcons.ChevronDown20 : FluentIcons.ChevronUp20
+                glyphSize: Theme.standardIconSize
+                Accessible.name: panel.collapsed ? qsTr("Expand") : qsTr("Collapse")
+                onClicked: panel.collapsed = !panel.collapsed
+            }
+
+            OverlayHeaderButton {
+                id: closeButton
+
                 glyph: FluentIcons.Dismiss16
                 onClicked: panel.closeClicked()
             }
@@ -84,6 +103,15 @@ Item {
             xAxis.maximum: panel.parent ? Math.max(0, panel.parent.width - panel.width) : 0
             yAxis.minimum: 0
             yAxis.maximum: panel.parent ? Math.max(0, panel.parent.height - panel.height) : 0
+        }
+
+        TapHandler {
+            enabled: panel.collapsible
+            onDoubleTapped: eventPoint => {
+                const buttonX = collapseButton.visible ? collapseButton.x : closeButton.x;
+                if (eventPoint.position.x < buttonX)
+                    panel.collapsed = !panel.collapsed;
+            }
         }
     }
 

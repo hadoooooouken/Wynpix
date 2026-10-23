@@ -22,8 +22,10 @@ Item {
     Connections {
         target: root.coordinator.colorAdjustments
         function onOpenChanged() {
-            if (root.coordinator.colorAdjustments.open)
+            if (root.coordinator.colorAdjustments.open) {
                 panel.resetPosition();
+                panel.collapsed = false;
+            }
         }
     }
 
@@ -38,6 +40,7 @@ Item {
         title: qsTr("Color adjustments")
         strongTitle: true
         draggable: true
+        collapsible: true
         width: root.panelWidth
         bottomPadding: root.padding
         placementX: Math.max(0, Math.min(root.coordinator.colorAdjustments.anchor.x, root.width - width))
@@ -54,6 +57,7 @@ Item {
                 width: parent.width
                 sliders: root.editor
                 trackGradients: colorTracks.tracks
+                visible: !panel.collapsed
             }
 
             Row {
