@@ -190,6 +190,17 @@ private slots:
     QCOMPARE(editor.adjustments().smartEnhance, ColorAdjustments::kNeutralSmartEnhance);
   }
 
+  void colorAdjustmentsVibrancePreviewsAndResets() {
+    ColorAdjustmentsEditor editor;
+    QVERIFY(int(ColorAdjustmentsEditor::Vibrance) + 1 == int(ColorAdjustmentsEditor::Saturation));
+    editor.setValue(ColorAdjustmentsEditor::Vibrance, 60);
+    QVERIFY(fuzzyEqual(editor.adjustments().vibrance, 0.6f));
+    editor.setValue(ColorAdjustmentsEditor::Vibrance, 999);
+    QCOMPARE(editor.adjustments().vibrance, 1.0f);
+    editor.resetValue(ColorAdjustmentsEditor::Vibrance);
+    QCOMPARE(editor.adjustments().vibrance, ColorAdjustments::kNeutralVibrance);
+  }
+
   void colorAdjustmentsCompareShowsTheOriginal() {
     ColorAdjustmentsEditor editor;
     editor.setValue(ColorAdjustmentsEditor::Saturation, 150);

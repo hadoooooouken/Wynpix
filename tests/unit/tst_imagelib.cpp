@@ -145,6 +145,30 @@ private slots:
     QCOMPARE(qBlue(redResult.pixel(0, 0)), 0);
   }
 
+  void vibranceLiftsMutedPixelsAndKeepsGreyAndAlpha() {
+    constexpr int kMutedRed = 153;
+    constexpr int kMutedOther = 128;
+    constexpr int kAlpha = 200;
+    QImage source(kOddWidth, kOddHeight, QImage::Format_ARGB32);
+    source.fill(qRgba(kMutedRed, kMutedOther, kMutedOther, kAlpha));
+    source.setPixel(0, 0, qRgba(kMutedOther, kMutedOther, kMutedOther, kAlpha));
+    ColorAdjustments adj;
+    adj.vibrance = 1.0f;
+    // Vibrance alone, then together with a matrix adjustment: both run the
+    // same fused pass.
+    for (const float contrast : {ColorAdjustments::kNeutralContrast, 1.1f}) {
+      adj.contrast = contrast;
+      const QImage result = ImageLib::applyColorAdjustments(
+          std::make_shared<const QImage>(source), adj);
+      QCOMPARE(result.size(), source.size());
+      QCOMPARE(qAlpha(result.pixel(1, 1)), kAlpha);
+      QVERIFY(qRed(result.pixel(1, 1)) > qRed(source.pixel(1, 1)));
+      QVERIFY(qGreen(result.pixel(1, 1)) < qGreen(source.pixel(1, 1)));
+      QCOMPARE(qRed(result.pixel(0, 0)), qGreen(result.pixel(0, 0)));
+      QCOMPARE(qGreen(result.pixel(0, 0)), qBlue(result.pixel(0, 0)));
+    }
+  }
+
   void smartEnhancePreservesMonochromaticImagesWithNoise() {
     constexpr int kWidth = 64;
     constexpr int kHeight = 64;

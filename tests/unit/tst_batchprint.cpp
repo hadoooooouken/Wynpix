@@ -456,6 +456,22 @@ private slots:
         dialog.reject();
     }
 
+    void batchVibranceSliderMapsToAFraction() {
+        BatchConverterDialogModel dialog;
+        FakeBatchConversionService service;
+        QVERIFY(dialog.start(batchInput({u"C:/a.png"_s}), service));
+        const int vibrance = static_cast<int>(ColorSlider::Vibrance);
+        QCOMPARE(vibrance + 1, static_cast<int>(ColorSlider::Saturation));
+        dialog.setColorEnabled(true);
+        dialog.setColorValue(vibrance, 50.0);
+        QCOMPARE(dialog.job().colorAdjustments.vibrance, 0.5f);
+        dialog.setColorValue(vibrance, 500.0);
+        QCOMPARE(dialog.colorValues()[vibrance], 100.0);
+        dialog.resetColorValues();
+        QCOMPARE(dialog.colorValues()[vibrance], 0.0);
+        dialog.reject();
+    }
+
     void batchConvertShowsTheFirstProblem() {
         SourceFolder folder;
         BatchConverterDialogModel dialog;

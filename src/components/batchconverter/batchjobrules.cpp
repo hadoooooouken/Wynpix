@@ -229,6 +229,7 @@ QList<ColorSliderSpec> colorSliders() {
         {QCoreApplication::translate("BatchConverterDialog", "Temperature:"), -50.0, 50.0, 0.0, 1.0, 0, {}, false},
         {QCoreApplication::translate("BatchConverterDialog", "Tint:"), -50.0, 50.0, 0.0, 1.0, 0, {}, false},
         {QCoreApplication::translate("BatchConverterDialog", "Hue:"), -180.0, 180.0, 0.0, 1.0, 0, degree, false},
+        {QCoreApplication::translate("BatchConverterDialog", "Vibrance:"), -100.0, 100.0, 0.0, 1.0, 0, percent, false},
         {QCoreApplication::translate("BatchConverterDialog", "Saturation:"), 0.0, 200.0, 100.0, 1.0, 0, percent, false},
     };
 }
@@ -256,6 +257,7 @@ ColorAdjustments colorAdjustmentsFor(const ColorSliderValues &values) {
     adjustments.brightness = fraction(ColorSlider::Brightness);
     adjustments.saturation = fraction(ColorSlider::Saturation);
     adjustments.hue = static_cast<float>(value(ColorSlider::Hue));
+    adjustments.vibrance = fraction(ColorSlider::Vibrance);
     adjustments.temperature = fraction(ColorSlider::Temperature);
     adjustments.tint = fraction(ColorSlider::Tint);
     return adjustments;

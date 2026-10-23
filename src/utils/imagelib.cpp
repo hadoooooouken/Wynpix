@@ -1404,10 +1404,14 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
   if (adjustments.hasSmartEnhance()) {
     applySmartEnhanceToImage(dst, adjustments.smartEnhance);
   }
-  if (!adjustments.hasMatrixAdjustments()) {
+  const bool vibranceActive = adjustments.hasVibrance();
+  if (!adjustments.hasMatrixAdjustments() && !vibranceActive) {
     return dst;
   }
+  // Neutral matrix adjustments give the identity, so vibrance alone runs the
+  // same single pass: matrix, clamp, vibrance, one rounding (as the GPU does).
   ColorMatrix cm = colorAdjustmentMatrix(adjustments);
+  const float vibrance = adjustments.vibrance;
 
   int height = dst.height();
   int width = dst.width();
@@ -1432,7 +1436,7 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
       if (y_start >= height) break;
 
       numTasks++;
-      pool->start(new ScalerTask([bits, bytesPerLine, cm, width, y_start, y_end, &semaphore]() {
+      pool->start(new ScalerTask([bits, bytesPerLine, cm, vibrance, vibranceActive, width, y_start, y_end, &semaphore]() {
 #if defined(__AVX2__)
         // Set up AVX2 constants
         const __m256i mask_b_i = _mm256_set1_epi32(0x000000FF);
@@ -1457,6 +1461,16 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
 
         // Pre-scale offset to avoid doing it per pixel
         const __m256 v_offset_scaled = _mm256_set1_ps(cm.offset * 255.0f);
+
+        // Vibrance (see applyColorAdjustmentVibrance()), computed on the
+        // [0, 255] scale: factor = max(0, base + slope * (peak - low)).
+        const __m256 v_luma_r = _mm256_set1_ps(kColorLumaR);
+        const __m256 v_luma_g = _mm256_set1_ps(kColorLumaG);
+        const __m256 v_luma_b = _mm256_set1_ps(kColorLumaB);
+        const float vibW0 = (vibrance >= 0.0f) ? kVibrancePosBase : kVibranceNegBase;
+        const float vibW1 = (vibrance >= 0.0f) ? kVibrancePosSlope : kVibranceNegSlope;
+        const __m256 v_vib_base = _mm256_set1_ps(1.0f + vibrance * vibW0);
+        const __m256 v_vib_slope = _mm256_set1_ps((vibrance * vibW1) / 255.0f);
 #endif
 
         for (int y = y_start; y < y_end; ++y) {
@@ -1489,6 +1503,23 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
             out_g = _mm256_min_ps(_mm256_max_ps(out_g, v_zero), v_255);
             out_b = _mm256_min_ps(_mm256_max_ps(out_b, v_zero), v_255);
 
+            if (vibranceActive) {
+              const __m256 peak = _mm256_max_ps(out_r, _mm256_max_ps(out_g, out_b));
+              const __m256 low = _mm256_min_ps(out_r, _mm256_min_ps(out_g, out_b));
+              const __m256 chroma = _mm256_sub_ps(peak, low);
+              const __m256 factor = _mm256_max_ps(
+                  v_zero, _mm256_fmadd_ps(v_vib_slope, chroma, v_vib_base));
+              const __m256 luma = _mm256_fmadd_ps(
+                  v_luma_r, out_r,
+                  _mm256_fmadd_ps(v_luma_g, out_g, _mm256_mul_ps(v_luma_b, out_b)));
+              out_r = _mm256_fmadd_ps(_mm256_sub_ps(out_r, luma), factor, luma);
+              out_g = _mm256_fmadd_ps(_mm256_sub_ps(out_g, luma), factor, luma);
+              out_b = _mm256_fmadd_ps(_mm256_sub_ps(out_b, luma), factor, luma);
+              out_r = _mm256_min_ps(_mm256_max_ps(out_r, v_zero), v_255);
+              out_g = _mm256_min_ps(_mm256_max_ps(out_g, v_zero), v_255);
+              out_b = _mm256_min_ps(_mm256_max_ps(out_b, v_zero), v_255);
+            }
+
             // Convert back to integers (cvtps2dq rounds to nearest)
             __m256i out_r_i = _mm256_cvtps_epi32(out_r);
             __m256i out_g_i = _mm256_cvtps_epi32(out_g);
@@ -1516,6 +1547,17 @@ QImage ImageLib::applyColorAdjustmentsWithMode(std::shared_ptr<const QImage> sou
             float out_r = cm.m[0][0] * r + cm.m[0][1] * g + cm.m[0][2] * b + cm.offset * 255.0f;
             float out_g = cm.m[1][0] * r + cm.m[1][1] * g + cm.m[1][2] * b + cm.offset * 255.0f;
             float out_b = cm.m[2][0] * r + cm.m[2][1] * g + cm.m[2][2] * b + cm.offset * 255.0f;
+
+            if (vibranceActive) {
+              constexpr float kByteMax = 255.0f;
+              float rgb[3] = {std::clamp(out_r, 0.0f, kByteMax) / kByteMax,
+                              std::clamp(out_g, 0.0f, kByteMax) / kByteMax,
+                              std::clamp(out_b, 0.0f, kByteMax) / kByteMax};
+              applyColorAdjustmentVibrance(rgb, vibrance);
+              out_r = rgb[0] * kByteMax;
+              out_g = rgb[1] * kByteMax;
+              out_b = rgb[2] * kByteMax;
+            }
 
             int nr = std::clamp(static_cast<int>(out_r + 0.5f), 0, 255);
             int ng = std::clamp(static_cast<int>(out_g + 0.5f), 0, 255);

@@ -43,6 +43,8 @@ layout(std140, binding = 0) uniform TileParams {
     int downscaleTaps;
     float smartEnhance;
     int smartEnhanceEnabled;
+    // Vibrance in [-1, 1] applied after the colour matrix.
+    float vibrance;
     vec4 wbScale;
     vec4 wbBias;
 };
@@ -67,6 +69,8 @@ const float kOpaqueAlphaThreshold = 0.9999;
 const float kMinUnpremultiplyAlpha = 0.0001;
 // CAS strengths below this do nothing (ColorAdjustments epsilon).
 const float kSharpenEpsilon = 0.001;
+// Vibrance values below this do nothing (ColorAdjustments epsilon).
+const float kVibranceEpsilon = 0.001;
 
 // Downscale taps: inner and outer tap distance in device pixels and the LOD
 // bias towards the next sharper mip level.
@@ -238,6 +242,18 @@ vec3 applySmartEnhance(vec3 color, vec2 uv)
     return clamp(midtoneBoost, 0.0, 1.0);
 }
 
+// Mirror of applyColorAdjustmentVibrance() in utils/coloradjustments.h.
+vec3 applyVibrance(vec3 color, float amount)
+{
+    float peak = max(color.r, max(color.g, color.b));
+    float low = min(color.r, min(color.g, color.b));
+    float chroma = peak - low;
+    float luma = dot(color, kLuma);
+    float weight = (amount >= 0.0) ? (1.8 - 1.4 * chroma) : (0.5 + 0.25 * chroma);
+    float factor = max(0.0, 1.0 + amount * weight);
+    return clamp(vec3(luma) + (color - vec3(luma)) * factor, 0.0, 1.0);
+}
+
 void main()
 {
     vec4 color = texture(imageTexture, texCoord);
@@ -271,6 +287,8 @@ void main()
                               dot(colorRow1.xyz, straight),
                               dot(colorRow2.xyz, straight)) + vec3(colorOffset),
                          0.0, 1.0);
+        if (abs(vibrance) > kVibranceEpsilon)
+            straight = applyVibrance(straight, vibrance);
         rgb = straight * a;
     }
     color = vec4(rgb, a);

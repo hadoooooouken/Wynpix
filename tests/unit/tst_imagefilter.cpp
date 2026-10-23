@@ -112,6 +112,53 @@ private slots:
     QVERIFY(matrixEquals(colorAdjustmentMatrix(adjustments), expected, 0.0f));
   }
 
+  void vibranceLiftsMutedColoursAndSparesSaturatedOnes() {
+    constexpr float kFullVibrance = 1.0f;
+    float muted[3] = {0.6f, 0.5f, 0.5f};
+    float saturated[3] = {1.0f, 0.0f, 0.0f};
+    float grey[3] = {0.5f, 0.5f, 0.5f};
+    applyColorAdjustmentVibrance(muted, kFullVibrance);
+    applyColorAdjustmentVibrance(saturated, kFullVibrance);
+    applyColorAdjustmentVibrance(grey, kFullVibrance);
+    // The muted red moves away from luma; fully saturated and grey pixels
+    // stay as they are.
+    QVERIFY(muted[0] > 0.6f + kMatrixTolerance);
+    QVERIFY(muted[1] < 0.5f - kMatrixTolerance);
+    QVERIFY(near(saturated[0], 1.0f) && near(saturated[1], 0.0f) && near(saturated[2], 0.0f));
+    QVERIFY(near(grey[0], 0.5f) && near(grey[1], 0.5f) && near(grey[2], 0.5f));
+
+    float mutedAgain[3] = {0.6f, 0.5f, 0.5f};
+    applyColorAdjustmentVibrance(mutedAgain, -kFullVibrance);
+    QVERIFY(mutedAgain[0] < 0.6f - kMatrixTolerance);
+  }
+
+  void negativeVibrancePreservesChromaMonotonicity() {
+    constexpr float kMinusFullVibrance = -1.0f;
+    float previousChromaOut = 0.0f;
+    for (int step = 0; step <= 20; ++step) {
+      const float chromaIn = step / 20.0f;
+      float rgb[3] = {0.5f + (1.0f - kColorLumaR) * chromaIn,
+                      0.5f - kColorLumaR * chromaIn,
+                      0.5f - kColorLumaR * chromaIn};
+      applyColorAdjustmentVibrance(rgb, kMinusFullVibrance);
+      const float peak = std::max({rgb[0], rgb[1], rgb[2]});
+      const float low = std::min({rgb[0], rgb[1], rgb[2]});
+      const float chromaOut = peak - low;
+      QVERIFY(chromaOut >= previousChromaOut - 1e-5f);
+      previousChromaOut = chromaOut;
+    }
+  }
+
+  void vibranceIsNotPartOfTheMatrix() {
+    ColorAdjustments adjustments;
+    adjustments.vibrance = 1.0f;
+    QVERIFY(adjustments.hasVibrance());
+    QVERIFY(adjustments.hasAdjustments());
+    QVERIFY(!adjustments.hasMatrixAdjustments());
+    const float identity[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    QVERIFY(matrixEquals(colorAdjustmentMatrix(adjustments), identity, 0.0f));
+  }
+
   void scalingFiltersMapToRenderModes_data() {
     QTest::addColumn<int>("filter");
     QTest::addColumn<RenderEnums::TextureSampling>("sampling");

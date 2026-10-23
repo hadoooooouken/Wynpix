@@ -72,7 +72,7 @@ struct TileUniforms {
   qint32 downscaleTaps = kDisabled;
   float smartEnhance = 0.0f;
   qint32 smartEnhanceEnabled = kDisabled;
-  qint32 padding{};
+  float vibrance = 0.0f;
   float wbScale[4] = {1.0f, 1.0f, 1.0f, 0.0f};
   float wbBias[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 };
@@ -96,6 +96,7 @@ static_assert(offsetof(TileUniforms, sharpenMode) == 220);
 static_assert(offsetof(TileUniforms, downscaleTaps) == 224);
 static_assert(offsetof(TileUniforms, smartEnhance) == 228);
 static_assert(offsetof(TileUniforms, smartEnhanceEnabled) == 232);
+static_assert(offsetof(TileUniforms, vibrance) == 236);
 static_assert(offsetof(TileUniforms, wbScale) == 240);
 static_assert(offsetof(TileUniforms, wbBias) == 256);
 static_assert(sizeof(TileUniforms) % 16 == 0);
@@ -140,7 +141,7 @@ struct PanoramaUniforms {
   // The tile spans the whole image width and its sampler repeats
   // horizontally: no horizontal core test, the texture wraps around.
   qint32 wrapsHorizontally = kDisabled;
-  qint32 padding = 0;
+  float vibrance = 0.0f;
 };
 static_assert(offsetof(PanoramaUniforms, colorRow0) == 64);
 static_assert(offsetof(PanoramaUniforms, colorRow1) == 80);
@@ -157,6 +158,7 @@ static_assert(offsetof(PanoramaUniforms, cosPitch) == 172);
 static_assert(offsetof(PanoramaUniforms, colorOffset) == 176);
 static_assert(offsetof(PanoramaUniforms, colorEnabled) == 180);
 static_assert(offsetof(PanoramaUniforms, wrapsHorizontally) == 184);
+static_assert(offsetof(PanoramaUniforms, vibrance) == 188);
 static_assert(sizeof(PanoramaUniforms) % 16 == 0);
 // A tile's uniform buffer holds either block; a tile is never drawn flat and
 // as a panorama in the same frame.

@@ -27,6 +27,7 @@ layout(std140, binding = 0) uniform PanoramaParams {
     float colorOffset;
     int colorEnabled;
     int wrapsHorizontally;
+    float vibrance;
 };
 
 void main()

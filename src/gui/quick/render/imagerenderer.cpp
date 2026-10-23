@@ -61,6 +61,7 @@ PanoramaUniforms panoramaUniforms(const RenderFrame &frame, QSize targetSize,
     setUniformRow(uniforms.colorRow1, matrix.m[1]);
     setUniformRow(uniforms.colorRow2, matrix.m[2]);
     uniforms.colorOffset = matrix.offset;
+    uniforms.vibrance = frame.filter.colorAdjustments.vibrance;
     uniforms.colorEnabled = PanoramaUniforms::kEnabled;
   }
   return uniforms;

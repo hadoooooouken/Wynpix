@@ -1,10 +1,24 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <numbers>
 
 // Threshold below which a colour adjustment component counts as "unchanged".
 inline constexpr float kColorAdjustmentEpsilon = 0.001f;
+
+// Rec.709 luma weights: saturation and vibrance pivot around luma.
+inline constexpr float kColorLumaR = 0.2126f;
+inline constexpr float kColorLumaG = 0.7152f;
+inline constexpr float kColorLumaB = 0.0722f;
+// Vibrance chroma-weight curve: weight(c) = base + slope * c.
+// Positive vibrance boosts muted colours strongly while still lifting vivid
+// ones; negative vibrance damps vivid colours into pastel without inverting
+// gradients (base + 2 * slope <= 1) or draining skin tones.
+inline constexpr float kVibrancePosBase = 1.8f;
+inline constexpr float kVibrancePosSlope = -1.4f;
+inline constexpr float kVibranceNegBase = 0.5f;
+inline constexpr float kVibranceNegSlope = 0.25f;
 
 // Interactive colour adjustments applied by the viewer (GPU preview), by
 // ImageLib::applyColorAdjustments() (CPU apply/export) and by the batch
@@ -18,6 +32,7 @@ struct ColorAdjustments {
     static constexpr float kNeutralSaturation = 1.0f;
     static constexpr float kNeutralHue = 0.0f;
     static constexpr float kNeutralSmartEnhance = 0.0f;
+    static constexpr float kNeutralVibrance = 0.0f;
 
     float smartEnhance = kNeutralSmartEnhance; // 0.0 to 1.0 (0% to 100%)
     float exposure = kNeutralExposure;       // stops
@@ -27,6 +42,7 @@ struct ColorAdjustments {
     float tint = kNeutralTint;               // white balance green <-> magenta
     float saturation = kNeutralSaturation;   // multiplier
     float hue = kNeutralHue;                 // degrees
+    float vibrance = kNeutralVibrance;       // -1.0 to 1.0, boosts muted colours most
 
     [[nodiscard]] bool hasMatrixAdjustments() const noexcept {
         return std::abs(exposure - kNeutralExposure) > kColorAdjustmentEpsilon ||
@@ -40,11 +56,17 @@ struct ColorAdjustments {
 
     // True when at least one component differs from the identity transform.
     [[nodiscard]] bool hasAdjustments() const noexcept {
-        return hasMatrixAdjustments() || hasSmartEnhance();
+        return hasMatrixAdjustments() || hasSmartEnhance() || hasVibrance();
     }
 
     [[nodiscard]] bool hasSmartEnhance() const noexcept {
         return std::abs(smartEnhance - kNeutralSmartEnhance) > kColorAdjustmentEpsilon;
+    }
+
+    // Vibrance depends on the saturation of each pixel, so it is not part of
+    // the colour matrix (see applyColorAdjustmentVibrance()).
+    [[nodiscard]] bool hasVibrance() const noexcept {
+        return std::abs(vibrance - kNeutralVibrance) > kColorAdjustmentEpsilon;
     }
 
     friend bool operator==(const ColorAdjustments &,
@@ -63,9 +85,9 @@ struct ColorMatrix {
 // Pure arithmetic, safe on any thread.
 [[nodiscard]] inline ColorMatrix colorAdjustmentMatrix(const ColorAdjustments &adjustments) {
     // Rec.709 luma weights (saturation pivots around luma).
-    constexpr float kLumaR = 0.2126f;
-    constexpr float kLumaG = 0.7152f;
-    constexpr float kLumaB = 0.0722f;
+    constexpr float kLumaR = kColorLumaR;
+    constexpr float kLumaG = kColorLumaG;
+    constexpr float kLumaB = kColorLumaB;
     // Unit grey axis component 1 / sqrt(3): hue rotates around (1, 1, 1).
     constexpr float kGreyAxis = 0.57735f;
     constexpr float kExposureBase = 2.0f;
@@ -149,4 +171,22 @@ struct ColorMatrix {
     }
     result.offset = adjustments.brightness * contrast + kContrastPivot * (1.0f - contrast);
     return result;
+}
+
+// Vibrance on straight RGB in [0, 1], applied after the colour matrix.
+// Mirrored by applyVibrance() in res/shaders/rhi/image.frag and panorama.frag
+// and by the AVX2 loop of ImageLib::applyColorAdjustmentsWithMode().
+// Pure arithmetic, safe on any thread.
+inline void applyColorAdjustmentVibrance(float (&rgb)[3], float vibrance) {
+    const float peak = std::max({rgb[0], rgb[1], rgb[2]});
+    const float low = std::min({rgb[0], rgb[1], rgb[2]});
+    const float chroma = peak - low;
+    const float luma = kColorLumaR * rgb[0] + kColorLumaG * rgb[1] + kColorLumaB * rgb[2];
+    const float weight = (vibrance >= 0.0f)
+                             ? (kVibrancePosBase + kVibrancePosSlope * chroma)
+                             : (kVibranceNegBase + kVibranceNegSlope * chroma);
+    const float factor = std::max(0.0f, 1.0f + vibrance * weight);
+    for (float &channel : rgb) {
+        channel = std::clamp(luma + (channel - luma) * factor, 0.0f, 1.0f);
+    }
 }

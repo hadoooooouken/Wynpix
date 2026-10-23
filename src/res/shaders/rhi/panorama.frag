@@ -43,6 +43,8 @@ layout(std140, binding = 0) uniform PanoramaParams {
     // The texture spans the whole image width and its sampler repeats: no
     // horizontal core test.
     int wrapsHorizontally;
+    // Vibrance in [-1, 1] applied after the colour matrix.
+    float vibrance;
 };
 
 layout(binding = 1) uniform sampler2D imageTexture;
@@ -50,9 +52,24 @@ layout(binding = 1) uniform sampler2D imageTexture;
 const float kPi = 3.14159265358979323846;
 // Below this alpha the pixel is not un-premultiplied for the colour matrix.
 const float kMinUnpremultiplyAlpha = 0.0001;
+// Rec.709 luma weights and the vibrance thresholds of image.frag.
+const vec3 kLuma = vec3(0.2126, 0.7152, 0.0722);
+const float kVibranceEpsilon = 0.001;
 // Longitude differences of neighbouring pixels larger than half the image
 // width are the wrap at the seam, not a footprint.
 const float kHalfTurn = 0.5;
+
+// Mirror of applyColorAdjustmentVibrance() in utils/coloradjustments.h.
+vec3 applyVibrance(vec3 color, float amount)
+{
+    float peak = max(color.r, max(color.g, color.b));
+    float low = min(color.r, min(color.g, color.b));
+    float chroma = peak - low;
+    float luma = dot(color, kLuma);
+    float weight = (amount >= 0.0) ? (1.8 - 1.4 * chroma) : (0.5 + 0.25 * chroma);
+    float factor = max(0.0, 1.0 + amount * weight);
+    return clamp(vec3(luma) + (color - vec3(luma)) * factor, 0.0, 1.0);
+}
 
 void main()
 {
@@ -104,6 +121,8 @@ void main()
                               dot(colorRow1.xyz, straight),
                               dot(colorRow2.xyz, straight)) + vec3(colorOffset),
                          0.0, 1.0);
+        if (abs(vibrance) > kVibranceEpsilon)
+            straight = applyVibrance(straight, vibrance);
         color.rgb = straight * a;
     }
     fragColor = color;

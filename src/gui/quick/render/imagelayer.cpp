@@ -236,6 +236,7 @@ TileUniforms layerUniforms(const RenderFrame &frame,
     setUniformRow(uniforms.colorRow1, matrix.m[1]);
     setUniformRow(uniforms.colorRow2, matrix.m[2]);
     uniforms.colorOffset = matrix.offset;
+    uniforms.vibrance = imageFilter.colorAdjustments.vibrance;
     uniforms.colorEnabled = TileUniforms::kEnabled;
     if (imageFilter.colorAdjustments.hasSmartEnhance()) {
       uniforms.smartEnhance = imageFilter.colorAdjustments.smartEnhance;

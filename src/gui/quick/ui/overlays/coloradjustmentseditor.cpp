@@ -24,6 +24,8 @@ QList<SliderSpec> colorAdjustmentSpecs() {
     constexpr int kBrightnessLimit = 100;
     // Temperature and tint shifts.
     constexpr int kColorShiftLimit = 50;
+    // Vibrance: +-100%.
+    constexpr int kVibranceLimit = 100;
     // Saturation: x0 - x2.
     constexpr int kSaturationMax = 200;
     // Hue rotation: a half turn either way.
@@ -39,6 +41,7 @@ QList<SliderSpec> colorAdjustmentSpecs() {
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Temperature")), -kColorShiftLimit, kColorShiftLimit, kNeutral, SliderValueFormat::Integer},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Tint")), -kColorShiftLimit, kColorShiftLimit, kNeutral, SliderValueFormat::Integer},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Hue")), -kHueLimit, kHueLimit, kNeutral, SliderValueFormat::Degrees},
+        {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Vibrance")), -kVibranceLimit, kVibranceLimit, kNeutral, SliderValueFormat::Percent},
         {label(QT_TRANSLATE_NOOP("ColorAdjustmentsOverlay", "Saturation")), kMultiplierMin, kSaturationMax, kNeutralMultiplier, SliderValueFormat::Percent},
     };
 }
@@ -58,6 +61,7 @@ ColorAdjustments ColorAdjustmentsEditor::adjustments() const {
         .tint = scaled(Tint),
         .saturation = scaled(Saturation),
         .hue = static_cast<float>(value(Hue)),
+        .vibrance = scaled(Vibrance),
     };
 }
 

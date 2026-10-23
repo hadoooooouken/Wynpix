@@ -32,6 +32,7 @@ layout(std140, binding = 0) uniform TileParams {
     int downscaleTaps;
     float smartEnhance;
     int smartEnhanceEnabled;
+    float vibrance;
     vec4 wbScale;
     vec4 wbBias;
 };
