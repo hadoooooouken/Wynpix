@@ -614,6 +614,7 @@ Window {
                                     rowIndex: index
                                     Layout.fillWidth: true
                                     spec: modelData
+                                    trackSpec: colorTracks.tracks[index]
                                     value: root.dialog.colorValues[index]
                                     onEdited: value => root.dialog.setColorValue(index, value)
                                 }
@@ -721,6 +722,10 @@ Window {
         parentWindow: root
         currentFolder: root.dialog.outputDirectoryUrl
         onAccepted: root.dialog.setOutputDirectoryUrl(folderDialog.selectedFolder)
+    }
+
+    ColorAdjustmentTracks {
+        id: colorTracks
     }
 
     // Warnings and the completion message (the QMessageBoxes of the widget

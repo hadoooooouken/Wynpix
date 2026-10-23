@@ -88,6 +88,7 @@ qt_add_qml_module(wynpix_ui
         BatchConverterDialog.qml
         BatchItemWidget.qml
         CasSettingsOverlay.qml
+        ColorAdjustmentTracks.qml
         ColorAdjustmentsOverlay.qml
         ConfirmationDialog.qml
         ControlsOverlay.qml

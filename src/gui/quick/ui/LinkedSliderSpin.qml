@@ -11,6 +11,9 @@ RowLayout {
     required property var spec
     required property real value
 
+    // Optional track gradient descriptor: { gradient: Gradient, baseColor: color }
+    property var trackSpec: null
+
     readonly property int labelWidth: 115
     readonly property int valueTextWidth: 45
     readonly property int formFieldSpacing: 6
@@ -62,6 +65,8 @@ RowLayout {
         stepSize: root.spec.step
         snapMode: Slider.SnapAlways
         value: root.value
+        trackGradient: root.trackSpec ? root.trackSpec.gradient : null
+        trackBaseColor: root.trackSpec && root.trackSpec.baseColor ? root.trackSpec.baseColor : "transparent"
 
         function setValueAt(x) {
             const handleRadius = slider.handle.width / 2;
