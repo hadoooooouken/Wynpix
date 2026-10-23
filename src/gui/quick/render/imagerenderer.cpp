@@ -54,16 +54,17 @@ PanoramaUniforms panoramaUniforms(const RenderFrame &frame, QSize targetSize,
   uniforms.cosYaw = static_cast<float>(std::cos(yaw));
   uniforms.sinPitch = static_cast<float>(std::sin(pitch));
   uniforms.cosPitch = static_cast<float>(std::cos(pitch));
-  if (frame.filter.colorAdjustments.hasAdjustments()) {
-    const ColorMatrix matrix =
-        colorAdjustmentMatrix(frame.filter.colorAdjustments);
+  // The colour matrix and vibrance switch independently.
+  if (frame.filter.colorAdjustments.hasMatrixAdjustments()) {
+    const ColorMatrix &matrix = frame.filter.colorMatrix;
     setUniformRow(uniforms.colorRow0, matrix.m[0]);
     setUniformRow(uniforms.colorRow1, matrix.m[1]);
     setUniformRow(uniforms.colorRow2, matrix.m[2]);
     uniforms.colorOffset = matrix.offset;
-    uniforms.vibrance = frame.filter.colorAdjustments.vibrance;
     uniforms.colorEnabled = PanoramaUniforms::kEnabled;
   }
+  if (frame.filter.colorAdjustments.hasVibrance())
+    uniforms.vibrance = frame.filter.colorAdjustments.vibrance;
   return uniforms;
 }
 

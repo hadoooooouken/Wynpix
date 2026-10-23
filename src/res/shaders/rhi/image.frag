@@ -34,6 +34,8 @@ layout(std140, binding = 0) uniform TileParams {
     float casSharpening;
     float casContrast;
     int checkerEnabled;
+    // Non-zero when the colour matrix applies; vibrance is switched by its
+    // own value.
     int colorEnabled;
     // kSharpenNone / kSharpenCas / kSharpenSmart.
     int sharpenMode;
@@ -280,14 +282,21 @@ void main()
     }
 
     // The adjustments are defined on straight colour: un-premultiply, apply,
-    // premultiply again.
-    if (colorEnabled != 0) {
+    // premultiply again. The matrix and vibrance switch independently.
+    bool vibranceActive = abs(vibrance) > kVibranceEpsilon;
+    if (colorEnabled != 0 || vibranceActive) {
         vec3 straight = (a > kMinUnpremultiplyAlpha) ? rgb / a : rgb;
-        straight = clamp(vec3(dot(colorRow0.xyz, straight),
-                              dot(colorRow1.xyz, straight),
-                              dot(colorRow2.xyz, straight)) + vec3(colorOffset),
-                         0.0, 1.0);
-        if (abs(vibrance) > kVibranceEpsilon)
+        if (colorEnabled != 0) {
+            straight = clamp(vec3(dot(colorRow0.xyz, straight),
+                                  dot(colorRow1.xyz, straight),
+                                  dot(colorRow2.xyz, straight)) + vec3(colorOffset),
+                             0.0, 1.0);
+        } else {
+            // Vibrance alone: the same [0, 1] input the matrix path gives it
+            // (and the CPU path, which clamps before vibrance).
+            straight = clamp(straight, 0.0, 1.0);
+        }
+        if (vibranceActive)
             straight = applyVibrance(straight, vibrance);
         rgb = straight * a;
     }

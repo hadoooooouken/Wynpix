@@ -139,6 +139,11 @@ struct ImageFilter {
   // CAS contrast adaptation in [0, 1].
   float casContrast = kDefaultCasContrast;
   ColorAdjustments colorAdjustments;
+  // colorAdjustmentMatrix(colorAdjustments), identity unless
+  // colorAdjustments.hasMatrixAdjustments(). Derived by
+  // ImageRenderItem::setImageFilter() like wbScale / wbBias, so the renderer
+  // does not recompute it per tile and frame.
+  ColorMatrix colorMatrix;
   float wbScale[3] = {1.0f, 1.0f, 1.0f};
   float wbBias[3] = {0.0f, 0.0f, 0.0f};
 

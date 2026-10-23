@@ -76,8 +76,11 @@ struct ColorAdjustments {
 // Affine colour transform of straight (non-premultiplied) RGB in [0, 1]:
 // out[i] = sum_j m[i][j] * in[j] + offset, clamped to [0, 1] by the consumer.
 struct ColorMatrix {
-    float m[3][3];
-    float offset;
+    // Default-constructed value is the identity transform.
+    float m[3][3] = {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
+    float offset = 0.0f;
+
+    friend bool operator==(const ColorMatrix &, const ColorMatrix &) = default;
 };
 
 // The one definition of the ColorAdjustments -> ColorMatrix mapping, shared

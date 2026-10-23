@@ -113,15 +113,22 @@ void main()
     vec2 tc = (uv - texRect.xy) / texRect.zw;
     vec4 color = textureGrad(imageTexture, tc, dx / texRect.zw,
                              dy / texRect.zw);
-    if (colorEnabled != 0) {
+    // The matrix (colorEnabled) and vibrance switch independently.
+    bool vibranceActive = abs(vibrance) > kVibranceEpsilon;
+    if (colorEnabled != 0 || vibranceActive) {
         float a = color.a;
         vec3 straight = (a > kMinUnpremultiplyAlpha) ? color.rgb / a
                                                      : color.rgb;
-        straight = clamp(vec3(dot(colorRow0.xyz, straight),
-                              dot(colorRow1.xyz, straight),
-                              dot(colorRow2.xyz, straight)) + vec3(colorOffset),
-                         0.0, 1.0);
-        if (abs(vibrance) > kVibranceEpsilon)
+        if (colorEnabled != 0) {
+            straight = clamp(vec3(dot(colorRow0.xyz, straight),
+                                  dot(colorRow1.xyz, straight),
+                                  dot(colorRow2.xyz, straight)) + vec3(colorOffset),
+                             0.0, 1.0);
+        } else {
+            // Vibrance alone: the same [0, 1] input the matrix path gives it.
+            straight = clamp(straight, 0.0, 1.0);
+        }
+        if (vibranceActive)
             straight = applyVibrance(straight, vibrance);
         color.rgb = straight * a;
     }

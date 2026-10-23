@@ -229,25 +229,26 @@ TileUniforms layerUniforms(const RenderFrame &frame,
   setGray(uniforms.checkerDark, kCheckerboardDark);
 
   const ImageFilter &imageFilter = frame.filter;
-  if (imageFilter.colorAdjustments.hasAdjustments()) {
-    const ColorMatrix matrix =
-        colorAdjustmentMatrix(imageFilter.colorAdjustments);
+  // The colour matrix, vibrance and Smart Enhance switch independently.
+  if (imageFilter.colorAdjustments.hasMatrixAdjustments()) {
+    const ColorMatrix &matrix = imageFilter.colorMatrix;
     setUniformRow(uniforms.colorRow0, matrix.m[0]);
     setUniformRow(uniforms.colorRow1, matrix.m[1]);
     setUniformRow(uniforms.colorRow2, matrix.m[2]);
     uniforms.colorOffset = matrix.offset;
-    uniforms.vibrance = imageFilter.colorAdjustments.vibrance;
     uniforms.colorEnabled = TileUniforms::kEnabled;
-    if (imageFilter.colorAdjustments.hasSmartEnhance()) {
-      uniforms.smartEnhance = imageFilter.colorAdjustments.smartEnhance;
-      uniforms.smartEnhanceEnabled = TileUniforms::kEnabled;
-      uniforms.wbScale[0] = imageFilter.wbScale[0];
-      uniforms.wbScale[1] = imageFilter.wbScale[1];
-      uniforms.wbScale[2] = imageFilter.wbScale[2];
-      uniforms.wbBias[0] = imageFilter.wbBias[0];
-      uniforms.wbBias[1] = imageFilter.wbBias[1];
-      uniforms.wbBias[2] = imageFilter.wbBias[2];
-    }
+  }
+  if (imageFilter.colorAdjustments.hasVibrance())
+    uniforms.vibrance = imageFilter.colorAdjustments.vibrance;
+  if (imageFilter.colorAdjustments.hasSmartEnhance()) {
+    uniforms.smartEnhance = imageFilter.colorAdjustments.smartEnhance;
+    uniforms.smartEnhanceEnabled = TileUniforms::kEnabled;
+    uniforms.wbScale[0] = imageFilter.wbScale[0];
+    uniforms.wbScale[1] = imageFilter.wbScale[1];
+    uniforms.wbScale[2] = imageFilter.wbScale[2];
+    uniforms.wbBias[0] = imageFilter.wbBias[0];
+    uniforms.wbBias[1] = imageFilter.wbBias[1];
+    uniforms.wbBias[2] = imageFilter.wbBias[2];
   }
   if (filter.sharpen) {
     uniforms.sharpenMode = static_cast<qint32>(imageFilter.sharpening);

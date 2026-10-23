@@ -205,6 +205,9 @@ void ImageRenderItem::updateWhiteBalanceFactors() {
 void ImageRenderItem::setImageFilter(const ImageFilter &filter) {
   ImageFilter updated = filter;
   applyWhiteBalance(updated);
+  updated.colorMatrix = updated.colorAdjustments.hasMatrixAdjustments()
+                            ? colorAdjustmentMatrix(updated.colorAdjustments)
+                            : ColorMatrix{};
   if (mFilter == updated)
     return;
   mFilter = updated;
