@@ -141,11 +141,11 @@ void ThumbnailListModel::populate(int count) {
     notifyIfVisibleThumbnailsReady();
 }
 
-void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry, QSize targetSize) {
+void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry) {
     // The thumbnailer publishes to every view, and another view may request
     // the same path and box with the other crop.
     const bool otherCrop = entry.cropped.has_value() && *entry.cropped != mRequest.crop;
-    if (targetSize != mRequest.targetSize || otherCrop || !checkRange(pos))
+    if (entry.targetSize != mRequest.targetSize || otherCrop || !checkRange(pos))
         return;
     mRequested.remove(pos);
     mUnavailable.remove(pos);
@@ -335,13 +335,28 @@ void ThumbnailListModel::setDirCount(int count) {
 void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
     if (config == mRequest)
         return;
-    const bool unload = config.targetSize != mRequest.targetSize ||
-                        config.crop != mRequest.crop ||
+    const bool targetSizeChanged = config.targetSize != mRequest.targetSize;
+    const bool unload = config.crop != mRequest.crop ||
                         config.cacheResolution != mRequest.cacheResolution;
     mRequest = config;
-    if (unload)
+    if (unload) {
         unloadAllThumbnails();
-    loadVisibleThumbnails();
+        loadVisibleThumbnails();
+        return;
+    }
+    if (targetSizeChanged) {
+        // Keep existing loaded thumbnails in mLoaded so they can be smoothly scaled
+        // by ThumbnailItem on the GPU without visual blinking or showing placeholders.
+        // In-flight requests for the previous targetSize are now obsolete.
+        mRequested.clear();
+        mUnavailable.clear();
+        if (mLoaded.isEmpty())
+            loadVisibleThumbnails();
+        else
+            loadVisibleThumbnailsDelayed();
+    } else {
+        loadVisibleThumbnails();
+    }
 }
 
 void ThumbnailListModel::setScrollConfig(const ThumbnailScrollConfig &config) {
@@ -674,7 +689,9 @@ void ThumbnailListModel::requestMissingThumbnails(ItemRange range) {
         return;
     QList<int> loadList;
     for (int index = range.first; index <= range.last; ++index) {
-        if (!mLoaded.contains(index) && !mRequested.contains(index) &&
+        const auto it = mLoaded.constFind(index);
+        const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != mRequest.targetSize);
+        if ((it == mLoaded.cend() || needsTargetSize) && !mRequested.contains(index) &&
             !mUnavailable.contains(index))
             loadList.append(index);
     }

@@ -24,12 +24,15 @@ struct ThumbnailEntry {
     // The crop the thumbnailer made it for; std::nullopt serves either crop
     // (a folder icon).
     std::optional<bool> cropped;
+    // The target box this thumbnail was generated for.
+    QSize targetSize;
 };
 
 // How thumbnails are requested: the target box in device pixels (the image
 // area of a cell times the device pixel ratio), square crop, and whether
-// thumbnails outside the preloaded range are dropped. Changing the box, the
-// crop or the thumbnail cache resolution unloads every thumbnail.
+// thumbnails outside the preloaded range are dropped. Changing the crop or
+// the thumbnail cache resolution unloads every thumbnail; changing the box
+// keeps existing thumbnails while fetching the new resolution.
 struct ThumbnailRequestConfig {
     QSize targetSize;
     bool crop = false;
@@ -183,10 +186,10 @@ public:
 
     // --- directory view (IDirectoryView) ---------------------------------
     void populate(int count);
-    // Ignored unless targetSize is the requested target box (the box the
-    // request was made for, whatever the pixel size of the entry is), the
-    // entry is made for the requested crop (or either) and pos is an item.
-    void setThumbnail(int pos, const ThumbnailEntry &entry, QSize targetSize);
+    // Ignored unless entry.targetSize is the requested target box (the box
+    // the request was made for, whatever the pixel size of the entry is),
+    // the entry is made for the requested crop (or either) and pos is an item.
+    void setThumbnail(int pos, const ThumbnailEntry &entry);
     void setThumbnailPending(int pos, bool pending);
     void setThumbnailUnavailable(int pos, QSize targetSize);
     // Items out of range are dropped.

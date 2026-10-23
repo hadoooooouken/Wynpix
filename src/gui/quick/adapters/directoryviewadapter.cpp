@@ -31,8 +31,8 @@ void DirectoryViewAdapter::setThumbnail(int pos, std::shared_ptr<Thumbnail> thum
             .name = thumb->name(),
             .info = thumb->info(),
             .cropped = thumb->cropped(),
-        },
-        thumb->targetSize());
+            .targetSize = thumb->targetSize(),
+        });
 }
 
 void DirectoryViewAdapter::setThumbnailPending(int pos, bool pending) {
