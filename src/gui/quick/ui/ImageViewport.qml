@@ -16,6 +16,7 @@ FocusScope {
     property color backgroundColor: Theme.colors.background
     property int sidePanelLeftInset: 0
     property int sidePanelRightInset: 0
+    property bool floatingPanelVisible: false
 
     Binding {
         target: root.controller
@@ -47,6 +48,7 @@ FocusScope {
     readonly property int indicatorBottomMargin: 16
     readonly property int indicatorHorizontalPadding: 14
     readonly property int indicatorVerticalPadding: 12
+    readonly property int indicatorRadius: 8
     readonly property int indicatorFadeDuration: 300
 
     focus: true
@@ -174,10 +176,12 @@ FocusScope {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.indicatorBottomMargin
+        topRightRadius: root.indicatorRadius
+        bottomRightRadius: root.indicatorRadius
         width: zoomText.implicitWidth + root.indicatorHorizontalPadding
         height: zoomText.implicitHeight + root.indicatorVerticalPadding
         color: Theme.colors.overlay
-        opacity: root.controller.zoomIndicatorVisible ? 1 : 0
+        opacity: root.controller.zoomIndicatorVisible && !root.floatingPanelVisible ? 1 : 0
         visible: opacity > 0
 
         Behavior on opacity {
