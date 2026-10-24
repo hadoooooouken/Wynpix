@@ -4,119 +4,119 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="426"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="454"/>
         <source>Failed</source>
         <translation>失敗</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="142"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="143"/>
         <source>Load Error</source>
         <translation>読み込みエラー</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="201"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="225"/>
         <source>AI Model Error</source>
         <translation>AIモデルエラー</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="212"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>AI拡大に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="230"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="249"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="254"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="273"/>
         <source>Resize Error</source>
         <translation>リサイズエラー</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="267"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="286"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="295"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="314"/>
         <source>Transform Error</source>
         <translation>変換エラー</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
         <source>Done</source>
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="306"/>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="334"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="362"/>
         <source>Save Error</source>
         <translation>保存エラー</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="26"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="27"/>
         <source>Original backup retained at:
 %1</source>
         <translation>元のバックアップの保存先:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="35"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="36"/>
         <source>Staged output retained at:
 %1</source>
         <translation>中間出力の保存先:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="39"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="40"/>
         <source>Temporary output could not be removed. Retained at:
 %1</source>
         <translation>一時出力を削除できませんでした。保存先:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="51"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="52"/>
         <source>Windows error: %1</source>
         <translation>Windows エラー: %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="360"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="388"/>
         <source>Commit Error</source>
         <translation>確定エラー</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="420"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="448"/>
         <source>Could not create a unique batch subfolder in &quot;%1&quot;. The batch was aborted.</source>
         <translation>「%1」にバッチ用の一意なサブフォルダーを作成できませんでした。バッチを中止しました。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="452"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="480"/>
         <source>Invalid destination path</source>
         <translation>無効な保存先パス</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="443"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
         <source>Invalid source index</source>
         <translation>無効なソースインデックス</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="342"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="464"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="476"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="370"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="492"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="504"/>
         <source>Skipped (Exists)</source>
         <translation>スキップ（存在します）</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="458"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="482"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="486"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="510"/>
         <source>Destination planning failed: invalid reservation key</source>
         <translation>出力先の計画に失敗しました: 予約キーが無効です</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="499"/>
         <source>Destination planning failed: no unique output path is available</source>
         <translation>出力先の計画に失敗しました: 一意な出力パスがありません</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="422"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="450"/>
         <source>Processing...</source>
         <translation>処理中...</translation>
     </message>
@@ -184,7 +184,7 @@
         <translation>バイナリ (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="773"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="787"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -224,7 +224,7 @@
         <translation>一般的なサイズ:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
         <source>Color adjustments</source>
         <translation>色調整</translation>
     </message>
@@ -289,57 +289,57 @@
         <translation>自然な彩度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
         <source>Output folder:</source>
         <translation>出力フォルダー:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="645"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="651"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
         <source>Create subfolder for batch</source>
         <translation>バッチ用のサブフォルダーを作成する</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="657"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
         <source>Filename pattern:</source>
         <translation>ファイル名のパターン:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="268"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="296"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="272"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="300"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>利用可能: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="686"/>
         <source>Overwrite existing files</source>
         <translation>既存のファイルを上書きする</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
         <source>Ready to convert.</source>
         <translation>変換の準備ができました。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="717"/>
         <source>Convert</source>
         <translation>変換</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="625"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
         <source>Reset Color Adjustments</source>
         <translation>色調整をリセット</translation>
     </message>
@@ -414,12 +414,12 @@
         <translation>models/ ディレクトリにAIモデルが見つかりません。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="441"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="469"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>選択されたファイル: %1 (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="721"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="735"/>
         <source>Select Output Directory</source>
         <translation>出力ディレクトリを選択</translation>
     </message>
@@ -434,53 +434,53 @@
         <translation>品質 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="709"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="460"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="723"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
         <source>Stopping...</source>
         <translation>停止中...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="418"/>
         <source>Invalid Directory</source>
         <translation>無効なディレクトリ</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="418"/>
         <source>Please select a valid output directory.</source>
         <translation>有効な出力ディレクトリを選択してください。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
         <source>Invalid Pattern</source>
         <translation>無効なパターン</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>ファイル名パターンには、パス移動シーケンス（..）や絶対パスを含めることはできません。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
         <source>No files</source>
         <translation>ファイルがありません</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="425"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>キューにファイルが選択されていません。少なくとも1つのファイルにチェックを入れてください。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="400"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
         <source>Resolution Limit Exceeded</source>
         <translation>解像度制限を超過しました</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="429"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -495,42 +495,42 @@ Please reduce the percentage or absolute size.</source>
 パーセンテージまたは絶対サイズを小さくしてください。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="480"/>
         <source>Processing...</source>
         <translation>処理中...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="468"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="496"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>ユーザーによって停止されました。成功: %1、失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="500"/>
         <source>Batch aborted.</source>
         <translation>バッチを中止しました。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="485"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="513"/>
         <source>Batch Conversion Failed</source>
         <translation>バッチ変換に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="484"/>
         <source>Processed %1 / %2 files.</source>
         <translation>%1 / %2 個のファイルを処理しました。</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="464"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="492"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>終了しました。成功: %1, 失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="504"/>
         <source>Batch Conversion Complete</source>
         <translation>バッチ変換完了</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="477"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="505"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -542,11 +542,16 @@ Total files: %3</source>
 失敗: %2
 総ファイル数: %3</translation>
     </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="610"/>
+        <source>Paste</source>
+        <translation>貼り付け</translation>
+    </message>
 </context>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
         <source>Pending</source>
         <translation>待機中</translation>
     </message>
@@ -582,7 +587,7 @@ Total files: %3</source>
 <context>
     <name>ColorAdjustmentsOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="38"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="41"/>
         <source>Color adjustments</source>
         <translation>色調整</translation>
     </message>
@@ -632,19 +637,29 @@ Total files: %3</source>
         <translation>彩度</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="76"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="63"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="69"/>
         <source>Compare</source>
         <translation>比較</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="75"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="81"/>
         <source>Reset</source>
         <translation>リセット</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="91"/>
+        <source>Copy</source>
+        <translation>コピー</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="91"/>
+        <source>Copied for batch converter</source>
+        <translation>バッチコンバーター用にコピーしました</translation>
     </message>
 </context>
 <context>
@@ -1562,20 +1577,20 @@ Staged copy:
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="617"/>
+        <location filename="../../components/directorypresenter.cpp" line="625"/>
         <source>Directory expansion failed: %1</source>
         <translation>フォルダーの展開に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="661"/>
+        <location filename="../../components/directorypresenter.cpp" line="669"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation>選択範囲に対応ファイルが %1 個を超えて含まれているため、フォルダーの展開を中止しました。選択範囲を絞って再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="886"/>
-        <location filename="../../components/directorypresenter.cpp" line="953"/>
-        <location filename="../../components/directorypresenter.cpp" line="1007"/>
-        <location filename="../../components/directorypresenter.cpp" line="1038"/>
+        <location filename="../../components/directorypresenter.cpp" line="894"/>
+        <location filename="../../components/directorypresenter.cpp" line="961"/>
+        <location filename="../../components/directorypresenter.cpp" line="1015"/>
+        <location filename="../../components/directorypresenter.cpp" line="1046"/>
         <source>Folder</source>
         <translation>フォルダ</translation>
     </message>
@@ -1763,42 +1778,42 @@ Staged copy:
         <translation>新しい順</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="239"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="280"/>
         <source>Folder icon sorting</source>
         <translation>フォルダアイコンの並べ替え</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="248"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="289"/>
         <source>Sort folders and images</source>
         <translation>フォルダと画像を並べ替え</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="264"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="305"/>
         <source>Filter by file format</source>
         <translation>ファイル形式で絞り込む</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="277"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="318"/>
         <source>Name filter</source>
         <translation>名前フィルター</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="283"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="324"/>
         <source>Filter images by name</source>
         <translation>名前で画像を絞り込む</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="291"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="332"/>
         <source>Viewer</source>
         <translation>ビューア</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="299"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="340"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="307"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="348"/>
         <source>Quit Wynpix</source>
         <translation>Wynpixを終了</translation>
     </message>
@@ -2101,6 +2116,19 @@ Staged copy:
         <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="82"/>
         <source>Folder Thumbnails: By File Size (desc.)</source>
         <translation>フォルダサムネイル: ファイルサイズ順 (降順)</translation>
+    </message>
+</context>
+<context>
+    <name>OverlayPanel</name>
+    <message>
+        <location filename="../../gui/quick/ui/OverlayPanel.qml" line="86"/>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/OverlayPanel.qml" line="86"/>
+        <source>Collapse</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3371,17 +3399,17 @@ Example: %1</source>
         <translation>画像あたりのメモリ割り当て制限（MB）:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="239"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="241"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="245"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="249"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>

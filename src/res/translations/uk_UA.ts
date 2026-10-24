@@ -4,119 +4,119 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
         <source>Stopped</source>
         <translation>Зупинено</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="426"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="454"/>
         <source>Failed</source>
         <translation>Не вдалося</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="142"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="143"/>
         <source>Load Error</source>
         <translation>Помилка завантаження</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="201"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="225"/>
         <source>AI Model Error</source>
         <translation>Помилка моделі ШІ</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="212"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>Помилка масштабування ШІ</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="230"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="249"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="254"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="273"/>
         <source>Resize Error</source>
         <translation>Помилка зміни розміру</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="267"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="286"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="295"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="314"/>
         <source>Transform Error</source>
         <translation>Помилка перетворення</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
         <source>Done</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="306"/>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="334"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="362"/>
         <source>Save Error</source>
         <translation>Помилка збереження</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="26"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="27"/>
         <source>Original backup retained at:
 %1</source>
         <translation>Резервну копію оригіналу збережено в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="35"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="36"/>
         <source>Staged output retained at:
 %1</source>
         <translation>Проміжний результат збережено в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="39"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="40"/>
         <source>Temporary output could not be removed. Retained at:
 %1</source>
         <translation>Не вдалося видалити тимчасовий результат. Збережено в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="51"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="52"/>
         <source>Windows error: %1</source>
         <translation>Помилка Windows: %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="360"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="388"/>
         <source>Commit Error</source>
         <translation>Помилка фіксації</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="420"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="448"/>
         <source>Could not create a unique batch subfolder in &quot;%1&quot;. The batch was aborted.</source>
         <translation>Не вдалося створити унікальну підпапку для пакета в «%1». Пакетну обробку перервано.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="452"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="480"/>
         <source>Invalid destination path</source>
         <translation>Неправильний шлях призначення</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="443"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
         <source>Invalid source index</source>
         <translation>Недійсний вихідний індекс</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="342"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="464"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="476"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="370"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="492"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="504"/>
         <source>Skipped (Exists)</source>
         <translation>Пропущено (існує)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="458"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="482"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="486"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="510"/>
         <source>Destination planning failed: invalid reservation key</source>
         <translation>Помилка планування призначення: недійсний ключ резервування</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="499"/>
         <source>Destination planning failed: no unique output path is available</source>
         <translation>Помилка планування призначення: немає доступного унікального шляху виводу</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="422"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="450"/>
         <source>Processing...</source>
         <translation>Обробка...</translation>
     </message>
@@ -184,7 +184,7 @@
         <translation>Двійковий (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="773"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="787"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -224,7 +224,7 @@
         <translation>Поширені розміри:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
         <source>Color adjustments</source>
         <translation>Корекція кольорів</translation>
     </message>
@@ -324,52 +324,52 @@
         <translation>Барвистість:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
         <source>Output folder:</source>
         <translation>Вихідна папка:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="645"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="651"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
         <source>Create subfolder for batch</source>
         <translation>Створити підпапку для пакета</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="657"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
         <source>Filename pattern:</source>
         <translation>Шаблон імені файлу:</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="268"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="296"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="272"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="300"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>Доступно: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="686"/>
         <source>Overwrite existing files</source>
         <translation>Перезаписувати існуючі файли</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
         <source>Ready to convert.</source>
         <translation>Готово до конвертації.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="717"/>
         <source>Convert</source>
         <translation>Конвертувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -404,12 +404,12 @@
         <translation>Не знайдено моделей ШІ в папці models/.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="441"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="469"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>Вибрано файлів: %1 (%2 МБ)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="721"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="735"/>
         <source>Select Output Directory</source>
         <translation>Вибрати вихідну папку</translation>
     </message>
@@ -424,53 +424,53 @@
         <translation>Якість (1 - найнижча, 100 - найвища)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="709"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="460"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="723"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
         <source>Stopping...</source>
         <translation>Зупинка...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="418"/>
         <source>Invalid Directory</source>
         <translation>Невірна папка</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="418"/>
         <source>Please select a valid output directory.</source>
         <translation>Будь ласка, виберіть дійсну вихідну папку.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
         <source>Invalid Pattern</source>
         <translation>Неправильний шаблон</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>Шаблон імені файлу не може містити послідовності переходу по папках (..) або абсолютні шляхи.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
         <source>No files</source>
         <translation>Немає файлів</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="425"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>У черзі немає вибраних файлів. Будь ласка, позначте хоча б один файл.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="400"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
         <source>Resolution Limit Exceeded</source>
         <translation>Перевищено ліміт роздільної здатності</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="429"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -485,42 +485,42 @@ Please reduce the percentage or absolute size.</source>
 Будь ласка, зменште відсоток або аболютний розмір.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="480"/>
         <source>Processing...</source>
         <translation>Обробка...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="468"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="496"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>Зупинено користувачем. Успішно: %1, Помилок: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="500"/>
         <source>Batch aborted.</source>
         <translation>Пакетну обробку перервано.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="485"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="513"/>
         <source>Batch Conversion Failed</source>
         <translation>Помилка пакетного перетворення</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="484"/>
         <source>Processed %1 / %2 files.</source>
         <translation>Оброблено %1 з %2 файлів.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="464"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="492"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>Завершено. Успішно: %1, Помилок: %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="504"/>
         <source>Batch Conversion Complete</source>
         <translation>Пакетне перетворення завершено</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="477"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="505"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -538,15 +538,20 @@ Total files: %3</source>
         <translation>Оригінальний розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="625"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
         <source>Reset Color Adjustments</source>
         <translation>Скинути корекцію кольорів</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="610"/>
+        <source>Paste</source>
+        <translation>Вставити</translation>
     </message>
 </context>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
         <source>Pending</source>
         <translation>Очікування</translation>
     </message>
@@ -582,7 +587,7 @@ Total files: %3</source>
 <context>
     <name>ColorAdjustmentsOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="38"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="41"/>
         <source>Color adjustments</source>
         <translation>Налаштування кольору</translation>
     </message>
@@ -632,19 +637,29 @@ Total files: %3</source>
         <translation>Насиченість</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="76"/>
         <source>Apply</source>
         <translation>Застосувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="63"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="69"/>
         <source>Compare</source>
         <translation>Порівняти</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="75"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="81"/>
         <source>Reset</source>
         <translation>Скинути</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="91"/>
+        <source>Copy</source>
+        <translation>Копіювати</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="91"/>
+        <source>Copied for batch converter</source>
+        <translation>Скопійовано для пакетного конвертера</translation>
     </message>
 </context>
 <context>
@@ -1566,20 +1581,20 @@ Staged copy:
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="617"/>
+        <location filename="../../components/directorypresenter.cpp" line="625"/>
         <source>Directory expansion failed: %1</source>
         <translation>Не вдалося розгорнути папку: %1</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="661"/>
+        <location filename="../../components/directorypresenter.cpp" line="669"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation>Розгортання папок зупинено: виділення містить понад %1 підтримуваних файлів. Зменште виділення та спробуйте ще раз.</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="886"/>
-        <location filename="../../components/directorypresenter.cpp" line="953"/>
-        <location filename="../../components/directorypresenter.cpp" line="1007"/>
-        <location filename="../../components/directorypresenter.cpp" line="1038"/>
+        <location filename="../../components/directorypresenter.cpp" line="894"/>
+        <location filename="../../components/directorypresenter.cpp" line="961"/>
+        <location filename="../../components/directorypresenter.cpp" line="1015"/>
+        <location filename="../../components/directorypresenter.cpp" line="1046"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
@@ -1767,42 +1782,42 @@ Staged copy:
         <translation>Найновіші</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="239"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="280"/>
         <source>Folder icon sorting</source>
         <translation>Сортування значків папок</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="248"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="289"/>
         <source>Sort folders and images</source>
         <translation>Сортувати папки та зображення</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="264"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="305"/>
         <source>Filter by file format</source>
         <translation>Фільтр за форматом файлу</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="277"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="318"/>
         <source>Name filter</source>
         <translation>Фільтр за назвою</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="283"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="324"/>
         <source>Filter images by name</source>
         <translation>Фільтрувати зображення за назвою</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="291"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="332"/>
         <source>Viewer</source>
         <translation>Перегляд</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="299"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="340"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="307"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="348"/>
         <source>Quit Wynpix</source>
         <translation>Вийти з Wynpix</translation>
     </message>
@@ -2105,6 +2120,19 @@ Staged copy:
         <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="82"/>
         <source>Folder Thumbnails: By File Size (desc.)</source>
         <translation>Ескізи тек: За розміром файлу (зв.)</translation>
+    </message>
+</context>
+<context>
+    <name>OverlayPanel</name>
+    <message>
+        <location filename="../../gui/quick/ui/OverlayPanel.qml" line="86"/>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/OverlayPanel.qml" line="86"/>
+        <source>Collapse</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3297,17 +3325,17 @@ Example: %1</source>
         <translation>Підтвердження видалення у кошик</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="239"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="241"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="245"/>
         <source>Apply</source>
         <translation>Застосувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="249"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>

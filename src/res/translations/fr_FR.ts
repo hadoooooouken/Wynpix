@@ -4,119 +4,119 @@
 <context>
     <name>BatchConverter</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
         <source>Stopped</source>
         <translation>Arrêté</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="426"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="454"/>
         <source>Failed</source>
         <translation>Échoué</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="142"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="143"/>
         <source>Load Error</source>
         <translation>Erreur de chargement</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="201"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="225"/>
         <source>AI Model Error</source>
         <translation>Erreur du modèle d&apos;IA</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="212"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>Échec de la mise à l&apos;échelle par IA</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="230"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="249"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="254"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="273"/>
         <source>Resize Error</source>
         <translation>Erreur de redimensionnement</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="267"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="286"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="295"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="314"/>
         <source>Transform Error</source>
         <translation>Erreur de transformation</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
         <source>Done</source>
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="306"/>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="334"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="362"/>
         <source>Save Error</source>
         <translation>Erreur d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="26"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="27"/>
         <source>Original backup retained at:
 %1</source>
         <translation>Sauvegarde de l&apos;original conservée dans :
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="35"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="36"/>
         <source>Staged output retained at:
 %1</source>
         <translation>Sortie intermédiaire conservée dans :
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="39"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="40"/>
         <source>Temporary output could not be removed. Retained at:
 %1</source>
         <translation>Impossible de supprimer la sortie temporaire. Conservée dans :
 %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="51"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="52"/>
         <source>Windows error: %1</source>
         <translation>Erreur Windows : %1</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="360"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="388"/>
         <source>Commit Error</source>
         <translation>Erreur de validation</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="420"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="448"/>
         <source>Could not create a unique batch subfolder in &quot;%1&quot;. The batch was aborted.</source>
         <translation>Impossible de créer un sous-dossier unique pour le lot dans « %1 ». Le lot a été interrompu.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="452"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="480"/>
         <source>Invalid destination path</source>
         <translation>Chemin de destination non valide</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="443"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
         <source>Invalid source index</source>
         <translation>Index source non valide</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="342"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="464"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="476"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="370"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="492"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="504"/>
         <source>Skipped (Exists)</source>
         <translation>Ignoré (Existe)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="458"/>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="482"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="486"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="510"/>
         <source>Destination planning failed: invalid reservation key</source>
         <translation>Échec de la planification de la destination : clé de réservation non valide</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchconverter.cpp" line="471"/>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="499"/>
         <source>Destination planning failed: no unique output path is available</source>
         <translation>Échec de la planification de la destination : aucun chemin de sortie unique disponible</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="422"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="450"/>
         <source>Processing...</source>
         <translation>Traitement en cours...</translation>
     </message>
@@ -184,7 +184,7 @@
         <translation>Binaire (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="773"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="787"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -224,7 +224,7 @@
         <translation>Tailles courantes :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="597"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
         <source>Color adjustments</source>
         <translation>Ajustements de couleur</translation>
     </message>
@@ -289,57 +289,57 @@
         <translation>Vibrance :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="633"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
         <source>Output folder:</source>
         <translation>Dossier de sortie :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="645"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="651"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
         <source>Create subfolder for batch</source>
         <translation>Créer un sous-dossier pour le lot</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="657"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
         <source>Filename pattern:</source>
         <translation>Modèle de nom de fichier :</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="268"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="296"/>
         <source>{name}_converted</source>
         <translation>{name}_converted</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="272"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="300"/>
         <source>Available: {name}, {ext}, {date}, {index}</source>
         <translation>Disponible : {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="672"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="686"/>
         <source>Overwrite existing files</source>
         <translation>Remplacer les fichiers existants</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
         <source>Ready to convert.</source>
         <translation>Prêt à convertir.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="703"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="717"/>
         <source>Convert</source>
         <translation>Convertir</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="625"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
         <source>Reset Color Adjustments</source>
         <translation>Réinitialiser les ajustements de couleur</translation>
     </message>
@@ -414,12 +414,12 @@
         <translation>Aucun modèle d&apos;IA trouvé dans le dossier models/.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="441"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="469"/>
         <source>%1 files selected (%2 MB)</source>
         <translation>%1 fichiers sélectionnés (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="721"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="735"/>
         <source>Select Output Directory</source>
         <translation>Sélectionner le dossier de sortie</translation>
     </message>
@@ -434,53 +434,53 @@
         <translation>Qualité (1 - la plus basse, 100 - la plus haute)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="709"/>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="460"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="723"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
         <source>Stopping...</source>
         <translation>Arrêt en cours...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="710"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="418"/>
         <source>Invalid Directory</source>
         <translation>Dossier non valide</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="390"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="418"/>
         <source>Please select a valid output directory.</source>
         <translation>Veuillez sélectionner un dossier de sortie valide.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="392"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
         <source>Invalid Pattern</source>
         <translation>Motif non valide</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="393"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="421"/>
         <source>Filename pattern cannot contain path traversal sequences (..) or absolute paths.</source>
         <translation>Le motif du nom de fichier ne peut pas contenir de séquences de traversée de chemin (..) ou de chemins absolus.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="396"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="424"/>
         <source>No files</source>
         <translation>Aucun fichier</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="397"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="425"/>
         <source>No files selected in the queue. Please check at least one file.</source>
         <translation>Aucun fichier sélectionné dans la file d&apos;attente. Veuillez cocher au moins un fichier.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="400"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="428"/>
         <source>Resolution Limit Exceeded</source>
         <translation>Limite de résolution dépassée</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="401"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="429"/>
         <source>Target resolution (%1x%2) exceeds safety limits.
 
 Maximum allowed dimension: %3 px
@@ -495,42 +495,42 @@ Nombre de pixels maximum autorisé : %4 MP
 Veuillez réduire le pourcentage ou la taille absolue.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="452"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="480"/>
         <source>Processing...</source>
         <translation>Traitement...</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="468"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="496"/>
         <source>Stopped by user. Success: %1, Failed: %2</source>
         <translation>Arrêté par l&apos;utilisateur. Réussi : %1, Échoué : %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="472"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="500"/>
         <source>Batch aborted.</source>
         <translation>Lot interrompu.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="485"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="513"/>
         <source>Batch Conversion Failed</source>
         <translation>Échec de la conversion par lot</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="456"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="484"/>
         <source>Processed %1 / %2 files.</source>
         <translation>%1 / %2 fichiers traités.</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="464"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="492"/>
         <source>Finished. Success: %1, Failed: %2</source>
         <translation>Terminé. Réussis : %1, Échecs : %2</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="476"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="504"/>
         <source>Batch Conversion Complete</source>
         <translation>Conversion par lots terminée</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="477"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="505"/>
         <source>Batch process complete.
 
 Successfully converted: %1
@@ -542,11 +542,16 @@ Convertis avec succès : %1
 Échecs : %2
 Total des fichiers : %3</translation>
     </message>
+    <message>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="610"/>
+        <source>Paste</source>
+        <translation>Coller</translation>
+    </message>
 </context>
 <context>
     <name>BatchItemWidget</name>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="420"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="448"/>
         <source>Pending</source>
         <translation>En attente</translation>
     </message>
@@ -582,7 +587,7 @@ Total des fichiers : %3</translation>
 <context>
     <name>ColorAdjustmentsOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="38"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="41"/>
         <source>Color adjustments</source>
         <translation>Ajustements de couleur</translation>
     </message>
@@ -632,19 +637,29 @@ Total des fichiers : %3</translation>
         <translation>Saturation</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="70"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="76"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="63"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="69"/>
         <source>Compare</source>
         <translation>Comparer</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="75"/>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="81"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/ColorAdjustmentsOverlay.qml" line="91"/>
+        <source>Copy</source>
+        <translation>Copier</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/overlays/coloradjustmentseditor.cpp" line="91"/>
+        <source>Copied for batch converter</source>
+        <translation>Copié pour le convertisseur par lots</translation>
     </message>
 </context>
 <context>
@@ -1564,20 +1579,20 @@ Copie intermédiaire :
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="617"/>
+        <location filename="../../components/directorypresenter.cpp" line="625"/>
         <source>Directory expansion failed: %1</source>
         <translation>Échec du parcours du dossier : %1</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="661"/>
+        <location filename="../../components/directorypresenter.cpp" line="669"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation>Le parcours des dossiers a été arrêté, car la sélection contient plus de %1 fichiers pris en charge. Réduisez la sélection et réessayez.</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="886"/>
-        <location filename="../../components/directorypresenter.cpp" line="953"/>
-        <location filename="../../components/directorypresenter.cpp" line="1007"/>
-        <location filename="../../components/directorypresenter.cpp" line="1038"/>
+        <location filename="../../components/directorypresenter.cpp" line="894"/>
+        <location filename="../../components/directorypresenter.cpp" line="961"/>
+        <location filename="../../components/directorypresenter.cpp" line="1015"/>
+        <location filename="../../components/directorypresenter.cpp" line="1046"/>
         <source>Folder</source>
         <translation>Dossier</translation>
     </message>
@@ -1765,42 +1780,42 @@ Copie intermédiaire :
         <translation>Plus récent</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="239"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="280"/>
         <source>Folder icon sorting</source>
         <translation>Tri des icônes de dossier</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="248"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="289"/>
         <source>Sort folders and images</source>
         <translation>Trier les dossiers et les images</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="264"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="305"/>
         <source>Filter by file format</source>
         <translation>Filtrer par format de fichier</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="277"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="318"/>
         <source>Name filter</source>
         <translation>Filtre par nom</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="283"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="324"/>
         <source>Filter images by name</source>
         <translation>Filtrer les images par nom</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="291"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="332"/>
         <source>Viewer</source>
         <translation>Visionneuse</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="299"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="340"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="307"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="348"/>
         <source>Quit Wynpix</source>
         <translation>Quitter Wynpix</translation>
     </message>
@@ -2103,6 +2118,19 @@ Copie intermédiaire :
         <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="82"/>
         <source>Folder Thumbnails: By File Size (desc.)</source>
         <translation>Miniatures de dossiers : par taille (desc.)</translation>
+    </message>
+</context>
+<context>
+    <name>OverlayPanel</name>
+    <message>
+        <location filename="../../gui/quick/ui/OverlayPanel.qml" line="86"/>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/OverlayPanel.qml" line="86"/>
+        <source>Collapse</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3371,17 +3399,17 @@ Example: %1</source>
         <translation>Limite d&apos;allocation de mémoire par image, en MB :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="239"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="241"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="243"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="245"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="247"/>
+        <location filename="../../gui/quick/ui/SettingsDialog.qml" line="249"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
