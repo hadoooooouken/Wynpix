@@ -223,7 +223,7 @@ QList<ColorSliderSpec> colorSliders() {
     const QString degree = u"°"_s;
     return {
         {QCoreApplication::translate("BatchConverterDialog", "Smart Enhance:"), 0.0, 100.0, 0.0, 1.0, 0, percent, false},
-        {QCoreApplication::translate("BatchConverterDialog", "Exposure:"), -2.0, 2.0, 0.0, 0.01, 2, {}, true},
+        {QCoreApplication::translate("BatchConverterDialog", "Exposure:"), -3.0, 3.0, 0.0, 0.01, 2, {}, true},
         {QCoreApplication::translate("BatchConverterDialog", "Contrast:"), 0.0, 300.0, 100.0, 1.0, 0, percent, false},
         {QCoreApplication::translate("BatchConverterDialog", "Brightness:"), -100.0, 100.0, 0.0, 1.0, 0, percent, false},
         {QCoreApplication::translate("BatchConverterDialog", "Temperature:"), -50.0, 50.0, 0.0, 1.0, 0, {}, false},
