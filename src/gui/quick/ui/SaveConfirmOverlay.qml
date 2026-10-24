@@ -11,7 +11,7 @@ Item {
     required property OverlayCoordinator coordinator
 
     readonly property int topMargin: 35
-    // Clears the taskbar of an auto-hiding Windows shell.
+    // Clears transient floating messages displayed at the bottom centre.
     readonly property int bottomMargin: 80
     readonly property int padding: 9
     readonly property int groupSpacing: 8
