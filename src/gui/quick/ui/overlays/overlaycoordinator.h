@@ -18,9 +18,10 @@
 // The overlays of the Qt Quick UI: owns their visibility (OverlayState) and
 // content models and applies the rules of the widget main window (MW) that
 // concern more than one overlay:
-// - entering the folder view closes copy / move, rename, colour adjustments
-//   and CAS settings and hides the image info, which returns with the
-//   document view;
+// - entering the folder view closes copy / move, rename and CAS settings and
+//   hides the image info and the colour adjustments, which return with the
+//   document view (the colour adjustments keep their position and whether
+//   they are collapsed, which stay with the QML panel);
 // - image info, copy / move, colour adjustments and CAS settings open only in
 //   the document view, copy / move only while an image is displayed;
 // - copy / move and rename take the keyboard focus while open;
@@ -104,6 +105,9 @@ public:
 signals:
     void keyboardOverlayOpenChanged();
     void placementChanged();
+    // The user opened the colour adjustments, at the pointer. Not emitted when
+    // they return with the document view.
+    void colorAdjustmentsOpenedAtPointer();
     void saveRequested();
     void saveAsRequested();
     void discardEditsRequested();
@@ -135,6 +139,7 @@ private:
     bool mFolderViewActive = false;
     bool mDocumentDisplayed = false;
     bool mImageInfoHiddenByFolderView = false;
+    bool mColorAdjustmentsHiddenByFolderView = false;
     bool mShowSaveConfirm = false;
     bool mSaveConfirmAtTop = false;
     bool mCopyAtTop = false;

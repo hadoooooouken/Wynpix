@@ -4,6 +4,8 @@ import wynpix.style
 
 // Colour adjustment sliders with a live preview (ColorAdjustmentsOverlay in
 // the widget UI). It opens at the pointer and can be dragged by its header.
+// When it returns with the document view it keeps its position and whether it
+// is collapsed.
 // Compare shows the unadjusted image while held; Apply applies the
 // adjustments to the image; Reset restores the defaults.
 Item {
@@ -20,12 +22,10 @@ Item {
     visible: coordinator.colorAdjustments.open
 
     Connections {
-        target: root.coordinator.colorAdjustments
-        function onOpenChanged() {
-            if (root.coordinator.colorAdjustments.open) {
-                panel.resetPosition();
-                panel.collapsed = false;
-            }
+        target: root.coordinator
+        function onColorAdjustmentsOpenedAtPointer() {
+            panel.resetPosition();
+            panel.collapsed = false;
         }
     }
 

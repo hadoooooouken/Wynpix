@@ -87,13 +87,21 @@ void OverlayCoordinator::setFolderViewActive(bool active) {
     mFolderViewActive = active;
     mFullscreenChrome.setViewMode(active ? MODE_FOLDERVIEW : MODE_DOCUMENT);
     if (active) {
-        for (OverlayState *state : {&mCopy, &mRename, &mColorAdjustments, &mCasSettings})
+        for (OverlayState *state : {&mCopy, &mRename, &mCasSettings})
             state->close();
         mImageInfoHiddenByFolderView = mImageInfo.isOpen();
         mImageInfo.close();
-    } else if (mImageInfoHiddenByFolderView) {
+        mColorAdjustmentsHiddenByFolderView = mColorAdjustments.isOpen();
+        mColorAdjustments.close();
+        return;
+    }
+    if (mImageInfoHiddenByFolderView) {
         mImageInfoHiddenByFolderView = false;
         mImageInfo.setOpen(true);
+    }
+    if (mColorAdjustmentsHiddenByFolderView) {
+        mColorAdjustmentsHiddenByFolderView = false;
+        mColorAdjustments.setOpen(true);
     }
 }
 
@@ -161,10 +169,12 @@ void OverlayCoordinator::toggleRename(const QString &currentName) {
 void OverlayCoordinator::toggleColorAdjustments() {
     if (mFolderViewActive)
         return;
-    if (mColorAdjustments.isOpen())
+    if (mColorAdjustments.isOpen()) {
         mColorAdjustments.close();
-    else
-        openAtPointer(mColorAdjustments);
+        return;
+    }
+    openAtPointer(mColorAdjustments);
+    emit colorAdjustmentsOpenedAtPointer();
 }
 
 void OverlayCoordinator::toggleCasSettings() {
