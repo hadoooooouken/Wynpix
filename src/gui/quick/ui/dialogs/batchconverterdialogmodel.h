@@ -125,6 +125,7 @@ class BatchConverterDialogModel final : public DialogSession {
     Q_PROPERTY(bool flipVertical READ flipVertical NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool colorEnabled READ colorEnabled NOTIFY settingsChanged FINAL)
     Q_PROPERTY(QList<double> colorValues READ colorValues NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(bool canPasteColorAdjustments READ canPasteColorAdjustments NOTIFY canPasteColorAdjustmentsChanged FINAL)
     Q_PROPERTY(QString outputDirectory READ outputDirectory NOTIFY settingsChanged FINAL)
     Q_PROPERTY(QUrl outputDirectoryUrl READ outputDirectoryUrl NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool createSubfolder READ createSubfolder NOTIFY settingsChanged FINAL)
@@ -204,6 +205,7 @@ public:
     [[nodiscard]] bool colorEnabled() const;
     // In BatchJobRules::ColorSlider order.
     [[nodiscard]] QList<double> colorValues() const;
+    [[nodiscard]] bool canPasteColorAdjustments() const;
     [[nodiscard]] QString outputDirectory() const;
     [[nodiscard]] QUrl outputDirectoryUrl() const;
     [[nodiscard]] bool createSubfolder() const;
@@ -257,6 +259,8 @@ public:
     Q_INVOKABLE void setColorEnabled(bool enabled);
     Q_INVOKABLE void setColorValue(int slider, double value);
     Q_INVOKABLE void resetColorValues();
+    Q_INVOKABLE void pasteColorAdjustments();
+    void setCopiedColorAdjustments(const ColorAdjustments &adjustments);
     Q_INVOKABLE void setOutputDirectory(const QString &directory);
     // A non-local URL is rejected with a warning.
     Q_INVOKABLE void setOutputDirectoryUrl(const QUrl &url);
@@ -286,6 +290,7 @@ signals:
     void runChanged();
     void messageChanged();
     void listKeptChanged();
+    void canPasteColorAdjustmentsChanged();
 
 private:
     void connectService(BatchConversionService &service);
@@ -330,4 +335,5 @@ private:
     bool mMessageOpen = false;
     bool mMessageIsWarning = false;
     BatchJobRules::Message mMessage;
+    std::optional<ColorAdjustments> mCopiedColorAdjustments;
 };

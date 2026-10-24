@@ -222,6 +222,10 @@ void QuickUiHost::forwardOverlayEvents() {
   QObject::connect(mOverlays.colorAdjustmentsEditor(),
                    &ColorAdjustmentsEditor::applyRequested, events,
                    &UiEvents::colorAdjustmentsApplyRequested);
+  QObject::connect(mOverlays.colorAdjustmentsEditor(),
+                   &ColorAdjustmentsEditor::colorAdjustmentsCopied,
+                   mDialogCoordinator.batchConverter(),
+                   &BatchConverterDialogModel::setCopiedColorAdjustments);
   QObject::connect(&mOverlays, &OverlayCoordinator::saveRequested, events,
                    &UiEvents::saveRequested);
   QObject::connect(&mOverlays, &OverlayCoordinator::saveAsRequested, events,

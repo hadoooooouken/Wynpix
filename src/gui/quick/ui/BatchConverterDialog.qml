@@ -592,11 +592,25 @@ Window {
                         }
 
                         // Colour adjustments, collapsed while disabled.
-                        CheckBox {
+                        RowLayout {
+                            Layout.fillWidth: true
                             Layout.topMargin: root.sectionSpacing
-                            text: qsTr("Color adjustments")
-                            checked: root.dialog.colorEnabled
-                            onToggled: root.dialog.setColorEnabled(checked)
+
+                            CheckBox {
+                                text: qsTr("Color adjustments")
+                                checked: root.dialog.colorEnabled
+                                onToggled: root.dialog.setColorEnabled(checked)
+                            }
+
+                            Item {
+                                Layout.fillWidth: true
+                            }
+
+                            Button {
+                                text: qsTr("Paste")
+                                visible: root.dialog.canPasteColorAdjustments
+                                onClicked: root.dialog.pasteColorAdjustments()
+                            }
                         }
 
                         ColumnLayout {

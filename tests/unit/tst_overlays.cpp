@@ -225,6 +225,44 @@ private slots:
     QCOMPARE(editor.adjustments(), ColorAdjustments{});
   }
 
+  void colorAdjustmentsCopyShowsNotification() {
+    OverlayCoordinator overlays(defaultSettings());
+    overlays.colorAdjustmentsEditor()->setValue(ColorAdjustmentsEditor::Exposure, 100);
+    overlays.colorAdjustmentsEditor()->copy();
+    QVERIFY(overlays.messages()->isVisible());
+    QCOMPARE(overlays.messages()->text(), u"Copied for batch converter"_s);
+  }
+
+  void colorAdjustmentsCopyIgnoresNeutralAdjustments() {
+    OverlayCoordinator overlays(defaultSettings());
+    QSignalSpy copied(overlays.colorAdjustmentsEditor(),
+                      &ColorAdjustmentsEditor::colorAdjustmentsCopied);
+    overlays.colorAdjustmentsEditor()->copy();
+    QVERIFY(!overlays.messages()->isVisible());
+    QCOMPARE(copied.size(), 0);
+  }
+
+  void colorAdjustmentsHasAdjustmentsTracksState() {
+    ColorAdjustmentsEditor editor;
+    QVERIFY(!editor.hasAdjustments());
+    QSignalSpy spy(&editor, &ColorAdjustmentsEditor::hasAdjustmentsChanged);
+    editor.setValue(ColorAdjustmentsEditor::Exposure, 100);
+    QVERIFY(editor.hasAdjustments());
+    QCOMPARE(spy.size(), 1);
+    editor.resetAll();
+    QVERIFY(!editor.hasAdjustments());
+    QCOMPARE(spy.size(), 2);
+  }
+
+  void colorAdjustmentsCopyEmitsCopied() {
+    ColorAdjustmentsEditor editor;
+    editor.setValue(ColorAdjustmentsEditor::Exposure, 100);
+    QSignalSpy copied(&editor, &ColorAdjustmentsEditor::colorAdjustmentsCopied);
+    editor.copy();
+    QCOMPARE(copied.size(), 1);
+    QVERIFY(fuzzyEqual(copied.at(0).at(0).value<ColorAdjustments>().exposure, 1.0f));
+  }
+
   void casEditorLoadsAndPublishes() {
     CasSettingsEditor editor;
     QSignalSpy edited(&editor, &CasSettingsEditor::parametersEdited);

@@ -158,6 +158,8 @@ using ColorSliderValues = std::array<double, kColorSliderCount>;
 [[nodiscard]] ColorSliderValues defaultColorValues();
 // The adjustments of the slider values (percent sliders become fractions).
 [[nodiscard]] ColorAdjustments colorAdjustmentsFor(const ColorSliderValues &values);
+// The slider values for the adjustments (fractions become percent values, clamped).
+[[nodiscard]] ColorSliderValues colorSliderValuesFor(const ColorAdjustments &adjustments);
 
 //--- output ------------------------------------------------------------------
 [[nodiscard]] QString defaultPattern();

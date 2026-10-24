@@ -472,6 +472,82 @@ private slots:
         dialog.reject();
     }
 
+    void batchColorSliderValuesForInvertsAdjustments() {
+        ColorAdjustments adjustments;
+        adjustments.smartEnhance = 0.4f;
+        adjustments.exposure = -1.25f;
+        adjustments.contrast = 1.5f;
+        adjustments.brightness = 0.2f;
+        adjustments.temperature = -0.3f;
+        adjustments.tint = 0.15f;
+        adjustments.hue = 45.0f;
+        adjustments.vibrance = -0.4f;
+        adjustments.saturation = 1.6f;
+
+        const ColorSliderValues values = BatchJobRules::colorSliderValuesFor(adjustments);
+        const ColorAdjustments inverted = BatchJobRules::colorAdjustmentsFor(values);
+        QCOMPARE(inverted.smartEnhance, 0.4f);
+        QCOMPARE(inverted.exposure, -1.25f);
+        QCOMPARE(inverted.contrast, 1.5f);
+        QCOMPARE(inverted.brightness, 0.2f);
+        QCOMPARE(inverted.temperature, -0.3f);
+        QCOMPARE(inverted.tint, 0.15f);
+        QCOMPARE(inverted.hue, 45.0f);
+        QCOMPARE(inverted.vibrance, -0.4f);
+        QCOMPARE(inverted.saturation, 1.6f);
+
+        // Clamping out-of-range adjustments to slider limits.
+        ColorAdjustments outOfBounds;
+        outOfBounds.smartEnhance = 2.0f;
+        outOfBounds.exposure = 10.0f;
+        outOfBounds.contrast = -1.0f;
+        outOfBounds.brightness = 5.0f;
+        outOfBounds.temperature = -2.0f;
+        outOfBounds.tint = 2.0f;
+        outOfBounds.hue = 300.0f;
+        outOfBounds.vibrance = -5.0f;
+        outOfBounds.saturation = 10.0f;
+
+        const ColorSliderValues clampedValues = BatchJobRules::colorSliderValuesFor(outOfBounds);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::SmartEnhance)], 100.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Exposure)], 3.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Contrast)], 0.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Brightness)], 100.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Temperature)], -50.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Tint)], 50.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Hue)], 180.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Vibrance)], -100.0);
+        QCOMPARE(clampedValues[static_cast<std::size_t>(ColorSlider::Saturation)], 200.0);
+    }
+
+    void batchPasteColorAdjustments() {
+        BatchConverterDialogModel dialog;
+        FakeBatchConversionService service;
+        QVERIFY(dialog.start(batchInput({u"C:/a.png"_s}), service));
+        QVERIFY(!dialog.canPasteColorAdjustments());
+
+        // Neutral adjustments do not enable paste.
+        dialog.setCopiedColorAdjustments(ColorAdjustments{});
+        QVERIFY(!dialog.canPasteColorAdjustments());
+
+        // Custom adjustments enable paste.
+        ColorAdjustments custom;
+        custom.exposure = 1.5f;
+        custom.contrast = 1.2f;
+        dialog.setCopiedColorAdjustments(custom);
+        QVERIFY(dialog.canPasteColorAdjustments());
+
+        // Paste enables color adjustments and applies the values.
+        QVERIFY(!dialog.colorEnabled());
+        dialog.pasteColorAdjustments();
+        QVERIFY(dialog.colorEnabled());
+        const int exposure = static_cast<int>(ColorSlider::Exposure);
+        const int contrast = static_cast<int>(ColorSlider::Contrast);
+        QCOMPARE(dialog.colorValues()[exposure], 1.5);
+        QCOMPARE(dialog.colorValues()[contrast], 120.0);
+        dialog.reject();
+    }
+
     void batchConvertShowsTheFirstProblem() {
         SourceFolder folder;
         BatchConverterDialogModel dialog;

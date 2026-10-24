@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import wynpix.bridges
 import wynpix.style
 
@@ -60,7 +61,8 @@ Item {
                 visible: !panel.collapsed
             }
 
-            Row {
+            RowLayout {
+                width: parent.width
                 spacing: root.buttonSpacing
 
                 Button {
@@ -79,6 +81,17 @@ Item {
                     text: qsTr("Reset")
                     focusPolicy: Qt.NoFocus
                     onClicked: root.editor.resetAll()
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    text: qsTr("Copy")
+                    focusPolicy: Qt.NoFocus
+                    enabled: root.editor.hasAdjustments
+                    onClicked: root.editor.copy()
                 }
             }
         }

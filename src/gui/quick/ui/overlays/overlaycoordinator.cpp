@@ -36,6 +36,8 @@ OverlayCoordinator::OverlayCoordinator(const UiSettingsSnapshot &settings, QObje
                 mCasParameters = parameters;
                 emit casParametersEdited(parameters);
             });
+    connect(&mColorAdjustmentsEditor, &ColorAdjustmentsEditor::notificationRequested,
+            &mMessages, &NotificationOverlayModel::showNotification);
     mCasParameters = casParametersOf(settings.viewer);
     mSettingsCasParameters = mCasParameters;
     applySettings(settings);

@@ -255,6 +255,10 @@ QList<double> BatchConverterDialogModel::colorValues() const {
     return {mDraft.colorValues.begin(), mDraft.colorValues.end()};
 }
 
+bool BatchConverterDialogModel::canPasteColorAdjustments() const {
+    return mCopiedColorAdjustments.has_value() && mCopiedColorAdjustments->hasAdjustments();
+}
+
 QString BatchConverterDialogModel::outputDirectory() const {
     return mDraft.job.outputDir;
 }
@@ -681,6 +685,24 @@ void BatchConverterDialogModel::setColorValue(int slider, double value) {
 
 void BatchConverterDialogModel::resetColorValues() {
     mDraft.colorValues = defaultColorValues();
+    emit settingsChanged();
+}
+
+void BatchConverterDialogModel::setCopiedColorAdjustments(const ColorAdjustments &adjustments) {
+    const bool wasCanPaste = canPasteColorAdjustments();
+    if (adjustments.hasAdjustments())
+        mCopiedColorAdjustments = adjustments;
+    else
+        mCopiedColorAdjustments.reset();
+    if (canPasteColorAdjustments() != wasCanPaste)
+        emit canPasteColorAdjustmentsChanged();
+}
+
+void BatchConverterDialogModel::pasteColorAdjustments() {
+    if (!canPasteColorAdjustments())
+        return;
+    mDraft.colorEnabled = true;
+    mDraft.colorValues = BatchJobRules::colorSliderValuesFor(*mCopiedColorAdjustments);
     emit settingsChanged();
 }
 

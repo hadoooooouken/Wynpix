@@ -263,6 +263,34 @@ ColorAdjustments colorAdjustmentsFor(const ColorSliderValues &values) {
     return adjustments;
 }
 
+ColorSliderValues colorSliderValuesFor(const ColorAdjustments &adjustments) {
+    const QList<ColorSliderSpec> sliders = colorSliders();
+    const auto clamped = [&sliders](ColorSlider slider, double rawValue) {
+        const ColorSliderSpec &spec = sliders[static_cast<qsizetype>(slider)];
+        return std::clamp(rawValue, spec.minimum, spec.maximum);
+    };
+    ColorSliderValues values{};
+    values[static_cast<std::size_t>(ColorSlider::SmartEnhance)] =
+        clamped(ColorSlider::SmartEnhance, adjustments.smartEnhance * kPercentPerUnit);
+    values[static_cast<std::size_t>(ColorSlider::Exposure)] =
+        clamped(ColorSlider::Exposure, adjustments.exposure);
+    values[static_cast<std::size_t>(ColorSlider::Contrast)] =
+        clamped(ColorSlider::Contrast, adjustments.contrast * kPercentPerUnit);
+    values[static_cast<std::size_t>(ColorSlider::Brightness)] =
+        clamped(ColorSlider::Brightness, adjustments.brightness * kPercentPerUnit);
+    values[static_cast<std::size_t>(ColorSlider::Temperature)] =
+        clamped(ColorSlider::Temperature, adjustments.temperature * kPercentPerUnit);
+    values[static_cast<std::size_t>(ColorSlider::Tint)] =
+        clamped(ColorSlider::Tint, adjustments.tint * kPercentPerUnit);
+    values[static_cast<std::size_t>(ColorSlider::Hue)] =
+        clamped(ColorSlider::Hue, adjustments.hue);
+    values[static_cast<std::size_t>(ColorSlider::Vibrance)] =
+        clamped(ColorSlider::Vibrance, adjustments.vibrance * kPercentPerUnit);
+    values[static_cast<std::size_t>(ColorSlider::Saturation)] =
+        clamped(ColorSlider::Saturation, adjustments.saturation * kPercentPerUnit);
+    return values;
+}
+
 //--- output ------------------------------------------------------------------
 QString defaultPattern() {
     return QCoreApplication::translate("BatchConverterDialog", "{name}_converted");

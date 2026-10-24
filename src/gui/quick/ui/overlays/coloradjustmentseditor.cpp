@@ -65,6 +65,10 @@ ColorAdjustments ColorAdjustmentsEditor::adjustments() const {
     };
 }
 
+bool ColorAdjustmentsEditor::hasAdjustments() const {
+    return mHasAdjustments;
+}
+
 void ColorAdjustmentsEditor::setComparing(bool comparing) {
     if (mComparing == comparing)
         return;
@@ -77,7 +81,25 @@ void ColorAdjustmentsEditor::apply() {
     resetAll();
 }
 
+void ColorAdjustmentsEditor::copy() {
+    if (!mHasAdjustments)
+        return;
+
+    const ColorAdjustments adj = adjustments();
+    emit colorAdjustmentsCopied(adj);
+    emit notificationRequested({
+        QCoreApplication::translate("ColorAdjustmentsOverlay", "Copied for batch converter"),
+        NotificationKind::Info,
+        std::nullopt});
+}
+
 void ColorAdjustmentsEditor::valuesEdited() {
+    const ColorAdjustments adj = adjustments();
     if (!mComparing)
-        emit previewChanged(adjustments());
+        emit previewChanged(adj);
+    const bool has = adj.hasAdjustments();
+    if (mHasAdjustments != has) {
+        mHasAdjustments = has;
+        emit hasAdjustmentsChanged();
+    }
 }
