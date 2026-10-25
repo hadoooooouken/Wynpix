@@ -73,6 +73,8 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert("M", "moveFile");
   actionManager->defaults.insert("Home", "jumpToFirst");
   actionManager->defaults.insert("End", "jumpToLast");
+  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+Home", "firstPage");
+  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+End", "lastPage");
   actionManager->defaults.insert("F5", "reloadImage");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+C",
                                  "copyFileClipboard");

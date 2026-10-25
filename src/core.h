@@ -101,14 +101,8 @@ private:
     void attachModel(DirectoryModel *_model);
     QString selectedPath();
     void guiSetImage(std::shared_ptr<Image> img);
-    void maybeShowPageHint(const std::shared_ptr<Image> &img);
-    void showPageChangeMessage(const QString &path);
     QTimer slideshowTimer;
     QTimer preloadTimer;
-
-    // paths for which the "this document has multiple pages" hint was
-    // already shown once during the current folder visit; cleared in reset()
-    QSet<QString> autoPageHintShown;
 
     void startSlideshowTimer();
     void startSlideshow();
@@ -145,6 +139,9 @@ private slots:
     void rotateRight();
     void nextPage();
     void prevPage();
+    void firstPage();
+    void lastPage();
+    void goToPage(int pageIndex);
     void onUpscaleRequested(QSize size);
     void updateUpscale(const std::shared_ptr<Image> &image, QSize size,
                        const QString &path);

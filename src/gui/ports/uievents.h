@@ -27,6 +27,7 @@ signals:
     void draggedOut();
     void nextImageRequested();
     void prevImageRequested();
+    void pageRequested(int pageIndex);
     // A non-looping animation stopped after its last frame.
     void playbackFinished();
     // An animation stopped on an open or decode error (the UI has already

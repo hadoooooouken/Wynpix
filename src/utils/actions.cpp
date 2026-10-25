@@ -89,6 +89,8 @@ void Actions::init() {
   mActions.insert("createDirectory");
   mActions.insert("nextPage");
   mActions.insert("prevPage");
+  mActions.insert("firstPage");
+  mActions.insert("lastPage");
   mActions.insert("toggleUpscayl");
   mActions.insert("cycleUpscaylModel");
   mActions.insert("toggleHdrToneMapping");

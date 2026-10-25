@@ -39,7 +39,6 @@
 
 namespace {
 constexpr int PreloadDebounceDelayMs = 200;
-constexpr int PageChangeMessageDurationMs = 900;
 constexpr int FolderViewRevealDelayMs = 100;
 constexpr int DocumentReadyFallbackMs = 1000;
 constexpr int SettledDocumentRevealDelayMs = 0;
@@ -702,6 +701,7 @@ void Core::connectUiEvents() {
           qOverload<>(&Core::onDraggedOut));
   connect(events, &UiEvents::nextImageRequested, this, &Core::nextImage);
   connect(events, &UiEvents::prevImageRequested, this, &Core::prevImage);
+  connect(events, &UiEvents::pageRequested, this, &Core::goToPage);
   connect(events, &UiEvents::playbackFinished, this,
           &Core::onPlaybackFinished);
   connect(events, &UiEvents::playbackFailed, this, &Core::onPlaybackFailed);
@@ -719,6 +719,8 @@ void Core::initActions() {
   connect(actionManager, &ActionManager::rotateRight, this, &Core::rotateRight);
   connect(actionManager, &ActionManager::nextPage, this, &Core::nextPage);
   connect(actionManager, &ActionManager::prevPage, this, &Core::prevPage);
+  connect(actionManager, &ActionManager::firstPage, this, &Core::firstPage);
+  connect(actionManager, &ActionManager::lastPage, this, &Core::lastPage);
   connect(actionManager, &ActionManager::crop, this, &Core::toggleCropPanel);
   connect(actionManager, &ActionManager::setWallpaper, this,
           &Core::setWallpaper);
@@ -960,32 +962,42 @@ void Core::rotateRight() { rotateByDegrees(90); }
 void Core::nextPage() {
   if (!state.hasActiveImage || !state.currentImg)
     return;
-  int count = state.currentImg->frameCount();
-  if (count <= 1)
-    return;
-  QString path = state.currentFilePath;
-  int cur = ImageStatic::pageOverrideForPath(path);
-  if (cur + 1 >= count)
-    return;
-  ImageStatic::setPageOverrideForPath(path, cur + 1);
-  if (model->reload(path)) {
-    showPageChangeMessage(path);
-  } else {
-    ImageStatic::setPageOverrideForPath(path, cur);
-  }
+  const QString path = state.currentFilePath;
+  const int cur = ImageStatic::pageOverrideForPath(path);
+  goToPage(cur + 1);
 }
 
 void Core::prevPage() {
   if (!state.hasActiveImage || !state.currentImg)
     return;
-  QString path = state.currentFilePath;
-  int cur = ImageStatic::pageOverrideForPath(path);
-  if (cur <= 0)
+  const QString path = state.currentFilePath;
+  const int cur = ImageStatic::pageOverrideForPath(path);
+  goToPage(cur - 1);
+}
+
+void Core::firstPage() {
+  goToPage(0);
+}
+
+void Core::lastPage() {
+  if (!state.hasActiveImage || !state.currentImg)
     return;
-  ImageStatic::setPageOverrideForPath(path, cur - 1);
-  if (model->reload(path)) {
-    showPageChangeMessage(path);
-  } else {
+  goToPage(state.currentImg->frameCount() - 1);
+}
+
+void Core::goToPage(int pageIndex) {
+  if (!state.hasActiveImage || !state.currentImg)
+    return;
+  if (state.currentImg->type() != STATIC || state.currentImg->frameCount() <= 1)
+    return;
+  const QString path = state.currentFilePath;
+  const int count = state.currentImg->frameCount();
+  pageIndex = std::clamp(pageIndex, 0, count - 1);
+  const int cur = ImageStatic::pageOverrideForPath(path);
+  if (pageIndex == cur)
+    return;
+  ImageStatic::setPageOverrideForPath(path, pageIndex);
+  if (!model->reload(path)) {
     ImageStatic::setPageOverrideForPath(path, cur);
   }
 }
@@ -2088,7 +2100,6 @@ void Core::reset() {
   state.currentFilePath = "";
   state.directoryPath = "";
   state.currentImg.reset();
-  autoPageHintShown.clear();
   m_pendingDocumentLoad = PendingDocumentLoad::None;
   model->setDirectory("");
 }
@@ -2445,7 +2456,6 @@ void Core::onModelItemReady(std::shared_ptr<Image> img, const QString &path) {
   if (path == state.currentFilePath) {
     state.currentImg = img;
     guiSetImage(img);
-    maybeShowPageHint(img);
     updateInfoString();
     if (state.delayModel) {
       this->showGui();
@@ -2554,50 +2564,6 @@ void Core::guiSetImage(std::shared_ptr<Image> img) {
     info.append({ it.key(), it.value() });
   info.append(img->getGenerationInfo());
   ui.shell.setMetadata(info);
-}
-
-// Shows a one-time "this document has multiple pages" hint the first time
-// browsing lands on a multi-page static document (PDF/TIFF, etc.) during
-// the current folder visit. Explicit page turns are handled separately by
-// showPageChangeMessage(), called directly from nextPage()/prevPage() —
-// see its comment for why no shared flag is needed to tell the two apart.
-// Animated formats are excluded: their frameCount() reports animation
-// frames, not document pages, and isn't relevant to this notification.
-void Core::maybeShowPageHint(const std::shared_ptr<Image> &img) {
-  if (!img || img->type() != STATIC || img->frameCount() <= 1)
-    return;
-
-  QString path = img->filePath();
-  if (autoPageHintShown.contains(path))
-    return;
-  autoPageHintShown.insert(path);
-
-  int page = ImageStatic::pageOverrideForPath(path) + 1;
-  ui.notifications.showMessage(tr("Page %1/%2").arg(page).arg(img->frameCount()),
-                   PageChangeMessageDurationMs);
-}
-
-// Shows "Page N/M" for `path` right after an explicit page-turn hotkey.
-// Callers only reach this after DirectoryModel::reload() has returned true,
-// confirming a fresh image was actually loaded -- not just that the target
-// page number was stored by ImageStatic. DirectoryModel::reload()
-// performs its load synchronously and emits imageReady() through a same-thread
-// direct connection, so by the time reload(path) returns in nextPage()/prevPage(),
-// state.currentImg already reflects the freshly reloaded page. This lets us
-// report the result directly instead of correlating it via a shared flag
-// across two events, which sidesteps any risk of that flag being consumed
-// by an unrelated event.
-// NOTE: this relies on reload() staying synchronous; if it's ever made
-// asynchronous, this call must move to a completion callback instead.
-void Core::showPageChangeMessage(const QString &path) {
-  if (state.currentFilePath != path || !state.currentImg)
-    return;
-  if (state.currentImg->type() != STATIC || state.currentImg->frameCount() <= 1)
-    return;
-
-  int page = ImageStatic::pageOverrideForPath(path) + 1;
-  ui.notifications.showMessage(tr("Page %1/%2").arg(page).arg(state.currentImg->frameCount()),
-                   PageChangeMessageDurationMs);
 }
 
 void Core::updateInfoString() {

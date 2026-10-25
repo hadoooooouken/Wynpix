@@ -542,6 +542,103 @@ private slots:
     QVERIFY(!model->data(model->index(0), ImageInfoModel::StackedRole).toBool());
     QVERIFY(model->data(model->index(1), ImageInfoModel::StackedRole).toBool());
   }
+
+  void pageNavigationTracksPagesAndDispatchesRequests() {
+    OverlayCoordinator overlays(defaultSettings());
+    PageNavigationController *nav = overlays.pageNavigation();
+    QVERIFY(!nav->isVisible());
+
+    ShellFileInfo multiPage = documentInfo();
+    multiPage.pageIndex = 2;
+    multiPage.pageCount = 5;
+    overlays.setFileInfo(multiPage);
+
+    QVERIFY(nav->isVisible());
+    QCOMPARE(nav->pageIndex(), 2);
+    QCOMPARE(nav->pageCount(), 5);
+    QVERIFY(nav->hasPrevious());
+    QVERIFY(nav->hasNext());
+
+    QSignalSpy pageSpy(nav, &PageNavigationController::pageRequested);
+
+    nav->prevPage();
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 1);
+
+    nav->nextPage();
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 3);
+
+    nav->firstPage();
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 0);
+
+    nav->lastPage();
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 4);
+
+    nav->seekToPage(3);
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 3);
+
+    // Seeking to current page index does not dispatch redundant request
+    nav->seekToPage(2);
+    QCOMPARE(pageSpy.size(), 0);
+
+    // Boundary checks on first page (page 0)
+    multiPage.pageIndex = 0;
+    overlays.setFileInfo(multiPage);
+    QVERIFY(!nav->hasPrevious());
+    QVERIFY(nav->hasNext());
+    nav->prevPage();
+    QCOMPARE(pageSpy.size(), 0);
+    nav->firstPage();
+    QCOMPARE(pageSpy.size(), 0);
+
+    // Boundary checks on last page (page 4)
+    multiPage.pageIndex = 4;
+    overlays.setFileInfo(multiPage);
+    QVERIFY(nav->hasPrevious());
+    QVERIFY(!nav->hasNext());
+    nav->nextPage();
+    QCOMPARE(pageSpy.size(), 0);
+    nav->lastPage();
+    QCOMPARE(pageSpy.size(), 0);
+
+    // Clamping of seekToPage
+    nav->seekToPage(-10);
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 0);
+
+    multiPage.pageIndex = 0;
+    overlays.setFileInfo(multiPage);
+    nav->seekToPage(999);
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 4);
+
+    // Scrubbing timer control and immediate seek dispatch
+    QVERIFY(nav->isShown());
+    QVERIFY(nav->isHideTimerActive());
+    nav->onScrubbingStarted();
+    QVERIFY(nav->isScrubbing());
+    QVERIFY(!nav->isHideTimerActive());
+
+    nav->seekToPage(2);
+    QCOMPARE(pageSpy.size(), 1);
+    QCOMPARE(pageSpy.takeFirst().at(0).toInt(), 2);
+
+    nav->onScrubbingFinished();
+    QVERIFY(!nav->isScrubbing());
+    QVERIFY(nav->isHideTimerActive());
+
+    // Flag cleanup on loss of visibility
+    nav->onScrubbingStarted();
+    QVERIFY(nav->isScrubbing());
+    overlays.setFolderViewActive(true);
+    QVERIFY(!nav->isVisible());
+    QVERIFY(!nav->isScrubbing());
+    QVERIFY(!nav->isHideTimerActive());
+  }
 };
 
 int runOverlayTests(int argc, char **argv) {
