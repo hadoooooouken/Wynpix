@@ -43,6 +43,15 @@ FocusScope {
 
     Loader {
         anchors.fill: parent
+        active: overlays.coordinator.animationPlayback.visible
+        asynchronous: true
+        sourceComponent: AnimationPlaybackOverlay {
+            playback: overlays.coordinator.animationPlayback
+        }
+    }
+
+    Loader {
+        anchors.fill: parent
         active: overlays.coordinator.imageInfo.created
         asynchronous: true
         sourceComponent: ImageInfoOverlay {

@@ -1,12 +1,19 @@
 #include "animationplayer.h"
 
+#include <QImageReader>
 #include <QMovie>
+#include <algorithm>
+#include <cmath>
 
 namespace {
 // QMovie numbers its frames from 0; animations with fewer frames than this
 // are shown, not played.
 constexpr int kFirstFrame = 0;
 constexpr int kMinimumPlayableFrames = 2;
+// Animations whose uncompressed frames fit within this threshold use CacheAll
+// for instant random access, scrub and reverse. Larger files stay on CacheNone
+// to protect physical RAM.
+constexpr qint64 kMaxCacheBytes = 256 * 1024 * 1024;
 } // namespace
 
 //------------------------------------------------------------------------------
@@ -29,6 +36,16 @@ bool AnimationPlayer::open(const QString &path, const QByteArray &format) {
                         .reason = movie->lastErrorString()});
     return false;
   }
+
+  // QMovie requires setCacheMode() to be configured before reading frames.
+  // Setting it after jumpToFrame() leaves frame 0 un-cached, breaking loop jumps.
+  const QSize size = QImageReader(path, format).size();
+  const qint64 estimatedBytes = size.isValid()
+      ? static_cast<qint64>(size.width()) * size.height() * 4 * movie->frameCount()
+      : 0;
+  if (estimatedBytes > 0 && estimatedBytes <= kMaxCacheBytes)
+    movie->setCacheMode(QMovie::CacheAll);
+
   // Frames are advanced by the player's own timer; the QMovie is never
   // started.
   mMovie = std::move(movie);
@@ -37,6 +54,7 @@ bool AnimationPlayer::open(const QString &path, const QByteArray &format) {
     close();
     return false;
   }
+
   emit frameCountChanged();
   // Playing before the first frame is published, so that its delay is
   // already scheduled when frameReady() arrives.
@@ -53,6 +71,16 @@ void AnimationPlayer::close() {
   mFrame.reset();
   setPlaying(false);
   setFinished(false);
+  if (!mRememberSettings) {
+    if (mReversed) {
+      mReversed = false;
+      emit reversedChanged();
+    }
+    if (!qFuzzyCompare(mSpeed, 1.0)) {
+      mSpeed = 1.0;
+      emit speedChanged();
+    }
+  }
   if (wasOpen) {
     emit frameCountChanged();
     emit frameChanged();
@@ -65,14 +93,30 @@ bool AnimationPlayer::isOpen() const { return mMovie != nullptr; }
 void AnimationPlayer::play() {
   if (!mMovie || mMovie->frameCount() < kMinimumPlayableFrames)
     return;
+  const int startFrame = mReversed ? mMovie->frameCount() - 1 : kFirstFrame;
+  const int endFrame = mReversed ? kFirstFrame : mMovie->frameCount() - 1;
+  const bool restartNeeded =
+      mFinished || (!mLoop && mMovie->currentFrameNumber() == endFrame);
   setFinished(false);
   setPlaying(true);
-  scheduleNextFrame();
+  if (restartNeeded && mMovie->currentFrameNumber() != startFrame) {
+    if (!showFrame(startFrame))
+      pause();
+  } else {
+    scheduleNextFrame();
+  }
 }
 
 void AnimationPlayer::pause() {
   mTimer.stop();
   setPlaying(false);
+}
+
+void AnimationPlayer::togglePlayPause() {
+  if (isPlaying())
+    pause();
+  else
+    play();
 }
 
 bool AnimationPlayer::isPlaying() const { return mPlaying; }
@@ -89,6 +133,35 @@ void AnimationPlayer::setLoop(bool loop) {
 
 bool AnimationPlayer::loops() const { return mLoop; }
 
+void AnimationPlayer::setSpeed(qreal speed) {
+  if (speed <= 0.0 || qFuzzyCompare(mSpeed, speed))
+    return;
+  mSpeed = speed;
+  emit speedChanged();
+  if (mPlaying)
+    scheduleNextFrame();
+}
+
+qreal AnimationPlayer::speed() const { return mSpeed; }
+
+void AnimationPlayer::setReversed(bool reversed) {
+  if (mReversed == reversed)
+    return;
+  mReversed = reversed;
+  emit reversedChanged();
+}
+
+bool AnimationPlayer::isReversed() const { return mReversed; }
+
+void AnimationPlayer::setRememberSettings(bool remember) {
+  if (mRememberSettings == remember)
+    return;
+  mRememberSettings = remember;
+  emit rememberSettingsChanged();
+}
+
+bool AnimationPlayer::rememberSettings() const { return mRememberSettings; }
+
 bool AnimationPlayer::isFinished() const { return mFinished; }
 
 //------------------------------------------------------------------------------
@@ -98,19 +171,22 @@ bool AnimationPlayer::showFrame(int index) {
   setFinished(false);
   if (mMovie->currentFrameNumber() == index)
     return true;
-  // QMovie only decodes forwards; earlier frames restart from the first one.
-  if (index < mMovie->currentFrameNumber() &&
-      !mMovie->jumpToFrame(kFirstFrame)) {
-    reportDecodeError(kFirstFrame);
-    return false;
-  }
-  while (mMovie->currentFrameNumber() != index) {
-    const int next = mMovie->currentFrameNumber() + 1;
-    // A wrap means frame index is beyond the decodable part of the file:
-    // stepping on would never reach it.
-    if (stepForward() != FrameStep::Advanced) {
-      reportDecodeError(next);
-      break;
+  // With CacheAll, direct frame jumps are instantaneous in both directions.
+  if (!mMovie->jumpToFrame(index)) {
+    // Fallback for formats or states that do not support direct jumping:
+    if (index < mMovie->currentFrameNumber() &&
+        !mMovie->jumpToFrame(kFirstFrame)) {
+      reportDecodeError(kFirstFrame);
+      return false;
+    }
+    while (mMovie->currentFrameNumber() != index) {
+      const int next = mMovie->currentFrameNumber() + 1;
+      // A wrap means frame index is beyond the decodable part of the file:
+      // stepping on would never reach it.
+      if (stepForward() != FrameStep::Advanced) {
+        reportDecodeError(next);
+        return false;
+      }
     }
   }
   publishCurrentFrame();
@@ -132,6 +208,16 @@ void AnimationPlayer::prevFrame() {
   showFrame(mMovie->currentFrameNumber() <= kFirstFrame
                 ? mMovie->frameCount() - 1
                 : mMovie->currentFrameNumber() - 1);
+}
+
+void AnimationPlayer::firstFrame() {
+  if (mMovie)
+    showFrame(kFirstFrame);
+}
+
+void AnimationPlayer::lastFrame() {
+  if (mMovie)
+    showFrame(mMovie->frameCount() - 1);
 }
 
 int AnimationPlayer::frameIndex() const {
@@ -158,37 +244,55 @@ int AnimationPlayer::scheduledDelay() const {
 void AnimationPlayer::onTimer() {
   if (!mMovie || !mPlaying)
     return;
-  if (mMovie->currentFrameNumber() < mMovie->frameCount() - 1) {
-    const int next = mMovie->currentFrameNumber() + 1;
-    switch (stepForward()) {
-    case FrameStep::Failed:
-      reportDecodeError(next);
+  if (!mReversed) {
+    if (mMovie->currentFrameNumber() < mMovie->frameCount() - 1) {
+      const int next = mMovie->currentFrameNumber() + 1;
+      switch (stepForward()) {
+      case FrameStep::Failed:
+        reportDecodeError(next);
+        pause();
+        return;
+      case FrameStep::Advanced:
+        publishCurrentFrame();
+        return;
+      case FrameStep::Wrapped:
+        // The file ends before its last declared frame (a truncated GIF):
+        // its decodable frames are the whole animation, and QMovie is back at
+        // the first one.
+        if (mLoop)
+          publishCurrentFrame();
+        else
+          finishPlayback();
+        return;
+      }
+    }
+    if (!mLoop) {
+      finishPlayback();
+      return;
+    }
+    if (!mMovie->jumpToFrame(kFirstFrame)) {
+      reportDecodeError(kFirstFrame);
       pause();
       return;
-    case FrameStep::Advanced:
-      publishCurrentFrame();
+    }
+    publishCurrentFrame();
+  } else {
+    if (mMovie->currentFrameNumber() > kFirstFrame) {
+      if (!showFrame(mMovie->currentFrameNumber() - 1)) {
+        pause();
+      }
       return;
-    case FrameStep::Wrapped:
-      // The file ends before its last declared frame (a truncated GIF):
-      // its decodable frames are the whole animation, and QMovie is back at
-      // the first one.
-      if (mLoop)
-        publishCurrentFrame();
-      else
-        finishPlayback();
+    }
+    if (!mLoop) {
+      finishPlayback();
+      return;
+    }
+    const int last = mMovie->frameCount() - 1;
+    if (!showFrame(last)) {
+      pause();
       return;
     }
   }
-  if (!mLoop) {
-    finishPlayback();
-    return;
-  }
-  if (!mMovie->jumpToFrame(kFirstFrame)) {
-    reportDecodeError(kFirstFrame);
-    pause();
-    return;
-  }
-  publishCurrentFrame();
 }
 
 AnimationPlayer::FrameStep AnimationPlayer::stepForward() {
@@ -221,7 +325,14 @@ void AnimationPlayer::publishCurrentFrame() {
 }
 
 void AnimationPlayer::scheduleNextFrame() {
-  mTimer.start(mMovie->nextFrameDelay());
+  const int delay = mMovie->nextFrameDelay();
+  if (qFuzzyCompare(mSpeed, 1.0)) {
+    mTimer.start(delay);
+  } else {
+    const int baseDelay = delay > 0 ? delay : 100;
+    const int effectiveDelay = std::max(1, static_cast<int>(std::round(baseDelay / mSpeed)));
+    mTimer.start(effectiveDelay);
+  }
 }
 
 void AnimationPlayer::setPlaying(bool playing) {

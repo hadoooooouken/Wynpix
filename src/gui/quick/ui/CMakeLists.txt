@@ -56,6 +56,8 @@ qt_add_qml_module(wynpix_ui
         menus/contextmenumodel.h
         overlays/adjustmentslidermodel.cpp
         overlays/adjustmentslidermodel.h
+        overlays/animationplaybackcontroller.cpp
+        overlays/animationplaybackcontroller.h
         overlays/cassettingseditor.cpp
         overlays/cassettingseditor.h
         overlays/coloradjustmentseditor.cpp
@@ -87,6 +89,7 @@ qt_add_qml_module(wynpix_ui
         thumbnails/thumbnailstriplayout.h
     QML_FILES
         AdjustmentSliders.qml
+        AnimationPlaybackOverlay.qml
         BatchConverterDialog.qml
         BatchItemWidget.qml
         CasSettingsOverlay.qml

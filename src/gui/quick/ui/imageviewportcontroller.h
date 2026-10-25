@@ -128,6 +128,8 @@ public:
     // On by default; off, an animation stops at its last frame and reports
     // playbackFinished() (slideshow).
     void setLoopPlayback(bool loop);
+    [[nodiscard]] AnimationPlayer &animationPlayer() { return mPlayer; }
+    [[nodiscard]] const AnimationPlayer &animationPlayer() const { return mPlayer; }
     void closeImage();
     [[nodiscard]] bool hasImage() const;
     // AI-upscaled crop (Core); ignored for SVG documents, which show their
@@ -389,6 +391,7 @@ private:
     WheelClassifier mWheelClassifier;
     QElapsedTimer mClock;
     AnimationPlayer mPlayer;
+    bool mLoopPlayback = true;
     FramePresentationTracker mPresentation;
     GraphicsDeviceLossMonitor mDeviceLoss;
 

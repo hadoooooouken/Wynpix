@@ -57,6 +57,7 @@ ColorAdjustmentsEditor *OverlayCoordinator::colorAdjustmentsEditor() { return &m
 OverlayState *OverlayCoordinator::casSettings() { return &mCasSettings; }
 CasSettingsEditor *OverlayCoordinator::casSettingsEditor() { return &mCasSettingsEditor; }
 PageNavigationController *OverlayCoordinator::pageNavigation() { return &mPageNavigation; }
+AnimationPlaybackController *OverlayCoordinator::animationPlayback() { return &mAnimationPlayback; }
 
 bool OverlayCoordinator::isKeyboardOverlayOpen() const {
     return mCopy.isOpen() || mRename.isOpen();
@@ -76,6 +77,7 @@ void OverlayCoordinator::applySettings(const UiSettingsSnapshot &settings) {
     setPlacement(saveConfirmAtTopWith(settings.panel), copyAtTopWith(settings.panel));
     mFullscreenChrome.applySettings(settings);
     mPageNavigation.setPanelAtTop(settings.panel.enabled && settings.panel.position == SettingsEnums::PanelPosition::Top);
+    mAnimationPlayback.setPanelAtTop(settings.panel.enabled && settings.panel.position == SettingsEnums::PanelPosition::Top);
     // An edit made in the overlay is already current; a different value in
     // the settings comes from elsewhere (settings dialog).
     const CasParameters settingsCas = casParametersOf(settings.viewer);
@@ -91,6 +93,7 @@ void OverlayCoordinator::setFolderViewActive(bool active) {
     mFolderViewActive = active;
     mFullscreenChrome.setViewMode(active ? MODE_FOLDERVIEW : MODE_DOCUMENT);
     mPageNavigation.setFolderViewActive(active);
+    mAnimationPlayback.setFolderViewActive(active);
     if (active) {
         for (OverlayState *state : {&mCopy, &mRename, &mCasSettings})
             state->close();
@@ -133,6 +136,7 @@ void OverlayCoordinator::pointerMoved(QPointF position, bool windowActive) {
     if (windowActive) {
         mFullscreenChrome.pointerMoved();
         mPageNavigation.pointerMoved();
+        mAnimationPlayback.pointerMoved();
     }
 }
 

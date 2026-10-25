@@ -232,6 +232,7 @@ void QuickUiHost::forwardOverlayEvents() {
                    &UiEvents::saveAsRequested);
   QObject::connect(&mOverlays, &OverlayCoordinator::discardEditsRequested,
                    events, &UiEvents::discardEditsRequested);
+  mOverlays.animationPlayback()->attachPlayer(&mViewport.animationPlayer());
 }
 
 //------------------------------------------------------------------------------

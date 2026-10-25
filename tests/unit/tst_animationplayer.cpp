@@ -4,6 +4,7 @@
 #include <QSignalSpy>
 #include <QTemporaryDir>
 #include <QTest>
+#include <cmath>
 #include <vector>
 
 #include "components/animationplayer/animationplayer.h"
@@ -224,6 +225,139 @@ private slots:
     QSignalSpy frames(&player, &AnimationPlayer::frameReady);
     QTest::qWait(kQuietPeriodMs);
     QCOMPARE(frames.count(), 0);
+  }
+
+  void speedScalingModifiesScheduledDelay() {
+    AnimationPlayer player;
+    QSignalSpy speedSpy(&player, &AnimationPlayer::speedChanged);
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    player.pause();
+    QCOMPARE(player.speed(), 1.0);
+
+    // Speed up 2x: delay should be halved.
+    player.setSpeed(2.0);
+    QCOMPARE(speedSpy.count(), 1);
+    QCOMPARE(player.speed(), 2.0);
+    player.play();
+    const int baseDelay0 = kThreeFrameDelays[0];
+    const int expected2x = std::max(1, static_cast<int>(std::round(baseDelay0 / 2.0)));
+    QCOMPARE(player.scheduledDelay(), expected2x);
+
+    // Slow down 0.5x: delay should be doubled.
+    player.setSpeed(0.5);
+    QCOMPARE(speedSpy.count(), 2);
+    QCOMPARE(player.speed(), 0.5);
+    const int expectedHalfX = std::max(1, static_cast<int>(std::round(baseDelay0 / 0.5)));
+    QCOMPARE(player.scheduledDelay(), expectedHalfX);
+  }
+
+  void reversedPlaybackPlaysBackwards() {
+    AnimationPlayer player;
+    QSignalSpy reversedSpy(&player, &AnimationPlayer::reversedChanged);
+    player.setLoop(true);
+    player.setReversed(true);
+    QCOMPARE(reversedSpy.count(), 1);
+    QVERIFY(player.isReversed());
+
+    std::vector<int> order;
+    connect(&player, &AnimationPlayer::frameReady, this,
+            [&](const std::shared_ptr<const QImage> &, int index) {
+              order.push_back(index);
+            });
+
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    // Start at frame 0, next step reversed loops to 2, then 1, 0, 2...
+    QTRY_VERIFY_WITH_TIMEOUT(order.size() >= 4,
+                             kFrameTimeoutMs * kThreeFrameCount);
+    QCOMPARE(order[0], 0);
+    QCOMPARE(order[1], 2);
+    QCOMPARE(order[2], 1);
+    QCOMPARE(order[3], 0);
+
+    // Test firstFrame() and lastFrame() helpers
+    player.pause();
+    player.firstFrame();
+    QCOMPARE(player.frameIndex(), 0);
+    player.lastFrame();
+    QCOMPARE(player.frameIndex(), kLastFrame);
+  }
+
+  void rememberSettingsPreservesStateAcrossOpenClose() {
+    AnimationPlayer player;
+    QSignalSpy rememberSpy(&player, &AnimationPlayer::rememberSettingsChanged);
+
+    // Default: rememberSettings is false -> close() resets speed and reversed.
+    QVERIFY(!player.rememberSettings());
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    player.setSpeed(2.0);
+    player.setReversed(true);
+    player.close();
+    QCOMPARE(player.speed(), 1.0);
+    QVERIFY(!player.isReversed());
+
+    // With rememberSettings true: close() preserves speed and reversed.
+    player.setRememberSettings(true);
+    QCOMPARE(rememberSpy.count(), 1);
+    QVERIFY(player.rememberSettings());
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    player.setSpeed(3.0);
+    player.setReversed(true);
+    player.close();
+    QCOMPARE(player.speed(), 3.0);
+    QVERIFY(player.isReversed());
+
+    // Opening another animation preserves settings.
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    QCOMPARE(player.speed(), 3.0);
+    QVERIFY(player.isReversed());
+  }
+
+  void restartAfterFinishedInBothDirections() {
+    AnimationPlayer player;
+    // 1. Forward finish -> restart forward
+    QSignalSpy finishedForward(&player, &AnimationPlayer::playbackFinished);
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    QVERIFY(finishedForward.wait(kFrameTimeoutMs * kThreeFrameCount));
+    QVERIFY(player.isFinished());
+    QCOMPARE(player.frameIndex(), kLastFrame);
+    QCOMPARE(player.scheduledDelay(), AnimationPlayer::kNoDelay);
+
+    // play() restarts from frame 0
+    player.play();
+    QVERIFY(player.isPlaying());
+    QVERIFY(!player.isFinished());
+    QCOMPARE(player.frameIndex(), 0);
+    QVERIFY(player.scheduledDelay() > 0);
+
+    // 2. Forward finish -> switch to reverse -> restart without early-exit stall
+    player.close();
+    QVERIFY(player.open(mThreeFrames, kGifFormat));
+    QSignalSpy finished2(&player, &AnimationPlayer::playbackFinished);
+    QVERIFY(finished2.wait(kFrameTimeoutMs * kThreeFrameCount));
+    QVERIFY(player.isFinished());
+    QCOMPARE(player.frameIndex(), kLastFrame);
+
+    player.setReversed(true);
+    // Already at startFrame (kLastFrame): play() must start timer without getting stuck.
+    player.play();
+    QVERIFY(player.isPlaying());
+    QVERIFY(!player.isFinished());
+    QCOMPARE(player.frameIndex(), kLastFrame);
+    QVERIFY(player.scheduledDelay() > 0);
+
+    // 3. Reverse finish -> switch to forward -> restart without early-exit stall
+    QSignalSpy finishedReverse(&player, &AnimationPlayer::playbackFinished);
+    QVERIFY(finishedReverse.wait(kFrameTimeoutMs * kThreeFrameCount));
+    QVERIFY(player.isFinished());
+    QCOMPARE(player.frameIndex(), 0);
+
+    player.setReversed(false);
+    // Already at startFrame (0): play() must start timer without getting stuck.
+    player.play();
+    QVERIFY(player.isPlaying());
+    QVERIFY(!player.isFinished());
+    QCOMPARE(player.frameIndex(), 0);
+    QVERIFY(player.scheduledDelay() > 0);
   }
 
 private:

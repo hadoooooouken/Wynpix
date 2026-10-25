@@ -7,6 +7,7 @@
 #include "gui/ports/shellport.h"
 #include "gui/quick/bridges/uisettings.h"
 #include "gui/quick/ui/overlays/cassettingseditor.h"
+#include "gui/quick/ui/overlays/animationplaybackcontroller.h"
 #include "gui/quick/ui/overlays/coloradjustmentseditor.h"
 #include "gui/quick/ui/overlays/copytargetsmodel.h"
 #include "gui/quick/ui/overlays/fullscreenchromecontroller.h"
@@ -52,6 +53,7 @@ class OverlayCoordinator final : public QObject {
     Q_PROPERTY(OverlayState *casSettings READ casSettings CONSTANT FINAL)
     Q_PROPERTY(CasSettingsEditor *casSettingsEditor READ casSettingsEditor CONSTANT FINAL)
     Q_PROPERTY(PageNavigationController *pageNavigation READ pageNavigation CONSTANT FINAL)
+    Q_PROPERTY(AnimationPlaybackController *animationPlayback READ animationPlayback CONSTANT FINAL)
     Q_PROPERTY(bool keyboardOverlayOpen READ isKeyboardOverlayOpen NOTIFY keyboardOverlayOpenChanged FINAL)
     Q_PROPERTY(bool saveConfirmAtTop READ isSaveConfirmAtTop NOTIFY placementChanged FINAL)
     Q_PROPERTY(bool copyAtTop READ isCopyAtTop NOTIFY placementChanged FINAL)
@@ -74,6 +76,7 @@ public:
     [[nodiscard]] OverlayState *casSettings();
     [[nodiscard]] CasSettingsEditor *casSettingsEditor();
     [[nodiscard]] PageNavigationController *pageNavigation();
+    [[nodiscard]] AnimationPlaybackController *animationPlayback();
 
     // An overlay that takes the keyboard focus is open.
     [[nodiscard]] bool isKeyboardOverlayOpen() const;
@@ -130,6 +133,7 @@ private:
     OverlayState mImageInfo{false};
     ImageInfoModel mImageInfoModel;
     PageNavigationController mPageNavigation;
+    AnimationPlaybackController mAnimationPlayback;
     OverlayState mSaveConfirm{false};
     OverlayState mCopy{true};
     CopyTargetsModel mCopyTargets;

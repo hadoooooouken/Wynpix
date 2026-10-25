@@ -46,6 +46,9 @@ class AnimationPlayer : public QObject {
   Q_PROPERTY(bool finished READ isFinished NOTIFY finishedChanged FINAL)
   Q_PROPERTY(int frameIndex READ frameIndex NOTIFY frameChanged FINAL)
   Q_PROPERTY(int frameCount READ frameCount NOTIFY frameCountChanged FINAL)
+  Q_PROPERTY(qreal speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
+  Q_PROPERTY(bool reversed READ isReversed WRITE setReversed NOTIFY reversedChanged FINAL)
+  Q_PROPERTY(bool rememberSettings READ rememberSettings WRITE setRememberSettings NOTIFY rememberSettingsChanged FINAL)
 
 public:
   // Returned by frameIndex() and scheduledDelay() when there is none.
@@ -69,12 +72,25 @@ public:
   // single frame never play.
   void play();
   void pause();
+  void togglePlayPause();
   [[nodiscard]] bool isPlaying() const;
 
   // Loop playback (Settings::loopSlideshow() in the widget UI); turning it
   // on after playback finished resumes playing.
   void setLoop(bool loop);
   [[nodiscard]] bool loops() const;
+
+  // Playback speed multiplier (1.0 = normal, 0.5 = half speed, 2.0 = double speed).
+  void setSpeed(qreal speed);
+  [[nodiscard]] qreal speed() const;
+
+  // Reverse playback direction.
+  void setReversed(bool reversed);
+  [[nodiscard]] bool isReversed() const;
+
+  // Preserve speed, loop, and direction settings across images.
+  void setRememberSettings(bool remember);
+  [[nodiscard]] bool rememberSettings() const;
 
   // Playback stopped at the last frame because looping is off; cleared by
   // play(), stepping and a new animation.
@@ -85,6 +101,8 @@ public:
   bool showFrame(int index);
   void nextFrame();
   void prevFrame();
+  void firstFrame();
+  void lastFrame();
 
   [[nodiscard]] int frameIndex() const;
   [[nodiscard]] int frameCount() const;
@@ -103,6 +121,9 @@ signals:
   void playingChanged();
   void loopChanged();
   void finishedChanged();
+  void speedChanged();
+  void reversedChanged();
+  void rememberSettingsChanged();
   // Playback stopped after the last frame (looping off).
   void playbackFinished();
   // The animation could not be opened or a frame could not be decoded;
@@ -133,4 +154,7 @@ private:
   bool mPlaying = false;
   bool mLoop = false;
   bool mFinished = false;
+  qreal mSpeed = 1.0;
+  bool mReversed = false;
+  bool mRememberSettings = false;
 };

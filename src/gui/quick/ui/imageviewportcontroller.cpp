@@ -435,6 +435,8 @@ void ImageViewportController::showAnimation(const QString &filePath, const QStri
     reset();
     syncDevicePixelRatio();
     mFilePath = filePath;
+    if (!mPlayer.rememberSettings())
+        mPlayer.setLoop(mLoopPlayback);
     // open() publishes the first frame synchronously (onAnimationFrame()).
     mAwaitingFirstFrame = true;
     if (!mPlayer.open(filePath, format.toUtf8())) {
@@ -480,6 +482,7 @@ void ImageViewportController::onAnimationFrame(std::shared_ptr<const QImage> fra
 }
 
 void ImageViewportController::setLoopPlayback(bool loop) {
+    mLoopPlayback = loop;
     mPlayer.setLoop(loop);
 }
 
