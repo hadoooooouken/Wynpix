@@ -11,6 +11,7 @@ FocusScope {
     id: overlays
 
     required property OverlayCoordinator coordinator
+    property int bottomInset: 0
 
     Loader {
         anchors.fill: parent
@@ -104,6 +105,7 @@ FocusScope {
         asynchronous: true
         sourceComponent: FloatingMessage {
             message: overlays.coordinator.messages
+            bottomInset: overlays.bottomInset
         }
     }
 }

@@ -141,6 +141,7 @@ ApplicationWindow {
         anchors.fill: parent
         coordinator: root.overlays
         focus: root.overlays.keyboardOverlayOpen
+        bottomInset: !root.windowShell.folderViewActive ? mainPanel.dockedBottom : 0
     }
 
     Connections {

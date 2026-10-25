@@ -139,6 +139,24 @@ TestCase {
         compare(viewport.height, window.height);
     }
 
+    function test_pinnedPanelInsetsTheOverlayLayerInViewer() {
+        Fixture.configureThumbnailPanel(true, SettingsEnums.PanelPosition.Bottom, false);
+        const window = createWindow();
+        Fixture.setPanelWindowSize(window.width, window.height);
+        const overlays = childOfType(window, "OverlayLayer");
+        verify(overlays !== null, "no OverlayLayer in window");
+        compare(overlays.bottomInset, Fixture.thumbnailPanel.layout.panelExtent);
+
+        // A floating panel does not inset the overlays.
+        Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Bottom, false);
+        compare(overlays.bottomInset, 0);
+
+        // Folder view does not inset the overlays even if a pinned panel is configured.
+        Fixture.configureThumbnailPanel(true, SettingsEnums.PanelPosition.Bottom, false);
+        Fixture.setFolderViewActive(true);
+        compare(overlays.bottomInset, 0);
+    }
+
     function test_cropModeDocksTheSidePanelAndCoversTheViewport() {
         Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Bottom, false);
         const window = createWindow();

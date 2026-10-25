@@ -9,6 +9,7 @@ Item {
     id: root
 
     required property NotificationOverlayModel message
+    property int bottomInset: 0
 
     readonly property int bottomMargin: 35
     readonly property int horizontalPadding: 12
@@ -21,7 +22,7 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: root.bottomMargin
+        anchors.bottomMargin: root.bottomMargin + root.bottomInset
         width: content.implicitWidth + 2 * root.horizontalPadding
         height: content.implicitHeight + 2 * root.verticalPadding
         visible: opacity > 0
