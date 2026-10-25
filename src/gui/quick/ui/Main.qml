@@ -142,6 +142,7 @@ ApplicationWindow {
         coordinator: root.overlays
         focus: root.overlays.keyboardOverlayOpen
         bottomInset: !root.windowShell.folderViewActive ? mainPanel.dockedBottom : 0
+        bottomFloatingPanelVisible: !root.windowShell.folderViewActive && !mainPanel.controller.docked && mainPanel.atBottom && mainPanel.visible
     }
 
     Connections {

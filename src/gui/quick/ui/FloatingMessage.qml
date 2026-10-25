@@ -10,6 +10,7 @@ Item {
 
     required property NotificationOverlayModel message
     property int bottomInset: 0
+    property bool bottomFloatingPanelVisible: false
 
     readonly property int bottomMargin: 35
     readonly property int horizontalPadding: 12
@@ -29,7 +30,7 @@ Item {
 
         states: State {
             name: "hidden"
-            when: !root.message.visible
+            when: !root.message.visible || root.bottomFloatingPanelVisible
             PropertyChanges {
                 bubble.opacity: 0
             }

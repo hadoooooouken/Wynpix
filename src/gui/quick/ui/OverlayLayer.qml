@@ -12,6 +12,7 @@ FocusScope {
 
     required property OverlayCoordinator coordinator
     property int bottomInset: 0
+    property bool bottomFloatingPanelVisible: false
 
     Loader {
         anchors.fill: parent
@@ -106,6 +107,7 @@ FocusScope {
         sourceComponent: FloatingMessage {
             message: overlays.coordinator.messages
             bottomInset: overlays.bottomInset
+            bottomFloatingPanelVisible: overlays.bottomFloatingPanelVisible
         }
     }
 }

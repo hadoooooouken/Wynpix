@@ -157,6 +157,48 @@ TestCase {
         compare(overlays.bottomInset, 0);
     }
 
+    function test_floatingBottomPanelHidesOverlayLayerFloatingMessage() {
+        Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Bottom, false);
+        const window = createWindow();
+        Fixture.setPanelWindowSize(window.width, window.height);
+        const overlays = childOfType(window, "OverlayLayer");
+        verify(overlays !== null, "no OverlayLayer in window");
+        compare(overlays.bottomFloatingPanelVisible, false);
+
+        // A notification instantiates the FloatingMessage overlay.
+        Fixture.overlays.colorAdjustmentsEditor.copy();
+        tryVerify(() => childOfType(window, "FloatingMessage") !== null);
+        const floatingMessage = childOfType(window, "FloatingMessage");
+        compare(floatingMessage.bottomFloatingPanelVisible, false);
+        const bubble = floatingMessage.children[0];
+        verify(bubble !== null, "no bubble in FloatingMessage");
+        compare(bubble.opacity, 1);
+
+        // Hover near the bottom edge shows the floating bottom thumbnail panel and hides the message.
+        Fixture.panelPointerMoved(Qt.point(window.width / 2, window.height - 2), Qt.NoButton);
+        const mainPanel = childOfType(window, "MainPanel");
+        verify(mainPanel !== null && mainPanel.visible, "mainPanel not visible on hover");
+        compare(overlays.bottomFloatingPanelVisible, true);
+        compare(floatingMessage.bottomFloatingPanelVisible, true);
+        tryCompare(bubble, "opacity", 0);
+
+        // Moving pointer away lets the floating panel hide, restoring message visibility.
+        Fixture.panelPointerMoved(Qt.point(window.width / 2, window.height / 2), Qt.NoButton);
+        tryCompare(floatingMessage, "bottomFloatingPanelVisible", false);
+        tryCompare(bubble, "opacity", 1);
+
+        // A left floating panel does not hide the floating message at bottom centre.
+        Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Left, false);
+        Fixture.panelPointerMoved(Qt.point(2, window.height / 2), Qt.NoButton);
+        compare(overlays.bottomFloatingPanelVisible, false);
+        compare(floatingMessage.bottomFloatingPanelVisible, false);
+
+        // A pinned bottom panel does not set bottomFloatingPanelVisible.
+        Fixture.configureThumbnailPanel(true, SettingsEnums.PanelPosition.Bottom, false);
+        compare(overlays.bottomFloatingPanelVisible, false);
+        compare(floatingMessage.bottomFloatingPanelVisible, false);
+    }
+
     function test_cropModeDocksTheSidePanelAndCoversTheViewport() {
         Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Bottom, false);
         const window = createWindow();
