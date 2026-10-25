@@ -16,7 +16,6 @@ Item {
     readonly property int horizontalPadding: 12
     readonly property int verticalPadding: 11
     readonly property int spacing: 8
-    readonly property int fadeOutDuration: 300
 
     Item {
         id: bubble
@@ -35,14 +34,24 @@ Item {
                 bubble.opacity: 0
             }
         }
-        // Shows at once, fades out.
-        transitions: Transition {
-            to: "hidden"
-            NumberAnimation {
-                property: "opacity"
-                duration: root.fadeOutDuration
+        transitions: [
+            Transition {
+                to: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeOutDuration
+                    easing.type: Easing.OutQuart
+                }
+            },
+            Transition {
+                from: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeInDuration
+                    easing.type: Easing.OutCubic
+                }
             }
-        }
+        ]
 
         PopupBackground {
             anchors.fill: parent

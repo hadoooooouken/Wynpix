@@ -17,7 +17,6 @@ Item {
     readonly property int spacing: 12
     readonly property int cornerRadius: 8
     readonly property real backgroundOpacity: 0.9
-    readonly property int fadeOutDuration: 230
 
     Rectangle {
         id: infoBar
@@ -36,14 +35,24 @@ Item {
                 infoBar.opacity: 0
             }
         }
-        // Shows at once, fades out.
-        transitions: Transition {
-            to: "hidden"
-            NumberAnimation {
-                property: "opacity"
-                duration: root.fadeOutDuration
+        transitions: [
+            Transition {
+                to: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeOutDuration
+                    easing.type: Easing.OutQuart
+                }
+            },
+            Transition {
+                from: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeInDuration
+                    easing.type: Easing.OutCubic
+                }
             }
-        }
+        ]
 
         Row {
             id: row

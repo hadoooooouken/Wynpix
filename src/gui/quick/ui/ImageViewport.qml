@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import wynpix.bridges
 import wynpix.render
+import wynpix.style
 
 // The image viewer of the Qt Quick UI: the GPU image view, its pointer input
 // and the viewer chrome (zoom indicator, click zones). Presentation only;
@@ -49,7 +50,6 @@ FocusScope {
     readonly property int indicatorHorizontalPadding: 14
     readonly property int indicatorVerticalPadding: 12
     readonly property int indicatorRadius: 8
-    readonly property int indicatorFadeDuration: 300
 
     focus: true
     Keys.onPressed: event => event.accepted = Actions.handleKeyEvent(event)
@@ -173,6 +173,8 @@ FocusScope {
     }
 
     Rectangle {
+        id: zoomIndicator
+
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.indicatorBottomMargin
@@ -181,13 +183,36 @@ FocusScope {
         width: zoomText.implicitWidth + root.indicatorHorizontalPadding
         height: zoomText.implicitHeight + root.indicatorVerticalPadding
         color: Theme.colors.overlay
-        opacity: root.controller.zoomIndicatorVisible && !root.floatingPanelVisible ? 1 : 0
         visible: opacity > 0
 
-        Behavior on opacity {
-            enabled: !root.controller.reducedMotion
-            NumberAnimation { duration: root.indicatorFadeDuration }
+        states: State {
+            name: "hidden"
+            when: !root.controller.zoomIndicatorVisible || root.floatingPanelVisible
+            PropertyChanges {
+                zoomIndicator.opacity: 0
+            }
         }
+
+        transitions: [
+            Transition {
+                to: "hidden"
+                enabled: !root.controller.reducedMotion
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeOutDuration
+                    easing.type: Easing.OutQuart
+                }
+            },
+            Transition {
+                from: "hidden"
+                enabled: !root.controller.reducedMotion
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeInDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
+        ]
 
         Text {
             id: zoomText

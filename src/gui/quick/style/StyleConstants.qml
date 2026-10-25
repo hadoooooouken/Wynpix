@@ -104,6 +104,10 @@ QtObject {
     readonly property real stepHoverOpacity: 0.14
     readonly property real stepPressedOpacity: 0.26
 
+    // HUD and toast overlay transitions (zoom indicator, fullscreen chrome, page navigation, animation HUD, floating messages).
+    readonly property int hudFadeInDuration: 120
+    readonly property int hudFadeOutDuration: 230
+
     // Drop shadow of popups, menus and tooltips.
     readonly property color shadowColor: Qt.rgba(0, 0, 0, 0.3)
     readonly property real shadowBlur: 12

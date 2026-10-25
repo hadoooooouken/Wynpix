@@ -1,5 +1,6 @@
 import QtQuick
 import wynpix.bridges
+import wynpix.style
 
 // Window controls in the top right corner in fullscreen (ControlsOverlay in
 // the widget UI): folder view, settings and exit. They run their actions;
@@ -16,7 +17,6 @@ Item {
     readonly property int cornerRadius: 8
     readonly property real backgroundOpacity: 0.9
     readonly property color glyphColor: "white"
-    readonly property int fadeOutDuration: 230
 
     Rectangle {
         id: bar
@@ -36,15 +36,24 @@ Item {
                 bar.opacity: 0
             }
         }
-        // Shows at once, fades out.
-        transitions: Transition {
-            to: "hidden"
-            NumberAnimation {
-                property: "opacity"
-                duration: root.fadeOutDuration
-                easing.type: Easing.OutQuart
+        transitions: [
+            Transition {
+                to: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeOutDuration
+                    easing.type: Easing.OutQuart
+                }
+            },
+            Transition {
+                from: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeInDuration
+                    easing.type: Easing.OutCubic
+                }
             }
-        }
+        ]
 
         HoverHandler {
             onHoveredChanged: root.chrome.setControlsHovered(hovered)

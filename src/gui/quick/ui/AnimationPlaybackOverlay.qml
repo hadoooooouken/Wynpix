@@ -18,7 +18,6 @@ Item {
     readonly property int cornerRadius: 8
     readonly property int horizontalPadding: 8
     readonly property int verticalPadding: 4
-    readonly property int fadeOutDuration: 230
 
     visible: playback.visible
 
@@ -69,14 +68,24 @@ Item {
             }
         }
 
-        transitions: Transition {
-            to: "hidden"
-            NumberAnimation {
-                property: "opacity"
-                duration: root.fadeOutDuration
-                easing.type: Easing.OutQuart
+        transitions: [
+            Transition {
+                to: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeOutDuration
+                    easing.type: Easing.OutQuart
+                }
+            },
+            Transition {
+                from: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeInDuration
+                    easing.type: Easing.OutCubic
+                }
             }
-        }
+        ]
 
         HoverHandler {
             id: pillHover

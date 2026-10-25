@@ -17,7 +17,6 @@ Item {
     readonly property int cornerRadius: 8
     readonly property int horizontalPadding: 1
     readonly property int verticalPadding: 1
-    readonly property int fadeOutDuration: 230
 
     visible: navigation.visible
 
@@ -45,14 +44,24 @@ Item {
             }
         }
 
-        transitions: Transition {
-            to: "hidden"
-            NumberAnimation {
-                property: "opacity"
-                duration: root.fadeOutDuration
-                easing.type: Easing.OutQuart
+        transitions: [
+            Transition {
+                to: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeOutDuration
+                    easing.type: Easing.OutQuart
+                }
+            },
+            Transition {
+                from: "hidden"
+                NumberAnimation {
+                    property: "opacity"
+                    duration: StyleConstants.hudFadeInDuration
+                    easing.type: Easing.OutCubic
+                }
             }
-        }
+        ]
 
         HoverHandler {
             onHoveredChanged: root.navigation.setHovered(hovered)
