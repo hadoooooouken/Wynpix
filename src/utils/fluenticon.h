@@ -91,6 +91,11 @@ enum class FluentIcon {
     CheckmarkCircle20,
     Clock24,
     ClockDismiss24,
+    Play20,
+    Pause20,
+    Next20,
+    ArrowTurnDownLeft20,
+    ArrowRepeatAll20,
 };
 Q_ENUM_NS(FluentIcon)
 

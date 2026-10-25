@@ -4,7 +4,7 @@ from fontTools import subset
 # Get script's directory (res/fonts/)
 SCRIPT_DIR = Path(__file__).resolve().parent
 
-INPUT_FONT = SCRIPT_DIR / "FluentSystemIcons-Regular-Full.ttf"
+INPUT_FONT = SCRIPT_DIR / "FluentSystemIcons-Regular.ttf"
 OUTPUT_FONT = SCRIPT_DIR / "FluentSystemIcons-Custom.ttf"
 
 UNICODES = (
@@ -15,7 +15,7 @@ UNICODES = (
     "U+F018D,U+F018E,U+F1E8,U+E305,U+F2B5,U+F488,U+E643,U+F41C,U+F480,U+F697,"
     "U+E8B0,U+F16A,U+F16C,U+F298,U+F3F1,U+F869,U+F2A1,U+F2AD,U+F2B3,U+F02F,"
     "U+F601,U+F493,U+F0B3A,U+F0BCB,U+E74A,U+EFC9,U+F0059,U+F339,U+EA94,U+F0461,"
-    "U+F2DE,U+E373"
+    "U+F2DE,U+E373,U+F605,U+F5A1,U+F569,U+F067,U+F171"
 )
 
 def build_subset() -> None:

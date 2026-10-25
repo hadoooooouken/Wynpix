@@ -96,6 +96,13 @@ const QHash<FluentIcon, char32_t> &codepointTable() {
         // Shared loading resources
         { FluentIcon::Clock24,        0xF2DE }, // ic_fluent_clock_24_regular <- Loading indicator
         { FluentIcon::ClockDismiss24, 0xE373 }, // ic_fluent_clock_dismiss_24_regular <- Loading-error indicator
+
+        // Media playback controls
+        { FluentIcon::ArrowRepeatAll20,    0xF171 }, // ic_fluent_arrow_repeat_all_20_regular <- Loop / repeat
+        { FluentIcon::ArrowTurnDownLeft20, 0xF067 }, // ic_fluent_arrow_turn_down_left_20_regular <- Reverse playback
+        { FluentIcon::Next20,              0xF569 }, // ic_fluent_next_20_regular <- Last / first frame
+        { FluentIcon::Pause20,             0xF5A1 }, // ic_fluent_pause_20_regular <- Pause playback
+        { FluentIcon::Play20,              0xF605 }, // ic_fluent_play_20_regular <- Play playback
     };
     return table;
 }
