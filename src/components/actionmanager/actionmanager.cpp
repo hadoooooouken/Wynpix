@@ -47,6 +47,8 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+L", "rotateLeft");
   actionManager->defaults.insert(",", "prevPage");
   actionManager->defaults.insert(".", "nextPage");
+  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+,", "firstPage");
+  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+.", "lastPage");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+WheelUp",
                                  "zoomInCursor");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+WheelDown",
@@ -75,8 +77,6 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert("M", "moveFile");
   actionManager->defaults.insert("Home", "jumpToFirst");
   actionManager->defaults.insert("End", "jumpToLast");
-  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+Home", "firstPage");
-  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+End", "lastPage");
   actionManager->defaults.insert("F5", "reloadImage");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+C",
                                  "copyFileClipboard");

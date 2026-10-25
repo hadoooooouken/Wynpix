@@ -68,8 +68,8 @@ void WynpixTests::viewModeController_notifiesRepeatedRequests() {
 
 void WynpixTests::actionManager_mergeMissingDefaults_addsNewActions() {
   const QMap<QString, QString> defaults = {
-      {"Ctrl+Home", "firstPage"},
-      {"Ctrl+End", "lastPage"},
+      {"Ctrl+,", "firstPage"},
+      {"Ctrl+.", "lastPage"},
       {"Right", "nextImage"}
   };
   QMap<QString, QString> userShortcuts = {
@@ -78,43 +78,43 @@ void WynpixTests::actionManager_mergeMissingDefaults_addsNewActions() {
 
   const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(changed);
-  QCOMPARE(userShortcuts.value("Ctrl+Home"), QString("firstPage"));
-  QCOMPARE(userShortcuts.value("Ctrl+End"), QString("lastPage"));
+  QCOMPARE(userShortcuts.value("Ctrl+,"), QString("firstPage"));
+  QCOMPARE(userShortcuts.value("Ctrl+."), QString("lastPage"));
   QCOMPARE(userShortcuts.value("Right"), QString("nextImage"));
   QCOMPARE(userShortcuts.size(), 3);
 }
 
 void WynpixTests::actionManager_mergeMissingDefaults_preservesCustomActionMapping() {
   const QMap<QString, QString> defaults = {
-      {"Ctrl+Home", "firstPage"},
+      {"Ctrl+,", "firstPage"},
       {"Right", "nextImage"}
   };
-  // User mapped firstPage to Alt+Home instead of default Ctrl+Home
+  // User mapped firstPage to Alt+, instead of default Ctrl+,
   QMap<QString, QString> userShortcuts = {
-      {"Alt+Home", "firstPage"},
+      {"Alt+,", "firstPage"},
       {"Right", "nextImage"}
   };
 
   const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(!changed);
-  QVERIFY(!userShortcuts.contains("Ctrl+Home"));
-  QCOMPARE(userShortcuts.value("Alt+Home"), QString("firstPage"));
+  QVERIFY(!userShortcuts.contains("Ctrl+,"));
+  QCOMPARE(userShortcuts.value("Alt+,"), QString("firstPage"));
 }
 
 void WynpixTests::actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey() {
   const QMap<QString, QString> defaults = {
-      {"Ctrl+Home", "firstPage"},
+      {"Ctrl+,", "firstPage"},
       {"Right", "nextImage"}
   };
-  // User remapped Ctrl+Home to do jumpToFirst
+  // User remapped Ctrl+, to do jumpToFirst
   QMap<QString, QString> userShortcuts = {
-      {"Ctrl+Home", "jumpToFirst"},
+      {"Ctrl+,", "jumpToFirst"},
       {"Right", "nextImage"}
   };
 
   const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(!changed);
-  QCOMPARE(userShortcuts.value("Ctrl+Home"), QString("jumpToFirst"));
+  QCOMPARE(userShortcuts.value("Ctrl+,"), QString("jumpToFirst"));
   QVERIFY(userShortcuts.key("firstPage").isEmpty());
 }
 
