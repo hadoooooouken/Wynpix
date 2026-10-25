@@ -64,6 +64,7 @@ public:
     bool isLoaded(int index) const;
     bool isLoaded(QString filePath) const;
     bool reload(QString filePath);
+    void refreshFileEntry(const QString &filePath);
     QString filePathAt(int index) const;
     void unloadExcept(QString filePath, bool keepNearby);
     const FSEntry &fileEntryAt(int index) const;

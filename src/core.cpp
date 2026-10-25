@@ -1136,7 +1136,9 @@ void Core::reloadImage() { reloadImage(selectedPath()); }
 void Core::reloadImage(QString filePath) {
   if (model->isEmpty())
     return;
-  model->reload(filePath);
+  if (model->reload(filePath)) {
+    model->refreshFileEntry(filePath);
+  }
 }
 
 void Core::enableFolderView() {

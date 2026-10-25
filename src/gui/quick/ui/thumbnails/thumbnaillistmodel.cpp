@@ -149,12 +149,12 @@ void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry) {
         return;
     mRequested.remove(pos);
     mUnavailable.remove(pos);
-    // Without unloading every thumbnail is kept; otherwise only those the
-    // view can reach soon. An inactive (hidden) view keeps them as well:
-    // they are what its prefetch requested, or what another view requested
-    // within its range.
-    if (!mRequest.unloadOffscreen || preloadRange().contains(pos))
+    if (!entry.handle.isValid()) {
+        mLoaded.remove(pos);
+        mUnavailable.insert(pos);
+    } else if (!mRequest.unloadOffscreen || preloadRange().contains(pos)) {
         mLoaded.insert(pos, entry);
+    }
     emitRowChanged(pos, kThumbnailRoles);
     notifyIfVisibleThumbnailsReady();
 }
@@ -174,6 +174,7 @@ void ThumbnailListModel::setThumbnailUnavailable(int pos, QSize targetSize) {
     if (targetSize != mRequest.targetSize || !checkRange(pos))
         return;
     mRequested.remove(pos);
+    mLoaded.remove(pos);
     mUnavailable.insert(pos);
     emitRowChanged(pos, kThumbnailRoles);
     notifyIfVisibleThumbnailsReady();
@@ -299,10 +300,11 @@ void ThumbnailListModel::removeItem(int index) {
 void ThumbnailListModel::reloadItem(int index) {
     if (!checkRange(index))
         return;
-    mLoaded.remove(index);
+    const bool wasLoaded = mLoaded.contains(index);
     mUnavailable.remove(index);
     mRequested.insert(index);
-    emitRowChanged(index, kThumbnailRoles);
+    if (!wasLoaded)
+        emitRowChanged(index, kThumbnailRoles);
     emit thumbnailsNeeded({index}, mRequest.targetSize, mRequest.crop, true);
 }
 

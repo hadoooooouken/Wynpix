@@ -448,8 +448,11 @@ bool DirectoryModel::reload(QString filePath) {
     if(!containsFile(filePath) || loader.isLoading(filePath))
         return false;
     cache.remove(filePath);
-    dirManager.updateFileEntry(filePath);
     return forceLoad(filePath, false);
+}
+
+void DirectoryModel::refreshFileEntry(const QString &filePath) {
+    dirManager.updateFileEntry(filePath);
 }
 
 // The budget left after the cached images is split evenly between the
