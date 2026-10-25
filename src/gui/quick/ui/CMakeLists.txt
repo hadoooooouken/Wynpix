@@ -72,6 +72,8 @@ qt_add_qml_module(wynpix_ui
         overlays/overlaycoordinator.h
         overlays/overlaystate.cpp
         overlays/overlaystate.h
+        overlays/pagenavigationcontroller.cpp
+        overlays/pagenavigationcontroller.h
         overlays/renamepromptcontroller.cpp
         overlays/renamepromptcontroller.h
         settings/settingsdialogcontroller.cpp
@@ -111,6 +113,7 @@ qt_add_qml_module(wynpix_ui
         OverlayHeaderButton.qml
         OverlayLayer.qml
         OverlayPanel.qml
+        PageNavigationOverlay.qml
         PlacesPanel.qml
         PrintDialog.qml
         RenameOverlay.qml

@@ -13,6 +13,7 @@
 #include "gui/quick/ui/overlays/imageinfomodel.h"
 #include "gui/quick/ui/overlays/notificationoverlaymodel.h"
 #include "gui/quick/ui/overlays/overlaystate.h"
+#include "gui/quick/ui/overlays/pagenavigationcontroller.h"
 #include "gui/quick/ui/overlays/renamepromptcontroller.h"
 
 // The overlays of the Qt Quick UI: owns their visibility (OverlayState) and
@@ -50,6 +51,7 @@ class OverlayCoordinator final : public QObject {
     Q_PROPERTY(ColorAdjustmentsEditor *colorAdjustmentsEditor READ colorAdjustmentsEditor CONSTANT FINAL)
     Q_PROPERTY(OverlayState *casSettings READ casSettings CONSTANT FINAL)
     Q_PROPERTY(CasSettingsEditor *casSettingsEditor READ casSettingsEditor CONSTANT FINAL)
+    Q_PROPERTY(PageNavigationController *pageNavigation READ pageNavigation CONSTANT FINAL)
     Q_PROPERTY(bool keyboardOverlayOpen READ isKeyboardOverlayOpen NOTIFY keyboardOverlayOpenChanged FINAL)
     Q_PROPERTY(bool saveConfirmAtTop READ isSaveConfirmAtTop NOTIFY placementChanged FINAL)
     Q_PROPERTY(bool copyAtTop READ isCopyAtTop NOTIFY placementChanged FINAL)
@@ -71,6 +73,7 @@ public:
     [[nodiscard]] ColorAdjustmentsEditor *colorAdjustmentsEditor();
     [[nodiscard]] OverlayState *casSettings();
     [[nodiscard]] CasSettingsEditor *casSettingsEditor();
+    [[nodiscard]] PageNavigationController *pageNavigation();
 
     // An overlay that takes the keyboard focus is open.
     [[nodiscard]] bool isKeyboardOverlayOpen() const;
@@ -126,6 +129,7 @@ private:
     FullscreenChromeController mFullscreenChrome;
     OverlayState mImageInfo{false};
     ImageInfoModel mImageInfoModel;
+    PageNavigationController mPageNavigation;
     OverlayState mSaveConfirm{false};
     OverlayState mCopy{true};
     CopyTargetsModel mCopyTargets;

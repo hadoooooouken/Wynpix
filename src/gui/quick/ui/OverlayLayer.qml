@@ -32,6 +32,15 @@ FocusScope {
 
     Loader {
         anchors.fill: parent
+        active: overlays.coordinator.pageNavigation.visible
+        asynchronous: true
+        sourceComponent: PageNavigationOverlay {
+            navigation: overlays.coordinator.pageNavigation
+        }
+    }
+
+    Loader {
+        anchors.fill: parent
         active: overlays.coordinator.imageInfo.created
         asynchronous: true
         sourceComponent: ImageInfoOverlay {

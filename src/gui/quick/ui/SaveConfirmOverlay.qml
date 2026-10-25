@@ -10,7 +10,7 @@ Item {
 
     required property OverlayCoordinator coordinator
 
-    readonly property int topMargin: 35
+    readonly property int topMargin: coordinator.pageNavigation.visible ? 80 : 35
     // Clears transient floating messages displayed at the bottom centre.
     readonly property int bottomMargin: 80
     readonly property int padding: 9

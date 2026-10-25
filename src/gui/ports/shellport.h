@@ -22,6 +22,8 @@ struct ShellFileInfo {
     bool slideshow = false;
     bool shuffle = false;
     bool edited = false;
+    int pageIndex = 0;
+    int pageCount = 1;
 };
 
 // Ordered (label, value) pairs; the order is kept for display.

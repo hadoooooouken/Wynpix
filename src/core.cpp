@@ -2605,6 +2605,9 @@ void Core::updateInfoString() {
   QString format;
   QString colorProfile;
 
+  int pageIndex = 0;
+  int pageCount = 1;
+
   if (model->isLoaded(state.currentFilePath)) {
     auto img = model->getImage(state.currentFilePath);
     if (img) {
@@ -2612,6 +2615,10 @@ void Core::updateInfoString() {
       fileSize = img->fileSize();
       edited = img->isEdited();
       format = img->format();
+      if (img->type() == STATIC && img->frameCount() > 1) {
+        pageCount = img->frameCount();
+        pageIndex = ImageStatic::pageOverrideForPath(state.currentFilePath);
+      }
       auto qimg = img->getDecodedImage();
       if (qimg) {
         QString hdrProfile = HdrToneMapper::detectHdrProfile(*qimg);
@@ -2657,6 +2664,8 @@ void Core::updateInfoString() {
   info.slideshow = slideshow;
   info.shuffle = shuffle;
   info.edited = edited;
+  info.pageIndex = pageIndex;
+  info.pageCount = pageCount;
   ui.shell.setCurrentInfo(info);
 }
 
