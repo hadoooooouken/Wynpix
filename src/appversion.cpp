@@ -1,5 +1,5 @@
 #include "appversion.h"
 
 // clang-format off
-QVersionNumber appVersion(1,1,2);
+QVersionNumber appVersion(1,2,0);
 // clang-format on
