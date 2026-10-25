@@ -1,6 +1,7 @@
 #include <QSignalSpy>
 #include <QTest>
 
+#include "components/actionmanager/actionmanager.h"
 #include "components/viewmode/viewmodecontroller.h"
 #include "testsuites.h"
 
@@ -14,6 +15,10 @@ private slots:
   void viewModeController_keepsInitialMode();
   void viewModeController_switchesAndNotifies();
   void viewModeController_notifiesRepeatedRequests();
+  void actionManager_mergeMissingDefaults_addsNewActions();
+  void actionManager_mergeMissingDefaults_preservesCustomActionMapping();
+  void actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey();
+  void actionManager_mergeMissingDefaults_addsMultipleDefaultsForSameAction();
 };
 
 void WynpixTests::viewModeController_keepsInitialMode_data() {
@@ -59,6 +64,76 @@ void WynpixTests::viewModeController_notifiesRepeatedRequests() {
   controller.enableFolderView();
   QCOMPARE(controller.currentViewMode(), MODE_FOLDERVIEW);
   QCOMPARE(applied.count(), 2);
+}
+
+void WynpixTests::actionManager_mergeMissingDefaults_addsNewActions() {
+  const QMap<QString, QString> defaults = {
+      {"Ctrl+Home", "firstPage"},
+      {"Ctrl+End", "lastPage"},
+      {"Right", "nextImage"}
+  };
+  QMap<QString, QString> userShortcuts = {
+      {"Right", "nextImage"}
+  };
+
+  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  QVERIFY(changed);
+  QCOMPARE(userShortcuts.value("Ctrl+Home"), QString("firstPage"));
+  QCOMPARE(userShortcuts.value("Ctrl+End"), QString("lastPage"));
+  QCOMPARE(userShortcuts.value("Right"), QString("nextImage"));
+  QCOMPARE(userShortcuts.size(), 3);
+}
+
+void WynpixTests::actionManager_mergeMissingDefaults_preservesCustomActionMapping() {
+  const QMap<QString, QString> defaults = {
+      {"Ctrl+Home", "firstPage"},
+      {"Right", "nextImage"}
+  };
+  // User mapped firstPage to Alt+Home instead of default Ctrl+Home
+  QMap<QString, QString> userShortcuts = {
+      {"Alt+Home", "firstPage"},
+      {"Right", "nextImage"}
+  };
+
+  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  QVERIFY(!changed);
+  QVERIFY(!userShortcuts.contains("Ctrl+Home"));
+  QCOMPARE(userShortcuts.value("Alt+Home"), QString("firstPage"));
+}
+
+void WynpixTests::actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey() {
+  const QMap<QString, QString> defaults = {
+      {"Ctrl+Home", "firstPage"},
+      {"Right", "nextImage"}
+  };
+  // User remapped Ctrl+Home to do jumpToFirst
+  QMap<QString, QString> userShortcuts = {
+      {"Ctrl+Home", "jumpToFirst"},
+      {"Right", "nextImage"}
+  };
+
+  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  QVERIFY(!changed);
+  QCOMPARE(userShortcuts.value("Ctrl+Home"), QString("jumpToFirst"));
+  QVERIFY(userShortcuts.key("firstPage").isEmpty());
+}
+
+void WynpixTests::actionManager_mergeMissingDefaults_addsMultipleDefaultsForSameAction() {
+  const QMap<QString, QString> defaults = {
+      {"F", "toggleFullscreen"},
+      {"Enter", "toggleFullscreen"},
+      {"Right", "nextImage"}
+  };
+  // User config lacks toggleFullscreen completely
+  QMap<QString, QString> userShortcuts = {
+      {"Right", "nextImage"}
+  };
+
+  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  QVERIFY(changed);
+  QCOMPARE(userShortcuts.value("F"), QString("toggleFullscreen"));
+  QCOMPARE(userShortcuts.value("Enter"), QString("toggleFullscreen"));
+  QCOMPARE(userShortcuts.size(), 3);
 }
 
 int runWynpixTests(int argc, char **argv) {

@@ -5,11 +5,10 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QMap>
+#include <QSet>
 #include <QDebug>
 #include <QStringList>
 #include "utils/actions.h"
-#include "shortcutbuilder.h"
-#include "components/scriptmanager/scriptmanager.h"
 enum ActionType {
     ACTION_INVALID,
     ACTION_NORMAL,
@@ -19,6 +18,27 @@ enum ActionType {
 class ActionManager : public QObject {
     Q_OBJECT
 public:
+    static constexpr int kCurrentShortcutsVersion = 1;
+    static bool mergeMissingDefaults(const QMap<QString, QString> &defaults,
+                                     QMap<QString, QString> &shortcuts) {
+        bool changed = false;
+        QSet<QString> boundActions;
+        boundActions.reserve(shortcuts.size());
+        for (auto it = shortcuts.cbegin(); it != shortcuts.cend(); ++it) {
+            boundActions.insert(it.value());
+        }
+
+        for (auto it = defaults.cbegin(); it != defaults.cend(); ++it) {
+            const QString &defaultKey = it.key();
+            const QString &defaultAction = it.value();
+            if (!shortcuts.contains(defaultKey) && !boundActions.contains(defaultAction)) {
+                shortcuts.insert(defaultKey, defaultAction);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
     static ActionManager* getInstance();
     ~ActionManager();
     bool processEvent(QInputEvent*);

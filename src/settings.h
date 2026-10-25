@@ -95,6 +95,8 @@ public:
   void setLoopSlideshow(bool mode);
   void readShortcuts(QMap<QString, QString> &shortcuts);
   void saveShortcuts(const QMap<QString, QString> &shortcuts);
+  int shortcutsVersion();
+  void setShortcutsVersion(int version);
   bool panelEnabled();
   void setPanelEnabled(bool mode);
   int lastDisplay();

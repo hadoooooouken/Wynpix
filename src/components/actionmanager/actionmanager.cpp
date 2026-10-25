@@ -1,5 +1,7 @@
 #include "actionmanager.h"
+#include "components/scriptmanager/scriptmanager.h"
 #include "settings.h"
+#include "shortcutbuilder.h"
 
 ActionManager *actionManager = nullptr;
 
@@ -159,6 +161,7 @@ void ActionManager::resetDefaults() {
 //------------------------------------------------------------------------------
 void ActionManager::saveShortcuts() {
   settings->saveShortcuts(actionManager->shortcuts);
+  settings->setShortcutsVersion(kCurrentShortcutsVersion);
 }
 //------------------------------------------------------------------------------
 QString ActionManager::actionForShortcut(const QString &keys) {
@@ -218,8 +221,17 @@ inline ActionType ActionManager::validateAction(const QString &actionName) {
 //------------------------------------------------------------------------------
 void ActionManager::readShortcuts() {
   settings->readShortcuts(shortcuts);
+  const int storedVersion = settings->shortcutsVersion();
+
   if (shortcuts.isEmpty()) {
     resetDefaults();
+    actionManager->saveShortcuts();
+  } else if (storedVersion < kCurrentShortcutsVersion) {
+    if (mergeMissingDefaults(defaults, shortcuts)) {
+      actionManager->saveShortcuts();
+    } else {
+      settings->setShortcutsVersion(kCurrentShortcutsVersion);
+    }
   }
   actionManager->validateShortcuts();
 }

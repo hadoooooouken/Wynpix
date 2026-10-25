@@ -876,6 +876,19 @@ void Settings::saveShortcuts(const QMap<QString, QString> &shortcuts) {
   settings->settingsConf->endGroup();
 }
 //------------------------------------------------------------------------------
+int Settings::shortcutsVersion() {
+  settings->settingsConf->beginGroup("Controls");
+  const int ver = settings->settingsConf->value("shortcutsVersion", 0).toInt();
+  settings->settingsConf->endGroup();
+  return ver;
+}
+
+void Settings::setShortcutsVersion(int version) {
+  settings->settingsConf->beginGroup("Controls");
+  settings->settingsConf->setValue("shortcutsVersion", version);
+  settings->settingsConf->endGroup();
+}
+//------------------------------------------------------------------------------
 void Settings::readScripts(QMap<QString, Script> &scripts) {
   scripts.clear();
   settings->settingsConf->beginGroup("Scripts");
