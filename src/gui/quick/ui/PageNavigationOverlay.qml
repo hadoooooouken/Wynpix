@@ -17,6 +17,7 @@ Item {
     readonly property int cornerRadius: 8
     readonly property int horizontalPadding: 1
     readonly property int verticalPadding: 1
+    readonly property int fadeOutDuration: 230
 
     visible: navigation.visible
 
@@ -34,6 +35,28 @@ Item {
         color: Theme.colors.widget
         border.color: Theme.colors.widgetBorder
         border.width: StyleConstants.separatorThickness
+        visible: opacity > 0
+
+        states: State {
+            name: "hidden"
+            when: !root.navigation.shown
+            PropertyChanges {
+                pill.opacity: 0
+            }
+        }
+
+        transitions: Transition {
+            to: "hidden"
+            NumberAnimation {
+                property: "opacity"
+                duration: root.fadeOutDuration
+                easing.type: Easing.OutQuart
+            }
+        }
+
+        HoverHandler {
+            onHoveredChanged: root.navigation.setHovered(hovered)
+        }
 
         Row {
             id: buttons

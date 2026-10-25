@@ -130,8 +130,10 @@ void OverlayCoordinator::setMetadata(const MetadataEntries &entries) {
 
 void OverlayCoordinator::pointerMoved(QPointF position, bool windowActive) {
     mPointerPosition = position;
-    if (windowActive)
+    if (windowActive) {
         mFullscreenChrome.pointerMoved();
+        mPageNavigation.pointerMoved();
+    }
 }
 
 //------------------------------------------------------------------------------
