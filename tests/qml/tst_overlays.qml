@@ -35,14 +35,15 @@ Item {
         // Loader order in OverlayLayer.qml.
         readonly property int infoBarLoader: 0
         readonly property int controlsLoader: 1
-        readonly property int imageInfoLoader: 2
-        readonly property int colorAdjustmentsLoader: 3
-        readonly property int casSettingsLoader: 4
-        readonly property int saveConfirmLoader: 5
-        readonly property int copyLoader: 6
-        readonly property int renameLoader: 7
-        readonly property int messageLoader: 8
-        readonly property int loaderCount: 9
+        readonly property int pageNavigationLoader: 2
+        readonly property int imageInfoLoader: 3
+        readonly property int colorAdjustmentsLoader: 4
+        readonly property int casSettingsLoader: 5
+        readonly property int saveConfirmLoader: 6
+        readonly property int copyLoader: 7
+        readonly property int renameLoader: 8
+        readonly property int messageLoader: 9
+        readonly property int loaderCount: 10
 
         readonly property int messageTimeout: 3000
         readonly property int chromeTimeout: 4000
