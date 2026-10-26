@@ -42,7 +42,7 @@
 
 * **360-Degree Spherical Panorama View**: Interactive drag-and-look viewer for spherical panoramic photos, with the same real-time color adjustments as the regular view.
 
-* **Native Support for Modern Formats**: Out-of-the-box support for AVIF, HEIF/HEIC, JPEG XL (JXL), JPEG XR, JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph), PSD, XCF, DDS, RAW, KRA, ORA, QOI, DjVu, and images inside ZIP/CBZ, 7z and RAR archives.
+* **Native Support for Modern Formats**: Out-of-the-box support for AVIF, HEIF/HEIC, JPEG XL (JXL), JPEG XR, JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph), PSD, XCF, DDS, RAW, KRA, ORA, QOI, DjVu, and images inside ZIP/CBZ, 7z/CB7, and RAR/CBR archives.
 
 * **Modern CPU Optimization**: Compiled with AVX2 support for high-speed image processing on modern processors. A separate SSE2 build is available for older PCs (see [Installation](#installation)).
 
@@ -312,7 +312,7 @@ Wynpix natively supports standard formats as well as modern and professional ima
 * **Modern formats**: JPEG XL (JXL), AVIF, HEIF / HEIC, JPEG XR (JXR / HDP), JPEG 2000 (.jp2, .j2k, .jpf, .jpx, .jpc), HTJ2K (.jph).
 * **Game Textures & Formats**: DDS (DirectDraw Surface), TGA (Targa), QOI (Quite OK Image Format).
 * **Digital Art & Projects**: PSD (Photoshop), XCF (GIMP), AI (Adobe Illustrator), PDF, KRA (Krita), ORA (OpenRaster).
-* **Documents & Archives**: DjVu, and images inside ZIP/CBZ, 7z and RAR archives.
+* **Documents & Archives**: DjVu, and images inside ZIP/CBZ, 7z/CB7, and RAR/CBR archives.
 * **Legacy & Niche formats**: PCX, IFF/ILBM, SGI RGB, Sun Raster, PIC, PXR, SCT, PFM, farbfeld, PSX TIM, and animated ANI cursors.
 * **Professional & HDR**: OpenEXR (EXR), Radiance HDR (HDR).
 * **Camera RAW**: RAW (including CR2, NEF, ARW, DNG, RAF, etc. powered by LibRaw).
