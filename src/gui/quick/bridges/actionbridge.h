@@ -82,13 +82,14 @@ public:
   // Layout-independent name of the key of a QML KeyEvent, without
   // modifiers ("3" for the key in the digit row).
   Q_INVOKABLE QString keyText(QObject *event) const;
-  // Shortcut texts of a QML WheelEvent ("WheelUp") and of the press or
-  // release of a QML MouseEvent ("Ctrl+LMB"), as shortcuts are stored; empty
-  // for input that forms no shortcut (the press of the right button, the
-  // release of the others).
+  // Shortcut texts of a QML WheelEvent ("WheelUp") and of the press,
+  // release or double click of a QML MouseEvent ("Ctrl+LMB",
+  // "LMB_DoubleClick"), as shortcuts are stored; empty for input that forms
+  // no shortcut (the press of the right button, the release of the others).
   Q_INVOKABLE QString wheelShortcutText(QObject *event) const;
   Q_INVOKABLE QString mousePressShortcutText(QObject *event) const;
   Q_INVOKABLE QString mouseReleaseShortcutText(QObject *event) const;
+  Q_INVOKABLE QString mouseDoubleClickShortcutText(QObject *event) const;
 
   // Re-reads actions and shortcuts from the dispatcher.
   void refresh();

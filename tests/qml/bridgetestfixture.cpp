@@ -202,6 +202,12 @@ QString FakeActionDispatcher::shortcutText(QInputEvent &event) const {
       return {};
     return rightButton ? u"RMB"_s : u"LMB"_s;
   }
+  if (event.type() == QEvent::MouseButtonDblClick) {
+    const auto &mouseEvent = static_cast<const QMouseEvent &>(event);
+    if (mouseEvent.button() == Qt::LeftButton)
+      return u"LMB_DoubleClick"_s;
+    return {};
+  }
   if (event.type() != QEvent::KeyPress)
     return {};
   const auto &keyEvent = static_cast<const QKeyEvent &>(event);

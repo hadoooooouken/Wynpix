@@ -3,8 +3,8 @@ import wynpix.bridges
 import wynpix.style
 
 // Captures a shortcut (KeySequenceEdit in the widget UI): while focused,
-// every key press, mouse button press or release and wheel turn over it is
-// turned into shortcut text by the actions bridge and reported by
+// every key press, mouse button press, release or double click and wheel turn
+// over it is turned into shortcut text by the actions bridge and reported by
 // captured(); input that forms no shortcut is ignored. Keys do not reach the
 // dialog meanwhile, so Enter, Escape and Tab can be bound too.
 FocusScope {
@@ -54,6 +54,7 @@ FocusScope {
             root.report(Actions.mousePressShortcutText(mouse));
         }
         onReleased: mouse => root.report(Actions.mouseReleaseShortcutText(mouse))
+        onDoubleClicked: mouse => root.report(Actions.mouseDoubleClickShortcutText(mouse))
         onWheel: wheel => root.report(Actions.wheelShortcutText(wheel))
     }
 }

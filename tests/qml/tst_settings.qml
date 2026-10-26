@@ -177,6 +177,8 @@ TestCase {
         verify(field !== undefined);
         mouseClick(field);
         compare(Fixture.settingsDialog.editor.shortcutEditor.shortcut, "LMB");
+        mouseDoubleClickSequence(field, field.width / 2, field.height / 2, Qt.LeftButton);
+        compare(Fixture.settingsDialog.editor.shortcutEditor.shortcut, "LMB_DoubleClick");
         mouseWheel(field, field.width / 2, field.height / 2, 0, 120);
         compare(Fixture.settingsDialog.editor.shortcutEditor.shortcut, "WheelUp");
         mouseClick(findText(creator.contentItem, "Button", "Cancel"));

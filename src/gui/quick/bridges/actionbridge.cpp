@@ -76,6 +76,10 @@ QString ActionBridge::mouseReleaseShortcutText(QObject *event) const {
   return mouseShortcutText(event, QEvent::MouseButtonRelease);
 }
 
+QString ActionBridge::mouseDoubleClickShortcutText(QObject *event) const {
+  return mouseShortcutText(event, QEvent::MouseButtonDblClick);
+}
+
 QString ActionBridge::mouseShortcutText(QObject *event,
                                         QEvent::Type type) const {
   const std::unique_ptr<QMouseEvent> mouseEvent =
