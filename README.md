@@ -124,7 +124,10 @@
 | Toggle panorama mode                         | Shift+P                                     |
 | Panorama: Look around                        | Click & drag mouse (360° view)              |
 | Panorama: Zoom                               | MouseWheel (360° view)                      |
-| Page Navigation                              | , . (< >)                                   |
+| Next page                                    | . (>)                                       |
+| Previous page                                | , (<)                                       |
+| First page                                   | Ctrl+, (Ctrl+<)                             |
+| Last page                                    | Ctrl+. (Ctrl+>)                             |
 | ... and more.                                |                                             |
 
 Note: you can configure every shortcut by going to **Settings > Controls**.
