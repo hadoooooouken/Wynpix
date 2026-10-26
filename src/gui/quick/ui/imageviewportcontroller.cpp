@@ -1007,8 +1007,13 @@ void ImageViewportController::forceFitMode(ImageFitMode mode) {
 }
 
 void ImageViewportController::fitWindow() {
-    if (mInteractionEnabled)
-        forceFitMode(FIT_WINDOW);
+    if (!mInteractionEnabled)
+        return;
+    if (mPanorama) {
+        mTransform.resetPanorama();
+        return;
+    }
+    forceFitMode(FIT_WINDOW);
 }
 
 void ImageViewportController::fitWidth() {
@@ -1022,13 +1027,23 @@ void ImageViewportController::fitHeight() {
 }
 
 void ImageViewportController::fitOriginal() {
-    if (mInteractionEnabled)
-        setFitMode(FIT_ORIGINAL);
+    if (!mInteractionEnabled)
+        return;
+    if (mPanorama) {
+        mTransform.resetPanorama();
+        return;
+    }
+    setFitMode(FIT_ORIGINAL);
 }
 
 void ImageViewportController::switchFitMode() {
-    if (mInteractionEnabled)
-        setFitMode(mTransform.transform().fitMode() == FIT_WINDOW ? FIT_ORIGINAL : FIT_WINDOW);
+    if (!mInteractionEnabled)
+        return;
+    if (mPanorama) {
+        mTransform.resetPanorama();
+        return;
+    }
+    setFitMode(mTransform.transform().fitMode() == FIT_WINDOW ? FIT_ORIGINAL : FIT_WINDOW);
 }
 
 void ImageViewportController::setInteractionEnabled(bool enabled) {
@@ -1258,10 +1273,6 @@ bool ImageViewportController::pointerDoubleClicked(QPointF position, int button,
     if (mClickZonesEnabled && clicked == Qt::LeftButton && modifiers == Qt::NoModifier &&
         clickZoneAt(position) != ClickZone::None)
         return true;
-    if (mPanorama && clicked == Qt::LeftButton) {
-        mTransform.resetPanorama();
-        return true;
-    }
     return false;
 }
 

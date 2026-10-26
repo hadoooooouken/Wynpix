@@ -507,9 +507,21 @@ private slots:
     QVERIFY(controller.wheelTurned(kCentre, QPoint(0, 120), QPoint(), Qt::NoButton, kNoModifiers));
     QVERIFY(viewport.item.panoramaFov() != PanoramaView::kDefaultFov);
 
-    // Double click resets the camera.
-    QVERIFY(controller.pointerDoubleClicked(kCentre, kLeft, kNoModifiers));
+    // Double click falls through to shortcuts; fitOriginal (default LMB_DoubleClick) resets.
+    QVERIFY(!controller.pointerDoubleClicked(kCentre, kLeft, kNoModifiers));
+    controller.fitOriginal();
     QCOMPARE(viewport.item.panoramaYaw(), 0.0);
+    QCOMPARE(viewport.item.panoramaFov(), qreal(PanoramaView::kDefaultFov));
+
+    // fitWindow and switchFitMode also reset the panorama camera.
+    controller.wheelTurned(kCentre, QPoint(0, 120), QPoint(), Qt::NoButton, kNoModifiers);
+    QVERIFY(viewport.item.panoramaFov() != PanoramaView::kDefaultFov);
+    controller.fitWindow();
+    QCOMPARE(viewport.item.panoramaFov(), qreal(PanoramaView::kDefaultFov));
+
+    controller.wheelTurned(kCentre, QPoint(0, 120), QPoint(), Qt::NoButton, kNoModifiers);
+    QVERIFY(viewport.item.panoramaFov() != PanoramaView::kDefaultFov);
+    controller.switchFitMode();
     QCOMPARE(viewport.item.panoramaFov(), qreal(PanoramaView::kDefaultFov));
 
     controller.togglePanorama();
