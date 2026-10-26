@@ -91,12 +91,12 @@ void DirectoryExpandWorker::run() {
                     && !QImageReader(filePath, fileName.endsWith(u".zip", Qt::CaseInsensitive) ? "zip" : "cbz").canRead()) {
                     continue;
                 }
-                if (fileName.endsWith(u".7z", Qt::CaseInsensitive)
-                    && !QImageReader(filePath, "7z").canRead()) {
+                if ((fileName.endsWith(u".7z", Qt::CaseInsensitive) || fileName.endsWith(u".cb7", Qt::CaseInsensitive))
+                    && !QImageReader(filePath, fileName.endsWith(u".7z", Qt::CaseInsensitive) ? "7z" : "cb7").canRead()) {
                     continue;
                 }
-                if (fileName.endsWith(u".rar", Qt::CaseInsensitive)
-                    && !QImageReader(filePath, "rar").canRead()) {
+                if ((fileName.endsWith(u".rar", Qt::CaseInsensitive) || fileName.endsWith(u".cbr", Qt::CaseInsensitive))
+                    && !QImageReader(filePath, fileName.endsWith(u".rar", Qt::CaseInsensitive) ? "rar" : "cbr").canRead()) {
                     continue;
                 }
                 if (!tryAdd(filePath)) {

@@ -1,4 +1,4 @@
 {
-    "Keys": [ "7z" ],
-    "MimeTypes": [ "application/x-7z-compressed" ]
+    "Keys": [ "cb7", "7z" ],
+    "MimeTypes": [ "application/x-cb7", "application/x-7z-compressed" ]
 }

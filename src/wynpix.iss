@@ -192,6 +192,8 @@ Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".kra"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".ora"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".cbz"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".cbr"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".cb7"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".exr"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".hdr"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".qoi"; ValueData: ""; Flags: uninsdeletekey; Tasks: associate
@@ -279,6 +281,10 @@ Root: HKA; Subkey: "Software\Classes\.ora"; ValueType: string; ValueName: ""; Va
 Root: HKA; Subkey: "Software\Classes\.ora\OpenWithProgids"; ValueType: string; ValueName: "wynpix.AssocFile.ora"; ValueData: ""; Flags: uninsdeletevalue; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\.cbz"; ValueType: string; ValueName: ""; ValueData: "wynpix.AssocFile.cbz"; Flags: uninsdeletevalue; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\.cbz\OpenWithProgids"; ValueType: string; ValueName: "wynpix.AssocFile.cbz"; ValueData: ""; Flags: uninsdeletevalue; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\.cbr"; ValueType: string; ValueName: ""; ValueData: "wynpix.AssocFile.cbr"; Flags: uninsdeletevalue; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\.cbr\OpenWithProgids"; ValueType: string; ValueName: "wynpix.AssocFile.cbr"; ValueData: ""; Flags: uninsdeletevalue; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\.cb7"; ValueType: string; ValueName: ""; ValueData: "wynpix.AssocFile.cb7"; Flags: uninsdeletevalue; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\.cb7\OpenWithProgids"; ValueType: string; ValueName: "wynpix.AssocFile.cb7"; ValueData: ""; Flags: uninsdeletevalue; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\.exr"; ValueType: string; ValueName: ""; ValueData: "wynpix.AssocFile.exr"; Flags: uninsdeletevalue; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\.exr\OpenWithProgids"; ValueType: string; ValueName: "wynpix.AssocFile.exr"; ValueData: ""; Flags: uninsdeletevalue; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\.hdr"; ValueType: string; ValueName: ""; ValueData: "wynpix.AssocFile.hdr"; Flags: uninsdeletevalue; Tasks: associate
@@ -427,6 +433,14 @@ Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cbz"; ValueType: string; V
 Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cbz\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\filetypes\cbz.ico"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cbz\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletekey; Tasks: associate
 
+Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cbr"; ValueType: string; ValueName: ""; ValueData: "Comic Book RAR (Wynpix)"; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cbr\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\filetypes\cbr.ico"; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cbr\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletekey; Tasks: associate
+
+Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cb7"; ValueType: string; ValueName: ""; ValueData: "Comic Book 7z (Wynpix)"; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cb7\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\filetypes\cb7.ico"; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.cb7\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletekey; Tasks: associate
+
 Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.avif"; ValueType: string; ValueName: ""; ValueData: "AVIF Image (Wynpix)"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.avif\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\res\filetypes\avif.ico"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\Classes\wynpix.AssocFile.avif\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletekey; Tasks: associate
@@ -484,6 +498,8 @@ Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueT
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".kra"; ValueData: "wynpix.AssocFile.kra"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".ora"; ValueData: "wynpix.AssocFile.ora"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".cbz"; ValueData: "wynpix.AssocFile.cbz"; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".cbr"; ValueData: "wynpix.AssocFile.cbr"; Flags: uninsdeletekey; Tasks: associate
+Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".cb7"; ValueData: "wynpix.AssocFile.cb7"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".exr"; ValueData: "wynpix.AssocFile.exr"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".hdr"; ValueData: "wynpix.AssocFile.hdr"; Flags: uninsdeletekey; Tasks: associate
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".qoi"; ValueData: "wynpix.AssocFile.qoi"; Flags: uninsdeletekey; Tasks: associate
@@ -534,6 +550,8 @@ Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.raw\ShellEx\{{E357F
 Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.kra\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
 Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.ora\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
 Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.cbz\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
+Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.cbr\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
+Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.cb7\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
 Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.exr\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
 Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.hdr\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
 Root: HKA; Subkey: "Software\Classes\SystemFileAssociations\.qoi\ShellEx\{{E357FCCD-A995-4576-B01F-234630154E96}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppCLSID}"; Tasks: thumbnails
@@ -567,13 +585,14 @@ const
     ThumbnailProviderClassId;
   SupportedThumbnailExtensions =
     '.webp;.svg;.tiff;.tif;.tga;.avif;.heic;.heif;.jxl;.psd;.dng;.cr2;' +
-    '.cr3;.nef;.arw;.orf;.rw2;.pef;.raf;.raw;.kra;.ora;.cbz;.exr;.hdr;.qoi;' +
+    '.cr3;.nef;.arw;.orf;.rw2;.pef;.raf;.raw;.kra;.ora;.cbz;.cbr;.cb7;.exr;.hdr;.qoi;' +
     '.dds;.jxr;.hdp;.wdp;.ai;.djvu;.djv;.psb;.jp2;.j2k;.jpf;.jpx;.jpc;.jph';
   ObsoleteThumbnailExtensions =
     '.jpg;.jpeg;.jpe;.jfif;.png;.gif;.bmp;.dib;.ico;.pdf;.svgz';
   LegacyThumbnailProgIds =
     'wynpix.AssocFile.raw;wynpix.AssocFile.kra;' +
     'wynpix.AssocFile.ora;wynpix.AssocFile.cbz;' +
+    'wynpix.AssocFile.cbr;wynpix.AssocFile.cb7;' +
     'wynpix.AssocFile.webp;' +
     'wynpix.AssocFile.jxl;wynpix.AssocFile.avif;' +
     'wynpix.AssocFile.heic;wynpix.AssocFile.heif;' +

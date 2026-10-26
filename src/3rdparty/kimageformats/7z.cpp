@@ -252,7 +252,8 @@ bool SevenZipHandler::canRead() const
     if (!d->ensureIndex(device())) {
         return false;
     }
-    setFormat(QByteArrayLiteral("7z"));
+    const QByteArray requestedFormat = format().toLower();
+    setFormat(requestedFormat == "7z" ? QByteArrayLiteral("7z") : QByteArrayLiteral("cb7"));
     return true;
 }
 
@@ -356,7 +357,8 @@ void SevenZipHandler::setOption(ImageOption option, const QVariant &value)
 
 QImageIOPlugin::Capabilities SevenZipPlugin::capabilities(QIODevice *, const QByteArray &format) const
 {
-    if (format.compare("7z", Qt::CaseInsensitive) == 0) {
+    if (format.compare("7z", Qt::CaseInsensitive) == 0
+        || format.compare("cb7", Qt::CaseInsensitive) == 0) {
         return Capabilities(CanRead);
     }
     return {};
@@ -366,7 +368,7 @@ QImageIOHandler *SevenZipPlugin::create(QIODevice *device, const QByteArray &for
 {
     auto *handler = new SevenZipHandler;
     handler->setDevice(device);
-    handler->setFormat(format.isEmpty() ? QByteArrayLiteral("7z") : format);
+    handler->setFormat(format.isEmpty() ? QByteArrayLiteral("cb7") : format);
     return handler;
 }
 

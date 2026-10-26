@@ -18,12 +18,12 @@ bool isCandidateFileSupported(const QString &name, const QString &path) {
         QImageReader reader(path, name.endsWith(u".zip", Qt::CaseInsensitive) ? "zip" : "cbz");
         return reader.canRead();
     }
-    if (name.endsWith(u".7z", Qt::CaseInsensitive)) {
-        QImageReader reader(path, "7z");
+    if (name.endsWith(u".7z", Qt::CaseInsensitive) || name.endsWith(u".cb7", Qt::CaseInsensitive)) {
+        QImageReader reader(path, name.endsWith(u".7z", Qt::CaseInsensitive) ? "7z" : "cb7");
         return reader.canRead();
     }
-    if (name.endsWith(u".rar", Qt::CaseInsensitive)) {
-        QImageReader reader(path, "rar");
+    if (name.endsWith(u".rar", Qt::CaseInsensitive) || name.endsWith(u".cbr", Qt::CaseInsensitive)) {
+        QImageReader reader(path, name.endsWith(u".rar", Qt::CaseInsensitive) ? "rar" : "cbr");
         return reader.canRead();
     }
     return true;

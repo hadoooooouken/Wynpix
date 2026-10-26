@@ -1,4 +1,4 @@
-﻿/*
+/*
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -250,7 +250,8 @@ bool RarHandler::canRead() const
     if (!d->ensureIndex(dev))
         return false;
 
-    setFormat(QByteArrayLiteral("rar"));
+    const QByteArray requestedFormat = format().toLower();
+    setFormat(requestedFormat == "rar" ? QByteArrayLiteral("rar") : QByteArrayLiteral("cbr"));
     return true;
 }
 
@@ -355,7 +356,8 @@ void RarHandler::setOption(ImageOption option, const QVariant &value)
 QImageIOPlugin::Capabilities RarPlugin::capabilities(QIODevice * /*device*/,
                                                       const QByteArray &format) const
 {
-    if (format.compare("rar", Qt::CaseInsensitive) == 0)
+    if (format.compare("rar", Qt::CaseInsensitive) == 0
+        || format.compare("cbr", Qt::CaseInsensitive) == 0)
         return Capabilities(CanRead);
     return {};
 }
@@ -364,7 +366,7 @@ QImageIOHandler *RarPlugin::create(QIODevice *device, const QByteArray &format) 
 {
     auto *handler = new RarHandler;
     handler->setDevice(device);
-    handler->setFormat(format.isEmpty() ? QByteArrayLiteral("rar") : format);
+    handler->setFormat(format.isEmpty() ? QByteArrayLiteral("cbr") : format);
     return handler;
 }
 

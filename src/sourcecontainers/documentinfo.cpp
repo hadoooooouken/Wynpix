@@ -138,23 +138,23 @@ void DocumentInfo::detectFormat() {
         } else {
             mDocumentType = DocumentType::NONE;
         }
-    } else if(suffix == "7z") {
-        // 7z uses a dedicated image-archive handler. Recognize it only
-        // by explicit extension and only if it contains at least one readable image.
-        QImageReader reader(fileInfo.filePath(), "7z");
+    } else if(suffix == "7z" || suffix == "cb7") {
+        // 7z and CB7 use the same image-archive handler. Recognize them only
+        // by explicit extension and only if they contain at least one readable image.
+        QImageReader reader(fileInfo.filePath(), suffix);
         if(reader.canRead()) {
-            mFormat = QStringLiteral("7z");
+            mFormat = QString::fromLatin1(suffix);
             mDocumentType = DocumentType::STATIC;
             exifLoaded = true;
         } else {
             mDocumentType = DocumentType::NONE;
         }
-    } else if(suffix == "rar") {
-        // RAR uses a dedicated image-archive handler. Recognize it only
-        // by explicit extension and only if it contains at least one readable image.
-        QImageReader reader(fileInfo.filePath(), "rar");
+    } else if(suffix == "rar" || suffix == "cbr") {
+        // RAR and CBR use the same image-archive handler. Recognize them only
+        // by explicit extension and only if they contain at least one readable image.
+        QImageReader reader(fileInfo.filePath(), suffix);
         if(reader.canRead()) {
-            mFormat = QStringLiteral("rar");
+            mFormat = QString::fromLatin1(suffix);
             mDocumentType = DocumentType::STATIC;
             exifLoaded = true;
         } else {

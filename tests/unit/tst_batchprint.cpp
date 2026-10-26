@@ -140,7 +140,9 @@ private slots:
         QVERIFY(!isBatchConvertible(u"archive.zip"_s));
         QVERIFY(!isBatchConvertible(u"comic.cbz"_s));
         QVERIFY(!isBatchConvertible(u"bundle.7z"_s));
+        QVERIFY(!isBatchConvertible(u"comic.cb7"_s));
         QVERIFY(!isBatchConvertible(u"archive.rar"_s));
+        QVERIFY(!isBatchConvertible(u"comic.cbr"_s));
         QVERIFY(!isBatchConvertible(u"doc.pdf"_s));
         QVERIFY(!isBatchConvertible(u"book.djvu"_s));
         QVERIFY(!isBatchConvertible(u"book.djv"_s));

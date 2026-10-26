@@ -49,11 +49,13 @@ QVector<FormatCategory> allFormatCategories() {
         } },
         { QCoreApplication::translate("FormatFilterComboBox", "Documents / Archives"), {
             { "PDF",       {"pdf"} },
+            { "ZIP",       {"zip"} },
+            { "RAR",       {"rar"} },
+            { "7Z",        {"7z"} },
             { "DjVu",      {"djvu", "djv"} },
             { "CBZ",       {"cbz"} },
-            { "ZIP",       {"zip"} },
-            { "7Z",        {"7z"} },
-            { "RAR",       {"rar"} },
+            { "CBR",       {"cbr"} },
+            { "CB7",       {"cb7"} },
         } },
         { QCoreApplication::translate("FormatFilterComboBox", "Other"), {
             { "ICO",       {"ico"} },

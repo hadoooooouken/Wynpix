@@ -1,4 +1,4 @@
-﻿{
-    "Keys": [ "rar" ],
-    "MimeTypes": [ "application/vnd.rar" ]
+{
+    "Keys": [ "cbr", "rar" ],
+    "MimeTypes": [ "application/vnd.comicbook-rar", "application/x-cbr", "application/vnd.rar" ]
 }
