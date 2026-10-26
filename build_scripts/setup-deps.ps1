@@ -136,7 +136,7 @@ $GIT_DEPS = @(
     @{ Name = "libavif";        Url = "https://github.com/AOMediaCodec/libavif.git";              Tag = "v1.4.2";     Recursive = $true }
     @{ Name = "libjxl";         Url = "https://github.com/libjxl/libjxl.git";                     Tag = "v0.12.0";    Recursive = $true }
     @{ Name = "jxrlib";         Url = "https://github.com/4creators/jxrlib.git";                   Tag = "v2019.10.9"   }
-    @{ Name = "LibRaw";         Url = "https://github.com/LibRaw/LibRaw.git";                      Tag = "0.22.2"       }
+    @{ Name = "LibRaw";         Url = "https://github.com/LibRaw/LibRaw.git";                      Tag = "0.22.3"       }
     @{ Name = "ffmpeg";         Url = "https://git.ffmpeg.org/ffmpeg.git";                         Tag = "n9.0.2"       }
     # This pinned baseline is required by the local patch series below.
     @{ Name = "kimageformats";  Url = "https://invent.kde.org/frameworks/kimageformats.git";       Tag = "v6.26.0"      }
@@ -155,7 +155,7 @@ $GIT_DEPS = @(
 $SINGLE_PATCHES = @(
     @{ Dep = "jxrlib";     Patch = "jxrlib-v2019.10.9-uintptr-fix.patch"   }
     @{ Dep = "jxrlib";     Patch = "jxrlib-v2019.10.9-cmake-build.patch"   }
-    @{ Dep = "LibRaw";     Patch = "LibRaw-0.22.2-vcxproj-toolset.patch"   }
+    @{ Dep = "LibRaw";     Patch = "LibRaw-0.22.3-vcxproj-toolset.patch"   }
 )
 
 # Multi-commit patch series (applied with git am)

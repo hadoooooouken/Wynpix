@@ -44,7 +44,7 @@ DEFAULT_DEPS = [
     {"name": "libavif", "url": "https://github.com/AOMediaCodec/libavif.git", "current": "v1.4.2", "patched": False},
     {"name": "libjxl", "url": "https://github.com/libjxl/libjxl.git", "current": "v0.12.0", "patched": False},
     {"name": "jxrlib", "url": "https://github.com/4creators/jxrlib.git", "current": "v2019.10.9", "patched": True},
-    {"name": "LibRaw", "url": "https://github.com/LibRaw/LibRaw.git", "current": "0.22.2", "patched": True},
+    {"name": "LibRaw", "url": "https://github.com/LibRaw/LibRaw.git", "current": "0.22.3", "patched": True},
     {"name": "ffmpeg", "url": "https://git.ffmpeg.org/ffmpeg.git", "current": "n9.0.2", "patched": False},
     {"name": "openjpeg", "url": "https://github.com/uclouvain/openjpeg.git", "current": "v2.5.4", "patched": True},
     {"name": "OpenJPH", "url": "https://github.com/aous72/OpenJPH.git", "current": "0.32.0", "patched": False},
