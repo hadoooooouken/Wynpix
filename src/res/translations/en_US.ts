@@ -1929,12 +1929,12 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="58"/>
+        <location filename="../../utils/formatgroups.cpp" line="60"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="61"/>
+        <location filename="../../utils/formatgroups.cpp" line="63"/>
         <source>Fonts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2942,12 +2942,12 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
         <source>Select Monitor Color Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="302"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3225,8 +3225,6 @@ Staged copy:
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
 
 **Developer:** [hadooooouken](https://github.com/hadoooooouken)
-
-[**Contributors**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
 
 Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 

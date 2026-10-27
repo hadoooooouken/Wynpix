@@ -1951,12 +1951,12 @@ Staged copy:
         <translation>Документы / Архивы</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="58"/>
+        <location filename="../../utils/formatgroups.cpp" line="60"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="61"/>
+        <location filename="../../utils/formatgroups.cpp" line="63"/>
         <source>Fonts</source>
         <translation>Шрифты</translation>
     </message>
@@ -3547,8 +3547,6 @@ Example: %1</source>
 
 **Developer:** [hadooooouken](https://github.com/hadoooooouken)
 
-[**Contributors**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
-
 Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)
@@ -3558,8 +3556,6 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
 **Страница GitHub:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
 
 **Разработчик:** [hadooooouken](https://github.com/hadoooooouken)
-
-[**Участники разработки**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
 
 Wynpix распространяется под лицензией [GNU GPL версии 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
@@ -3724,12 +3720,12 @@ Wynpix распространяется под лицензией [GNU GPL ве�
         <translation>Обзор...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
         <source>Select Monitor Color Profile</source>
         <translation>Выберите цветовой профиль монитора</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="302"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>Цветовые профили (*.icc *.icm)</translation>
     </message>

@@ -1947,12 +1947,12 @@ Ara kopya:
         <translation>Belgeler / Arşivler</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="58"/>
+        <location filename="../../utils/formatgroups.cpp" line="60"/>
         <source>Other</source>
         <translation>Diğer</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="61"/>
+        <location filename="../../utils/formatgroups.cpp" line="63"/>
         <source>Fonts</source>
         <translation>Yazı Tipleri</translation>
     </message>
@@ -3074,8 +3074,6 @@ Ara kopya:
 
 **Developer:** [hadooooouken](https://github.com/hadoooooouken)
 
-[**Contributors**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
-
 Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)
@@ -3085,8 +3083,6 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
 **GitHub sayfası:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
 
 **Geliştirici:** [hadooooouken](https://github.com/hadoooooouken)
-
-[**Katkıda bulunanlar**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
 
 Wynpix, [GNU GPL Sürüm 3](https://www.gnu.org/licenses/gpl-3.0.en.html) kapsamında lisanslanmıştır
 
@@ -3645,12 +3641,12 @@ Example: %1</source>
         <translation>Göz at...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
         <source>Select Monitor Color Profile</source>
         <translation>Monitör Renk Profilini Seç</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="302"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>Renk Profilleri (*.icc *.icm)</translation>
     </message>

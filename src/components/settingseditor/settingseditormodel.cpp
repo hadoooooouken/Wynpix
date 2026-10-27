@@ -279,8 +279,6 @@ QString SettingsEditorModel::aboutText() {
         "\n"
         "**Developer:** [hadooooouken](https://github.com/hadoooooouken)\n"
         "\n"
-        "[**Contributors**](https://github.com/hadoooooouken/wynpix/graphs/contributors)\n"
-        "\n"
         "Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)\n"
         "\n"
         "Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)\n")));

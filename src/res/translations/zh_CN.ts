@@ -1947,12 +1947,12 @@ Staged copy:
         <translation>文档 / 压缩包</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="58"/>
+        <location filename="../../utils/formatgroups.cpp" line="60"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="61"/>
+        <location filename="../../utils/formatgroups.cpp" line="63"/>
         <source>Fonts</source>
         <translation>字体</translation>
     </message>
@@ -3568,12 +3568,12 @@ Example: %1</source>
         <translation>浏览...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
         <source>Select Monitor Color Profile</source>
         <translation>选择显示器色彩配置文件</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="302"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>色彩配置文件 (*.icc *.icm)</translation>
     </message>
@@ -3736,8 +3736,6 @@ Example: %1</source>
 
 **Developer:** [hadooooouken](https://github.com/hadoooooouken)
 
-[**Contributors**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
-
 Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)
@@ -3747,8 +3745,6 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
 **GitHub 页面：** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
 
 **开发者：** [hadooooouken](https://github.com/hadoooooouken)
-
-[**贡献者**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
 
 Wynpix 采用 [GNU GPL 第 3 版](https://www.gnu.org/licenses/gpl-3.0.en.html) 许可证
 

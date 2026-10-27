@@ -1947,12 +1947,12 @@ Staged copy:
         <translation>ドキュメント / アーカイブ</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="58"/>
+        <location filename="../../utils/formatgroups.cpp" line="60"/>
         <source>Other</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../../utils/formatgroups.cpp" line="61"/>
+        <location filename="../../utils/formatgroups.cpp" line="63"/>
         <source>Fonts</source>
         <translation>フォント</translation>
     </message>
@@ -3074,8 +3074,6 @@ Staged copy:
 
 **Developer:** [hadooooouken](https://github.com/hadoooooouken)
 
-[**Contributors**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
-
 Wynpix is licensed under [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Report any issues / request features [here](https://github.com/hadoooooouken/wynpix/issues)
@@ -3085,8 +3083,6 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
 **GitHub ページ:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
 
 **開発者:** [hadooooouken](https://github.com/hadoooooouken)
-
-[**貢献者**](https://github.com/hadoooooouken/wynpix/graphs/contributors)
 
 Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の下でライセンスされています
 
@@ -3645,12 +3641,12 @@ Example: %1</source>
         <translation>参照...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="298"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
         <source>Select Monitor Color Profile</source>
         <translation>モニターのカラープロファイルを選択</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="302"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>カラープロファイル (*.icc *.icm)</translation>
     </message>
