@@ -15,6 +15,8 @@ Rectangle {
     readonly property int horizontalPadding: 13
     readonly property int verticalPadding: 10
     readonly property int cornerRadius: 6
+    // Marks the card for the buttons on it (see style/Button.qml).
+    readonly property bool cardSurface: true
 
     Layout.fillWidth: true
     implicitWidth: column.implicitWidth + 2 * root.horizontalPadding
