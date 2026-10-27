@@ -64,12 +64,12 @@ T.Slider {
 
         // Filled part, from the start of the range to the handle.
         Rectangle {
-            visible: control.trackGradient === null
+            visible: control.trackGradient === null && control.enabled
             y: control.horizontal ? 0 : control.visualPosition * parent.height
             width: control.horizontal ? control.position * parent.width : parent.width
             height: control.horizontal ? parent.height : control.position * parent.height
             radius: groove.radius
-            color: control.enabled ? Theme.colors.accent : Theme.colors.widgetBorder
+            color: Theme.colors.accent
         }
     }
 }

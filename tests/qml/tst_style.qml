@@ -271,7 +271,7 @@ Item {
                         "hovered handle");
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             slider.enabled = false;
-            verifyColor(pixel(slider, 20, y), Theme.colors.widgetBorder, "disabled fill");
+            verifyColor(pixel(slider, 20, y), Theme.surfaces.tintedHc2, "disabled fill");
             verifyColor(pixel(slider, centerX, y), Theme.colors.text, "disabled handle");
             slider.enabled = true;
         }
