@@ -34,6 +34,10 @@ Rectangle {
     readonly property int panelRightMargin: 6
     readonly property int rightBorderWidth: 1
     readonly property int buttonRadius: 4
+    // Current and hovered rows of the bookmarks and the tree: a rounded
+    // shade inset from the panel edges (and from the scroll bar).
+    readonly property int rowInset: 4
+    readonly property int rowRadius: 5
     // BookmarksItem layout margins and the translucent text_hc2 shades of its
     // buttons.
     readonly property int bookmarkMarginH: 10
@@ -172,7 +176,9 @@ Rectangle {
                 return column === 0 ? tree.width : 0;
             }
 
-            ScrollBar.vertical: ScrollBar {}
+            ScrollBar.vertical: ScrollBar {
+                id: treeScrollBar
+            }
 
             Component.onCompleted: {
                 followCurrentFolder();
@@ -298,7 +304,7 @@ Rectangle {
 
     // BookmarksItem: folder glyph, name, and the move and remove buttons
     // while the pointer is over the row.
-    component BookmarkRow: Rectangle {
+    component BookmarkRow: Item {
         id: row
 
         required property int index
@@ -310,9 +316,16 @@ Rectangle {
 
         width: ListView.view.width
         implicitHeight: content.implicitHeight + 2 * root.bookmarkMarginV
-        color: highlighted ? Theme.colors.folderViewHc2
-             : rowHover.hovered || dropArea.containsDrag ? Theme.colors.folderViewHc
-             : "transparent"
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.leftMargin: root.rowInset
+            anchors.rightMargin: root.rowInset
+            radius: root.rowRadius
+            color: row.highlighted ? Theme.colors.folderViewHc2
+                 : rowHover.hovered || dropArea.containsDrag ? Theme.colors.folderViewHc
+                 : "transparent"
+        }
 
         HoverHandler {
             id: rowHover
@@ -433,10 +446,10 @@ Rectangle {
     }
 
     // A folder of the tree: branch chevron, folder glyph and name; hover and
-    // current row shades across the full width. A click on the chevron only
-    // expands or collapses (QTreeView), elsewhere it opens the folder; a
-    // double click expands or collapses.
-    component TreeRow: Rectangle {
+    // current row shades across the width, up to the scroll bar. A click on
+    // the chevron only expands or collapses (QTreeView), elsewhere it opens
+    // the folder; a double click expands or collapses.
+    component TreeRow: Item {
         id: treeRow
 
         required property TreeView treeView
@@ -451,12 +464,21 @@ Rectangle {
 
         implicitWidth: treeView.width
         implicitHeight: root.treeRowHeight
-        color: current ? Theme.colors.folderViewHc2
-             : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.folderViewHc
-             : "transparent"
 
-        readonly property real branchLeft: root.treeBranchPadding + depth * root.treeIndentation
+        readonly property real branchLeft: root.rowInset + root.treeBranchPadding
+                                           + depth * root.treeIndentation
         readonly property real branchWidth: root.treeIndentation - root.treeBranchPadding
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.leftMargin: root.rowInset
+            anchors.rightMargin: root.rowInset
+                                 + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
+            radius: root.rowRadius
+            color: treeRow.current ? Theme.colors.folderViewHc2
+                 : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.folderViewHc
+                 : "transparent"
+        }
 
         HoverHandler {
             id: treeHover
