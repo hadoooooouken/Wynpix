@@ -289,9 +289,10 @@ Item {
             useScheme(data.dark);
             const spin = data.spin;
             const field = spin.width / 2;
-            verifyColor(pixel(spin, field, 1), Theme.colors.button, "field");
+            verifyColor(pixel(spin, field, 3), Theme.colors.comboField, "field");
+            verifyColor(pixel(spin, field, 0), Theme.colors.comboFieldBorder, "border");
             mouseMove(spin, field, spin.height / 2);
-            verifyColor(pixel(spin, field, 1), Theme.colors.buttonHover, "hovered");
+            verifyColor(pixel(spin, field, 3), Theme.colors.comboFieldHover, "hovered");
             compare(spin.up.indicator.icon, FluentIcons.ChevronUp20);
             compare(spin.down.indicator.icon, FluentIcons.ChevronDown20);
 
@@ -333,9 +334,13 @@ Item {
         function test_textFields(data) {
             useScheme(data.dark);
             const y = textField.height / 2;
-            verifyColor(pixel(textField, 1, y), Theme.colors.button, "field");
+            verifyColor(pixel(textField, 3, y), Theme.colors.comboField, "field");
+            verifyColor(pixel(textField, 0, y), Theme.colors.comboFieldBorder, "border");
+            mouseMove(textField, 3, y);
+            verifyColor(pixel(textField, 3, y), Theme.colors.comboFieldHover, "hovered");
             textField.forceActiveFocus();
-            verifyColor(pixel(textField, 1, y), Theme.colors.buttonHover, "focused");
+            verifyColor(pixel(textField, 0, y), Theme.colors.accent, "focus border");
+            verifyColor(pixel(textField, 3, y), Theme.colors.comboFieldHover, "focused");
 
             verifyColor(pixel(searchField, 1, searchField.height / 2), Theme.colors.button,
                         "search field");

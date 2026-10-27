@@ -2,9 +2,9 @@ import QtQuick
 import QtQuick.Templates as T
 import wynpix.bridges
 
-// Text field (QLineEdit of floating panels and the folder view name
-// filter): a rounded field in the button colour that lightens while hovered
-// or focused.
+// Text field (QLineEdit of floating panels and dialog windows): a rounded
+// field in the comboField colour with a comboFieldBorder outline that
+// highlights in the accent colour while focused.
 T.TextField {
     id: control
 
@@ -48,8 +48,11 @@ T.TextField {
         implicitWidth: Theme.metrics.contextMenuWidth
         radius: StyleConstants.controlRadius
         color: control.enabled && (control.hovered || control.activeFocus)
-               ? Theme.colors.buttonHover : Theme.colors.button
+               ? Theme.colors.comboFieldHover : Theme.colors.comboField
         border.width: StyleConstants.fieldBorderWidth
-        border.color: color
+        border.color: control.enabled && control.activeFocus
+                      ? Theme.colors.accent
+                      : Color.transparent(Theme.colors.comboFieldBorder,
+                                          control.enabled ? 1.0 : StyleConstants.disabledOpacity)
     }
 }

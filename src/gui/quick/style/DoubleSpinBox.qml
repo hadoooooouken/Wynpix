@@ -80,8 +80,11 @@ T.DoubleSpinBox {
         implicitWidth: StyleConstants.comboImplicitWidth
         radius: StyleConstants.controlRadius
         color: control.enabled && (control.hovered || control.activeFocus)
-               ? Theme.colors.buttonHover : Theme.colors.button
+               ? Theme.colors.comboFieldHover : Theme.colors.comboField
         border.width: StyleConstants.fieldBorderWidth
-        border.color: color
+        border.color: control.enabled && control.activeFocus
+                      ? Theme.colors.accent
+                      : Color.transparent(Theme.colors.comboFieldBorder,
+                                          control.enabled ? 1.0 : StyleConstants.disabledOpacity)
     }
 }
