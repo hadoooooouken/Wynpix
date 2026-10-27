@@ -79,6 +79,9 @@ QtObject {
     // Scroll bars.
     readonly property int scrollBarThickness: 13
     readonly property int scrollBarMinimumHandleLength: 60
+    // Space around the handle inside the bar's thickness; the rounded handle
+    // floats in the track, so the bar keeps its overall thickness.
+    readonly property int scrollBarHandleInset: 2
     // Gap between a shown scroll bar and the content beside it.
     readonly property int scrollBarContentSpacing: 8
 
