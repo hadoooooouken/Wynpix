@@ -16,6 +16,7 @@ FocusScope {
     readonly property real backdropOpacity: 0.8
     readonly property int padding: 9
     readonly property int contentSpacing: 6
+    readonly property int buttonSpacing: 6
     readonly property int headerSpacing: 10
 
     visible: coordinator.rename.open
@@ -97,6 +98,7 @@ FocusScope {
 
             Row {
                 anchors.right: parent.right
+                spacing: root.buttonSpacing
 
                 Button {
                     text: qsTr("Rename")

@@ -14,7 +14,7 @@ Item {
     // Clears transient floating messages displayed at the bottom centre.
     readonly property int bottomMargin: 80
     readonly property int padding: 9
-    readonly property int groupSpacing: 8
+    readonly property int buttonSpacing: 6
     readonly property int contentSpacing: 10
 
     visible: coordinator.saveConfirm.open
@@ -40,9 +40,11 @@ Item {
             id: buttons
 
             x: root.padding
-            spacing: root.groupSpacing
+            spacing: root.buttonSpacing
 
             Row {
+                spacing: root.buttonSpacing
+
                 Button {
                     text: qsTr("Save")
                     focusPolicy: Qt.NoFocus
