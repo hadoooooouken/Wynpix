@@ -81,8 +81,11 @@ T.ComboBox {
     popup: T.Popup {
         y: control.height + StyleConstants.comboPopupGap
         width: control.width
-        // The margins keep the list inside the window, shrinking it if needed.
-        height: contentItem.implicitHeight + topPadding + bottomPadding
+        // An explicit height is never shrunk by the margins, so it is capped
+        // to the window here; a longer list then scrolls inside the popup
+        // instead of being cut off by the window edge.
+        height: Math.min(contentItem.implicitHeight + topPadding + bottomPadding,
+                         control.Window.height - topMargin - bottomMargin)
         topMargin: StyleConstants.popupListPadding
         bottomMargin: StyleConstants.popupListPadding
         padding: StyleConstants.popupListPadding
