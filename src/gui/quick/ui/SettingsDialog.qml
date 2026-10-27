@@ -231,12 +231,10 @@ Window {
                 }
 
                 RowLayout {
-                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: StyleConstants.dialogSpacing
                     spacing: StyleConstants.dialogButtonSpacing
 
-                    Item {
-                        Layout.fillWidth: true
-                    }
                     Button {
                         text: qsTranslate("SettingsDialog", "OK")
                         onClicked: root.controller.accept()
