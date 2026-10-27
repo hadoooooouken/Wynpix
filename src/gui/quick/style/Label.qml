@@ -5,5 +5,7 @@ import wynpix.bridges
 // Text on the application's surfaces (overlays, panels, bars).
 T.Label {
     color: Theme.colors.textHc
-    linkColor: Theme.colors.accent
+    // Links keep the text colour (light on dark, dark on light) and are told
+    // apart by their underline.
+    linkColor: color
 }
