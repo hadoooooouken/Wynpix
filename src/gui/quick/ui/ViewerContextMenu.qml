@@ -439,9 +439,10 @@ Menu {
                 menu.currentIndex = -1;
         }
 
-        // Presses and keys would trigger the row.
+        // Presses and keys would trigger the row. Above the row's content
+        // (nothing there takes input): Qt Quick offers a press to the row
+        // before a child with a negative z.
         MouseArea {
-            z: -1
             anchors.fill: parent
             acceptedButtons: Qt.AllButtons
         }
