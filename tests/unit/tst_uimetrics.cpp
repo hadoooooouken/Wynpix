@@ -460,6 +460,20 @@ private slots:
     verifyAlpha(tokens.scrollbarMarker, SemanticTokens::kScrollbarMarkerAlpha);
   }
 
+  void chromeIconsFollowTheChromeLightness() {
+    ColorScheme light = ThemeStore::colorScheme(COLORS_LIGHT);
+    QCOMPARE(SemanticTokens::colorsFor(light).iconOnChrome,
+             QColor(u"#646464"_s));
+    QCOMPARE(
+        SemanticTokens::colorsFor(ThemeStore::colorScheme(COLORS_DARK))
+            .iconOnChrome,
+        QColor(u"#a4a4a4"_s));
+    // The black background option blackens the chrome of the light scheme.
+    light.thumbpanel = QColor(Qt::black);
+    QCOMPARE(SemanticTokens::colorsFor(light).iconOnChrome,
+             QColor(u"#a4a4a4"_s));
+  }
+
   void snapshotCarriesTheTokens() {
     const QFont font = fontWithPointSize(kDefaultFontPointSize);
     for (const ColorSchemes scheme : {COLORS_DARK, COLORS_LIGHT}) {
@@ -468,6 +482,7 @@ private slots:
       const SemanticTokens::Colors tokens = SemanticTokens::colorsFor(colors);
       QCOMPARE(snapshot.tokens.surfaceWindow, tokens.surfaceWindow);
       QCOMPARE(snapshot.tokens.fillHover, tokens.fillHover);
+      QCOMPARE(snapshot.tokens.iconOnChrome, tokens.iconOnChrome);
       QCOMPARE(snapshot.tokens.accentText, tokens.accentText);
       QCOMPARE(snapshot.tokens.scrollbarMarker, tokens.scrollbarMarker);
       // Theme.colors takes its derived colours from the same tokens.

@@ -10,8 +10,9 @@
 // Colours of the UI named by role rather than by the scheme entry they come
 // from: surfaces, strokes, fills, the accent and its states, text, icons and
 // states. Built from a colour scheme; the fills, strokes and accent states
-// are derived (NeutralFills, SelectionFills, AccentContrast), the window and
-// card surfaces, the drop target and the scroll bar marker are fixed. Used by the Qt Quick Theme
+// are derived (NeutralFills, SelectionFills, AccentContrast), the icons on
+// the chrome follow its lightness, the window and card surfaces, the drop
+// target and the scroll bar marker are fixed. Used by the Qt Quick Theme
 // bridge.
 namespace SemanticTokens {
 
@@ -47,6 +48,8 @@ struct Colors {
   QColor iconDefault;
   QColor iconFolder;
   QColor iconThumbFolder;
+  // Glyphs on the chrome surface (the click-zone arrows of the viewer).
+  QColor iconOnChrome;
   QColor statusPending;
   QColor statusError;
   QColor statusProcessing;
@@ -68,6 +71,12 @@ inline constexpr QRgb kDarkSurfaceWindow = 0xff252525;
 inline constexpr QRgb kDarkSurfaceCard = 0xff2b2b2b;
 inline constexpr QRgb kLightSurfaceWindow = 0xfff5f5f5;
 inline constexpr QRgb kLightSurfaceCard = 0xffefefef;
+// Icons on the chrome, picked by its HSL lightness rather than by the
+// scheme: the black background option makes the chrome black in the light
+// scheme too.
+inline constexpr QRgb kIconOnLightChrome = 0xff646464;
+inline constexpr QRgb kIconOnDarkChrome = 0xffa4a4a4;
+inline constexpr qreal kLightChromeLightness = 0.5;
 inline constexpr QRgb kDropTarget = 0xffbe3c19;
 // "gray" of CSS and QML, not Qt::gray.
 inline constexpr QRgb kScrollbarMarker = 0xff808080;
@@ -121,6 +130,10 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
       .iconDefault = scheme.icons,
       .iconFolder = scheme.folder_icons,
       .iconThumbFolder = scheme.thumbnail_folder_icons,
+      .iconOnChrome = QColor::fromRgb(
+          scheme.thumbpanel.lightnessF() > kLightChromeLightness
+              ? kIconOnLightChrome
+              : kIconOnDarkChrome),
       .statusPending = scheme.status_pending,
       .statusError = scheme.status_error,
       .statusProcessing = scheme.status_processing,

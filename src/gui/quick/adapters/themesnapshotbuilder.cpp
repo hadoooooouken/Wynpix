@@ -94,6 +94,7 @@ ThemeTokens themeTokens(const SemanticTokens::Colors &colors) {
       .iconDefault = colors.iconDefault,
       .iconFolder = colors.iconFolder,
       .iconThumbFolder = colors.iconThumbFolder,
+      .iconOnChrome = colors.iconOnChrome,
       .statusPending = colors.statusPending,
       .statusError = colors.statusError,
       .statusProcessing = colors.statusProcessing,

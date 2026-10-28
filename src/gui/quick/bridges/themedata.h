@@ -163,6 +163,7 @@ struct ThemeTokens {
   Q_PROPERTY(QColor iconDefault MEMBER iconDefault)
   Q_PROPERTY(QColor iconFolder MEMBER iconFolder)
   Q_PROPERTY(QColor iconThumbFolder MEMBER iconThumbFolder)
+  Q_PROPERTY(QColor iconOnChrome MEMBER iconOnChrome)
   Q_PROPERTY(QColor statusPending MEMBER statusPending)
   Q_PROPERTY(QColor statusError MEMBER statusError)
   Q_PROPERTY(QColor statusProcessing MEMBER statusProcessing)
@@ -205,6 +206,7 @@ public:
   QColor iconDefault;
   QColor iconFolder;
   QColor iconThumbFolder;
+  QColor iconOnChrome;
   QColor statusPending;
   QColor statusError;
   QColor statusProcessing;

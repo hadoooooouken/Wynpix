@@ -149,7 +149,7 @@ FocusScope {
             // The pill slides by fractional pixels; native glyphs snap to the
             // pixel grid and would step behind it.
             renderType: Text.QtRendering
-            color: Theme.tokens.iconThumbFolder
+            color: Theme.tokens.iconOnChrome
             text: Theme.glyph(pill.rightSide ? FluentIcons.ChevronRight48 : FluentIcons.ChevronLeft48)
         }
     }
