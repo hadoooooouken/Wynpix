@@ -1,8 +1,9 @@
 # wynpix: Architecture and Development Notes
 
 What still applies from the finished Qt Widgets to Qt Quick migration, the
-typography work and the SSE2 build work, plus the issues they left open. The
-plans and the migration audit themselves are in the git history.
+typography work and the SSE2 build work, the measured memory of large HDR
+images, and the issues still open. The plans and the migration audit
+themselves are in the git history.
 
 ## 1. Structure
 
@@ -124,41 +125,49 @@ Release Procedure").
   `utils/hdrtonemapper.cpp`, `3rdparty/kimageformats/hdr.cpp` and
   `3rdparty/djvudec/djvu.c`.
 
-## 6. Open Issues
+## 6. Large HDR and EXR Images
 
-- **Rapid navigation through large HDR images.** The current image always
-  loads, outside the preload budget. Quick key presses cancel the superseded
-  loads, but a `.hdr` / `.exr` read already inside `QImageReader::read()`
-  runs to the end, so up to `MaxLoaderThreads` (3) decodes likely overlap.
-  Measured on 2026-10-29 (Release build, 32 GB of RAM, folders of five
-  images, thumbnail cache empty), peak private memory:
+Decoded sizes: `.hdr` 16 bytes per pixel (`RGBX32FPx4`), `.exr` 8 bytes per
+pixel. The memory budgets are in section 2. Measured on 2026-10-29 (Release
+build, 32 GB of RAM, folders of five images, thumbnail cache empty), peak
+private memory:
 
-  | Folder        | First open | Rapid navigation | Steady state |
-  |---------------|-----------:|-----------------:|-------------:|
-  | 24 MP `.exr`  |     3.5 GB |           3.5 GB |  1.3–1.6 GB  |
-  | 50 MP `.exr`  |     3.2 GB |           3.2 GB |  1.5–2.4 GB  |
-  | 24 MP `.hdr`  |     3.1 GB |           3.1 GB |  1.3–2.1 GB  |
-  | 50 MP `.hdr`  |     3.5 GB |           5.1 GB |  1.9–3.6 GB  |
+| Folder        | First open | Rapid navigation | Steady state |
+|---------------|-----------:|-----------------:|-------------:|
+| 24 MP `.exr`  |     3.5 GB |           3.5 GB |  1.3–1.6 GB  |
+| 50 MP `.exr`  |     3.2 GB |           3.2 GB |  1.5–2.4 GB  |
+| 24 MP `.hdr`  |     3.1 GB |           3.1 GB |  1.3–2.1 GB  |
+| 50 MP `.hdr`  |     3.5 GB |           5.1 GB |  1.9–3.6 GB  |
 
-  Decoded sizes: `.hdr` 16 bytes per pixel (`RGBX32FPx4`), `.exr` 8 bytes
-  per pixel; GPU memory is about 0.5 GB for a 24 MP image and 1 GB for
-  50 MP; the idle app uses 0.2 GB. Before the thumbnail budget, the first
-  open peaked at 4.8, 9.3, 3.1 and 5.8 GB. Left as it is: 5 GB fits the
-  32 GB machines these folders are expected on. Fix direction, if needed:
-  run the loader's full-size decodes under a `DecodeBudget` as well.
-- **HDR panoramas wider than 16384 px decode at full size.** Images over
-  16384 px are downscaled for display (`kMaxDimension`, `imagestatic.cpp`),
-  but the `.hdr` and `.exr` readers cannot scale on read, so Qt decodes the
-  full image first and the decode must fit `memoryAllocationLimit`. Its
-  default is 2048 MB on 16 GiB of RAM, scaled to the machine in steps of
-  512 MB (`defaultMemoryAllocationLimitMB`, `settings.cpp`); a value saved in
-  the ini is kept. With 32 GB of RAM (4096 MB) a 20480 × 10240 `.hdr`
-  (3.2 GB decoded) opens: 6.7 GB peak private memory, 4.7 GB after loading,
-  2.5 GB of GPU memory. A 16384 × 8192 `.hdr` (exactly 2048 MiB) opens
-  everywhere: 6.9 GB peak, 4.7 GB after loading. A 24576 × 12288 `.hdr`
-  (4.5 GB) needs 64 GB of RAM or a raised limit. Fix direction: support
-  `ScaledSize` in the `.hdr` and `.exr` readers, which read scan lines and
-  can downscale them as they go.
+GPU memory is about 0.5 GB for a 24 MP image and 1 GB for 50 MP; the idle
+app uses 0.2 GB. Without the thumbnail budget, the first open peaked at
+4.8, 9.3, 3.1 and 5.8 GB.
+
+- **Rapid navigation** is not bounded: the current image always loads,
+  outside the preload budget, and a `.hdr` / `.exr` read already inside
+  `QImageReader::read()` runs to the end when its load is cancelled, so up
+  to `MaxLoaderThreads` (3) decodes overlap. Kept: 5 GB fits the 32 GB
+  machines. If it must be bounded, the loader's full-size decodes go under
+  a `DecodeBudget` as well.
+- **Images over 16384 px** are downscaled for display (`kMaxDimension`,
+  `imagestatic.cpp`), but the `.hdr` and `.exr` readers cannot scale on
+  read: Qt decodes the full image first, and the decode must fit
+  `memoryAllocationLimit`. Its default is 2048 MB on 16 GiB of RAM, scaled to
+  the machine in steps of 512 MB (`defaultMemoryAllocationLimitMB`,
+  `settings.cpp`); a value saved in the ini is kept.
+
+  | Panorama `.hdr`  | Decoded  | Opens with                | Peak / loaded |
+  |------------------|---------:|---------------------------|--------------:|
+  | 16384 × 8192     | 2048 MiB | any RAM                   | 6.9 / 4.7 GB  |
+  | 20480 × 10240    |   3.2 GB | 32 GB of RAM              | 6.7 / 4.7 GB  |
+  | 24576 × 12288    |   4.5 GB | 64 GB, or a raised limit  |  not measured |
+
+  Both use 2.5 GB of GPU memory. `ScaledSize` support in the `.hdr` and
+  `.exr` readers, which read scan lines and can downscale them as they go,
+  would lift the limit and cut the peak.
+
+## 7. Open Issues
+
 - **HDR tone mapping on the GUI thread.** The first CPU use of an HDR image
   (copy to the clipboard, save, print, wallpaper, edits, AI resize) tone-maps
   the whole image on the GUI thread. Upscayl tone-maps only its crop, on the
