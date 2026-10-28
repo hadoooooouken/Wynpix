@@ -2,10 +2,16 @@
 
 #include <QImageReader>
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+
 #include <algorithm>
 #include <utility>
 
 namespace {
+constexpr qint64 ReferenceInstalledBytes = qint64{16} * 1024 * 1024 * 1024;
 constexpr int BitsPerByte = 8;
 // Readers that do not report their pixel format decode to 32-bit ARGB/RGB.
 constexpr int FallbackBitsPerPixel = 32;
@@ -25,6 +31,23 @@ std::optional<qint64> estimateDecodedBytes(QImageReader &reader) {
             : static_cast<int>(QImage::toPixelFormat(format).bitsPerPixel());
     return static_cast<qint64>(size.width()) * size.height() * bitsPerPixel /
            BitsPerByte;
+}
+
+qint64 scaledToInstalledMemory(qint64 bytesAt16GiB, qint64 maxBytes) {
+    MEMORYSTATUSEX status{};
+    status.dwLength = sizeof(status);
+    std::optional<qint64> installedBytes;
+    if (GlobalMemoryStatusEx(&status))
+        installedBytes = static_cast<qint64>(status.ullTotalPhys);
+    return scaledToInstalledMemory(bytesAt16GiB, maxBytes, installedBytes);
+}
+
+qint64 scaledToInstalledMemory(qint64 bytesAt16GiB, qint64 maxBytes,
+                               std::optional<qint64> installedBytes) {
+    if (!installedBytes || *installedBytes <= 0)
+        return std::min(bytesAt16GiB, maxBytes);
+    const double share = static_cast<double>(*installedBytes) / ReferenceInstalledBytes;
+    return std::min(static_cast<qint64>(bytesAt16GiB * share), maxBytes);
 }
 
 DecodeBudget::Reservation::Reservation(Reservation &&other) noexcept

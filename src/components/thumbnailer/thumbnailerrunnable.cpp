@@ -22,10 +22,13 @@ namespace {
 // Memory the thumbnail pool's full-size decodes hold at once. Readers that
 // cannot scale on read (.hdr, .exr, PNG) decode the whole image for a
 // thumbnail; unbounded, a folder of five 50 MP .exr images peaked at 9.3 GB.
-constexpr qint64 FullDecodeBudgetBytes = qint64{1024} * 1024 * 1024;
+// This much on 16 GiB of RAM, scaled to the machine.
+constexpr qint64 FullDecodeBudgetAt16GiB = qint64{1024} * 1024 * 1024;
+constexpr qint64 MaxFullDecodeBudgetBytes = 4 * FullDecodeBudgetAt16GiB;
 
 DecodeBudget &fullDecodeBudget() {
-  static DecodeBudget budget(FullDecodeBudgetBytes);
+  static DecodeBudget budget(
+      scaledToInstalledMemory(FullDecodeBudgetAt16GiB, MaxFullDecodeBudgetBytes));
   return budget;
 }
 

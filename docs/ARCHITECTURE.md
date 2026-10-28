@@ -44,13 +44,16 @@ Principles:
 
 - **Threads:** decoding, scaling, LUT generation and thumbnailing stay on
   their pools. No `QQmlEngine` access from worker threads.
-- **Memory:** two budgets bound decoded pixels. Preloading stops when the
-  cache holds 1.5 GiB (`PreloadMemoryBudgetBytes`, `directorymodel.cpp`).
-  Thumbnails from readers that cannot scale on read (`.hdr`, `.exr`, PNG)
-  share 1 GiB of full-size decodes, counted with the copy
-  `QImage::smoothScaled()` converts them to (`FullDecodeBudgetBytes`,
-  `thumbnailerrunnable.cpp`). Both use the header estimate
-  (`utils/decodebudget.h`).
+- **Memory:** two budgets bound decoded pixels. Both are sized for 16 GiB
+  of RAM and scaled to the RAM of the machine (`scaledToInstalledMemory`,
+  `utils/decodebudget.h`); large HDR and EXR folders are expected on
+  machines with 32 GB of RAM and 8 GB of VRAM. Preloading stops when the
+  cache holds 1.5 GiB at 16 GiB, at most 8 GiB (`PreloadBudgetAt16GiB`,
+  `directorymodel.cpp`). Thumbnails from readers that cannot scale on read
+  (`.hdr`, `.exr`, PNG) share 1 GiB at 16 GiB, at most 4 GiB, of full-size
+  decodes, counted with the copy `QImage::smoothScaled()` converts them to
+  (`FullDecodeBudgetAt16GiB`, `thumbnailerrunnable.cpp`). Both use the
+  header estimate.
 - **Startup:** heavy QML (folder view, dialogs, settings) sits behind
   `Loader { active: false; asynchronous: true }`; only the viewer and the
   messages overlay exist before the first frame. A folder view created while
@@ -127,22 +130,35 @@ Release Procedure").
   loads, outside the preload budget. Quick key presses cancel the superseded
   loads, but a `.hdr` / `.exr` read already inside `QImageReader::read()`
   runs to the end, so up to `MaxLoaderThreads` (3) decodes likely overlap.
-  Measured on 2026-10-28 (Release build, folders of five images,
-  thumbnail cache empty), peak private memory:
+  Measured on 2026-10-29 (Release build, 32 GB of RAM, folders of five
+  images, thumbnail cache empty), peak private memory:
 
   | Folder        | First open | Rapid navigation | Steady state |
   |---------------|-----------:|-----------------:|-------------:|
-  | 24 MP `.exr`  |     1.9 GB |           1.9 GB |  1.1–1.6 GB  |
+  | 24 MP `.exr`  |     3.5 GB |           3.5 GB |  1.3–1.6 GB  |
   | 50 MP `.exr`  |     3.2 GB |           3.2 GB |  1.5–2.4 GB  |
-  | 24 MP `.hdr`  |     2.0 GB |           2.8 GB |  1.2–2.0 GB  |
-  | 50 MP `.hdr`  |     2.8 GB |           5.1 GB |  2.0–2.8 GB  |
+  | 24 MP `.hdr`  |     3.1 GB |           3.1 GB |  1.3–2.1 GB  |
+  | 50 MP `.hdr`  |     3.5 GB |           5.1 GB |  1.9–3.6 GB  |
 
   Decoded sizes: `.hdr` 16 bytes per pixel (`RGBX32FPx4`), `.exr` 8 bytes
   per pixel; GPU memory is about 0.5 GB for a 24 MP image and 1 GB for
   50 MP; the idle app uses 0.2 GB. Before the thumbnail budget, the first
-  open peaked at 4.8, 9.3, 3.1 and 5.8 GB. Fix direction: run the loader's
-  full-size decodes under a `DecodeBudget` as well, so a new load waits for
-  a cancelled one to finish.
+  open peaked at 4.8, 9.3, 3.1 and 5.8 GB. Left as it is: 5 GB fits the
+  32 GB machines these folders are expected on. Fix direction, if needed:
+  run the loader's full-size decodes under a `DecodeBudget` as well.
+- **HDR panoramas wider than 16384 px decode at full size.** Images over
+  16384 px are downscaled for display (`kMaxDimension`, `imagestatic.cpp`),
+  but the `.hdr` and `.exr` readers cannot scale on read, so Qt decodes the
+  full image first and the decode must fit `memoryAllocationLimit`. Its
+  default is 2048 MB on 16 GiB of RAM, scaled to the machine in steps of
+  512 MB (`defaultMemoryAllocationLimitMB`, `settings.cpp`); a value saved in
+  the ini is kept. With 32 GB of RAM (4096 MB) a 20480 × 10240 `.hdr`
+  (3.2 GB decoded) opens: 6.7 GB peak private memory, 4.7 GB after loading,
+  2.5 GB of GPU memory. A 16384 × 8192 `.hdr` (exactly 2048 MiB) opens
+  everywhere: 6.9 GB peak, 4.7 GB after loading. A 24576 × 12288 `.hdr`
+  (4.5 GB) needs 64 GB of RAM or a raised limit. Fix direction: support
+  `ScaledSize` in the `.hdr` and `.exr` readers, which read scan lines and
+  can downscale them as they go.
 - **HDR tone mapping on the GUI thread.** The first CPU use of an HDR image
   (copy to the clipboard, save, print, wallpaper, edits, AI resize) tone-maps
   the whole image on the GUI thread. Upscayl tone-maps only its crop, on the

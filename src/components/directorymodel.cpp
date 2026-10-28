@@ -1,14 +1,23 @@
 #include "directorymodel.h"
 #include "sourcecontainers/imagestatic.h"
 #include "settings.h"
+#include "utils/decodebudget.h"
 
 #include <QSet>
 
 namespace {
 constexpr qint64 BytesPerMiB = 1024 * 1024;
 // Decoded pixels the cache may hold before neighbours are no longer
-// preloaded; sized for 16 GB machines. The current image always loads.
-constexpr qint64 PreloadMemoryBudgetBytes = 1536 * BytesPerMiB;
+// preloaded: this much on 16 GiB of RAM, scaled to the machine. The current
+// image always loads.
+constexpr qint64 PreloadBudgetAt16GiB = 1536 * BytesPerMiB;
+constexpr qint64 MaxPreloadBudgetBytes = 8192 * BytesPerMiB;
+
+qint64 preloadMemoryBudgetBytes() {
+    static const qint64 budget =
+        scaledToInstalledMemory(PreloadBudgetAt16GiB, MaxPreloadBudgetBytes);
+    return budget;
+}
 }
 
 DirectoryModel::DirectoryModel(QObject *parent) :
@@ -472,7 +481,7 @@ void DirectoryModel::preload(const QStringList &filePaths) {
         return;
 
     const qint64 remainingBytes =
-        PreloadMemoryBudgetBytes - cache.decodedBytes();
+        preloadMemoryBudgetBytes() - cache.decodedBytes();
     const qint64 limitPerImage = remainingBytes / pending.size();
     if(limitPerImage <= 0) {
         qDebug() << "DirectoryModel: preload skipped, the cache fills the"

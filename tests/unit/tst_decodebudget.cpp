@@ -100,6 +100,17 @@ private slots:
                                    kArgb32BytesPerPixel));
   }
 
+  void aBudgetScalesWithInstalledMemory() {
+    constexpr qint64 kGiB = 1024 * kMiB;
+    constexpr qint64 kAt16GiB = 1536 * kMiB;
+    constexpr qint64 kMax = 8 * kGiB;
+    QCOMPARE(scaledToInstalledMemory(kAt16GiB, kMax, 16 * kGiB), kAt16GiB);
+    QCOMPARE(scaledToInstalledMemory(kAt16GiB, kMax, 32 * kGiB), 2 * kAt16GiB);
+    QCOMPARE(scaledToInstalledMemory(kAt16GiB, kMax, 8 * kGiB), kAt16GiB / 2);
+    QCOMPARE(scaledToInstalledMemory(kAt16GiB, kMax, 128 * kGiB), kMax);
+    QCOMPARE(scaledToInstalledMemory(kAt16GiB, kMax, std::nullopt), kAt16GiB);
+  }
+
   void noEstimateWithoutDimensions() {
     QBuffer buffer;
     buffer.open(QIODevice::ReadOnly);

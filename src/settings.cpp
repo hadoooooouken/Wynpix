@@ -1,6 +1,8 @@
 #include "settings.h"
 #include "components/batchconverter/batchsavedsettings.h"
 #include "components/scalingfilter/scalingfilterselection.h"
+#include "components/settingseditor/settingsscales.h"
+#include "utils/decodebudget.h"
 #include "utils/formatregistry.h"
 
 #include <algorithm>
@@ -10,6 +12,24 @@ Settings *settings = nullptr;
 
 namespace {
 constexpr auto kPanelHideDelayKey = "panelHideDelayMs";
+constexpr qint64 kBytesPerMiB = 1024 * 1024;
+// The default per-image allocation limit on 16 GiB of RAM. A 20480 x 10240
+// .hdr panorama needs 3.2 GB to decode, so the default grows with the RAM.
+constexpr int kMemoryAllocationLimitAt16GiBMB = 2048;
+
+// The default allocation limit for this machine, in steps of the settings
+// editor.
+int defaultMemoryAllocationLimitMB() {
+  using namespace SettingsScales;
+  const qint64 scaledMB =
+      scaledToInstalledMemory(kMemoryAllocationLimitAt16GiBMB * kBytesPerMiB,
+                              kMaxMemoryLimitMB * kBytesPerMiB) /
+      kBytesPerMiB;
+  const qint64 steps =
+      (scaledMB + kMemoryLimitStepMB / 2) / kMemoryLimitStepMB;
+  return std::clamp(static_cast<int>(steps * kMemoryLimitStepMB),
+                    kMinMemoryLimitMB, kMaxMemoryLimitMB);
+}
 
 int normalizedPanelHideDelayMs(int delayMs) {
   const int clampedDelay =
@@ -68,7 +88,10 @@ void Settings::initCache() {
   mCachedUpscaylLimitEnabled.store(settingsConf->value("upscaylLimitEnabled", false).toBool(), std::memory_order_relaxed);
   mCachedUpscaylLimitValue.store(settingsConf->value("upscaylLimitValue", 200).toInt(), std::memory_order_relaxed);
 
-  int limit = settingsConf->value("memoryAllocationLimit", 2048).toInt();
+  int limit = settingsConf
+                  ->value("memoryAllocationLimit",
+                          defaultMemoryAllocationLimitMB())
+                  .toInt();
   if (limit < 512) limit = 512;
   else if (limit > 8192) limit = 8192;
   mCachedMemoryAllocationLimit.store(limit, std::memory_order_relaxed);

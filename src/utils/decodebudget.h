@@ -13,6 +13,12 @@ class QImageReader;
 // reader cannot report the dimensions.
 [[nodiscard]] std::optional<qint64> estimateDecodedBytes(QImageReader &reader);
 
+// A memory budget sized for 16 GiB of RAM, scaled to the RAM of this machine
+// and capped at maxBytes. Without a reported RAM size, the 16 GiB size.
+[[nodiscard]] qint64 scaledToInstalledMemory(qint64 bytesAt16GiB, qint64 maxBytes);
+[[nodiscard]] qint64 scaledToInstalledMemory(qint64 bytesAt16GiB, qint64 maxBytes,
+                                             std::optional<qint64> installedBytes);
+
 // Decoded pixels that concurrent decodes share. A decode reserves its size
 // and waits until it fits; one larger than the whole budget waits until the
 // budget is free and then runs alone.
