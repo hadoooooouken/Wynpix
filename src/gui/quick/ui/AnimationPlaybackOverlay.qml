@@ -112,8 +112,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: firstFrameButton.hovered
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: firstFrameButton.down ? Theme.colors.fillPressed
+                           : firstFrameButton.hovered ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -146,8 +146,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: prevFrameButton.hovered
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: prevFrameButton.down ? Theme.colors.fillPressed
+                           : prevFrameButton.hovered ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -213,8 +213,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: nextFrameButton.hovered
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: nextFrameButton.down ? Theme.colors.fillPressed
+                           : nextFrameButton.hovered ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -247,8 +247,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: lastFrameButton.hovered
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: lastFrameButton.down ? Theme.colors.fillPressed
+                           : lastFrameButton.hovered ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -286,9 +286,9 @@ Item {
                            ? (reverseButton.down ? Theme.colors.accentPressed
                               : reverseButton.hovered ? Theme.colors.accentHover
                               : Theme.colors.accent)
-                           : (reverseButton.hovered
-                              ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
-                              : "transparent")
+                           : (reverseButton.down ? Theme.colors.fillPressed
+                             : reverseButton.hovered ? Theme.colors.fillHover
+                             : "transparent")
                 }
 
                 contentItem: IconGlyph {
@@ -325,9 +325,9 @@ Item {
                            ? (loopButton.down ? Theme.colors.accentPressed
                               : loopButton.hovered ? Theme.colors.accentHover
                               : Theme.colors.accent)
-                           : (loopButton.hovered
-                              ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
-                              : "transparent")
+                           : (loopButton.down ? Theme.colors.fillPressed
+                             : loopButton.hovered ? Theme.colors.fillHover
+                             : "transparent")
                 }
 
                 contentItem: IconGlyph {
@@ -358,8 +358,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: speedButton.hovered || speedMenu.visible
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: speedButton.down ? Theme.colors.fillPressed
+                           : speedButton.hovered || speedMenu.visible ? Theme.colors.fillHover
                            : "transparent"
                 }
 

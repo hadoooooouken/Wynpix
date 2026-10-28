@@ -100,8 +100,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: firstPageButton.hovered && firstPageButton.enabled
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: firstPageButton.down ? Theme.colors.fillPressed
+                           : firstPageButton.hovered && firstPageButton.enabled ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -136,8 +136,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: prevPageButton.hovered && prevPageButton.enabled
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: prevPageButton.down ? Theme.colors.fillPressed
+                           : prevPageButton.hovered && prevPageButton.enabled ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -171,8 +171,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: nextPageButton.hovered && nextPageButton.enabled
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: nextPageButton.down ? Theme.colors.fillPressed
+                           : nextPageButton.hovered && nextPageButton.enabled ? Theme.colors.fillHover
                            : "transparent"
                 }
 
@@ -206,8 +206,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: lastPageButton.hovered && lastPageButton.enabled
-                           ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: lastPageButton.down ? Theme.colors.fillPressed
+                           : lastPageButton.hovered && lastPageButton.enabled ? Theme.colors.fillHover
                            : "transparent"
                 }
 
