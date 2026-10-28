@@ -32,7 +32,7 @@ FocusScope {
         anchors.fill: parent
         radius: StyleConstants.controlRadius
         color: mouseArea.containsMouse ? Theme.colors.fillHover : Theme.colors.fillRest
-        border.width: root.activeFocus ? StyleConstants.separatorThickness : 0
+        border.width: root.activeFocus ? StyleConstants.fieldBorderWidth : 0
         border.color: Theme.colors.accent
     }
 

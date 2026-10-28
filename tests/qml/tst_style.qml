@@ -249,7 +249,12 @@ Item {
             verifyColor(pixel(comboBox, 0, y), Theme.colors.comboFieldBorder, "border");
             mouseMove(comboBox, 3, y);
             verifyColor(pixel(comboBox, 3, y), Theme.colors.comboFieldHover, "hovered");
+            // Focus from a click or the code is not keyboard focus: no ring.
             comboBox.forceActiveFocus();
+            verifyColor(pixel(comboBox, 0, y), Theme.colors.comboFieldBorder, "mouse focus border");
+            gallery.forceActiveFocus();
+            comboBox.forceActiveFocus(Qt.TabFocusReason);
+            verify(comboBox.visualFocus);
             verifyColor(pixel(comboBox, 0, y), Theme.colors.accent, "focus border");
             compare(comboBox.indicator.text, Theme.glyph(FluentIcons.ChevronDown12));
 

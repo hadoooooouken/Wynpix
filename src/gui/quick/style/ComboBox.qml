@@ -71,7 +71,9 @@ T.ComboBox {
         fieldEnabled: control.enabled
         hovered: control.hovered
         pressed: control.down || control.popup.visible
-        focused: control.visualFocus || control.activeFocus
+        // An editable combo box is a text entry and rings like TextField;
+        // a plain one rings for keyboard focus only, like Button.
+        focused: control.editable ? control.activeFocus : control.visualFocus
     }
 
     popup: T.Popup {

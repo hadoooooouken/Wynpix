@@ -47,7 +47,7 @@ T.ToolButton {
              : control.checked ? (control.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
              : control.hovered ? Theme.colors.fillHover
              : "transparent"
-        border.width: control.visualFocus ? StyleConstants.separatorThickness : 0
+        border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
         border.color: Theme.colors.accent
     }
 }

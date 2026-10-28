@@ -4,7 +4,8 @@ import QtQuick.Templates as T
 import wynpix.bridges
 
 // Push button (QPushButton in the widget stylesheet). A flat button shows its
-// surface only while hovered, pressed or checked. The fills are translucent,
+// surface only while hovered, pressed or checked, and the focus ring alone
+// while it has keyboard focus. The fills are translucent,
 // so the button stays visible on a panel, a card or a dialog alike. A
 // highlighted (default) button is the primary one: solid accent with the
 // accent text colour.
@@ -42,12 +43,14 @@ T.Button {
         implicitHeight: Theme.metrics.buttonHeight
         radius: StyleConstants.controlRadius
         visible: !control.flat || control.down || control.checked || control.hovered
+                 || control.visualFocus
         color: control.highlighted ? (control.down ? Theme.colors.accentPressed
                                       : control.hovered ? Theme.colors.accentHover
                                       : Theme.colors.accent)
              : control.down ? Theme.colors.fillPressed
              : control.checked ? (control.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
              : control.hovered ? Theme.colors.fillHover
+             : control.flat ? "transparent"
              : Theme.colors.fillRest
         border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
         // The ring of the shared focus; on the solid accent it takes the text colour.
