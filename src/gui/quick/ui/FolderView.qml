@@ -47,9 +47,6 @@ FocusScope {
     readonly property int buttonBorderWidth: 1
     readonly property int splitterHandleWidth: 6
     readonly property int contentsBorderWidth: 1
-    // The top bar's border is a 14 % black line unless the top bar has the
-    // folder view colour.
-    readonly property real topBarBorderOpacity: 0.14
 
     readonly property list<string> sortingNames: [
         qsTr("A - Z"), qsTr("Z - A"), qsTr("Size"), qsTr("Size (desc)"), qsTr("Oldest"),
@@ -360,7 +357,7 @@ FocusScope {
         height: root.contentsBorderWidth
         color: Qt.colorEqual(Theme.colors.folderView, Theme.colors.folderViewTopBar)
                ? Theme.colors.folderView
-               : Qt.rgba(0, 0, 0, root.topBarBorderOpacity)
+               : StyleConstants.topBarBorderColor
     }
 
     SplitView {

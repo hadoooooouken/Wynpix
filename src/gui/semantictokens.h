@@ -11,7 +11,7 @@
 // from: surfaces, strokes, fills, the accent and its states, text, icons and
 // states. Built from a colour scheme; the fills, strokes and accent states
 // are derived (NeutralFills, SelectionFills, AccentContrast), the window and
-// card surfaces and the drop target are fixed. Used by the Qt Quick Theme
+// card surfaces, the drop target and the scroll bar marker are fixed. Used by the Qt Quick Theme
 // bridge.
 namespace SemanticTokens {
 
@@ -63,6 +63,7 @@ struct Colors {
   QColor dropTarget;
   QColor scrollbar;
   QColor scrollbarHover;
+  // Mark of the current item on the thumbnail strip scroll bar.
   QColor scrollbarMarker;
 };
 
@@ -74,6 +75,9 @@ inline constexpr QRgb kDarkSurfaceCard = 0xff2b2b2b;
 inline constexpr QRgb kLightSurfaceWindow = 0xfff5f5f5;
 inline constexpr QRgb kLightSurfaceCard = 0xffefefef;
 inline constexpr QRgb kDropTarget = 0xffbe3c19;
+// "gray" of CSS and QML, not Qt::gray.
+inline constexpr QRgb kScrollbarMarker = 0xff808080;
+inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
 // Opacity of secondary text (placeholders, shortcuts, notes) over the text
 // colour.
 inline constexpr qreal kSecondaryTextAlpha = 0.62;
@@ -86,6 +90,8 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
   const QColor accentText = AccentContrast::textOn(scheme.accent);
   QColor textSecondary = scheme.text.toRgb();
   textSecondary.setAlphaF(kSecondaryTextAlpha);
+  QColor scrollbarMarker = QColor::fromRgb(kScrollbarMarker);
+  scrollbarMarker.setAlphaF(kScrollbarMarkerAlpha);
   return {
       .surfaceCanvas = scheme.background,
       .surfaceCanvasFullscreen = scheme.background_fullscreen,
@@ -135,7 +141,7 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
       .dropTarget = QColor::fromRgb(kDropTarget),
       .scrollbar = scheme.scrollbar,
       .scrollbarHover = scheme.scrollbar_hover,
-      .scrollbarMarker = fills.scrollbarMarker,
+      .scrollbarMarker = scrollbarMarker,
   };
 }
 

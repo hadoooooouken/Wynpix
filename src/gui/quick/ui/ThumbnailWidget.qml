@@ -46,7 +46,6 @@ Item {
     readonly property int hoverInDuration: 100
     readonly property int hoverOutDuration: 60
     readonly property int statusIconSize: 72
-    readonly property color dropHoverColor: "#be3c19"
     readonly property real dropHoverFillOpacity: 0.1
 
     readonly property bool hasImage: loaded && thumbnail.valid
@@ -175,7 +174,7 @@ Item {
         Rectangle {
             anchors.fill: parent
             radius: StyleConstants.surfaceRadius
-            color: cell.dropHoverColor
+            color: Theme.tokens.dropTarget
             opacity: cell.dropHoverFillOpacity
         }
 
@@ -184,7 +183,7 @@ Item {
             radius: StyleConstants.surfaceRadius
             color: "transparent"
             border.width: cell.frameWidth
-            border.color: cell.dropHoverColor
+            border.color: Theme.tokens.dropTarget
         }
     }
 }

@@ -30,8 +30,6 @@ struct Colors {
   QColor strokeSubtle;
   QColor strokeDefault;
   QColor strokeStrong;
-  // Marks on the thumbnail strip scroll bar.
-  QColor scrollbarMarker;
 };
 
 // Opacities of the ink. In the dark scheme the pressed fill is the faintest,
@@ -58,7 +56,6 @@ inline constexpr qreal kDarkStrokeStrongAlpha = 0.27;
 inline constexpr qreal kLightStrokeSubtleAlpha = 0.06;
 inline constexpr qreal kLightStrokeDefaultAlpha = 0.24;
 inline constexpr qreal kLightStrokeStrongAlpha = 0.24;
-inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
 
 [[nodiscard]] inline QColor inkWithAlpha(Qt::GlobalColor ink, qreal alpha) {
   QColor color(ink);
@@ -88,7 +85,6 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
           ink, dark ? kDarkStrokeDefaultAlpha : kLightStrokeDefaultAlpha),
       .strokeStrong = inkWithAlpha(
           ink, dark ? kDarkStrokeStrongAlpha : kLightStrokeStrongAlpha),
-      .scrollbarMarker = inkWithAlpha(ink, kScrollbarMarkerAlpha),
   };
 }
 

@@ -33,7 +33,6 @@ Item {
         // updateScrollbarIndicator()).
         readonly property int markerSize: 2
         readonly property int markerInset: 2
-        readonly property real markerOpacity: 0.3
         readonly property real markerCenter: thumbnails.count > 0
             ? (thumbnails.currentIndex + 0.5) / thumbnails.count : 0
 
@@ -49,8 +48,7 @@ Item {
 
         Rectangle {
             visible: bar.size < 1.0 && bar.thumbnails.currentIndex >= 0
-            color: "gray"
-            opacity: bar.markerOpacity
+            color: Theme.tokens.scrollbarMarker
             x: bar.horizontal ? bar.width * bar.markerCenter - bar.markerSize : bar.markerInset
             y: bar.horizontal ? bar.markerInset : bar.height * bar.markerCenter - bar.markerSize
             width: bar.horizontal ? bar.markerSize : bar.width - 2 * bar.markerInset

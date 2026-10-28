@@ -40,9 +40,6 @@ FocusScope {
     readonly property int zoneArrowSize: 48
     readonly property int zoneFadeInDuration: 160
     readonly property int zoneFadeOutDuration: 120
-    readonly property real zoneArrowLightThemeLightness: 0.5
-    readonly property color zoneArrowOnLight: "#646464"
-    readonly property color zoneArrowOnDark: "#a4a4a4"
 
     // Zoom indicator (ZoomIndicatorOverlay).
     readonly property int indicatorBottomMargin: 16
@@ -152,8 +149,7 @@ FocusScope {
             // The pill slides by fractional pixels; native glyphs snap to the
             // pixel grid and would step behind it.
             renderType: Text.QtRendering
-            color: Theme.colors.thumbPanel.hslLightness > root.zoneArrowLightThemeLightness
-                   ? root.zoneArrowOnLight : root.zoneArrowOnDark
+            color: Theme.tokens.iconThumbFolder
             text: Theme.glyph(pill.rightSide ? FluentIcons.ChevronRight48 : FluentIcons.ChevronLeft48)
         }
     }

@@ -124,4 +124,13 @@ QtObject {
     // Dimming behind modal and modeless popups.
     readonly property color modalDimColor: Qt.rgba(0, 0, 0, 0.5)
     readonly property color modelessDimColor: Qt.rgba(0, 0, 0, 0.12)
+    // Border under the folder view's top bar, unless the top bar has the
+    // folder view colour.
+    readonly property color topBarBorderColor: Qt.rgba(0, 0, 0, 0.14)
+    // Crop overlay over the photo, the same in both schemes (the widget
+    // overlay's colours): the dimmed area outside the selection, the
+    // handles and the outlines.
+    readonly property color cropTintColor: Qt.rgba(0, 0, 0, 160 / 255)
+    readonly property color cropHandleColor: Qt.rgba(150 / 255, 150 / 255, 150 / 255, 160 / 255)
+    readonly property color cropOutlineColor: "white"
 }

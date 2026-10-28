@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import wynpix.bridges
+import wynpix.style
 
 // The crop selection over the viewer (CropOverlay in the widget UI): a tint
 // over the image outside the selection (over the whole image without one),
@@ -17,10 +18,6 @@ Item {
 
     required property CropController controller
 
-    // The widget overlay's colours.
-    readonly property color tintColor: Qt.rgba(0, 0, 0, 160 / 255)
-    readonly property color handleColor: Qt.rgba(150 / 255, 150 / 255, 150 / 255, 160 / 255)
-    readonly property color outlineColor: "white"
     readonly property int outlineWidth: 1
 
     readonly property rect image: controller.imageArea
@@ -116,7 +113,7 @@ Item {
         height: root.selection.height
         color: "transparent"
         border.width: root.outlineWidth
-        border.color: root.outlineColor
+        border.color: StyleConstants.cropOutlineColor
     }
 
     Repeater {
@@ -129,9 +126,9 @@ Item {
             y: modelData.y
             width: modelData.width
             height: modelData.height
-            color: root.handleColor
+            color: StyleConstants.cropHandleColor
             border.width: root.outlineWidth
-            border.color: root.outlineColor
+            border.color: StyleConstants.cropOutlineColor
         }
     }
 
@@ -148,6 +145,6 @@ Item {
     }
 
     component TintBand: Rectangle {
-        color: root.tintColor
+        color: StyleConstants.cropTintColor
     }
 }

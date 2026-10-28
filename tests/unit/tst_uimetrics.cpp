@@ -462,6 +462,10 @@ private slots:
     QCOMPARE(tokens.focusRing, colors.accent);
     QCOMPARE(tokens.accentText, AccentContrast::textOn(colors.accent));
     QCOMPARE(tokens.dropTarget, QColor(u"#be3c19"_s));
+    // The literals the thumbnail strip and the viewer used.
+    QCOMPARE(tokens.scrollbarMarker.rgb(), QColor(u"gray"_s).rgb());
+    QCOMPARE(tokens.scrollbarMarker.alphaF(),
+             SemanticTokens::kScrollbarMarkerAlpha);
   }
 
   void snapshotCarriesTheTokens() {
