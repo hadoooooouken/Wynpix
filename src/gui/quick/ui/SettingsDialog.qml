@@ -150,7 +150,9 @@ Window {
                             background: Rectangle {
                                 radius: root.sidebarEntryRadius
                                 visible: entry.highlighted || entry.down
-                                color: Theme.surfaces.tintedHc
+                                color: entry.highlighted
+                                       ? (entry.down ? Theme.colors.accentTintHover : Theme.colors.accentTint)
+                                       : Theme.colors.fillPressed
                             }
                         }
                     }

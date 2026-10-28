@@ -69,12 +69,7 @@ SettingsPage {
 
                     width: ListView.view.width
                     height: root.rowHeight
-                    // Text on the current row, which is filled with the accent.
-                    readonly property color textColor: ListView.isCurrentItem
-                                                       ? Theme.colors.accentText
-                                                       : Theme.colors.textHc
-
-                    color: ListView.isCurrentItem ? Theme.colors.accent
+                    color: ListView.isCurrentItem ? Theme.colors.accentTint
                          : index % 2 ? Theme.colors.folderViewHc : "transparent"
 
                     Label {
@@ -82,7 +77,6 @@ SettingsPage {
                         anchors.leftMargin: StyleConstants.itemHorizontalPadding
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
-                        color: scriptRow.textColor
                         text: scriptRow.display
                     }
 

@@ -5,6 +5,7 @@
 #include "gui/accentcontrast.h"
 #include "gui/dialogsurfaces.h"
 #include "gui/neutralfills.h"
+#include "gui/selectionfills.h"
 #include "gui/quick/adapters/themesnapshotbuilder.h"
 #include "gui/uimetrics.h"
 #include "testsuites.h"
@@ -368,6 +369,38 @@ private slots:
       QCOMPARE(snapshot.colors.fillPressed, fills.pressed);
       QCOMPARE(snapshot.colors.hudHover, fills.hudHover);
       QCOMPARE(snapshot.colors.hudPressed, fills.hudPressed);
+    }
+  }
+
+  void selectionFillsAreTheAccentAtFixedOpacities() {
+    for (const QString &name : kAccentSamples) {
+      const QColor accent(name);
+      const SelectionFills::Colors fills = SelectionFills::colorsFor(accent);
+      QCOMPARE(fills.tint.rgb(), accent.rgb());
+      QCOMPARE(fills.tintHover.rgb(), accent.rgb());
+      QCOMPARE(fills.frame.rgb(), accent.rgb());
+      QCOMPARE(fills.tint.alphaF(), SelectionFills::kTintAlpha);
+      QCOMPARE(fills.tintHover.alphaF(), SelectionFills::kTintHoverAlpha);
+      QCOMPARE(fills.frame.alphaF(), SelectionFills::kFrameAlpha);
+    }
+  }
+
+  void selectionFillsGrowFromTintToFrame() {
+    QCOMPARE_LT(SelectionFills::kTintAlpha, SelectionFills::kTintHoverAlpha);
+    QCOMPARE_LT(SelectionFills::kTintHoverAlpha, SelectionFills::kFrameAlpha);
+  }
+
+  void snapshotCarriesTheSelectionFills() {
+    const QFont font = fontWithPointSize(kDefaultFontPointSize);
+    ColorScheme colors = ThemeStore::colorScheme(COLORS_LIGHT);
+    for (const QString &name : kAccentSamples) {
+      colors.accent = QColor(name);
+      const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
+      const SelectionFills::Colors fills =
+          SelectionFills::colorsFor(colors.accent);
+      QCOMPARE(snapshot.colors.accentTint, fills.tint);
+      QCOMPARE(snapshot.colors.accentTintHover, fills.tintHover);
+      QCOMPARE(snapshot.colors.accentFrame, fills.frame);
     }
   }
 

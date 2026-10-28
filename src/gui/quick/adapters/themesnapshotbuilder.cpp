@@ -3,6 +3,7 @@
 #include "gui/accentcontrast.h"
 #include "gui/dialogsurfaces.h"
 #include "gui/neutralfills.h"
+#include "gui/selectionfills.h"
 #include "gui/uimetrics.h"
 #include "themestore.h"
 
@@ -10,6 +11,8 @@ namespace {
 
 ThemeColors themeColors(const ColorScheme &scheme) {
   const QColor accentText = AccentContrast::textOn(scheme.accent);
+  const SelectionFills::Colors selection =
+      SelectionFills::colorsFor(scheme.accent);
   const NeutralFills::Colors fills =
       NeutralFills::colorsFor(scheme.tid == COLORS_DARK);
   return {
@@ -27,6 +30,9 @@ ThemeColors themeColors(const ColorScheme &scheme) {
           scheme.accent, accentText, AccentContrast::kHoverStepPercent),
       .accentPressed = AccentContrast::stateFill(
           scheme.accent, accentText, AccentContrast::kPressedStepPercent),
+      .accentTint = selection.tint,
+      .accentTintHover = selection.tintHover,
+      .accentFrame = selection.frame,
       .folderView = scheme.folderview,
       .folderViewTopBar = scheme.folderview_topbar,
       .thumbPanel = scheme.thumbpanel,

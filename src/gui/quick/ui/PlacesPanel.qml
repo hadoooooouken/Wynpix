@@ -475,7 +475,7 @@ Rectangle {
             anchors.rightMargin: root.rowInset
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
             radius: root.rowRadius
-            color: treeRow.current ? Theme.colors.folderViewHc2
+            color: treeRow.current ? Theme.colors.accentTint
                  : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.folderViewHc
                  : "transparent"
         }

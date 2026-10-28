@@ -43,8 +43,6 @@ Item {
     readonly property real surfaceRadius: 8
     readonly property real thumbnailRadius: 4
     readonly property int frameWidth: 2
-    readonly property real selectionFillOpacity: 0.40
-    readonly property real selectionFrameOpacity: 0.70
     readonly property real hoverHighlight: 0.2
     readonly property real infoOpacity: 0.62
     readonly property int hoverInDuration: 100
@@ -109,8 +107,7 @@ Item {
         Rectangle {
             anchors.fill: parent
             radius: cell.surfaceRadius
-            color: Theme.colors.accent
-            opacity: cell.selectionFillOpacity
+            color: Theme.colors.accentTint
             visible: cell.selected
         }
 
@@ -119,8 +116,7 @@ Item {
             radius: cell.surfaceRadius
             color: "transparent"
             border.width: cell.frameWidth
-            border.color: Theme.colors.accent
-            opacity: cell.selectionFrameOpacity
+            border.color: Theme.colors.accentFrame
             visible: cell.selected
         }
     }

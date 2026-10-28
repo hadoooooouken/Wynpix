@@ -14,7 +14,9 @@
 // camelCase names: ColorScheme::folderview_topbar is folderViewTopBar. The
 // exceptions are derived from the accent (AccentContrast): accentText, the
 // colour of text and glyphs on a solid accent fill, and the fills of the
-// accent hovered (accentHover) and pressed (accentPressed) under that text.
+// accent hovered (accentHover) and pressed (accentPressed) under that text,
+// and the translucent accent of selected items (accentTint, accentTintHover,
+// accentFrame; SelectionFills).
 // The fills of neutral controls (fillRest, fillHover, fillPressed and the HUD
 // ones, NeutralFills) are translucent and come last.
 struct ThemeColors {
@@ -33,6 +35,9 @@ struct ThemeColors {
   Q_PROPERTY(QColor accentText MEMBER accentText)
   Q_PROPERTY(QColor accentHover MEMBER accentHover)
   Q_PROPERTY(QColor accentPressed MEMBER accentPressed)
+  Q_PROPERTY(QColor accentTint MEMBER accentTint)
+  Q_PROPERTY(QColor accentTintHover MEMBER accentTintHover)
+  Q_PROPERTY(QColor accentFrame MEMBER accentFrame)
   Q_PROPERTY(QColor folderView MEMBER folderView)
   Q_PROPERTY(QColor folderViewTopBar MEMBER folderViewTopBar)
   Q_PROPERTY(QColor thumbPanel MEMBER thumbPanel)
@@ -87,6 +92,9 @@ public:
   QColor accentText;
   QColor accentHover;
   QColor accentPressed;
+  QColor accentTint;
+  QColor accentTintHover;
+  QColor accentFrame;
   QColor folderView;
   QColor folderViewTopBar;
   QColor thumbPanel;
