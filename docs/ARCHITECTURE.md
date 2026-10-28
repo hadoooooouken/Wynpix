@@ -175,6 +175,14 @@ app uses 0.2 GB. Without the thumbnail budget, the first open peaked at
 
 - **Untested components.** `FileOpController` / `FileOperationTask`,
   `ColdStartWindowController` and `core.cpp` are in no test target.
+  - `FileOperationTask` changes the person's files: before it is next
+    changed, it gets tests for copying, name collisions (skip all, cancel
+    mid-tree, folder over file) and exiting while the replace prompt waits.
+    Copying needs no `DirectoryModel`; moving does.
+  - `ColdStartWindowController` gets tests when its state machine is next
+    changed; a regression shows on the next launch.
+  - `core.cpp` is not unit-tested itself; logic moved out of it into
+    components is tested there.
 - **`check-isa.ps1` gaps:**
   - The dependencies rebuilt for SSE2 (`kimg_avif`, `kimg_jxl`, `kimg_heif`,
     `kimg_ff`, `jpeg62`, `zlib1`, `deflate`, `zstd`) are allowlisted as whole
