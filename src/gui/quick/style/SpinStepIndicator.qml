@@ -2,8 +2,8 @@ import QtQuick
 import wynpix.bridges
 
 // Up or down step button of SpinBox and DoubleSpinBox: a chevron glyph on a
-// translucent text-coloured tint while hovered or pressed, which stays
-// visible on the field's own hover colour.
+// translucent fill while hovered or pressed, which stays visible on the
+// field's own hover colour.
 Rectangle {
     id: root
 
@@ -15,8 +15,8 @@ Rectangle {
     implicitWidth: StyleConstants.spinStepIndicatorWidth
     implicitHeight: StyleConstants.spinBoxMinimumContentHeight
     radius: StyleConstants.controlRadius
-    color: pressed ? Color.transparent(Theme.colors.textHc2, StyleConstants.stepPressedOpacity)
-         : hovered ? Color.transparent(Theme.colors.textHc2, StyleConstants.stepHoverOpacity)
+    color: pressed ? Theme.colors.fillPressed
+         : hovered ? Theme.colors.fillHover
          : "transparent"
     opacity: enabled ? 1.0 : StyleConstants.disabledOpacity
 

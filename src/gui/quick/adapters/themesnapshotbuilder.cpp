@@ -2,6 +2,7 @@
 
 #include "gui/accentcontrast.h"
 #include "gui/dialogsurfaces.h"
+#include "gui/neutralfills.h"
 #include "gui/uimetrics.h"
 #include "themestore.h"
 
@@ -9,6 +10,8 @@ namespace {
 
 ThemeColors themeColors(const ColorScheme &scheme) {
   const QColor accentText = AccentContrast::textOn(scheme.accent);
+  const NeutralFills::Colors fills =
+      NeutralFills::colorsFor(scheme.tid == COLORS_DARK);
   return {
       .background = scheme.background,
       .backgroundFullscreen = scheme.background_fullscreen,
@@ -59,6 +62,11 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .comboFieldHover = scheme.combo_field_hover,
       .comboFieldPressed = scheme.combo_field_pressed,
       .comboFieldBorder = scheme.combo_field_border,
+      .fillRest = fills.rest,
+      .fillHover = fills.hover,
+      .fillPressed = fills.pressed,
+      .hudHover = fills.hudHover,
+      .hudPressed = fills.hudPressed,
   };
 }
 

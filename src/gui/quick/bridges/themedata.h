@@ -15,6 +15,8 @@
 // exceptions are derived from the accent (AccentContrast): accentText, the
 // colour of text and glyphs on a solid accent fill, and the fills of the
 // accent hovered (accentHover) and pressed (accentPressed) under that text.
+// The fills of neutral controls (fillRest, fillHover, fillPressed and the HUD
+// ones, NeutralFills) are translucent and come last.
 struct ThemeColors {
   Q_GADGET
   QML_VALUE_TYPE(themeColors)
@@ -66,6 +68,11 @@ struct ThemeColors {
   Q_PROPERTY(QColor comboFieldHover MEMBER comboFieldHover)
   Q_PROPERTY(QColor comboFieldPressed MEMBER comboFieldPressed)
   Q_PROPERTY(QColor comboFieldBorder MEMBER comboFieldBorder)
+  Q_PROPERTY(QColor fillRest MEMBER fillRest)
+  Q_PROPERTY(QColor fillHover MEMBER fillHover)
+  Q_PROPERTY(QColor fillPressed MEMBER fillPressed)
+  Q_PROPERTY(QColor hudHover MEMBER hudHover)
+  Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
 
 public:
   QColor background;
@@ -115,6 +122,11 @@ public:
   QColor comboFieldHover;
   QColor comboFieldPressed;
   QColor comboFieldBorder;
+  QColor fillRest;
+  QColor fillHover;
+  QColor fillPressed;
+  QColor hudHover;
+  QColor hudPressed;
 
   friend bool operator==(const ThemeColors &, const ThemeColors &) = default;
 };

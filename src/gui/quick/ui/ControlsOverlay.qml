@@ -16,7 +16,10 @@ Item {
     readonly property int smallGlyphSize: 16
     readonly property int cornerRadius: 8
     readonly property real backgroundOpacity: 0.9
-    readonly property color glyphColor: "white"
+    // Glyphs and fills on the HUD panel, which is dark in both schemes.
+    readonly property color glyphColor: Theme.colors.overlayText
+    readonly property color hoverColor: Theme.colors.hudHover
+    readonly property color pressedColor: Theme.colors.hudPressed
 
     Rectangle {
         id: bar
@@ -66,6 +69,8 @@ Item {
                 glyph: FluentIcons.Grid20
                 glyphSize: root.largeGlyphSize
                 glyphColor: root.glyphColor
+                hoverColor: root.hoverColor
+                pressedColor: root.pressedColor
                 size: root.buttonSize
                 surfaceInset: 0
                 Accessible.name: qsTr("Folder view")
@@ -75,6 +80,8 @@ Item {
                 glyph: FluentIcons.Settings20
                 glyphSize: root.largeGlyphSize
                 glyphColor: root.glyphColor
+                hoverColor: root.hoverColor
+                pressedColor: root.pressedColor
                 size: root.buttonSize
                 surfaceInset: 0
                 Accessible.name: qsTr("Settings")
@@ -84,6 +91,8 @@ Item {
                 glyph: FluentIcons.Dismiss16
                 glyphSize: root.smallGlyphSize
                 glyphColor: root.glyphColor
+                hoverColor: root.hoverColor
+                pressedColor: root.pressedColor
                 size: root.buttonSize
                 surfaceInset: 0
                 Accessible.name: qsTr("Exit")

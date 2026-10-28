@@ -4,6 +4,7 @@
 
 #include "gui/accentcontrast.h"
 #include "gui/dialogsurfaces.h"
+#include "gui/neutralfills.h"
 #include "gui/quick/adapters/themesnapshotbuilder.h"
 #include "gui/uimetrics.h"
 #include "testsuites.h"
@@ -319,6 +320,54 @@ private slots:
       QCOMPARE(snapshot.colors.accentPressed,
                AccentContrast::stateFill(colors.accent, text,
                                          AccentContrast::kPressedStepPercent));
+    }
+  }
+
+  void neutralFillsAreInkOfTheScheme() {
+    const NeutralFills::Colors dark = NeutralFills::colorsFor(true);
+    QCOMPARE(dark.rest.rgb(), QColor(Qt::white).rgb());
+    QCOMPARE(dark.rest.alphaF(), NeutralFills::kDarkRestAlpha);
+    QCOMPARE(dark.hover.alphaF(), NeutralFills::kDarkHoverAlpha);
+    QCOMPARE(dark.pressed.alphaF(), NeutralFills::kDarkPressedAlpha);
+    const NeutralFills::Colors light = NeutralFills::colorsFor(false);
+    QCOMPARE(light.rest.rgb(), QColor(Qt::black).rgb());
+    QCOMPARE(light.rest.alphaF(), NeutralFills::kLightRestAlpha);
+    QCOMPARE(light.hover.alphaF(), NeutralFills::kLightHoverAlpha);
+    QCOMPARE(light.pressed.alphaF(), NeutralFills::kLightPressedAlpha);
+  }
+
+  void neutralFillsKeepTheDirectionOfThePressedFill() {
+    // Pressed is fainter than hover on the dark scheme and stronger on the
+    // light one, as the opaque button colours were.
+    const NeutralFills::Colors dark = NeutralFills::colorsFor(true);
+    QCOMPARE_LT(dark.pressed.alphaF(), dark.hover.alphaF());
+    const NeutralFills::Colors light = NeutralFills::colorsFor(false);
+    QCOMPARE_GT(light.pressed.alphaF(), light.hover.alphaF());
+    QCOMPARE_GT(light.hover.alphaF(), light.rest.alphaF());
+  }
+
+  void hudFillsAreWhiteInBothSchemes() {
+    for (const bool dark : {true, false}) {
+      const NeutralFills::Colors fills = NeutralFills::colorsFor(dark);
+      QCOMPARE(fills.hudHover.rgb(), QColor(Qt::white).rgb());
+      QCOMPARE(fills.hudHover.alphaF(), NeutralFills::kHudHoverAlpha);
+      QCOMPARE(fills.hudPressed.rgb(), QColor(Qt::white).rgb());
+      QCOMPARE(fills.hudPressed.alphaF(), NeutralFills::kHudPressedAlpha);
+    }
+  }
+
+  void snapshotCarriesTheNeutralFills() {
+    const QFont font = fontWithPointSize(kDefaultFontPointSize);
+    for (const ColorSchemes scheme : {COLORS_DARK, COLORS_LIGHT}) {
+      const ThemeSnapshot snapshot =
+          buildThemeSnapshot(ThemeStore::colorScheme(scheme), font, {});
+      const NeutralFills::Colors fills =
+          NeutralFills::colorsFor(scheme == COLORS_DARK);
+      QCOMPARE(snapshot.colors.fillRest, fills.rest);
+      QCOMPARE(snapshot.colors.fillHover, fills.hover);
+      QCOMPARE(snapshot.colors.fillPressed, fills.pressed);
+      QCOMPARE(snapshot.colors.hudHover, fills.hudHover);
+      QCOMPARE(snapshot.colors.hudPressed, fills.hudPressed);
     }
   }
 

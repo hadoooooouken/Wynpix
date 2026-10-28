@@ -102,10 +102,6 @@ QtObject {
     readonly property real disabledOpacity: 0.45
     // Hovered slider handle: accent lightened by this factor.
     readonly property real accentLightFactor: 1.3
-    // Spin box step buttons: text_hc2 at these opacities while hovered and
-    // pressed (the bookmark action buttons of the widget folder view).
-    readonly property real stepHoverOpacity: 0.14
-    readonly property real stepPressedOpacity: 0.26
 
     // HUD and toast overlay transitions (zoom indicator, fullscreen chrome, page navigation, animation HUD, floating messages).
     readonly property int hudFadeInDuration: 120

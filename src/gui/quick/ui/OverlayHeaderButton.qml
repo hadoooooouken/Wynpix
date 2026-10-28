@@ -18,6 +18,9 @@ T.AbstractButton {
     // Inset of the tinted surface from the button edge.
     property int surfaceInset: 3
     property real surfaceRadius: StyleConstants.controlRadius
+    // Fills of the hovered and the pressed button; HUD panels override them.
+    property color hoverColor: Theme.colors.fillHover
+    property color pressedColor: Theme.colors.fillPressed
 
     implicitWidth: size
     implicitHeight: size
@@ -30,8 +33,8 @@ T.AbstractButton {
         anchors.fill: parent
         anchors.margins: control.surfaceInset
         radius: control.surfaceRadius
-        color: control.down ? Theme.colors.buttonPressed
-             : control.hovered ? Theme.colors.buttonHover
+        color: control.down ? control.pressedColor
+             : control.hovered ? control.hoverColor
              : "transparent"
     }
 

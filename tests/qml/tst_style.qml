@@ -204,15 +204,21 @@ Item {
             return Color.blend(Theme.colors.widget, Color.transparent(fill, 1.0), opacity);
         }
 
+        // Colour of a neutral fill token (translucent ink) over the gallery
+        // surface.
+        function fillOver(fill) {
+            return over(Qt.rgba(fill.r, fill.g, fill.b, 1.0), fill.a);
+        }
+
         function test_button(data) {
             useScheme(data.dark);
             const y = button.height / 2;
-            verifyColor(pixel(button, 3, y), Theme.colors.button, "normal");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillRest), "normal");
             mouseMove(button, 3, y);
             verify(button.hovered);
-            verifyColor(pixel(button, 3, y), Theme.colors.buttonHover, "hovered");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillHover), "hovered");
             mousePress(button, 3, y);
-            verifyColor(pixel(button, 3, y), Theme.colors.buttonPressed, "pressed");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillPressed), "pressed");
             mouseRelease(button, 3, y);
             compare(disabledButton.contentItem.opacity, StyleConstants.disabledOpacity);
             verify(button.height >= Theme.metrics.buttonHeight);
@@ -224,11 +230,11 @@ Item {
             const y = toolButton.height / 2;
             verifyColor(pixel(toolButton, x, y), Theme.colors.widget, "normal (transparent)");
             mouseMove(toolButton, x, y);
-            verifyColor(pixel(toolButton, x, y), Theme.colors.panelButtonHover, "hovered");
+            verifyColor(pixel(toolButton, x, y), fillOver(Theme.colors.fillHover), "hovered");
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             toolButton.checkable = true;
             toolButton.checked = true;
-            verifyColor(pixel(toolButton, x, y), Theme.colors.panelButton, "checked");
+            verifyColor(pixel(toolButton, x, y), fillOver(Theme.colors.fillPressed), "checked");
             toolButton.checked = false;
             toolButton.checkable = false;
             // The inset keeps the panel colour off the bar edge.
@@ -432,12 +438,12 @@ Item {
             const y = button.height / 2;
             const darkButton = pixel(button, 3, y);
             const darkField = pixel(comboBox, 3, comboBox.height / 2);
-            verifyColor(darkButton, Theme.colors.button, "dark button");
+            verifyColor(darkButton, fillOver(Theme.colors.fillRest), "dark button");
 
             Fixture.switchTheme();
             verify(!Theme.dark);
             const lightButton = pixel(button, 3, y);
-            verifyColor(lightButton, Theme.colors.button, "light button");
+            verifyColor(lightButton, fillOver(Theme.colors.fillRest), "light button");
             verify(!colorClose(lightButton, darkButton));
             verifyColor(pixel(comboBox, 3, comboBox.height / 2), Theme.colors.comboField,
                         "light combo box");
