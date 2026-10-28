@@ -352,8 +352,8 @@ Menu {
         // The neutral hover of the menu rows.
         background: Rectangle {
             radius: StyleConstants.controlRadius
-            color: button.down ? Theme.colors.fillPressed
-                 : button.hovered || button.keyboardCurrent ? Theme.colors.fillHover
+            color: button.down ? Theme.tokens.fillPressed
+                 : button.hovered || button.keyboardCurrent ? Theme.tokens.fillHover
                  : "transparent"
         }
 
@@ -385,16 +385,16 @@ Menu {
         required property bool entryEnabled
         required property bool entryShown
 
-        readonly property color toneColor: entryTone === ContextMenuModel.Trash ? Theme.colors.trash
-                                         : entryTone === ContextMenuModel.Danger ? Theme.colors.danger
+        readonly property color toneColor: entryTone === ContextMenuModel.Trash ? Theme.tokens.trash
+                                         : entryTone === ContextMenuModel.Danger ? Theme.tokens.danger
                                          : "transparent"
         readonly property bool toned: entryTone !== ContextMenuModel.Normal
 
         text: entryText
         hasGlyph: true
         glyph: entryIcon
-        glyphColor: toned ? toneColor : Theme.colors.icons
-        labelColor: toned ? toneColor : Theme.colors.textHc
+        glyphColor: toned ? toneColor : Theme.tokens.iconDefault
+        labelColor: toned ? toneColor : Theme.tokens.textPrimary
         shortcutText: entryShortcut
         // A hidden row stays disabled: the menu's arrow keys skip disabled
         // rows but not invisible ones, and would stop on it unseen.
@@ -430,8 +430,8 @@ Menu {
         text: entryText
         hasGlyph: true
         glyph: entryIcon
-        glyphColor: Theme.colors.icons
-        labelColor: Theme.colors.textHc
+        glyphColor: Theme.tokens.iconDefault
+        labelColor: Theme.tokens.textPrimary
 
         // The highlight follows the pointer, as in the other rows.
         onHoveredChanged: {

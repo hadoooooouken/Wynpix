@@ -32,13 +32,13 @@ Item {
         switch (root.itemState) {
         case BatchQueueModel.Failed:
         case BatchQueueModel.Stopped:
-            return Theme.colors.statusError;
+            return Theme.tokens.statusError;
         case BatchQueueModel.Processing:
-            return Theme.colors.statusProcessing;
+            return Theme.tokens.statusProcessing;
         case BatchQueueModel.Done:
-            return Theme.colors.statusSuccess;
+            return Theme.tokens.statusSuccess;
         default:
-            return Theme.colors.statusPending;
+            return Theme.tokens.statusPending;
         }
     }
 
@@ -60,8 +60,8 @@ Item {
             Layout.preferredWidth: root.thumbnailSize
             Layout.preferredHeight: root.thumbnailSize
             radius: StyleConstants.itemRadius
-            color: Theme.colors.widget
-            border.color: Theme.colors.strokeDefault
+            color: Theme.tokens.surfacePopup
+            border.color: Theme.tokens.strokeDefault
 
             ThumbnailItem {
                 anchors.fill: parent
@@ -79,14 +79,14 @@ Item {
                 Layout.fillWidth: true
                 text: root.name
                 elide: Text.ElideRight
-                color: Theme.colors.textHc
+                color: Theme.tokens.textPrimary
                 font: Theme.fonts.bodyStrong
             }
             Text {
                 Layout.fillWidth: true
                 text: root.sourceInfo
                 elide: Text.ElideRight
-                color: Theme.colors.textLc
+                color: Theme.tokens.textTertiary
                 font: Theme.fonts.caption
             }
             Text {
@@ -94,7 +94,7 @@ Item {
                 visible: root.animated
                 text: qsTr("Animated image: only the first frame is converted")
                 elide: Text.ElideRight
-                color: Theme.colors.statusPending
+                color: Theme.tokens.statusPending
                 font: Theme.fonts.caption
             }
         }
@@ -121,7 +121,7 @@ Item {
                 readOnly: true
                 selectByMouse: true
                 wrapMode: Text.Wrap
-                color: Theme.colors.textLc
+                color: Theme.tokens.textTertiary
                 font: Theme.fonts.caption
             }
         }

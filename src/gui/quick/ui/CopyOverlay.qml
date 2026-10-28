@@ -76,7 +76,7 @@ FocusScope {
                     anchors.fill: parent
                     visible: rowArea.containsMouse
                     radius: StyleConstants.itemRadius
-                    color: Theme.colors.fillHover
+                    color: Theme.tokens.fillHover
                 }
 
                 MouseArea {
@@ -107,14 +107,14 @@ FocusScope {
 
                     Label {
                         text: target.displayName
-                        color: Theme.colors.textHc
+                        color: Theme.tokens.textPrimary
                         elide: Text.ElideRight
                         Layout.fillWidth: true
                     }
 
                     Label {
                         text: target.shortcut
-                        color: Color.transparent(Theme.colors.text, StyleConstants.secondaryTextOpacity)
+                        color: Color.transparent(Theme.tokens.textSecondary, StyleConstants.secondaryTextOpacity)
                     }
                 }
             }

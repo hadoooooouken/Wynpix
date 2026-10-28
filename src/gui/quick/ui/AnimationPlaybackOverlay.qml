@@ -54,8 +54,8 @@ Item {
         bottomRightRadius: StyleConstants.surfaceRadius
         topLeftRadius: 0
         topRightRadius: 0
-        color: Theme.colors.widget
-        border.color: Theme.colors.strokeDefault
+        color: Theme.tokens.surfacePopup
+        border.color: Theme.tokens.strokeDefault
         border.width: StyleConstants.separatorThickness
         visible: opacity > 0
 
@@ -111,8 +111,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: firstFrameButton.down ? Theme.colors.fillPressed
-                           : firstFrameButton.hovered ? Theme.colors.fillHover
+                    color: firstFrameButton.down ? Theme.tokens.fillPressed
+                           : firstFrameButton.hovered ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
@@ -120,7 +120,7 @@ Item {
                     icon: FluentIcons.Next20
                     rotation: 180
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -145,8 +145,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: prevFrameButton.down ? Theme.colors.fillPressed
-                           : prevFrameButton.hovered ? Theme.colors.fillHover
+                    color: prevFrameButton.down ? Theme.tokens.fillPressed
+                           : prevFrameButton.hovered ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
@@ -154,7 +154,7 @@ Item {
                     icon: FluentIcons.ChevronDown20
                     rotation: 90
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -179,15 +179,15 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: playPauseButton.down ? Theme.colors.accentPressed
-                         : playPauseButton.hovered ? Theme.colors.accentHover
-                         : Theme.colors.accent
+                    color: playPauseButton.down ? Theme.tokens.accentPressed
+                         : playPauseButton.hovered ? Theme.tokens.accentHover
+                         : Theme.tokens.accent
                 }
 
                 contentItem: IconGlyph {
                     icon: root.playback.playing ? FluentIcons.Pause20 : FluentIcons.Play20
                     size: root.iconSize
-                    color: Theme.colors.accentText
+                    color: Theme.tokens.accentText
                 }
 
                 ToolTip {
@@ -212,8 +212,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: nextFrameButton.down ? Theme.colors.fillPressed
-                           : nextFrameButton.hovered ? Theme.colors.fillHover
+                    color: nextFrameButton.down ? Theme.tokens.fillPressed
+                           : nextFrameButton.hovered ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
@@ -221,7 +221,7 @@ Item {
                     icon: FluentIcons.ChevronDown20
                     rotation: -90
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -246,15 +246,15 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: lastFrameButton.down ? Theme.colors.fillPressed
-                           : lastFrameButton.hovered ? Theme.colors.fillHover
+                    color: lastFrameButton.down ? Theme.tokens.fillPressed
+                           : lastFrameButton.hovered ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
                 contentItem: IconGlyph {
                     icon: FluentIcons.Next20
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -282,18 +282,18 @@ Item {
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
                     color: reverseButton.checked
-                           ? (reverseButton.down ? Theme.colors.accentPressed
-                              : reverseButton.hovered ? Theme.colors.accentHover
-                              : Theme.colors.accent)
-                           : (reverseButton.down ? Theme.colors.fillPressed
-                             : reverseButton.hovered ? Theme.colors.fillHover
+                           ? (reverseButton.down ? Theme.tokens.accentPressed
+                              : reverseButton.hovered ? Theme.tokens.accentHover
+                              : Theme.tokens.accent)
+                           : (reverseButton.down ? Theme.tokens.fillPressed
+                             : reverseButton.hovered ? Theme.tokens.fillHover
                              : "transparent")
                 }
 
                 contentItem: IconGlyph {
                     icon: FluentIcons.ArrowTurnDownLeft20
                     size: root.iconSize
-                    color: reverseButton.checked ? Theme.colors.accentText : Theme.colors.icons
+                    color: reverseButton.checked ? Theme.tokens.accentText : Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -321,18 +321,18 @@ Item {
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
                     color: loopButton.checked
-                           ? (loopButton.down ? Theme.colors.accentPressed
-                              : loopButton.hovered ? Theme.colors.accentHover
-                              : Theme.colors.accent)
-                           : (loopButton.down ? Theme.colors.fillPressed
-                             : loopButton.hovered ? Theme.colors.fillHover
+                           ? (loopButton.down ? Theme.tokens.accentPressed
+                              : loopButton.hovered ? Theme.tokens.accentHover
+                              : Theme.tokens.accent)
+                           : (loopButton.down ? Theme.tokens.fillPressed
+                             : loopButton.hovered ? Theme.tokens.fillHover
                              : "transparent")
                 }
 
                 contentItem: IconGlyph {
                     icon: FluentIcons.ArrowRepeatAll20
                     size: root.iconSize
-                    color: loopButton.checked ? Theme.colors.accentText : Theme.colors.icons
+                    color: loopButton.checked ? Theme.tokens.accentText : Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -357,14 +357,14 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: speedButton.down ? Theme.colors.fillPressed
-                           : speedButton.hovered || speedMenu.visible ? Theme.colors.fillHover
+                    color: speedButton.down ? Theme.tokens.fillPressed
+                           : speedButton.hovered || speedMenu.visible ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
                 contentItem: Text {
                     text: root.playback.speedText
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                     font: Theme.fonts.body
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -463,7 +463,7 @@ Item {
                     horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
                     text: (root.playback.frameIndex + 1).toString()
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                     font: Theme.fonts.body
                 }
 
@@ -472,7 +472,7 @@ Item {
 
                     verticalAlignment: Text.AlignVCenter
                     text: " / " + root.playback.frameCount
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                     font: Theme.fonts.body
                 }
             }

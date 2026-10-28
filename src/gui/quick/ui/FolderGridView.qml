@@ -108,7 +108,7 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.colors.folderView
+        color: Theme.tokens.surfaceView
     }
 
     GridView {
@@ -136,11 +136,11 @@ FocusScope {
         delegate: ThumbnailWidget {
             cellLayout: root.gridLayout.cell
             hoveredIndex: root.hoveredIndex
-            surfaceColor: Theme.colors.folderView
-            hoverColor: Theme.colors.folderViewHc
-            labelOnSurface: root.controller.labelTextColor(Theme.colors.folderView)
-            labelOnHover: root.controller.labelTextColor(Theme.colors.folderViewHc)
-            selectedLabelColor: Theme.colors.textHc2
+            surfaceColor: Theme.tokens.surfaceView
+            hoverColor: Theme.tokens.surfaceViewRaised
+            labelOnSurface: root.controller.labelTextColor(Theme.tokens.surfaceView)
+            labelOnHover: root.controller.labelTextColor(Theme.tokens.surfaceViewRaised)
+            selectedLabelColor: Theme.tokens.textOnView
         }
     }
 
@@ -183,9 +183,9 @@ FocusScope {
         y: band.y
         width: band.width
         height: band.height
-        color: Color.transparent(Theme.colors.accent, root.rubberBandFillOpacity)
+        color: Color.transparent(Theme.tokens.accent, root.rubberBandFillOpacity)
         border.width: root.rubberBandFrameWidth
-        border.color: Theme.colors.accent
+        border.color: Theme.tokens.accent
     }
 
     // Copy and move drops onto folders or into the current directory.
@@ -277,16 +277,16 @@ FocusScope {
         MenuRow {
             text: qsTr("Move to trash")
             glyph: FluentIcons.Delete20
-            glyphColor: Theme.colors.trash
-            labelColor: Theme.colors.trash
+            glyphColor: Theme.tokens.trash
+            labelColor: Theme.tokens.trash
             enabled: folderMenu.hasSelection
             onTriggered: Actions.invoke("moveToTrash")
         }
         MenuRow {
             text: qsTr("Delete permanently")
             glyph: FluentIcons.Dismiss20
-            glyphColor: Theme.colors.danger
-            labelColor: Theme.colors.danger
+            glyphColor: Theme.tokens.danger
+            labelColor: Theme.tokens.danger
             enabled: folderMenu.hasSelection
             onTriggered: Actions.invoke("removeFile")
         }

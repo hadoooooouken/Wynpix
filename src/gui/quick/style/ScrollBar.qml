@@ -25,7 +25,7 @@ T.ScrollBar {
         implicitHeight: StyleConstants.scrollBarThickness - 2 * StyleConstants.scrollBarHandleInset
         radius: Math.min(width, height) / 2
         visible: control.policy === T.ScrollBar.AlwaysOn || control.size < 1.0
-        color: control.hovered || control.pressed ? Theme.colors.scrollbarHover
-                                                  : Theme.colors.scrollbar
+        color: control.hovered || control.pressed ? Theme.tokens.scrollbarHover
+                                                  : Theme.tokens.scrollbar
     }
 }

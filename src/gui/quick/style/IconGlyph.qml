@@ -22,7 +22,7 @@ Item {
 
         anchors.fill: parent
         text: Theme.glyph(root.icon)
-        color: Theme.colors.icons
+        color: Theme.tokens.iconDefault
         font.family: Theme.iconFontFamily
         font.pixelSize: root.size
         horizontalAlignment: Text.AlignHCenter

@@ -25,7 +25,7 @@ Item {
         id: gallery
 
         anchors.fill: parent
-        color: Theme.colors.widget
+        color: Theme.tokens.surfacePopup
 
         Flow {
             anchors.fill: parent
@@ -206,7 +206,7 @@ Item {
 
         // Colour of a translucent fill over the gallery surface.
         function over(fill, opacity) {
-            return Color.blend(Theme.colors.widget, Color.transparent(fill, 1.0), opacity);
+            return Color.blend(Theme.tokens.surfacePopup, Color.transparent(fill, 1.0), opacity);
         }
 
         // Colour of a neutral fill token (translucent ink) over the gallery
@@ -218,20 +218,20 @@ Item {
         function test_button(data) {
             useScheme(data.dark);
             const y = button.height / 2;
-            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillRest), "normal");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.tokens.fillRest), "normal");
             mouseMove(button, 3, y);
             verify(button.hovered);
-            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillHover), "hovered");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.tokens.fillHover), "hovered");
             mousePress(button, 3, y);
-            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillPressed), "pressed");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.tokens.fillPressed), "pressed");
             mouseRelease(button, 3, y);
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             button.highlighted = true;
-            verifyColor(pixel(button, 3, y), Theme.colors.accent, "primary");
+            verifyColor(pixel(button, 3, y), Theme.tokens.accent, "primary");
             // A disabled primary button offers no accent to click.
             button.enabled = false;
-            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillRest), "disabled primary");
-            verifyColor(button.contentItem.color, Theme.colors.textHc, "disabled primary text");
+            verifyColor(pixel(button, 3, y), fillOver(Theme.tokens.fillRest), "disabled primary");
+            verifyColor(button.contentItem.color, Theme.tokens.textPrimary, "disabled primary text");
             button.enabled = true;
             button.highlighted = false;
             compare(disabledButton.contentItem.opacity, StyleConstants.disabledOpacity);
@@ -242,41 +242,41 @@ Item {
             useScheme(data.dark);
             const x = StyleConstants.toolButtonHorizontalInset + 2;
             const y = toolButton.height / 2;
-            verifyColor(pixel(toolButton, x, y), Theme.colors.widget, "normal (transparent)");
+            verifyColor(pixel(toolButton, x, y), Theme.tokens.surfacePopup, "normal (transparent)");
             mouseMove(toolButton, x, y);
-            verifyColor(pixel(toolButton, x, y), fillOver(Theme.colors.fillHover), "hovered");
+            verifyColor(pixel(toolButton, x, y), fillOver(Theme.tokens.fillHover), "hovered");
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             toolButton.checkable = true;
             toolButton.checked = true;
-            verifyColor(pixel(toolButton, x, y), fillOver(Theme.colors.accentTint), "checked");
+            verifyColor(pixel(toolButton, x, y), fillOver(Theme.tokens.accentTint), "checked");
             toolButton.checked = false;
             toolButton.checkable = false;
             // The inset keeps the panel colour off the bar edge.
-            verifyColor(pixel(toolButton, x, 1), Theme.colors.widget, "inset");
+            verifyColor(pixel(toolButton, x, 1), Theme.tokens.surfacePopup, "inset");
         }
 
         function test_comboBox(data) {
             useScheme(data.dark);
             const y = comboBox.height / 2;
             verify(comboBox.highlightOnHover);
-            verifyColor(pixel(comboBox, 3, y), Theme.colors.comboField, "field");
-            verifyColor(pixel(comboBox, 0, y), Theme.colors.comboFieldBorder, "border");
+            verifyColor(pixel(comboBox, 3, y), Theme.tokens.fieldRest, "field");
+            verifyColor(pixel(comboBox, 0, y), Theme.tokens.strokeField, "border");
             mouseMove(comboBox, 3, y);
-            verifyColor(pixel(comboBox, 3, y), Theme.colors.comboFieldHover, "hovered");
+            verifyColor(pixel(comboBox, 3, y), Theme.tokens.fieldHover, "hovered");
             // Focus from a click or the code is not keyboard focus: no ring.
             comboBox.forceActiveFocus();
-            verifyColor(pixel(comboBox, 0, y), Theme.colors.comboFieldBorder, "mouse focus border");
+            verifyColor(pixel(comboBox, 0, y), Theme.tokens.strokeField, "mouse focus border");
             gallery.forceActiveFocus();
             comboBox.forceActiveFocus(Qt.TabFocusReason);
             verify(comboBox.visualFocus);
-            verifyColor(pixel(comboBox, 0, y), Theme.colors.accent, "focus border");
+            verifyColor(pixel(comboBox, 0, y), Theme.tokens.accent, "focus border");
             compare(comboBox.indicator.text, Theme.glyph(FluentIcons.ChevronDown12));
 
             comboBox.popup.open();
             tryCompare(comboBox.popup, "opened", true);
             const background = comboBox.popup.background;
-            verifyColor(pixel(background, background.width / 2, 2), Theme.colors.widget, "popup");
-            verifyColor(pixel(background, background.width / 2, 0), fillOver(Theme.colors.strokeDefault),
+            verifyColor(pixel(background, background.width / 2, 2), Theme.tokens.surfacePopup, "popup");
+            verifyColor(pixel(background, background.width / 2, 0), fillOver(Theme.tokens.strokeDefault),
                         "popup border");
             compare(background.radius, Theme.metrics.contextMenuBorderRadius);
         }
@@ -297,20 +297,20 @@ Item {
         function test_slider(data) {
             useScheme(data.dark);
             const y = slider.height / 2;
-            verifyColor(pixel(slider, 20, y), Theme.colors.accent, "filled groove");
-            verifyColor(pixel(slider, slider.width - 20, y), fillOver(Theme.colors.strokeStrong), "groove");
+            verifyColor(pixel(slider, 20, y), Theme.tokens.accent, "filled groove");
+            verifyColor(pixel(slider, slider.width - 20, y), fillOver(Theme.tokens.strokeStrong), "groove");
             const handle = slider.handle;
             const centerX = handle.x + handle.width / 2;
-            verifyColor(pixel(slider, centerX, y), Theme.colors.accent, "handle");
-            verifyColor(pixel(slider, handle.x + 1, y), Theme.colors.widget, "handle ring");
+            verifyColor(pixel(slider, centerX, y), Theme.tokens.accent, "handle");
+            verifyColor(pixel(slider, handle.x + 1, y), Theme.tokens.surfacePopup, "handle ring");
             mouseMove(slider, centerX, y);
             verifyColor(pixel(slider, centerX, y),
-                        Color.lighter(Theme.colors.accent, StyleConstants.accentLightFactor),
+                        Color.lighter(Theme.tokens.accent, StyleConstants.accentLightFactor),
                         "hovered handle");
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             slider.enabled = false;
-            verifyColor(pixel(slider, 20, y), fillOver(Theme.colors.strokeStrong), "disabled fill");
-            verifyColor(pixel(slider, centerX, y), over(Theme.colors.text, StyleConstants.disabledOpacity),
+            verifyColor(pixel(slider, 20, y), fillOver(Theme.tokens.strokeStrong), "disabled fill");
+            verifyColor(pixel(slider, centerX, y), over(Theme.tokens.textSecondary, StyleConstants.disabledOpacity),
                         "disabled handle");
             slider.enabled = true;
         }
@@ -328,10 +328,10 @@ Item {
             useScheme(data.dark);
             const spin = data.spin;
             const field = spin.width / 2;
-            verifyColor(pixel(spin, field, 3), Theme.colors.comboField, "field");
-            verifyColor(pixel(spin, field, 0), Theme.colors.comboFieldBorder, "border");
+            verifyColor(pixel(spin, field, 3), Theme.tokens.fieldRest, "field");
+            verifyColor(pixel(spin, field, 0), Theme.tokens.strokeField, "border");
             mouseMove(spin, field, spin.height / 2);
-            verifyColor(pixel(spin, field, 3), Theme.colors.comboFieldHover, "hovered");
+            verifyColor(pixel(spin, field, 3), Theme.tokens.fieldHover, "hovered");
             compare(spin.up.indicator.icon, FluentIcons.ChevronUp20);
             compare(spin.down.indicator.icon, FluentIcons.ChevronDown20);
 
@@ -364,7 +364,7 @@ Item {
             radioButton.checked = false;
 
             compare(checkBox.indicator.font.family, Theme.iconFontFamily);
-            verifyColor(checkBox.indicator.color, Theme.colors.icons, "indicator");
+            verifyColor(checkBox.indicator.color, Theme.tokens.iconDefault, "indicator");
             checkBox.enabled = false;
             compare(checkBox.indicator.opacity, StyleConstants.disabledOpacity);
             checkBox.enabled = true;
@@ -373,15 +373,15 @@ Item {
         function test_textFields(data) {
             useScheme(data.dark);
             const y = textField.height / 2;
-            verifyColor(pixel(textField, 3, y), Theme.colors.comboField, "field");
-            verifyColor(pixel(textField, 0, y), Theme.colors.comboFieldBorder, "border");
+            verifyColor(pixel(textField, 3, y), Theme.tokens.fieldRest, "field");
+            verifyColor(pixel(textField, 0, y), Theme.tokens.strokeField, "border");
             mouseMove(textField, 3, y);
-            verifyColor(pixel(textField, 3, y), Theme.colors.comboFieldHover, "hovered");
+            verifyColor(pixel(textField, 3, y), Theme.tokens.fieldHover, "hovered");
             textField.forceActiveFocus();
-            verifyColor(pixel(textField, 0, y), Theme.colors.accent, "focus border");
-            verifyColor(pixel(textField, 3, y), Theme.colors.comboFieldHover, "focused");
+            verifyColor(pixel(textField, 0, y), Theme.tokens.accent, "focus border");
+            verifyColor(pixel(textField, 3, y), Theme.tokens.fieldHover, "focused");
 
-            verifyColor(pixel(searchField, 3, searchField.height / 2), Theme.colors.comboField,
+            verifyColor(pixel(searchField, 3, searchField.height / 2), Theme.tokens.fieldRest,
                         "search field");
             verify(searchField.searchIndicator.indicator === null);
             verify(searchField.contentItem.children[0].visible);
@@ -396,8 +396,8 @@ Item {
         function test_progressBar(data) {
             useScheme(data.dark);
             const y = progressBar.height / 2;
-            verifyColor(pixel(progressBar, 3, y), Theme.colors.accent, "filled part");
-            verifyColor(pixel(progressBar, progressBar.width - 3, y), Theme.colors.folderView,
+            verifyColor(pixel(progressBar, 3, y), Theme.tokens.accent, "filled part");
+            verifyColor(pixel(progressBar, progressBar.width - 3, y), Theme.tokens.surfaceView,
                         "empty part");
             // The percentage is in the accent text colour over the filled
             // part only.
@@ -405,20 +405,20 @@ Item {
             verify(filledText);
             verify(filledText.clip);
             compare(filledText.width, progressBar.contentItem.width * progressBar.visualPosition);
-            verifyColor(filledText.children[0].color, Theme.colors.accentText, "filled text");
+            verifyColor(filledText.children[0].color, Theme.tokens.accentText, "filled text");
         }
 
         function test_scrollBar(data) {
             useScheme(data.dark);
             const x = scrollBar.width / 2;
             compare(scrollBar.width, StyleConstants.scrollBarThickness);
-            verifyColor(pixel(scrollBar, x, 10), Theme.colors.scrollbar, "handle");
+            verifyColor(pixel(scrollBar, x, 10), Theme.tokens.scrollbar, "handle");
             mouseMove(scrollBar, x, 10);
-            verifyColor(pixel(scrollBar, x, 10), Theme.colors.scrollbarHover, "hovered handle");
+            verifyColor(pixel(scrollBar, x, 10), Theme.tokens.scrollbarHover, "hovered handle");
             // The handle never gets shorter than the minimum length.
             scrollBar.size = 0.05;
             verifyColor(pixel(scrollBar, x, StyleConstants.scrollBarMinimumHandleLength - 2),
-                        Theme.colors.scrollbarHover, "minimum handle");
+                        Theme.tokens.scrollbarHover, "minimum handle");
             scrollBar.size = 0.3;
         }
 
@@ -433,9 +433,9 @@ Item {
             const background = menu.background;
             const frameTop = -menu.topInset;
             verify(frameTop > 0, "no room for the shadow");
-            verifyColor(pixel(background, background.width / 2, frameTop + 2), Theme.colors.widget,
+            verifyColor(pixel(background, background.width / 2, frameTop + 2), Theme.tokens.surfacePopup,
                         "menu");
-            verifyColor(pixel(background, background.width / 2, frameTop), fillOver(Theme.colors.strokeDefault),
+            verifyColor(pixel(background, background.width / 2, frameTop), fillOver(Theme.tokens.strokeDefault),
                         "menu border");
 
             const item = menu.itemAt(0);
@@ -445,13 +445,13 @@ Item {
             verify(shortcut.length > 0);
             menu.currentIndex = 0;
             verifyColor(pixel(item, 3, item.height / 2),
-                        fillOver(Theme.colors.fillHover),
+                        fillOver(Theme.tokens.fillHover),
                         "highlighted item");
 
             const disabledItem = menu.itemAt(2);
             verify(!disabledItem.enabled);
             verifyColor(disabledItem.contentItem.secondaryColor,
-                        Color.transparent(Theme.colors.text, StyleConstants.secondaryTextOpacity),
+                        Color.transparent(Theme.tokens.textSecondary, StyleConstants.secondaryTextOpacity),
                         "secondary text");
         }
 
@@ -460,19 +460,19 @@ Item {
             toolTip.open();
             tryCompare(toolTip, "opened", true);
             const tipBackground = toolTip.background;
-            verifyColor(pixel(tipBackground, 3, tipBackground.height / 2), Theme.colors.widget,
+            verifyColor(pixel(tipBackground, 3, tipBackground.height / 2), Theme.tokens.surfacePopup,
                         "tooltip");
             compare(tipBackground.radius, Theme.metrics.tooltipBorderRadius);
-            verifyColor(toolTip.contentItem.color, Theme.colors.textHc, "tooltip text");
+            verifyColor(toolTip.contentItem.color, Theme.tokens.textPrimary, "tooltip text");
 
             popup.open();
             tryCompare(popup, "opened", true);
             verifyColor(pixel(popup.background, popup.width / 2, popup.height / 2),
-                        Theme.colors.widget, "popup");
-            verifyColor(pixel(popup.background, popup.width / 2, 0), fillOver(Theme.colors.strokeDefault),
+                        Theme.tokens.surfacePopup, "popup");
+            verifyColor(pixel(popup.background, popup.width / 2, 0), fillOver(Theme.tokens.strokeDefault),
                         "popup border");
 
-            verifyColor(label.color, Theme.colors.textHc, "label");
+            verifyColor(label.color, Theme.tokens.textPrimary, "label");
         }
 
         // A theme switch restyles live controls through their bindings, with
@@ -486,17 +486,17 @@ Item {
             const y = button.height / 2;
             const darkButton = pixel(button, 3, y);
             const darkField = pixel(comboBox, 3, comboBox.height / 2);
-            verifyColor(darkButton, fillOver(Theme.colors.fillRest), "dark button");
+            verifyColor(darkButton, fillOver(Theme.tokens.fillRest), "dark button");
 
             Fixture.switchTheme();
             verify(!Theme.dark);
             const lightButton = pixel(button, 3, y);
-            verifyColor(lightButton, fillOver(Theme.colors.fillRest), "light button");
+            verifyColor(lightButton, fillOver(Theme.tokens.fillRest), "light button");
             verify(!colorClose(lightButton, darkButton));
-            verifyColor(pixel(comboBox, 3, comboBox.height / 2), Theme.colors.comboField,
+            verifyColor(pixel(comboBox, 3, comboBox.height / 2), Theme.tokens.fieldRest,
                         "light combo box");
             verify(!colorClose(pixel(comboBox, 3, comboBox.height / 2), darkField));
-            verifyColor(pixel(gallery, 1, 1), Theme.colors.widget, "light surface");
+            verifyColor(pixel(gallery, 1, 1), Theme.tokens.surfacePopup, "light surface");
         }
 
         // Writes style-dark.png and style-light.png (the gallery with a menu,

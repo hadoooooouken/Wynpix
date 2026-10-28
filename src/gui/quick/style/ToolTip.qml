@@ -32,7 +32,7 @@ T.ToolTip {
         text: control.text
         font: control.font
         wrapMode: Text.Wrap
-        color: Theme.colors.textHc
+        color: Theme.tokens.textPrimary
     }
 
     background: PopupBackground {

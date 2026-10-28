@@ -19,9 +19,9 @@ Rectangle {
     implicitWidth: column.implicitWidth + 2 * root.horizontalPadding
     implicitHeight: column.implicitHeight + 2 * root.verticalPadding
     radius: StyleConstants.itemRadius
-    color: Theme.colors.surfaceCard
+    color: Theme.tokens.surfaceCard
     border.width: StyleConstants.separatorThickness
-    border.color: Theme.colors.strokeSubtle
+    border.color: Theme.tokens.strokeSubtle
 
     ColumnLayout {
         id: column

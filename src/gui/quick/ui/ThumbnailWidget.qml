@@ -103,7 +103,7 @@ Item {
         Rectangle {
             anchors.fill: parent
             radius: StyleConstants.surfaceRadius
-            color: Theme.colors.accentTint
+            color: Theme.tokens.accentTint
             visible: cell.selected
         }
 
@@ -112,7 +112,7 @@ Item {
             radius: StyleConstants.surfaceRadius
             color: "transparent"
             border.width: cell.frameWidth
-            border.color: Theme.colors.accentFrame
+            border.color: Theme.tokens.accentFrame
             visible: cell.selected
         }
     }
@@ -133,7 +133,7 @@ Item {
         visible: !cell.hasImage
         icon: cell.unavailable || cell.loaded ? FluentIcons.ClockDismiss24 : FluentIcons.Clock24
         size: cell.statusIconSize
-        color: cell.selected ? Theme.colors.accent : Theme.colors.thumbPanelHc2
+        color: cell.selected ? Theme.tokens.accent : Theme.tokens.surfaceChromeRaised
     }
 
     Text {

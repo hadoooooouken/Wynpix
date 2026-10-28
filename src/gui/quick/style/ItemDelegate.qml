@@ -22,7 +22,7 @@ T.ItemDelegate {
 
     icon.width: Theme.compactIconSize
     icon.height: Theme.compactIconSize
-    icon.color: Theme.colors.icons
+    icon.color: Theme.tokens.iconDefault
 
     contentItem: IconLabel {
         spacing: control.spacing
@@ -35,13 +35,13 @@ T.ItemDelegate {
         icon: control.icon
         text: control.text
         font: control.font
-        color: Theme.colors.textHc
+        color: Theme.tokens.textPrimary
     }
 
     background: Rectangle {
         implicitHeight: StyleConstants.itemMinimumHeight
         radius: StyleConstants.itemRadius
         visible: control.down || control.highlighted || control.visualFocus
-        color: control.down ? Theme.colors.fillPressed : Theme.colors.fillHover
+        color: control.down ? Theme.tokens.fillPressed : Theme.tokens.fillHover
     }
 }

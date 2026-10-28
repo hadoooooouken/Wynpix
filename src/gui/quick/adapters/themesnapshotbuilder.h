@@ -9,8 +9,8 @@ class ColorScheme;
 
 // Builds the snapshot published by ThemeBridge from a colour scheme, the
 // system font and the registered icon font family: the scheme colours and
-// those derived from them (ThemeColors), the same by role (ThemeTokens,
-// SemanticTokens), the text styles derived from the system font
+// those derived from them by role (ThemeTokens, SemanticTokens), the text
+// styles derived from the system font
 // (UiMetrics::Typography) and the control metrics of the body style
 // (UiMetrics::ControlMetrics).
 //

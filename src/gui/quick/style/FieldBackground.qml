@@ -2,8 +2,8 @@ import QtQuick
 import wynpix.bridges
 
 // Background of the entry controls (TextField, SearchField, SpinBox,
-// DoubleSpinBox, ComboBox): a rounded field in the comboField colour with a
-// comboFieldBorder outline. One focus ring serves all of them: while the
+// DoubleSpinBox, ComboBox): a rounded field in the fieldRest colour with a
+// strokeField outline. One focus ring serves all of them: while the
 // control is focused the outline becomes an accent ring of fieldBorderWidth,
 // and the fill takes the hover colour.
 Rectangle {
@@ -19,12 +19,12 @@ Rectangle {
     readonly property bool ringVisible: root.fieldEnabled && root.focused
 
     radius: StyleConstants.controlRadius
-    color: root.fieldEnabled && root.pressed ? Theme.colors.comboFieldPressed
-         : root.fieldEnabled && (root.hovered || root.focused) ? Theme.colors.comboFieldHover
-         : Theme.colors.comboField
+    color: root.fieldEnabled && root.pressed ? Theme.tokens.fieldPressed
+         : root.fieldEnabled && (root.hovered || root.focused) ? Theme.tokens.fieldHover
+         : Theme.tokens.fieldRest
     border.width: root.ringVisible ? StyleConstants.fieldBorderWidth : root.restBorderWidth
     border.color: root.ringVisible
-                  ? Theme.colors.accent
-                  : Color.transparent(Theme.colors.comboFieldBorder,
+                  ? Theme.tokens.accent
+                  : Color.transparent(Theme.tokens.strokeField,
                                       root.fieldEnabled ? 1.0 : StyleConstants.disabledOpacity)
 }

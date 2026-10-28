@@ -12,15 +12,15 @@ T.AbstractButton {
     // A FluentIcons value.
     required property int glyph
     property int glyphSize: Theme.compactIconSize
-    property color glyphColor: Theme.colors.icons
+    property color glyphColor: Theme.tokens.iconDefault
     // Edge of the square button.
     property int size: Theme.metrics.overlayHeaderSize
     // Inset of the tinted surface from the button edge.
     property int surfaceInset: 3
     property real surfaceRadius: StyleConstants.controlRadius
     // Fills of the hovered and the pressed button; HUD panels override them.
-    property color hoverColor: Theme.colors.fillHover
-    property color pressedColor: Theme.colors.fillPressed
+    property color hoverColor: Theme.tokens.fillHover
+    property color pressedColor: Theme.tokens.fillPressed
 
     implicitWidth: size
     implicitHeight: size

@@ -16,9 +16,9 @@ Item {
     readonly property int smallGlyphSize: 16
     readonly property real backgroundOpacity: 0.9
     // Glyphs and fills on the HUD panel, which is dark in both schemes.
-    readonly property color glyphColor: Theme.colors.overlayText
-    readonly property color hoverColor: Theme.colors.hudHover
-    readonly property color pressedColor: Theme.colors.hudPressed
+    readonly property color glyphColor: Theme.tokens.textOnHud
+    readonly property color hoverColor: Theme.tokens.hudHover
+    readonly property color pressedColor: Theme.tokens.hudPressed
 
     Rectangle {
         id: bar
@@ -28,7 +28,7 @@ Item {
         width: buttons.implicitWidth
         height: buttons.implicitHeight
         bottomLeftRadius: StyleConstants.surfaceRadius
-        color: Color.transparent(Theme.colors.overlay, root.backgroundOpacity)
+        color: Color.transparent(Theme.tokens.surfaceHud, root.backgroundOpacity)
         visible: opacity > 0
 
         states: State {

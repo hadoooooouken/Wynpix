@@ -62,13 +62,13 @@ T.SearchField {
 
         text: control.text
         placeholderText: control.placeholderText
-        placeholderTextColor: Color.transparent(Theme.colors.text, StyleConstants.secondaryTextOpacity)
+        placeholderTextColor: Color.transparent(Theme.tokens.textSecondary, StyleConstants.secondaryTextOpacity)
         selectByMouse: control.selectTextByMouse
 
         font: control.font
-        color: Theme.colors.textHc
-        selectionColor: Theme.colors.accent
-        selectedTextColor: Theme.colors.accentText
+        color: Theme.tokens.textPrimary
+        selectionColor: Theme.tokens.accent
+        selectedTextColor: Theme.tokens.accentText
         verticalAlignment: TextInput.AlignVCenter
 
         // The template draws no placeholder.

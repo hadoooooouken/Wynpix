@@ -52,14 +52,14 @@ Rectangle {
     readonly property real collapsedRotation: -StyleConstants.quarterTurn
     readonly property int treeBranchAnimationDuration: 120
 
-    color: Theme.colors.folderView
+    color: Theme.tokens.surfaceView
 
     Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: root.panelRightMargin
         width: root.rightBorderWidth
         height: parent.height
-        color: Theme.colors.folderViewHc
+        color: Theme.tokens.surfaceViewRaised
     }
 
     ColumnLayout {
@@ -121,7 +121,7 @@ Rectangle {
                 width: parent.width
                 height: root.dropIndicatorHeight
                 y: bookmarkList.dropRow >= 0 ? bookmarkList.dropIndicatorY() : 0
-                color: Theme.colors.accent
+                color: Theme.tokens.accent
             }
         }
 
@@ -260,7 +260,7 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: header.text
-                color: headerArea.containsMouse ? Theme.colors.textHc2 : Theme.colors.textHc
+                color: headerArea.containsMouse ? Theme.tokens.textOnView : Theme.tokens.textPrimary
                 font: Theme.fonts.bodyStrong
 
                 MouseArea {
@@ -289,8 +289,8 @@ Rectangle {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: headerButton.down ? Theme.colors.fillPressed
-                         : headerButton.hovered ? Theme.colors.fillHover
+                    color: headerButton.down ? Theme.tokens.fillPressed
+                         : headerButton.hovered ? Theme.tokens.fillHover
                          : "transparent"
                 }
                 contentItem: IconGlyph {
@@ -320,9 +320,9 @@ Rectangle {
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
             radius: StyleConstants.rowRadius
-            color: row.highlighted ? (rowHover.hovered || dropArea.containsDrag ? Theme.colors.accentTintHover
-                                                                                : Theme.colors.accentTint)
-                 : rowHover.hovered || dropArea.containsDrag ? Theme.colors.fillHover
+            color: row.highlighted ? (rowHover.hovered || dropArea.containsDrag ? Theme.tokens.accentTintHover
+                                                                                : Theme.tokens.accentTint)
+                 : rowHover.hovered || dropArea.containsDrag ? Theme.tokens.fillHover
                  : "transparent"
         }
 
@@ -392,13 +392,13 @@ Rectangle {
             IconGlyph {
                 icon: FluentIcons.Folder16
                 size: Theme.compactIconSize
-                color: Theme.colors.folderIcons
+                color: Theme.tokens.iconFolder
             }
 
             Label {
                 Layout.fillWidth: true
                 text: row.name
-                color: Theme.colors.textHc2
+                color: Theme.tokens.textOnView
                 elide: Text.ElideRight
             }
 
@@ -433,9 +433,9 @@ Rectangle {
         background: Rectangle {
             radius: StyleConstants.controlRadius
             color: bookmarkButton.down
-                   ? Color.transparent(Theme.colors.textHc2, root.bookmarkButtonPressedOpacity)
+                   ? Color.transparent(Theme.tokens.textOnView, root.bookmarkButtonPressedOpacity)
                    : bookmarkButton.hovered
-                     ? Color.transparent(Theme.colors.textHc2, root.bookmarkButtonHoverOpacity)
+                     ? Color.transparent(Theme.tokens.textOnView, root.bookmarkButtonHoverOpacity)
                      : "transparent"
         }
         contentItem: IconGlyph {
@@ -474,9 +474,9 @@ Rectangle {
             anchors.rightMargin: root.rowInset
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
             radius: StyleConstants.rowRadius
-            color: treeRow.current ? (treeHover.hovered || treeDrop.containsDrag ? Theme.colors.accentTintHover
-                                                                                 : Theme.colors.accentTint)
-                 : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.fillHover
+            color: treeRow.current ? (treeHover.hovered || treeDrop.containsDrag ? Theme.tokens.accentTintHover
+                                                                                 : Theme.tokens.accentTint)
+                 : treeHover.hovered || treeDrop.containsDrag ? Theme.tokens.fillHover
                  : "transparent"
         }
 
@@ -542,13 +542,13 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 icon: FluentIcons.Folder16
                 size: Theme.compactIconSize
-                color: Theme.colors.folderIcons
+                color: Theme.tokens.iconFolder
             }
 
             Label {
                 anchors.verticalCenter: parent.verticalCenter
                 text: treeRow.display
-                color: Theme.colors.textHc2
+                color: Theme.tokens.textOnView
             }
         }
     }

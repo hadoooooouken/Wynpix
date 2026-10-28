@@ -72,7 +72,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.message.text
                 visible: text.length > 0
-                color: Theme.colors.textHc
+                color: Theme.tokens.textPrimary
                 font: Theme.fonts.bodyStrong
             }
         }

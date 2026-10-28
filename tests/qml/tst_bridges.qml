@@ -24,7 +24,7 @@ Item {
         id: consumer
 
         property bool smoothZoom: AppSettings.viewer.smoothZoom
-        property color background: Theme.colors.background
+        property color background: Theme.tokens.surfaceCanvas
     }
 
     Item {
@@ -79,9 +79,9 @@ Item {
             signalName: "overlaysChanged"
         }
         SignalSpy {
-            id: colorsSpy
+            id: tokensSpy
             target: Theme
-            signalName: "colorsChanged"
+            signalName: "tokensChanged"
         }
         SignalSpy {
             id: darkSpy
@@ -106,7 +106,7 @@ Item {
 
         function init() {
             for (const spy of [viewerSpy, panelSpy, folderViewSpy, overlaysSpy,
-                               colorsSpy, darkSpy, fontsSpy, iconFontSpy, shortcutsSpy])
+                               tokensSpy, darkSpy, fontsSpy, iconFontSpy, shortcutsSpy])
                 spy.clear();
         }
 
@@ -138,16 +138,16 @@ Item {
 
         function test_themeSwitchNotifiesColorsAndMode() {
             const wasDark = Theme.dark;
-            const background = Theme.colors.background;
+            const background = Theme.tokens.surfaceCanvas;
             Fixture.switchTheme();
 
-            compare(colorsSpy.count, 1);
+            compare(tokensSpy.count, 1);
             compare(darkSpy.count, 1);
             compare(fontsSpy.count, 0);
             compare(iconFontSpy.count, 0);
             compare(Theme.dark, !wasDark);
-            verify(!Qt.colorEqual(Theme.colors.background, background));
-            verify(Qt.colorEqual(consumer.background, Theme.colors.background));
+            verify(!Qt.colorEqual(Theme.tokens.surfaceCanvas, background));
+            verify(Qt.colorEqual(consumer.background, Theme.tokens.surfaceCanvas));
         }
 
         function test_iconGlyphs() {

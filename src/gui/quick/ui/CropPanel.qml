@@ -115,7 +115,7 @@ FocusScope {
                 Label {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     text: qsTr("Width")
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                 }
                 SpinBox {
                     id: widthBox
@@ -133,7 +133,7 @@ FocusScope {
                 Label {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     text: qsTr("Height")
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                 }
                 SpinBox {
                     id: heightBox
@@ -152,13 +152,13 @@ FocusScope {
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
                     implicitHeight: StyleConstants.separatorThickness
-                    color: Theme.colors.strokeDefault
+                    color: Theme.tokens.strokeDefault
                 }
 
                 Label {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     text: qsTr("Pos_X")
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                 }
                 SpinBox {
                     id: xBox
@@ -176,7 +176,7 @@ FocusScope {
                 Label {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     text: qsTr("Pos_Y")
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                 }
                 SpinBox {
                     id: yBox
@@ -299,9 +299,9 @@ FocusScope {
 
         Layout.fillWidth: true
         implicitHeight: groupContent.implicitHeight + root.groupTopPadding + root.groupBottomPadding
-        color: Theme.colors.widget
+        color: Theme.tokens.surfacePopup
         border.width: StyleConstants.separatorThickness
-        border.color: Theme.colors.strokeDefault
+        border.color: Theme.tokens.strokeDefault
         radius: StyleConstants.controlRadius
 
         ColumnLayout {
@@ -320,7 +320,7 @@ FocusScope {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 font: Theme.fonts.bodyStrong
-                color: Theme.colors.text
+                color: Theme.tokens.textSecondary
             }
         }
     }
@@ -351,7 +351,7 @@ FocusScope {
                 x: -width / 2
                 y: -height / 2
                 rotation: root.markerRotation
-                color: Theme.colors.widget
+                color: Theme.tokens.surfacePopup
             }
         }
 

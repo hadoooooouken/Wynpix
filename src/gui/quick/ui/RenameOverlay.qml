@@ -47,7 +47,7 @@ FocusScope {
     Rectangle {
         anchors.fill: parent
         visible: root.prompt.backdrop
-        color: Color.transparent(Theme.colors.folderViewHc2, root.backdropOpacity)
+        color: Color.transparent(Theme.tokens.surfaceViewRaisedStrong, root.backdropOpacity)
 
         MouseArea {
             anchors.fill: parent

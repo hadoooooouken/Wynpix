@@ -76,7 +76,7 @@ DialogWindow {
         Layout.fillWidth: true
         text: root.dialog.message
         textFormat: Text.PlainText
-        color: Theme.colors.textLc
+        color: Theme.tokens.textTertiary
         font: Theme.fonts.caption
     }
 

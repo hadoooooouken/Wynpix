@@ -31,14 +31,14 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.colors.widget
+        color: Theme.tokens.surfacePopup
 
         Rectangle {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: StyleConstants.separatorThickness
-            color: Theme.colors.strokeDefault
+            color: Theme.tokens.strokeDefault
         }
     }
 

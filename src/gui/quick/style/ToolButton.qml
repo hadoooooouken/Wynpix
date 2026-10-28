@@ -27,7 +27,7 @@ T.ToolButton {
 
     icon.width: Theme.standardIconSize
     icon.height: Theme.standardIconSize
-    icon.color: Theme.colors.icons
+    icon.color: Theme.tokens.iconDefault
 
     contentItem: IconLabel {
         spacing: control.spacing
@@ -38,16 +38,16 @@ T.ToolButton {
         icon: control.icon
         text: control.text
         font: control.font
-        color: Theme.colors.textHc
+        color: Theme.tokens.textPrimary
     }
 
     background: Rectangle {
         radius: StyleConstants.controlRadius
-        color: control.down ? Theme.colors.fillPressed
-             : control.checked ? (control.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
-             : control.hovered ? Theme.colors.fillHover
+        color: control.down ? Theme.tokens.fillPressed
+             : control.checked ? (control.hovered ? Theme.tokens.accentTintHover : Theme.tokens.accentTint)
+             : control.hovered ? Theme.tokens.fillHover
              : "transparent"
         border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
-        border.color: Theme.colors.accent
+        border.color: Theme.tokens.accent
     }
 }

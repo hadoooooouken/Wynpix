@@ -38,10 +38,10 @@ T.SpinBox {
         clip: width < implicitWidth
 
         font: control.font
-        color: Theme.colors.text
+        color: Theme.tokens.textSecondary
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
-        selectionColor: Theme.colors.accent
-        selectedTextColor: Theme.colors.accentText
+        selectionColor: Theme.tokens.accent
+        selectedTextColor: Theme.tokens.accentText
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 

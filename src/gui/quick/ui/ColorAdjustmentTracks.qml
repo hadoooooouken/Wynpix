@@ -17,7 +17,7 @@ Item {
     }
 
     // Blend gradient for Exposure, Contrast and Brightness: layers dark and
-    // light shading over the active Theme.colors.accent base.
+    // light shading over the active Theme.tokens.accent base.
     Gradient {
         id: toneBlendGradient
         orientation: Gradient.Horizontal
@@ -72,9 +72,9 @@ Item {
 
     readonly property var tracks: [
         { gradient: smartEnhanceGradient },
-        { gradient: toneBlendGradient, baseColor: Theme.colors.accent },
-        { gradient: toneBlendGradient, baseColor: Theme.colors.accent },
-        { gradient: toneBlendGradient, baseColor: Theme.colors.accent },
+        { gradient: toneBlendGradient, baseColor: Theme.tokens.accent },
+        { gradient: toneBlendGradient, baseColor: Theme.tokens.accent },
+        { gradient: toneBlendGradient, baseColor: Theme.tokens.accent },
         { gradient: temperatureGradient },
         { gradient: tintGradient },
         { gradient: hueGradient },

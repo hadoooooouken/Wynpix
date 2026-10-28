@@ -35,8 +35,8 @@ ApplicationWindow {
     // The background behind the image. In windowed mode the window opacity
     // setting makes it translucent; the background item then carries the
     // alpha alone and the viewer clears to transparent, so it applies once.
-    readonly property color viewerBackground: windowShell.fullscreen ? Theme.colors.backgroundFullscreen
-                                                                     : Theme.colors.background
+    readonly property color viewerBackground: windowShell.fullscreen ? Theme.tokens.surfaceCanvasFullscreen
+                                                                     : Theme.tokens.surfaceCanvas
     readonly property color windowBackground: Color.transparent(viewerBackground,
                                                                 windowShell.backgroundOpacity)
     readonly property bool translucentBackground: windowShell.backgroundOpacity < opaqueOpacity

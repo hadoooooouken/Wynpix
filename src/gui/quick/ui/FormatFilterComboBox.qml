@@ -35,7 +35,7 @@ T.AbstractButton {
     readonly property int popupRightGap: 10
     readonly property int borderWidth: 2
     // Text and glyph on the accent field.
-    readonly property color limitedContentColor: Theme.colors.accentText
+    readonly property color limitedContentColor: Theme.tokens.accentText
 
     readonly property int popupContentWidth: formatIndent + formatColumns * formatColumnWidth
                                              + (formatColumns - 1) * popupSpacing
@@ -110,10 +110,10 @@ T.AbstractButton {
 
     background: Rectangle {
         radius: StyleConstants.controlRadius
-        color: control.limited ? (control.hovered || control.popupOpen ? Theme.colors.accentHover
-                                                                       : Theme.colors.accent)
-             : control.hovered || control.popupOpen ? Theme.colors.fillHover
-             : Theme.colors.fillRest
+        color: control.limited ? (control.hovered || control.popupOpen ? Theme.tokens.accentHover
+                                                                       : Theme.tokens.accent)
+             : control.hovered || control.popupOpen ? Theme.tokens.fillHover
+             : Theme.tokens.fillRest
         border.width: control.borderWidth
         border.color: color
     }
@@ -124,7 +124,7 @@ T.AbstractButton {
             width: parent.width - x - glyph.width - control.textIconSpacing - control.iconRightPadding
             height: parent.height
             text: control.filter.displayText
-            color: control.limited ? control.limitedContentColor : Theme.colors.textHc
+            color: control.limited ? control.limitedContentColor : Theme.tokens.textPrimary
             font: Theme.fonts.body
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
@@ -137,7 +137,7 @@ T.AbstractButton {
             anchors.verticalCenter: parent.verticalCenter
             icon: FluentIcons.Checkmark16
             size: Theme.compactIconSize
-            color: control.limited ? control.limitedContentColor : Theme.colors.icons
+            color: control.limited ? control.limitedContentColor : Theme.tokens.iconDefault
         }
     }
 
@@ -208,7 +208,7 @@ T.AbstractButton {
                 Rectangle {
                     width: parent.width
                     height: StyleConstants.separatorThickness
-                    color: Theme.colors.strokeDefault
+                    color: Theme.tokens.strokeDefault
                 }
 
                 Repeater {

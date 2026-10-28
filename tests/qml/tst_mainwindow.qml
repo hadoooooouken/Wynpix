@@ -59,24 +59,24 @@ TestCase {
         verify(!window.visible);
         compare(window.width, window.initialWidth);
         compare(window.height, window.initialHeight);
-        verify(Qt.colorEqual(window.color, Theme.colors.background));
+        verify(Qt.colorEqual(window.color, Theme.tokens.surfaceCanvas));
     }
 
     function test_fullscreenUsesTheFullscreenBackground() {
         const window = createWindow();
         Fixture.setFullscreen(true);
-        verify(Qt.colorEqual(window.color, Theme.colors.backgroundFullscreen));
+        verify(Qt.colorEqual(window.color, Theme.tokens.surfaceCanvasFullscreen));
         Fixture.setFullscreen(false);
-        verify(Qt.colorEqual(window.color, Theme.colors.background));
+        verify(Qt.colorEqual(window.color, Theme.tokens.surfaceCanvas));
     }
 
     function test_viewerClearsToTheFullscreenBackgroundInFullscreen() {
         const window = createWindow();
         const viewport = childOfType(window, "ImageViewport");
         verify(viewport !== null, "no ImageViewport in the main window");
-        verify(Qt.colorEqual(viewport.backgroundColor, Theme.colors.background));
+        verify(Qt.colorEqual(viewport.backgroundColor, Theme.tokens.surfaceCanvas));
         Fixture.setFullscreen(true);
-        verify(Qt.colorEqual(viewport.backgroundColor, Theme.colors.backgroundFullscreen));
+        verify(Qt.colorEqual(viewport.backgroundColor, Theme.tokens.surfaceCanvasFullscreen));
     }
 
     function test_windowOpacityMakesOnlyTheWindowedBackgroundTranslucent() {
@@ -92,7 +92,7 @@ TestCase {
 
         Fixture.setFullscreen(true);
         compare(window.windowBackground.a, testCase.opaque);
-        verify(Qt.colorEqual(viewport.backgroundColor, Theme.colors.backgroundFullscreen));
+        verify(Qt.colorEqual(viewport.backgroundColor, Theme.tokens.surfaceCanvasFullscreen));
         Fixture.setFullscreen(false);
 
         Fixture.setFolderViewActive(true);

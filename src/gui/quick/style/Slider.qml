@@ -19,7 +19,7 @@ T.Slider {
     // gradient without the filled highlight segment.
     property var trackGradient: null
     // Base color beneath trackGradient, used to blend the gradient with
-    // Theme.colors.accent (e.g. for exposure, contrast and brightness).
+    // Theme.tokens.accent (e.g. for exposure, contrast and brightness).
     property color trackBaseColor: "transparent"
 
     handle: Rectangle {
@@ -34,12 +34,12 @@ T.Slider {
         radius: width / 2
         // Disabled: the text colour at the disabled opacity over the widget,
         // not the brightest colour of the control.
-        color: !control.enabled ? Qt.tint(Theme.colors.widget,
-                                          Color.transparent(Theme.colors.text, StyleConstants.disabledOpacity))
-             : control.hovered || control.pressed ? Color.lighter(Theme.colors.accent, StyleConstants.accentLightFactor)
-             : Theme.colors.accent
+        color: !control.enabled ? Qt.tint(Theme.tokens.surfacePopup,
+                                          Color.transparent(Theme.tokens.textSecondary, StyleConstants.disabledOpacity))
+             : control.hovered || control.pressed ? Color.lighter(Theme.tokens.accent, StyleConstants.accentLightFactor)
+             : Theme.tokens.accent
         border.width: StyleConstants.sliderHandleBorderWidth
-        border.color: Theme.colors.widget
+        border.color: Theme.tokens.surfacePopup
 
         // The shared focus ring, outside the ring of the widget colour.
         Rectangle {
@@ -48,7 +48,7 @@ T.Slider {
             radius: width / 2
             color: "transparent"
             border.width: StyleConstants.fieldBorderWidth
-            border.color: Theme.colors.accent
+            border.color: Theme.tokens.accent
             visible: control.visualFocus
         }
     }
@@ -65,7 +65,7 @@ T.Slider {
         radius: StyleConstants.sliderGrooveThickness / 2
         color: control.trackGradient !== null
              ? control.trackBaseColor
-             : Theme.colors.strokeStrong
+             : Theme.tokens.strokeStrong
         scale: control.horizontal && control.mirrored ? -1 : 1
 
         Rectangle {
@@ -83,7 +83,7 @@ T.Slider {
             width: control.horizontal ? control.position * parent.width : parent.width
             height: control.horizontal ? parent.height : control.position * parent.height
             radius: groove.radius
-            color: Theme.colors.accent
+            color: Theme.tokens.accent
         }
     }
 }

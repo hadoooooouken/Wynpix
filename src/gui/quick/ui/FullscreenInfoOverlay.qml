@@ -23,7 +23,7 @@ Item {
         width: Math.min(row.implicitWidth + 2 * root.horizontalPadding, root.maximumWidth)
         height: row.implicitHeight + 2 * root.verticalPadding
         bottomRightRadius: StyleConstants.surfaceRadius
-        color: Color.transparent(Theme.colors.overlay, root.backgroundOpacity)
+        color: Color.transparent(Theme.tokens.surfaceHud, root.backgroundOpacity)
         clip: row.implicitWidth + 2 * root.horizontalPadding > root.maximumWidth
         visible: opacity > 0
 
@@ -63,16 +63,16 @@ Item {
             Label {
                 text: root.chrome.positionText
                 visible: text.length > 0
-                color: Theme.colors.overlayText
+                color: Theme.tokens.textOnHud
             }
             Label {
                 text: root.chrome.nameText
-                color: Theme.colors.overlayText
+                color: Theme.tokens.textOnHud
             }
             Label {
                 text: root.chrome.detailsText
                 visible: text.length > 0
-                color: Theme.colors.overlayText
+                color: Theme.tokens.textOnHud
             }
         }
     }

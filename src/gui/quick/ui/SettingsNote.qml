@@ -11,7 +11,7 @@ Label {
     readonly property real noteTextOpacity: 0.5
 
     Layout.fillWidth: true
-    color: Color.transparent(Theme.colors.textHc, root.noteTextOpacity)
+    color: Color.transparent(Theme.tokens.textPrimary, root.noteTextOpacity)
     font: Theme.fonts.caption
     textFormat: Text.PlainText
     wrapMode: Text.WordWrap

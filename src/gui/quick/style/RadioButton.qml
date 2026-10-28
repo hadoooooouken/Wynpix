@@ -22,7 +22,7 @@ T.RadioButton {
         y: control.topPadding + (control.availableHeight - height) / 2
         icon: control.checked ? FluentIcons.Record16 : FluentIcons.RadioButton16
         size: StyleConstants.indicatorSize
-        color: control.checked ? Theme.colors.accent : Theme.colors.icons
+        color: control.checked ? Theme.tokens.accent : Theme.tokens.iconDefault
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
     }
 
@@ -31,7 +31,7 @@ T.RadioButton {
         radius: StyleConstants.controlRadius
         color: "transparent"
         border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
-        border.color: Theme.colors.accent
+        border.color: Theme.tokens.accent
     }
 
     contentItem: Text {
@@ -40,7 +40,7 @@ T.RadioButton {
 
         text: control.text
         font: control.font
-        color: Theme.colors.textHc
+        color: Theme.tokens.textPrimary
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter

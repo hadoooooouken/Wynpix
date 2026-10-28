@@ -118,12 +118,12 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.colors.thumbPanel
+        color: Theme.tokens.surfaceChrome
     }
 
     // Border towards the viewer.
     Rectangle {
-        color: Theme.colors.thumbPanelHc2
+        color: Theme.tokens.surfaceChromeRaised
         x: panel.atRight ? 0 : panel.atLeft ? parent.width - panel.borderWidth : 0
         y: panel.atTop ? parent.height - panel.borderWidth : 0
         width: panel.horizontal ? parent.width : panel.borderWidth
@@ -219,10 +219,10 @@ Item {
         Accessible.role: Accessible.Button
 
         background: Rectangle {
-            readonly property color surface: button.down ? Theme.colors.fillPressed
-                                           : button.active ? (button.hovered ? Theme.colors.accentTintHover
-                                                                             : Theme.colors.accentTint)
-                                           : button.hovered ? Theme.colors.fillHover
+            readonly property color surface: button.down ? Theme.tokens.fillPressed
+                                           : button.active ? (button.hovered ? Theme.tokens.accentTintHover
+                                                                             : Theme.tokens.accentTint)
+                                           : button.hovered ? Theme.tokens.fillHover
                                            : "transparent"
 
             radius: StyleConstants.panelButtonRadius

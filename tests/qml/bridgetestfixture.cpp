@@ -57,7 +57,7 @@ constexpr int kThumbnailValue = 200;
 
 // The application's own dark and light schemes, built as the application
 // builds them (the two have distinct backgrounds, so a switch changes
-// ThemeColors). The test application font stands in for the system font
+// ThemeTokens). The test application font stands in for the system font
 // the text styles derive from.
 ThemeSnapshot testTheme(bool dark) {
   return buildThemeSnapshot(

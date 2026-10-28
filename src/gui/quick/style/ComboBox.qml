@@ -59,10 +59,10 @@ T.ComboBox {
         selectByMouse: control.selectTextByMouse
 
         font: control.font
-        color: Theme.colors.textHc
+        color: Theme.tokens.textPrimary
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
-        selectionColor: Theme.colors.accent
-        selectedTextColor: Theme.colors.accentText
+        selectionColor: Theme.tokens.accent
+        selectedTextColor: Theme.tokens.accentText
         verticalAlignment: Text.AlignVCenter
     }
 

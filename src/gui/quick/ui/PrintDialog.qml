@@ -62,7 +62,7 @@ DialogWindow {
                     y: previewItem.paintedRect.y
                     width: previewItem.paintedRect.width
                     height: previewItem.paintedRect.height
-                    visible: Theme.colors.surfaceWindow.hsvValue > root.pageFrameWindowValue
+                    visible: Theme.tokens.surfaceWindow.hsvValue > root.pageFrameWindowValue
                     color: "transparent"
                     border.width: root.pageFrameWidth
                     border.color: root.pageFrameColor
@@ -77,7 +77,7 @@ DialogWindow {
                 Rectangle {
                     Layout.fillWidth: true
                     implicitHeight: StyleConstants.separatorThickness
-                    color: Theme.colors.strokeDefault
+                    color: Theme.tokens.strokeDefault
                 }
                 Label {
                     text: qsTr("Preview")
@@ -86,7 +86,7 @@ DialogWindow {
                 Rectangle {
                     Layout.fillWidth: true
                     implicitHeight: StyleConstants.separatorThickness
-                    color: Theme.colors.strokeDefault
+                    color: Theme.tokens.strokeDefault
                 }
             }
         }
@@ -142,7 +142,7 @@ DialogWindow {
                 Rectangle {
                     Layout.fillHeight: true
                     implicitWidth: StyleConstants.separatorThickness
-                    color: Theme.colors.strokeDefault
+                    color: Theme.tokens.strokeDefault
                 }
 
                 ColumnLayout {
@@ -178,7 +178,7 @@ DialogWindow {
                 Layout.fillWidth: true
                 visible: root.dialog.errorText.length > 0
                 text: root.dialog.errorText
-                color: Theme.colors.statusError
+                color: Theme.tokens.statusError
                 wrapMode: Text.Wrap
             }
 

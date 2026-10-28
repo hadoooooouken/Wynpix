@@ -28,7 +28,7 @@ T.ProgressBar {
             width: control.indeterminate ? parent.width : control.visualPosition * parent.width
             height: parent.height
             radius: StyleConstants.progressBarRadius
-            color: Theme.colors.accent
+            color: Theme.tokens.accent
             visible: control.indeterminate || control.position > 0
         }
 
@@ -38,7 +38,7 @@ T.ProgressBar {
             anchors.centerIn: parent
             text: Math.round(control.position * control.percentPerUnit) + "%"
             visible: !control.indeterminate
-            color: Theme.colors.textHc2
+            color: Theme.tokens.textOnView
             font: Theme.fonts.body
         }
 
@@ -55,7 +55,7 @@ T.ProgressBar {
                 x: percentText.x
                 y: percentText.y
                 text: percentText.text
-                color: Theme.colors.accentText
+                color: Theme.tokens.accentText
                 font: percentText.font
             }
         }
@@ -64,8 +64,8 @@ T.ProgressBar {
     background: Rectangle {
         implicitWidth: StyleConstants.sliderLength
         radius: StyleConstants.progressBarRadius
-        color: Theme.colors.folderView
+        color: Theme.tokens.surfaceView
         border.width: StyleConstants.progressBarBorderWidth
-        border.color: Theme.colors.strokeDefault
+        border.color: Theme.tokens.strokeDefault
     }
 }

@@ -107,8 +107,8 @@ private slots:
         ThemeStore::colorScheme(static_cast<ColorSchemes>(scheme)),
         fontWithPointSize(kDefaultFontPointSize), QString());
 
-    QCOMPARE(snapshot.colors.surfaceWindow, grey(window));
-    QCOMPARE(snapshot.colors.surfaceCard, grey(card));
+    QCOMPARE(snapshot.tokens.surfaceWindow, grey(window));
+    QCOMPARE(snapshot.tokens.surfaceCard, grey(card));
   }
 
   void defaultSystemFontGivesTheDesktopRamp() {
@@ -284,7 +284,7 @@ private slots:
       for (const QString &name : kAccentSamples) {
         colors.accent = QColor(name);
         const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
-        QCOMPARE(snapshot.colors.accentText,
+        QCOMPARE(snapshot.tokens.accentText,
                  AccentContrast::textOn(colors.accent));
       }
     }
@@ -321,11 +321,11 @@ private slots:
     for (const QString &name : kAccentSamples) {
       colors.accent = QColor(name);
       const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
-      const QColor text = snapshot.colors.accentText;
-      QCOMPARE(snapshot.colors.accentHover,
+      const QColor text = snapshot.tokens.accentText;
+      QCOMPARE(snapshot.tokens.accentHover,
                AccentContrast::stateFill(colors.accent, text,
                                          AccentContrast::kHoverStepPercent));
-      QCOMPARE(snapshot.colors.accentPressed,
+      QCOMPARE(snapshot.tokens.accentPressed,
                AccentContrast::stateFill(colors.accent, text,
                                          AccentContrast::kPressedStepPercent));
     }
@@ -387,14 +387,14 @@ private slots:
           buildThemeSnapshot(ThemeStore::colorScheme(scheme), font, {});
       const NeutralFills::Colors fills =
           NeutralFills::colorsFor(scheme == COLORS_DARK);
-      QCOMPARE(snapshot.colors.fillRest, fills.rest);
-      QCOMPARE(snapshot.colors.fillHover, fills.hover);
-      QCOMPARE(snapshot.colors.fillPressed, fills.pressed);
-      QCOMPARE(snapshot.colors.hudHover, fills.hudHover);
-      QCOMPARE(snapshot.colors.hudPressed, fills.hudPressed);
-      QCOMPARE(snapshot.colors.strokeSubtle, fills.strokeSubtle);
-      QCOMPARE(snapshot.colors.strokeDefault, fills.strokeDefault);
-      QCOMPARE(snapshot.colors.strokeStrong, fills.strokeStrong);
+      QCOMPARE(snapshot.tokens.fillRest, fills.rest);
+      QCOMPARE(snapshot.tokens.fillHover, fills.hover);
+      QCOMPARE(snapshot.tokens.fillPressed, fills.pressed);
+      QCOMPARE(snapshot.tokens.hudHover, fills.hudHover);
+      QCOMPARE(snapshot.tokens.hudPressed, fills.hudPressed);
+      QCOMPARE(snapshot.tokens.strokeSubtle, fills.strokeSubtle);
+      QCOMPARE(snapshot.tokens.strokeDefault, fills.strokeDefault);
+      QCOMPARE(snapshot.tokens.strokeStrong, fills.strokeStrong);
     }
   }
 
@@ -424,9 +424,9 @@ private slots:
       const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
       const SelectionFills::Colors fills =
           SelectionFills::colorsFor(colors.accent);
-      QCOMPARE(snapshot.colors.accentTint, fills.tint);
-      QCOMPARE(snapshot.colors.accentTintHover, fills.tintHover);
-      QCOMPARE(snapshot.colors.accentFrame, fills.frame);
+      QCOMPARE(snapshot.tokens.accentTint, fills.tint);
+      QCOMPARE(snapshot.tokens.accentTintHover, fills.tintHover);
+      QCOMPARE(snapshot.tokens.accentFrame, fills.frame);
     }
   }
 
@@ -443,14 +443,29 @@ private slots:
     const SemanticTokens::Colors tokens = SemanticTokens::colorsFor(colors);
 
     QCOMPARE(tokens.surfaceCanvas, colors.background);
+    QCOMPARE(tokens.surfaceCanvasFullscreen, colors.background_fullscreen);
     QCOMPARE(tokens.surfaceChrome, colors.thumbpanel);
+    QCOMPARE(tokens.surfaceChromeRaised, colors.thumbpanel_hc2);
     QCOMPARE(tokens.surfaceView, colors.folderview);
+    QCOMPARE(tokens.surfaceViewRaised, colors.folderview_hc);
+    QCOMPARE(tokens.surfaceViewRaisedStrong, colors.folderview_hc2);
     QCOMPARE(tokens.surfaceBar, colors.folderview_topbar);
     QCOMPARE(tokens.surfacePopup, colors.widget);
     QCOMPARE(tokens.surfaceHud, colors.overlay);
+    QCOMPARE(tokens.strokeField, colors.combo_field_border);
+    QCOMPARE(tokens.fieldRest, colors.combo_field);
+    QCOMPARE(tokens.fieldHover, colors.combo_field_hover);
+    QCOMPARE(tokens.fieldPressed, colors.combo_field_pressed);
     QCOMPARE(tokens.textPrimary, colors.text_hc);
+    QCOMPARE(tokens.textSecondary, colors.text);
+    QCOMPARE(tokens.textTertiary, colors.text_lc);
+    QCOMPARE(tokens.textOnView, colors.text_hc2);
+    QCOMPARE(tokens.textOnChrome, colors.thumbpanel_text);
     QCOMPARE(tokens.textOnHud, colors.overlay_text);
+    QCOMPARE(tokens.iconDefault, colors.icons);
+    QCOMPARE(tokens.iconFolder, colors.folder_icons);
     QCOMPARE(tokens.iconThumbFolder, colors.thumbnail_folder_icons);
+    QCOMPARE(tokens.contrastOnChrome, colors.thumbpanel_hc);
     QCOMPARE(tokens.accentText, AccentContrast::textOn(colors.accent));
     QCOMPARE(tokens.dropTarget, QColor(u"#be3c19"_s));
     // The literals the thumbnail strip and the viewer used.
@@ -483,10 +498,9 @@ private slots:
       QCOMPARE(snapshot.tokens.iconOnChrome, tokens.iconOnChrome);
       QCOMPARE(snapshot.tokens.accentText, tokens.accentText);
       QCOMPARE(snapshot.tokens.scrollbarMarker, tokens.scrollbarMarker);
-      // Theme.colors takes its derived colours from the same tokens.
-      QCOMPARE(snapshot.colors.accentText, snapshot.tokens.accentText);
-      QCOMPARE(snapshot.colors.fillHover, snapshot.tokens.fillHover);
-      QCOMPARE(snapshot.colors.surfaceCard, snapshot.tokens.surfaceCard);
+      QCOMPARE(snapshot.tokens.fieldRest, tokens.fieldRest);
+      QCOMPARE(snapshot.tokens.textOnView, tokens.textOnView);
+      QCOMPARE(snapshot.tokens.contrastOnChrome, tokens.contrastOnChrome);
     }
   }
 
@@ -509,11 +523,11 @@ private slots:
 
     QCOMPARE(snapshot.dark, dark);
     QCOMPARE(snapshot.iconFontFamily, iconFamily);
-    QCOMPARE(snapshot.colors.background, colors.background);
-    QCOMPARE(snapshot.colors.folderViewHc, colors.folderview_hc);
-    QCOMPARE(snapshot.colors.thumbPanelText, colors.thumbpanel_text);
-    QCOMPARE(snapshot.colors.comboFieldBorder, colors.combo_field_border);
-    QCOMPARE(snapshot.colors.scrollbarHover, colors.scrollbar_hover);
+    QCOMPARE(snapshot.tokens.surfaceCanvas, colors.background);
+    QCOMPARE(snapshot.tokens.surfaceViewRaised, colors.folderview_hc);
+    QCOMPARE(snapshot.tokens.textOnChrome, colors.thumbpanel_text);
+    QCOMPARE(snapshot.tokens.strokeField, colors.combo_field_border);
+    QCOMPARE(snapshot.tokens.scrollbarHover, colors.scrollbar_hover);
 
     const UiMetrics::Typography typography = UiMetrics::typographyFor(font);
     QCOMPARE(snapshot.fonts.caption, typography.caption);

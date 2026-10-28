@@ -42,7 +42,7 @@ GridLayout {
 
             objectName: "adjustmentLabel_" + index
             text: label
-            color: Theme.colors.textHc
+            color: Theme.tokens.textPrimary
             Layout.row: index
             Layout.column: 0
 
@@ -127,7 +127,7 @@ GridLayout {
 
             objectName: "adjustmentValue_" + index
             text: valueText
-            color: Theme.colors.textHc
+            color: Theme.tokens.textPrimary
             horizontalAlignment: Text.AlignRight
             Layout.row: index
             Layout.column: 2

@@ -71,7 +71,7 @@ Item {
 
             Label {
                 text: panel.title
-                color: Theme.colors.textHc
+                color: Theme.tokens.textPrimary
                 font: panel.strongTitle ? Theme.fonts.bodyStrong : Theme.fonts.body
                 elide: Text.ElideRight
                 Layout.fillWidth: true

@@ -76,13 +76,14 @@ Principles:
 
 ## 3. Theme and Style
 
-- **Colours:** `Theme.colors` holds the colour scheme entries
-  (`themestore.h`) under camelCase names and the colours derived from them:
-  the accent states and the text on the accent (`gui/accentcontrast.h`), the
-  translucent fills and strokes of neutral controls (`gui/neutralfills.h`)
-  and the selection tints (`gui/selectionfills.h`). `Theme.tokens`
-  (`gui/semantictokens.h`) names the same colours by role (surface, stroke,
-  fill, accent, text, icon, status); most QML still reads `Theme.colors`.
+- **Colours:** QML reads every colour from `Theme.tokens`
+  (`gui/semantictokens.h`), named by role (surface, stroke, fill, field,
+  accent, text, icon, status) rather than by the colour scheme entry
+  (`themestore.h`) it comes from. Besides the scheme entries it holds the
+  colours derived from them: the accent states and the text on the accent
+  (`gui/accentcontrast.h`), the translucent fills and strokes of neutral
+  controls (`gui/neutralfills.h`) and the selection tints
+  (`gui/selectionfills.h`).
 - **Fixed sizes and factors:** `StyleConstants` (corner radii, paddings,
   opacities, durations). Sizes that scale with the font come from
   `Theme.metrics`.
@@ -192,7 +193,3 @@ app uses 0.2 GB. Without the thumbnail budget, the first open peaked at
   - AVX code in prebuilt static libraries (`kimg_exr`, `kimg_jph`,
     `kimg_raw`) is reported as CRT dispatch without proof; only the SDE run
     covers these plugins.
-- **Two colour APIs.** QML reads `Theme.colors`; `Theme.tokens` duplicates
-  about twenty of its colours by role and is used in a few places. Either
-  move QML to the tokens and drop the duplicates from `Theme.colors`, or
-  drop the unused tokens.

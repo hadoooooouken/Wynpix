@@ -54,7 +54,7 @@ Window {
     title: root.editor.windowTitle
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
-    color: Theme.colors.surfaceWindow
+    color: Theme.tokens.surfaceWindow
     width: root.initialWidth
     height: root.initialHeight
     minimumWidth: root.minimumContentWidth
@@ -99,14 +99,14 @@ Window {
                 Layout.preferredWidth: root.sidebarWidth + 2 * root.sidebarPadding
                 Layout.fillWidth: false
                 Layout.fillHeight: true
-                color: Theme.colors.surfaceCard
+                color: Theme.tokens.surfaceCard
 
                 Rectangle {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     width: StyleConstants.separatorThickness
-                    color: Theme.colors.strokeSubtle
+                    color: Theme.tokens.strokeSubtle
                 }
 
                 ColumnLayout {
@@ -151,9 +151,9 @@ Window {
                                 radius: StyleConstants.rowRadius
                                 visible: entry.highlighted || entry.down || entry.hovered
                                 color: entry.highlighted
-                                       ? (entry.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
-                                       : entry.down ? Theme.colors.fillPressed
-                                       : Theme.colors.fillHover
+                                       ? (entry.hovered ? Theme.tokens.accentTintHover : Theme.tokens.accentTint)
+                                       : entry.down ? Theme.tokens.fillPressed
+                                       : Theme.tokens.fillHover
                             }
                         }
                     }

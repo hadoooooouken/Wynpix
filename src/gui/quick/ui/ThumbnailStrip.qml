@@ -43,7 +43,7 @@ Item {
         // stylesheet), so a translucent panel has an even band under them.
         background: Rectangle {
             visible: bar.contentItem.visible
-            color: Theme.colors.thumbPanel
+            color: Theme.tokens.surfaceChrome
         }
 
         Rectangle {
@@ -134,11 +134,11 @@ Item {
         delegate: ThumbnailWidget {
             cellLayout: strip.stripLayout
             hoveredIndex: strip.hoveredIndex
-            surfaceColor: Theme.colors.thumbPanel
-            hoverColor: Theme.colors.thumbPanelHc
-            labelOnSurface: strip.controller.labelTextColor(Theme.colors.thumbPanel)
-            labelOnHover: strip.controller.labelTextColor(Theme.colors.thumbPanelHc)
-            selectedLabelColor: Theme.colors.thumbPanelText
+            surfaceColor: Theme.tokens.surfaceChrome
+            hoverColor: Theme.tokens.contrastOnChrome
+            labelOnSurface: strip.controller.labelTextColor(Theme.tokens.surfaceChrome)
+            labelOnHover: strip.controller.labelTextColor(Theme.tokens.contrastOnChrome)
+            selectedLabelColor: Theme.tokens.textOnChrome
         }
     }
 

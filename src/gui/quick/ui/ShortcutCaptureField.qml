@@ -31,9 +31,9 @@ FocusScope {
     Rectangle {
         anchors.fill: parent
         radius: StyleConstants.controlRadius
-        color: mouseArea.containsMouse ? Theme.colors.fillHover : Theme.colors.fillRest
+        color: mouseArea.containsMouse ? Theme.tokens.fillHover : Theme.tokens.fillRest
         border.width: root.activeFocus ? StyleConstants.fieldBorderWidth : 0
-        border.color: Theme.colors.accent
+        border.color: Theme.tokens.accent
     }
 
     Label {

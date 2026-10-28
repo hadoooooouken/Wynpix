@@ -10,125 +10,8 @@
 // Settings::colorScheme() and the application font
 // (gui/quick/adapters/themesnapshotbuilder.h).
 
-// The colours of ColorScheme (themestore.h) that QML reads, under camelCase
-// names: ColorScheme::folderview_topbar is folderViewTopBar. The exceptions
-// are derived from the accent (AccentContrast): accentText, the colour of
-// text and glyphs on a solid accent fill, and the fills of the accent hovered
-// (accentHover) and pressed (accentPressed) under that text, and the
-// translucent accent of selected items (accentTint, accentTintHover,
-// accentFrame; SelectionFills).
-// The fills and strokes of neutral controls (fillRest, fillHover, fillPressed,
-// the HUD ones and stroke*, NeutralFills) are translucent and follow; the
-// dialog window and its cards (surfaceWindow, surfaceCard) come last.
-struct ThemeColors {
-  Q_GADGET
-  QML_VALUE_TYPE(themeColors)
-  QML_UNCREATABLE("Provided by Theme.colors")
-  Q_PROPERTY(QColor background MEMBER background)
-  Q_PROPERTY(QColor backgroundFullscreen MEMBER backgroundFullscreen)
-  Q_PROPERTY(QColor text MEMBER text)
-  Q_PROPERTY(QColor icons MEMBER icons)
-  Q_PROPERTY(QColor folderIcons MEMBER folderIcons)
-  Q_PROPERTY(QColor widget MEMBER widget)
-  Q_PROPERTY(QColor accent MEMBER accent)
-  Q_PROPERTY(QColor accentText MEMBER accentText)
-  Q_PROPERTY(QColor accentHover MEMBER accentHover)
-  Q_PROPERTY(QColor accentPressed MEMBER accentPressed)
-  Q_PROPERTY(QColor accentTint MEMBER accentTint)
-  Q_PROPERTY(QColor accentTintHover MEMBER accentTintHover)
-  Q_PROPERTY(QColor accentFrame MEMBER accentFrame)
-  Q_PROPERTY(QColor folderView MEMBER folderView)
-  Q_PROPERTY(QColor folderViewTopBar MEMBER folderViewTopBar)
-  Q_PROPERTY(QColor thumbPanel MEMBER thumbPanel)
-  Q_PROPERTY(QColor scrollbar MEMBER scrollbar)
-  Q_PROPERTY(QColor scrollbarHover MEMBER scrollbarHover)
-  Q_PROPERTY(QColor overlayText MEMBER overlayText)
-  Q_PROPERTY(QColor overlay MEMBER overlay)
-  Q_PROPERTY(QColor statusPending MEMBER statusPending)
-  Q_PROPERTY(QColor statusError MEMBER statusError)
-  Q_PROPERTY(QColor statusProcessing MEMBER statusProcessing)
-  Q_PROPERTY(QColor statusSuccess MEMBER statusSuccess)
-  Q_PROPERTY(QColor danger MEMBER danger)
-  Q_PROPERTY(QColor trash MEMBER trash)
-  Q_PROPERTY(QColor textHc2 MEMBER textHc2)
-  Q_PROPERTY(QColor textHc MEMBER textHc)
-  Q_PROPERTY(QColor textLc MEMBER textLc)
-  Q_PROPERTY(QColor folderViewHc MEMBER folderViewHc)
-  Q_PROPERTY(QColor folderViewHc2 MEMBER folderViewHc2)
-  Q_PROPERTY(QColor thumbPanelHc MEMBER thumbPanelHc)
-  Q_PROPERTY(QColor thumbPanelHc2 MEMBER thumbPanelHc2)
-  Q_PROPERTY(QColor thumbPanelText MEMBER thumbPanelText)
-  Q_PROPERTY(QColor comboField MEMBER comboField)
-  Q_PROPERTY(QColor comboFieldHover MEMBER comboFieldHover)
-  Q_PROPERTY(QColor comboFieldPressed MEMBER comboFieldPressed)
-  Q_PROPERTY(QColor comboFieldBorder MEMBER comboFieldBorder)
-  Q_PROPERTY(QColor fillRest MEMBER fillRest)
-  Q_PROPERTY(QColor fillHover MEMBER fillHover)
-  Q_PROPERTY(QColor fillPressed MEMBER fillPressed)
-  Q_PROPERTY(QColor hudHover MEMBER hudHover)
-  Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
-  Q_PROPERTY(QColor strokeSubtle MEMBER strokeSubtle)
-  Q_PROPERTY(QColor strokeDefault MEMBER strokeDefault)
-  Q_PROPERTY(QColor strokeStrong MEMBER strokeStrong)
-  Q_PROPERTY(QColor surfaceWindow MEMBER surfaceWindow)
-  Q_PROPERTY(QColor surfaceCard MEMBER surfaceCard)
-
-public:
-  QColor background;
-  QColor backgroundFullscreen;
-  QColor text;
-  QColor icons;
-  QColor folderIcons;
-  QColor widget;
-  QColor accent;
-  QColor accentText;
-  QColor accentHover;
-  QColor accentPressed;
-  QColor accentTint;
-  QColor accentTintHover;
-  QColor accentFrame;
-  QColor folderView;
-  QColor folderViewTopBar;
-  QColor thumbPanel;
-  QColor scrollbar;
-  QColor scrollbarHover;
-  QColor overlayText;
-  QColor overlay;
-  QColor statusPending;
-  QColor statusError;
-  QColor statusProcessing;
-  QColor statusSuccess;
-  QColor danger;
-  QColor trash;
-  QColor textHc2;
-  QColor textHc;
-  QColor textLc;
-  QColor folderViewHc;
-  QColor folderViewHc2;
-  QColor thumbPanelHc;
-  QColor thumbPanelHc2;
-  QColor thumbPanelText;
-  QColor comboField;
-  QColor comboFieldHover;
-  QColor comboFieldPressed;
-  QColor comboFieldBorder;
-  QColor fillRest;
-  QColor fillHover;
-  QColor fillPressed;
-  QColor hudHover;
-  QColor hudPressed;
-  QColor strokeSubtle;
-  QColor strokeDefault;
-  QColor strokeStrong;
-  QColor surfaceWindow;
-  QColor surfaceCard;
-
-  friend bool operator==(const ThemeColors &, const ThemeColors &) = default;
-};
-
-// Colours by role (SemanticTokens::Colors): surfaces, strokes, fills, the
-// accent and its states, text, icons and states. Theme.colors keeps the
-// scheme entries until QML moves to these.
+// Colours of the UI by role (SemanticTokens::Colors): surfaces, strokes,
+// fills, the accent and its states, text, icons and states.
 struct ThemeTokens {
   Q_GADGET
   QML_VALUE_TYPE(themeTokens)
@@ -136,7 +19,10 @@ struct ThemeTokens {
   Q_PROPERTY(QColor surfaceCanvas MEMBER surfaceCanvas)
   Q_PROPERTY(QColor surfaceCanvasFullscreen MEMBER surfaceCanvasFullscreen)
   Q_PROPERTY(QColor surfaceChrome MEMBER surfaceChrome)
+  Q_PROPERTY(QColor surfaceChromeRaised MEMBER surfaceChromeRaised)
   Q_PROPERTY(QColor surfaceView MEMBER surfaceView)
+  Q_PROPERTY(QColor surfaceViewRaised MEMBER surfaceViewRaised)
+  Q_PROPERTY(QColor surfaceViewRaisedStrong MEMBER surfaceViewRaisedStrong)
   Q_PROPERTY(QColor surfaceBar MEMBER surfaceBar)
   Q_PROPERTY(QColor surfacePopup MEMBER surfacePopup)
   Q_PROPERTY(QColor surfaceWindow MEMBER surfaceWindow)
@@ -145,9 +31,13 @@ struct ThemeTokens {
   Q_PROPERTY(QColor strokeSubtle MEMBER strokeSubtle)
   Q_PROPERTY(QColor strokeDefault MEMBER strokeDefault)
   Q_PROPERTY(QColor strokeStrong MEMBER strokeStrong)
+  Q_PROPERTY(QColor strokeField MEMBER strokeField)
   Q_PROPERTY(QColor fillRest MEMBER fillRest)
   Q_PROPERTY(QColor fillHover MEMBER fillHover)
   Q_PROPERTY(QColor fillPressed MEMBER fillPressed)
+  Q_PROPERTY(QColor fieldRest MEMBER fieldRest)
+  Q_PROPERTY(QColor fieldHover MEMBER fieldHover)
+  Q_PROPERTY(QColor fieldPressed MEMBER fieldPressed)
   Q_PROPERTY(QColor hudHover MEMBER hudHover)
   Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
   Q_PROPERTY(QColor accent MEMBER accent)
@@ -158,11 +48,16 @@ struct ThemeTokens {
   Q_PROPERTY(QColor accentTintHover MEMBER accentTintHover)
   Q_PROPERTY(QColor accentFrame MEMBER accentFrame)
   Q_PROPERTY(QColor textPrimary MEMBER textPrimary)
+  Q_PROPERTY(QColor textSecondary MEMBER textSecondary)
+  Q_PROPERTY(QColor textTertiary MEMBER textTertiary)
+  Q_PROPERTY(QColor textOnView MEMBER textOnView)
+  Q_PROPERTY(QColor textOnChrome MEMBER textOnChrome)
   Q_PROPERTY(QColor textOnHud MEMBER textOnHud)
   Q_PROPERTY(QColor iconDefault MEMBER iconDefault)
   Q_PROPERTY(QColor iconFolder MEMBER iconFolder)
   Q_PROPERTY(QColor iconThumbFolder MEMBER iconThumbFolder)
   Q_PROPERTY(QColor iconOnChrome MEMBER iconOnChrome)
+  Q_PROPERTY(QColor contrastOnChrome MEMBER contrastOnChrome)
   Q_PROPERTY(QColor statusPending MEMBER statusPending)
   Q_PROPERTY(QColor statusError MEMBER statusError)
   Q_PROPERTY(QColor statusProcessing MEMBER statusProcessing)
@@ -178,7 +73,10 @@ public:
   QColor surfaceCanvas;
   QColor surfaceCanvasFullscreen;
   QColor surfaceChrome;
+  QColor surfaceChromeRaised;
   QColor surfaceView;
+  QColor surfaceViewRaised;
+  QColor surfaceViewRaisedStrong;
   QColor surfaceBar;
   QColor surfacePopup;
   QColor surfaceWindow;
@@ -187,9 +85,13 @@ public:
   QColor strokeSubtle;
   QColor strokeDefault;
   QColor strokeStrong;
+  QColor strokeField;
   QColor fillRest;
   QColor fillHover;
   QColor fillPressed;
+  QColor fieldRest;
+  QColor fieldHover;
+  QColor fieldPressed;
   QColor hudHover;
   QColor hudPressed;
   QColor accent;
@@ -200,11 +102,16 @@ public:
   QColor accentTintHover;
   QColor accentFrame;
   QColor textPrimary;
+  QColor textSecondary;
+  QColor textTertiary;
+  QColor textOnView;
+  QColor textOnChrome;
   QColor textOnHud;
   QColor iconDefault;
   QColor iconFolder;
   QColor iconThumbFolder;
   QColor iconOnChrome;
+  QColor contrastOnChrome;
   QColor statusPending;
   QColor statusError;
   QColor statusProcessing;
@@ -271,7 +178,6 @@ public:
 
 // Complete set published by ThemeBridge in one step.
 struct ThemeSnapshot {
-  ThemeColors colors;
   ThemeTokens tokens;
   ThemeFonts fonts;
   ThemeMetrics metrics;

@@ -58,7 +58,7 @@ Item {
             visible: root.entries.empty
             text: qsTr("<no metadata found>")
             textFormat: Text.PlainText
-            color: Theme.colors.text
+            color: Theme.tokens.textSecondary
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -79,7 +79,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent
                     visible: hover.hovered
-                    color: Theme.colors.fillHover
+                    color: Theme.tokens.fillHover
                 }
 
                 HoverHandler {
@@ -95,7 +95,7 @@ Item {
                     Label {
                         width: entry.stacked ? entryLayout.width : root.nameWidth
                         text: entry.name
-                        color: Theme.colors.text
+                        color: Theme.tokens.textSecondary
                     }
 
                     TextEdit {
@@ -107,9 +107,9 @@ Item {
                         readOnly: true
                         selectByMouse: true
                         activeFocusOnPress: false
-                        color: Theme.colors.text
-                        selectionColor: Theme.colors.accent
-                        selectedTextColor: Theme.colors.accentText
+                        color: Theme.tokens.textSecondary
+                        selectionColor: Theme.tokens.accent
+                        selectedTextColor: Theme.tokens.accentText
                         font: Theme.fonts.body
                     }
                 }

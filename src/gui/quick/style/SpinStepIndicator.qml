@@ -15,8 +15,8 @@ Rectangle {
     implicitWidth: StyleConstants.spinStepIndicatorWidth
     implicitHeight: StyleConstants.spinBoxMinimumContentHeight
     radius: StyleConstants.controlRadius
-    color: pressed ? Theme.colors.fillPressed
-         : hovered ? Theme.colors.fillHover
+    color: pressed ? Theme.tokens.fillPressed
+         : hovered ? Theme.tokens.fillHover
          : "transparent"
     opacity: enabled ? 1.0 : StyleConstants.disabledOpacity
 

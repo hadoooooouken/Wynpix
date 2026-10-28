@@ -41,8 +41,8 @@ Item {
         bottomRightRadius: StyleConstants.surfaceRadius
         topLeftRadius: 0
         topRightRadius: 0
-        color: Theme.colors.widget
-        border.color: Theme.colors.strokeDefault
+        color: Theme.tokens.surfacePopup
+        border.color: Theme.tokens.strokeDefault
         border.width: StyleConstants.separatorThickness
         visible: opacity > 0
 
@@ -99,8 +99,8 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: firstPageButton.down ? Theme.colors.fillPressed
-                           : firstPageButton.hovered && firstPageButton.enabled ? Theme.colors.fillHover
+                    color: firstPageButton.down ? Theme.tokens.fillPressed
+                           : firstPageButton.hovered && firstPageButton.enabled ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
@@ -108,7 +108,7 @@ Item {
                     icon: FluentIcons.Next20
                     rotation: 180
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -135,15 +135,15 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: prevPageButton.down ? Theme.colors.fillPressed
-                           : prevPageButton.hovered && prevPageButton.enabled ? Theme.colors.fillHover
+                    color: prevPageButton.down ? Theme.tokens.fillPressed
+                           : prevPageButton.hovered && prevPageButton.enabled ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
                 contentItem: IconGlyph {
                     icon: FluentIcons.ChevronLeft48
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -170,15 +170,15 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: nextPageButton.down ? Theme.colors.fillPressed
-                           : nextPageButton.hovered && nextPageButton.enabled ? Theme.colors.fillHover
+                    color: nextPageButton.down ? Theme.tokens.fillPressed
+                           : nextPageButton.hovered && nextPageButton.enabled ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
                 contentItem: IconGlyph {
                     icon: FluentIcons.ChevronRight48
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -205,15 +205,15 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: lastPageButton.down ? Theme.colors.fillPressed
-                           : lastPageButton.hovered && lastPageButton.enabled ? Theme.colors.fillHover
+                    color: lastPageButton.down ? Theme.tokens.fillPressed
+                           : lastPageButton.hovered && lastPageButton.enabled ? Theme.tokens.fillHover
                            : "transparent"
                 }
 
                 contentItem: IconGlyph {
                     icon: FluentIcons.Next20
                     size: root.iconSize
-                    color: Theme.colors.icons
+                    color: Theme.tokens.iconDefault
                 }
 
                 ToolTip {
@@ -264,7 +264,7 @@ Item {
                     text: (pageSlider.pressed
                            ? Math.round(pageSlider.value) + 1
                            : root.navigation.pageIndex + 1).toString()
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                     font: Theme.fonts.body
                 }
 
@@ -273,7 +273,7 @@ Item {
 
                     verticalAlignment: Text.AlignVCenter
                     text: " / " + root.navigation.pageCount
-                    color: Theme.colors.text
+                    color: Theme.tokens.textSecondary
                     font: Theme.fonts.body
                 }
             }

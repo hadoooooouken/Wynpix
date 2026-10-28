@@ -14,7 +14,7 @@ FocusScope {
 
     required property ImageViewportController controller
     // What the image is drawn over; may be translucent.
-    property color backgroundColor: Theme.colors.background
+    property color backgroundColor: Theme.tokens.surfaceCanvas
     property int sidePanelLeftInset: 0
     property int sidePanelRightInset: 0
     property bool floatingPanelVisible: false
@@ -123,7 +123,7 @@ FocusScope {
         width: root.zonePillWidth
         height: Math.max(root.height / root.zonePillHeightDivisor, root.zonePillMinHeight)
         radius: StyleConstants.surfaceRadius
-        color: Theme.colors.thumbPanel
+        color: Theme.tokens.surfaceChrome
         opacity: highlighted ? 1 : 0
         visible: opacity > 0
 
@@ -176,7 +176,7 @@ FocusScope {
         bottomRightRadius: StyleConstants.surfaceRadius
         width: zoomText.implicitWidth + root.indicatorHorizontalPadding
         height: zoomText.implicitHeight + root.indicatorVerticalPadding
-        color: Theme.colors.overlay
+        color: Theme.tokens.surfaceHud
         visible: opacity > 0
 
         states: State {
@@ -213,7 +213,7 @@ FocusScope {
 
             anchors.centerIn: parent
             font: Theme.fonts.title
-            color: Theme.colors.overlayText
+            color: Theme.tokens.textOnHud
             text: qsTr("%1%").arg(root.controller.zoomPercent)
         }
     }

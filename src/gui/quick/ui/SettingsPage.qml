@@ -36,7 +36,7 @@ ScrollView {
         Rectangle {
             Layout.fillWidth: true
             implicitHeight: StyleConstants.separatorThickness
-            color: Theme.colors.strokeDefault
+            color: Theme.tokens.strokeDefault
         }
     }
 }

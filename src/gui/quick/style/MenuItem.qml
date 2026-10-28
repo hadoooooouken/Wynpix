@@ -16,8 +16,8 @@ T.MenuItem {
     property bool hasGlyph: false
     property int glyph
     property int glyphSize: Theme.standardIconSize
-    property color glyphColor: Theme.colors.icons
-    property color labelColor: Theme.colors.textHc
+    property color glyphColor: Theme.tokens.iconDefault
+    property color labelColor: Theme.tokens.textPrimary
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
@@ -31,7 +31,7 @@ T.MenuItem {
 
     icon.width: Theme.compactIconSize
     icon.height: Theme.compactIconSize
-    icon.color: Theme.colors.icons
+    icon.color: Theme.tokens.iconDefault
 
     contentItem: Item {
         id: content
@@ -42,7 +42,7 @@ T.MenuItem {
                                              ? control.arrow.width + control.spacing : 0
         readonly property real glyphPadding: control.hasGlyph ? glyphIcon.width + control.spacing : 0
         readonly property string shortcutText: control.shortcutText
-        readonly property color secondaryColor: Color.transparent(Theme.colors.text,
+        readonly property color secondaryColor: Color.transparent(Theme.tokens.textSecondary,
                                                                   StyleConstants.secondaryTextOpacity)
 
         implicitWidth: indicatorPadding + glyphPadding + label.implicitWidth
@@ -120,8 +120,8 @@ T.MenuItem {
     background: Rectangle {
         implicitHeight: Theme.metrics.contextMenuItemHeight
         radius: StyleConstants.itemRadius
-        color: control.down ? Theme.colors.fillPressed
-             : control.highlighted ? Theme.colors.fillHover
+        color: control.down ? Theme.tokens.fillPressed
+             : control.highlighted ? Theme.tokens.fillHover
              : "transparent"
     }
 }

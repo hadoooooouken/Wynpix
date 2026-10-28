@@ -18,10 +18,10 @@ T.TextField {
     leftPadding: StyleConstants.fieldHorizontalPadding + StyleConstants.fieldBorderWidth
     rightPadding: StyleConstants.fieldHorizontalPadding + StyleConstants.fieldBorderWidth
 
-    color: Theme.colors.textHc
-    selectionColor: Theme.colors.accent
-    selectedTextColor: Theme.colors.accentText
-    placeholderTextColor: Color.transparent(Theme.colors.text, StyleConstants.secondaryTextOpacity)
+    color: Theme.tokens.textPrimary
+    selectionColor: Theme.tokens.accent
+    selectedTextColor: Theme.tokens.accentText
+    placeholderTextColor: Color.transparent(Theme.tokens.textSecondary, StyleConstants.secondaryTextOpacity)
     verticalAlignment: TextInput.AlignVCenter
     opacity: enabled ? 1.0 : StyleConstants.disabledOpacity
 

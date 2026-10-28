@@ -45,7 +45,7 @@ Window {
     title: qsTr("Batch Converter")
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
-    color: Theme.colors.surfaceWindow
+    color: Theme.tokens.surfaceWindow
     width: Math.max(root.initialWidth, root.minimumContentWidth)
     height: root.initialHeight
     minimumWidth: root.minimumContentWidth
@@ -181,9 +181,9 @@ Window {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        color: Theme.colors.folderView
+                        color: Theme.tokens.surfaceView
                         border.width: root.queueFrameWidth
-                        border.color: Theme.colors.strokeDefault
+                        border.color: Theme.tokens.strokeDefault
 
                         ListView {
                             objectName: "batchQueue"

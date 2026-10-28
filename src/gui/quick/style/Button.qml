@@ -27,7 +27,7 @@ T.Button {
 
     icon.width: Theme.compactIconSize
     icon.height: Theme.compactIconSize
-    icon.color: control.primary ? Theme.colors.accentText : Theme.colors.icons
+    icon.color: control.primary ? Theme.tokens.accentText : Theme.tokens.iconDefault
 
     contentItem: IconLabel {
         spacing: control.spacing
@@ -38,7 +38,7 @@ T.Button {
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.primary ? Theme.colors.accentText : Theme.colors.textHc
+        color: control.primary ? Theme.tokens.accentText : Theme.tokens.textPrimary
     }
 
     background: Rectangle {
@@ -46,16 +46,16 @@ T.Button {
         radius: StyleConstants.controlRadius
         visible: !control.flat || control.down || control.checked || control.hovered
                  || control.visualFocus
-        color: control.primary ? (control.down ? Theme.colors.accentPressed
-                                  : control.hovered ? Theme.colors.accentHover
-                                  : Theme.colors.accent)
-             : control.down ? Theme.colors.fillPressed
-             : control.checked ? (control.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
-             : control.hovered ? Theme.colors.fillHover
+        color: control.primary ? (control.down ? Theme.tokens.accentPressed
+                                  : control.hovered ? Theme.tokens.accentHover
+                                  : Theme.tokens.accent)
+             : control.down ? Theme.tokens.fillPressed
+             : control.checked ? (control.hovered ? Theme.tokens.accentTintHover : Theme.tokens.accentTint)
+             : control.hovered ? Theme.tokens.fillHover
              : control.flat ? "transparent"
-             : Theme.colors.fillRest
+             : Theme.tokens.fillRest
         border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
         // The ring of the shared focus; on the solid accent it takes the text colour.
-        border.color: control.primary ? Theme.colors.accentText : Theme.colors.accent
+        border.color: control.primary ? Theme.tokens.accentText : Theme.tokens.accent
     }
 }

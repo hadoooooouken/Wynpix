@@ -23,7 +23,7 @@ T.CheckBox {
             : control.checkState === Qt.PartiallyChecked ? FluentIcons.CheckboxIndeterminate16
             : FluentIcons.CheckboxUnchecked16
         size: StyleConstants.indicatorSize
-        color: control.checkState === Qt.Unchecked ? Theme.colors.icons : Theme.colors.accent
+        color: control.checkState === Qt.Unchecked ? Theme.tokens.iconDefault : Theme.tokens.accent
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
     }
 
@@ -32,7 +32,7 @@ T.CheckBox {
         radius: StyleConstants.controlRadius
         color: "transparent"
         border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
-        border.color: Theme.colors.accent
+        border.color: Theme.tokens.accent
     }
 
     contentItem: Text {
@@ -41,7 +41,7 @@ T.CheckBox {
 
         text: control.text
         font: control.font
-        color: Theme.colors.textHc
+        color: Theme.tokens.textPrimary
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter

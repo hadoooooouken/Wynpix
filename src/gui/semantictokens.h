@@ -21,7 +21,13 @@ struct Colors {
   QColor surfaceCanvas;
   QColor surfaceCanvasFullscreen;
   QColor surfaceChrome;
+  // The chrome one step further from the canvas (its border, glyphs on it).
+  QColor surfaceChromeRaised;
   QColor surfaceView;
+  // The view one and two steps further from the canvas: hovered and
+  // alternate rows, borders, the backdrop of the rename prompt.
+  QColor surfaceViewRaised;
+  QColor surfaceViewRaisedStrong;
   QColor surfaceBar;
   QColor surfacePopup;
   QColor surfaceWindow;
@@ -30,9 +36,15 @@ struct Colors {
   QColor strokeSubtle;
   QColor strokeDefault;
   QColor strokeStrong;
+  // Outline of entry fields (text fields, combo boxes, spin boxes).
+  QColor strokeField;
   QColor fillRest;
   QColor fillHover;
   QColor fillPressed;
+  // Opaque fills of entry fields, stronger than the button fills.
+  QColor fieldRest;
+  QColor fieldHover;
+  QColor fieldPressed;
   QColor hudHover;
   QColor hudPressed;
   QColor accent;
@@ -42,13 +54,21 @@ struct Colors {
   QColor accentTint;
   QColor accentTintHover;
   QColor accentFrame;
+  // Text from the highest contrast to the lowest.
   QColor textPrimary;
+  QColor textSecondary;
+  QColor textTertiary;
+  // Black or white, whichever stands out on the view or the chrome.
+  QColor textOnView;
+  QColor textOnChrome;
   QColor textOnHud;
   QColor iconDefault;
   QColor iconFolder;
   QColor iconThumbFolder;
   // Glyphs on the chrome surface (the click-zone arrows of the viewer).
   QColor iconOnChrome;
+  // textOnChrome at the opacity of the chrome: hovered thumbnails.
+  QColor contrastOnChrome;
   QColor statusPending;
   QColor statusError;
   QColor statusProcessing;
@@ -93,7 +113,10 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
       .surfaceCanvas = scheme.background,
       .surfaceCanvasFullscreen = scheme.background_fullscreen,
       .surfaceChrome = scheme.thumbpanel,
+      .surfaceChromeRaised = scheme.thumbpanel_hc2,
       .surfaceView = scheme.folderview,
+      .surfaceViewRaised = scheme.folderview_hc,
+      .surfaceViewRaisedStrong = scheme.folderview_hc2,
       .surfaceBar = scheme.folderview_topbar,
       .surfacePopup = scheme.widget,
       .surfaceWindow =
@@ -104,9 +127,13 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
       .strokeSubtle = fills.strokeSubtle,
       .strokeDefault = fills.strokeDefault,
       .strokeStrong = fills.strokeStrong,
+      .strokeField = scheme.combo_field_border,
       .fillRest = fills.rest,
       .fillHover = fills.hover,
       .fillPressed = fills.pressed,
+      .fieldRest = scheme.combo_field,
+      .fieldHover = scheme.combo_field_hover,
+      .fieldPressed = scheme.combo_field_pressed,
       .hudHover = fills.hudHover,
       .hudPressed = fills.hudPressed,
       .accent = scheme.accent,
@@ -119,6 +146,10 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
       .accentTintHover = selection.tintHover,
       .accentFrame = selection.frame,
       .textPrimary = scheme.text_hc,
+      .textSecondary = scheme.text,
+      .textTertiary = scheme.text_lc,
+      .textOnView = scheme.text_hc2,
+      .textOnChrome = scheme.thumbpanel_text,
       .textOnHud = scheme.overlay_text,
       .iconDefault = scheme.icons,
       .iconFolder = scheme.folder_icons,
@@ -127,6 +158,7 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
           scheme.thumbpanel.lightnessF() > kLightChromeLightness
               ? kIconOnLightChrome
               : kIconOnDarkChrome),
+      .contrastOnChrome = scheme.thumbpanel_hc,
       .statusPending = scheme.status_pending,
       .statusError = scheme.status_error,
       .statusProcessing = scheme.status_processing,

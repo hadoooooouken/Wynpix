@@ -69,7 +69,7 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.colors.folderView
+        color: Theme.tokens.surfaceView
     }
 
     Rectangle {
@@ -79,7 +79,7 @@ FocusScope {
         anchors.right: parent.right
         anchors.top: parent.top
         height: Theme.metrics.topPanelHeight
-        color: Theme.colors.folderViewTopBar
+        color: Theme.tokens.surfaceBar
 
         RowLayout {
             anchors.fill: parent
@@ -105,7 +105,7 @@ FocusScope {
                 Layout.minimumWidth: root.pathBarMinimumWidth
                 Layout.preferredWidth: root.upButtonWidth + pathText.implicitWidth
                 radius: StyleConstants.controlRadius
-                color: Theme.colors.fillRest
+                color: Theme.tokens.fillRest
 
                 Row {
                     anchors.fill: parent
@@ -126,8 +126,8 @@ FocusScope {
 
                         background: Rectangle {
                             radius: StyleConstants.controlRadius
-                            color: upButton.down ? Theme.colors.fillPressed
-                                 : upButton.hovered ? Theme.colors.fillHover
+                            color: upButton.down ? Theme.tokens.fillPressed
+                                 : upButton.hovered ? Theme.tokens.fillHover
                                  : "transparent"
                         }
                         contentItem: IconGlyph {
@@ -143,7 +143,7 @@ FocusScope {
                         height: parent.height
                         rightPadding: root.pathTextRightPadding
                         text: root.controller.directoryPath
-                        color: Theme.colors.text
+                        color: Theme.tokens.textSecondary
                         font: Theme.fonts.body
                         elide: Text.ElideMiddle
                         verticalAlignment: Text.AlignVCenter
@@ -166,7 +166,7 @@ FocusScope {
                 text: root.gridController.selectedImageCount === 1
                       ? qsTr("1 image selected")
                       : qsTr("%1 images selected").arg(root.gridController.selectedImageCount)
-                color: Theme.colors.textHc
+                color: Theme.tokens.textPrimary
             }
 
             T.AbstractButton {
@@ -186,9 +186,9 @@ FocusScope {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: batchButton.down ? Theme.colors.fillPressed
-                         : batchButton.hovered ? Theme.colors.fillHover
-                         : Theme.colors.fillRest
+                    color: batchButton.down ? Theme.tokens.fillPressed
+                         : batchButton.hovered ? Theme.tokens.fillHover
+                         : Theme.tokens.fillRest
                 }
                 contentItem: Item {
                     Label {
@@ -197,7 +197,7 @@ FocusScope {
                         x: root.batchTextPadding
                         anchors.verticalCenter: parent.verticalCenter
                         text: qsTr("Batch convert")
-                        color: Theme.colors.textHc
+                        color: Theme.tokens.textPrimary
                     }
                     IconGlyph {
                         x: batchButton.width - width - root.batchIconGap
@@ -212,7 +212,7 @@ FocusScope {
                 Layout.rightMargin: root.gridSizeLabelMargin
                 visible: !root.controller.compactTopBar
                 text: qsTr("Grid size")
-                color: Theme.colors.textHc
+                color: Theme.tokens.textPrimary
 
                 MouseArea {
                     anchors.fill: parent
@@ -355,8 +355,8 @@ FocusScope {
         anchors.right: parent.right
         anchors.top: topBar.bottom
         height: root.contentsBorderWidth
-        color: Qt.colorEqual(Theme.colors.folderView, Theme.colors.folderViewTopBar)
-               ? Theme.colors.folderView
+        color: Qt.colorEqual(Theme.tokens.surfaceView, Theme.tokens.surfaceBar)
+               ? Theme.tokens.surfaceView
                : StyleConstants.topBarBorderColor
     }
 
@@ -374,7 +374,7 @@ FocusScope {
 
         handle: Rectangle {
             implicitWidth: root.splitterHandleWidth
-            color: Theme.colors.folderView
+            color: Theme.tokens.surfaceView
         }
 
         PlacesPanel {
@@ -417,10 +417,10 @@ FocusScope {
         Accessible.name: toolTip
 
         background: Rectangle {
-            readonly property color surface: button.down ? Theme.colors.fillPressed
-                                           : button.active ? (button.hovered ? Theme.colors.accentTintHover
-                                                                             : Theme.colors.accentTint)
-                                           : button.hovered ? Theme.colors.fillHover
+            readonly property color surface: button.down ? Theme.tokens.fillPressed
+                                           : button.active ? (button.hovered ? Theme.tokens.accentTintHover
+                                                                             : Theme.tokens.accentTint)
+                                           : button.hovered ? Theme.tokens.fillHover
                                            : "transparent"
 
             radius: StyleConstants.controlRadius
@@ -474,8 +474,8 @@ FocusScope {
         }
         background: Rectangle {
             radius: StyleConstants.controlRadius
-            color: combo.hovered || combo.popup.visible ? Theme.colors.fillHover
-                                                        : Theme.colors.fillRest
+            color: combo.hovered || combo.popup.visible ? Theme.tokens.fillHover
+                                                        : Theme.tokens.fillRest
             border.width: root.fieldBorderWidth
             border.color: color
         }

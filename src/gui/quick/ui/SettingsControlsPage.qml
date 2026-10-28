@@ -57,8 +57,8 @@ SettingsPage {
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: root.tableHeight
-            color: Theme.colors.folderView
-            border.color: Theme.colors.strokeDefault
+            color: Theme.tokens.surfaceView
+            border.color: Theme.tokens.strokeDefault
             border.width: StyleConstants.separatorThickness
 
             ListView {
@@ -77,7 +77,7 @@ SettingsPage {
                     z: 2
                     width: ListView.view.width
                     height: root.rowHeight
-                    color: Theme.colors.widget
+                    color: Theme.tokens.surfacePopup
 
                     Row {
                         anchors.fill: parent
@@ -110,8 +110,8 @@ SettingsPage {
 
                     width: ListView.view.width
                     height: root.rowHeight
-                    color: ListView.isCurrentItem ? Theme.colors.accentTint
-                         : index % 2 ? Theme.colors.folderViewHc : "transparent"
+                    color: ListView.isCurrentItem ? Theme.tokens.accentTint
+                         : index % 2 ? Theme.tokens.surfaceViewRaised : "transparent"
 
                     Row {
                         anchors.fill: parent
