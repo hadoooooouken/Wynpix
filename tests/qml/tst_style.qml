@@ -225,6 +225,15 @@ Item {
             mousePress(button, 3, y);
             verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillPressed), "pressed");
             mouseRelease(button, 3, y);
+            mouseMove(gallery, gallery.width - 1, gallery.height - 1);
+            button.highlighted = true;
+            verifyColor(pixel(button, 3, y), Theme.colors.accent, "primary");
+            // A disabled primary button offers no accent to click.
+            button.enabled = false;
+            verifyColor(pixel(button, 3, y), fillOver(Theme.colors.fillRest), "disabled primary");
+            verifyColor(button.contentItem.color, Theme.colors.textHc, "disabled primary text");
+            button.enabled = true;
+            button.highlighted = false;
             compare(disabledButton.contentItem.opacity, StyleConstants.disabledOpacity);
             verify(button.height >= Theme.metrics.buttonHeight);
         }
