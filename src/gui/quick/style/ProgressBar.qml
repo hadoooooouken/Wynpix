@@ -4,7 +4,8 @@ import wynpix.bridges
 
 // Progress bar (the batch converter's QProgressBar rules): a bordered bar in
 // the folder view colour, filled with the accent colour, with the percentage
-// centred on it.
+// centred on it: in the folder view text colour over the empty part and in
+// the accent text colour over the filled part.
 T.ProgressBar {
     id: control
 
@@ -22,6 +23,8 @@ T.ProgressBar {
         implicitHeight: percentText.implicitHeight + 2 * StyleConstants.progressBarTextPadding
 
         Rectangle {
+            id: fill
+
             width: control.indeterminate ? parent.width : control.visualPosition * parent.width
             height: parent.height
             radius: StyleConstants.progressBarRadius
@@ -37,6 +40,24 @@ T.ProgressBar {
             visible: !control.indeterminate
             color: Theme.colors.textHc2
             font: Theme.fonts.body
+        }
+
+        // The same text again, cut to the filled part.
+        Item {
+            objectName: "filledPercentText"
+
+            width: fill.width
+            height: parent.height
+            clip: true
+            visible: percentText.visible && fill.visible
+
+            Text {
+                x: percentText.x
+                y: percentText.y
+                text: percentText.text
+                color: Theme.colors.accentText
+                font: percentText.font
+            }
         }
     }
 

@@ -97,6 +97,11 @@ Item {
                 id: label
                 text: "Label"
             }
+            ProgressBar {
+                id: progressBar
+                width: 200
+                value: 0.5
+            }
             Item {
                 width: scrollBar.width
                 height: 200
@@ -364,6 +369,21 @@ Item {
             verify(searchField.clearIndicator.indicator.visible);
             compare(searchField.clearIndicator.indicator.icon, FluentIcons.Dismiss16);
             searchField.text = "";
+        }
+
+        function test_progressBar(data) {
+            useScheme(data.dark);
+            const y = progressBar.height / 2;
+            verifyColor(pixel(progressBar, 3, y), Theme.colors.accent, "filled part");
+            verifyColor(pixel(progressBar, progressBar.width - 3, y), Theme.colors.folderView,
+                        "empty part");
+            // The percentage is in the accent text colour over the filled
+            // part only.
+            const filledText = findChild(progressBar.contentItem, "filledPercentText");
+            verify(filledText);
+            verify(filledText.clip);
+            compare(filledText.width, progressBar.contentItem.width * progressBar.visualPosition);
+            verifyColor(filledText.children[0].color, Theme.colors.accentText, "filled text");
         }
 
         function test_scrollBar(data) {
