@@ -430,20 +430,6 @@ private slots:
     }
   }
 
-  void fieldFillsAreStrongerThanButtonsInTheDarkScheme() {
-    const NeutralFills::Colors dark = NeutralFills::colorsFor(true);
-    QCOMPARE_GT(dark.fieldRest.alphaF(), dark.rest.alphaF());
-    QCOMPARE_GT(dark.fieldHover.alphaF(), dark.fieldRest.alphaF());
-    QCOMPARE_LT(dark.fieldPressed.alphaF(), dark.fieldRest.alphaF());
-    // The light scheme uses the button ladder for fields.
-    const NeutralFills::Colors light = NeutralFills::colorsFor(false);
-    QCOMPARE(light.fieldRest, light.rest);
-    QCOMPARE(light.fieldHover, light.hover);
-    QCOMPARE(light.fieldPressed, light.pressed);
-    QCOMPARE_LT(dark.subtle.alphaF(), dark.rest.alphaF());
-    QCOMPARE_LT(light.subtle.alphaF(), light.rest.alphaF());
-  }
-
   void tokensNameTheSchemeColoursByRole_data() {
     QTest::addColumn<int>("scheme");
     QTest::newRow("dark") << static_cast<int>(COLORS_DARK);
@@ -467,7 +453,6 @@ private slots:
     verifyAlpha(tokens.textSecondary, SemanticTokens::kSecondaryTextAlpha);
     QCOMPARE(tokens.textOnHud, colors.overlay_text);
     QCOMPARE(tokens.iconThumbFolder, colors.thumbnail_folder_icons);
-    QCOMPARE(tokens.focusRing, colors.accent);
     QCOMPARE(tokens.accentText, AccentContrast::textOn(colors.accent));
     QCOMPARE(tokens.dropTarget, QColor(u"#be3c19"_s));
     // The literals the thumbnail strip and the viewer used.
@@ -482,7 +467,7 @@ private slots:
       const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
       const SemanticTokens::Colors tokens = SemanticTokens::colorsFor(colors);
       QCOMPARE(snapshot.tokens.surfaceWindow, tokens.surfaceWindow);
-      QCOMPARE(snapshot.tokens.fieldHover, tokens.fieldHover);
+      QCOMPARE(snapshot.tokens.fillHover, tokens.fillHover);
       QCOMPARE(snapshot.tokens.accentText, tokens.accentText);
       QCOMPARE(snapshot.tokens.scrollbarMarker, tokens.scrollbarMarker);
       // Theme.colors takes its derived colours from the same tokens.

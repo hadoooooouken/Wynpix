@@ -32,10 +32,6 @@ struct Colors {
   QColor fillRest;
   QColor fillHover;
   QColor fillPressed;
-  QColor fillSubtle;
-  QColor fieldRest;
-  QColor fieldHover;
-  QColor fieldPressed;
   QColor hudHover;
   QColor hudPressed;
   QColor accent;
@@ -45,8 +41,6 @@ struct Colors {
   QColor accentTint;
   QColor accentTintHover;
   QColor accentFrame;
-  // Keyboard focus ring; on a solid accent fill it is accentText.
-  QColor focusRing;
   QColor textPrimary;
   QColor textSecondary;
   QColor textOnHud;
@@ -110,10 +104,6 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
       .fillRest = fills.rest,
       .fillHover = fills.hover,
       .fillPressed = fills.pressed,
-      .fillSubtle = fills.subtle,
-      .fieldRest = fills.fieldRest,
-      .fieldHover = fills.fieldHover,
-      .fieldPressed = fills.fieldPressed,
       .hudHover = fills.hudHover,
       .hudPressed = fills.hudPressed,
       .accent = scheme.accent,
@@ -125,7 +115,6 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
       .accentTint = selection.tint,
       .accentTintHover = selection.tintHover,
       .accentFrame = selection.frame,
-      .focusRing = scheme.accent,
       .textPrimary = scheme.text_hc,
       .textSecondary = textSecondary,
       .textOnHud = scheme.overlay_text,

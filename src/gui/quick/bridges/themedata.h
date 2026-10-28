@@ -148,10 +148,6 @@ struct ThemeTokens {
   Q_PROPERTY(QColor fillRest MEMBER fillRest)
   Q_PROPERTY(QColor fillHover MEMBER fillHover)
   Q_PROPERTY(QColor fillPressed MEMBER fillPressed)
-  Q_PROPERTY(QColor fillSubtle MEMBER fillSubtle)
-  Q_PROPERTY(QColor fieldRest MEMBER fieldRest)
-  Q_PROPERTY(QColor fieldHover MEMBER fieldHover)
-  Q_PROPERTY(QColor fieldPressed MEMBER fieldPressed)
   Q_PROPERTY(QColor hudHover MEMBER hudHover)
   Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
   Q_PROPERTY(QColor accent MEMBER accent)
@@ -161,7 +157,6 @@ struct ThemeTokens {
   Q_PROPERTY(QColor accentTint MEMBER accentTint)
   Q_PROPERTY(QColor accentTintHover MEMBER accentTintHover)
   Q_PROPERTY(QColor accentFrame MEMBER accentFrame)
-  Q_PROPERTY(QColor focusRing MEMBER focusRing)
   Q_PROPERTY(QColor textPrimary MEMBER textPrimary)
   Q_PROPERTY(QColor textSecondary MEMBER textSecondary)
   Q_PROPERTY(QColor textOnHud MEMBER textOnHud)
@@ -195,10 +190,6 @@ public:
   QColor fillRest;
   QColor fillHover;
   QColor fillPressed;
-  QColor fillSubtle;
-  QColor fieldRest;
-  QColor fieldHover;
-  QColor fieldPressed;
   QColor hudHover;
   QColor hudPressed;
   QColor accent;
@@ -208,7 +199,6 @@ public:
   QColor accentTint;
   QColor accentTintHover;
   QColor accentFrame;
-  QColor focusRing;
   QColor textPrimary;
   QColor textSecondary;
   QColor textOnHud;

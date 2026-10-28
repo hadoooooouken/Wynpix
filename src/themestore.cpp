@@ -102,15 +102,6 @@ constexpr int kComboFieldBorderDeltaDark = 62;
 
 void ColorScheme::createColorVariants() {
   if (widget.valueF() <= 0.45f) { // dark theme
-    // top bar buttons
-    panel_button.setHsv(folderview_topbar.hue(), folderview_topbar.saturation(),
-                        qMin(folderview_topbar.value() + 20, 255));
-    panel_button_hover.setHsv(folderview_topbar.hue(),
-                              folderview_topbar.saturation(),
-                              qMin(folderview_topbar.value() + 26, 255));
-    panel_button_pressed.setHsv(folderview_topbar.hue(),
-                                folderview_topbar.saturation(),
-                                qMin(folderview_topbar.value() + 15, 255));
     folderview_hc.setHsv(folderview.hue(), folderview.saturation(),
                          qMin(folderview.value() + 12, 255));
     folderview_hc2.setHsv(folderview.hue(), folderview.saturation(),
@@ -121,13 +112,6 @@ void ColorScheme::createColorVariants() {
                           qMin(thumbpanel.value() + 18, 255));
     thumbpanel_hc.setAlpha(thumbpanel.alpha());
     thumbpanel_hc2.setAlpha(thumbpanel.alpha());
-    folderview_button_pressed = folderview_hc;
-    folderview_button_hover = folderview_hc2;
-    // regular buttons - from widget bg
-    button.setHsv(widget.hue(), widget.saturation(),
-                  qMin(widget.value() + 21, 255));
-    button_hover = QColor(button.lighter(112));
-    button_pressed = QColor(button.darker(112));
     scrollbar_hover = scrollbar.lighter(120);
     // text
     text_hc = QColor(text.lighter(110));
@@ -136,7 +120,6 @@ void ColorScheme::createColorVariants() {
     thumbpanel_text = (qGray(thumbpanel.rgb()) > 128) ? QColor(0, 0, 0)
                                                       : QColor(255, 255, 255);
     text_lc = QColor(text.darker(115));
-    text_lc2 = QColor(text.darker(160));
     // dedicated, stronger-contrast panel for plain QComboBox instances
     // (see field comment in themestore.h)
     combo_field.setHsv(widget.hue(), widget.saturation(),
@@ -151,15 +134,6 @@ void ColorScheme::createColorVariants() {
         widget.hue(), widget.saturation(),
         qMin(widget.value() + kComboFieldBorderDeltaDark, 255));
   } else { // light theme
-    // top bar buttons
-    panel_button.setHsv(folderview_topbar.hue(), folderview_topbar.saturation(),
-                        qMax(folderview_topbar.value() - 30, 0));
-    panel_button_hover.setHsv(folderview_topbar.hue(),
-                              folderview_topbar.saturation(),
-                              qMax(folderview_topbar.value() - 45, 0));
-    panel_button_pressed.setHsv(folderview_topbar.hue(),
-                                folderview_topbar.saturation(),
-                                qMax(folderview_topbar.value() - 55, 0));
     folderview_hc.setHsv(folderview.hue(), folderview.saturation(),
                          qMax(folderview.value() - 25, 0));
     folderview_hc2.setHsv(folderview.hue(), folderview.saturation(),
@@ -170,13 +144,6 @@ void ColorScheme::createColorVariants() {
                           qMax(thumbpanel.value() - 40, 0));
     thumbpanel_hc.setAlpha(thumbpanel.alpha());
     thumbpanel_hc2.setAlpha(thumbpanel.alpha());
-    folderview_button_pressed = folderview_hc2;
-    folderview_button_hover = folderview_hc;
-    // regular buttons - from widget bg
-    button.setHsv(widget.hue(), widget.saturation(),
-                  qMax(widget.value() - 42, 0));
-    button_hover = QColor(button.darker(106));
-    button_pressed = QColor(button.darker(118));
     scrollbar_hover = scrollbar.darker(120);
     // text
     text_hc = QColor(text.darker(104));
@@ -185,14 +152,13 @@ void ColorScheme::createColorVariants() {
     thumbpanel_text = (qGray(thumbpanel.rgb()) > 128) ? QColor(0, 0, 0)
                                                       : QColor(255, 255, 255);
     text_lc = QColor(text.lighter(130));
-    text_lc2 = QColor(text.lighter(160));
-    // light theme's regular button/border already contrasts well against
-    // OS-tinted native dialog backgrounds, so reuse them as-is
-    combo_field = button;
-    combo_field_hover = button_hover;
-    combo_field_pressed = button_pressed;
+    // the regular button colours from the widget background and the widget
+    // border already contrast well against OS-tinted native dialog
+    // backgrounds, so the light combo box panel uses them as-is
+    combo_field.setHsv(widget.hue(), widget.saturation(),
+                       qMax(widget.value() - 42, 0));
+    combo_field_hover = QColor(combo_field.darker(106));
+    combo_field_pressed = QColor(combo_field.darker(118));
     combo_field_border = widget_border;
   }
-  // misc
-  input_field_focus = QColor(accent);
 }

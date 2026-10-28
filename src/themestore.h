@@ -68,21 +68,11 @@ public:
     QColor text_hc2;
     QColor text_hc;
     QColor text_lc;
-    QColor text_lc2;
-    QColor button;
-    QColor button_hover;
-    QColor button_pressed;
-    QColor panel_button;
-    QColor panel_button_hover;
-    QColor panel_button_pressed;
     QColor folderview_hc;
     QColor folderview_hc2;
     QColor thumbpanel_hc;
     QColor thumbpanel_hc2;
     QColor thumbpanel_text;
-    QColor folderview_button_hover;
-    QColor folderview_button_pressed;
-    QColor input_field_focus;
     // combobox panel colors, kept in the theme files. Tuned to stay
     // visible against both the app's own surfaces and the OS-tinted
     // native dialog backgrounds.
