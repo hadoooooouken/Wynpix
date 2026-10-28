@@ -13,6 +13,12 @@ using namespace Qt::StringLiterals;
 using Kind = ContextMenuModel::Kind;
 using Tone = ContextMenuModel::Tone;
 
+// Rows of items(): "Quick copy", "More" and "Rename" (one of the rows under
+// "More").
+constexpr int kCopyRow = 5;
+constexpr int kMoreRow = 12;
+constexpr int kRenameRow = 14;
+
 // Runs nothing; records the invoked actions and answers shortcuts from a
 // map, like ActionManager::shortcutForAction() (scripts included).
 class FakeDispatcher final : public IActionDispatcher {
@@ -179,16 +185,20 @@ private slots:
     QVERIFY(!entryFor(menu.itemEntries(), u"casSettings"_s).shown);
   }
 
-  void moreExpandsInPlaceAndCollapsesOnOpening() {
+  void moreExpandsWhileItOrARowUnderItIsCurrent() {
     FakeDispatcher dispatcher;
     ContextMenuModel menu(dispatcher);
     QVERIFY(!entryFor(menu.itemEntries(), u"renameFile"_s).shown);
     QVERIFY(!entryOfKind(menu.itemEntries(), Kind::Submenu).shown);
     QCOMPARE(entryOfKind(menu.itemEntries(), Kind::Expander).icon,
              static_cast<int>(FluentIcon::ChevronDown20));
+    // A closed menu ignores its current row.
+    menu.setCurrentRow(kMoreRow);
+    QVERIFY(!menu.isMoreExpanded());
 
+    menu.show();
     QSignalSpy reset(menu.items(), &QAbstractItemModel::modelReset);
-    menu.toggleMore();
+    menu.setCurrentRow(kMoreRow);
     QVERIFY(menu.isMoreExpanded());
     QCOMPARE(reset.count(), 0);
     QVERIFY(entryFor(menu.itemEntries(), u"renameFile"_s).shown);
@@ -196,20 +206,33 @@ private slots:
     QVERIFY(entryOfKind(menu.itemEntries(), Kind::Submenu).shown);
     QCOMPARE(entryOfKind(menu.itemEntries(), Kind::Expander).icon,
              static_cast<int>(FluentIcon::ChevronUp20));
-
-    menu.toggle();
-    QVERIFY(menu.isOpen());
+    // A row under "More" keeps it expanded, a row above it collapses it.
+    menu.setCurrentRow(kRenameRow);
+    QVERIFY(menu.isMoreExpanded());
+    menu.setCurrentRow(kCopyRow);
     QVERIFY(!menu.isMoreExpanded());
     QVERIFY(!entryFor(menu.itemEntries(), u"renameFile"_s).shown);
+
+    // The menu action collapses it, also on an open menu.
+    menu.setCurrentRow(kMoreRow);
+    menu.show();
+    QVERIFY(menu.isOpen());
+    QVERIFY(!menu.isMoreExpanded());
   }
 
-  void menuActionOpensAndClosesTheMenu() {
+  void menuActionOpensTheMenuAndMovesAnOpenOne() {
     FakeDispatcher dispatcher;
     ContextMenuModel menu(dispatcher);
     QSignalSpy open(&menu, &ContextMenuModel::openChanged);
-    menu.toggle();
+    QSignalSpy reposition(&menu, &ContextMenuModel::repositionRequested);
+    menu.show();
     QVERIFY(menu.isOpen());
-    menu.toggle();
+    QCOMPARE(reposition.count(), 0);
+    menu.show();
+    QVERIFY(menu.isOpen());
+    QCOMPARE(open.count(), 1);
+    QCOMPARE(reposition.count(), 1);
+    menu.close();
     QVERIFY(!menu.isOpen());
     QCOMPARE(open.count(), 2);
     // Closing a closed menu says nothing.
@@ -220,28 +243,28 @@ private slots:
   void folderViewAndLockedViewerKeepTheMenuClosed() {
     FakeDispatcher dispatcher;
     ContextMenuModel menu(dispatcher);
-    menu.toggle();
+    menu.show();
     menu.setFolderViewActive(true);
     QVERIFY(!menu.isOpen());
-    menu.toggle();
+    menu.show();
     QVERIFY(!menu.isOpen());
 
     menu.setFolderViewActive(false);
-    menu.toggle();
+    menu.show();
     QVERIFY(menu.isOpen());
     menu.setInteractionEnabled(false);
     QVERIFY(!menu.isOpen());
-    menu.toggle();
+    menu.show();
     QVERIFY(!menu.isOpen());
     menu.setInteractionEnabled(true);
-    menu.toggle();
+    menu.show();
     QVERIFY(menu.isOpen());
   }
 
   void triggeringARowClosesTheMenuAndRunsTheAction() {
     FakeDispatcher dispatcher;
     ContextMenuModel menu(dispatcher);
-    menu.toggle();
+    menu.show();
     menu.trigger(u"copyFile"_s);
     QVERIFY(!menu.isOpen());
     QCOMPARE(dispatcher.invoked, QStringList{u"copyFile"_s});
@@ -253,7 +276,7 @@ private slots:
   void invokingAButtonKeepsTheMenuOpen() {
     FakeDispatcher dispatcher;
     ContextMenuModel menu(dispatcher);
-    menu.toggle();
+    menu.show();
     menu.invoke(u"zoomIn"_s);
     QVERIFY(menu.isOpen());
     QCOMPARE(dispatcher.invoked, QStringList{u"zoomIn"_s});
@@ -287,12 +310,12 @@ private slots:
     menu.setScripts({u"Edit"_s, u"Upload"_s});
     QCOMPARE(reset.count(), 1);
 
-    menu.toggle();
+    menu.show();
     menu.trigger(u"s:Edit"_s);
     QCOMPARE(dispatcher.invoked, QStringList{u"s:Edit"_s});
 
     QSignalSpy settings(&menu, &ContextMenuModel::scriptSettingsRequested);
-    menu.toggle();
+    menu.show();
     menu.configureScripts();
     QCOMPARE(settings.count(), 1);
     QVERIFY(!menu.isOpen());

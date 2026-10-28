@@ -11,6 +11,8 @@ qt_add_executable(wynpix_render_tests
     tst_imagerenderer.cpp
     # The HDR tests compare against the unchanged CPU tone mapper.
     "${PROJECT_SOURCE_DIR}/src/utils/hdrtonemapper.cpp"
+    # The auto white balance of ImageRenderItem.
+    "${PROJECT_SOURCE_DIR}/src/utils/autocoloradjustments.cpp"
 )
 
 target_link_libraries(wynpix_render_tests PRIVATE

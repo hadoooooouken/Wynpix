@@ -47,6 +47,8 @@ qt_add_executable(wynpix_tests
     "${WYNPIX_APP_SOURCE_DIR}/utils/hdrtonemapper.cpp"
     # ImageLib scalers and colour adjustments (tst_imagelib.cpp).
     "${WYNPIX_APP_SOURCE_DIR}/utils/imagelib.cpp"
+    # The auto white balance of ImageLib and ImageRenderItem.
+    "${WYNPIX_APP_SOURCE_DIR}/utils/autocoloradjustments.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/sourcecontainers/thumbnail.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/components/thumbnailer/thumbnailgeometry.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/quick/adapters/directoryviewadapter.cpp"

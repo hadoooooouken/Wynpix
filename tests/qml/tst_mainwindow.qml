@@ -166,7 +166,7 @@ TestCase {
         compare(overlays.bottomFloatingPanelVisible, false);
 
         // A notification instantiates the FloatingMessage overlay.
-        Fixture.overlays.colorAdjustmentsEditor.copy();
+        Fixture.showMessage("Hello");
         tryVerify(() => childOfType(window, "FloatingMessage") !== null);
         const floatingMessage = childOfType(window, "FloatingMessage");
         compare(floatingMessage.bottomFloatingPanelVisible, false);

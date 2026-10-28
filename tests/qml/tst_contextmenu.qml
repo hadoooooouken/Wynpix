@@ -4,16 +4,17 @@ import QtTest
 import wynpix.ui
 import wynpix.tests
 
-// The viewer's context menu over the Fixture's ContextMenuModel: it opens in
-// its own window (larger than the small test window), shows the shortcuts of
-// the action system, runs the rows' actions, expands "More" in place and
-// lists the scripts with "Configure menu".
+// The viewer's context menu over the Fixture's ContextMenuModel: it opens as
+// an item popup in the window, shows the shortcuts of the action system, runs
+// the rows' actions, expands "More" in place while it or a row under it is
+// current and lists the scripts with "Configure menu".
 Item {
     id: root
 
-    // Smaller than the menu, which must not be confined to it.
-    width: 300
-    height: 200
+    // Room for the menu with "More" expanded: an item popup is confined to
+    // the window.
+    width: 600
+    height: 900
 
     ViewerContextMenu {
         id: menu
@@ -24,9 +25,10 @@ Item {
     TestCase {
         id: testCase
 
-        // Items before the instantiated rows: the button rows and their
-        // separator (ViewerContextMenu.fixedItemCount).
-        readonly property int fixedItems: 2
+        // Items before the instantiated rows: the zoom row, the transform row
+        // and their separator (ViewerContextMenu.fixedItemCount).
+        readonly property int fixedItems: 3
+        readonly property int transformRowItem: 1
         // Rows of ContextMenuModel.items.
         readonly property int panoramaRow: 1
         readonly property int copyRow: 5
@@ -44,15 +46,14 @@ Item {
         }
 
         function openMenu(scripts) {
-            Fixture.toggleContextMenu(scripts, false);
+            Fixture.showContextMenu(scripts, false);
             tryVerify(() => menu.opened, timeout, "the menu did not open");
             // The menu window is exposed with its first frame.
             waitForRendering(menu.contentItem);
         }
 
         function closeMenu() {
-            if (Fixture.contextMenu.open)
-                Fixture.toggleContextMenu([], false);
+            Fixture.closeContextMenu();
             tryVerify(() => !menu.visible, timeout);
         }
 
@@ -65,12 +66,26 @@ Item {
             closeMenu();
         }
 
-        function test_opensInItsOwnWindowBeyondTheWindowEdges() {
+        // The button of action in the transform row.
+        function transformButton(action) {
+            const buttons = menu.itemAt(transformRowItem).contentItem.children;
+            for (let i = 0; i < buttons.length; ++i) {
+                if (buttons[i].entryAction === action)
+                    return buttons[i];
+            }
+            return null;
+        }
+
+        // Makes row index of the model current, as the pointer or a key
+        // does; the menu reports it to the model.
+        function makeCurrent(index) {
+            menu.currentIndex = fixedItems + index;
+        }
+
+        function test_opensAsAnItemPopupWithEveryRow() {
             openMenu([]);
-            compare(menu.popupType, T.Popup.Window);
+            compare(menu.popupType, T.Popup.Item);
             compare(menu.count, fixedItems + rowCount);
-            verify(menu.height > root.height,
-                   "the menu (" + menu.height + ") is confined to the window (" + root.height + ")");
         }
 
         function test_shownShortcutsAreTheActionShortcuts() {
@@ -130,12 +145,7 @@ Item {
         function test_cropButtonRunsOnSingleClick() {
             Fixture.setShortcut("crop", "X");
             openMenu([]);
-            const transformRow = menu.itemAt(0).children[1];
-            let crop = null;
-            for (let i = 0; i < transformRow.children.length; ++i) {
-                if (transformRow.children[i].entryAction === "crop")
-                    crop = transformRow.children[i];
-            }
+            const crop = transformButton("crop");
             verify(crop !== null, "no crop button");
             mouseClick(crop);
             compare(Fixture.lastInvoked, "crop");
@@ -145,12 +155,7 @@ Item {
         function test_resizeButtonRunsOnSingleClickAndClosesMenu() {
             Fixture.setShortcut("resize", "R");
             openMenu([]);
-            const transformRow = menu.itemAt(0).children[1];
-            let resize = null;
-            for (let i = 0; i < transformRow.children.length; ++i) {
-                if (transformRow.children[i].entryAction === "resize")
-                    resize = transformRow.children[i];
-            }
+            const resize = transformButton("resize");
             verify(resize !== null, "no resize button");
             mouseClick(resize);
             compare(Fixture.lastInvoked, "resize");
@@ -164,14 +169,23 @@ Item {
             verify(!rename.visible);
             compare(rename.height, 0);
             const heightBefore = menu.height;
-            mousePress(row(expanderRow));
-            mouseRelease(row(expanderRow));
+            makeCurrent(expanderRow);
             tryVerify(() => rename.visible && rename.height > 0, timeout);
-            verify(menu.opened, "More closed the menu");
             tryVerify(() => menu.height > heightBefore, timeout);
             compare(menu.width, menu.implicitWidth);
+            // A press on "More" does not trigger it.
+            mouseClick(row(expanderRow));
+            verify(menu.opened, "a click on More closed the menu");
+
+            // A row under it keeps it expanded, a row above collapses it.
+            makeCurrent(renameRow);
+            tryCompare(Fixture.contextMenu, "moreExpanded", true);
+            makeCurrent(copyRow);
+            tryVerify(() => !rename.visible, timeout);
 
             // Collapsed again when the menu opens next time.
+            makeCurrent(expanderRow);
+            tryVerify(() => rename.visible, timeout);
             closeMenu();
             openMenu([]);
             verify(!row(renameRow).visible);
@@ -186,22 +200,23 @@ Item {
 
         function test_scriptsSubmenu() {
             openMenu(["Edit", "Upload"]);
-            mousePress(row(expanderRow));
-            mouseRelease(row(expanderRow));
+            makeCurrent(submenuRow);
             const scriptsRow = row(submenuRow);
-            tryVerify(() => scriptsRow.visible, timeout);
-            // The menu window grows to the expanded rows.
-            tryVerify(() => scriptsRow.mapToItem(null, 0, scriptsRow.height).y <= scriptsRow.Window.height,
-                      timeout, "the expanded rows lie outside the menu window");
+            // The menu's column places the expanded rows on its next polish.
+            tryVerify(() => scriptsRow.visible && scriptsRow.y > row(expanderRow).y, timeout,
+                      "the expanded rows were not laid out");
+            // The expanded rows fit in the window.
+            verify(scriptsRow.mapToItem(null, 0, scriptsRow.height).y <= root.height,
+                   "the expanded rows lie outside the window");
             verify(scriptsRow.subMenu !== null);
             const scripts = scriptsRow.subMenu;
             compare(scripts.title, "Open with...");
             // Two scripts, the separator, "Configure menu".
             compare(scripts.count, 4);
             compare(scripts.itemAt(1).text, "Upload");
-            // A click on its row opens it as a cascade (the offscreen platform
-            // delivers no hover).
-            mouseClick(scriptsRow);
+            // The Right key on its row opens it as a cascade. (A synthetic
+            // click opens it on the press and closes it again on the release.)
+            keyClick(Qt.Key_Right);
             tryVerify(() => scripts.opened, timeout, "the scripts submenu did not open");
             waitForRendering(scripts.contentItem);
             mouseClick(scripts.itemAt(3));
@@ -213,10 +228,8 @@ Item {
         function test_rendersForReview() {
             Fixture.setShortcut("copyFile", "C");
             openMenu(["Edit"]);
-            mousePress(row(expanderRow));
-            mouseRelease(row(expanderRow));
-            tryVerify(() => row(renameRow).mapToItem(null, 0, row(renameRow).height).y
-                            <= row(renameRow).Window.height, timeout);
+            makeCurrent(expanderRow);
+            tryVerify(() => row(renameRow).visible && row(renameRow).y > row(expanderRow).y, timeout);
             waitForRendering(menu.contentItem);
             grabImage(menu.contentItem).save(Fixture.artifactPath("contextmenu.png"));
         }
@@ -230,7 +243,7 @@ Item {
             openMenu([]);
             Fixture.setFolderViewActive(true);
             tryVerify(() => !menu.visible, timeout);
-            Fixture.toggleContextMenu([], false);
+            Fixture.showContextMenu([], false);
             verify(!Fixture.contextMenu.open);
             Fixture.setFolderViewActive(false);
         }

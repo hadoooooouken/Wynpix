@@ -17,7 +17,9 @@ TestCase {
     readonly property int batchIndex: 4
     readonly property int printIndex: 5
     readonly property int activationTimeoutMs: 5000
-    readonly property int colorSliderCount: 7
+    readonly property int colorSliderCount: 9
+    // BatchJobRules::ColorSlider::Exposure: -3 .. 3 in steps of 0.01.
+    readonly property int exposureSlider: 1
 
     // BatchQueueModel.ItemState values.
     readonly property int processingState: 1
@@ -201,10 +203,10 @@ TestCase {
         const dialog = Fixture.dialogs.batchConverter;
         dialog.setColorEnabled(true);
 
-        const slider = findNamed(window.contentItem, "batchColorSlider_0");
-        const label = findNamed(window.contentItem, "batchColorLabel_0");
-        const firstValue = findNamed(window.contentItem, "batchColorValue_0");
-        const secondValue = findNamed(window.contentItem, "batchColorValue_1");
+        const slider = findNamed(window.contentItem, "batchColorSlider_" + exposureSlider);
+        const label = findNamed(window.contentItem, "batchColorLabel_" + exposureSlider);
+        const firstValue = findNamed(window.contentItem, "batchColorValue_" + exposureSlider);
+        const secondValue = findNamed(window.contentItem, "batchColorValue_" + (exposureSlider + 1));
         verify(slider !== null);
         verify(label !== null);
         verify(firstValue !== null);
@@ -217,18 +219,18 @@ TestCase {
         verify(Math.abs(firstRight - secondRight) < 1,
                "color value texts do not share a right edge");
 
-        dialog.setColorValue(0, 1.5);
-        compare(dialog.colorValues[0], 1.5);
+        dialog.setColorValue(exposureSlider, 1.5);
+        compare(dialog.colorValues[exposureSlider], 1.5);
         mouseDoubleClickSequence(slider, slider.width / 2, slider.height / 2);
-        tryVerify(() => dialog.colorValues[0] === 0);
+        tryVerify(() => dialog.colorValues[exposureSlider] === 0);
 
-        dialog.setColorValue(0, 1.5);
+        dialog.setColorValue(exposureSlider, 1.5);
         mouseDoubleClickSequence(label, label.width / 2, label.height / 2);
-        tryVerify(() => dialog.colorValues[0] === 0);
+        tryVerify(() => dialog.colorValues[exposureSlider] === 0);
 
-        dialog.setColorValue(0, 1.5);
+        dialog.setColorValue(exposureSlider, 1.5);
         mouseDoubleClickSequence(firstValue, firstValue.width / 2, firstValue.height / 2);
-        tryVerify(() => dialog.colorValues[0] === 0);
+        tryVerify(() => dialog.colorValues[exposureSlider] === 0);
     }
 
     function test_batchColorSliderKeepsDraggingOutsideItsBounds() {
@@ -236,14 +238,14 @@ TestCase {
         const window = openedWindow(batchIndex);
         const dialog = Fixture.dialogs.batchConverter;
         dialog.setColorEnabled(true);
-        const slider = findNamed(window.contentItem, "batchColorSlider_0");
+        const slider = findNamed(window.contentItem, "batchColorSlider_" + exposureSlider);
         verify(slider !== null);
 
         mousePress(slider, slider.width / 2, slider.height / 2);
         mouseMove(slider, slider.width + 100, slider.height / 2);
-        tryVerify(() => dialog.colorValues[0] > 1.5);
+        tryVerify(() => dialog.colorValues[exposureSlider] > 1.5);
         mouseMove(slider, -100, slider.height / 2);
-        tryVerify(() => dialog.colorValues[0] < -1.5);
+        tryVerify(() => dialog.colorValues[exposureSlider] < -1.5);
         mouseRelease(slider, -100, slider.height / 2);
     }
 
@@ -252,21 +254,21 @@ TestCase {
         const window = openedWindow(batchIndex);
         const dialog = Fixture.dialogs.batchConverter;
         dialog.setColorEnabled(true);
-        const label = findNamed(window.contentItem, "batchColorLabel_0");
-        const slider = findNamed(window.contentItem, "batchColorSlider_0");
-        const valueText = findNamed(window.contentItem, "batchColorValue_0");
+        const label = findNamed(window.contentItem, "batchColorLabel_" + exposureSlider);
+        const slider = findNamed(window.contentItem, "batchColorSlider_" + exposureSlider);
+        const valueText = findNamed(window.contentItem, "batchColorValue_" + exposureSlider);
         verify(label !== null);
         verify(slider !== null);
         verify(valueText !== null);
 
         mouseWheel(label, label.width / 2, label.height / 2, 0, 120);
-        tryVerify(() => dialog.colorValues[0] === 0.01);
+        tryVerify(() => dialog.colorValues[exposureSlider] === 0.01);
 
         mouseWheel(slider, slider.width / 2, slider.height / 2, 0, -120);
-        tryVerify(() => dialog.colorValues[0] === 0);
+        tryVerify(() => dialog.colorValues[exposureSlider] === 0);
 
         mouseWheel(valueText, valueText.width / 2, valueText.height / 2, 0, -120);
-        tryVerify(() => dialog.colorValues[0] === -0.01);
+        tryVerify(() => dialog.colorValues[exposureSlider] === -0.01);
     }
 
     function test_batchWarnsWithoutSelectedFiles() {

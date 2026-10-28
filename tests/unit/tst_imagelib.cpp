@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "testsuites.h"
+#include "utils/autocoloradjustments.h"
 #include "utils/coloradjustments.h"
 #include "utils/imagelib.h"
 
@@ -121,20 +122,19 @@ private slots:
   }
 
   void smartEnhancePreservesMonochromeAndFlatImages() {
-    // 1. Flat grey image should remain unchanged
+    // 1. A flat image gives no channel range to stretch: the white balance
+    // leaves it as it is (the tone curve still applies).
     const QImage flat = flatImage(QSize(64, 64));
+    const WhiteBalanceFactors factors = calculateWhiteBalanceFactors(&flat);
+    for (int channel = 0; channel < 3; ++channel) {
+      QCOMPARE(factors.scale[channel], 1.0f);
+      QCOMPARE(factors.bias[channel], 0.0f);
+    }
     ColorAdjustments adj;
     adj.smartEnhance = 1.0f;
     const QImage flatResult = ImageLib::applyColorAdjustments(
         std::make_shared<const QImage>(flat), adj);
     QCOMPARE(flatResult.size(), flat.size());
-    for (int y = 0; y < flat.height(); ++y) {
-      for (int x = 0; x < flat.width(); ++x) {
-        QCOMPARE(qRed(flatResult.pixel(x, y)), kFlatRed);
-        QCOMPARE(qGreen(flatResult.pixel(x, y)), kFlatGreen);
-        QCOMPARE(qBlue(flatResult.pixel(x, y)), kFlatBlue);
-      }
-    }
 
     // 2. Pure red image with near-zero green and blue should not blow up into cyan
     QImage redImage(32, 32, QImage::Format_ARGB32);

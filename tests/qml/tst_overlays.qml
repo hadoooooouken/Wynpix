@@ -36,14 +36,15 @@ Item {
         readonly property int infoBarLoader: 0
         readonly property int controlsLoader: 1
         readonly property int pageNavigationLoader: 2
-        readonly property int imageInfoLoader: 3
-        readonly property int colorAdjustmentsLoader: 4
-        readonly property int casSettingsLoader: 5
-        readonly property int saveConfirmLoader: 6
-        readonly property int copyLoader: 7
-        readonly property int renameLoader: 8
-        readonly property int messageLoader: 9
-        readonly property int loaderCount: 10
+        readonly property int animationPlaybackLoader: 3
+        readonly property int imageInfoLoader: 4
+        readonly property int colorAdjustmentsLoader: 5
+        readonly property int casSettingsLoader: 6
+        readonly property int saveConfirmLoader: 7
+        readonly property int copyLoader: 8
+        readonly property int renameLoader: 9
+        readonly property int messageLoader: 10
+        readonly property int loaderCount: 11
 
         readonly property int messageTimeout: 3000
         readonly property int chromeTimeout: 4000

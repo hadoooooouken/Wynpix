@@ -210,8 +210,11 @@ public:
   Q_INVOKABLE void panelPointerMoved(QPointF position, int buttons);
 
   // Context menu: the menu action, as QuickContextMenuActions runs it, with
-  // the scripts named in scripts and the CAS filter on or off.
-  Q_INVOKABLE void toggleContextMenu(const QStringList &scripts, bool casFilter);
+  // the scripts named in scripts and the CAS filter on or off; it opens the
+  // menu or moves an open one. closeContextMenu() closes it as a click
+  // outside does.
+  Q_INVOKABLE void showContextMenu(const QStringList &scripts, bool casFilter);
+  Q_INVOKABLE void closeContextMenu();
   // Crop mode: the crop panel request of the shell port, with screenSize.
   // The fixture keeps the controller's image and image area in sync with
   // the viewport and turns the viewer input off while it is active, as

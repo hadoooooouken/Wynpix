@@ -44,9 +44,9 @@ private slots:
     QTest::addColumn<qreal>("dpr");
     QTest::addColumn<int>("zoom");
     QTest::addColumn<int>("gesture");
-    QTest::newRow("1.0") << 1.0 << 4 << 40;
-    QTest::newRow("1.5") << 1.5 << 6 << 60;
-    QTest::newRow("2.0") << 2.0 << 8 << 80;
+    QTest::newRow("1.0") << 1.0 << 6 << 40;
+    QTest::newRow("1.5") << 1.5 << 9 << 60;
+    QTest::newRow("2.0") << 2.0 << 12 << 80;
   }
 
   void thresholdsFollowDevicePixelRatio() {
@@ -116,11 +116,12 @@ private slots:
 
   void rightButtonVerticalStrokeZooms() {
     ViewportInteraction interaction = pressedAt(kPress);
-    // Within the threshold nothing is decided.
-    QCOMPARE(interaction.move(kPress + QPoint(0, -4), Qt::RightButton, largeImage()).kind,
+    // Within the threshold (6 px, so that a shaky click still opens the
+    // context menu) nothing is decided.
+    QCOMPARE(interaction.move(kPress + QPoint(0, -6), Qt::RightButton, largeImage()).kind,
              Kind::None);
     QCOMPARE(interaction.mode(), Mode::None);
-    QCOMPARE(interaction.move(kPress + QPoint(0, -6), Qt::RightButton, largeImage()).kind,
+    QCOMPARE(interaction.move(kPress + QPoint(0, -8), Qt::RightButton, largeImage()).kind,
              Kind::None);
     QCOMPARE(interaction.mode(), Mode::Zoom);
     // The first zoom step covers the movement since the press.
@@ -136,10 +137,10 @@ private slots:
 
   void rightButtonThresholdScalesWithDpr() {
     ViewportInteraction interaction = pressedAt(kPress, 2.0);
-    QCOMPARE(interaction.move(kPress + QPoint(0, -7), Qt::RightButton, largeImage()).kind,
+    QCOMPARE(interaction.move(kPress + QPoint(0, -12), Qt::RightButton, largeImage()).kind,
              Kind::None);
     QCOMPARE(interaction.mode(), Mode::None);
-    QCOMPARE(interaction.move(kPress + QPoint(0, -9), Qt::RightButton, largeImage()).kind,
+    QCOMPARE(interaction.move(kPress + QPoint(0, -13), Qt::RightButton, largeImage()).kind,
              Kind::None);
     QCOMPARE(interaction.mode(), Mode::Zoom);
   }
@@ -168,8 +169,8 @@ private slots:
 
   void diagonalStrokeWithoutDominanceZooms() {
     ViewportInteraction interaction = pressedAt(kPress);
-    // |dx| = 10 is not more than twice |dy| = 6.
-    QCOMPARE(interaction.move(kPress + QPoint(10, -6), Qt::RightButton, largeImage()).kind,
+    // |dx| = 10 is not more than twice |dy| = 7.
+    QCOMPARE(interaction.move(kPress + QPoint(10, -7), Qt::RightButton, largeImage()).kind,
              Kind::None);
     QCOMPARE(interaction.mode(), Mode::Zoom);
   }

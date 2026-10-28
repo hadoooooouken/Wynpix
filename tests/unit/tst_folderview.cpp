@@ -302,21 +302,33 @@ private slots:
     QCOMPARE(scrolls.count(), 0);
   }
 
-  void sliderSnapsAndStoresOnRelease() {
+  void sliderIsLogarithmicAndStoresOnRelease() {
     GridFixture fixture;
     QSignalSpy committed(&fixture.grid, &FolderGridController::iconSizeCommitted);
     QCOMPARE(FolderGridController::zoomSliderMinimum(), 700);
     QCOMPARE(FolderGridController::zoomSliderMaximum(), 900);
     fixture.grid.setZoomSliderPressed(true);
-    fixture.grid.setZoomSliderValue(FolderGridController::kSliderSnapValue + 5);
-    QCOMPARE(fixture.grid.iconSize(), 256);
-    QCOMPARE(fixture.grid.zoomSliderValue(), FolderGridController::kSliderSnapValue);
+    // Hundredths of log2 of the size, without snapping.
+    fixture.grid.setZoomSliderValue(805);
+    QCOMPARE(fixture.grid.iconSize(), 265);
+    QCOMPARE(fixture.grid.zoomSliderValue(), 805);
     fixture.grid.setZoomSliderValue(850);
     QCOMPARE(fixture.grid.iconSize(), 362);
     QCOMPARE(committed.count(), 0);
     fixture.grid.setZoomSliderPressed(false);
     QCOMPARE(committed.count(), 1);
     QCOMPARE(committed.first().at(0).toInt(), 362);
+  }
+
+  void resetRestoresAndStoresTheDefaultSize() {
+    GridFixture fixture;
+    QSignalSpy committed(&fixture.grid, &FolderGridController::iconSizeCommitted);
+    fixture.grid.setZoomSliderValue(850);
+    QCOMPARE(fixture.grid.iconSize(), 362);
+    fixture.grid.resetIconSize();
+    QCOMPARE(fixture.grid.iconSize(), FolderGridLayout::kDefaultIconSize);
+    QCOMPARE(committed.count(), 2);
+    QCOMPARE(committed.last().at(0).toInt(), FolderGridLayout::kDefaultIconSize);
   }
 
   void dropsKeepTheirTargetAndAction() {

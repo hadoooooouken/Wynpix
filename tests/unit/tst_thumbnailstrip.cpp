@@ -30,12 +30,14 @@ constexpr int kWaitMarginMs = 100;
 constexpr QSize kLargeWindow(1200, 800);
 constexpr QSize kSmallWindow(600, 400);
 
-ThumbnailEntry entryOf(int width, int height) {
+// A width x height thumbnail, the answer to a request for targetSize.
+ThumbnailEntry entryOf(int width, int height, QSize targetSize = kRequestSize) {
   QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
   image.fill(Qt::red);
   return {.handle = {.image = image, .sourceSize = image.size()},
           .name = u"name"_s,
-          .info = u"info"_s};
+          .info = u"info"_s,
+          .targetSize = targetSize};
 }
 
 // A model of count items, configured with kRequestSize thumbnails and
@@ -197,15 +199,15 @@ private slots:
     QSignalSpy ready(&model, &ThumbnailListModel::visibleThumbnailsReady);
     prepare(model, 3);
     QCOMPARE(ready.count(), 0);
-    model.setThumbnail(0, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(0, entryOf(4, 3));
     model.setThumbnailUnavailable(1, kRequestSize);
     // Another target box is not the requested thumbnail.
-    model.setThumbnail(2, entryOf(4, 3), kRequestSize + QSize(1, 1));
+    model.setThumbnail(2, entryOf(4, 3, kRequestSize + QSize(1, 1)));
     QCOMPARE(ready.count(), 0);
     QVERIFY(!isLoaded(model, 2));
-    model.setThumbnail(2, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(2, entryOf(4, 3));
     QCOMPARE(ready.count(), 1);
-    model.setThumbnail(2, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(2, entryOf(4, 3));
     QCOMPARE(ready.count(), 1);
     QVERIFY(isLoaded(model, 0));
     QVERIFY(model.data(model.index(1), ThumbnailListModel::UnavailableRole).toBool());
@@ -219,7 +221,7 @@ private slots:
     QSignalSpy ready(&model, &ThumbnailListModel::visibleThumbnailsReady);
     prepare(model, 1);
     model.setThumbnailPending(0, true);
-    model.setThumbnail(0, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(0, entryOf(4, 3));
     QCOMPARE(ready.count(), 0);
     QVERIFY(model.data(model.index(0), ThumbnailListModel::PendingRole).toBool());
     model.setThumbnailPending(0, false);
@@ -229,7 +231,7 @@ private slots:
   void insertAndRemoveShiftItems() {
     ThumbnailListModel model;
     prepare(model, 5);
-    model.setThumbnail(3, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(3, entryOf(4, 3));
     model.select(3);
     model.insertItem(1);
     QCOMPARE(model.itemCount(), 6);
@@ -272,12 +274,12 @@ private slots:
     model.populate(1000);
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
-    model.setThumbnail(0, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(0, entryOf(4, 3));
     QVERIFY(isLoaded(model, 0));
     model.setViewport(50000.0, kViewExtent);
     QVERIFY(!isLoaded(model, 0));
     // A thumbnail arriving out of range is not kept.
-    model.setThumbnail(1, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(1, entryOf(4, 3));
     QVERIFY(!isLoaded(model, 1));
   }
 
@@ -289,8 +291,8 @@ private slots:
     model.populate(1000);
     model.setViewport(0.0, kViewExtent);
     // Results another view requested reach the hidden view.
-    model.setThumbnail(0, entryOf(4, 3), kRequestSize);
-    model.setThumbnail(999, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(0, entryOf(4, 3));
+    model.setThumbnail(999, entryOf(4, 3));
     QVERIFY(isLoaded(model, 0));
     QVERIFY(!isLoaded(model, 999));
     QCOMPARE(requests.count(), 0);
@@ -345,7 +347,7 @@ private slots:
     model.setActive(true);
     model.select(kSelectedItem);
     model.focusOn(kSelectedItem);
-    model.setThumbnail(kSelectedItem, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(kSelectedItem, entryOf(4, 3));
     // The right-button gesture to the end unloads the selected item.
     model.press(kSelectedItem, Qt::RightButton, Qt::NoModifier, {kPressX, 0});
     model.move({kPressX - ThumbnailListModel::kGestureThreshold - 1.0, 0}, Qt::RightButton);
@@ -380,15 +382,15 @@ private slots:
     // The folder grid requested the same path and size uncropped.
     ThumbnailEntry uncropped = entryOf(4, 3);
     uncropped.cropped = false;
-    model.setThumbnail(0, uncropped, kRequestSize);
+    model.setThumbnail(0, uncropped);
     QVERIFY(!isLoaded(model, 0));
     QVERIFY(model.data(model.index(0), ThumbnailListModel::PendingRole).toBool());
     ThumbnailEntry cropped = entryOf(3, 3);
     cropped.cropped = true;
-    model.setThumbnail(0, cropped, kRequestSize);
+    model.setThumbnail(0, cropped);
     QVERIFY(isLoaded(model, 0));
     // A folder icon serves either crop.
-    model.setThumbnail(1, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(1, entryOf(4, 3));
     QVERIFY(isLoaded(model, 1));
   }
 
@@ -453,7 +455,7 @@ private slots:
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 2);
-    model.setThumbnail(0, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(0, entryOf(4, 3));
     requests.clear();
     model.configure({.targetSize = kRequestSize, .crop = true});
     QVERIFY(!isLoaded(model, 0));
@@ -466,10 +468,12 @@ private slots:
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 2);
-    model.setThumbnail(1, entryOf(4, 3), kRequestSize);
+    model.setThumbnail(1, entryOf(4, 3));
     requests.clear();
     model.reloadItem(1);
-    QVERIFY(!isLoaded(model, 1));
+    // The loaded thumbnail stays until the new one arrives, so the item does
+    // not flicker.
+    QVERIFY(isLoaded(model, 1));
     QCOMPARE(requests.count(), 1);
     QCOMPARE(requests.first().at(0).value<QList<int>>(), QList<int>{1});
     QCOMPARE(requests.first().at(3).toBool(), true);
@@ -887,41 +891,47 @@ private slots:
     // A thumbnail whose pixels are not the box (a square image, a folder
     // icon, a cropped image) is the answer to the request it is labelled
     // with.
-    model.setThumbnail(0, entryOf(75, 75), kRequestSize);
-    model.setThumbnail(1, entryOf(100, 100), kRequestSize);
+    model.setThumbnail(0, entryOf(75, 75));
+    model.setThumbnail(1, entryOf(100, 100));
     QVERIFY(isLoaded(model, 0));
     QVERIFY(isLoaded(model, 1));
     // The box of another request is rejected whatever its pixels are, also
     // when only one side or only the order of the sides differs.
-    model.setThumbnail(2, entryOf(100, 75), QSize(100, 100));
-    model.setThumbnail(2, entryOf(100, 75), QSize(75, 100));
-    model.setThumbnail(2, entryOf(100, 75), QSize(100, 76));
+    model.setThumbnail(2, entryOf(100, 75, QSize(100, 100)));
+    model.setThumbnail(2, entryOf(100, 75, QSize(75, 100)));
+    model.setThumbnail(2, entryOf(100, 75, QSize(100, 76)));
     QVERIFY(!isLoaded(model, 2));
     model.setThumbnailUnavailable(2, QSize(100, 100));
     QVERIFY(!model.data(model.index(2), ThumbnailListModel::UnavailableRole).toBool());
     QCOMPARE(ready.count(), 0);
-    model.setThumbnail(2, entryOf(100, 75), kRequestSize);
+    model.setThumbnail(2, entryOf(100, 75));
     model.setThumbnailUnavailable(3, kRequestSize);
     QCOMPARE(ready.count(), 1);
   }
 
-  void changingTheTargetBoxUnloadsAndRequestsAgain() {
+  void changingTheTargetBoxKeepsThumbnailsAndRequestsAgain() {
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 2);
     QCOMPARE(requests.count(), 1);
-    model.setThumbnail(0, entryOf(100, 75), kRequestSize);
+    model.setThumbnail(0, entryOf(100, 75));
     QVERIFY(isLoaded(model, 0));
-    // Same width, other height: another request.
+    // Same width, other height: the loaded thumbnail stays (the view scales
+    // it) and the new box is requested after the load delay.
     const QSize taller(kRequestSize.width(), kRequestSize.height() + 1);
     model.configure({.targetSize = taller});
-    QVERIFY(!isLoaded(model, 0));
-    QCOMPARE(requests.count(), 2);
+    QVERIFY(isLoaded(model, 0));
+    QCOMPARE(requests.count(), 1);
+    QTRY_COMPARE(requests.count(), 2);
     QCOMPARE(requests.last().at(1).toSize(), taller);
+    QVERIFY(requests.last().at(0).value<QList<int>>().contains(0));
     // The answer to the old request arrives late and is ignored.
-    model.setThumbnail(0, entryOf(100, 75), kRequestSize);
-    QVERIFY(!isLoaded(model, 0));
+    model.setThumbnail(1, entryOf(100, 75));
+    QVERIFY(!isLoaded(model, 1));
+    model.setThumbnail(1, entryOf(100, 75, taller));
+    QVERIFY(isLoaded(model, 1));
   }
+
 
   void panelConfiguresTheModel() {
     ThumbnailListModel model;

@@ -13,6 +13,8 @@ qt_add_executable(wynpix_qml_tests
     main.cpp
     "${WYNPIX_APP_SOURCE_DIR}/themestore.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/quick/adapters/themesnapshotbuilder.cpp"
+    # The auto white balance of ImageRenderItem (wynpix_render).
+    "${WYNPIX_APP_SOURCE_DIR}/utils/autocoloradjustments.cpp"
 )
 
 qt_add_qml_module(wynpix_qml_tests

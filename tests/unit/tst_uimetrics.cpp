@@ -51,6 +51,14 @@ void verifyStyle(const QFont &font, const UiMetrics::TextStyle &style,
 
 QColor grey(int value) { return QColor::fromRgb(value, value, value); }
 
+// QColor keeps alpha as a 16-bit integer, so alphaF() is the opacity it was
+// set to only up to one step.
+constexpr qreal kAlphaTolerance = 1.0 / 65535;
+
+void verifyAlpha(const QColor &color, qreal alpha) {
+  QCOMPARE_LE(qAbs(color.alphaF() - alpha), kAlphaTolerance);
+}
+
 // Accent colours the text colour is checked on: the Windows accent palette,
 // and extremes that break fixed text colours (a nearly black and a nearly
 // white accent, mid grey, and the dark dialog window colour).
@@ -326,14 +334,14 @@ private slots:
   void neutralFillsAreInkOfTheScheme() {
     const NeutralFills::Colors dark = NeutralFills::colorsFor(true);
     QCOMPARE(dark.rest.rgb(), QColor(Qt::white).rgb());
-    QCOMPARE(dark.rest.alphaF(), NeutralFills::kDarkRestAlpha);
-    QCOMPARE(dark.hover.alphaF(), NeutralFills::kDarkHoverAlpha);
-    QCOMPARE(dark.pressed.alphaF(), NeutralFills::kDarkPressedAlpha);
+    verifyAlpha(dark.rest, NeutralFills::kDarkRestAlpha);
+    verifyAlpha(dark.hover, NeutralFills::kDarkHoverAlpha);
+    verifyAlpha(dark.pressed, NeutralFills::kDarkPressedAlpha);
     const NeutralFills::Colors light = NeutralFills::colorsFor(false);
     QCOMPARE(light.rest.rgb(), QColor(Qt::black).rgb());
-    QCOMPARE(light.rest.alphaF(), NeutralFills::kLightRestAlpha);
-    QCOMPARE(light.hover.alphaF(), NeutralFills::kLightHoverAlpha);
-    QCOMPARE(light.pressed.alphaF(), NeutralFills::kLightPressedAlpha);
+    verifyAlpha(light.rest, NeutralFills::kLightRestAlpha);
+    verifyAlpha(light.hover, NeutralFills::kLightHoverAlpha);
+    verifyAlpha(light.pressed, NeutralFills::kLightPressedAlpha);
   }
 
   void neutralFillsKeepTheDirectionOfThePressedFill() {
@@ -350,9 +358,9 @@ private slots:
     for (const bool dark : {true, false}) {
       const NeutralFills::Colors fills = NeutralFills::colorsFor(dark);
       QCOMPARE(fills.hudHover.rgb(), QColor(Qt::white).rgb());
-      QCOMPARE(fills.hudHover.alphaF(), NeutralFills::kHudHoverAlpha);
+      verifyAlpha(fills.hudHover, NeutralFills::kHudHoverAlpha);
       QCOMPARE(fills.hudPressed.rgb(), QColor(Qt::white).rgb());
-      QCOMPARE(fills.hudPressed.alphaF(), NeutralFills::kHudPressedAlpha);
+      verifyAlpha(fills.hudPressed, NeutralFills::kHudPressedAlpha);
     }
   }
 
@@ -366,10 +374,10 @@ private slots:
       QCOMPARE_LE(fills.strokeSubtle.alphaF(), fills.strokeDefault.alphaF());
       QCOMPARE_LE(fills.strokeDefault.alphaF(), fills.strokeStrong.alphaF());
     }
-    QCOMPARE(NeutralFills::colorsFor(true).strokeDefault.alphaF(),
-             NeutralFills::kDarkStrokeDefaultAlpha);
-    QCOMPARE(NeutralFills::colorsFor(false).strokeDefault.alphaF(),
-             NeutralFills::kLightStrokeDefaultAlpha);
+    verifyAlpha(NeutralFills::colorsFor(true).strokeDefault,
+                NeutralFills::kDarkStrokeDefaultAlpha);
+    verifyAlpha(NeutralFills::colorsFor(false).strokeDefault,
+                NeutralFills::kLightStrokeDefaultAlpha);
   }
 
   void snapshotCarriesTheNeutralFills() {
@@ -397,9 +405,9 @@ private slots:
       QCOMPARE(fills.tint.rgb(), accent.rgb());
       QCOMPARE(fills.tintHover.rgb(), accent.rgb());
       QCOMPARE(fills.frame.rgb(), accent.rgb());
-      QCOMPARE(fills.tint.alphaF(), SelectionFills::kTintAlpha);
-      QCOMPARE(fills.tintHover.alphaF(), SelectionFills::kTintHoverAlpha);
-      QCOMPARE(fills.frame.alphaF(), SelectionFills::kFrameAlpha);
+      verifyAlpha(fills.tint, SelectionFills::kTintAlpha);
+      verifyAlpha(fills.tintHover, SelectionFills::kTintHoverAlpha);
+      verifyAlpha(fills.frame, SelectionFills::kFrameAlpha);
     }
   }
 
@@ -456,7 +464,7 @@ private slots:
     QCOMPARE(tokens.surfaceHud, colors.overlay);
     QCOMPARE(tokens.textPrimary, colors.text_hc);
     QCOMPARE(tokens.textSecondary.rgb(), colors.text.rgb());
-    QCOMPARE(tokens.textSecondary.alphaF(), SemanticTokens::kSecondaryTextAlpha);
+    verifyAlpha(tokens.textSecondary, SemanticTokens::kSecondaryTextAlpha);
     QCOMPARE(tokens.textOnHud, colors.overlay_text);
     QCOMPARE(tokens.iconThumbFolder, colors.thumbnail_folder_icons);
     QCOMPARE(tokens.focusRing, colors.accent);
@@ -464,8 +472,7 @@ private slots:
     QCOMPARE(tokens.dropTarget, QColor(u"#be3c19"_s));
     // The literals the thumbnail strip and the viewer used.
     QCOMPARE(tokens.scrollbarMarker.rgb(), QColor(u"gray"_s).rgb());
-    QCOMPARE(tokens.scrollbarMarker.alphaF(),
-             SemanticTokens::kScrollbarMarkerAlpha);
+    verifyAlpha(tokens.scrollbarMarker, SemanticTokens::kScrollbarMarkerAlpha);
   }
 
   void snapshotCarriesTheTokens() {

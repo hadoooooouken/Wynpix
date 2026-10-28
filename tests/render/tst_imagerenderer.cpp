@@ -98,13 +98,13 @@ constexpr int kChannels = 4;
 
 // Colour adjustments touching every stage of colorAdjustmentMatrix().
 constexpr ColorAdjustments kTestAdjustments{
-    0.5f,   // exposure
-    1.2f,   // contrast
-    0.05f,  // brightness
-    0.1f,   // temperature
-    -0.05f, // tint
-    1.3f,   // saturation
-    30.0f,  // hue
+    .exposure = 0.5f,
+    .contrast = 1.2f,
+    .brightness = 0.05f,
+    .temperature = 0.1f,
+    .tint = -0.05f,
+    .saturation = 1.3f,
+    .hue = 30.0f,
 };
 constexpr float kStrongCas = 1.0f;
 constexpr float kNoCasContrast = 0.0f;

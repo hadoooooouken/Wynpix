@@ -452,12 +452,14 @@ QString BridgeTestFixture::lastCropRequest() const { return mLastCropRequest; }
 
 int BridgeTestFixture::scriptSettingsRequests() const { return mScriptSettingsRequests; }
 
-void BridgeTestFixture::toggleContextMenu(const QStringList &scripts, bool casFilter) {
+void BridgeTestFixture::showContextMenu(const QStringList &scripts, bool casFilter) {
   mContextMenu.setScripts(scripts);
   mContextMenu.setImageDisplayed(mViewport.hasImage());
   mContextMenu.setCasFilterActive(casFilter);
-  mContextMenu.toggle();
+  mContextMenu.show();
 }
+
+void BridgeTestFixture::closeContextMenu() { mContextMenu.close(); }
 
 void BridgeTestFixture::toggleCrop(QSize screenSize) {
   mCrop.setScreenSize(screenSize);
@@ -598,8 +600,11 @@ bool BridgeTestFixture::requestText(const QString &title, const QString &label,
 bool BridgeTestFixture::requestBatchConversion(const QStringList &paths) {
   constexpr QSize kOriginalSize(1000, 500);
   constexpr int kQuality = 90;
+  QList<BatchListEntry> files;
+  for (const QString &path : paths)
+    files.append({.path = path, .checked = true});
   return mDialogs.batchConverter()->start(
-      {.filePaths = paths,
+      {.files = files,
        .defaultOutputDirectory = {},
        .originalSize = kOriginalSize,
        .saveQualities = {.jpeg = kQuality, .png = 3, .modern = kQuality},
@@ -728,8 +733,8 @@ int BridgeTestFixture::deliverRequestedThumbnails() {
         index,
         ThumbnailEntry{.handle = {.image = image, .sourceSize = kTestSourceSize},
                        .name = u"item %1"_s.arg(index),
-                       .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight)},
-        targetSize);
+                       .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight),
+                       .targetSize = targetSize});
   }
   return static_cast<int>(indices.count());
 }
@@ -816,8 +821,8 @@ int BridgeTestFixture::deliverFolderThumbnails() {
         index,
         ThumbnailEntry{.handle = {.image = image, .sourceSize = kTestSourceSize},
                        .name = u"file %1"_s.arg(index),
-                       .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight)},
-        targetSize);
+                       .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight),
+                       .targetSize = targetSize});
   }
   return static_cast<int>(indices.count());
 }

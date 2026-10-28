@@ -50,8 +50,16 @@ struct SourceFolder {
     }
 };
 
+// The files at paths, all selected for the batch.
+QList<BatchListEntry> checkedEntries(const QStringList &paths) {
+    QList<BatchListEntry> entries;
+    for (const QString &path : paths)
+        entries.append({.path = path, .checked = true});
+    return entries;
+}
+
 BatchConverterDialogInput batchInput(const QStringList &paths) {
-    return {.filePaths = paths,
+    return {.files = checkedEntries(paths),
             .defaultOutputDirectory = {},
             .originalSize = QSize(1000, 500),
             .saveQualities = {.jpeg = 95, .png = 3, .modern = 80},
@@ -239,7 +247,7 @@ private slots:
         SourceFolder folder;
         BatchQueueModel queue;
         QSignalSpy completed(&queue, &BatchQueueModel::sourceInfoCompleted);
-        queue.reset(folder.paths + QStringList{folder.dir.filePath(u"missing.png"_s)});
+        queue.reset(checkedEntries(folder.paths + QStringList{folder.dir.filePath(u"missing.png"_s)}));
         QCOMPARE(queue.rowCount(), 4);
         QCOMPARE(queue.selectedCount(), 4);
         QVERIFY(completed.wait(kSourceInfoTimeoutMs));
@@ -255,7 +263,7 @@ private slots:
         SourceFolder folder;
         BatchQueueModel queue;
         QSignalSpy completed(&queue, &BatchQueueModel::sourceInfoCompleted);
-        queue.reset(folder.paths);
+        queue.reset(checkedEntries(folder.paths));
         QVERIFY(completed.wait(kSourceInfoTimeoutMs));
         queue.setChecked(1, false);
         QCOMPARE(queue.selectedCount(), 2);
@@ -277,11 +285,11 @@ private slots:
 
         BatchQueueModel queue;
         QSignalSpy completed(&queue, &BatchQueueModel::sourceInfoCompleted);
-        queue.reset(folder.paths);
+        queue.reset(checkedEntries(folder.paths));
         // The first scan has posted the headers of a.png, b.png and c.png;
         // they are delivered only after the queue changed.
         QVERIFY(queue.waitForSourceScan(QDeadlineTimer(kSourceInfoTimeoutMs)));
-        queue.reset({other});
+        queue.reset(checkedEntries({other}));
         QVERIFY(completed.wait(kSourceInfoTimeoutMs));
         QVERIFY(queue.waitForSourceScan(QDeadlineTimer(kSourceInfoTimeoutMs)));
         QCoreApplication::processEvents();
@@ -298,7 +306,7 @@ private slots:
 
     void queueTakesStatesAndThumbnails() {
         BatchQueueModel queue;
-        queue.reset({u"C:/a.png"_s, u"C:/b.png"_s, u"C:/a.png"_s});
+        queue.reset(checkedEntries({u"C:/a.png"_s, u"C:/b.png"_s, u"C:/a.png"_s}));
         queue.setItemState(1, BatchItemState::Failed, u"Load Error"_s);
         QCOMPARE(queue.data(queue.index(1), BatchQueueModel::DetailsRole).toString(), u"Load Error"_s);
         QCOMPARE(queue.data(queue.index(1), BatchQueueModel::StateTextRole).toString(), u"Failed"_s);
@@ -339,8 +347,13 @@ private slots:
         QVERIFY(!dialog.start(batchInput(folder.paths), service));
         dialog.reject();
         QVERIFY(!dialog.result().conversionStarted);
-        QVERIFY(!dialog.preferencesToStore());
-        QCOMPARE(dialog.queue()->rowCount(), 0);
+        // Cancel keeps the list and hands it back.
+        QVERIFY(dialog.result().listKept);
+        QCOMPARE(dialog.result().files.size(), 3);
+        // The choices are handed back however the dialog closes.
+        const BatchConverterPreferences preferences = dialog.preferencesToStore();
+        QVERIFY(preferences.useUpscayl);
+        QCOMPARE(preferences.upscaylModel, u"anime"_s);
     }
 
     void batchDialogWithoutModelsHasNoUpscayl() {
@@ -535,7 +548,7 @@ private slots:
         // Custom adjustments enable paste.
         ColorAdjustments custom;
         custom.exposure = 1.5f;
-        custom.contrast = 1.2f;
+        custom.contrast = 1.25f;
         dialog.setCopiedColorAdjustments(custom);
         QVERIFY(dialog.canPasteColorAdjustments());
 
@@ -546,7 +559,7 @@ private slots:
         const int exposure = static_cast<int>(ColorSlider::Exposure);
         const int contrast = static_cast<int>(ColorSlider::Contrast);
         QCOMPARE(dialog.colorValues()[exposure], 1.5);
-        QCOMPARE(dialog.colorValues()[contrast], 120.0);
+        QCOMPARE(dialog.colorValues()[contrast], 125.0);
         dialog.reject();
     }
 
@@ -614,10 +627,9 @@ private slots:
         dialog.stopOrClose();
         QVERIFY(!dialog.isOpen());
         QVERIFY(dialog.result().conversionStarted);
-        const std::optional<BatchConverterPreferences> preferences = dialog.preferencesToStore();
-        QVERIFY(preferences);
-        QVERIFY(preferences->useUpscayl);
-        QCOMPARE(preferences->upscaylModel, u"anime"_s);
+        const BatchConverterPreferences preferences = dialog.preferencesToStore();
+        QVERIFY(preferences.useUpscayl);
+        QCOMPARE(preferences.upscaylModel, u"anime"_s);
     }
 
     void batchStopWaitsForTheCancellation() {
