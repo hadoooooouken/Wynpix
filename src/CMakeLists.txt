@@ -140,6 +140,7 @@ add_executable(wynpix
     wynpix.rc
     ${QM_FILES}
 )
+target_include_directories(wynpix PRIVATE "${PROJECT_BINARY_DIR}/generated")
 
 # zlib for PngTextChunkReader (zTXt inflate), qtiff.dll, and kimg_png.
 # All three use the shared zlib-ng DLL, so only the import library is needed.

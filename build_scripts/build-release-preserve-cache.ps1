@@ -4,19 +4,32 @@ param()
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $installDir = Join-Path $projectRoot "INSTALL"
+$cmakeListsPath = Join-Path $projectRoot "CMakeLists.txt"
+$projectVersionMatch = [regex]::Match(
+    (Get-Content -LiteralPath $cmakeListsPath -Raw),
+    '(?s)\bproject\s*\(\s*wynpix\s+VERSION\s+(\d+(?:\.\d+){2,3})\b'
+)
+if (-not $projectVersionMatch.Success) {
+    throw "Could not determine the Wynpix version from '$cmakeListsPath'."
+}
+$projectVersion = $projectVersionMatch.Groups[1].Value
+$releaseVersion = $projectVersion
+if ($projectVersion -match '^\d+\.\d+\.\d+\.0$') {
+    $releaseVersion = $projectVersion -replace '\.0$', ''
+}
 
 $targets = @{
     AVX2 = @{
         Preset = "wynpix-x64-release"
         ReleaseDir = Join-Path $projectRoot "release"
-        Archive = "wynpix-portable.7z"
-        Installer = "wynpix-setup.exe"
+        Archive = "wynpix-portable_v$releaseVersion.7z"
+        Installer = "wynpix-setup_v$releaseVersion.exe"
     }
     SSE2 = @{
         Preset = "wynpix-x64-release-sse2"
         ReleaseDir = Join-Path $projectRoot "release-sse2"
-        Archive = "wynpix-portable-sse2.7z"
-        Installer = "wynpix-setup-sse2.exe"
+        Archive = "wynpix-portable-sse2_v$releaseVersion.7z"
+        Installer = "wynpix-setup-sse2_v$releaseVersion.exe"
     }
 }
 
@@ -303,7 +316,10 @@ try {
         Assert-ArchiveMatchesDirectory -ArchivePath $archivePath -SourceDirectory $target.ReleaseDir
 
         Invoke-External -Executable $iscc -Arguments @(
-            "/DIsa=$isaName", "src\wynpix.iss"
+            "/DIsa=$isaName",
+            "/DMyAppVersion=$projectVersion",
+            "/DReleaseVersion=$releaseVersion",
+            "src\wynpix.iss"
         )
 
         $installerPath = Join-Path $installDir $target.Installer

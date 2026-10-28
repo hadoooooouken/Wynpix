@@ -1,10 +1,11 @@
 #include <winres.h>
+#include "wynpix_version.h"
 
 IDI_ICON1               ICON    DISCARDABLE     "res/icons/common/logo/app/wynpix.ico"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION 1,2,1,0
-PRODUCTVERSION 1,2,1,0
+FILEVERSION WYNPIX_VERSION_MAJOR,WYNPIX_VERSION_MINOR,WYNPIX_VERSION_PATCH,WYNPIX_VERSION_TWEAK
+PRODUCTVERSION WYNPIX_VERSION_MAJOR,WYNPIX_VERSION_MINOR,WYNPIX_VERSION_PATCH,WYNPIX_VERSION_TWEAK
 FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 FILEFLAGS 0x1L
@@ -21,12 +22,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "hadoooooouken"
             VALUE "FileDescription", "Wynpix"
-            VALUE "FileVersion", "1.2.1.0"
+            VALUE "FileVersion", WYNPIX_VERSION_STRING
             VALUE "InternalName", "wynpix.exe"
             VALUE "LegalCopyright", "Copyright (C) 2026 hadooooouken"
             VALUE "OriginalFilename", "wynpix.exe"
             VALUE "ProductName", "Wynpix"
-            VALUE "ProductVersion", "1.2.1.0"
+            VALUE "ProductVersion", WYNPIX_VERSION_STRING
         END
     END
     BLOCK "VarFileInfo"

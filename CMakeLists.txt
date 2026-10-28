@@ -5,6 +5,16 @@ project(wynpix
     HOMEPAGE_URL "https://github.com/hadoooooouken/wynpix"
     LANGUAGES C CXX RC)
 
+if(NOT DEFINED PROJECT_VERSION_TWEAK OR PROJECT_VERSION_TWEAK STREQUAL "")
+    set(PROJECT_VERSION_TWEAK 0)
+endif()
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/wynpix_version.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/generated/wynpix_version.h"
+    @ONLY
+)
+
 message(STATUS "Build configuration: " ${CMAKE_BUILD_TYPE})
 
 # AUTOMOC

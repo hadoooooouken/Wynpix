@@ -1,18 +1,23 @@
 #define MyAppName "Wynpix"
-#define MyAppVersion "1.2.1.0"
+#ifndef MyAppVersion
+  #error MyAppVersion must be supplied by the release build script.
+#endif
+#ifndef ReleaseVersion
+  #error ReleaseVersion must be supplied by the release build script.
+#endif
 #define MyAppPublisher "hadoooooouken"
 #define MyAppURL "https://github.com/hadoooooouken/wynpix"
 #define MyAppExeName "wynpix.exe"
 #define MyAppIconName "wynpix.ico"
 #define MyAppCLSID "{{9E9681D4-2454-445F-8C28-79AAF86F9F15}"
-
-; Target ISA of the packaged build: iscc wynpix.iss (AVX2) or iscc /DIsa=SSE2 wynpix.iss
+; Release scripts provide MyAppVersion and ReleaseVersion from the root CMake project.
+; For manual builds, also provide /DIsa=SSE2 to build the SSE2 package.
 #ifndef Isa
   #define Isa "AVX2"
 #endif
 
-#define MyAvx2OutputBaseFilename "wynpix-setup"
-#define MySse2OutputBaseFilename "wynpix-setup-sse2"
+#define MyAvx2OutputBaseFilename "wynpix-setup_v" + ReleaseVersion
+#define MySse2OutputBaseFilename "wynpix-setup-sse2_v" + ReleaseVersion
 
 #if Isa == "AVX2"
   #define MyReleaseDir "..\release"

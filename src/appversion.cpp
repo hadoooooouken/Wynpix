@@ -1,5 +1,8 @@
 #include "appversion.h"
+#include "wynpix_version.h"
 
-// clang-format off
-QVersionNumber appVersion(1,2,1);
-// clang-format on
+QVersionNumber appVersion(
+    WYNPIX_VERSION_MAJOR,
+    WYNPIX_VERSION_MINOR,
+    WYNPIX_VERSION_PATCH
+);
