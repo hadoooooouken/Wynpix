@@ -1,5 +1,6 @@
 #include "themesnapshotbuilder.h"
 
+#include "gui/accentcontrast.h"
 #include "gui/dialogsurfaces.h"
 #include "gui/uimetrics.h"
 #include "themestore.h"
@@ -17,6 +18,7 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .widget = scheme.widget,
       .widgetBorder = scheme.widget_border,
       .accent = scheme.accent,
+      .accentText = AccentContrast::textOn(scheme.accent),
       .folderView = scheme.folderview,
       .folderViewTopBar = scheme.folderview_topbar,
       .thumbPanel = scheme.thumbpanel,

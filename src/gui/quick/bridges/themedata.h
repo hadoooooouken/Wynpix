@@ -11,7 +11,9 @@
 // (gui/quick/adapters/themesnapshotbuilder.h).
 
 // Every colour of ColorScheme (themestore.h), base and extended, under
-// camelCase names: ColorScheme::folderview_topbar is folderViewTopBar.
+// camelCase names: ColorScheme::folderview_topbar is folderViewTopBar. The
+// exception is accentText, derived from the accent (AccentContrast): the
+// colour of text and glyphs on a solid accent fill.
 struct ThemeColors {
   Q_GADGET
   QML_VALUE_TYPE(themeColors)
@@ -25,6 +27,7 @@ struct ThemeColors {
   Q_PROPERTY(QColor widget MEMBER widget)
   Q_PROPERTY(QColor widgetBorder MEMBER widgetBorder)
   Q_PROPERTY(QColor accent MEMBER accent)
+  Q_PROPERTY(QColor accentText MEMBER accentText)
   Q_PROPERTY(QColor folderView MEMBER folderView)
   Q_PROPERTY(QColor folderViewTopBar MEMBER folderViewTopBar)
   Q_PROPERTY(QColor thumbPanel MEMBER thumbPanel)
@@ -71,6 +74,7 @@ public:
   QColor widget;
   QColor widgetBorder;
   QColor accent;
+  QColor accentText;
   QColor folderView;
   QColor folderViewTopBar;
   QColor thumbPanel;
