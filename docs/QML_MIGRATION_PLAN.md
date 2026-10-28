@@ -1912,9 +1912,10 @@ test QML scene and by `--ui=quick`. The widget viewer is not modified.
     logged stub.
   - **Kept for parity:** Cancel does not undo the previewed theme values
     (theme mode, accent, black background, thumbnail bar opacity); scripts
-    are added, edited and removed at once, and "Reset to defaults" restores
-    the default shortcuts at once; editing a script under a new name adds
-    it and keeps the old one.
+    are added, edited and removed at once; editing a script under a new
+    name adds it and keeps the old one. "Reset to defaults" restored the
+    default shortcuts at once as well; later it moved into the shortcut
+    table, so it waits for Apply and Cancel undoes it.
   - **Fixed:**
     - A stored language that is not offered now falls back to English. The
       widget dialog's `setCurrentText("en_US")` never matched an entry, so

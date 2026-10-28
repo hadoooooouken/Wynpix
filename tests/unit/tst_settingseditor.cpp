@@ -364,6 +364,11 @@ private slots:
         editor.load();
         editor.resetShortcuts();
         QCOMPARE(editor.shortcutTable()->entries(), (ShortcutList{kZoomIn}));
+        // Like every table edit, the reset waits for apply(): Cancel keeps
+        // the shortcuts the application has.
+        QCOMPARE(f.shortcuts.live, (ShortcutList{kNextImage, kPrevImage}));
+        editor.apply();
+        QCOMPARE(f.values.appliedShortcuts, (ShortcutList{kZoomIn}));
     }
 
     //--- shortcut creator ---------------------------------------------------

@@ -24,8 +24,8 @@ class IShortcutScriptStore;
 // As in the widget dialog, some edits take effect at once, before apply():
 // the theme mode, the black background, the thumbnail bar opacity and the
 // custom accent are previewed through the store; scripts are added, edited
-// and removed at once, and "Reset to defaults" restores the default
-// shortcuts at once. Shortcut edits stay in the table until apply().
+// and removed at once. Shortcut edits, "Reset to defaults" included, stay in
+// the table until apply().
 //
 // Values that the stored settings do not offer fall back to a valid choice
 // on load: the language to English, the scaling filter to bilinear, the

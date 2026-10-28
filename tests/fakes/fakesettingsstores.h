@@ -66,10 +66,7 @@ public:
 class FakeShortcutScriptStore final : public IShortcutScriptStore {
 public:
     ShortcutList shortcuts() override { return live; }
-    ShortcutList resetShortcuts() override {
-        live = defaults;
-        return live;
-    }
+    ShortcutList defaultShortcuts() override { return defaults; }
     QStringList actionNames() override { return actions; }
 
     QStringList scriptNames() override { return scripts.keys(); }

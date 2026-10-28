@@ -48,6 +48,7 @@ public:
     const QList<QString> shortcutsForAction(QString action);
     QStringList actionList();
     const QMap<QString,QString>& allShortcuts();
+    const QMap<QString,QString>& defaultShortcuts();
     void removeShortcut(const QString &keys);
     void removeAllShortcuts();
     void removeAllShortcuts(QString actionName);

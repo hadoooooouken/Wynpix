@@ -133,6 +133,10 @@ QStringList ActionManager::actionList() { return appActions->getList(); }
 const QMap<QString, QString> &ActionManager::allShortcuts() {
   return actionManager->shortcuts;
 }
+
+const QMap<QString, QString> &ActionManager::defaultShortcuts() {
+  return actionManager->defaults;
+}
 //------------------------------------------------------------------------------
 void ActionManager::removeAllShortcuts() { shortcuts.clear(); }
 //------------------------------------------------------------------------------

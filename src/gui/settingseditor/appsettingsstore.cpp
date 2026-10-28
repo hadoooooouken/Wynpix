@@ -72,18 +72,23 @@ void AppSettingsStore::clearThumbnailCache() {
 AppShortcutStore::AppShortcutStore(ActionManager &actions, ScriptManager &scripts)
     : mActions(actions), mScripts(scripts) {}
 
-ShortcutList AppShortcutStore::shortcuts() {
+namespace {
+// bound maps shortcuts to actions.
+ShortcutList shortcutList(const QMap<QString, QString> &bound) {
     ShortcutList list;
-    const QMap<QString, QString> &all = mActions.allShortcuts(); // <shortcut, action>
-    list.reserve(all.size());
-    for (auto it = all.cbegin(); it != all.cend(); ++it)
+    list.reserve(bound.size());
+    for (auto it = bound.cbegin(); it != bound.cend(); ++it)
         list.append({.action = it.value(), .shortcut = it.key()});
     return list;
 }
+} // namespace
 
-ShortcutList AppShortcutStore::resetShortcuts() {
-    mActions.resetDefaults();
-    return shortcuts();
+ShortcutList AppShortcutStore::shortcuts() {
+    return shortcutList(mActions.allShortcuts());
+}
+
+ShortcutList AppShortcutStore::defaultShortcuts() {
+    return shortcutList(mActions.defaultShortcuts());
 }
 
 QStringList AppShortcutStore::actionNames() {

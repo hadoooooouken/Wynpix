@@ -57,7 +57,7 @@ public:
     AppShortcutStore(ActionManager &actions, ScriptManager &scripts);
 
     [[nodiscard]] ShortcutList shortcuts() override;
-    [[nodiscard]] ShortcutList resetShortcuts() override;
+    [[nodiscard]] ShortcutList defaultShortcuts() override;
     [[nodiscard]] QStringList actionNames() override;
 
     [[nodiscard]] QStringList scriptNames() override;

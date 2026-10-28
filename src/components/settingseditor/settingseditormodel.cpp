@@ -467,7 +467,7 @@ void SettingsEditorModel::removeShortcut(int row) {
 }
 
 void SettingsEditorModel::resetShortcuts() {
-    mShortcuts.setEntries(mShortcutStore.resetShortcuts());
+    mShortcuts.setEntries(mShortcutStore.defaultShortcuts());
 }
 
 void SettingsEditorModel::onShortcutAccepted() {

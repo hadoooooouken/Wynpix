@@ -45,9 +45,8 @@ public:
     virtual ~IShortcutScriptStore() = default;
 
     [[nodiscard]] virtual ShortcutList shortcuts() = 0;
-    // Restores the default shortcuts (at once, as the widget dialog did) and
-    // returns them.
-    [[nodiscard]] virtual ShortcutList resetShortcuts() = 0;
+    // The default shortcuts; changes nothing.
+    [[nodiscard]] virtual ShortcutList defaultShortcuts() = 0;
     [[nodiscard]] virtual QStringList actionNames() = 0;
 
     [[nodiscard]] virtual QStringList scriptNames() = 0;
