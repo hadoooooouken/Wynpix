@@ -24,7 +24,6 @@ FocusScope {
     readonly property int labelSpacing: 10
     readonly property int aspectSpacing: 6
     readonly property int buttonsTopGap: 5
-    readonly property int groupRadius: 4
     readonly property int groupTopPadding: 6
     readonly property int groupSidePadding: 10
     readonly property int groupBottomPadding: 8
@@ -303,7 +302,7 @@ FocusScope {
         color: Theme.colors.widget
         border.width: StyleConstants.separatorThickness
         border.color: Theme.colors.strokeDefault
-        radius: root.groupRadius
+        radius: StyleConstants.controlRadius
 
         ColumnLayout {
             id: groupContent

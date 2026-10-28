@@ -15,7 +15,6 @@ Item {
     readonly property int horizontalPadding: 9
     readonly property int verticalPadding: 5
     readonly property int spacing: 12
-    readonly property int cornerRadius: 8
     readonly property real backgroundOpacity: 0.9
 
     Rectangle {
@@ -23,7 +22,7 @@ Item {
 
         width: Math.min(row.implicitWidth + 2 * root.horizontalPadding, root.maximumWidth)
         height: row.implicitHeight + 2 * root.verticalPadding
-        bottomRightRadius: root.cornerRadius
+        bottomRightRadius: StyleConstants.surfaceRadius
         color: Color.transparent(Theme.colors.overlay, root.backgroundOpacity)
         clip: row.implicitWidth + 2 * root.horizontalPadding > root.maximumWidth
         visible: opacity > 0

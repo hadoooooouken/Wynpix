@@ -36,7 +36,6 @@ FocusScope {
     readonly property int zonePillEdgeMargin: 16
     readonly property int zonePillHeightDivisor: 3
     readonly property int zonePillMinHeight: 80
-    readonly property int zonePillRadius: 8
     readonly property int zonePillSlide: 12
     readonly property int zoneArrowSize: 48
     readonly property int zoneFadeInDuration: 160
@@ -49,7 +48,6 @@ FocusScope {
     readonly property int indicatorBottomMargin: 16
     readonly property int indicatorHorizontalPadding: 14
     readonly property int indicatorVerticalPadding: 12
-    readonly property int indicatorRadius: 8
 
     focus: true
     Keys.onPressed: event => event.accepted = Actions.handleKeyEvent(event)
@@ -127,7 +125,7 @@ FocusScope {
         y: (root.height - height) / 2
         width: root.zonePillWidth
         height: Math.max(root.height / root.zonePillHeightDivisor, root.zonePillMinHeight)
-        radius: root.zonePillRadius
+        radius: StyleConstants.surfaceRadius
         color: Theme.colors.thumbPanel
         opacity: highlighted ? 1 : 0
         visible: opacity > 0
@@ -178,8 +176,8 @@ FocusScope {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.indicatorBottomMargin
-        topRightRadius: root.indicatorRadius
-        bottomRightRadius: root.indicatorRadius
+        topRightRadius: StyleConstants.surfaceRadius
+        bottomRightRadius: StyleConstants.surfaceRadius
         width: zoomText.implicitWidth + root.indicatorHorizontalPadding
         height: zoomText.implicitHeight + root.indicatorVerticalPadding
         color: Theme.colors.overlay

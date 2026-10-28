@@ -6,12 +6,19 @@ import QtQuick
 // values of the former widget stylesheet and ProxyStyle; the sizes that
 // scale with the font come from Theme.metrics.
 QtObject {
-    // Corner radius of buttons, fields, combo boxes and panel buttons.
+    // Corner radii, on a scale of 4, 6 and 8 with three named exceptions.
+    // Buttons, fields, combo boxes, panel buttons and thumbnails.
     readonly property int controlRadius: 4
-    // Floating panels and plain popups (FloatingWidget).
-    readonly property int popupRadius: 8
-    // Highlighted rows of menus and combo box lists.
+    // Highlighted rows of menus and combo box lists, settings groups and
+    // batch thumbnails.
     readonly property int itemRadius: 6
+    // Floating panels, plain popups (FloatingWidget), the viewer overlays
+    // and thumbnail cells.
+    readonly property int surfaceRadius: 8
+    // Current and hovered rows of the settings sidebar and the places panel.
+    readonly property int rowRadius: 5
+    // Buttons of the main panel (ButtonSmall of the widget stylesheet).
+    readonly property int panelButtonRadius: 1
 
     // Push button padding.
     readonly property int buttonVerticalPadding: 7

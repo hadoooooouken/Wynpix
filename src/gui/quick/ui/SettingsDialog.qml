@@ -29,7 +29,6 @@ Window {
     readonly property int sidebarPadding: 8
     readonly property int sidebarIconSize: 32
     readonly property int sidebarRowHeight: 40
-    readonly property int sidebarEntryRadius: 5
     // Version badges under the sidebar: logo sizes and the gap between the
     // application and the Qt badge.
     readonly property size appLogoSize: Qt.size(20, 22)
@@ -148,7 +147,7 @@ Window {
                             }
 
                             background: Rectangle {
-                                radius: root.sidebarEntryRadius
+                                radius: StyleConstants.rowRadius
                                 visible: entry.highlighted || entry.down
                                 color: entry.highlighted
                                        ? (entry.down ? Theme.colors.accentTintHover : Theme.colors.accentTint)

@@ -33,11 +33,9 @@ Rectangle {
     readonly property int headerSpacing: 16
     readonly property int panelRightMargin: 6
     readonly property int rightBorderWidth: 1
-    readonly property int buttonRadius: 4
     // Current and hovered rows of the bookmarks and the tree: a rounded
     // shade inset from the panel edges (and from the scroll bar).
     readonly property int rowInset: 4
-    readonly property int rowRadius: 5
     // BookmarksItem layout margins and the translucent text_hc2 shades of its
     // buttons.
     readonly property int bookmarkMarginH: 10
@@ -290,7 +288,7 @@ Rectangle {
                 }
 
                 background: Rectangle {
-                    radius: root.buttonRadius
+                    radius: StyleConstants.controlRadius
                     color: headerButton.down ? Theme.colors.fillPressed
                          : headerButton.hovered ? Theme.colors.fillHover
                          : "transparent"
@@ -321,7 +319,7 @@ Rectangle {
             anchors.fill: parent
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
-            radius: root.rowRadius
+            radius: StyleConstants.rowRadius
             color: row.highlighted ? Theme.colors.accentTint
                  : rowHover.hovered || dropArea.containsDrag ? Theme.colors.fillHover
                  : "transparent"
@@ -432,7 +430,7 @@ Rectangle {
         hoverEnabled: true
 
         background: Rectangle {
-            radius: root.buttonRadius
+            radius: StyleConstants.controlRadius
             color: bookmarkButton.down
                    ? Color.transparent(Theme.colors.textHc2, root.bookmarkButtonPressedOpacity)
                    : bookmarkButton.hovered
@@ -474,7 +472,7 @@ Rectangle {
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
-            radius: root.rowRadius
+            radius: StyleConstants.rowRadius
             color: treeRow.current ? Theme.colors.accentTint
                  : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.fillHover
                  : "transparent"

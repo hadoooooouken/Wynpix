@@ -14,7 +14,6 @@ Item {
     readonly property int buttonSize: 30
     readonly property int largeGlyphSize: 20
     readonly property int smallGlyphSize: 16
-    readonly property int cornerRadius: 8
     readonly property real backgroundOpacity: 0.9
     // Glyphs and fills on the HUD panel, which is dark in both schemes.
     readonly property color glyphColor: Theme.colors.overlayText
@@ -28,7 +27,7 @@ Item {
         anchors.right: parent.right
         width: buttons.implicitWidth
         height: buttons.implicitHeight
-        bottomLeftRadius: root.cornerRadius
+        bottomLeftRadius: StyleConstants.surfaceRadius
         color: Color.transparent(Theme.colors.overlay, root.backgroundOpacity)
         visible: opacity > 0
 

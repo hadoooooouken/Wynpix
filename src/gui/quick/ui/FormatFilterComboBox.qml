@@ -33,7 +33,6 @@ T.AbstractButton {
     readonly property int popupBottomGap: 10
     readonly property int popupLeftGap: 10
     readonly property int popupRightGap: 10
-    readonly property int controlRadius: 4
     readonly property int borderWidth: 2
     // Text and glyph on the accent field.
     readonly property color limitedContentColor: Theme.colors.accentText
@@ -110,7 +109,7 @@ T.AbstractButton {
     }
 
     background: Rectangle {
-        radius: control.controlRadius
+        radius: StyleConstants.controlRadius
         color: control.limited ? (control.hovered || control.popupOpen ? Theme.colors.accentHover
                                                                        : Theme.colors.accent)
              : control.hovered || control.popupOpen ? Theme.colors.fillHover

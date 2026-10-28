@@ -15,7 +15,6 @@ Item {
 
     readonly property int buttonSize: Theme.metrics.contextMenuItemHeight
     readonly property int iconSize: Theme.standardIconSize
-    readonly property int cornerRadius: 8
     readonly property int horizontalPadding: 8
     readonly property int verticalPadding: 4
 
@@ -51,8 +50,8 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         width: controlsRow.implicitWidth + 2 * root.horizontalPadding
         height: controlsRow.implicitHeight + 2 * root.verticalPadding
-        bottomLeftRadius: root.cornerRadius
-        bottomRightRadius: root.cornerRadius
+        bottomLeftRadius: StyleConstants.surfaceRadius
+        bottomRightRadius: StyleConstants.surfaceRadius
         topLeftRadius: 0
         topRightRadius: 0
         color: Theme.colors.widget

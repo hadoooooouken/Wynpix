@@ -14,12 +14,11 @@ Rectangle {
 
     readonly property int horizontalPadding: 13
     readonly property int verticalPadding: 10
-    readonly property int cornerRadius: 6
 
     Layout.fillWidth: true
     implicitWidth: column.implicitWidth + 2 * root.horizontalPadding
     implicitHeight: column.implicitHeight + 2 * root.verticalPadding
-    radius: root.cornerRadius
+    radius: StyleConstants.itemRadius
     color: Theme.colors.surfaceCard
     border.width: StyleConstants.separatorThickness
     border.color: Theme.colors.strokeSubtle

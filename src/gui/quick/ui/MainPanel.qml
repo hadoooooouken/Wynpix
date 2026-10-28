@@ -210,7 +210,6 @@ Item {
         property int glyphSize: Theme.standardIconSize
         // Checked look (the pinned state), not toggled by a press.
         property bool active: false
-        readonly property real surfaceRadius: 1
 
         implicitWidth: size
         implicitHeight: size
@@ -224,7 +223,7 @@ Item {
                                            : button.hovered ? Theme.colors.fillHover
                                            : "transparent"
 
-            radius: button.surfaceRadius
+            radius: StyleConstants.panelButtonRadius
             color: surface
             border.width: 1
             border.color: surface

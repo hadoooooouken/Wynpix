@@ -40,8 +40,6 @@ Item {
     property real hoverAmount: 0
 
     // ThumbnailWidget constants.
-    readonly property real surfaceRadius: 8
-    readonly property real thumbnailRadius: 4
     readonly property int frameWidth: 2
     readonly property real hoverHighlight: 0.2
     readonly property real infoOpacity: 0.62
@@ -98,7 +96,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: cell.surfaceRadius
+            radius: StyleConstants.surfaceRadius
             color: cell.hoverColor
             opacity: cell.hoverAmount
             visible: !cell.selected && cell.hoverAmount > 0
@@ -106,14 +104,14 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: cell.surfaceRadius
+            radius: StyleConstants.surfaceRadius
             color: Theme.colors.accentTint
             visible: cell.selected
         }
 
         Rectangle {
             anchors.fill: parent
-            radius: cell.surfaceRadius
+            radius: StyleConstants.surfaceRadius
             color: "transparent"
             border.width: cell.frameWidth
             border.color: Theme.colors.accentFrame
@@ -128,7 +126,7 @@ Item {
         visible: cell.hasImage
         thumbnail: cell.thumbnail
         maximumSize: cell.cellLayout.imageArea
-        cornerRadius: cell.thumbnailRadius
+        cornerRadius: StyleConstants.controlRadius
         highlight: cell.hoverHighlight * cell.hoverAmount
     }
 
@@ -176,14 +174,14 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: cell.surfaceRadius
+            radius: StyleConstants.surfaceRadius
             color: cell.dropHoverColor
             opacity: cell.dropHoverFillOpacity
         }
 
         Rectangle {
             anchors.fill: parent
-            radius: cell.surfaceRadius
+            radius: StyleConstants.surfaceRadius
             color: "transparent"
             border.width: cell.frameWidth
             border.color: cell.dropHoverColor

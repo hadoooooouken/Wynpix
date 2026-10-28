@@ -43,7 +43,6 @@ FocusScope {
     readonly property int comboSpacing: 4
     readonly property int nameFilterWidth: 163
     readonly property int nameFilterSpacing: 8
-    readonly property int controlRadius: 4
     readonly property int fieldBorderWidth: 2
     readonly property int buttonBorderWidth: 1
     readonly property int splitterHandleWidth: 6
@@ -108,7 +107,7 @@ FocusScope {
                 Layout.rightMargin: root.controlMarginH
                 Layout.minimumWidth: root.pathBarMinimumWidth
                 Layout.preferredWidth: root.upButtonWidth + pathText.implicitWidth
-                radius: root.controlRadius
+                radius: StyleConstants.controlRadius
                 color: Theme.colors.fillRest
 
                 Row {
@@ -129,7 +128,7 @@ FocusScope {
                         }
 
                         background: Rectangle {
-                            radius: root.controlRadius
+                            radius: StyleConstants.controlRadius
                             color: upButton.down ? Theme.colors.fillPressed
                                  : upButton.hovered ? Theme.colors.fillHover
                                  : "transparent"
@@ -189,7 +188,7 @@ FocusScope {
                 onClicked: root.gridController.requestBatchConversion()
 
                 background: Rectangle {
-                    radius: root.controlRadius
+                    radius: StyleConstants.controlRadius
                     color: batchButton.down ? Theme.colors.fillPressed
                          : batchButton.hovered ? Theme.colors.fillHover
                          : Theme.colors.fillRest
@@ -427,7 +426,7 @@ FocusScope {
                                            : button.hovered ? Theme.colors.fillHover
                                            : "transparent"
 
-            radius: root.controlRadius
+            radius: StyleConstants.controlRadius
             color: surface
             border.width: root.buttonBorderWidth
             border.color: surface
@@ -477,7 +476,7 @@ FocusScope {
             size: Theme.compactIconSize
         }
         background: Rectangle {
-            radius: root.controlRadius
+            radius: StyleConstants.controlRadius
             color: combo.hovered || combo.popup.visible ? Theme.colors.fillHover
                                                         : Theme.colors.fillRest
             border.width: root.fieldBorderWidth

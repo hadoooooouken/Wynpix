@@ -26,7 +26,6 @@ Item {
     readonly property int margin: 6
     readonly property int spacing: 10
     readonly property int textSpacing: 2
-    readonly property int thumbnailRadius: 6
     readonly property int stateMinimumWidth: 80
 
     readonly property color stateColor: {
@@ -60,7 +59,7 @@ Item {
         Rectangle {
             Layout.preferredWidth: root.thumbnailSize
             Layout.preferredHeight: root.thumbnailSize
-            radius: root.thumbnailRadius
+            radius: StyleConstants.itemRadius
             color: Theme.colors.widget
             border.color: Theme.colors.strokeDefault
 
@@ -68,7 +67,7 @@ Item {
                 anchors.fill: parent
                 thumbnail: root.thumbnail
                 maximumSize: Qt.size(root.thumbnailSize, root.thumbnailSize)
-                cornerRadius: root.thumbnailRadius
+                cornerRadius: StyleConstants.itemRadius
             }
         }
 

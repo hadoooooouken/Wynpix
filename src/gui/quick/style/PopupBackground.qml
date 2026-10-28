@@ -7,7 +7,7 @@ import wynpix.bridges
 Item {
     id: root
 
-    property real radius: StyleConstants.popupRadius
+    property real radius: StyleConstants.surfaceRadius
     property color color: Theme.colors.widget
     property color borderColor: Theme.colors.strokeDefault
     property int borderWidth: StyleConstants.separatorThickness
