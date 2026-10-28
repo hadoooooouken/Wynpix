@@ -133,8 +133,10 @@ void ShortcutEditorModel::setShortcut(const QString &shortcut) {
     if (action.isEmpty()) {
         mWarning.clear();
     } else {
-        mWarning = QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog", "This shortcut is used for action: ")) +
-                   action + QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog", ". Replace?"));
+        // One string, so that a translation can place the action anywhere.
+        mWarning = QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog",
+                                                                                  "This shortcut is used for action: %1. Replace?"))
+                       .arg(action);
     }
     emit shortcutChanged();
 }
