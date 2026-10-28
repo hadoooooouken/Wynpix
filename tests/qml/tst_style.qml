@@ -278,7 +278,8 @@ Item {
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             slider.enabled = false;
             verifyColor(pixel(slider, 20, y), Theme.surfaces.tintedHc2, "disabled fill");
-            verifyColor(pixel(slider, centerX, y), Theme.colors.text, "disabled handle");
+            verifyColor(pixel(slider, centerX, y), over(Theme.colors.text, StyleConstants.disabledOpacity),
+                        "disabled handle");
             slider.enabled = true;
         }
 

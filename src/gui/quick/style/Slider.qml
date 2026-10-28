@@ -32,11 +32,25 @@ T.Slider {
         implicitWidth: StyleConstants.sliderHandleSize
         implicitHeight: StyleConstants.sliderHandleSize
         radius: width / 2
-        color: !control.enabled ? Theme.colors.text
+        // Disabled: the text colour at the disabled opacity over the widget,
+        // not the brightest colour of the control.
+        color: !control.enabled ? Qt.tint(Theme.colors.widget,
+                                          Color.transparent(Theme.colors.text, StyleConstants.disabledOpacity))
              : control.hovered || control.pressed ? Color.lighter(Theme.colors.accent, StyleConstants.accentLightFactor)
              : Theme.colors.accent
         border.width: StyleConstants.sliderHandleBorderWidth
         border.color: Theme.colors.widget
+
+        // The shared focus ring, outside the ring of the widget colour.
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: -(StyleConstants.sliderHandleBorderWidth + StyleConstants.fieldBorderWidth)
+            radius: width / 2
+            color: "transparent"
+            border.width: StyleConstants.fieldBorderWidth
+            border.color: Theme.colors.accent
+            visible: control.visualFocus
+        }
     }
 
     background: Rectangle {

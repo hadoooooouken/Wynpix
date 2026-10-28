@@ -23,7 +23,16 @@ T.CheckBox {
             : control.checkState === Qt.PartiallyChecked ? FluentIcons.CheckboxIndeterminate16
             : FluentIcons.CheckboxUnchecked16
         size: StyleConstants.indicatorSize
+        color: control.checkState === Qt.Unchecked ? Theme.colors.icons : Theme.colors.accent
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
+    }
+
+    // The shared focus ring (FieldBackground), shown for keyboard focus.
+    background: Rectangle {
+        radius: StyleConstants.controlRadius
+        color: "transparent"
+        border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
+        border.color: Theme.colors.accent
     }
 
     contentItem: Text {

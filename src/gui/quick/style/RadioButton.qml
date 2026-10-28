@@ -22,7 +22,16 @@ T.RadioButton {
         y: control.topPadding + (control.availableHeight - height) / 2
         icon: control.checked ? FluentIcons.Record16 : FluentIcons.RadioButton16
         size: StyleConstants.indicatorSize
+        color: control.checked ? Theme.colors.accent : Theme.colors.icons
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
+    }
+
+    // The shared focus ring (FieldBackground), shown for keyboard focus.
+    background: Rectangle {
+        radius: StyleConstants.controlRadius
+        color: "transparent"
+        border.width: control.visualFocus ? StyleConstants.fieldBorderWidth : 0
+        border.color: Theme.colors.accent
     }
 
     contentItem: Text {
