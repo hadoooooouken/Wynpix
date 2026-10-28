@@ -191,6 +191,8 @@ DialogWindow {
 
                     objectName: "exportPdfButton"
                     text: qsTr("Export PDF")
+                    // The action of Enter without a printer.
+                    highlighted: !root.dialog.printersAvailable
                     onClicked: pdfDialog.open()
                 }
                 Item {
@@ -201,6 +203,7 @@ DialogWindow {
 
                     objectName: "printButton"
                     text: qsTr("Print")
+                    highlighted: true
                     enabled: root.dialog.printersAvailable
                     onClicked: root.dialog.print()
                 }

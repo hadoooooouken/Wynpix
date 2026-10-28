@@ -715,6 +715,7 @@ Window {
                 Button {
                     objectName: "convertButton"
                     text: qsTr("Convert")
+                    highlighted: true
                     enabled: root.editable
                     onClicked: root.dialog.convert()
                 }
@@ -779,11 +780,14 @@ Window {
 
         DialogButtonBox {
             Layout.fillWidth: true
+            defaultButton: messageOkButton
             onAccepted: root.dialog.dismissMessage()
 
             // Own button, not standardButtons: no Qt base translation is
             // loaded.
             Button {
+                id: messageOkButton
+
                 text: qsTr("OK")
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
             }

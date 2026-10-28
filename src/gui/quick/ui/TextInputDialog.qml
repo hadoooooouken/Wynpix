@@ -43,11 +43,14 @@ DialogWindow {
     DialogButtonBox {
         Layout.fillWidth: true
         Layout.topMargin: StyleConstants.dialogSpacing
+        defaultButton: okButton
         onAccepted: root.dialog.accept(field.text)
         onRejected: root.dialog.reject()
 
         // Own buttons, not standardButtons: no Qt base translation is loaded.
         Button {
+            id: okButton
+
             text: qsTr("OK")
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }

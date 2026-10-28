@@ -82,11 +82,14 @@ DialogWindow {
 
     DialogButtonBox {
         Layout.fillWidth: true
+        defaultButton: okButton
         onAccepted: root.dialog.accept()
         onRejected: root.dialog.reject()
 
         // Own buttons, not standardButtons: no Qt base translation is loaded.
         Button {
+            id: okButton
+
             text: qsTr("OK")
             enabled: root.dialog.canAccept
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole

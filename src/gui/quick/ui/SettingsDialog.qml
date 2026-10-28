@@ -238,6 +238,7 @@ Window {
 
                     Button {
                         text: qsTranslate("SettingsDialog", "OK")
+                        highlighted: true
                         onClicked: root.controller.accept()
                     }
                     Button {

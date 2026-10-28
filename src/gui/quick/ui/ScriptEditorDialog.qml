@@ -90,6 +90,7 @@ DialogWindow {
         }
         Button {
             text: root.dialog.acceptText
+            highlighted: true
             enabled: root.dialog.canAccept
             onClicked: root.dialog.accept()
         }
