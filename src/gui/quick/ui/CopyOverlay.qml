@@ -76,7 +76,7 @@ FocusScope {
                     anchors.fill: parent
                     visible: rowArea.containsMouse
                     radius: StyleConstants.itemRadius
-                    color: Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: Theme.colors.fillHover
                 }
 
                 MouseArea {

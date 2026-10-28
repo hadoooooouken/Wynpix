@@ -79,7 +79,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent
                     visible: hover.hovered
-                    color: Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+                    color: Theme.colors.fillHover
                 }
 
                 HoverHandler {

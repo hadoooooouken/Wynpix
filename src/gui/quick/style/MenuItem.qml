@@ -4,7 +4,7 @@ import QtQuick.Templates as T
 import wynpix.bridges
 
 // Context menu row of the widget UI: label on the left, the action's
-// shortcut on the right in the secondary text colour, a rounded accent
+// shortcut on the right in the secondary text colour, a rounded neutral
 // highlight under the pointer. The icon is either icon.source or a glyph of
 // the application icon font (hasGlyph, glyph).
 T.MenuItem {
@@ -120,8 +120,8 @@ T.MenuItem {
     background: Rectangle {
         implicitHeight: Theme.metrics.contextMenuItemHeight
         radius: StyleConstants.itemRadius
-        color: control.highlighted || control.down
-               ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
-               : "transparent"
+        color: control.down ? Theme.colors.fillPressed
+             : control.highlighted ? Theme.colors.fillHover
+             : "transparent"
     }
 }

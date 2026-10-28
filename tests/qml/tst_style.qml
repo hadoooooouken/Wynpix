@@ -397,7 +397,7 @@ Item {
             verify(shortcut.length > 0);
             menu.currentIndex = 0;
             verifyColor(pixel(item, 3, item.height / 2),
-                        over(Theme.colors.accent, StyleConstants.accentHighlightOpacity),
+                        fillOver(Theme.colors.fillHover),
                         "highlighted item");
 
             const disabledItem = menu.itemAt(2);

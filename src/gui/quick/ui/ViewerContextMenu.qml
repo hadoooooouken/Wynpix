@@ -349,12 +349,12 @@ Menu {
             icon: button.entryIcon
             opacity: button.enabled ? 1.0 : StyleConstants.disabledOpacity
         }
-        // The accent highlight of the menu rows, not the panel button tint.
+        // The neutral hover of the menu rows.
         background: Rectangle {
             radius: StyleConstants.controlRadius
-            color: button.hovered || button.keyboardCurrent
-                   ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
-                   : "transparent"
+            color: button.down ? Theme.colors.fillPressed
+                 : button.hovered || button.keyboardCurrent ? Theme.colors.fillHover
+                 : "transparent"
         }
 
         ToolTip {

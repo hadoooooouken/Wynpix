@@ -3,7 +3,7 @@ import QtQuick.Controls.impl
 import QtQuick.Templates as T
 import wynpix.bridges
 
-// Row of a combo box list or another popup list: a rounded accent highlight
+// Row of a combo box list or another popup list: a rounded neutral highlight
 // on the widget surface (QComboBox QAbstractItemView::item).
 T.ItemDelegate {
     id: control
@@ -42,6 +42,6 @@ T.ItemDelegate {
         implicitHeight: StyleConstants.itemMinimumHeight
         radius: StyleConstants.itemRadius
         visible: control.down || control.highlighted || control.visualFocus
-        color: Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
+        color: control.down ? Theme.colors.fillPressed : Theme.colors.fillHover
     }
 }
