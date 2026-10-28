@@ -130,6 +130,7 @@ Window {
                             width: ListView.view.width
                             height: root.sidebarRowHeight
                             highlighted: ListView.isCurrentItem
+                            hoverEnabled: true
                             onClicked: root.controller.page = entry.index
 
                             contentItem: RowLayout {
@@ -148,10 +149,11 @@ Window {
 
                             background: Rectangle {
                                 radius: StyleConstants.rowRadius
-                                visible: entry.highlighted || entry.down
+                                visible: entry.highlighted || entry.down || entry.hovered
                                 color: entry.highlighted
-                                       ? (entry.down ? Theme.colors.accentTintHover : Theme.colors.accentTint)
-                                       : Theme.colors.fillPressed
+                                       ? (entry.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
+                                       : entry.down ? Theme.colors.fillPressed
+                                       : Theme.colors.fillHover
                             }
                         }
                     }

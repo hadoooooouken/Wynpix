@@ -199,8 +199,8 @@ Item {
         }
     }
 
-    // ButtonSmall of the widget stylesheet: hover and checked surfaces with
-    // a 1 px frame of the same colour.
+    // ButtonSmall of the widget stylesheet: hover, pressed and checked
+    // surfaces with a 1 px frame of the same colour.
     component PanelButton: T.AbstractButton {
         id: button
 
@@ -219,7 +219,9 @@ Item {
         Accessible.role: Accessible.Button
 
         background: Rectangle {
-            readonly property color surface: button.active ? Theme.colors.accentTint
+            readonly property color surface: button.down ? Theme.colors.fillPressed
+                                           : button.active ? (button.hovered ? Theme.colors.accentTintHover
+                                                                             : Theme.colors.accentTint)
                                            : button.hovered ? Theme.colors.fillHover
                                            : "transparent"
 

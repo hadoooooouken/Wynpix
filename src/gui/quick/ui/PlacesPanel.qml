@@ -320,7 +320,8 @@ Rectangle {
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
             radius: StyleConstants.rowRadius
-            color: row.highlighted ? Theme.colors.accentTint
+            color: row.highlighted ? (rowHover.hovered || dropArea.containsDrag ? Theme.colors.accentTintHover
+                                                                                : Theme.colors.accentTint)
                  : rowHover.hovered || dropArea.containsDrag ? Theme.colors.fillHover
                  : "transparent"
         }
@@ -473,7 +474,8 @@ Rectangle {
             anchors.rightMargin: root.rowInset
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
             radius: StyleConstants.rowRadius
-            color: treeRow.current ? Theme.colors.accentTint
+            color: treeRow.current ? (treeHover.hovered || treeDrop.containsDrag ? Theme.colors.accentTintHover
+                                                                                 : Theme.colors.accentTint)
                  : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.fillHover
                  : "transparent"
         }
