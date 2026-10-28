@@ -15,7 +15,8 @@ QML_FOREIGN_NAMESPACE(FluentIcons)
 QML_NAMED_ELEMENT(FluentIcons)
 } // namespace FluentIconsForeign
 
-// Colours, fonts, control metrics and icon glyphs for QML
+// Colours (by scheme entry and by role), fonts, control metrics and icon
+// glyphs for QML
 // (Theme singleton).
 //
 // Like SettingsBridge, it is fed by the composition root: QuickUiHost builds
@@ -33,6 +34,7 @@ class ThemeBridge : public QObject {
   QML_SINGLETON
   QML_UNCREATABLE("Provided by QuickUiHost via setExternalSingletonInstance()")
   Q_PROPERTY(ThemeColors colors READ colors NOTIFY colorsChanged FINAL)
+  Q_PROPERTY(ThemeTokens tokens READ tokens NOTIFY tokensChanged FINAL)
   Q_PROPERTY(ThemeFonts fonts READ fonts NOTIFY fontsChanged FINAL)
   Q_PROPERTY(ThemeMetrics metrics READ metrics NOTIFY metricsChanged FINAL)
   Q_PROPERTY(bool dark READ dark NOTIFY darkChanged FINAL)
@@ -44,6 +46,7 @@ public:
   explicit ThemeBridge(const ThemeSnapshot &initial, QObject *parent = nullptr);
 
   [[nodiscard]] const ThemeColors &colors() const;
+  [[nodiscard]] const ThemeTokens &tokens() const;
   [[nodiscard]] const ThemeFonts &fonts() const;
   [[nodiscard]] const ThemeMetrics &metrics() const;
   [[nodiscard]] bool dark() const;
@@ -64,6 +67,7 @@ public:
 
 signals:
   void colorsChanged();
+  void tokensChanged();
   void fontsChanged();
   void metricsChanged();
   void darkChanged();

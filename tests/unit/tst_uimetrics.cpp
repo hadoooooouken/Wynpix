@@ -5,6 +5,7 @@
 #include "gui/accentcontrast.h"
 #include "gui/neutralfills.h"
 #include "gui/selectionfills.h"
+#include "gui/semantictokens.h"
 #include "gui/quick/adapters/themesnapshotbuilder.h"
 #include "gui/uimetrics.h"
 #include "testsuites.h"
@@ -418,6 +419,65 @@ private slots:
       QCOMPARE(snapshot.colors.accentTint, fills.tint);
       QCOMPARE(snapshot.colors.accentTintHover, fills.tintHover);
       QCOMPARE(snapshot.colors.accentFrame, fills.frame);
+    }
+  }
+
+  void fieldFillsAreStrongerThanButtonsInTheDarkScheme() {
+    const NeutralFills::Colors dark = NeutralFills::colorsFor(true);
+    QCOMPARE_GT(dark.fieldRest.alphaF(), dark.rest.alphaF());
+    QCOMPARE_GT(dark.fieldHover.alphaF(), dark.fieldRest.alphaF());
+    QCOMPARE_LT(dark.fieldPressed.alphaF(), dark.fieldRest.alphaF());
+    // The light scheme uses the button ladder for fields.
+    const NeutralFills::Colors light = NeutralFills::colorsFor(false);
+    QCOMPARE(light.fieldRest, light.rest);
+    QCOMPARE(light.fieldHover, light.hover);
+    QCOMPARE(light.fieldPressed, light.pressed);
+    QCOMPARE_LT(dark.subtle.alphaF(), dark.rest.alphaF());
+    QCOMPARE_LT(light.subtle.alphaF(), light.rest.alphaF());
+  }
+
+  void tokensNameTheSchemeColoursByRole_data() {
+    QTest::addColumn<int>("scheme");
+    QTest::newRow("dark") << static_cast<int>(COLORS_DARK);
+    QTest::newRow("light") << static_cast<int>(COLORS_LIGHT);
+  }
+
+  void tokensNameTheSchemeColoursByRole() {
+    QFETCH(int, scheme);
+    const ColorScheme colors =
+        ThemeStore::colorScheme(static_cast<ColorSchemes>(scheme));
+    const SemanticTokens::Colors tokens = SemanticTokens::colorsFor(colors);
+
+    QCOMPARE(tokens.surfaceCanvas, colors.background);
+    QCOMPARE(tokens.surfaceChrome, colors.thumbpanel);
+    QCOMPARE(tokens.surfaceView, colors.folderview);
+    QCOMPARE(tokens.surfaceBar, colors.folderview_topbar);
+    QCOMPARE(tokens.surfacePopup, colors.widget);
+    QCOMPARE(tokens.surfaceHud, colors.overlay);
+    QCOMPARE(tokens.textPrimary, colors.text_hc);
+    QCOMPARE(tokens.textSecondary.rgb(), colors.text.rgb());
+    QCOMPARE(tokens.textSecondary.alphaF(), SemanticTokens::kSecondaryTextAlpha);
+    QCOMPARE(tokens.textOnHud, colors.overlay_text);
+    QCOMPARE(tokens.iconThumbFolder, colors.thumbnail_folder_icons);
+    QCOMPARE(tokens.focusRing, colors.accent);
+    QCOMPARE(tokens.accentText, AccentContrast::textOn(colors.accent));
+    QCOMPARE(tokens.dropTarget, QColor(u"#be3c19"_s));
+  }
+
+  void snapshotCarriesTheTokens() {
+    const QFont font = fontWithPointSize(kDefaultFontPointSize);
+    for (const ColorSchemes scheme : {COLORS_DARK, COLORS_LIGHT}) {
+      const ColorScheme colors = ThemeStore::colorScheme(scheme);
+      const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
+      const SemanticTokens::Colors tokens = SemanticTokens::colorsFor(colors);
+      QCOMPARE(snapshot.tokens.surfaceWindow, tokens.surfaceWindow);
+      QCOMPARE(snapshot.tokens.fieldHover, tokens.fieldHover);
+      QCOMPARE(snapshot.tokens.accentText, tokens.accentText);
+      QCOMPARE(snapshot.tokens.scrollbarMarker, tokens.scrollbarMarker);
+      // Theme.colors takes its derived colours from the same tokens.
+      QCOMPARE(snapshot.colors.accentText, snapshot.tokens.accentText);
+      QCOMPARE(snapshot.colors.fillHover, snapshot.tokens.fillHover);
+      QCOMPARE(snapshot.colors.surfaceCard, snapshot.tokens.surfaceCard);
     }
   }
 

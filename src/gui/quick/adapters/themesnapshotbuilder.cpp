@@ -1,27 +1,15 @@
 #include "themesnapshotbuilder.h"
 
-#include "gui/accentcontrast.h"
-#include "gui/neutralfills.h"
-#include "gui/selectionfills.h"
+#include "gui/semantictokens.h"
 #include "gui/uimetrics.h"
 #include "themestore.h"
 
 namespace {
 
-// Window of every dialog (decision D3: the settings window colour) and the
-// cards and sidebar on it, 6 HSV values lighter in the dark scheme and
-// darker in the light one.
-constexpr QRgb kDarkSurfaceWindow = 0xff252525;
-constexpr QRgb kDarkSurfaceCard = 0xff2b2b2b;
-constexpr QRgb kLightSurfaceWindow = 0xfff5f5f5;
-constexpr QRgb kLightSurfaceCard = 0xffefefef;
-
-ThemeColors themeColors(const ColorScheme &scheme) {
-  const bool dark = scheme.tid == COLORS_DARK;
-  const QColor accentText = AccentContrast::textOn(scheme.accent);
-  const SelectionFills::Colors selection =
-      SelectionFills::colorsFor(scheme.accent);
-  const NeutralFills::Colors fills = NeutralFills::colorsFor(dark);
+// Scheme entries; the colours derived from the accent and the neutral fills,
+// strokes and dialog surfaces are the tokens'.
+ThemeColors themeColors(const ColorScheme &scheme,
+                        const SemanticTokens::Colors &tokens) {
   return {
       .background = scheme.background,
       .backgroundFullscreen = scheme.background_fullscreen,
@@ -30,14 +18,12 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .folderIcons = scheme.folder_icons,
       .widget = scheme.widget,
       .accent = scheme.accent,
-      .accentText = accentText,
-      .accentHover = AccentContrast::stateFill(
-          scheme.accent, accentText, AccentContrast::kHoverStepPercent),
-      .accentPressed = AccentContrast::stateFill(
-          scheme.accent, accentText, AccentContrast::kPressedStepPercent),
-      .accentTint = selection.tint,
-      .accentTintHover = selection.tintHover,
-      .accentFrame = selection.frame,
+      .accentText = tokens.accentText,
+      .accentHover = tokens.accentHover,
+      .accentPressed = tokens.accentPressed,
+      .accentTint = tokens.accentTint,
+      .accentTintHover = tokens.accentTintHover,
+      .accentFrame = tokens.accentFrame,
       .folderView = scheme.folderview,
       .folderViewTopBar = scheme.folderview_topbar,
       .thumbPanel = scheme.thumbpanel,
@@ -63,18 +49,66 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .comboFieldHover = scheme.combo_field_hover,
       .comboFieldPressed = scheme.combo_field_pressed,
       .comboFieldBorder = scheme.combo_field_border,
-      .fillRest = fills.rest,
-      .fillHover = fills.hover,
-      .fillPressed = fills.pressed,
-      .hudHover = fills.hudHover,
-      .hudPressed = fills.hudPressed,
-      .strokeSubtle = fills.strokeSubtle,
-      .strokeDefault = fills.strokeDefault,
-      .strokeStrong = fills.strokeStrong,
-      .surfaceWindow =
-          QColor::fromRgb(dark ? kDarkSurfaceWindow : kLightSurfaceWindow),
-      .surfaceCard =
-          QColor::fromRgb(dark ? kDarkSurfaceCard : kLightSurfaceCard),
+      .fillRest = tokens.fillRest,
+      .fillHover = tokens.fillHover,
+      .fillPressed = tokens.fillPressed,
+      .hudHover = tokens.hudHover,
+      .hudPressed = tokens.hudPressed,
+      .strokeSubtle = tokens.strokeSubtle,
+      .strokeDefault = tokens.strokeDefault,
+      .strokeStrong = tokens.strokeStrong,
+      .surfaceWindow = tokens.surfaceWindow,
+      .surfaceCard = tokens.surfaceCard,
+  };
+}
+
+ThemeTokens themeTokens(const SemanticTokens::Colors &colors) {
+  return {
+      .surfaceCanvas = colors.surfaceCanvas,
+      .surfaceCanvasFullscreen = colors.surfaceCanvasFullscreen,
+      .surfaceChrome = colors.surfaceChrome,
+      .surfaceView = colors.surfaceView,
+      .surfaceBar = colors.surfaceBar,
+      .surfacePopup = colors.surfacePopup,
+      .surfaceWindow = colors.surfaceWindow,
+      .surfaceCard = colors.surfaceCard,
+      .surfaceHud = colors.surfaceHud,
+      .strokeSubtle = colors.strokeSubtle,
+      .strokeDefault = colors.strokeDefault,
+      .strokeStrong = colors.strokeStrong,
+      .fillRest = colors.fillRest,
+      .fillHover = colors.fillHover,
+      .fillPressed = colors.fillPressed,
+      .fillSubtle = colors.fillSubtle,
+      .fieldRest = colors.fieldRest,
+      .fieldHover = colors.fieldHover,
+      .fieldPressed = colors.fieldPressed,
+      .hudHover = colors.hudHover,
+      .hudPressed = colors.hudPressed,
+      .accent = colors.accent,
+      .accentHover = colors.accentHover,
+      .accentPressed = colors.accentPressed,
+      .accentText = colors.accentText,
+      .accentTint = colors.accentTint,
+      .accentTintHover = colors.accentTintHover,
+      .accentFrame = colors.accentFrame,
+      .focusRing = colors.focusRing,
+      .textPrimary = colors.textPrimary,
+      .textSecondary = colors.textSecondary,
+      .textOnHud = colors.textOnHud,
+      .iconDefault = colors.iconDefault,
+      .iconFolder = colors.iconFolder,
+      .iconThumbFolder = colors.iconThumbFolder,
+      .statusPending = colors.statusPending,
+      .statusError = colors.statusError,
+      .statusProcessing = colors.statusProcessing,
+      .statusSuccess = colors.statusSuccess,
+      .danger = colors.danger,
+      .trash = colors.trash,
+      .dropTarget = colors.dropTarget,
+      .scrollbar = colors.scrollbar,
+      .scrollbarHover = colors.scrollbarHover,
+      .scrollbarMarker = colors.scrollbarMarker,
   };
 }
 
@@ -97,8 +131,10 @@ ThemeSnapshot buildThemeSnapshot(const ColorScheme &scheme,
       UiMetrics::typographyFor(systemFont);
   const UiMetrics::ControlMetrics metrics =
       UiMetrics::controlMetricsFor(typography.body);
+  const SemanticTokens::Colors tokens = SemanticTokens::colorsFor(scheme);
   return {
-      .colors = themeColors(scheme),
+      .colors = themeColors(scheme, tokens),
+      .tokens = themeTokens(tokens),
       .fonts = themeFonts(typography),
       .metrics =
           {

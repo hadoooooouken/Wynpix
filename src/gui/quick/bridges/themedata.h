@@ -126,6 +126,109 @@ public:
   friend bool operator==(const ThemeColors &, const ThemeColors &) = default;
 };
 
+// Colours by role (SemanticTokens::Colors): surfaces, strokes, fills, the
+// accent and its states, text, icons and states. Theme.colors keeps the
+// scheme entries until QML moves to these.
+struct ThemeTokens {
+  Q_GADGET
+  QML_VALUE_TYPE(themeTokens)
+  QML_UNCREATABLE("Provided by Theme.tokens")
+  Q_PROPERTY(QColor surfaceCanvas MEMBER surfaceCanvas)
+  Q_PROPERTY(QColor surfaceCanvasFullscreen MEMBER surfaceCanvasFullscreen)
+  Q_PROPERTY(QColor surfaceChrome MEMBER surfaceChrome)
+  Q_PROPERTY(QColor surfaceView MEMBER surfaceView)
+  Q_PROPERTY(QColor surfaceBar MEMBER surfaceBar)
+  Q_PROPERTY(QColor surfacePopup MEMBER surfacePopup)
+  Q_PROPERTY(QColor surfaceWindow MEMBER surfaceWindow)
+  Q_PROPERTY(QColor surfaceCard MEMBER surfaceCard)
+  Q_PROPERTY(QColor surfaceHud MEMBER surfaceHud)
+  Q_PROPERTY(QColor strokeSubtle MEMBER strokeSubtle)
+  Q_PROPERTY(QColor strokeDefault MEMBER strokeDefault)
+  Q_PROPERTY(QColor strokeStrong MEMBER strokeStrong)
+  Q_PROPERTY(QColor fillRest MEMBER fillRest)
+  Q_PROPERTY(QColor fillHover MEMBER fillHover)
+  Q_PROPERTY(QColor fillPressed MEMBER fillPressed)
+  Q_PROPERTY(QColor fillSubtle MEMBER fillSubtle)
+  Q_PROPERTY(QColor fieldRest MEMBER fieldRest)
+  Q_PROPERTY(QColor fieldHover MEMBER fieldHover)
+  Q_PROPERTY(QColor fieldPressed MEMBER fieldPressed)
+  Q_PROPERTY(QColor hudHover MEMBER hudHover)
+  Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
+  Q_PROPERTY(QColor accent MEMBER accent)
+  Q_PROPERTY(QColor accentHover MEMBER accentHover)
+  Q_PROPERTY(QColor accentPressed MEMBER accentPressed)
+  Q_PROPERTY(QColor accentText MEMBER accentText)
+  Q_PROPERTY(QColor accentTint MEMBER accentTint)
+  Q_PROPERTY(QColor accentTintHover MEMBER accentTintHover)
+  Q_PROPERTY(QColor accentFrame MEMBER accentFrame)
+  Q_PROPERTY(QColor focusRing MEMBER focusRing)
+  Q_PROPERTY(QColor textPrimary MEMBER textPrimary)
+  Q_PROPERTY(QColor textSecondary MEMBER textSecondary)
+  Q_PROPERTY(QColor textOnHud MEMBER textOnHud)
+  Q_PROPERTY(QColor iconDefault MEMBER iconDefault)
+  Q_PROPERTY(QColor iconFolder MEMBER iconFolder)
+  Q_PROPERTY(QColor iconThumbFolder MEMBER iconThumbFolder)
+  Q_PROPERTY(QColor statusPending MEMBER statusPending)
+  Q_PROPERTY(QColor statusError MEMBER statusError)
+  Q_PROPERTY(QColor statusProcessing MEMBER statusProcessing)
+  Q_PROPERTY(QColor statusSuccess MEMBER statusSuccess)
+  Q_PROPERTY(QColor danger MEMBER danger)
+  Q_PROPERTY(QColor trash MEMBER trash)
+  Q_PROPERTY(QColor dropTarget MEMBER dropTarget)
+  Q_PROPERTY(QColor scrollbar MEMBER scrollbar)
+  Q_PROPERTY(QColor scrollbarHover MEMBER scrollbarHover)
+  Q_PROPERTY(QColor scrollbarMarker MEMBER scrollbarMarker)
+
+public:
+  QColor surfaceCanvas;
+  QColor surfaceCanvasFullscreen;
+  QColor surfaceChrome;
+  QColor surfaceView;
+  QColor surfaceBar;
+  QColor surfacePopup;
+  QColor surfaceWindow;
+  QColor surfaceCard;
+  QColor surfaceHud;
+  QColor strokeSubtle;
+  QColor strokeDefault;
+  QColor strokeStrong;
+  QColor fillRest;
+  QColor fillHover;
+  QColor fillPressed;
+  QColor fillSubtle;
+  QColor fieldRest;
+  QColor fieldHover;
+  QColor fieldPressed;
+  QColor hudHover;
+  QColor hudPressed;
+  QColor accent;
+  QColor accentHover;
+  QColor accentPressed;
+  QColor accentText;
+  QColor accentTint;
+  QColor accentTintHover;
+  QColor accentFrame;
+  QColor focusRing;
+  QColor textPrimary;
+  QColor textSecondary;
+  QColor textOnHud;
+  QColor iconDefault;
+  QColor iconFolder;
+  QColor iconThumbFolder;
+  QColor statusPending;
+  QColor statusError;
+  QColor statusProcessing;
+  QColor statusSuccess;
+  QColor danger;
+  QColor trash;
+  QColor dropTarget;
+  QColor scrollbar;
+  QColor scrollbarHover;
+  QColor scrollbarMarker;
+
+  friend bool operator==(const ThemeTokens &, const ThemeTokens &) = default;
+};
+
 // Text styles of the UI (UiMetrics::Typography), named after the Windows 11
 // type ramp styles; body is the application font.
 struct ThemeFonts {
@@ -179,6 +282,7 @@ public:
 // Complete set published by ThemeBridge in one step.
 struct ThemeSnapshot {
   ThemeColors colors;
+  ThemeTokens tokens;
   ThemeFonts fonts;
   ThemeMetrics metrics;
   bool dark = false;

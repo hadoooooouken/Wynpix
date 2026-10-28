@@ -13,6 +13,8 @@ ThemeBridge::ThemeBridge(const ThemeSnapshot &initial, QObject *parent)
 //------------------------------------------------------------------------------
 const ThemeColors &ThemeBridge::colors() const { return mSnapshot.colors; }
 
+const ThemeTokens &ThemeBridge::tokens() const { return mSnapshot.tokens; }
+
 const ThemeFonts &ThemeBridge::fonts() const { return mSnapshot.fonts; }
 
 const ThemeMetrics &ThemeBridge::metrics() const { return mSnapshot.metrics; }
@@ -37,6 +39,8 @@ QString ThemeBridge::glyph(FluentIcons::FluentIcon icon) const {
 void ThemeBridge::apply(const ThemeSnapshot &snapshot) {
   publishIfChanged(mSnapshot.colors, snapshot.colors, *this,
                    &ThemeBridge::colorsChanged);
+  publishIfChanged(mSnapshot.tokens, snapshot.tokens, *this,
+                   &ThemeBridge::tokensChanged);
   publishIfChanged(mSnapshot.fonts, snapshot.fonts, *this,
                    &ThemeBridge::fontsChanged);
   publishIfChanged(mSnapshot.metrics, snapshot.metrics, *this,
