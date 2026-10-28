@@ -50,7 +50,7 @@ DEFAULT_DEPS = [
     {"name": "OpenJPH", "url": "https://github.com/aous72/OpenJPH.git", "current": "0.32.0", "patched": False},
     {"name": "libdeflate", "url": "https://github.com/ebiggers/libdeflate.git", "current": "v1.26", "patched": False},
     {"name": "zlib-ng", "url": "https://github.com/zlib-ng/zlib-ng.git", "current": "2.3.3", "patched": False},
-    {"name": "libjpeg-turbo", "url": "https://github.com/libjpeg-turbo/libjpeg-turbo.git", "current": "3.2.0", "patched": False},
+    {"name": "libjpeg-turbo", "url": "https://github.com/libjpeg-turbo/libjpeg-turbo.git", "current": "3.2.1", "patched": False},
     {"name": "libspng", "url": "https://github.com/randy408/libspng.git", "current": "v0.7.4", "patched": False},
     {"name": "libtiff", "url": "https://gitlab.com/libtiff/libtiff.git", "current": "v4.7.2", "patched": False},
     {"name": "zstd", "url": "https://github.com/facebook/zstd.git", "current": "v1.5.7", "patched": False},

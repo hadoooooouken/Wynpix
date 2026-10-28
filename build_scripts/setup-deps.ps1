@@ -144,7 +144,7 @@ $GIT_DEPS = @(
     @{ Name = "OpenJPH";        Url = "https://github.com/aous72/OpenJPH.git";                     Tag = "0.32.0"       }
     @{ Name = "libdeflate";     Url = "https://github.com/ebiggers/libdeflate.git";                Tag = "v1.26"        }
     @{ Name = "zlib-ng";        Url = "https://github.com/zlib-ng/zlib-ng.git";                    Tag = "2.3.3"        }
-    @{ Name = "libjpeg-turbo";  Url = "https://github.com/libjpeg-turbo/libjpeg-turbo.git";        Tag = "3.2.0"        }
+    @{ Name = "libjpeg-turbo";  Url = "https://github.com/libjpeg-turbo/libjpeg-turbo.git";        Tag = "3.2.1"        }
     @{ Name = "libspng";        Url = "https://github.com/randy408/libspng.git";                   Tag = "v0.7.4"       }
     @{ Name = "libtiff";        Url = "https://gitlab.com/libtiff/libtiff.git";                    Tag = "v4.7.2"       }
     @{ Name = "zstd";           Url = "https://github.com/facebook/zstd.git";                      Tag = "v1.5.7"       }
