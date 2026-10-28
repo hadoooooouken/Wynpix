@@ -153,7 +153,7 @@ FocusScope {
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
                     implicitHeight: StyleConstants.separatorThickness
-                    color: Theme.colors.widgetBorder
+                    color: Theme.colors.strokeDefault
                 }
 
                 Label {
@@ -302,7 +302,7 @@ FocusScope {
         implicitHeight: groupContent.implicitHeight + root.groupTopPadding + root.groupBottomPadding
         color: Theme.colors.widget
         border.width: StyleConstants.separatorThickness
-        border.color: Theme.colors.button
+        border.color: Theme.colors.strokeDefault
         radius: root.groupRadius
 
         ColumnLayout {

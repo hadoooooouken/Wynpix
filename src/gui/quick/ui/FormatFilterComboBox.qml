@@ -209,7 +209,7 @@ T.AbstractButton {
                 Rectangle {
                     width: parent.width
                     height: StyleConstants.separatorThickness
-                    color: Theme.colors.widgetBorder
+                    color: Theme.colors.strokeDefault
                 }
 
                 Repeater {

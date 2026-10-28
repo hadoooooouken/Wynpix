@@ -56,7 +56,7 @@ Item {
         topLeftRadius: 0
         topRightRadius: 0
         color: Theme.colors.widget
-        border.color: Theme.colors.widgetBorder
+        border.color: Theme.colors.strokeDefault
         border.width: StyleConstants.separatorThickness
         visible: opacity > 0
 

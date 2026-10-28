@@ -357,6 +357,22 @@ private slots:
     }
   }
 
+  void strokesAreInkOfTheSchemeFromFaintToStrong() {
+    for (const bool dark : {true, false}) {
+      const NeutralFills::Colors fills = NeutralFills::colorsFor(dark);
+      const QColor ink = QColor(dark ? Qt::white : Qt::black);
+      QCOMPARE(fills.strokeSubtle.rgb(), ink.rgb());
+      QCOMPARE(fills.strokeDefault.rgb(), ink.rgb());
+      QCOMPARE(fills.strokeStrong.rgb(), ink.rgb());
+      QCOMPARE_LE(fills.strokeSubtle.alphaF(), fills.strokeDefault.alphaF());
+      QCOMPARE_LE(fills.strokeDefault.alphaF(), fills.strokeStrong.alphaF());
+    }
+    QCOMPARE(NeutralFills::colorsFor(true).strokeDefault.alphaF(),
+             NeutralFills::kDarkStrokeDefaultAlpha);
+    QCOMPARE(NeutralFills::colorsFor(false).strokeDefault.alphaF(),
+             NeutralFills::kLightStrokeDefaultAlpha);
+  }
+
   void snapshotCarriesTheNeutralFills() {
     const QFont font = fontWithPointSize(kDefaultFontPointSize);
     for (const ColorSchemes scheme : {COLORS_DARK, COLORS_LIGHT}) {
@@ -369,6 +385,9 @@ private slots:
       QCOMPARE(snapshot.colors.fillPressed, fills.pressed);
       QCOMPARE(snapshot.colors.hudHover, fills.hudHover);
       QCOMPARE(snapshot.colors.hudPressed, fills.hudPressed);
+      QCOMPARE(snapshot.colors.strokeSubtle, fills.strokeSubtle);
+      QCOMPARE(snapshot.colors.strokeDefault, fills.strokeDefault);
+      QCOMPARE(snapshot.colors.strokeStrong, fills.strokeStrong);
     }
   }
 

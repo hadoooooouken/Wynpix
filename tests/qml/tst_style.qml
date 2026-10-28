@@ -257,7 +257,7 @@ Item {
             tryCompare(comboBox.popup, "opened", true);
             const background = comboBox.popup.background;
             verifyColor(pixel(background, background.width / 2, 2), Theme.colors.widget, "popup");
-            verifyColor(pixel(background, background.width / 2, 0), Theme.colors.widgetBorder,
+            verifyColor(pixel(background, background.width / 2, 0), fillOver(Theme.colors.strokeDefault),
                         "popup border");
             compare(background.radius, Theme.metrics.contextMenuBorderRadius);
         }
@@ -266,7 +266,7 @@ Item {
             useScheme(data.dark);
             const y = slider.height / 2;
             verifyColor(pixel(slider, 20, y), Theme.colors.accent, "filled groove");
-            verifyColor(pixel(slider, slider.width - 20, y), Theme.surfaces.tintedHc2, "groove");
+            verifyColor(pixel(slider, slider.width - 20, y), fillOver(Theme.colors.strokeStrong), "groove");
             const handle = slider.handle;
             const centerX = handle.x + handle.width / 2;
             verifyColor(pixel(slider, centerX, y), Theme.colors.accent, "handle");
@@ -277,7 +277,7 @@ Item {
                         "hovered handle");
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             slider.enabled = false;
-            verifyColor(pixel(slider, 20, y), Theme.surfaces.tintedHc2, "disabled fill");
+            verifyColor(pixel(slider, 20, y), fillOver(Theme.colors.strokeStrong), "disabled fill");
             verifyColor(pixel(slider, centerX, y), over(Theme.colors.text, StyleConstants.disabledOpacity),
                         "disabled handle");
             slider.enabled = true;
@@ -388,7 +388,7 @@ Item {
             verify(frameTop > 0, "no room for the shadow");
             verifyColor(pixel(background, background.width / 2, frameTop + 2), Theme.colors.widget,
                         "menu");
-            verifyColor(pixel(background, background.width / 2, frameTop), Theme.colors.widgetBorder,
+            verifyColor(pixel(background, background.width / 2, frameTop), fillOver(Theme.colors.strokeDefault),
                         "menu border");
 
             const item = menu.itemAt(0);
@@ -422,7 +422,7 @@ Item {
             tryCompare(popup, "opened", true);
             verifyColor(pixel(popup.background, popup.width / 2, popup.height / 2),
                         Theme.colors.widget, "popup");
-            verifyColor(pixel(popup.background, popup.width / 2, 0), Theme.colors.widgetBorder,
+            verifyColor(pixel(popup.background, popup.width / 2, 0), fillOver(Theme.colors.strokeDefault),
                         "popup border");
 
             verifyColor(label.color, Theme.colors.textHc, "label");

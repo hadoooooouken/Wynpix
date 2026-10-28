@@ -65,7 +65,7 @@ T.Slider {
         radius: StyleConstants.sliderGrooveThickness / 2
         color: control.trackGradient !== null
              ? control.trackBaseColor
-             : Theme.surfaces.tintedHc2
+             : Theme.colors.strokeStrong
         scale: control.horizontal && control.mirrored ? -1 : 1
 
         Rectangle {

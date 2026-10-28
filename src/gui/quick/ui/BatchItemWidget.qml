@@ -62,7 +62,7 @@ Item {
             Layout.preferredHeight: root.thumbnailSize
             radius: root.thumbnailRadius
             color: Theme.colors.widget
-            border.color: Theme.colors.widgetBorder
+            border.color: Theme.colors.strokeDefault
 
             ThumbnailItem {
                 anchors.fill: parent

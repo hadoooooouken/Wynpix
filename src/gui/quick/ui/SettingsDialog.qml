@@ -107,7 +107,7 @@ Window {
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     width: StyleConstants.separatorThickness
-                    color: Theme.surfaces.tintedLc
+                    color: Theme.colors.strokeSubtle
                 }
 
                 ColumnLayout {

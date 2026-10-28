@@ -45,6 +45,6 @@ T.ProgressBar {
         radius: StyleConstants.progressBarRadius
         color: Theme.colors.folderView
         border.width: StyleConstants.progressBarBorderWidth
-        border.color: Theme.colors.widgetBorder
+        border.color: Theme.colors.strokeDefault
     }
 }

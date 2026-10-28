@@ -9,7 +9,7 @@ Item {
 
     property real radius: StyleConstants.popupRadius
     property color color: Theme.colors.widget
-    property color borderColor: Theme.colors.widgetBorder
+    property color borderColor: Theme.colors.strokeDefault
     property int borderWidth: StyleConstants.separatorThickness
 
     RectangularShadow {

@@ -22,7 +22,7 @@ Rectangle {
     radius: root.cornerRadius
     color: Theme.surfaces.tintedLc2
     border.width: StyleConstants.separatorThickness
-    border.color: Theme.surfaces.tintedLc
+    border.color: Theme.colors.strokeSubtle
 
     ColumnLayout {
         id: column

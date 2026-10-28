@@ -78,6 +78,9 @@ struct ThemeColors {
   Q_PROPERTY(QColor fillPressed MEMBER fillPressed)
   Q_PROPERTY(QColor hudHover MEMBER hudHover)
   Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
+  Q_PROPERTY(QColor strokeSubtle MEMBER strokeSubtle)
+  Q_PROPERTY(QColor strokeDefault MEMBER strokeDefault)
+  Q_PROPERTY(QColor strokeStrong MEMBER strokeStrong)
 
 public:
   QColor background;
@@ -135,6 +138,9 @@ public:
   QColor fillPressed;
   QColor hudHover;
   QColor hudPressed;
+  QColor strokeSubtle;
+  QColor strokeDefault;
+  QColor strokeStrong;
 
   friend bool operator==(const ThemeColors &, const ThemeColors &) = default;
 };

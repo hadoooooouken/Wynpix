@@ -16,6 +16,6 @@ T.MenuSeparator {
 
     contentItem: Rectangle {
         implicitHeight: StyleConstants.separatorThickness
-        color: Theme.colors.widgetBorder
+        color: Theme.colors.strokeDefault
     }
 }

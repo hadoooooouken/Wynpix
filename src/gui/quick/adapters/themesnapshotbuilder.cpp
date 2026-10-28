@@ -73,6 +73,9 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .fillPressed = fills.pressed,
       .hudHover = fills.hudHover,
       .hudPressed = fills.hudPressed,
+      .strokeSubtle = fills.strokeSubtle,
+      .strokeDefault = fills.strokeDefault,
+      .strokeStrong = fills.strokeStrong,
   };
 }
 

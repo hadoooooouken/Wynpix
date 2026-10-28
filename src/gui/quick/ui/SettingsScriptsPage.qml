@@ -47,7 +47,7 @@ SettingsPage {
             Layout.fillWidth: true
             Layout.preferredHeight: root.listHeight
             color: Theme.colors.folderView
-            border.color: Theme.colors.widgetBorder
+            border.color: Theme.colors.strokeDefault
             border.width: StyleConstants.separatorThickness
 
             ListView {

@@ -38,7 +38,7 @@ FocusScope {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: StyleConstants.separatorThickness
-            color: Theme.colors.widgetBorder
+            color: Theme.colors.strokeDefault
         }
     }
 
