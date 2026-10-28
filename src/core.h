@@ -11,6 +11,8 @@
 #include <QDesktopServices>
 #include <QSet>
 #include <QTimer>
+#include <functional>
+#include <memory>
 #include <optional>
 #include "appversion.h"
 #include "settings_types.h"
@@ -27,6 +29,24 @@
 class ColdStartWindowController;
 class ImageStatic;
 enum class ImageEditKind;
+
+// How the images an edit changed are saved.
+enum class EditSaving {
+    None,
+    // Each one at once, after the person confirmed the action.
+    AfterConfirmation,
+    // Each one at once.
+    Immediately
+};
+
+// An edit of the source pixels of each image (Core::editImages()).
+struct ImageEditRequest {
+    ImageEditKind kind;
+    // The action as messages name it.
+    QString action;
+    std::function<QImage(std::shared_ptr<const QImage>)> edit;
+    EditSaving saving = EditSaving::None;
+};
 
 struct State {
     bool hasActiveImage = false;
@@ -115,8 +135,23 @@ private:
     std::shared_ptr<ImageStatic> getEditableImage(const QString &filePath);
     QList<QString> currentSelection();
 
-    template<typename... Args>
-    bool edit_template(bool save, ImageEditKind editKind, QString actionName, const std::function<QImage(std::shared_ptr<const QImage>, Args...)>& func, Args&&... as);
+    // Runs action at once when the cached images at paths have the SDR copy
+    // getImage() returns, otherwise once SdrCopyPreparer has built them. The
+    // selection can change meanwhile, so action works on paths it captured.
+    void withSdrCopies(const QList<QString> &paths, std::function<void()> action);
+    void editImages(const QList<QString> &paths, const ImageEditRequest &request);
+    void applyEdits(const QList<QString> &paths, const ImageEditRequest &request);
+    [[nodiscard]] ImageEditRequest orientationEdit(
+        QString action, std::function<QImage(std::shared_ptr<const QImage>)> edit);
+    [[nodiscard]] ImageEditRequest resizeEdit(const ResizeRequest &request) const;
+    void startAiResize(const QString &path, const ResizeRequest &request);
+    void applyColorAdjustmentsTo(const QString &path,
+                                 const ColorAdjustments &adjustments);
+    void saveImageAs(const QString &path, const QString &destPath);
+    void discardEditsOf(const QString &path);
+    void copyImageToClipboard(const QString &path);
+    void setImageAsWallpaper(const QString &path);
+    void printImage(const QString &path);
 
     // True when the save overlay should be offered for the image.
     [[nodiscard]] bool needsSaveOverlay(const std::shared_ptr<Image> &img) const;
@@ -238,6 +273,7 @@ private:
     std::unique_ptr<class WallpaperController> wallpaperController;
     std::unique_ptr<class MimePayloadManager> mimePayloadManager;
     std::unique_ptr<class FileOpController> fileOpController;
+    std::unique_ptr<class SdrCopyPreparer> sdrCopyPreparer;
     int aiResizeGeneration = 0;
     std::optional<AiResizeOperation> activeAiResizeOperation;
     bool aiResizeBusyUiActive = false;

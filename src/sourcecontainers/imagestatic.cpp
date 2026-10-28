@@ -240,6 +240,14 @@ std::shared_ptr<const QImage> ImageStatic::getImage() {
   return isEdited() ? imageEdited : pixels.sdr(sdrConversionParams());
 }
 
+bool ImageStatic::needsSdrConversion() {
+  return !isEdited() && !pixels.hasSdr(sdrConversionParams());
+}
+
+void ImageStatic::prepareSdrCopy() {
+  (void)pixels.sdr(sdrConversionParams());
+}
+
 qint64 ImageStatic::decodedBytes() const {
   const qint64 editedBytes = imageEdited ? imageEdited->sizeInBytes() : 0;
   return pixels.sizeInBytes() + editedBytes;

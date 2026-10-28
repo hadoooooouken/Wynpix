@@ -22,10 +22,54 @@ void DecodedPixels::assign(std::shared_ptr<const QImage> decoded, bool hdr,
 }
 
 std::shared_ptr<const QImage> DecodedPixels::sdr(const HdrToneMapParams &params) {
+    {
+        QMutexLocker locker(&mMutex);
+        if (hasSdrLocked(params))
+            return mSdr;
+    }
+    QMutexLocker conversionLocker(&mConversionMutex);
+    std::shared_ptr<const QImage> hdr;
+    SdrConversion toSdr;
+    {
+        QMutexLocker locker(&mMutex);
+        if (hasSdrLocked(params))
+            return mSdr;
+        // A copy built with other params is dropped; readers keep their
+        // reference.
+        mSdr.reset();
+        mSdrParams.reset();
+        hdr = mHdr;
+        toSdr = mToSdr;
+    }
+
+    std::shared_ptr<const QImage> converted;
+    if (!toSdr) {
+        qWarning() << "DecodedPixels: an HDR image has no SDR conversion";
+    } else {
+        QImage image = toSdr(*hdr, params);
+        if (image.isNull())
+            qWarning() << "DecodedPixels: the HDR image could not be converted to SDR";
+        else
+            converted = std::make_shared<const QImage>(std::move(image));
+    }
+
     QMutexLocker locker(&mMutex);
-    if (mHdr && mSdrParams != params)
-        convertLocked(params);
-    return mSdr;
+    // Pixels assigned or replaced during the conversion keep their state; the
+    // caller still gets the copy of the pixels it asked for.
+    if (mHdr == hdr) {
+        mSdr = converted;
+        mSdrParams = params;
+    }
+    return converted;
+}
+
+bool DecodedPixels::hasSdr(const HdrToneMapParams &params) const {
+    QMutexLocker locker(&mMutex);
+    return hasSdrLocked(params);
+}
+
+bool DecodedPixels::hasSdrLocked(const HdrToneMapParams &params) const {
+    return !mHdr || mSdrParams == params;
 }
 
 std::shared_ptr<const QImage> DecodedPixels::decoded() const {
@@ -60,20 +104,4 @@ void DecodedPixels::replace(std::shared_ptr<const QImage> sdrPixels) {
     mHdr.reset();
     mSdr = std::move(sdrPixels);
     mSdrParams.reset();
-}
-
-void DecodedPixels::convertLocked(const HdrToneMapParams &params) {
-    // A copy built with other params is dropped; readers keep their reference.
-    mSdr.reset();
-    mSdrParams = params;
-    if (!mToSdr) {
-        qWarning() << "DecodedPixels: an HDR image has no SDR conversion";
-        return;
-    }
-    QImage converted = mToSdr(*mHdr, params);
-    if (converted.isNull()) {
-        qWarning() << "DecodedPixels: the HDR image could not be converted to SDR";
-        return;
-    }
-    mSdr = std::make_shared<const QImage>(std::move(converted));
 }

@@ -18,8 +18,9 @@
 // other ones, so a cached image follows a tone mapping change like the viewer.
 // An SDR image is its own SDR copy.
 //
-// Thread safe: images are shared between the GUI thread and the loader and
-// upscaler pools.
+// Thread safe: images are shared between the GUI thread and the loader,
+// upscaler and SDR copy pools. A conversion runs outside the lock of the
+// other members, so they do not wait for it.
 class DecodedPixels {
 public:
     // HDR -> SDR; returns a null image when the conversion fails.
@@ -39,6 +40,8 @@ public:
     // without pixels or when the conversion with params failed (reported once
     // per params).
     [[nodiscard]] std::shared_ptr<const QImage> sdr(const HdrToneMapParams &params);
+    // True when sdr(params) returns without converting.
+    [[nodiscard]] bool hasSdr(const HdrToneMapParams &params) const;
     // The pixels as decoded: the HDR source while it is kept, otherwise the
     // SDR pixels. Never converts.
     [[nodiscard]] std::shared_ptr<const QImage> decoded() const;
@@ -54,9 +57,12 @@ public:
 
 private:
     // Requires mMutex.
-    void convertLocked(const HdrToneMapParams &params);
+    [[nodiscard]] bool hasSdrLocked(const HdrToneMapParams &params) const;
 
     mutable QMutex mMutex;
+    // Held for a whole conversion: one runs at a time, and the readers that
+    // waited for it find the copy built.
+    QMutex mConversionMutex;
     std::shared_ptr<const QImage> mHdr;
     std::shared_ptr<const QImage> mSdr;
     SdrConversion mToSdr;

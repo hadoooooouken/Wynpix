@@ -7,8 +7,10 @@
 
 #include <array>
 #include <atomic>
+#include <chrono>
 #include <latch>
 #include <memory>
+#include <semaphore>
 #include <vector>
 
 #include "sourcecontainers/decodedpixels.h"
@@ -20,6 +22,9 @@ constexpr QSize kImageSize(64, 32);
 constexpr int kConcurrentReaders = 8;
 // How long the first conversion waits for other readers to convert as well.
 constexpr int kOverlapWindowMs = 100;
+// How long a held conversion waits for the test to let it finish; a reader
+// that waits for the conversion keeps the test from doing so in time.
+constexpr std::chrono::seconds kHeldConversionTimeout(5);
 // Tone mapping as the settings default to it, a changed white level, and no
 // tone mapping.
 constexpr HdrToneMapParams kToneMapped{};
@@ -82,6 +87,36 @@ struct CountingConversion {
     };
   }
 };
+
+// A conversion that runs until the test releases it, on a thread of its own.
+struct HeldConversion {
+  std::binary_semaphore started{0};
+  std::binary_semaphore released{0};
+  std::atomic<bool> releasedInTime = false;
+  std::shared_ptr<const QImage> result;
+  std::unique_ptr<QThread> thread;
+
+  DecodedPixels::SdrConversion function() {
+    return [this](const QImage &hdr, const HdrToneMapParams &) {
+      started.release();
+      releasedInTime = released.try_acquire_for(kHeldConversionTimeout);
+      return hdr.convertToFormat(QImage::Format_ARGB32);
+    };
+  }
+
+  // Starts sdr(params) on the thread and returns once its conversion runs.
+  void start(DecodedPixels &pixels, const HdrToneMapParams &params) {
+    thread.reset(QThread::create(
+        [this, &pixels, params]() { result = pixels.sdr(params); }));
+    thread->start();
+    started.acquire();
+  }
+
+  void finish() {
+    released.release();
+    thread->wait();
+  }
+};
 } // namespace
 
 Q_DECLARE_METATYPE(HdrToneMapParams)
@@ -116,6 +151,7 @@ private slots:
     const std::shared_ptr<const QImage> sdr = sdrImage();
     DecodedPixels pixels;
     pixels.assign(sdr, false, conversion.function());
+    QVERIFY(pixels.hasSdr(kToneMapped));
     QCOMPARE(pixels.sdr(kToneMapped), sdr);
     QCOMPARE(pixels.sdr(kChangedWhite), sdr);
     QCOMPARE(pixels.decoded(), sdr);
@@ -157,6 +193,47 @@ private slots:
     QVERIFY(results.front());
   }
 
+  // The viewer and the cache read the pixels on the GUI thread while
+  // SdrCopyPreparer tone-maps them on its worker.
+  void aConversionDoesNotBlockTheOtherReaders() {
+    HeldConversion conversion;
+    const std::shared_ptr<const QImage> hdr = hdrImage();
+    DecodedPixels pixels;
+    pixels.assign(hdr, true, conversion.function());
+    QVERIFY(!pixels.hasSdr(kToneMapped));
+
+    conversion.start(pixels, kToneMapped);
+    QCOMPARE(pixels.decoded(), hdr);
+    QCOMPARE(pixels.size(), kImageSize);
+    QCOMPARE(pixels.sizeInBytes(), hdr->sizeInBytes());
+    QVERIFY(pixels.hasHdrSource());
+    QVERIFY(!pixels.hasSdr(kToneMapped));
+    conversion.finish();
+
+    QVERIFY(conversion.releasedInTime);
+    QVERIFY(conversion.result);
+    QVERIFY(pixels.hasSdr(kToneMapped));
+    QCOMPARE(pixels.sdr(kToneMapped), conversion.result);
+  }
+
+  void pixelsReplacedDuringAConversionKeepTheirState() {
+    HeldConversion conversion;
+    DecodedPixels pixels;
+    pixels.assign(hdrImage(), true, conversion.function());
+
+    conversion.start(pixels, kToneMapped);
+    const std::shared_ptr<const QImage> edited = sdrImage();
+    pixels.replace(edited);
+    conversion.finish();
+
+    QVERIFY(conversion.releasedInTime);
+    // The reader gets the copy of the pixels it asked for.
+    QVERIFY(conversion.result);
+    QVERIFY(conversion.result != edited);
+    QCOMPARE(pixels.sdr(kToneMapped), edited);
+    QCOMPARE(pixels.sizeInBytes(), edited->sizeInBytes());
+  }
+
   void aFailedConversionIsReportedOnce() {
     std::atomic<int> calls = 0;
     DecodedPixels pixels;
@@ -167,6 +244,8 @@ private slots:
     });
     QTest::ignoreMessage(QtWarningMsg, "DecodedPixels: the HDR image could not be converted to SDR");
     QVERIFY(!pixels.sdr(kToneMapped));
+    // Not tried again, so a preparation of the copy is done.
+    QVERIFY(pixels.hasSdr(kToneMapped));
     QVERIFY(!pixels.sdr(kToneMapped));
     QCOMPARE(calls.load(), 1);
     // The HDR source can still be shown.

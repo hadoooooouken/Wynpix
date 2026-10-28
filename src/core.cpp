@@ -25,6 +25,7 @@
 #include "gui/controllers/coldstartwindowcontroller.h"
 #include "components/wallpaper/wallpapercontroller.h"
 #include "components/mimepayload/mimepayloadmanager.h"
+#include "components/sdrcopy/sdrcopypreparer.h"
 #include <QColorSpace>
 #include <QCursor>
 #include <tchar.h>
@@ -268,6 +269,14 @@ Core::Core(const UiPorts &ports)
             ui.notifications.showError(
                 tr("Failed to clean up temporary image-transfer data: %1")
                     .arg(QDir::toNativeSeparators(path)));
+          });
+  sdrCopyPreparer = std::make_unique<SdrCopyPreparer>(this);
+  connect(sdrCopyPreparer.get(), &SdrCopyPreparer::busyChanged, this,
+          [](bool busy) {
+            if (busy)
+              QGuiApplication::setOverrideCursor(Qt::BusyCursor);
+            else
+              QGuiApplication::restoreOverrideCursor();
           });
   connect(wallpaperController.get(),
           &WallpaperController::wallpaperApplyFinished,
@@ -1204,9 +1213,13 @@ void Core::toggleFolderView() {
 void Core::copyFileClipboard() {
   if (model->isEmpty())
     return;
+  const QString path = selectedPath();
+  withSdrCopies({path}, [this, path]() { copyImageToClipboard(path); });
+}
 
+void Core::copyImageToClipboard(const QString &path) {
   MimePayloadResult payloadResult = mimePayloadManager->createPayload(
-      {model->getImage(selectedPath()), MimePayloadTarget::Clipboard});
+      {model->getImage(path), MimePayloadTarget::Clipboard});
   if (!payloadResult.succeeded()) {
     ui.notifications.showError(mimePayloadFailureMessage(payloadResult.error));
     return;
@@ -1666,37 +1679,65 @@ std::shared_ptr<ImageStatic> Core::getEditableImage(const QString &filePath) {
   return std::dynamic_pointer_cast<ImageStatic>(model->getImage(filePath));
 }
 
-// Returns true when every selected editable image was edited. An image whose
-// pixels are unavailable (for example a failed HDR-to-SDR conversion) or whose
-// edit produced no image is left unchanged and not saved.
-template <typename... Args>
-bool Core::edit_template(
-    bool save, ImageEditKind editKind, QString action,
-    const std::function<QImage(std::shared_ptr<const QImage>, Args...)>
-        &editFunc,
-    Args &&...as) {
+// The SDR copy of a cached HDR image is built on SdrCopyPreparer's worker, not
+// here; an image not cached yet is decoded and converted by the action itself.
+void Core::withSdrCopies(const QList<QString> &paths,
+                         std::function<void()> action) {
+  QList<std::shared_ptr<Image>> images;
+  for (const QString &path : paths) {
+    if (model->isLoaded(path))
+      images.append(model->getImage(path));
+  }
+  if (SdrCopyPreparer::isReady(images)) {
+    action();
+    return;
+  }
+  sdrCopyPreparer->prepare(
+      std::move(images), [this, paths, action = std::move(action)]() {
+        const bool filesKept = std::ranges::all_of(
+            paths, [this](const QString &path) { return model->containsFile(path); });
+        if (!filesKept) {
+          qWarning() << "Core: an image action was dropped, its files left the"
+                        " folder while their SDR copies were built";
+          return;
+        }
+        // Checked again: the tone mapping settings or the cached images can
+        // have changed meanwhile.
+        withSdrCopies(paths, action);
+      });
+}
+
+void Core::editImages(const QList<QString> &paths,
+                      const ImageEditRequest &request) {
   if (model->isEmpty())
-    return false;
-  if (save && !ui.dialogs.confirm({
-                  action, tr("Perform action \"") + action + "\"? \n\n" +
-                              tr("Changes will be saved immediately.")}).accepted)
-    return false;
+    return;
+  if (request.saving == EditSaving::AfterConfirmation &&
+      !ui.dialogs.confirm({
+          request.action,
+          tr("Perform action \"") + request.action + "\"? \n\n" +
+              tr("Changes will be saved immediately.")}).accepted)
+    return;
+  withSdrCopies(paths, [this, paths, request]() { applyEdits(paths, request); });
+}
+
+// An image whose pixels are unavailable (for example a failed HDR-to-SDR
+// conversion) or whose edit produced no image is left unchanged and not saved.
+void Core::applyEdits(const QList<QString> &paths,
+                      const ImageEditRequest &request) {
   bool allEdited = true;
-  const auto selection = currentSelection();
-  for (const auto &path : selection) {
+  for (const auto &path : paths) {
     auto img = getEditableImage(path);
     if (!img)
       continue;
     const std::shared_ptr<const QImage> source = img->getImage();
     if (!source || source->isNull() ||
-        !img->setEditedImage(std::make_unique<const QImage>(
-                                 editFunc(source, std::forward<Args>(as)...)),
-                             editKind)) {
+        !img->setEditedImage(std::make_unique<const QImage>(request.edit(source)),
+                             request.kind)) {
       allEdited = false;
       continue;
     }
     model->updateImage(path, std::static_pointer_cast<Image>(img));
-    if (save) {
+    if (request.saving != EditSaving::None) {
       (void)saveFile(path);
       if (state.currentFilePath != path)
         model->unload(path);
@@ -1704,98 +1745,126 @@ bool Core::edit_template(
   }
   if (!allEdited)
     ui.notifications.showError(
-        tr("%1 failed: the image could not be edited.").arg(action));
+        tr("%1 failed: the image could not be edited.").arg(request.action));
   updateInfoString();
-  return allEdited;
+}
+
+// The folder view saves rotations and flips at once.
+ImageEditRequest Core::orientationEdit(
+    QString action, std::function<QImage(std::shared_ptr<const QImage>)> edit) {
+  const EditSaving saving = ui.viewMode.currentViewMode() == MODE_FOLDERVIEW
+                                ? EditSaving::AfterConfirmation
+                                : EditSaving::None;
+  return {.kind = ImageEditKind::Orientation,
+          .action = std::move(action),
+          .edit = std::move(edit),
+          .saving = saving};
+}
+
+ImageEditRequest Core::resizeEdit(const ResizeRequest &request) const {
+  return {.kind = ImageEditKind::Content,
+          .action = tr("Resize"),
+          .edit = [size = request.size, filter = request.filter](
+                      std::shared_ptr<const QImage> source) {
+            return ImageLib::scaled(std::move(source), size, filter);
+          }};
 }
 
 void Core::flipH() {
-  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW),
-                ImageEditKind::Orientation, tr("Flip horizontal"),
-                {ImageLib::flippedH});
+  editImages(currentSelection(),
+             orientationEdit(tr("Flip horizontal"), ImageLib::flippedH));
 }
 
 void Core::flipV() {
-  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW),
-                ImageEditKind::Orientation, tr("Flip vertical"),
-                {ImageLib::flippedV});
+  editImages(currentSelection(),
+             orientationEdit(tr("Flip vertical"), ImageLib::flippedV));
 }
 
 void Core::rotateByDegrees(int degrees) {
-  edit_template((ui.viewMode.currentViewMode() == MODE_FOLDERVIEW),
-                ImageEditKind::Orientation, tr("Rotate"), {ImageLib::rotated},
-                degrees);
+  editImages(currentSelection(),
+             orientationEdit(tr("Rotate"),
+                             [degrees](std::shared_ptr<const QImage> source) {
+                               return ImageLib::rotated(std::move(source), degrees);
+                             }));
 }
 
 void Core::resize(const ResizeRequest &resizeRequest) {
-  const QSize size = resizeRequest.size;
-  const ScalingFilter filter = resizeRequest.filter;
-  if (resizeRequest.useUpscayl) {
-    if (model->isEmpty())
-      return;
+  if (!resizeRequest.useUpscayl) {
+    editImages(currentSelection(), resizeEdit(resizeRequest));
+    return;
+  }
+  if (model->isEmpty())
+    return;
 
-    if (activeAiResizeOperation.has_value()) {
-      ui.notifications.showAiUpscale(tr("AI resize is already running."));
-      return;
-    }
-
-    const auto selection = currentSelection();
-    if (selection.isEmpty())
-      return;
-
-    if (selection.size() > 1) {
-      ui.notifications.showWarning(tr("AI resize supports one image at a time."));
-      return;
-    }
-
-    const QString path = selection.constFirst();
-    auto img = getEditableImage(path);
-    if (!img) {
-      ui.notifications.showError(tr("Could not resize image."));
-      return;
-    }
-
-    std::shared_ptr<const QImage> source = img->getImage();
-    if (!source || source->isNull()) {
-      ui.notifications.showError(tr("Could not resize image."));
-      return;
-    }
-
-    // Final safety net: AI upscaling only makes sense when the target is
-    // actually larger than the source in some dimension. A caller might
-    // still pass useUpscayl=true here from a stale/persisted checkbox state
-    // for a same-size or downscale request - don't pay for a full AI model
-    // pass in that case, just do the regular (much cheaper) CPU resize.
-    if (size.width() <= source->width() && size.height() <= source->height()) {
-      edit_template(false, ImageEditKind::Content, tr("Resize"),
-                    {ImageLib::scaled}, size, filter);
-      return;
-    }
-
-    UpscaylResizeRequest request;
-    request.path = path;
-    request.targetSize = size;
-    request.filter = filter;
-    request.modelName = resizeRequest.upscaylModel;
-    request.sourceImage = source;
-    request.generation = ++aiResizeGeneration;
-
-    activeAiResizeOperation = AiResizeOperation{
-        request.generation, path, img->contentRevision(), img};
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-    aiResizeBusyUiActive = true;
-    ui.notifications.showAiUpscale(tr("AI resizing..."), 3600000);
-
-    auto task = new UpscaylResizeRunnable(request);
-    task->setAutoDelete(false);
-    connect(task, &UpscaylResizeRunnable::finished, task, &QObject::deleteLater, Qt::QueuedConnection);
-    connect(task, &UpscaylResizeRunnable::finished, this, &Core::onAiResizeFinished, Qt::QueuedConnection);
-    QThreadPool::globalInstance()->start(task);
+  if (activeAiResizeOperation.has_value()) {
+    ui.notifications.showAiUpscale(tr("AI resize is already running."));
     return;
   }
 
-  edit_template(false, ImageEditKind::Content, tr("Resize"),
-                {ImageLib::scaled}, size, filter);
+  const auto selection = currentSelection();
+  if (selection.isEmpty())
+    return;
+
+  if (selection.size() > 1) {
+    ui.notifications.showWarning(tr("AI resize supports one image at a time."));
+    return;
+  }
+
+  const QString path = selection.constFirst();
+  withSdrCopies({path}, [this, path, resizeRequest]() {
+    startAiResize(path, resizeRequest);
+  });
+}
+
+void Core::startAiResize(const QString &path, const ResizeRequest &resizeRequest) {
+  // Another AI resize can have started while the SDR copy was built.
+  if (activeAiResizeOperation.has_value()) {
+    ui.notifications.showAiUpscale(tr("AI resize is already running."));
+    return;
+  }
+
+  auto img = getEditableImage(path);
+  if (!img) {
+    ui.notifications.showError(tr("Could not resize image."));
+    return;
+  }
+
+  std::shared_ptr<const QImage> source = img->getImage();
+  if (!source || source->isNull()) {
+    ui.notifications.showError(tr("Could not resize image."));
+    return;
+  }
+
+  // Final safety net: AI upscaling only makes sense when the target is
+  // actually larger than the source in some dimension. A caller might
+  // still pass useUpscayl=true here from a stale/persisted checkbox state
+  // for a same-size or downscale request - don't pay for a full AI model
+  // pass in that case, just do the regular (much cheaper) CPU resize.
+  const QSize size = resizeRequest.size;
+  if (size.width() <= source->width() && size.height() <= source->height()) {
+    editImages({path}, resizeEdit(resizeRequest));
+    return;
+  }
+
+  UpscaylResizeRequest request;
+  request.path = path;
+  request.targetSize = size;
+  request.filter = resizeRequest.filter;
+  request.modelName = resizeRequest.upscaylModel;
+  request.sourceImage = source;
+  request.generation = ++aiResizeGeneration;
+
+  activeAiResizeOperation = AiResizeOperation{
+      request.generation, path, img->contentRevision(), img};
+  QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+  aiResizeBusyUiActive = true;
+  ui.notifications.showAiUpscale(tr("AI resizing..."), 3600000);
+
+  auto task = new UpscaylResizeRunnable(request);
+  task->setAutoDelete(false);
+  connect(task, &UpscaylResizeRunnable::finished, task, &QObject::deleteLater, Qt::QueuedConnection);
+  connect(task, &UpscaylResizeRunnable::finished, this, &Core::onAiResizeFinished, Qt::QueuedConnection);
+  QThreadPool::globalInstance()->start(task);
 }
 
 void Core::clearAiResizeBusyUi() {
@@ -1857,30 +1926,39 @@ void Core::onAiResizeFinished(int generation, QString path, QImage image, bool s
 void Core::crop(QRect rect) {
   if (ui.viewMode.currentViewMode() == MODE_FOLDERVIEW)
     return;
-  edit_template(false, ImageEditKind::Content, tr("Crop"), {ImageLib::cropped},
-                rect);
+  editImages(currentSelection(),
+             {.kind = ImageEditKind::Content,
+              .action = tr("Crop"),
+              .edit = [rect](std::shared_ptr<const QImage> source) {
+                return ImageLib::cropped(std::move(source), rect);
+              }});
 }
 
 void Core::cropAndSave(QRect rect) {
   if (ui.viewMode.currentViewMode() == MODE_FOLDERVIEW)
     return;
-  if (!edit_template(false, ImageEditKind::Content, tr("Crop"),
-                     {ImageLib::cropped}, rect))
-    return;
-  (void)saveFile(selectedPath());
-  updateInfoString();
+  editImages(currentSelection(),
+             {.kind = ImageEditKind::Content,
+              .action = tr("Crop"),
+              .edit = [rect](std::shared_ptr<const QImage> source) {
+                return ImageLib::cropped(std::move(source), rect);
+              },
+              .saving = EditSaving::Immediately});
 }
 
 void Core::applyColorAdjustments(const ColorAdjustments &adjustments) {
-  if (model->isEmpty())
+  if (model->isEmpty() || !adjustments.hasAdjustments())
     return;
+  const QString path = state.currentFilePath;
+  withSdrCopies({path}, [this, path, adjustments]() {
+    applyColorAdjustmentsTo(path, adjustments);
+  });
+}
 
-  QString path = state.currentFilePath;
+void Core::applyColorAdjustmentsTo(const QString &path,
+                                   const ColorAdjustments &adjustments) {
   auto img = getEditableImage(path);
   if (!img)
-    return;
-
-  if (!adjustments.hasAdjustments())
     return;
 
   QImage adjusted = ImageLib::applyColorAdjustments(img->getImage(), adjustments);
@@ -1913,7 +1991,7 @@ ImageSaveResult Core::saveFile(const QString &filePath, const QString &newPath) 
   ui.shell.setSaveOverlayVisible(false);
   // switch to the new file
   if (model->containsFile(newPath) && state.currentFilePath != newPath) {
-    discardEdits();
+    discardEditsOf(filePath);
     if (ui.viewMode.currentViewMode() == MODE_DOCUMENT)
       loadPath(newPath);
   }
@@ -1925,7 +2003,12 @@ void Core::saveCurrentFile() { saveCurrentFileAs(selectedPath()); }
 void Core::saveCurrentFileAs(QString destPath) {
   if (model->isEmpty())
     return;
-  const ImageSaveResult saveResult = saveFile(selectedPath(), destPath);
+  const QString path = selectedPath();
+  withSdrCopies({path}, [this, path, destPath]() { saveImageAs(path, destPath); });
+}
+
+void Core::saveImageAs(const QString &path, const QString &destPath) {
+  const ImageSaveResult saveResult = saveFile(path, destPath);
   if (saveResult.succeeded()) {
     if (saveResult.retainedBackupPath.isEmpty())
       ui.notifications.showSuccess(tr("File saved"));
@@ -1936,12 +2019,15 @@ void Core::saveCurrentFileAs(QString destPath) {
 void Core::discardEdits() {
   if (model->isEmpty())
     return;
+  discardEditsOf(selectedPath());
+}
 
-  std::shared_ptr<Image> img = model->getImage(selectedPath());
+void Core::discardEditsOf(const QString &path) {
+  std::shared_ptr<Image> img = model->getImage(path);
   if (img && img->type() == STATIC) {
     auto imgStatic = dynamic_cast<ImageStatic *>(img.get());
     imgStatic->discardEditedImage();
-    model->updateImage(selectedPath(), img);
+    model->updateImage(path, img);
   }
   ui.shell.setSaveOverlayVisible(false);
 }
@@ -2005,7 +2091,12 @@ void Core::runScript(const QString &scriptName) {
 void Core::setWallpaper() {
   if (model->isEmpty() || selectedPath().isEmpty())
     return;
-  auto img = model->getImage(selectedPath());
+  const QString path = selectedPath();
+  withSdrCopies({path}, [this, path]() { setImageAsWallpaper(path); });
+}
+
+void Core::setImageAsWallpaper(const QString &path) {
+  auto img = model->getImage(path);
   if (!img || img->type() != DocumentType::STATIC) {
     ui.notifications.showMessage(tr("Set wallpaper: file not supported"));
     return;
@@ -2029,7 +2120,12 @@ void Core::setWallpaper() {
 void Core::print() {
   if (model->isEmpty())
     return;
-  auto img = model->getImage(selectedPath());
+  const QString path = selectedPath();
+  withSdrCopies({path}, [this, path]() { printImage(path); });
+}
+
+void Core::printImage(const QString &path) {
+  auto img = model->getImage(path);
   if (!img) {
     ui.notifications.showError(tr("Could not open image"));
     return;
@@ -2038,13 +2134,13 @@ void Core::print() {
     ui.notifications.showError(tr("Can only print static images"));
     return;
   }
-  const std::shared_ptr<const QImage> printImage = img->getImage();
-  if (!printImage || printImage->isNull()) {
+  const std::shared_ptr<const QImage> pixels = img->getImage();
+  if (!pixels || pixels->isNull()) {
     ui.notifications.showError(tr("Could not open image"));
     return;
   }
   QString pdfPath = model->directoryPath() + "/" + img->baseName() + ".pdf";
-  ui.dialogs.print({printImage, pdfPath});
+  ui.dialogs.print({pixels, pdfPath});
 }
 
 // The viewer scales on the GPU and asks for the upscale directly, without a

@@ -25,6 +25,11 @@ public:
     ~ImageStatic();
 
     std::shared_ptr<const QImage> getImage();
+    // True when getImage() tone-maps the HDR source first.
+    [[nodiscard]] bool needsSdrConversion();
+    // Builds the SDR copy of the unedited pixels that getImage() returns.
+    // Thread safe; SdrCopyPreparer runs it on its worker.
+    void prepareSdrCopy();
     // The decoded image (HDR stays HDR); the viewer tone maps and colour
     // manages it itself.
     std::shared_ptr<const QImage> getDisplayImage() override;
