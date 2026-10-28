@@ -86,10 +86,6 @@ ShortcutList AppShortcutStore::resetShortcuts() {
     return shortcuts();
 }
 
-QString AppShortcutStore::actionForShortcut(const QString &shortcut) {
-    return mActions.actionForShortcut(shortcut);
-}
-
 QStringList AppShortcutStore::actionNames() {
     return mActions.actionList();
 }

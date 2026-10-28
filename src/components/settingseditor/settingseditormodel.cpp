@@ -449,7 +449,7 @@ void SettingsEditorModel::refreshThumbnailCacheSize() {
 
 //--- shortcuts ----------------------------------------------------------------
 void SettingsEditorModel::addShortcut() {
-    mShortcutEditor.startAdd();
+    mShortcutEditor.startAdd(mShortcuts.entries());
 }
 
 void SettingsEditorModel::editShortcut(int row) {
@@ -458,7 +458,7 @@ void SettingsEditorModel::editShortcut(int row) {
         qWarning() << "SettingsEditorModel: no shortcut in row" << row;
         return;
     }
-    mShortcutEditor.startEdit(*entry, row);
+    mShortcutEditor.startEdit(*entry, row, mShortcuts.entries());
 }
 
 void SettingsEditorModel::removeShortcut(int row) {

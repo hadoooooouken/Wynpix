@@ -11,8 +11,10 @@ class IShortcutScriptStore;
 // The shortcut creator of the settings dialog (ShortcutCreatorDialog): binds
 // a shortcut to an action or to a script ("s:<name>"). The shortcut comes
 // from the key, mouse button or wheel input the dialog captures; a shortcut
-// the application already binds shows a warning (it is replaced when the
-// dialog is accepted). It can be accepted once a shortcut was entered.
+// another row of the shortcut table binds shows a warning (that row is
+// replaced when the dialog is accepted). The table is the one being edited,
+// with the changes not applied yet. It can be accepted once a shortcut was
+// entered.
 //
 // GUI thread only.
 class ShortcutEditorModel final : public EditorSession {
@@ -47,10 +49,10 @@ public:
     [[nodiscard]] QString warning() const;
     [[nodiscard]] bool canAccept() const;
 
-    // Opens the creator for a new shortcut.
-    void startAdd();
-    // Opens the editor for entry, the table row at row.
-    void startEdit(const ShortcutEntry &entry, int row);
+    // Opens the creator for a new shortcut; table is the shortcut table.
+    void startAdd(const ShortcutList &table);
+    // Opens the editor for entry, the row at row of table.
+    void startEdit(const ShortcutEntry &entry, int row, const ShortcutList &table);
 
     // A captured shortcut; empty ones (input without a shortcut) are ignored.
     Q_INVOKABLE void setShortcut(const QString &shortcut);
@@ -69,9 +71,13 @@ protected:
     [[nodiscard]] bool acceptable() const override;
 
 private:
-    void startRequest(const QString &title, int row);
+    void startRequest(const QString &title, int row, const ShortcutList &table);
+    // Action of the table row that binds shortcut, other than the edited
+    // row; empty for none.
+    [[nodiscard]] QString boundAction(const QString &shortcut) const;
 
     IShortcutScriptStore &mStore;
+    ShortcutList mTable;
     QString mTitle;
     QStringList mActions;
     QStringList mScripts;

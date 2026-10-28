@@ -164,10 +164,6 @@ void ActionManager::saveShortcuts() {
   settings->setShortcutsVersion(kCurrentShortcutsVersion);
 }
 //------------------------------------------------------------------------------
-QString ActionManager::actionForShortcut(const QString &keys) {
-  return actionManager->shortcuts[keys];
-}
-
 const QString ActionManager::shortcutForAction(QString action) {
   return shortcuts.key(action, "");
 }

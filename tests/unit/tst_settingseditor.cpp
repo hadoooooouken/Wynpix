@@ -405,6 +405,42 @@ private slots:
         QCOMPARE(put.constFirst().constFirst().toInt(), 1);
     }
 
+    void theCreatorChecksTheTableBeingEdited() {
+        EditorFixture f;
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        ShortcutEditorModel &creator = *editor.shortcutEditor();
+
+        // Removed from the table, not applied yet: free.
+        editor.removeShortcut(0);
+        editor.addShortcut();
+        creator.setShortcut(u"Right"_s);
+        QVERIFY(creator.warning().isEmpty());
+        creator.setActionIndex(2);
+        creator.accept();
+
+        // Added to the table, not applied yet: bound.
+        editor.addShortcut();
+        creator.setShortcut(u"Right"_s);
+        QCOMPARE(creator.warning(), u"This shortcut is used for action: zoomIn. Replace?"_s);
+        creator.reject();
+        QVERIFY(f.shortcuts.live.contains(kNextImage));
+    }
+
+    void theEditedRowIsNoConflict() {
+        EditorFixture f;
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        ShortcutEditorModel &creator = *editor.shortcutEditor();
+        editor.editShortcut(0);
+        QCOMPARE(creator.shortcut(), kNextImage.shortcut);
+        creator.setShortcut(kNextImage.shortcut);
+        QVERIFY(creator.warning().isEmpty());
+        // Another row's shortcut still is one.
+        creator.setShortcut(kPrevImage.shortcut);
+        QCOMPARE(creator.warning(), u"This shortcut is used for action: prevImage. Replace?"_s);
+    }
+
     void theEditorStartsWithTheEditedScriptBinding() {
         EditorFixture f;
         f.shortcuts.scripts = {{u"a"_s, {}}, {u"b"_s, {}}};

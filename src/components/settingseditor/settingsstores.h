@@ -48,8 +48,6 @@ public:
     // Restores the default shortcuts (at once, as the widget dialog did) and
     // returns them.
     [[nodiscard]] virtual ShortcutList resetShortcuts() = 0;
-    // Action bound to shortcut in the application, empty for none.
-    [[nodiscard]] virtual QString actionForShortcut(const QString &shortcut) = 0;
     [[nodiscard]] virtual QStringList actionNames() = 0;
 
     [[nodiscard]] virtual QStringList scriptNames() = 0;

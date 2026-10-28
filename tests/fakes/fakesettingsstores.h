@@ -70,13 +70,6 @@ public:
         live = defaults;
         return live;
     }
-    QString actionForShortcut(const QString &shortcut) override {
-        for (const ShortcutEntry &entry : live) {
-            if (entry.shortcut == shortcut)
-                return entry.action;
-        }
-        return {};
-    }
     QStringList actionNames() override { return actions; }
 
     QStringList scriptNames() override { return scripts.keys(); }

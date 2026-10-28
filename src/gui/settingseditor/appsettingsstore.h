@@ -58,7 +58,6 @@ public:
 
     [[nodiscard]] ShortcutList shortcuts() override;
     [[nodiscard]] ShortcutList resetShortcuts() override;
-    [[nodiscard]] QString actionForShortcut(const QString &shortcut) override;
     [[nodiscard]] QStringList actionNames() override;
 
     [[nodiscard]] QStringList scriptNames() override;
