@@ -158,7 +158,6 @@ struct ThemeTokens {
   Q_PROPERTY(QColor accentTintHover MEMBER accentTintHover)
   Q_PROPERTY(QColor accentFrame MEMBER accentFrame)
   Q_PROPERTY(QColor textPrimary MEMBER textPrimary)
-  Q_PROPERTY(QColor textSecondary MEMBER textSecondary)
   Q_PROPERTY(QColor textOnHud MEMBER textOnHud)
   Q_PROPERTY(QColor iconDefault MEMBER iconDefault)
   Q_PROPERTY(QColor iconFolder MEMBER iconFolder)
@@ -201,7 +200,6 @@ public:
   QColor accentTintHover;
   QColor accentFrame;
   QColor textPrimary;
-  QColor textSecondary;
   QColor textOnHud;
   QColor iconDefault;
   QColor iconFolder;

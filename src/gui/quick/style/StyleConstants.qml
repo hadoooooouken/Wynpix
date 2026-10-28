@@ -102,7 +102,8 @@ QtObject {
     readonly property int indicatorPadding: 6
 
     // Colour factors.
-    // Secondary text (shortcuts, disabled menu items): text at this opacity.
+    // Secondary text (shortcuts, disabled menu items, placeholders,
+    // thumbnail details): text at this opacity.
     readonly property real secondaryTextOpacity: 0.62
     // Disabled icons, indicators and control content.
     readonly property real disabledOpacity: 0.45

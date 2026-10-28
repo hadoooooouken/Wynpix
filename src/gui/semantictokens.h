@@ -43,7 +43,6 @@ struct Colors {
   QColor accentTintHover;
   QColor accentFrame;
   QColor textPrimary;
-  QColor textSecondary;
   QColor textOnHud;
   QColor iconDefault;
   QColor iconFolder;
@@ -81,9 +80,6 @@ inline constexpr QRgb kDropTarget = 0xffbe3c19;
 // "gray" of CSS and QML, not Qt::gray.
 inline constexpr QRgb kScrollbarMarker = 0xff808080;
 inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
-// Opacity of secondary text (placeholders, shortcuts, notes) over the text
-// colour.
-inline constexpr qreal kSecondaryTextAlpha = 0.62;
 
 [[nodiscard]] inline Colors colorsFor(const ColorScheme &scheme) {
   const bool dark = scheme.tid == COLORS_DARK;
@@ -91,8 +87,6 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
   const SelectionFills::Colors selection =
       SelectionFills::colorsFor(scheme.accent);
   const QColor accentText = AccentContrast::textOn(scheme.accent);
-  QColor textSecondary = scheme.text.toRgb();
-  textSecondary.setAlphaF(kSecondaryTextAlpha);
   QColor scrollbarMarker = QColor::fromRgb(kScrollbarMarker);
   scrollbarMarker.setAlphaF(kScrollbarMarkerAlpha);
   return {
@@ -125,7 +119,6 @@ inline constexpr qreal kSecondaryTextAlpha = 0.62;
       .accentTintHover = selection.tintHover,
       .accentFrame = selection.frame,
       .textPrimary = scheme.text_hc,
-      .textSecondary = textSecondary,
       .textOnHud = scheme.overlay_text,
       .iconDefault = scheme.icons,
       .iconFolder = scheme.folder_icons,

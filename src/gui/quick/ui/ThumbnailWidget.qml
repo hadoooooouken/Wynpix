@@ -42,7 +42,6 @@ Item {
     // ThumbnailWidget constants.
     readonly property int frameWidth: 2
     readonly property real hoverHighlight: 0.2
-    readonly property real infoOpacity: 0.62
     readonly property int hoverInDuration: 100
     readonly property int hoverOutDuration: 60
     readonly property int statusIconSize: 72
@@ -159,7 +158,7 @@ Item {
         visible: cell.cellLayout.labels && cell.loaded
         text: cell.info
         color: cell.labelColor
-        opacity: cell.infoOpacity
+        opacity: StyleConstants.secondaryTextOpacity
         font: Theme.fonts.body
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignHCenter

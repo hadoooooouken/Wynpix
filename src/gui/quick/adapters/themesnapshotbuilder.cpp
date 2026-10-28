@@ -89,7 +89,6 @@ ThemeTokens themeTokens(const SemanticTokens::Colors &colors) {
       .accentTintHover = colors.accentTintHover,
       .accentFrame = colors.accentFrame,
       .textPrimary = colors.textPrimary,
-      .textSecondary = colors.textSecondary,
       .textOnHud = colors.textOnHud,
       .iconDefault = colors.iconDefault,
       .iconFolder = colors.iconFolder,

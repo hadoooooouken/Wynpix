@@ -449,8 +449,6 @@ private slots:
     QCOMPARE(tokens.surfacePopup, colors.widget);
     QCOMPARE(tokens.surfaceHud, colors.overlay);
     QCOMPARE(tokens.textPrimary, colors.text_hc);
-    QCOMPARE(tokens.textSecondary.rgb(), colors.text.rgb());
-    verifyAlpha(tokens.textSecondary, SemanticTokens::kSecondaryTextAlpha);
     QCOMPARE(tokens.textOnHud, colors.overlay_text);
     QCOMPARE(tokens.iconThumbFolder, colors.thumbnail_folder_icons);
     QCOMPARE(tokens.accentText, AccentContrast::textOn(colors.accent));
