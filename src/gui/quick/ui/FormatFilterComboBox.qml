@@ -111,9 +111,10 @@ T.AbstractButton {
 
     background: Rectangle {
         radius: control.controlRadius
-        color: control.limited ? Theme.colors.accent
-             : control.hovered || control.popupOpen ? Theme.colors.panelButtonHover
-             : Theme.colors.panelButton
+        color: control.limited ? (control.hovered || control.popupOpen ? Theme.colors.accentHover
+                                                                       : Theme.colors.accent)
+             : control.hovered || control.popupOpen ? Theme.colors.fillHover
+             : Theme.colors.fillRest
         border.width: control.borderWidth
         border.color: color
     }

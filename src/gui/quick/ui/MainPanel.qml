@@ -220,8 +220,8 @@ Item {
         Accessible.role: Accessible.Button
 
         background: Rectangle {
-            readonly property color surface: button.active ? Theme.colors.folderViewHc
-                                           : button.hovered ? Theme.colors.folderViewHc2
+            readonly property color surface: button.active ? Theme.colors.accentTint
+                                           : button.hovered ? Theme.colors.fillHover
                                            : "transparent"
 
             radius: button.surfaceRadius

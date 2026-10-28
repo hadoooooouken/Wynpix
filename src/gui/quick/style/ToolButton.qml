@@ -43,7 +43,8 @@ T.ToolButton {
 
     background: Rectangle {
         radius: StyleConstants.controlRadius
-        color: control.down || control.checked ? Theme.colors.fillPressed
+        color: control.down ? Theme.colors.fillPressed
+             : control.checked ? (control.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
              : control.hovered ? Theme.colors.fillHover
              : "transparent"
         border.width: control.visualFocus ? StyleConstants.separatorThickness : 0

@@ -40,7 +40,8 @@ T.Button {
         implicitHeight: Theme.metrics.buttonHeight
         radius: StyleConstants.controlRadius
         visible: !control.flat || control.down || control.checked || control.hovered
-        color: control.down || control.checked ? Theme.colors.fillPressed
+        color: control.down ? Theme.colors.fillPressed
+             : control.checked ? (control.hovered ? Theme.colors.accentTintHover : Theme.colors.accentTint)
              : control.hovered || control.highlighted ? Theme.colors.fillHover
              : Theme.colors.fillRest
         border.width: control.visualFocus ? StyleConstants.separatorThickness : 0

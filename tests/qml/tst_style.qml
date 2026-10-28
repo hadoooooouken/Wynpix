@@ -234,7 +234,7 @@ Item {
             mouseMove(gallery, gallery.width - 1, gallery.height - 1);
             toolButton.checkable = true;
             toolButton.checked = true;
-            verifyColor(pixel(toolButton, x, y), fillOver(Theme.colors.fillPressed), "checked");
+            verifyColor(pixel(toolButton, x, y), fillOver(Theme.colors.accentTint), "checked");
             toolButton.checked = false;
             toolButton.checkable = false;
             // The inset keeps the panel colour off the bar edge.

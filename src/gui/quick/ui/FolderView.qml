@@ -109,7 +109,7 @@ FocusScope {
                 Layout.minimumWidth: root.pathBarMinimumWidth
                 Layout.preferredWidth: root.upButtonWidth + pathText.implicitWidth
                 radius: root.controlRadius
-                color: Theme.colors.panelButton
+                color: Theme.colors.fillRest
 
                 Row {
                     anchors.fill: parent
@@ -130,8 +130,8 @@ FocusScope {
 
                         background: Rectangle {
                             radius: root.controlRadius
-                            color: upButton.down ? Theme.colors.panelButtonPressed
-                                 : upButton.hovered ? Theme.colors.panelButtonHover
+                            color: upButton.down ? Theme.colors.fillPressed
+                                 : upButton.hovered ? Theme.colors.fillHover
                                  : "transparent"
                         }
                         contentItem: IconGlyph {
@@ -190,9 +190,9 @@ FocusScope {
 
                 background: Rectangle {
                     radius: root.controlRadius
-                    color: batchButton.down ? Theme.colors.panelButtonPressed
-                         : batchButton.hovered ? Theme.colors.panelButtonHover
-                         : Theme.colors.panelButton
+                    color: batchButton.down ? Theme.colors.fillPressed
+                         : batchButton.hovered ? Theme.colors.fillHover
+                         : Theme.colors.fillRest
                 }
                 contentItem: Item {
                     Label {
@@ -421,8 +421,10 @@ FocusScope {
         Accessible.name: toolTip
 
         background: Rectangle {
-            readonly property color surface: button.active || button.down ? Theme.colors.panelButton
-                                           : button.hovered ? Theme.colors.panelButtonHover
+            readonly property color surface: button.down ? Theme.colors.fillPressed
+                                           : button.active ? (button.hovered ? Theme.colors.accentTintHover
+                                                                             : Theme.colors.accentTint)
+                                           : button.hovered ? Theme.colors.fillHover
                                            : "transparent"
 
             radius: root.controlRadius
@@ -476,8 +478,8 @@ FocusScope {
         }
         background: Rectangle {
             radius: root.controlRadius
-            color: combo.hovered || combo.popup.visible ? Theme.colors.panelButtonHover
-                                                        : Theme.colors.panelButton
+            color: combo.hovered || combo.popup.visible ? Theme.colors.fillHover
+                                                        : Theme.colors.fillRest
             border.width: root.fieldBorderWidth
             border.color: color
         }

@@ -291,8 +291,8 @@ Rectangle {
 
                 background: Rectangle {
                     radius: root.buttonRadius
-                    color: headerButton.down ? Theme.colors.folderViewButtonPressed
-                         : headerButton.hovered ? Theme.colors.folderViewButtonHover
+                    color: headerButton.down ? Theme.colors.fillPressed
+                         : headerButton.hovered ? Theme.colors.fillHover
                          : "transparent"
                 }
                 contentItem: IconGlyph {
@@ -322,8 +322,8 @@ Rectangle {
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
             radius: root.rowRadius
-            color: row.highlighted ? Theme.colors.folderViewHc2
-                 : rowHover.hovered || dropArea.containsDrag ? Theme.colors.folderViewHc
+            color: row.highlighted ? Theme.colors.accentTint
+                 : rowHover.hovered || dropArea.containsDrag ? Theme.colors.fillHover
                  : "transparent"
         }
 
@@ -476,7 +476,7 @@ Rectangle {
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
             radius: root.rowRadius
             color: treeRow.current ? Theme.colors.accentTint
-                 : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.folderViewHc
+                 : treeHover.hovered || treeDrop.containsDrag ? Theme.colors.fillHover
                  : "transparent"
         }
 
