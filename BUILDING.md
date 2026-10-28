@@ -325,7 +325,7 @@ cmake --build --preset wynpix-x64-release-sse2
 
 Outputs are placed in `release/` (AVX2) and `release-sse2/` (SSE2).
 
-The `wynpix-x64-debug` preset leaves out `kimg_exr`, `kimg_jph`, `kimg_jxl` and `kimg_raw`: OpenEXR, OpenJPH, libjxl and LibRaw are built as Release-only static C++ libraries, which a Debug (`/MDd`) plugin cannot link (LNK2038). Debug builds therefore cannot open EXR, HTJ2K, JPEG XL and camera RAW files.
+The `wynpix-x64-debug` preset leaves out `kimg_exr`, `kimg_jph`, `kimg_jxl` and `kimg_raw`: OpenEXR, OpenJPH, libjxl and LibRaw are built as Release-only static C++ libraries, which a Debug (`/MDd`) plugin cannot link (LNK2038). Debug builds therefore cannot open EXR, HTJ2K, JPEG XL and camera RAW files. For the same reason (LibRaw) they leave out the shell extension, `wynpixshellex.dll`.
 
 ### Phase 3: Post-Build (Optional)
 

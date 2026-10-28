@@ -133,7 +133,13 @@ foreach(_glslang_target glslang SPIRV MachineIndependent GenericCodeGen OGLCompi
 endforeach()
 
 add_subdirectory(src)
-add_subdirectory(shellex)
+# The shell extension links LibRaw, a Release-only static C++ library that a
+# Debug (/MDd) DLL cannot link (LNK2038; see src/3rdparty/kimageformats).
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Debug build: skipping wynpixshellex (Release-only LibRaw)")
+else()
+    add_subdirectory(shellex)
+endif()
 
 if(WYNPIX_BUILD_TESTS)
     enable_testing()
