@@ -14,6 +14,7 @@ qt_add_executable(wynpix_tests
     tst_viewportinteraction.cpp
     tst_viewtransform.cpp
     tst_decodedpixels.cpp
+    tst_decodebudget.cpp
     tst_quickshell.cpp
     tst_singleinstance.cpp
     tst_windowstate.cpp
@@ -43,6 +44,7 @@ qt_add_executable(wynpix_tests
     "${WYNPIX_APP_SOURCE_DIR}/components/upscaler/upscaledecision.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/components/windowstate/windowstatecontroller.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/sourcecontainers/decodedpixels.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/utils/decodebudget.cpp"
     # HdrToneMapper::toSdr, the SDR conversion DecodedPixels is given.
     "${WYNPIX_APP_SOURCE_DIR}/utils/hdrtonemapper.cpp"
     # ImageLib scalers and colour adjustments (tst_imagelib.cpp).

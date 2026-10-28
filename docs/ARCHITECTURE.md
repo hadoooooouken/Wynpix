@@ -44,6 +44,13 @@ Principles:
 
 - **Threads:** decoding, scaling, LUT generation and thumbnailing stay on
   their pools. No `QQmlEngine` access from worker threads.
+- **Memory:** two budgets bound decoded pixels. Preloading stops when the
+  cache holds 1.5 GiB (`PreloadMemoryBudgetBytes`, `directorymodel.cpp`).
+  Thumbnails from readers that cannot scale on read (`.hdr`, `.exr`, PNG)
+  share 1 GiB of full-size decodes, counted with the copy
+  `QImage::smoothScaled()` converts them to (`FullDecodeBudgetBytes`,
+  `thumbnailerrunnable.cpp`). Both use the header estimate
+  (`utils/decodebudget.h`).
 - **Startup:** heavy QML (folder view, dialogs, settings) sits behind
   `Loader { active: false; asynchronous: true }`; only the viewer and the
   messages overlay exist before the first frame. A folder view created while
@@ -116,10 +123,26 @@ Release Procedure").
 
 ## 6. Open Issues
 
-- **HDR memory not measured.** Preloading is bounded by a 1.5 GiB budget of
-  decoded pixels (`PreloadMemoryBudgetBytes`, `directorymodel.cpp`), but the
-  memory of a folder of 24 MP and 50 MP `.hdr` / `.exr` images was never
-  measured.
+- **Rapid navigation through large HDR images.** The current image always
+  loads, outside the preload budget. Quick key presses cancel the superseded
+  loads, but a `.hdr` / `.exr` read already inside `QImageReader::read()`
+  runs to the end, so up to `MaxLoaderThreads` (3) decodes likely overlap.
+  Measured on 2026-10-28 (Release build, folders of five images,
+  thumbnail cache empty), peak private memory:
+
+  | Folder        | First open | Rapid navigation | Steady state |
+  |---------------|-----------:|-----------------:|-------------:|
+  | 24 MP `.exr`  |     1.9 GB |           1.9 GB |  1.1–1.6 GB  |
+  | 50 MP `.exr`  |     3.2 GB |           3.2 GB |  1.5–2.4 GB  |
+  | 24 MP `.hdr`  |     2.0 GB |           2.8 GB |  1.2–2.0 GB  |
+  | 50 MP `.hdr`  |     2.8 GB |           5.1 GB |  2.0–2.8 GB  |
+
+  Decoded sizes: `.hdr` 16 bytes per pixel (`RGBX32FPx4`), `.exr` 8 bytes
+  per pixel; GPU memory is about 0.5 GB for a 24 MP image and 1 GB for
+  50 MP; the idle app uses 0.2 GB. Before the thumbnail budget, the first
+  open peaked at 4.8, 9.3, 3.1 and 5.8 GB. Fix direction: run the loader's
+  full-size decodes under a `DecodeBudget` as well, so a new load waits for
+  a cancelled one to finish.
 - **HDR tone mapping on the GUI thread.** The first CPU use of an HDR image
   (copy to the clipboard, save, print, wallpaper, edits, AI resize) tone-maps
   the whole image on the GUI thread. Upscayl tone-maps only its crop, on the

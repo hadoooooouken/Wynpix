@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
   status |= runWindowTitleTests(argc, argv);
   status |= runQuickShellTests(argc, argv);
   status |= runDecodedPixelsTests(argc, argv);
+  status |= runDecodeBudgetTests(argc, argv);
   status |= runUpscaleDecisionTests(argc, argv);
   status |= runUiMetricsTests(argc, argv);
   status |= runOverlayTests(argc, argv);

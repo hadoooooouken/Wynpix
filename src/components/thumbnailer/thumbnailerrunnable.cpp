@@ -3,6 +3,7 @@
 #include "thumbnailgeometry.h"
 #include "utils/blendreader.h"
 #include "utils/colormanager.h"
+#include "utils/decodebudget.h"
 #include "utils/djvureader.h"
 #include "utils/fontpreview.h"
 #include "utils/hdrtonemapper.h"
@@ -18,6 +19,67 @@
 #include <QColorSpace>
 
 namespace {
+// Memory the thumbnail pool's full-size decodes hold at once. Readers that
+// cannot scale on read (.hdr, .exr, PNG) decode the whole image for a
+// thumbnail; unbounded, a folder of five 50 MP .exr images peaked at 9.3 GB.
+constexpr qint64 FullDecodeBudgetBytes = qint64{1024} * 1024 * 1024;
+
+DecodeBudget &fullDecodeBudget() {
+  static DecodeBudget budget(FullDecodeBudgetBytes);
+  return budget;
+}
+
+// The format QImage::smoothScaled() (Qt 6.12) converts a copy of the image to
+// before scaling; nullopt when it scales the format as it is.
+std::optional<QImage::Format> smoothScaleCopyFormat(QImage::Format format,
+                                                    bool hasAlpha) {
+  switch (format) {
+  case QImage::Format_RGB32:
+  case QImage::Format_ARGB32_Premultiplied:
+  case QImage::Format_RGBX8888:
+  case QImage::Format_RGBA8888_Premultiplied:
+  case QImage::Format_RGBX64:
+  case QImage::Format_RGBA64_Premultiplied:
+  case QImage::Format_RGBX32FPx4:
+  case QImage::Format_RGBA32FPx4_Premultiplied:
+  case QImage::Format_CMYK8888:
+    return std::nullopt;
+  case QImage::Format_RGBA64:
+  case QImage::Format_Grayscale16:
+    return QImage::Format_RGBA64_Premultiplied;
+  case QImage::Format_RGBX16FPx4:
+    return QImage::Format_RGBX32FPx4;
+  case QImage::Format_RGBA16FPx4:
+  case QImage::Format_RGBA16FPx4_Premultiplied:
+  case QImage::Format_RGBA32FPx4:
+    return QImage::Format_RGBA32FPx4_Premultiplied;
+  default:
+    return hasAlpha ? QImage::Format_ARGB32_Premultiplied
+                    : QImage::Format_RGB32;
+  }
+}
+
+// Peak bytes of a full-size read that is then smooth-scaled: the decoded
+// image and the copy the scaler converts it to. 0 when the reader cannot
+// report the dimensions.
+qint64 fullDecodePeakBytes(QImageReader &reader) {
+  const std::optional<qint64> decoded = estimateDecodedBytes(reader);
+  if (!decoded)
+    return 0;
+  const QImage::Format format = reader.imageFormat();
+  // An unreported format is taken as 32-bit, converted to a 32-bit copy.
+  if (format == QImage::Format_Invalid)
+    return 2 * *decoded;
+  const QPixelFormat pixelFormat = QImage::toPixelFormat(format);
+  const std::optional<QImage::Format> copyFormat = smoothScaleCopyFormat(
+      format, pixelFormat.alphaUsage() == QPixelFormat::UsesAlpha);
+  if (!copyFormat)
+    return *decoded;
+  return *decoded + *decoded *
+                        QImage::toPixelFormat(*copyFormat).bitsPerPixel() /
+                        pixelFormat.bitsPerPixel();
+}
+
 [[nodiscard]] QImage toPremultipliedThumbnail(QImage image) {
   if (!image.hasAlphaChannel())
     return image;
@@ -489,6 +551,16 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
   QSize originalSize;
   bool indexed = (reader->imageFormat() == QImage::Format_Indexed8);
   bool manualResize = indexed || !reader->supportsOption(QImageIOHandler::Size);
+  // Held from before a full-size read until the thumbnail is made from it.
+  std::optional<DecodeBudget::Reservation> fullDecode;
+  const auto reserveFullDecode = [&] {
+    fullDecode =
+        fullDecodeBudget().reserve(fullDecodePeakBytes(*reader), context);
+    return fullDecode.has_value();
+  };
+  if ((manualResize || !reader->supportsOption(QImageIOHandler::ScaledSize)) &&
+      !reserveFullDecode())
+    return std::make_pair(QImage(), QSize());
   if (!manualResize) { // resize during read via QImageReader (faster)
     QSize scaledSize = noUpscaleScaledSize(reader->size(), size, ARMode);
     if (scaledSize != reader->size())
@@ -514,6 +586,8 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
       if (selectBestResolution && imageCount > 1) {
         reader->jumpToImage(bestIndex);
       }
+      if (!fullDecode && !reserveFullDecode())
+        return std::make_pair(QImage(), QSize());
     }
   }
   if (manualResize) { // manual resize & crop. slower but should just work

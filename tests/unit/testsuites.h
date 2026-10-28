@@ -15,6 +15,7 @@ int runSingleInstanceTests(int argc, char **argv);
 int runWindowTitleTests(int argc, char **argv);
 int runQuickShellTests(int argc, char **argv);
 int runDecodedPixelsTests(int argc, char **argv);
+int runDecodeBudgetTests(int argc, char **argv);
 int runUpscaleDecisionTests(int argc, char **argv);
 int runUiMetricsTests(int argc, char **argv);
 int runOverlayTests(int argc, char **argv);

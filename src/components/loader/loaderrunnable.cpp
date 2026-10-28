@@ -1,30 +1,9 @@
 #include "loaderrunnable.h"
+#include "utils/decodebudget.h"
 
 #include <utility>
 
 #include <QImageReader>
-
-namespace {
-constexpr int BitsPerByte = 8;
-// Readers that do not report their pixel format decode to 32-bit ARGB/RGB.
-constexpr int FallbackBitsPerPixel = 32;
-
-// Decoded size from the file header, without decoding; nullopt when the
-// reader cannot report the dimensions (the decoded image is checked instead).
-std::optional<qint64> estimateDecodedBytes(const QString &path) {
-    QImageReader reader(path);
-    const QSize size = reader.size();
-    if (!size.isValid() || size.isEmpty())
-        return std::nullopt;
-    const QImage::Format format = reader.imageFormat();
-    const int bitsPerPixel =
-        format == QImage::Format_Invalid
-            ? FallbackBitsPerPixel
-            : static_cast<int>(QImage::toPixelFormat(format).bitsPerPixel());
-    return static_cast<qint64>(size.width()) * size.height() * bitsPerPixel /
-           BitsPerByte;
-}
-} // namespace
 
 void LoaderTaskNotifier::reportCompletion(ImageLoadCompletion completion) {
     emit taskCompleted(std::move(completion));
@@ -43,8 +22,9 @@ LoaderRunnable::~LoaderRunnable() {
 
 void LoaderRunnable::run() {
     if (request.decodedBytesLimit) {
-        const std::optional<qint64> estimate =
-            estimateDecodedBytes(request.path);
+        // Without an estimate the decoded image is checked instead.
+        QImageReader reader(request.path);
+        const std::optional<qint64> estimate = estimateDecodedBytes(reader);
         if (estimate && *estimate > *request.decodedBytesLimit) {
             completion.status = ImageLoadCompletionStatus::OverMemoryBudget;
             return;
