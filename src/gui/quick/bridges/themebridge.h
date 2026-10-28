@@ -16,8 +16,7 @@ QML_NAMED_ELEMENT(FluentIcons)
 } // namespace FluentIconsForeign
 
 // Colours (by scheme entry and by role), fonts, control metrics and icon
-// glyphs for QML
-// (Theme singleton).
+// glyphs for QML (Theme singleton).
 //
 // Like SettingsBridge, it is fed by the composition root: QuickUiHost builds
 // a ThemeSnapshot whenever Settings::settingsChanged fires (a theme switch is

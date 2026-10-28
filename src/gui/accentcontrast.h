@@ -14,10 +14,10 @@
 // and what the UI used before; otherwise it is black. At least one of the two
 // always reaches the AA contrast (the worst case, a fill of luminance ~0.18,
 // gives about 4.6:1), so the result is readable on every opaque fill.
-namespace AccentContrast {
-
+//
 // Also the fills of the accent hovered and pressed, which move away from the
 // text colour so that the text stays readable on them.
+namespace AccentContrast {
 
 // WCAG 2.x AA minimum contrast ratio for normal text.
 inline constexpr qreal kMinTextContrast = 4.5;
