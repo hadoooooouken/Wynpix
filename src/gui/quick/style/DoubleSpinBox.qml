@@ -43,7 +43,7 @@ T.DoubleSpinBox {
         color: Theme.colors.text
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
         selectionColor: Theme.colors.accent
-        selectedTextColor: Theme.colors.textHc2
+        selectedTextColor: Theme.colors.accentText
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 

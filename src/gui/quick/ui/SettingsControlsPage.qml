@@ -110,6 +110,11 @@ SettingsPage {
 
                     width: ListView.view.width
                     height: root.rowHeight
+                    // Text on the current row, which is filled with the accent.
+                    readonly property color textColor: ListView.isCurrentItem
+                                                       ? Theme.colors.accentText
+                                                       : Theme.colors.textHc
+
                     color: ListView.isCurrentItem ? Theme.colors.accent
                          : index % 2 ? Theme.colors.folderViewHc : "transparent"
 
@@ -122,6 +127,7 @@ SettingsPage {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
+                            color: shortcutRow.textColor
                             text: shortcutRow.action
                         }
                         Label {
@@ -130,6 +136,7 @@ SettingsPage {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
+                            color: shortcutRow.textColor
                             text: shortcutRow.shortcut
                         }
                     }

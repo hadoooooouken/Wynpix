@@ -188,7 +188,7 @@ Item {
                 contentItem: IconGlyph {
                     icon: root.playback.playing ? FluentIcons.Pause20 : FluentIcons.Play20
                     size: root.iconSize
-                    color: "white"
+                    color: Theme.colors.accentText
                 }
 
                 ToolTip {
@@ -294,7 +294,7 @@ Item {
                 contentItem: IconGlyph {
                     icon: FluentIcons.ArrowTurnDownLeft20
                     size: root.iconSize
-                    color: reverseButton.checked ? "white" : Theme.colors.icons
+                    color: reverseButton.checked ? Theme.colors.accentText : Theme.colors.icons
                 }
 
                 ToolTip {
@@ -333,7 +333,7 @@ Item {
                 contentItem: IconGlyph {
                     icon: FluentIcons.ArrowRepeatAll20
                     size: root.iconSize
-                    color: loopButton.checked ? "white" : Theme.colors.icons
+                    color: loopButton.checked ? Theme.colors.accentText : Theme.colors.icons
                 }
 
                 ToolTip {

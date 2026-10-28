@@ -21,7 +21,7 @@ T.TextField {
 
     color: Theme.colors.textHc
     selectionColor: Theme.colors.accent
-    selectedTextColor: Theme.colors.textHc2
+    selectedTextColor: Theme.colors.accentText
     placeholderTextColor: Color.transparent(Theme.colors.text, StyleConstants.secondaryTextOpacity)
     verticalAlignment: TextInput.AlignVCenter
     opacity: enabled ? 1.0 : StyleConstants.disabledOpacity

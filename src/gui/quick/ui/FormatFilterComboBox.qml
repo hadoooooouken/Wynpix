@@ -35,8 +35,8 @@ T.AbstractButton {
     readonly property int popupRightGap: 10
     readonly property int controlRadius: 4
     readonly property int borderWidth: 2
-    // Text and glyph on the accent field (Qt::white in the widget).
-    readonly property color limitedContentColor: "white"
+    // Text and glyph on the accent field.
+    readonly property color limitedContentColor: Theme.colors.accentText
 
     readonly property int popupContentWidth: formatIndent + formatColumns * formatColumnWidth
                                              + (formatColumns - 1) * popupSpacing

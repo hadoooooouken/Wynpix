@@ -66,7 +66,7 @@ T.SearchField {
         font: control.font
         color: Theme.colors.textHc
         selectionColor: Theme.colors.accent
-        selectedTextColor: Theme.colors.textHc2
+        selectedTextColor: Theme.colors.accentText
         verticalAlignment: TextInput.AlignVCenter
 
         // The template draws no placeholder.

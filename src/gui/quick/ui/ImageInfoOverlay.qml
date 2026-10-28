@@ -109,6 +109,7 @@ Item {
                         activeFocusOnPress: false
                         color: Theme.colors.text
                         selectionColor: Theme.colors.accent
+                        selectedTextColor: Theme.colors.accentText
                         font: Theme.fonts.body
                     }
                 }
