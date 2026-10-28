@@ -198,7 +198,7 @@ private slots:
   }
 
   // Stepping to a frame past the decodable part used to step forever (the
-  // GUI thread hung); it now reports the frame and stops.
+  // GUI thread hung); it now reports the frame and fails.
   void steppingPastTruncatedEndReportsError() {
     const QString path = writeTruncatedThreeFrameGif();
     QVERIFY(!path.isEmpty());
@@ -206,7 +206,7 @@ private slots:
     QVERIFY(player.open(path, kGifFormat));
     player.pause();
     QSignalSpy errors(&player, &AnimationPlayer::playbackError);
-    QVERIFY(player.showFrame(kLastFrame));
+    QVERIFY(!player.showFrame(kLastFrame));
     QCOMPARE(errors.count(), 1);
     const auto error = errors.first().first().value<AnimationPlaybackError>();
     QCOMPARE(error.kind, AnimationPlaybackError::Kind::DecodeFrame);
@@ -255,9 +255,6 @@ private slots:
     AnimationPlayer player;
     QSignalSpy reversedSpy(&player, &AnimationPlayer::reversedChanged);
     player.setLoop(true);
-    player.setReversed(true);
-    QCOMPARE(reversedSpy.count(), 1);
-    QVERIFY(player.isReversed());
 
     std::vector<int> order;
     connect(&player, &AnimationPlayer::frameReady, this,
@@ -266,6 +263,11 @@ private slots:
             });
 
     QVERIFY(player.open(mThreeFrames, kGifFormat));
+    // Opening resets the direction unless the settings are remembered, so
+    // it is set on the open file.
+    player.setReversed(true);
+    QCOMPARE(reversedSpy.count(), 1);
+    QVERIFY(player.isReversed());
     // Start at frame 0, next step reversed loops to 2, then 1, 0, 2...
     QTRY_VERIFY_WITH_TIMEOUT(order.size() >= 4,
                              kFrameTimeoutMs * kThreeFrameCount);

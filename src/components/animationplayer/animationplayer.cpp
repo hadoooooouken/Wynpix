@@ -172,7 +172,9 @@ bool AnimationPlayer::showFrame(int index) {
   if (mMovie->currentFrameNumber() == index)
     return true;
   // With CacheAll, direct frame jumps are instantaneous in both directions.
-  if (!mMovie->jumpToFrame(index)) {
+  // A jump past the decodable part of a truncated file wraps to the first
+  // frame and still reports success, so the frame reached is checked.
+  if (!mMovie->jumpToFrame(index) || mMovie->currentFrameNumber() != index) {
     // Fallback for formats or states that do not support direct jumping:
     if (index < mMovie->currentFrameNumber() &&
         !mMovie->jumpToFrame(kFirstFrame)) {

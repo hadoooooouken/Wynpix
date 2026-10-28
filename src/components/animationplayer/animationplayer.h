@@ -97,7 +97,7 @@ public:
   [[nodiscard]] bool isFinished() const;
 
   // Shows frame index (0 .. frameCount() - 1); false when it is out of
-  // range or not open.
+  // range, not open, or cannot be decoded (reported by playbackError).
   bool showFrame(int index);
   void nextFrame();
   void prevFrame();
