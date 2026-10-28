@@ -34,6 +34,19 @@ function(kimageformats_add_plugin plugin)
     wynpix_suppress_crt_deprecation(${plugin})
 endfunction()
 
+# OpenEXR, OpenJPH, libjxl and LibRaw are prebuilt as Release-only static C++
+# libraries. The MSVC STL records /MD and _ITERATOR_DEBUG_LEVEL=0 in their
+# objects, so a Debug (/MDd) plugin fails to link with LNK2038. Debug builds
+# leave these plugins out.
+set(KIMAGEFORMATS_RELEASE_ONLY_PLUGINS exr jph jxl raw)
+set(KIMAGEFORMATS_RELEASE_ONLY_PLUGINS ${KIMAGEFORMATS_RELEASE_ONLY_PLUGINS} PARENT_SCOPE)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(KIF_BUILD_RELEASE_ONLY_PLUGINS OFF)
+    message(STATUS "Debug build: skipping kimg_exr, kimg_jph, kimg_jxl and kimg_raw (Release-only C++ dependencies)")
+else()
+    set(KIF_BUILD_RELEASE_ONLY_PLUGINS ON)
+endif()
+
 # Standalone plugins
 kimageformats_add_plugin(kimg_ani SOURCES ani.cpp)
 kimageformats_add_plugin(kimg_dds SOURCES dds.cpp scanlineconverter.cpp)
@@ -185,28 +198,32 @@ endif()
 set(OPENEXR_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/openexr/${WYNPIX_DEPS_INSTALL_NAME}")
 set(IMATH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/Imath/${WYNPIX_DEPS_INSTALL_NAME}")
 # ZSTD_INSTALL_DIR comes from src/CMakeLists.txt.
-kimageformats_add_plugin(kimg_exr SOURCES exr.cpp scanlineconverter.cpp)
-target_include_directories(kimg_exr SYSTEM PRIVATE 
-    "${OPENEXR_ROOT}/include"
-    "${OPENEXR_ROOT}/include/OpenEXR"
-    "${IMATH_ROOT}/include"
-    "${IMATH_ROOT}/include/Imath"
-)
-target_link_libraries(kimg_exr PRIVATE 
-    "${OPENEXR_ROOT}/lib/OpenEXR-3_5.lib"
-    "${OPENEXR_ROOT}/lib/OpenEXRCore-3_5.lib"
-    "${OPENEXR_ROOT}/lib/Iex-3_5.lib"
-    "${OPENEXR_ROOT}/lib/IlmThread-3_5.lib"
-    "${IMATH_ROOT}/lib/Imath-3_2.lib"
-    "${ZSTD_INSTALL_DIR}/lib/zstd.lib"
-)
+if(KIF_BUILD_RELEASE_ONLY_PLUGINS)
+    kimageformats_add_plugin(kimg_exr SOURCES exr.cpp scanlineconverter.cpp)
+    target_include_directories(kimg_exr SYSTEM PRIVATE
+        "${OPENEXR_ROOT}/include"
+        "${OPENEXR_ROOT}/include/OpenEXR"
+        "${IMATH_ROOT}/include"
+        "${IMATH_ROOT}/include/Imath"
+    )
+    target_link_libraries(kimg_exr PRIVATE
+        "${OPENEXR_ROOT}/lib/OpenEXR-3_5.lib"
+        "${OPENEXR_ROOT}/lib/OpenEXRCore-3_5.lib"
+        "${OPENEXR_ROOT}/lib/Iex-3_5.lib"
+        "${OPENEXR_ROOT}/lib/IlmThread-3_5.lib"
+        "${IMATH_ROOT}/lib/Imath-3_2.lib"
+        "${ZSTD_INSTALL_DIR}/lib/zstd.lib"
+    )
+endif()
 
 # LibRaw (Enabled with local build)
 set(LIBRAW_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/LibRaw")
-kimageformats_add_plugin(kimg_raw SOURCES raw.cpp scanlineconverter.cpp)
-target_include_directories(kimg_raw PRIVATE "${LIBRAW_ROOT}")
-target_link_libraries(kimg_raw PRIVATE "${LIBRAW_ROOT}/buildfiles/release-x86_64${WYNPIX_DEPS_SUFFIX}/libraw_static.lib")
-target_compile_definitions(kimg_raw PRIVATE LIBRAW_NODLL)
+if(KIF_BUILD_RELEASE_ONLY_PLUGINS)
+    kimageformats_add_plugin(kimg_raw SOURCES raw.cpp scanlineconverter.cpp)
+    target_include_directories(kimg_raw PRIVATE "${LIBRAW_ROOT}")
+    target_link_libraries(kimg_raw PRIVATE "${LIBRAW_ROOT}/buildfiles/release-x86_64${WYNPIX_DEPS_SUFFIX}/libraw_static.lib")
+    target_compile_definitions(kimg_raw PRIVATE LIBRAW_NODLL)
+endif()
 
 # JXR (Enabled with local build using jxrlib)
 set(JXR_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/jxrlib/${WYNPIX_DEPS_INSTALL_NAME}")
@@ -220,7 +237,9 @@ if(EXISTS "${JXR_ROOT}/lib/jxrglue.lib")
 endif()
 
 if(MSVC)
-    target_compile_options(kimg_exr PRIVATE /wd4996)
+    if(TARGET kimg_exr)
+        target_compile_options(kimg_exr PRIVATE /wd4996)
+    endif()
     if(TARGET kimg_jxr)
         target_compile_options(kimg_jxr PRIVATE /wd4828)
     endif()
@@ -267,7 +286,7 @@ set(BROTLI_DEC_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WY
 set(BROTLI_ENC_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/third_party/brotli/Release/brotlienc.lib")
 set(HWY_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/libjxl/${WYNPIX_DEPS_BUILD_NAME}/third_party/highway/Release/hwy.lib")
 
-if(EXISTS "${JXL_LIBRARY}")
+if(KIF_BUILD_RELEASE_ONLY_PLUGINS AND EXISTS "${JXL_LIBRARY}")
     kimageformats_add_plugin(kimg_jxl SOURCES jxl.cpp microexif.cpp)
     target_include_directories(kimg_jxl PRIVATE ${JXL_INCLUDE_DIR} ${JXL_BUILD_INCLUDE_DIR} "${PROJECT_SOURCE_DIR}/src")
     target_link_libraries(kimg_jxl PRIVATE
@@ -293,7 +312,7 @@ endif()
 
 # OpenJPH (Enabled with local build)
 set(OPENJPH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/OpenJPH/${WYNPIX_DEPS_INSTALL_NAME}")
-if(EXISTS "${OPENJPH_ROOT}/lib/openjph.0.32.lib")
+if(KIF_BUILD_RELEASE_ONLY_PLUGINS AND EXISTS "${OPENJPH_ROOT}/lib/openjph.0.32.lib")
     kimageformats_add_plugin(kimg_jph SOURCES jph.cpp)
     target_include_directories(kimg_jph SYSTEM PRIVATE "${OPENJPH_ROOT}/include")
     target_link_libraries(kimg_jph PRIVATE "${OPENJPH_ROOT}/lib/openjph.0.32.lib")

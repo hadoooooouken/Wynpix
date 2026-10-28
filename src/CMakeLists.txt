@@ -452,6 +452,9 @@ if(WIN32)
     )
     # Copy each plugin only if its target was actually built
     set(_kimg_required_plugins ani dds ff hdr iff pcx pic pfm psd pxr qoi ras rgb sct tim tga xcf exr raw kra ora cbz 7z rar jp2 jph)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        list(REMOVE_ITEM _kimg_required_plugins ${KIMAGEFORMATS_RELEASE_ONLY_PLUGINS})
+    endif()
     foreach(_plugin ${_kimg_required_plugins})
         if(TARGET kimg_${_plugin})
             add_custom_command(TARGET wynpix POST_BUILD
