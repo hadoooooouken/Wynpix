@@ -184,9 +184,6 @@ app uses 0.2 GB. Without the thumbnail budget, the first open peaked at
   - `core.cpp` is not unit-tested itself; logic moved out of it into
     components is tested there.
 - **`check-isa.ps1` gaps:**
-  - The dependencies rebuilt for SSE2 (`kimg_avif`, `kimg_jxl`, `kimg_heif`,
-    `kimg_ff`, `jpeg62`, `zlib1`, `deflate`, `zstd`) are allowlisted as whole
-    files, so one built for AVX2 by mistake passes.
   - A failing `dumpbin` reports `[OK]`: its exit code and the number of
     parsed lines are not checked.
   - The mnemonic regex also matches mnemonics made of hex letters (`add`,
