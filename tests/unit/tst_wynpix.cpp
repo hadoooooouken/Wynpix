@@ -6,7 +6,7 @@
 #include "testsuites.h"
 
 // Qt Test suite for UI-independent wynpix components. Test cases are added
-// together with the components they cover (docs/QML_MIGRATION_PLAN.md).
+// together with the components they cover.
 class WynpixTests : public QObject {
   Q_OBJECT
 

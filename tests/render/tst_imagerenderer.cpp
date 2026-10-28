@@ -1019,7 +1019,7 @@ private slots:
   }
 
   //----------------------------------------------------------------------------
-  // S1.2: colour adjustments, sharpening, exact downsample.
+  // Colour adjustments, sharpening, exact downsample.
 
   void colorAdjustmentsMatchReference_data() {
     QTest::addColumn<ImageKind>("kind");

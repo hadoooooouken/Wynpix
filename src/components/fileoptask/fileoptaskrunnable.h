@@ -77,7 +77,7 @@ signals:
 // waits for their results while polling the cancellation flag. It never uses
 // Qt::BlockingQueuedConnection: after the GUI event loop has ended,
 // ~FileOpController() waits for this task, and a blocking call the GUI thread
-// never runs would hang the exit (docs/QML_MIGRATION_AUDIT.md, P-1). On
+// never runs would hang the exit. On
 // cancellation the worker stops waiting, and a call still queued skips its
 // work. Plain filesystem calls (FileOperations::copyFileTo(),
 // FileOperations::removeFile()) don't touch DirectoryManager and run directly

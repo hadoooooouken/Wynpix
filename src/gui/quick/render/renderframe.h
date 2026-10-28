@@ -81,7 +81,7 @@ enum class Projection {
 Q_ENUM_NS(Projection)
 } // namespace RenderEnums
 
-// Where the image is drawn, in the units of ViewTransform (S0.4).
+// Where the image is drawn, in the units of ViewTransform.
 struct ImagePlacement {
   // Top-left corner of the image in item coordinates (logical pixels).
   QPointF position;

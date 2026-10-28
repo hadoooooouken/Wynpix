@@ -15,7 +15,7 @@ inline constexpr int kStandardIconSizePx = 20;
 // styles they stand for, at desktop sizes: body is the Windows system font
 // size (9 pt, 12 px) that Windows 10 and the Win32 surfaces of Windows 11
 // use; the Fluent 14 px body read too large and thin at 100 % scaling
-// (docs/TYPOGRAPHY_PLAN.md). Body is the application font. Used by the
+// (docs/ARCHITECTURE.md). Body is the application font. Used by the
 // Qt Quick Theme bridge.
 struct Typography {
   QFont caption;    // notes, hints, secondary info lines

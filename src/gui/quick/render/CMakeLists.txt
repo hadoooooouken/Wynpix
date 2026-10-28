@@ -1,6 +1,5 @@
 ## QML MODULE wynpix.render
-# GPU image rendering for the Qt Quick UI (Phase 1 of
-# docs/QML_MIGRATION_PLAN.md): ImageRenderItem (QQuickRhiItem) and its
+# GPU image rendering for the Qt Quick UI (docs/ARCHITECTURE.md): ImageRenderItem (QQuickRhiItem) and its
 # render-thread ImageRenderer (with RenderDevice and ImageLayer), drawing
 # through QRhi with the RHI shaders in res/shaders/rhi (tile drawing with
 # sharpening and colour adjustments, the exact-ratio box downsample, the

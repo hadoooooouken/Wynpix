@@ -1,6 +1,6 @@
 ## QML MODULE wynpix.ui
 # Application shell of the Qt Quick UI. QML files here are presentation only;
-# decisions stay in C++ components (see docs/QML_MIGRATION_PLAN.md).
+# decisions stay in C++ components (see docs/ARCHITECTURE.md).
 
 qt_add_library(wynpix_ui STATIC)
 
