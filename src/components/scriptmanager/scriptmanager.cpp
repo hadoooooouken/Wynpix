@@ -26,7 +26,7 @@ ScriptManager *ScriptManager::getInstance() {
     return scriptManager;
 }
 
-void ScriptManager::runScript(const QString &scriptName, std::shared_ptr<Image> img) {
+void ScriptManager::runScript(const QString &scriptName, const QString &filePath) {
     if(scripts.contains(scriptName)) {
         Script script = scripts.value(scriptName);
         if(script.command.trimmed().isEmpty()) {
@@ -42,7 +42,7 @@ void ScriptManager::runScript(const QString &scriptName, std::shared_ptr<Image> 
             emit error(errorString);
             return;
         }
-        processArguments(arguments, img);
+        processArguments(arguments, filePath);
         QString program = arguments.takeAt(0);
 
         if(script.blocking) {
@@ -125,10 +125,10 @@ void ScriptManager::runScript(const QString &scriptName, std::shared_ptr<Image> 
     }
 }
 
-void ScriptManager::processArguments(QStringList &cmd, std::shared_ptr<Image> img) {
+void ScriptManager::processArguments(QStringList &cmd, const QString &filePath) {
     for (auto &arg : cmd) {
         if (arg.contains("%file%")) {
-            arg.replace("%file%", img->filePath());
+            arg.replace("%file%", filePath);
         }
         // Windows always uses backslashes
         arg.replace("/", "\\");

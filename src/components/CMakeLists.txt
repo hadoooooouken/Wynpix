@@ -48,7 +48,7 @@ target_sources(wynpix PRIVATE
 
     mimepayload/mimepayloadmanager.cpp
 
-    sdrcopy/sdrcopypreparer.cpp
+    imagepreparer/imagepreparer.cpp
 
     comfymetadata/comfyksamplerparser.cpp
     comfymetadata/pngtextchunkreader.cpp

@@ -48,6 +48,11 @@ struct ImageEditRequest {
     EditSaving saving = EditSaving::None;
 };
 
+// Called with each image of an action and the path it is at; image is null
+// when it could not be decoded.
+using ImageAction =
+    std::function<void(const QString &path, const std::shared_ptr<Image> &image)>;
+
 struct State {
     bool hasActiveImage = false;
     bool delayModel = false;
@@ -132,26 +137,48 @@ private:
                                            const QString &newPath);
     [[nodiscard]] ImageSaveResult saveFile(const QString &filePath);
 
-    std::shared_ptr<ImageStatic> getEditableImage(const QString &filePath);
     QList<QString> currentSelection();
+    // The decoded image at path that Core already holds: the cached one, or
+    // the shown one before the folder scan has registered it
+    // (modelDelayLoad()).
+    [[nodiscard]] std::shared_ptr<Image> heldImage(const QString &path);
 
-    // Runs action at once when the cached images at paths have the SDR copy
-    // getImage() returns, otherwise once SdrCopyPreparer has built them. The
-    // selection can change meanwhile, so action works on paths it captured.
-    void withSdrCopies(const QList<QString> &paths, std::function<void()> action);
+    // An action over images (withPreparedImages()) and how far it got.
+    struct ImageActionRun {
+        QList<QString> paths;
+        ImageAction onImage;
+        std::function<void()> onFinished;
+        qsizetype next = 0;
+    };
+    // Calls onImage for each path in turn with its image decoded and its SDR
+    // copy built, then onFinished. A held image that is ready is passed at
+    // once; any other is readied by ImagePreparer first, so an action over a
+    // selection holds one image that is not cached at a time. The selection
+    // can change meanwhile, so callers pass the paths.
+    void withPreparedImages(QList<QString> paths, ImageAction onImage,
+                            std::function<void()> onFinished = {});
+    // loaded: the image ImagePreparer readied for the next path, if any.
+    void continueImageAction(const std::shared_ptr<ImageActionRun> &run,
+                             std::shared_ptr<Image> loaded);
     void editImages(const QList<QString> &paths, const ImageEditRequest &request);
-    void applyEdits(const QList<QString> &paths, const ImageEditRequest &request);
+    // Returns false when the image could not be edited.
+    [[nodiscard]] bool applyEdit(const QString &path,
+                                 const std::shared_ptr<Image> &image,
+                                 const ImageEditRequest &request);
     [[nodiscard]] ImageEditRequest orientationEdit(
         QString action, std::function<QImage(std::shared_ptr<const QImage>)> edit);
     [[nodiscard]] ImageEditRequest resizeEdit(const ResizeRequest &request) const;
-    void startAiResize(const QString &path, const ResizeRequest &request);
+    void startAiResize(const QString &path, const std::shared_ptr<Image> &image,
+                       const ResizeRequest &request);
     void applyColorAdjustmentsTo(const QString &path,
+                                 const std::shared_ptr<Image> &image,
                                  const ColorAdjustments &adjustments);
-    void saveImageAs(const QString &path, const QString &destPath);
+    void saveImageAs(const QString &path, const std::shared_ptr<Image> &image,
+                     const QString &destPath);
     void discardEditsOf(const QString &path);
-    void copyImageToClipboard(const QString &path);
-    void setImageAsWallpaper(const QString &path);
-    void printImage(const QString &path);
+    void copyImageToClipboard(const std::shared_ptr<Image> &image);
+    void setImageAsWallpaper(const std::shared_ptr<Image> &image);
+    void printImage(const std::shared_ptr<Image> &image);
 
     // True when the save overlay should be offered for the image.
     [[nodiscard]] bool needsSaveOverlay(const std::shared_ptr<Image> &img) const;
@@ -273,7 +300,7 @@ private:
     std::unique_ptr<class WallpaperController> wallpaperController;
     std::unique_ptr<class MimePayloadManager> mimePayloadManager;
     std::unique_ptr<class FileOpController> fileOpController;
-    std::unique_ptr<class SdrCopyPreparer> sdrCopyPreparer;
+    std::unique_ptr<class ImagePreparer> imagePreparer;
     int aiResizeGeneration = 0;
     std::optional<AiResizeOperation> activeAiResizeOperation;
     bool aiResizeBusyUiActive = false;

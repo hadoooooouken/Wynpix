@@ -44,10 +44,12 @@ Principles:
 ## 2. Rules
 
 - **Threads:** decoding, scaling, LUT generation and thumbnailing stay on
-  their pools. No `QQmlEngine` access from worker threads. The SDR copy of
-  an HDR image that CPU actions use (copy to the clipboard, save, print,
-  wallpaper, edits, AI resize) is built on the worker of `SdrCopyPreparer`;
-  `Core::withSdrCopies()` runs the action once it is ready.
+  their pools. No `QQmlEngine` access from worker threads. CPU actions on
+  images (copy to the clipboard, save, print, wallpaper, edits, resize, AI
+  resize) get their images from `Core::withPreparedImages()`: the worker of
+  `ImagePreparer` decodes an image that is not cached and builds the SDR
+  copy of an HDR image, one image of the selection at a time, and the action
+  continues on the GUI thread.
 - **Memory:** two budgets bound decoded pixels. Both are sized for 16 GiB
   of RAM and scaled to the RAM of the machine (`scaledToInstalledMemory`,
   `utils/decodebudget.h`); large HDR and EXR folders are expected on
@@ -171,13 +173,6 @@ app uses 0.2 GB. Without the thumbnail budget, the first open peaked at
 
 ## 7. Open Issues
 
-- **Synchronous decoding in folder view actions.** Rotate, flip, copy to the
-  clipboard, print, wallpaper and Save as decode each selected image that is
-  not cached on the GUI thread (`DirectoryModel::getImage()` →
-  `Loader::load()`), for any format; an HDR image is also tone-mapped there.
-  A rotation of a large selection blocks the UI until every file is decoded,
-  edited and saved. Fix direction: load the selection one image at a time on
-  the loader pool and continue each action with a queued call.
 - **Untested components.** `FileOpController` / `FileOperationTask`,
   `ColdStartWindowController` and `core.cpp` are in no test target.
 - **`check-isa.ps1` gaps:**

@@ -15,7 +15,7 @@ class ScriptManager : public QObject {
 public:
     static ScriptManager* getInstance();
     ~ScriptManager();
-    void runScript(const QString &scriptName, std::shared_ptr<Image> img);
+    void runScript(const QString &scriptName, const QString &filePath);
     bool scriptExists(QString scriptName);
     void readScripts();
     void saveScripts();
@@ -34,7 +34,7 @@ private:
     static constexpr int kBlockingScriptTimeoutMs = 10000;
     QMap<QString, Script> scripts; // <name, script>
     bool blockingScriptActive = false;
-    void processArguments(QStringList &cmd, std::shared_ptr<Image> img);
+    void processArguments(QStringList &cmd, const QString &filePath);
 
 };
 

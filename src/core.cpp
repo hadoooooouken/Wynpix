@@ -25,7 +25,7 @@
 #include "gui/controllers/coldstartwindowcontroller.h"
 #include "components/wallpaper/wallpapercontroller.h"
 #include "components/mimepayload/mimepayloadmanager.h"
-#include "components/sdrcopy/sdrcopypreparer.h"
+#include "components/imagepreparer/imagepreparer.h"
 #include <QColorSpace>
 #include <QCursor>
 #include <tchar.h>
@@ -270,8 +270,8 @@ Core::Core(const UiPorts &ports)
                 tr("Failed to clean up temporary image-transfer data: %1")
                     .arg(QDir::toNativeSeparators(path)));
           });
-  sdrCopyPreparer = std::make_unique<SdrCopyPreparer>(this);
-  connect(sdrCopyPreparer.get(), &SdrCopyPreparer::busyChanged, this,
+  imagePreparer = std::make_unique<ImagePreparer>(this);
+  connect(imagePreparer.get(), &ImagePreparer::busyChanged, this,
           [](bool busy) {
             if (busy)
               QGuiApplication::setOverrideCursor(Qt::BusyCursor);
@@ -1213,13 +1213,15 @@ void Core::toggleFolderView() {
 void Core::copyFileClipboard() {
   if (model->isEmpty())
     return;
-  const QString path = selectedPath();
-  withSdrCopies({path}, [this, path]() { copyImageToClipboard(path); });
+  withPreparedImages({selectedPath()},
+                     [this](const QString &, const std::shared_ptr<Image> &image) {
+                       copyImageToClipboard(image);
+                     });
 }
 
-void Core::copyImageToClipboard(const QString &path) {
+void Core::copyImageToClipboard(const std::shared_ptr<Image> &image) {
   MimePayloadResult payloadResult = mimePayloadManager->createPayload(
-      {model->getImage(path), MimePayloadTarget::Clipboard});
+      {image, MimePayloadTarget::Clipboard});
   if (!payloadResult.succeeded()) {
     ui.notifications.showError(mimePayloadFailureMessage(payloadResult.error));
     return;
@@ -1331,10 +1333,13 @@ void Core::onDraggedOut(QList<QString> paths) {
   if (paths.isEmpty())
     return;
   QMimeData *mimeData;
-  // single selection, image
-  if (paths.count() == 1 && model->containsFile(paths.constFirst())) {
+  // single selection, image. An image that is not held has no edits, so its
+  // file is dragged as it is, without decoding it.
+  const std::shared_ptr<Image> image =
+      paths.count() == 1 ? heldImage(paths.constFirst()) : nullptr;
+  if (image && model->containsFile(paths.constFirst())) {
     MimePayloadResult payloadResult = mimePayloadManager->createPayload(
-        {model->getImage(paths.constLast()), MimePayloadTarget::Drop});
+        {image, MimePayloadTarget::Drop});
     if (!payloadResult.succeeded()) {
       ui.notifications.showError(mimePayloadFailureMessage(payloadResult.error));
       return;
@@ -1613,15 +1618,19 @@ void Core::showResizeDialog() {
     qWarning() << "Core::showResizeDialog: ignored, the directory model is empty";
     return;
   }
-  auto img = model->getImage(selectedPath());
-  if (!img) {
-    qWarning() << "Core::showResizeDialog: ignored, no image for the selected path"
-               << selectedPath();
-    return;
-  }
-  const std::optional<ResizeRequest> request = ui.dialogs.requestResize(img->size());
-  if (request)
-    resize(*request);
+  withPreparedImages(
+      {selectedPath()},
+      [this](const QString &path, const std::shared_ptr<Image> &image) {
+        if (!image) {
+          qWarning() << "Core::showResizeDialog: ignored, no image for the selected path"
+                     << path;
+          return;
+        }
+        const std::optional<ResizeRequest> request =
+            ui.dialogs.requestResize(image->size());
+        if (request)
+          resize(*request);
+      });
 }
 
 void Core::showBatchConverter() {
@@ -1675,36 +1684,61 @@ void Core::openBatchConverter() {
 // ---------------------------------------------------------------- image
 // operations
 
-std::shared_ptr<ImageStatic> Core::getEditableImage(const QString &filePath) {
-  return std::dynamic_pointer_cast<ImageStatic>(model->getImage(filePath));
+std::shared_ptr<Image> Core::heldImage(const QString &path) {
+  if (model->isLoaded(path))
+    return model->getImage(path);
+  if (state.currentImg && path == state.currentFilePath)
+    return state.currentImg;
+  return nullptr;
 }
 
-// The SDR copy of a cached HDR image is built on SdrCopyPreparer's worker, not
-// here; an image not cached yet is decoded and converted by the action itself.
-void Core::withSdrCopies(const QList<QString> &paths,
-                         std::function<void()> action) {
-  QList<std::shared_ptr<Image>> images;
-  for (const QString &path : paths) {
-    if (model->isLoaded(path))
-      images.append(model->getImage(path));
+void Core::withPreparedImages(QList<QString> paths, ImageAction onImage,
+                              std::function<void()> onFinished) {
+  auto run = std::make_shared<ImageActionRun>(
+      ImageActionRun{.paths = std::move(paths),
+                     .onImage = std::move(onImage),
+                     .onFinished = std::move(onFinished)});
+  continueImageAction(run, nullptr);
+}
+
+void Core::continueImageAction(const std::shared_ptr<ImageActionRun> &run,
+                               std::shared_ptr<Image> loaded) {
+  while (run->next < run->paths.size()) {
+    const QString path = run->paths.at(run->next);
+    // The held image is the one the viewer shows and edits go to; it can
+    // have been cached while ImagePreparer decoded loaded.
+    std::shared_ptr<Image> image = heldImage(path);
+    if (!image)
+      image = std::move(loaded);
+    loaded.reset();
+    if (!ImagePreparer::isReady(image)) {
+      imagePreparer->prepare(
+          path, std::move(image),
+          [this, run, path](std::shared_ptr<Image> prepared) {
+            if (!model->containsFile(path) && path != state.currentFilePath) {
+              qWarning() << "Core: an image action skipped" << path
+                         << "- it left the folder while it was prepared";
+              ++run->next;
+              continueImageAction(run, nullptr);
+              return;
+            }
+            if (!prepared) {
+              run->onImage(path, nullptr);
+              ++run->next;
+              continueImageAction(run, nullptr);
+              return;
+            }
+            // Checked again: the image can have been cached, or the tone
+            // mapping settings changed, meanwhile.
+            continueImageAction(run, std::move(prepared));
+          });
+      return;
+    }
+    run->onImage(path, image);
+    ++run->next;
   }
-  if (SdrCopyPreparer::isReady(images)) {
-    action();
-    return;
-  }
-  sdrCopyPreparer->prepare(
-      std::move(images), [this, paths, action = std::move(action)]() {
-        const bool filesKept = std::ranges::all_of(
-            paths, [this](const QString &path) { return model->containsFile(path); });
-        if (!filesKept) {
-          qWarning() << "Core: an image action was dropped, its files left the"
-                        " folder while their SDR copies were built";
-          return;
-        }
-        // Checked again: the tone mapping settings or the cached images can
-        // have changed meanwhile.
-        withSdrCopies(paths, action);
-      });
+  if (run->onFinished)
+    run->onFinished();
 }
 
 void Core::editImages(const QList<QString> &paths,
@@ -1717,36 +1751,44 @@ void Core::editImages(const QList<QString> &paths,
           tr("Perform action \"") + request.action + "\"? \n\n" +
               tr("Changes will be saved immediately.")}).accepted)
     return;
-  withSdrCopies(paths, [this, paths, request]() { applyEdits(paths, request); });
+  auto allEdited = std::make_shared<bool>(true);
+  withPreparedImages(
+      paths,
+      [this, request, allEdited](const QString &path,
+                                 const std::shared_ptr<Image> &image) {
+        if (!applyEdit(path, image, request))
+          *allEdited = false;
+      },
+      [this, action = request.action, allEdited]() {
+        if (!*allEdited)
+          ui.notifications.showError(
+              tr("%1 failed: the image could not be edited.").arg(action));
+        updateInfoString();
+      });
 }
 
-// An image whose pixels are unavailable (for example a failed HDR-to-SDR
-// conversion) or whose edit produced no image is left unchanged and not saved.
-void Core::applyEdits(const QList<QString> &paths,
-                      const ImageEditRequest &request) {
-  bool allEdited = true;
-  for (const auto &path : paths) {
-    auto img = getEditableImage(path);
-    if (!img)
-      continue;
-    const std::shared_ptr<const QImage> source = img->getImage();
-    if (!source || source->isNull() ||
-        !img->setEditedImage(std::make_unique<const QImage>(request.edit(source)),
-                             request.kind)) {
-      allEdited = false;
-      continue;
-    }
-    model->updateImage(path, std::static_pointer_cast<Image>(img));
-    if (request.saving != EditSaving::None) {
-      (void)saveFile(path);
-      if (state.currentFilePath != path)
-        model->unload(path);
-    }
+// An image whose pixels are unavailable (it could not be decoded, or its
+// HDR-to-SDR conversion failed) or whose edit produced no image is left
+// unchanged and not saved. Images that are not static are not edited.
+bool Core::applyEdit(const QString &path, const std::shared_ptr<Image> &image,
+                     const ImageEditRequest &request) {
+  if (!image)
+    return false;
+  const auto img = std::dynamic_pointer_cast<ImageStatic>(image);
+  if (!img)
+    return true;
+  const std::shared_ptr<const QImage> source = img->getImage();
+  if (!source || source->isNull() ||
+      !img->setEditedImage(std::make_unique<const QImage>(request.edit(source)),
+                           request.kind))
+    return false;
+  model->updateImage(path, image);
+  if (request.saving != EditSaving::None) {
+    (void)saveFile(path);
+    if (state.currentFilePath != path)
+      model->unload(path);
   }
-  if (!allEdited)
-    ui.notifications.showError(
-        tr("%1 failed: the image could not be edited.").arg(request.action));
-  updateInfoString();
+  return true;
 }
 
 // The folder view saves rotations and flips at once.
@@ -1810,20 +1852,23 @@ void Core::resize(const ResizeRequest &resizeRequest) {
     return;
   }
 
-  const QString path = selection.constFirst();
-  withSdrCopies({path}, [this, path, resizeRequest]() {
-    startAiResize(path, resizeRequest);
-  });
+  withPreparedImages(
+      {selection.constFirst()},
+      [this, resizeRequest](const QString &path,
+                            const std::shared_ptr<Image> &image) {
+        startAiResize(path, image, resizeRequest);
+      });
 }
 
-void Core::startAiResize(const QString &path, const ResizeRequest &resizeRequest) {
-  // Another AI resize can have started while the SDR copy was built.
+void Core::startAiResize(const QString &path, const std::shared_ptr<Image> &image,
+                         const ResizeRequest &resizeRequest) {
+  // Another AI resize can have started while the image was prepared.
   if (activeAiResizeOperation.has_value()) {
     ui.notifications.showAiUpscale(tr("AI resize is already running."));
     return;
   }
 
-  auto img = getEditableImage(path);
+  const auto img = std::dynamic_pointer_cast<ImageStatic>(image);
   if (!img) {
     ui.notifications.showError(tr("Could not resize image."));
     return;
@@ -1842,7 +1887,11 @@ void Core::startAiResize(const QString &path, const ResizeRequest &resizeRequest
   // pass in that case, just do the regular (much cheaper) CPU resize.
   const QSize size = resizeRequest.size;
   if (size.width() <= source->width() && size.height() <= source->height()) {
-    editImages({path}, resizeEdit(resizeRequest));
+    const ImageEditRequest edit = resizeEdit(resizeRequest);
+    if (!applyEdit(path, image, edit))
+      ui.notifications.showError(
+          tr("%1 failed: the image could not be edited.").arg(edit.action));
+    updateInfoString();
     return;
   }
 
@@ -1854,6 +1903,10 @@ void Core::startAiResize(const QString &path, const ResizeRequest &resizeRequest
   request.sourceImage = source;
   request.generation = ++aiResizeGeneration;
 
+  // The result is applied to the cached image, so an image of the folder view
+  // selection that is not cached yet is cached now.
+  if (!heldImage(path))
+    model->updateImage(path, image);
   activeAiResizeOperation = AiResizeOperation{
       request.generation, path, img->contentRevision(), img};
   QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1898,14 +1951,9 @@ void Core::onAiResizeFinished(int generation, QString path, QImage image, bool s
     return;
   }
 
-  auto img = getEditableImage(path);
-  if (!img) {
-    ui.notifications.showError(tr("Could not apply AI resize."));
-    return;
-  }
-
-  const std::shared_ptr<ImageStatic> sourceImage = operation.sourceImage.lock();
-  if (!sourceImage || img != sourceImage ||
+  // An image no longer held was unloaded or reloaded meanwhile.
+  const std::shared_ptr<ImageStatic> img = operation.sourceImage.lock();
+  if (!img || heldImage(path) != img ||
       img->contentRevision() != operation.sourceRevision) {
     ui.notifications.showWarning(tr("AI resize finished, but the image has changed."));
     return;
@@ -1949,15 +1997,17 @@ void Core::cropAndSave(QRect rect) {
 void Core::applyColorAdjustments(const ColorAdjustments &adjustments) {
   if (model->isEmpty() || !adjustments.hasAdjustments())
     return;
-  const QString path = state.currentFilePath;
-  withSdrCopies({path}, [this, path, adjustments]() {
-    applyColorAdjustmentsTo(path, adjustments);
-  });
+  withPreparedImages({state.currentFilePath},
+                     [this, adjustments](const QString &path,
+                                         const std::shared_ptr<Image> &image) {
+                       applyColorAdjustmentsTo(path, image, adjustments);
+                     });
 }
 
 void Core::applyColorAdjustmentsTo(const QString &path,
+                                   const std::shared_ptr<Image> &image,
                                    const ColorAdjustments &adjustments) {
-  auto img = getEditableImage(path);
+  const auto img = std::dynamic_pointer_cast<ImageStatic>(image);
   if (!img)
     return;
 
@@ -1969,7 +2019,7 @@ void Core::applyColorAdjustmentsTo(const QString &path,
 
   img->setEditedImage(std::make_unique<const QImage>(adjusted),
                       ImageEditKind::Content);
-  model->updateImage(path, std::static_pointer_cast<Image>(img));
+  model->updateImage(path, image);
   updateInfoString();
 }
 
@@ -2003,12 +2053,28 @@ void Core::saveCurrentFile() { saveCurrentFileAs(selectedPath()); }
 void Core::saveCurrentFileAs(QString destPath) {
   if (model->isEmpty())
     return;
-  const QString path = selectedPath();
-  withSdrCopies({path}, [this, path, destPath]() { saveImageAs(path, destPath); });
+  withPreparedImages({selectedPath()},
+                     [this, destPath](const QString &path,
+                                      const std::shared_ptr<Image> &image) {
+                       saveImageAs(path, image, destPath);
+                     });
 }
 
-void Core::saveImageAs(const QString &path, const QString &destPath) {
+void Core::saveImageAs(const QString &path, const std::shared_ptr<Image> &image,
+                       const QString &destPath) {
+  if (!image) {
+    ui.notifications.showError(
+        imageSaveFailureMessage({ImageSaveError::SourceUnavailable}));
+    return;
+  }
+  // DirectoryModel saves cached images; an image of the folder view
+  // selection that is not cached is cached for the save only.
+  const bool cachedForSave = !heldImage(path);
+  if (cachedForSave)
+    model->updateImage(path, image);
   const ImageSaveResult saveResult = saveFile(path, destPath);
+  if (cachedForSave && state.currentFilePath != path)
+    model->unload(path);
   if (saveResult.succeeded()) {
     if (saveResult.retainedBackupPath.isEmpty())
       ui.notifications.showSuccess(tr("File saved"));
@@ -2022,8 +2088,9 @@ void Core::discardEdits() {
   discardEditsOf(selectedPath());
 }
 
+// Only a held image can have edits.
 void Core::discardEditsOf(const QString &path) {
-  std::shared_ptr<Image> img = model->getImage(path);
+  std::shared_ptr<Image> img = heldImage(path);
   if (img && img->type() == STATIC) {
     auto imgStatic = dynamic_cast<ImageStatic *>(img.get());
     imgStatic->discardEditedImage();
@@ -2085,18 +2152,19 @@ void Core::showRenameDialog() {
 void Core::runScript(const QString &scriptName) {
   if (model->isEmpty())
     return;
-  scriptManager->runScript(scriptName, model->getImage(selectedPath()));
+  scriptManager->runScript(scriptName, selectedPath());
 }
 
 void Core::setWallpaper() {
   if (model->isEmpty() || selectedPath().isEmpty())
     return;
-  const QString path = selectedPath();
-  withSdrCopies({path}, [this, path]() { setImageAsWallpaper(path); });
+  withPreparedImages({selectedPath()},
+                     [this](const QString &, const std::shared_ptr<Image> &image) {
+                       setImageAsWallpaper(image);
+                     });
 }
 
-void Core::setImageAsWallpaper(const QString &path) {
-  auto img = model->getImage(path);
+void Core::setImageAsWallpaper(const std::shared_ptr<Image> &img) {
   if (!img || img->type() != DocumentType::STATIC) {
     ui.notifications.showMessage(tr("Set wallpaper: file not supported"));
     return;
@@ -2120,12 +2188,13 @@ void Core::setImageAsWallpaper(const QString &path) {
 void Core::print() {
   if (model->isEmpty())
     return;
-  const QString path = selectedPath();
-  withSdrCopies({path}, [this, path]() { printImage(path); });
+  withPreparedImages({selectedPath()},
+                     [this](const QString &, const std::shared_ptr<Image> &image) {
+                       printImage(image);
+                     });
 }
 
-void Core::printImage(const QString &path) {
-  auto img = model->getImage(path);
+void Core::printImage(const std::shared_ptr<Image> &img) {
   if (!img) {
     ui.notifications.showError(tr("Could not open image"));
     return;

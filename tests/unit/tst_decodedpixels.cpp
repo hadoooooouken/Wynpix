@@ -194,7 +194,7 @@ private slots:
   }
 
   // The viewer and the cache read the pixels on the GUI thread while
-  // SdrCopyPreparer tone-maps them on its worker.
+  // ImagePreparer tone-maps them on its worker.
   void aConversionDoesNotBlockTheOtherReaders() {
     HeldConversion conversion;
     const std::shared_ptr<const QImage> hdr = hdrImage();
