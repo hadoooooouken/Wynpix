@@ -3,7 +3,6 @@
 #include <QTest>
 
 #include "gui/accentcontrast.h"
-#include "gui/dialogsurfaces.h"
 #include "gui/neutralfills.h"
 #include "gui/selectionfills.h"
 #include "gui/quick/adapters/themesnapshotbuilder.h"
@@ -75,33 +74,32 @@ constexpr qreal kEqualContrastLuminance = 0.179;
 constexpr qreal kWhiteMaxLuminance = 0.184;
 } // namespace
 
-// The control metrics and dialog surfaces of the Qt Quick Theme bridge, and
-// the theme snapshot built from them.
+// The control metrics and colours of the Qt Quick Theme bridge, and the
+// theme snapshot built from them.
 class UiMetricsTests : public QObject {
   Q_OBJECT
 
 private slots:
-  void darkDialogSurfacesAreLighterTints() {
-    const DialogSurfaces::Colors colors = DialogSurfaces::colorsFor(true);
-    // The values the stylesheet used for the dark scheme.
-    QCOMPARE(colors.window, grey(37));
-    QCOMPARE(colors.text, grey(220));
-    QCOMPARE(colors.tintedLc2, grey(43));
-    QCOMPARE(colors.tintedLc, grey(51));
-    QCOMPARE(colors.tinted, grey(57));
-    QCOMPARE(colors.tintedHc, grey(72));
-    QCOMPARE(colors.tintedHc2, grey(87));
+  void dialogSurfacesKeepTheSettingsWindowColours_data() {
+    QTest::addColumn<int>("scheme");
+    QTest::addColumn<int>("window");
+    QTest::addColumn<int>("card");
+    // The values the stylesheet used for the settings window and its
+    // groups: cards are lighter on the dark window, darker on the light one.
+    QTest::newRow("dark") << static_cast<int>(COLORS_DARK) << 37 << 43;
+    QTest::newRow("light") << static_cast<int>(COLORS_LIGHT) << 245 << 239;
   }
 
-  void lightDialogSurfacesAreDarkerTints() {
-    const DialogSurfaces::Colors colors = DialogSurfaces::colorsFor(false);
-    QCOMPARE(colors.window, grey(245));
-    QCOMPARE(colors.text, grey(30));
-    QCOMPARE(colors.tintedLc2, grey(239));
-    QCOMPARE(colors.tintedLc, grey(231));
-    QCOMPARE(colors.tinted, grey(225));
-    QCOMPARE(colors.tintedHc, grey(210));
-    QCOMPARE(colors.tintedHc2, grey(195));
+  void dialogSurfacesKeepTheSettingsWindowColours() {
+    QFETCH(int, scheme);
+    QFETCH(int, window);
+    QFETCH(int, card);
+    const ThemeSnapshot snapshot = buildThemeSnapshot(
+        ThemeStore::colorScheme(static_cast<ColorSchemes>(scheme)),
+        fontWithPointSize(kDefaultFontPointSize), QString());
+
+    QCOMPARE(snapshot.colors.surfaceWindow, grey(window));
+    QCOMPARE(snapshot.colors.surfaceCard, grey(card));
   }
 
   void defaultSystemFontGivesTheDesktopRamp() {
@@ -423,14 +421,14 @@ private slots:
     }
   }
 
-  void snapshotCarriesTheSchemeMetricsAndSurfaces_data() {
+  void snapshotCarriesTheSchemeAndMetrics_data() {
     QTest::addColumn<int>("scheme");
     QTest::addColumn<bool>("dark");
     QTest::newRow("dark") << static_cast<int>(COLORS_DARK) << true;
     QTest::newRow("light") << static_cast<int>(COLORS_LIGHT) << false;
   }
 
-  void snapshotCarriesTheSchemeMetricsAndSurfaces() {
+  void snapshotCarriesTheSchemeAndMetrics() {
     QFETCH(int, scheme);
     QFETCH(bool, dark);
     const ColorScheme colors =
@@ -443,8 +441,8 @@ private slots:
     QCOMPARE(snapshot.dark, dark);
     QCOMPARE(snapshot.iconFontFamily, iconFamily);
     QCOMPARE(snapshot.colors.background, colors.background);
-    QCOMPARE(snapshot.colors.button, colors.button);
-    QCOMPARE(snapshot.colors.panelButtonHover, colors.panel_button_hover);
+    QCOMPARE(snapshot.colors.folderViewHc, colors.folderview_hc);
+    QCOMPARE(snapshot.colors.thumbPanelText, colors.thumbpanel_text);
     QCOMPARE(snapshot.colors.comboFieldBorder, colors.combo_field_border);
     QCOMPARE(snapshot.colors.scrollbarHover, colors.scrollbar_hover);
 
@@ -463,10 +461,6 @@ private slots:
     QCOMPARE(snapshot.metrics.tooltipBorderRadius, metrics.tooltipBorderRadius);
     QCOMPARE(snapshot.metrics.contextMenuBorderRadius,
              metrics.contextMenuBorderRadius);
-
-    const DialogSurfaces::Colors surfaces = DialogSurfaces::colorsFor(dark);
-    QCOMPARE(snapshot.surfaces.window, surfaces.window);
-    QCOMPARE(snapshot.surfaces.tintedHc2, surfaces.tintedHc2);
   }
 };
 

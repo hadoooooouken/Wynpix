@@ -55,7 +55,7 @@ Window {
     title: root.editor.windowTitle
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
-    color: Theme.surfaces.window
+    color: Theme.colors.surfaceWindow
     width: root.initialWidth
     height: root.initialHeight
     minimumWidth: root.minimumContentWidth
@@ -100,7 +100,7 @@ Window {
                 Layout.preferredWidth: root.sidebarWidth + 2 * root.sidebarPadding
                 Layout.fillWidth: false
                 Layout.fillHeight: true
-                color: Theme.surfaces.tintedLc2
+                color: Theme.colors.surfaceCard
 
                 Rectangle {
                     anchors.top: parent.top

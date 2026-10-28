@@ -1111,9 +1111,11 @@ test QML scene and by `--ui=quick`. The widget viewer is not modified.
     and context menu frame sizes) and `DialogSurfaces::colorsFor(dark)`
     (`gui/dialogsurfaces.h`: dialog window and text colours and the five
     tints, `sys_window_tinted*` in the stylesheet). The stylesheet output is
-    unchanged.
-  - **Theme bridge:** `Theme.metrics` and `Theme.surfaces`, notified only
-    when they change. The snapshot is built by the pure
+    unchanged. Later the dialogs moved to the translucent `stroke*` tokens
+    and `DialogSurfaces` was removed: the window and card colours are
+    `Theme.colors.surfaceWindow` and `surfaceCard`.
+  - **Theme bridge:** `Theme.metrics` and `Theme.surfaces` (since merged into
+    `Theme.colors`), notified only when they change. The snapshot is built by the pure
     `buildThemeSnapshot(scheme, font, iconFontFamily)`
     (`gui/quick/adapters/themesnapshotbuilder.*`); `BridgeSnapshots::
     readTheme()` calls it with the Settings scheme.
@@ -2171,7 +2173,8 @@ test QML scene and by `--ui=quick`. The widget viewer is not modified.
 - **Delivered:**
   - **Widget UI removed:** everything under `gui/` except `ports/`,
     `controllers/` (`ColdStartWindowController`), `settingseditor/`,
-    `quick/`, `idirectoryview.h`, `uimetrics.h` and `dialogsurfaces.h`.
+    `quick/`, `idirectoryview.h`, `uimetrics.h` and `dialogsurfaces.h`
+    (removed later with `Theme.surfaces`).
     That is `MW`, `CentralWidget`, `ContextMenu`, `customwidgets/`,
     `dialogs/`, `overlays/` (with the `*Proxy` deferral classes),
     `panels/` (with the dead `InfoBar`), `viewers/` (`ImageViewerV2`,

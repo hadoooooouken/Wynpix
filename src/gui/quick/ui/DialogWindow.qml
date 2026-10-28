@@ -27,7 +27,7 @@ Window {
 
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
-    color: Theme.surfaces.window
+    color: Theme.colors.surfaceWindow
 
     // The window keeps the size of its content.
     readonly property int contentWidth: Math.max(root.minimumContentWidth, body.implicitWidth)

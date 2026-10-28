@@ -10,15 +10,16 @@
 // Settings::colorScheme() and the application font
 // (gui/quick/adapters/themesnapshotbuilder.h).
 
-// Every colour of ColorScheme (themestore.h), base and extended, under
-// camelCase names: ColorScheme::folderview_topbar is folderViewTopBar. The
-// exceptions are derived from the accent (AccentContrast): accentText, the
-// colour of text and glyphs on a solid accent fill, and the fills of the
-// accent hovered (accentHover) and pressed (accentPressed) under that text,
-// and the translucent accent of selected items (accentTint, accentTintHover,
+// The colours of ColorScheme (themestore.h) that QML reads, under camelCase
+// names: ColorScheme::folderview_topbar is folderViewTopBar. The exceptions
+// are derived from the accent (AccentContrast): accentText, the colour of
+// text and glyphs on a solid accent fill, and the fills of the accent hovered
+// (accentHover) and pressed (accentPressed) under that text, and the
+// translucent accent of selected items (accentTint, accentTintHover,
 // accentFrame; SelectionFills).
-// The fills of neutral controls (fillRest, fillHover, fillPressed and the HUD
-// ones, NeutralFills) are translucent and come last.
+// The fills and strokes of neutral controls (fillRest, fillHover, fillPressed,
+// the HUD ones and stroke*, NeutralFills) are translucent and follow; the
+// dialog window and its cards (surfaceWindow, surfaceCard) come last.
 struct ThemeColors {
   Q_GADGET
   QML_VALUE_TYPE(themeColors)
@@ -28,9 +29,7 @@ struct ThemeColors {
   Q_PROPERTY(QColor text MEMBER text)
   Q_PROPERTY(QColor icons MEMBER icons)
   Q_PROPERTY(QColor folderIcons MEMBER folderIcons)
-  Q_PROPERTY(QColor thumbnailFolderIcons MEMBER thumbnailFolderIcons)
   Q_PROPERTY(QColor widget MEMBER widget)
-  Q_PROPERTY(QColor widgetBorder MEMBER widgetBorder)
   Q_PROPERTY(QColor accent MEMBER accent)
   Q_PROPERTY(QColor accentText MEMBER accentText)
   Q_PROPERTY(QColor accentHover MEMBER accentHover)
@@ -54,21 +53,11 @@ struct ThemeColors {
   Q_PROPERTY(QColor textHc2 MEMBER textHc2)
   Q_PROPERTY(QColor textHc MEMBER textHc)
   Q_PROPERTY(QColor textLc MEMBER textLc)
-  Q_PROPERTY(QColor textLc2 MEMBER textLc2)
-  Q_PROPERTY(QColor button MEMBER button)
-  Q_PROPERTY(QColor buttonHover MEMBER buttonHover)
-  Q_PROPERTY(QColor buttonPressed MEMBER buttonPressed)
-  Q_PROPERTY(QColor panelButton MEMBER panelButton)
-  Q_PROPERTY(QColor panelButtonHover MEMBER panelButtonHover)
-  Q_PROPERTY(QColor panelButtonPressed MEMBER panelButtonPressed)
   Q_PROPERTY(QColor folderViewHc MEMBER folderViewHc)
   Q_PROPERTY(QColor folderViewHc2 MEMBER folderViewHc2)
   Q_PROPERTY(QColor thumbPanelHc MEMBER thumbPanelHc)
   Q_PROPERTY(QColor thumbPanelHc2 MEMBER thumbPanelHc2)
   Q_PROPERTY(QColor thumbPanelText MEMBER thumbPanelText)
-  Q_PROPERTY(QColor folderViewButtonHover MEMBER folderViewButtonHover)
-  Q_PROPERTY(QColor folderViewButtonPressed MEMBER folderViewButtonPressed)
-  Q_PROPERTY(QColor inputFieldFocus MEMBER inputFieldFocus)
   Q_PROPERTY(QColor comboField MEMBER comboField)
   Q_PROPERTY(QColor comboFieldHover MEMBER comboFieldHover)
   Q_PROPERTY(QColor comboFieldPressed MEMBER comboFieldPressed)
@@ -81,6 +70,8 @@ struct ThemeColors {
   Q_PROPERTY(QColor strokeSubtle MEMBER strokeSubtle)
   Q_PROPERTY(QColor strokeDefault MEMBER strokeDefault)
   Q_PROPERTY(QColor strokeStrong MEMBER strokeStrong)
+  Q_PROPERTY(QColor surfaceWindow MEMBER surfaceWindow)
+  Q_PROPERTY(QColor surfaceCard MEMBER surfaceCard)
 
 public:
   QColor background;
@@ -88,9 +79,7 @@ public:
   QColor text;
   QColor icons;
   QColor folderIcons;
-  QColor thumbnailFolderIcons;
   QColor widget;
-  QColor widgetBorder;
   QColor accent;
   QColor accentText;
   QColor accentHover;
@@ -114,21 +103,11 @@ public:
   QColor textHc2;
   QColor textHc;
   QColor textLc;
-  QColor textLc2;
-  QColor button;
-  QColor buttonHover;
-  QColor buttonPressed;
-  QColor panelButton;
-  QColor panelButtonHover;
-  QColor panelButtonPressed;
   QColor folderViewHc;
   QColor folderViewHc2;
   QColor thumbPanelHc;
   QColor thumbPanelHc2;
   QColor thumbPanelText;
-  QColor folderViewButtonHover;
-  QColor folderViewButtonPressed;
-  QColor inputFieldFocus;
   QColor comboField;
   QColor comboFieldHover;
   QColor comboFieldPressed;
@@ -141,6 +120,8 @@ public:
   QColor strokeSubtle;
   QColor strokeDefault;
   QColor strokeStrong;
+  QColor surfaceWindow;
+  QColor surfaceCard;
 
   friend bool operator==(const ThemeColors &, const ThemeColors &) = default;
 };
@@ -195,39 +176,11 @@ public:
   friend bool operator==(const ThemeMetrics &, const ThemeMetrics &) = default;
 };
 
-// Dialog window and text colours and the tinted surfaces derived from them
-// (DialogSurfaces::Colors), from the faintest (tintedLc2) to the strongest
-// (tintedHc2) contrast with the window.
-struct ThemeSurfaces {
-  Q_GADGET
-  QML_VALUE_TYPE(themeSurfaces)
-  QML_UNCREATABLE("Provided by Theme.surfaces")
-  Q_PROPERTY(QColor window MEMBER window)
-  Q_PROPERTY(QColor text MEMBER text)
-  Q_PROPERTY(QColor tintedLc2 MEMBER tintedLc2)
-  Q_PROPERTY(QColor tintedLc MEMBER tintedLc)
-  Q_PROPERTY(QColor tinted MEMBER tinted)
-  Q_PROPERTY(QColor tintedHc MEMBER tintedHc)
-  Q_PROPERTY(QColor tintedHc2 MEMBER tintedHc2)
-
-public:
-  QColor window;
-  QColor text;
-  QColor tintedLc2;
-  QColor tintedLc;
-  QColor tinted;
-  QColor tintedHc;
-  QColor tintedHc2;
-
-  friend bool operator==(const ThemeSurfaces &, const ThemeSurfaces &) = default;
-};
-
 // Complete set published by ThemeBridge in one step.
 struct ThemeSnapshot {
   ThemeColors colors;
   ThemeFonts fonts;
   ThemeMetrics metrics;
-  ThemeSurfaces surfaces;
   bool dark = false;
   QString iconFontFamily;
 

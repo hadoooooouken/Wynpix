@@ -20,7 +20,7 @@ Rectangle {
     implicitWidth: column.implicitWidth + 2 * root.horizontalPadding
     implicitHeight: column.implicitHeight + 2 * root.verticalPadding
     radius: root.cornerRadius
-    color: Theme.surfaces.tintedLc2
+    color: Theme.colors.surfaceCard
     border.width: StyleConstants.separatorThickness
     border.color: Theme.colors.strokeSubtle
 

@@ -17,10 +17,6 @@ const ThemeFonts &ThemeBridge::fonts() const { return mSnapshot.fonts; }
 
 const ThemeMetrics &ThemeBridge::metrics() const { return mSnapshot.metrics; }
 
-const ThemeSurfaces &ThemeBridge::surfaces() const {
-  return mSnapshot.surfaces;
-}
-
 bool ThemeBridge::dark() const { return mSnapshot.dark; }
 
 const QString &ThemeBridge::iconFontFamily() const {
@@ -45,8 +41,6 @@ void ThemeBridge::apply(const ThemeSnapshot &snapshot) {
                    &ThemeBridge::fontsChanged);
   publishIfChanged(mSnapshot.metrics, snapshot.metrics, *this,
                    &ThemeBridge::metricsChanged);
-  publishIfChanged(mSnapshot.surfaces, snapshot.surfaces, *this,
-                   &ThemeBridge::surfacesChanged);
   publishIfChanged(mSnapshot.dark, snapshot.dark, *this,
                    &ThemeBridge::darkChanged);
   publishIfChanged(mSnapshot.iconFontFamily, snapshot.iconFontFamily, *this,

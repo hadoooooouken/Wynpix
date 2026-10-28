@@ -45,7 +45,7 @@ Window {
     title: qsTr("Batch Converter")
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
-    color: Theme.surfaces.window
+    color: Theme.colors.surfaceWindow
     width: Math.max(root.initialWidth, root.minimumContentWidth)
     height: root.initialHeight
     minimumWidth: root.minimumContentWidth

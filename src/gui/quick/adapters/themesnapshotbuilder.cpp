@@ -1,7 +1,6 @@
 #include "themesnapshotbuilder.h"
 
 #include "gui/accentcontrast.h"
-#include "gui/dialogsurfaces.h"
 #include "gui/neutralfills.h"
 #include "gui/selectionfills.h"
 #include "gui/uimetrics.h"
@@ -9,21 +8,27 @@
 
 namespace {
 
+// Window of every dialog (decision D3: the settings window colour) and the
+// cards and sidebar on it, 6 HSV values lighter in the dark scheme and
+// darker in the light one.
+constexpr QRgb kDarkSurfaceWindow = 0xff252525;
+constexpr QRgb kDarkSurfaceCard = 0xff2b2b2b;
+constexpr QRgb kLightSurfaceWindow = 0xfff5f5f5;
+constexpr QRgb kLightSurfaceCard = 0xffefefef;
+
 ThemeColors themeColors(const ColorScheme &scheme) {
+  const bool dark = scheme.tid == COLORS_DARK;
   const QColor accentText = AccentContrast::textOn(scheme.accent);
   const SelectionFills::Colors selection =
       SelectionFills::colorsFor(scheme.accent);
-  const NeutralFills::Colors fills =
-      NeutralFills::colorsFor(scheme.tid == COLORS_DARK);
+  const NeutralFills::Colors fills = NeutralFills::colorsFor(dark);
   return {
       .background = scheme.background,
       .backgroundFullscreen = scheme.background_fullscreen,
       .text = scheme.text,
       .icons = scheme.icons,
       .folderIcons = scheme.folder_icons,
-      .thumbnailFolderIcons = scheme.thumbnail_folder_icons,
       .widget = scheme.widget,
-      .widgetBorder = scheme.widget_border,
       .accent = scheme.accent,
       .accentText = accentText,
       .accentHover = AccentContrast::stateFill(
@@ -49,21 +54,11 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .textHc2 = scheme.text_hc2,
       .textHc = scheme.text_hc,
       .textLc = scheme.text_lc,
-      .textLc2 = scheme.text_lc2,
-      .button = scheme.button,
-      .buttonHover = scheme.button_hover,
-      .buttonPressed = scheme.button_pressed,
-      .panelButton = scheme.panel_button,
-      .panelButtonHover = scheme.panel_button_hover,
-      .panelButtonPressed = scheme.panel_button_pressed,
       .folderViewHc = scheme.folderview_hc,
       .folderViewHc2 = scheme.folderview_hc2,
       .thumbPanelHc = scheme.thumbpanel_hc,
       .thumbPanelHc2 = scheme.thumbpanel_hc2,
       .thumbPanelText = scheme.thumbpanel_text,
-      .folderViewButtonHover = scheme.folderview_button_hover,
-      .folderViewButtonPressed = scheme.folderview_button_pressed,
-      .inputFieldFocus = scheme.input_field_focus,
       .comboField = scheme.combo_field,
       .comboFieldHover = scheme.combo_field_hover,
       .comboFieldPressed = scheme.combo_field_pressed,
@@ -76,6 +71,10 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .strokeSubtle = fills.strokeSubtle,
       .strokeDefault = fills.strokeDefault,
       .strokeStrong = fills.strokeStrong,
+      .surfaceWindow =
+          QColor::fromRgb(dark ? kDarkSurfaceWindow : kLightSurfaceWindow),
+      .surfaceCard =
+          QColor::fromRgb(dark ? kDarkSurfaceCard : kLightSurfaceCard),
   };
 }
 
@@ -98,8 +97,6 @@ ThemeSnapshot buildThemeSnapshot(const ColorScheme &scheme,
       UiMetrics::typographyFor(systemFont);
   const UiMetrics::ControlMetrics metrics =
       UiMetrics::controlMetricsFor(typography.body);
-  const bool dark = scheme.tid == COLORS_DARK;
-  const DialogSurfaces::Colors surfaces = DialogSurfaces::colorsFor(dark);
   return {
       .colors = themeColors(scheme),
       .fonts = themeFonts(typography),
@@ -115,17 +112,7 @@ ThemeSnapshot buildThemeSnapshot(const ColorScheme &scheme,
               .tooltipBorderRadius = metrics.tooltipBorderRadius,
               .contextMenuBorderRadius = metrics.contextMenuBorderRadius,
           },
-      .surfaces =
-          {
-              .window = surfaces.window,
-              .text = surfaces.text,
-              .tintedLc2 = surfaces.tintedLc2,
-              .tintedLc = surfaces.tintedLc,
-              .tinted = surfaces.tinted,
-              .tintedHc = surfaces.tintedHc,
-              .tintedHc2 = surfaces.tintedHc2,
-          },
-      .dark = dark,
+      .dark = scheme.tid == COLORS_DARK,
       .iconFontFamily = iconFontFamily,
   };
 }

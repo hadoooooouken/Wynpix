@@ -62,7 +62,7 @@ DialogWindow {
                     y: previewItem.paintedRect.y
                     width: previewItem.paintedRect.width
                     height: previewItem.paintedRect.height
-                    visible: Theme.surfaces.window.hsvValue > root.pageFrameWindowValue
+                    visible: Theme.colors.surfaceWindow.hsvValue > root.pageFrameWindowValue
                     color: "transparent"
                     border.width: root.pageFrameWidth
                     border.color: root.pageFrameColor
