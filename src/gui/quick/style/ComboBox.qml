@@ -29,7 +29,9 @@ T.ComboBox {
         required property var model
         required property int index
 
+        // Clear of the scroll bar, which lies over the list's right edge.
         width: ListView.view.width
+               - (ListView.view.visibleArea.heightRatio < 1.0 ? StyleConstants.scrollBarThickness : 0)
         text: model[control.textRole]
         font.weight: control.currentIndex === index ? Theme.fonts.bodyStrong.weight
                                                     : Theme.fonts.body.weight

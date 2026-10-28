@@ -281,6 +281,19 @@ Item {
             compare(background.radius, Theme.metrics.contextMenuBorderRadius);
         }
 
+        function test_comboBoxScrollingList() {
+            const shortModel = comboBox.model;
+            comboBox.model = Array.from({ length: 60 }, (_, i) => "Item " + i);
+            comboBox.popup.open();
+            tryCompare(comboBox.popup, "opened", true);
+            const list = comboBox.popup.contentItem;
+            verify(list.visibleArea.heightRatio < 1.0, "the list does not scroll");
+            // The rows end where the scroll bar begins.
+            compare(list.itemAtIndex(0).width, list.width - StyleConstants.scrollBarThickness);
+            comboBox.popup.close();
+            comboBox.model = shortModel;
+        }
+
         function test_slider(data) {
             useScheme(data.dark);
             const y = slider.height / 2;
