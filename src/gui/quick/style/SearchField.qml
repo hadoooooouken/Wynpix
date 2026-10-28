@@ -84,13 +84,11 @@ T.SearchField {
         }
     }
 
-    background: Rectangle {
+    background: FieldBackground {
         implicitWidth: Theme.metrics.contextMenuWidth
-        radius: StyleConstants.controlRadius
-        color: control.enabled && (control.hovered || control.activeFocus || control.contentItem.activeFocus)
-               ? Theme.colors.buttonHover : Theme.colors.button
-        border.width: StyleConstants.fieldBorderWidth
-        border.color: color
+        fieldEnabled: control.enabled
+        hovered: control.hovered
+        focused: control.activeFocus || control.contentItem.activeFocus
     }
 
     popup: T.Popup {

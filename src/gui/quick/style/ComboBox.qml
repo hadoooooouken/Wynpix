@@ -64,18 +64,14 @@ T.ComboBox {
         verticalAlignment: Text.AlignVCenter
     }
 
-    background: Rectangle {
+    background: FieldBackground {
         implicitWidth: StyleConstants.comboImplicitWidth
         implicitHeight: Theme.metrics.buttonHeight
-        radius: StyleConstants.controlRadius
-        color: control.down || control.popup.visible ? Theme.colors.comboFieldPressed
-             : control.hovered && control.enabled ? Theme.colors.comboFieldHover
-             : Theme.colors.comboField
-        border.width: StyleConstants.comboBorderWidth
-        border.color: control.enabled && (control.visualFocus || control.activeFocus)
-                      ? Theme.colors.accent
-                      : Color.transparent(Theme.colors.comboFieldBorder,
-                                          control.enabled ? 1.0 : StyleConstants.disabledOpacity)
+        restBorderWidth: StyleConstants.comboBorderWidth
+        fieldEnabled: control.enabled
+        hovered: control.hovered
+        pressed: control.down || control.popup.visible
+        focused: control.visualFocus || control.activeFocus
     }
 
     popup: T.Popup {

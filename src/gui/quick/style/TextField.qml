@@ -2,9 +2,8 @@ import QtQuick
 import QtQuick.Templates as T
 import wynpix.bridges
 
-// Text field (QLineEdit of floating panels and dialog windows): a rounded
-// field in the comboField colour with a comboFieldBorder outline that
-// highlights in the accent colour while focused.
+// Text field (QLineEdit of floating panels and dialog windows): a field
+// background with the shared focus ring (FieldBackground).
 T.TextField {
     id: control
 
@@ -44,15 +43,10 @@ T.TextField {
         renderType: control.renderType
     }
 
-    background: Rectangle {
+    background: FieldBackground {
         implicitWidth: Theme.metrics.contextMenuWidth
-        radius: StyleConstants.controlRadius
-        color: control.enabled && (control.hovered || control.activeFocus)
-               ? Theme.colors.comboFieldHover : Theme.colors.comboField
-        border.width: StyleConstants.fieldBorderWidth
-        border.color: control.enabled && control.activeFocus
-                      ? Theme.colors.accent
-                      : Color.transparent(Theme.colors.comboFieldBorder,
-                                          control.enabled ? 1.0 : StyleConstants.disabledOpacity)
+        fieldEnabled: control.enabled
+        hovered: control.hovered
+        focused: control.activeFocus
     }
 }

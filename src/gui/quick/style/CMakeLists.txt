@@ -25,6 +25,7 @@ qt_add_qml_module(wynpix_style
         ComboBox.qml
         DialogButtonBox.qml
         DoubleSpinBox.qml
+        FieldBackground.qml
         IconGlyph.qml
         ItemDelegate.qml
         Label.qml

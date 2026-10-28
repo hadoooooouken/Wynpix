@@ -22,7 +22,8 @@ QtObject {
     readonly property int toolButtonHorizontalInset: 2
     readonly property int toolButtonPadding: 6
 
-    // Text fields, spin boxes and search fields.
+    // Text fields, spin boxes and search fields; also the width of the focus
+    // ring of every entry control, combo boxes included.
     readonly property int fieldBorderWidth: 2
     readonly property int fieldVerticalPadding: 4
     readonly property int fieldHorizontalPadding: 6

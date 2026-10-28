@@ -348,7 +348,7 @@ Item {
             verifyColor(pixel(textField, 0, y), Theme.colors.accent, "focus border");
             verifyColor(pixel(textField, 3, y), Theme.colors.comboFieldHover, "focused");
 
-            verifyColor(pixel(searchField, 1, searchField.height / 2), Theme.colors.button,
+            verifyColor(pixel(searchField, 3, searchField.height / 2), Theme.colors.comboField,
                         "search field");
             verify(searchField.searchIndicator.indicator === null);
             verify(searchField.contentItem.children[0].visible);

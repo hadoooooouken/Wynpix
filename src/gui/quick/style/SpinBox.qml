@@ -74,15 +74,10 @@ T.SpinBox {
                  && (control.wrap || control.value > Math.min(control.from, control.to))
     }
 
-    background: Rectangle {
+    background: FieldBackground {
         implicitWidth: StyleConstants.comboImplicitWidth
-        radius: StyleConstants.controlRadius
-        color: control.enabled && (control.hovered || control.activeFocus)
-               ? Theme.colors.comboFieldHover : Theme.colors.comboField
-        border.width: StyleConstants.fieldBorderWidth
-        border.color: control.enabled && control.activeFocus
-                      ? Theme.colors.accent
-                      : Color.transparent(Theme.colors.comboFieldBorder,
-                                          control.enabled ? 1.0 : StyleConstants.disabledOpacity)
+        fieldEnabled: control.enabled
+        hovered: control.hovered
+        focused: control.activeFocus
     }
 }
