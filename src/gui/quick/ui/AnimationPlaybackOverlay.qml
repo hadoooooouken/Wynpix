@@ -180,9 +180,9 @@ Item {
 
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
-                    color: playPauseButton.hovered || playPauseButton.down
-                           ? Color.lighter(Theme.colors.accent, StyleConstants.accentLightFactor)
-                           : Theme.colors.accent
+                    color: playPauseButton.down ? Theme.colors.accentPressed
+                         : playPauseButton.hovered ? Theme.colors.accentHover
+                         : Theme.colors.accent
                 }
 
                 contentItem: IconGlyph {
@@ -283,8 +283,8 @@ Item {
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
                     color: reverseButton.checked
-                           ? (reverseButton.hovered || reverseButton.down
-                              ? Color.lighter(Theme.colors.accent, StyleConstants.accentLightFactor)
+                           ? (reverseButton.down ? Theme.colors.accentPressed
+                              : reverseButton.hovered ? Theme.colors.accentHover
                               : Theme.colors.accent)
                            : (reverseButton.hovered
                               ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)
@@ -322,8 +322,8 @@ Item {
                 background: Rectangle {
                     radius: StyleConstants.controlRadius
                     color: loopButton.checked
-                           ? (loopButton.hovered || loopButton.down
-                              ? Color.lighter(Theme.colors.accent, StyleConstants.accentLightFactor)
+                           ? (loopButton.down ? Theme.colors.accentPressed
+                              : loopButton.hovered ? Theme.colors.accentHover
                               : Theme.colors.accent)
                            : (loopButton.hovered
                               ? Color.transparent(Theme.colors.accent, StyleConstants.accentHighlightOpacity)

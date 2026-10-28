@@ -16,6 +16,9 @@
 // gives about 4.6:1), so the result is readable on every opaque fill.
 namespace AccentContrast {
 
+// Also the fills of the accent hovered and pressed, which move away from the
+// text colour so that the text stays readable on them.
+
 // WCAG 2.x AA minimum contrast ratio for normal text.
 inline constexpr qreal kMinTextContrast = 4.5;
 
@@ -66,6 +69,23 @@ inline constexpr qreal kContrastFlare = 0.05;
     return light;
   }
   return QColor(kDarkText);
+}
+
+// Steps of the hovered and pressed fills from the accent, in percent
+// (QColor::lighter and QColor::darker).
+inline constexpr int kHoverStepPercent = 115;
+inline constexpr int kPressedStepPercent = 130;
+
+// The accent moved by a step away from the text colour: darker under white
+// text, lighter under black text. The text keeps at least the contrast it has
+// on the plain accent, unlike a hover that always lightens: white text on a
+// lightened blue falls below 3:1.
+[[nodiscard]] inline QColor stateFill(const QColor &accent,
+                                      const QColor &text, int stepPercent) {
+  if (text == QColor(kLightText)) {
+    return accent.darker(stepPercent);
+  }
+  return accent.lighter(stepPercent);
 }
 
 } // namespace AccentContrast

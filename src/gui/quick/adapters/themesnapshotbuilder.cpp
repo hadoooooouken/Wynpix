@@ -8,6 +8,7 @@
 namespace {
 
 ThemeColors themeColors(const ColorScheme &scheme) {
+  const QColor accentText = AccentContrast::textOn(scheme.accent);
   return {
       .background = scheme.background,
       .backgroundFullscreen = scheme.background_fullscreen,
@@ -18,7 +19,11 @@ ThemeColors themeColors(const ColorScheme &scheme) {
       .widget = scheme.widget,
       .widgetBorder = scheme.widget_border,
       .accent = scheme.accent,
-      .accentText = AccentContrast::textOn(scheme.accent),
+      .accentText = accentText,
+      .accentHover = AccentContrast::stateFill(
+          scheme.accent, accentText, AccentContrast::kHoverStepPercent),
+      .accentPressed = AccentContrast::stateFill(
+          scheme.accent, accentText, AccentContrast::kPressedStepPercent),
       .folderView = scheme.folderview,
       .folderViewTopBar = scheme.folderview_topbar,
       .thumbPanel = scheme.thumbpanel,

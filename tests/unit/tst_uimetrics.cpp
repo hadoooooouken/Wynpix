@@ -281,6 +281,47 @@ private slots:
     }
   }
 
+  void accentStatesKeepTheTextContrastOfTheAccent() {
+    for (const QString &name : kAccentSamples) {
+      const QColor accent(name);
+      const QColor text = AccentContrast::textOn(accent);
+      const qreal base = AccentContrast::contrastRatio(text, accent);
+      for (const int step : {AccentContrast::kHoverStepPercent,
+                             AccentContrast::kPressedStepPercent}) {
+        const QColor fill = AccentContrast::stateFill(accent, text, step);
+        QCOMPARE_GE(AccentContrast::contrastRatio(text, fill), base);
+      }
+    }
+  }
+
+  void accentStatesMoveAwayFromTheText() {
+    // Under white text the states are darker, under black text lighter.
+    const QColor blue(u"#0078d4"_s);
+    QCOMPARE_LT(AccentContrast::relativeLuminance(AccentContrast::stateFill(
+                    blue, QColor(Qt::white), AccentContrast::kHoverStepPercent)),
+                AccentContrast::relativeLuminance(blue));
+    const QColor teal(u"#00b7c3"_s);
+    QCOMPARE_GT(AccentContrast::relativeLuminance(AccentContrast::stateFill(
+                    teal, QColor(Qt::black), AccentContrast::kHoverStepPercent)),
+                AccentContrast::relativeLuminance(teal));
+  }
+
+  void snapshotCarriesTheAccentStates() {
+    const QFont font = fontWithPointSize(kDefaultFontPointSize);
+    ColorScheme colors = ThemeStore::colorScheme(COLORS_DARK);
+    for (const QString &name : kAccentSamples) {
+      colors.accent = QColor(name);
+      const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, {});
+      const QColor text = snapshot.colors.accentText;
+      QCOMPARE(snapshot.colors.accentHover,
+               AccentContrast::stateFill(colors.accent, text,
+                                         AccentContrast::kHoverStepPercent));
+      QCOMPARE(snapshot.colors.accentPressed,
+               AccentContrast::stateFill(colors.accent, text,
+                                         AccentContrast::kPressedStepPercent));
+    }
+  }
+
   void snapshotCarriesTheSchemeMetricsAndSurfaces_data() {
     QTest::addColumn<int>("scheme");
     QTest::addColumn<bool>("dark");
