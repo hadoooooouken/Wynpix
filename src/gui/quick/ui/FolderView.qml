@@ -328,7 +328,7 @@ FocusScope {
 
                 ToolTip {
                     visible: nameFilter.hovered && !nameFilter.activeFocus
-                    text: qsTr("Filter images by name")
+                    text: qsTr("Filter folders and images by name")
                 }
             }
 

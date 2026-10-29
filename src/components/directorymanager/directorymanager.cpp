@@ -164,6 +164,10 @@ public:
                             continue;
                         }
                     }
+                    if (!matchesNameFilter(name, request.nameFilter)) {
+                        it.increment(ec);
+                        continue;
+                    }
                     FSEntry newEntry;
                     newEntry.name = name;
                     newEntry.path = path;
@@ -894,10 +898,13 @@ void DirectoryManager::renameFileEntry(const QString &oldFilePath, const QString
 
 // ---- dir entries
 
+// The name filter hides folders as it hides files.
 bool DirectoryManager::insertDirEntry(const QString &dirPath) {
     if(containsDir(dirPath))
         return false;
     QString dirName = QFileInfo(dirPath).fileName();
+    if (!matchesNameFilter(dirName, mNameFilter))
+        return false;
     FSEntry FSEntry;
     FSEntry.name = dirName;
     FSEntry.path = dirPath;
@@ -919,11 +926,20 @@ void DirectoryManager::removeDirEntry(const QString &dirPath) {
     emit dirRemoved(dirPath, index);
 }
 
+// A folder renamed out of the name filter leaves the list, one renamed into
+// it joins.
 void DirectoryManager::renameDirEntry(const QString &oldDirPath, const QString &newDirName) {
-    if(!containsDir(oldDirPath))
-        return;
     QFileInfo fi(oldDirPath);
     QString newDirPath = fi.absolutePath() + "/" + newDirName;
+    if(!containsDir(oldDirPath)) {
+        if (!matchesNameFilter(fi.fileName(), mNameFilter))
+            insertDirEntry(newDirPath);
+        return;
+    }
+    if (!matchesNameFilter(newDirName, mNameFilter)) {
+        removeDirEntry(oldDirPath);
+        return;
+    }
     // remove the old one
     int oldIndex = indexOfDir(oldDirPath);
     dirEntryVec.erase(dirEntryVec.begin() + oldIndex);
