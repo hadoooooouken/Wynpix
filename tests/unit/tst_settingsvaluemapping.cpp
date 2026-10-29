@@ -418,6 +418,9 @@ private slots:
       // Without a custom accent the scheme's own accent is shown.
       if (!expected.theme.customAccent)
         expected.theme.accentColor = loaded.theme.accentColor;
+      // Settings keeps the last custom accent, the one of set A, also
+      // while set B turns the custom accent off.
+      expected.theme.lastCustomAccent = valueSetA().values.theme.accentColor;
       QCOMPARE(loaded.general, expected.general);
       QCOMPARE(loaded.view, expected.view);
       QCOMPARE(loaded.theme, expected.theme);
