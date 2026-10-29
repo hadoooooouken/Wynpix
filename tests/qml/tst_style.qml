@@ -83,6 +83,11 @@ Item {
                 id: radioButton
                 text: "Radio button"
             }
+            RowBackground {
+                id: rowBackground
+                width: 120
+                height: 28
+            }
             TextField {
                 id: textField
                 placeholderText: "Text field"
@@ -377,6 +382,28 @@ Item {
             checkBox.enabled = false;
             compare(checkBox.indicator.opacity, StyleConstants.disabledOpacity);
             checkBox.enabled = true;
+        }
+
+        // The fill is sampled in the middle of the row, the indicator on the
+        // leading edge, inside its straight middle part.
+        function test_rowBackground(data) {
+            useScheme(data.dark);
+            const x = rowBackground.width / 2;
+            const y = rowBackground.height / 2;
+            const edge = 1;
+            verifyColor(pixel(rowBackground, x, y), Theme.tokens.surfacePopup, "rest");
+            verifyColor(pixel(rowBackground, edge, y), Theme.tokens.surfacePopup, "no indicator");
+            rowBackground.hovered = true;
+            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.fillHover), "hovered");
+            rowBackground.selected = true;
+            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.fillRest), "selected, hovered");
+            rowBackground.hovered = false;
+            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.fillHover), "selected");
+            verifyColor(pixel(rowBackground, edge, y), Theme.tokens.accent, "indicator");
+            rowBackground.selected = false;
+            rowBackground.restColor = Theme.tokens.surfaceViewRaised;
+            verifyColor(pixel(rowBackground, x, y), Theme.tokens.surfaceViewRaised, "alternate row");
+            rowBackground.restColor = "transparent";
         }
 
         function test_textFields(data) {

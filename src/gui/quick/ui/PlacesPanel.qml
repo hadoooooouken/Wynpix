@@ -315,15 +315,12 @@ Rectangle {
         width: ListView.view.width
         implicitHeight: content.implicitHeight + 2 * root.bookmarkMarginV
 
-        Rectangle {
+        RowBackground {
             anchors.fill: parent
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
-            radius: StyleConstants.rowRadius
-            color: row.highlighted ? (rowHover.hovered || dropArea.containsDrag ? Theme.tokens.accentTintHover
-                                                                                : Theme.tokens.accentTint)
-                 : rowHover.hovered || dropArea.containsDrag ? Theme.tokens.fillHover
-                 : "transparent"
+            selected: row.highlighted
+            hovered: rowHover.hovered || dropArea.containsDrag
         }
 
         HoverHandler {
@@ -468,16 +465,13 @@ Rectangle {
                                            + depth * root.treeIndentation
         readonly property real branchWidth: root.treeIndentation - root.treeBranchPadding
 
-        Rectangle {
+        RowBackground {
             anchors.fill: parent
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
-            radius: StyleConstants.rowRadius
-            color: treeRow.current ? (treeHover.hovered || treeDrop.containsDrag ? Theme.tokens.accentTintHover
-                                                                                 : Theme.tokens.accentTint)
-                 : treeHover.hovered || treeDrop.containsDrag ? Theme.tokens.fillHover
-                 : "transparent"
+            selected: treeRow.current
+            hovered: treeHover.hovered || treeDrop.containsDrag
         }
 
         HoverHandler {

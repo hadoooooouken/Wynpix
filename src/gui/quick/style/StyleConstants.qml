@@ -102,6 +102,9 @@ QtObject {
     readonly property int indicatorDashLength: 8
     readonly property int indicatorDashThickness: 2
     readonly property int radioDotSize: 8
+    // Accent pill on the leading edge of a selected row (RowBackground).
+    readonly property int selectionIndicatorWidth: 3
+    readonly property int selectionIndicatorLength: 16
     // Glyph size of chevrons.
     readonly property int chevronSize: 12
     // Rotation that turns a downward chevron sideways.

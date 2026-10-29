@@ -36,6 +36,7 @@ qt_add_qml_module(wynpix_style
         PopupBackground.qml
         ProgressBar.qml
         RadioButton.qml
+        RowBackground.qml
         ScrollBar.qml
         ScrollView.qml
         SearchField.qml

@@ -101,7 +101,7 @@ SettingsPage {
                     }
                 }
 
-                delegate: Rectangle {
+                delegate: RowBackground {
                     id: shortcutRow
 
                     required property int index
@@ -110,8 +110,9 @@ SettingsPage {
 
                     width: ListView.view.width
                     height: root.rowHeight
-                    color: ListView.isCurrentItem ? Theme.tokens.accentTint
-                         : index % 2 ? Theme.tokens.surfaceViewRaised : "transparent"
+                    radius: 0
+                    selected: ListView.isCurrentItem
+                    restColor: index % 2 ? Theme.tokens.surfaceViewRaised : "transparent"
 
                     Row {
                         anchors.fill: parent

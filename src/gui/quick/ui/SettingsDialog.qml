@@ -147,13 +147,10 @@ Window {
                                 }
                             }
 
-                            background: Rectangle {
-                                radius: StyleConstants.rowRadius
-                                visible: entry.highlighted || entry.down || entry.hovered
-                                color: entry.highlighted
-                                       ? (entry.hovered ? Theme.tokens.accentTintHover : Theme.tokens.accentTint)
-                                       : entry.down ? Theme.tokens.fillPressed
-                                       : Theme.tokens.fillHover
+                            background: RowBackground {
+                                selected: entry.highlighted
+                                hovered: entry.hovered
+                                pressed: entry.down && !entry.highlighted
                             }
                         }
                     }
