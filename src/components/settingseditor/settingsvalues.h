@@ -149,6 +149,9 @@ public:
     int textRenderType = 0;      // QuickTextRenderType
     bool customAccent = false;
     QColor accentColor;
+    // The custom accent that turning customAccent back on restores; invalid
+    // if none was ever set (the shown accent is taken then).
+    QColor lastCustomAccent;
     int backgroundOpacityPercent = 0;
     int thumbnailOpacityPercent = 0;
     bool useBlackBackground = false;

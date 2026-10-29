@@ -257,6 +257,11 @@ void Settings::loadTheme() {
   QColor customAccent = mHasCustomAccent
                             ? QColor(themeConf->value("accent").toString())
                             : QColor();
+  // A theme saved before the last custom accent was kept has only the
+  // active one.
+  mLastCustomAccent = QColor(
+      themeConf->value("lastCustomAccent", themeConf->value("accent"))
+          .toString());
   themeConf->endGroup();
 
   BaseColorScheme base;
@@ -289,9 +294,13 @@ void Settings::loadTheme() {
 void Settings::saveTheme() {
   themeConf->beginGroup("Colors");
   if (mHasCustomAccent) {
+    mLastCustomAccent = mColorScheme.accent;
     themeConf->setValue("accent", mColorScheme.accent.name());
   } else {
     themeConf->remove("accent");
+  }
+  if (mLastCustomAccent.isValid()) {
+    themeConf->setValue("lastCustomAccent", mLastCustomAccent.name());
   }
   themeConf->endGroup();
 }

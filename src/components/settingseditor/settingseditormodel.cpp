@@ -423,9 +423,15 @@ void SettingsEditorModel::setThumbnailOpacityPercent(int percent, bool preview) 
 
 void SettingsEditorModel::setCustomAccent(bool customAccent) {
     ThemeSettings edited = mValues.theme;
+    if (edited.customAccent)
+        edited.lastCustomAccent = edited.accentColor;
     edited.customAccent = customAccent;
+    // Turned back on, the custom accent is the last one; the first time, the
+    // accent shown so far.
+    const QColor custom = edited.lastCustomAccent.isValid() ? edited.lastCustomAccent
+                                                            : edited.accentColor;
     edited.accentColor = mValueStore.previewAccent(
-        customAccent ? std::optional<QColor>(edited.accentColor) : std::nullopt);
+        customAccent ? std::optional<QColor>(custom) : std::nullopt);
     setTheme(edited);
 }
 
@@ -434,6 +440,7 @@ void SettingsEditorModel::setAccentColor(const QColor &color) {
         return;
     ThemeSettings edited = mValues.theme;
     edited.accentColor = mValueStore.previewAccent(color);
+    edited.lastCustomAccent = edited.accentColor;
     setTheme(edited);
 }
 

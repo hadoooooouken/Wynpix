@@ -229,6 +229,9 @@ public:
   bool hasCustomAccent() const { return mHasCustomAccent; }
   void setHasCustomAccent(bool custom) { mHasCustomAccent = custom; }
   void clearCustomAccent();
+  // The last custom accent, kept while the custom accent is off so that
+  // turning it back on restores it; invalid if none was ever set.
+  QColor lastCustomAccent() const { return mLastCustomAccent; }
 
 
   bool showSaveOverlay();
@@ -339,6 +342,7 @@ private:
   std::unique_ptr<QDir> mTmpDir, mThumbCacheDir, mConfDir;
   ColorScheme mColorScheme;
   bool mHasCustomAccent = false;
+  QColor mLastCustomAccent;
 
   void setupCache();
 

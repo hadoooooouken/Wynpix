@@ -298,6 +298,10 @@ private slots:
         editor.setCustomAccent(false);
         QVERIFY(!f.values.customAccent);
         QCOMPARE(editor.theme().accentColor, FakeSettingsValueStore::themeAccent(THEME_LIGHT));
+        // Turned back on, the custom accent is the last one, not the theme's.
+        editor.setCustomAccent(true);
+        QCOMPARE(f.values.customAccent, std::optional<QColor>(accent));
+        QCOMPARE(editor.theme().accentColor, accent);
         QCOMPARE(f.values.applyCount, 0);
     }
 

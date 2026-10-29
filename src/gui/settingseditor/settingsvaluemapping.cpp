@@ -107,6 +107,7 @@ SettingsValues SettingsValueMapping::load() const {
     theme.textRenderType = static_cast<int>(s.quickTextRenderType());
     theme.customAccent = s.hasCustomAccent();
     theme.accentColor = s.colorScheme().accent;
+    theme.lastCustomAccent = s.lastCustomAccent();
     theme.backgroundOpacityPercent = opacityPercent(s.backgroundOpacity());
     theme.thumbnailOpacityPercent = opacityPercent(s.thumbnailOpacity());
     theme.useBlackBackground = s.useBlackBackground();
