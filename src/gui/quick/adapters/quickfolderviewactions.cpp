@@ -87,8 +87,6 @@ void QuickFolderViewActions::forwardIntents() {
 
 void QuickFolderViewActions::forwardGridRequests() {
     DirectoryViewAdapter *view = &gridView;
-    connect(&grid, &FolderGridController::typeAheadRequested, view,
-            &DirectoryViewAdapter::typeAheadTextEntered);
     connect(&grid, &FolderGridController::draggedOver, view, &DirectoryViewAdapter::draggedOver);
     connect(&grid, &FolderGridController::openSelectedRequested, view,
             &DirectoryViewAdapter::openSelectedRequested);

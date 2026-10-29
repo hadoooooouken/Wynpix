@@ -58,8 +58,8 @@ struct GridFixture {
     return grid.layout().itemRect(index).center() - QPointF(0.0, model.viewOffset());
   }
 
-  bool key(int key, Qt::KeyboardModifiers modifiers = Qt::NoModifier, const QString &text = {}) {
-    return grid.keyPressed(key, modifiers.toInt(), text);
+  bool key(int key, Qt::KeyboardModifiers modifiers = Qt::NoModifier) {
+    return grid.keyPressed(key, modifiers.toInt());
   }
 };
 
@@ -208,33 +208,36 @@ private slots:
   void controlAKeepsTheCurrentItem() {
     GridFixture fixture;
     fixture.model.select(3);
-    QVERIFY(fixture.key(Qt::Key_A, Qt::ControlModifier, u"\x01"_s));
+    QVERIFY(fixture.key(Qt::Key_A, Qt::ControlModifier));
     QCOMPARE(fixture.model.selection().count(), kItemCount);
     QCOMPARE(fixture.model.currentIndex(), 3);
     // Other Ctrl shortcuts are left to the actions.
-    QVERIFY(!fixture.key(Qt::Key_R, Qt::ControlModifier, u"\x12"_s));
-    QVERIFY(!fixture.key(Qt::Key_A, Qt::ControlModifier | Qt::ShiftModifier, u"\x01"_s));
+    QVERIFY(!fixture.key(Qt::Key_R, Qt::ControlModifier));
+    QVERIFY(!fixture.key(Qt::Key_A, Qt::ControlModifier | Qt::ShiftModifier));
   }
 
-  void keysActivateGoUpAndTypeAhead() {
+  void keysActivateAndGoUp() {
     GridFixture fixture;
     fixture.model.select(2);
     QSignalSpy activated(&fixture.model, &ThumbnailListModel::activated);
     QSignalSpy actions(&fixture.grid, &FolderGridController::actionRequested);
-    QSignalSpy typeAhead(&fixture.grid, &FolderGridController::typeAheadRequested);
     QVERIFY(fixture.key(Qt::Key_Return));
     QCOMPARE(activated.count(), 1);
     QCOMPARE(activated.first().at(0).toInt(), 2);
     QVERIFY(fixture.key(Qt::Key_Backspace));
     QCOMPARE(actions.count(), 1);
     QCOMPARE(actions.first().at(0).toString(), u"goUp"_s);
-    QVERIFY(fixture.key(Qt::Key_B, Qt::NoModifier, u"b"_s));
-    QCOMPARE(typeAhead.count(), 1);
-    QCOMPARE(typeAhead.first().at(0).toString(), u"b"_s);
-    // Alt combinations and keys without text go to the actions.
-    QVERIFY(!fixture.key(Qt::Key_B, Qt::AltModifier, u"b"_s));
+  }
+
+  // Letters, with or without Shift, are left to the action shortcuts.
+  void lettersGoToTheActions() {
+    GridFixture fixture;
+    fixture.model.select(2);
+    QVERIFY(!fixture.key(Qt::Key_B));
+    QVERIFY(!fixture.key(Qt::Key_B, Qt::ShiftModifier));
+    QVERIFY(!fixture.key(Qt::Key_B, Qt::AltModifier));
     QVERIFY(!fixture.key(Qt::Key_F5));
-    QCOMPARE(typeAhead.count(), 1);
+    QCOMPARE(fixture.model.selection(), QList<int>{2});
   }
 
   void rubberBandSelectsTouchedCells() {

@@ -50,5 +50,4 @@ signals:
     void backRequested() override;
     void forwardRequested() override;
     void openSelectedRequested() override;
-    void typeAheadTextEntered(QString text) override;
 };

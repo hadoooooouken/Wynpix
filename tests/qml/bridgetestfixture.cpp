@@ -775,8 +775,6 @@ void BridgeTestFixture::connectFolderView() {
           });
   connect(&mFolderView, &FolderViewController::directorySelected, this,
           [this](const QString &path) { mLastFolderRequest = u"directory:"_s + path; });
-  connect(&mFolderGrid, &FolderGridController::typeAheadRequested, this,
-          [this](const QString &text) { mLastFolderRequest = u"typeAhead:"_s + text; });
   connect(&mFolderGrid, &FolderGridController::contextMenuRequested, this,
           [this]() { mLastFolderRequest = u"contextMenu"_s; });
   connect(&mFolderGrid, &FolderGridController::batchConversionRequested, this,

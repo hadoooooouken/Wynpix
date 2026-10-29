@@ -120,13 +120,14 @@ Item {
             compare(Fixture.lastFolderRequest, "drop:4:" + copyAction);
         }
 
-        function test_keysMoveAndTypeAhead() {
+        function test_keysMoveAndLettersDoNot() {
             const point = centreOf(2);
             mouseClick(root, point.x, point.y);
             keyClick(Qt.Key_Right);
             compare(Fixture.folderView.grid.model.currentIndex, 3);
             keyClick(Qt.Key_X);
-            compare(Fixture.lastFolderRequest, "typeAhead:x");
+            compare(Fixture.folderView.grid.model.currentIndex, 3);
+            compare(Fixture.lastFolderRequest, "");
         }
 
         function test_largeDirectoryKeepsTheDelegatesBounded() {

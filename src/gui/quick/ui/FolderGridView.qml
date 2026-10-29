@@ -71,7 +71,7 @@ FocusScope {
     Component.onDestruction: thumbnails.setActive(false)
 
     Keys.onPressed: event => {
-        event.accepted = root.controller.keyPressed(event.key, event.modifiers, event.text)
+        event.accepted = root.controller.keyPressed(event.key, event.modifiers)
                          || Actions.handleKeyEvent(event);
     }
     Keys.onReleased: event => root.controller.keyReleased(event.key)

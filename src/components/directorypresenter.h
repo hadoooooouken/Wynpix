@@ -8,7 +8,6 @@
 #include "directorymodel.h"
 #include "directoryexpandworker.h"
 #include <QColor>
-#include <QElapsedTimer>
 #include <QHash>
 #include <QMap>
 #include <QMimeData>
@@ -106,9 +105,6 @@ private slots:
     void onDraggedOver(int index);
 
     void onDroppedInto(const QMimeData *data, QObject *source, int targetIndex, Qt::DropAction action);
-    // Windows-Explorer-style type-ahead navigation from the view's plain
-    // keypresses (see IDirectoryView::typeAheadTextEntered).
-    void onTypeAheadTextEntered(QString text);
 
     // Delivered from the background DirectoryExpandWorker thread (queued
     // connection) with the immutable generation captured for that launch.
@@ -145,18 +141,6 @@ private:
                             right.color);
         }
     };
-
-    // ---- Windows-Explorer-style type-ahead navigation ----
-    // Absolute-index-space name lookup, matching the same dirCount()
-    // offsetting used throughout this class (populateView(),
-    // onItemActivated(), etc.).
-    QString typeAheadNameAt(int absoluteIndex) const;
-    // Searches [searchStart, searchStart + totalCount) modulo totalCount for
-    // the first name starting with prefix (case-insensitive). Returns -1 if
-    // nothing matches.
-    int typeAheadMatchIndex(const QString &prefix, int searchStart, int totalCount) const;
-    QString typeAheadBuffer;
-    QElapsedTimer typeAheadTimer;
 
     QHash<QString, QList<PendingFolderThumbnail>> dirThumbnailTasks;
     QSvgRenderer folderIconRenderer;

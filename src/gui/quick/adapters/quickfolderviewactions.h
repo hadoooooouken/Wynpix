@@ -34,8 +34,8 @@ struct QuickFolderViewContext {
 //   conversion (the button and the "Add to Batch Converter" row) and the
 //   readiness of the grid and the tree to Core
 //   (UiEvents);
-// - turns the grid's requests into the directory view's signals (type-ahead,
-//   drag hover, drops, opening the selection) and runs its actions;
+// - turns the grid's requests into the directory view's signals (drag
+//   hover, drops, opening the selection) and runs its actions;
 // - stores the icon size, the places panel layout and the bookmarks.
 // GUI thread only.
 class QuickFolderViewActions final : public QObject {

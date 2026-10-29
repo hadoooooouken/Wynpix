@@ -25,8 +25,8 @@
 //   was no scroll gesture, Ctrl + wheel zoom;
 // - keyboard: arrows (Up / Down keep the column a short last row moved
 //   away from), Page Up / Down by four rows, Home / End, Shift ranges,
-//   Ctrl+A, Enter activates, Backspace goes up, printable text goes to the
-//   type-ahead; everything else is left to the action shortcuts;
+//   Ctrl+A, Enter activates, Backspace goes up; everything else is left to
+//   the action shortcuts;
 // - icon size: 128 - 512, the zoom slider on a log2 scale, reset to default
 //   (256) on double-click, stored when the slider is released;
 // - drops: copy and move onto items or the background;
@@ -96,9 +96,9 @@ public:
     Q_INVOKABLE void release(int index, int button, QPointF position);
     Q_INVOKABLE void doubleClick(int index, int button);
     Q_INVOKABLE void wheel(QPoint angleDelta, QPoint pixelDelta, int modifiers);
-    // A key press (Qt::Key, Qt::KeyboardModifiers, the typed text); returns
-    // false when the action shortcuts should handle it.
-    Q_INVOKABLE bool keyPressed(int key, int modifiers, const QString &text);
+    // A key press (Qt::Key, Qt::KeyboardModifiers); returns false when the
+    // action shortcuts should handle it.
+    Q_INVOKABLE bool keyPressed(int key, int modifiers);
     Q_INVOKABLE void keyReleased(int key);
     // The grid lost the keyboard focus or was hidden.
     Q_INVOKABLE void focusLost();
@@ -128,7 +128,6 @@ signals:
     void iconSizeCommitted(int size);
     // An application action to run ("goUp").
     void actionRequested(const QString &name);
-    void typeAheadRequested(const QString &text);
     // A right click that was no gesture, at position (view coordinates).
     void contextMenuRequested(QPointF position);
     void draggedOver(int index);

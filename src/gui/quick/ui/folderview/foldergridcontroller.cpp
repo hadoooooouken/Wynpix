@@ -286,7 +286,7 @@ void FolderGridController::endRubberBand() {
 //------------------------------------------------------------------------------
 // Keyboard (FolderGridView::keyPressEvent())
 
-bool FolderGridController::keyPressed(int key, int modifiers, const QString &text) {
+bool FolderGridController::keyPressed(int key, int modifiers) {
     const auto keyboardModifiers = Qt::KeyboardModifiers::fromInt(modifiers);
     // ThumbnailView::keyPressEvent(): Shift anchors a range.
     if (key == Qt::Key_Shift) {
@@ -341,13 +341,6 @@ bool FolderGridController::keyPressed(int key, int modifiers, const QString &tex
         return true;
     default:
         break;
-    }
-    // Windows Explorer style type-ahead: a printable character without Alt
-    // or Meta jumps to the next matching name (DirectoryPresenter matches).
-    if (!(keyboardModifiers & (Qt::AltModifier | Qt::MetaModifier)) && !text.isEmpty() &&
-        text.at(0).isPrint()) {
-        emit typeAheadRequested(text);
-        return true;
     }
     return false;
 }

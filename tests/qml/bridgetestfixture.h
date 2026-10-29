@@ -88,8 +88,8 @@ class BridgeTestFixture : public QObject {
   Q_PROPERTY(FolderViewController *folderView READ folderView CONSTANT FINAL)
   // The last request of the folder view: "sorting:<mode>",
   // "folderSorting:<mode>", "nameFilter:<text>", "formats:<extensions>",
-  // "directory:<path>", "activated:<index>", "typeAhead:<text>",
-  // "contextMenu", "batch", "openSelected", "drop:<index>:<action>".
+  // "directory:<path>", "activated:<index>", "contextMenu", "batch",
+  // "openSelected", "drop:<index>:<action>".
   Q_PROPERTY(QString lastFolderRequest READ lastFolderRequest FINAL)
   Q_PROPERTY(int folderThumbnailRequestCount READ folderThumbnailRequestCount FINAL)
   Q_PROPERTY(int scriptSettingsRequests READ scriptSettingsRequests FINAL)
