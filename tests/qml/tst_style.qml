@@ -426,6 +426,12 @@ Item {
             searchField.text = "filter";
             verify(searchField.clearIndicator.indicator.visible);
             compare(searchField.clearIndicator.indicator.icon, FluentIcons.Dismiss16);
+            // The clear button keeps the typing in the field.
+            const indicator = searchField.clearIndicator.indicator;
+            mouseClick(indicator, indicator.width / 2, indicator.height / 2);
+            compare(searchField.text, "");
+            keyClick(Qt.Key_A);
+            compare(searchField.text, "a");
             searchField.text = "";
         }
 
