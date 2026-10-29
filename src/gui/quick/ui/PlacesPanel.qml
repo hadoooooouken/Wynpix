@@ -36,16 +36,20 @@ Rectangle {
     // Current and hovered rows of the bookmarks and the tree: a rounded
     // shade inset from the panel edges (and from the scroll bar).
     readonly property int rowInset: 4
-    // BookmarksItem layout margins and the translucent text_hc2 shades of its
+    // Rows of the bookmarks and the tree: the folder glyph or a line of text,
+    // whichever is taller, between the vertical paddings, so both sections
+    // grow alike with the text size (28 px at the default font).
+    readonly property int rowVerticalPadding: 6
+    readonly property int rowHeight: Math.max(Theme.compactIconSize, Math.ceil(rowFontMetrics.height))
+                                     + 2 * rowVerticalPadding
+    // BookmarksItem layout margin and the translucent text_hc2 shades of its
     // buttons.
     readonly property int bookmarkMarginH: 10
-    readonly property int bookmarkMarginV: 6
     readonly property int bookmarkSpacing: 6
     readonly property real bookmarkButtonHoverOpacity: 0.14
     readonly property real bookmarkButtonPressedOpacity: 0.26
     readonly property int dropIndicatorHeight: 2
-    // QTreeView rows: 24 px plus 2 px padding, 20 px indentation.
-    readonly property int treeRowHeight: 28
+    // QTreeView indentation.
     readonly property int treeIndentation: 20
     readonly property int treeBranchPadding: 6
     readonly property int treeTextSpacing: 4
@@ -53,6 +57,13 @@ Rectangle {
     readonly property int treeBranchAnimationDuration: 120
 
     color: Theme.tokens.surfaceView
+
+    // The row labels use the application font (Theme.fonts.body).
+    FontMetrics {
+        id: rowFontMetrics
+
+        font: Theme.fonts.body
+    }
 
     Rectangle {
         anchors.right: parent.right
@@ -313,7 +324,7 @@ Rectangle {
         readonly property bool showButtons: rowHover.hovered || rowArea.dragging
 
         width: ListView.view.width
-        implicitHeight: content.implicitHeight + 2 * root.bookmarkMarginV
+        implicitHeight: root.rowHeight
 
         RowBackground {
             anchors.fill: parent
@@ -461,7 +472,7 @@ Rectangle {
         required property string display
 
         implicitWidth: treeView.width
-        implicitHeight: root.treeRowHeight
+        implicitHeight: root.rowHeight
 
         readonly property real branchLeft: root.rowInset + root.treeBranchPadding
                                            + depth * root.treeIndentation
