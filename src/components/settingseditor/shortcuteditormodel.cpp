@@ -2,10 +2,8 @@
 
 #include <QCoreApplication>
 
-#include <algorithm>
-
+#include "actionshortcutmodel.h"
 #include "settingsstores.h"
-#include "shortcuttablemodel.h"
 
 namespace {
 // The texts keep the translation contexts of the widget dialogs.
@@ -20,50 +18,12 @@ QString ShortcutEditorModel::title() const {
     return mTitle;
 }
 
-QStringList ShortcutEditorModel::actions() const {
-    return mActions;
+QString ShortcutEditorModel::actionTitle() const {
+    return shortcutActionInfo(mAction, mInfos).title;
 }
 
-QStringList ShortcutEditorModel::actionTitles() const {
-    return mActionTitles;
-}
-
-QStringList ShortcutEditorModel::scripts() const {
-    return mScripts;
-}
-
-bool ShortcutEditorModel::isScriptSelected() const {
-    return mScriptSelected;
-}
-
-void ShortcutEditorModel::setScriptSelected(bool selected) {
-    if (mScriptSelected == selected)
-        return;
-    mScriptSelected = selected;
-    emit selectionChanged();
-    emit shortcutChanged();
-}
-
-int ShortcutEditorModel::actionIndex() const {
-    return mActionIndex;
-}
-
-void ShortcutEditorModel::setActionIndex(int index) {
-    if (index < 0 || index >= mActions.size() || index == mActionIndex)
-        return;
-    mActionIndex = index;
-    emit selectionChanged();
-}
-
-int ShortcutEditorModel::scriptIndex() const {
-    return mScriptIndex;
-}
-
-void ShortcutEditorModel::setScriptIndex(int index) {
-    if (index < 0 || index >= mScripts.size() || index == mScriptIndex)
-        return;
-    mScriptIndex = index;
-    emit selectionChanged();
+QString ShortcutEditorModel::categoryTitle() const {
+    return shortcutActionInfo(mAction, mInfos).category;
 }
 
 QString ShortcutEditorModel::shortcut() const {
@@ -85,57 +45,34 @@ bool ShortcutEditorModel::canAccept() const {
 }
 
 bool ShortcutEditorModel::acceptable() const {
-    if (mShortcut.isEmpty())
-        return false;
-    return mScriptSelected ? !mScripts.isEmpty() : !mActions.isEmpty();
+    return !mAction.isEmpty() && !mShortcut.isEmpty();
 }
 
-void ShortcutEditorModel::startAdd(const ShortcutList &table) {
-    startRequest(QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog", "Add shortcut")), -1,
-                 table);
+void ShortcutEditorModel::startAdd(const QString &action, const ShortcutList &table) {
+    startRequest(QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog", "Add shortcut")),
+                 action, table);
     open();
 }
 
-void ShortcutEditorModel::startEdit(const ShortcutEntry &entry, int row, const ShortcutList &table) {
-    startRequest(QCoreApplication::translate(kSettingsContext, QT_TRANSLATE_NOOP("SettingsDialog", "Edit shortcut")), row,
-                 table);
-    if (entry.action.startsWith(kScriptActionPrefix)) {
-        mScriptSelected = true;
-        const qsizetype index = mScripts.indexOf(entry.action.mid(kScriptActionPrefix.size()));
-        if (index >= 0)
-            mScriptIndex = static_cast<int>(index);
-    } else {
-        const qsizetype index = mActions.indexOf(entry.action);
-        if (index >= 0)
-            mActionIndex = static_cast<int>(index);
-    }
+void ShortcutEditorModel::startEdit(const ShortcutEntry &entry, const ShortcutList &table) {
+    startRequest(QCoreApplication::translate(kSettingsContext, QT_TRANSLATE_NOOP("SettingsDialog", "Edit shortcut")),
+                 entry.action, table);
     // The shortcut being edited is not a conflict.
+    mEdited = entry;
     mShortcut = entry.shortcut;
-    emit selectionChanged();
     emit shortcutChanged();
     open();
 }
 
-void ShortcutEditorModel::startRequest(const QString &title, int row, const ShortcutList &table) {
+void ShortcutEditorModel::startRequest(const QString &title, const QString &action, const ShortcutList &table) {
     mTable = table;
     mTitle = title;
     mInfos = mStore.actionInfos();
-    mActions = mInfos.keys();
-    std::ranges::sort(mActions, [this](const QString &a, const QString &b) {
-        return mInfos.value(a).title.localeAwareCompare(mInfos.value(b).title) < 0;
-    });
-    mActionTitles.clear();
-    for (const QString &action : std::as_const(mActions))
-        mActionTitles.append(mInfos.value(action).title);
-    mScripts = mStore.scriptNames();
-    mScriptSelected = false;
-    mActionIndex = 0;
-    mScriptIndex = 0;
+    mAction = action;
     mShortcut.clear();
     mWarning.clear();
-    mEditedRow = row;
+    mEdited.reset();
     emit requestChanged();
-    emit selectionChanged();
     emit shortcutChanged();
 }
 
@@ -150,28 +87,23 @@ void ShortcutEditorModel::setShortcut(const QString &shortcut) {
         // One string, so that a translation can place the action anywhere.
         mWarning = QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog",
                                                                                   "This shortcut is used for action: %1. Replace?"))
-                       .arg(shortcutActionTitle(action, mInfos));
+                       .arg(shortcutActionInfo(action, mInfos).title);
     }
     emit shortcutChanged();
 }
 
 QString ShortcutEditorModel::boundAction(const QString &shortcut) const {
-    for (qsizetype row = 0; row < mTable.size(); ++row) {
-        if (row != mEditedRow && mTable.at(row).shortcut == shortcut)
-            return mTable.at(row).action;
+    for (const ShortcutEntry &entry : mTable) {
+        if (entry.shortcut == shortcut && entry != mEdited)
+            return entry.action;
     }
     return {};
 }
 
 ShortcutEntry ShortcutEditorModel::result() const {
-    QString action;
-    if (mScriptSelected)
-        action = kScriptActionPrefix.toString() + mScripts.value(mScriptIndex);
-    else
-        action = mActions.value(mActionIndex);
-    return {.action = action, .shortcut = mShortcut};
+    return {.action = mAction, .shortcut = mShortcut};
 }
 
-int ShortcutEditorModel::editedRow() const {
-    return mEditedRow;
+std::optional<ShortcutEntry> ShortcutEditorModel::edited() const {
+    return mEdited;
 }

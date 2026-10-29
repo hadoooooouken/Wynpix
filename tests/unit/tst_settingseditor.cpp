@@ -1,3 +1,4 @@
+#include <QSet>
 #include <QSignalSpy>
 #include <QTest>
 #include <QUrl>
@@ -10,6 +11,7 @@
 #include "gui/quick/ui/settings/settingsdialogcontroller.h"
 #include "settings_types.h"
 #include "testsuites.h"
+#include "utils/actions.h"
 
 namespace {
 using namespace Qt::StringLiterals;
@@ -22,6 +24,14 @@ const ShortcutEntry kNextImage{.action = u"nextImage"_s, .shortcut = u"Right"_s}
 const ShortcutEntry kPrevImage{.action = u"prevImage"_s, .shortcut = u"Left"_s};
 const ShortcutEntry kZoomIn{.action = u"zoomIn"_s, .shortcut = u"+"_s};
 const ShortcutEntry kNextImageWheel{.action = u"nextImage"_s, .shortcut = u"WheelDown"_s};
+
+// The values of role in the rows of model, top to bottom.
+QStringList column(const QAbstractItemModel &model, int role) {
+    QStringList values;
+    for (int row = 0; row < model.rowCount(); ++row)
+        values.append(model.index(row, 0).data(role).toString());
+    return values;
+}
 
 // Values that every normalization keeps.
 SettingsValues validValues() {
@@ -327,39 +337,166 @@ private slots:
         QVERIFY(editor.thumbnailCacheSizeText() != before);
     }
 
-    //--- shortcut table -----------------------------------------------------
-    void theTableIsSortedByActionKeepingTheOrderOfEqualActions() {
-        ShortcutTableModel table;
-        table.setEntries({kZoomIn, kNextImageWheel, kPrevImage, kNextImage});
-        QCOMPARE(table.entries(),
+    //--- shortcuts ----------------------------------------------------------
+    void everyActionHasARowListingItsShortcuts() {
+        ActionShortcutModel model;
+        model.setActions({{u"nextImage"_s, {}}, {u"prevImage"_s, {}}, {u"zoomIn"_s, {}}}, {});
+        model.setEntries({kZoomIn, kNextImageWheel, kPrevImage, kNextImage});
+        QCOMPARE(model.entries(),
                  (ShortcutList{kNextImageWheel, kNextImage, kPrevImage, kZoomIn}));
-        QCOMPARE(table.rowCount(), 4);
-        QCOMPARE(table.data(table.index(1, ShortcutTableModel::ShortcutColumn), Qt::DisplayRole),
-                 QVariant(kNextImage.shortcut));
+        QCOMPARE(model.rowCount(), 3);
+        QCOMPARE(model.data(model.index(0), ActionShortcutModel::ShortcutsRole).toStringList(),
+                 (QStringList{kNextImageWheel.shortcut, kNextImage.shortcut}));
     }
 
-    void puttingABoundShortcutReplacesItsRow() {
-        ShortcutTableModel table;
-        table.setEntries({kNextImage, kPrevImage});
+    void puttingABoundShortcutMovesIt() {
+        ActionShortcutModel model;
+        model.setActions({{u"nextImage"_s, {}}, {u"prevImage"_s, {}}, {u"zoomIn"_s, {}}}, {});
+        model.setEntries({kNextImage, kPrevImage});
         const ShortcutEntry rebound{.action = u"zoomIn"_s, .shortcut = u"Right"_s};
-        QCOMPARE(table.put(rebound), 1);
-        QCOMPARE(table.entries(), (ShortcutList{kPrevImage, rebound}));
-        // A new entry of an existing action goes after its rows.
-        QCOMPARE(table.put(kNextImageWheel), 0);
-        QCOMPARE(table.put({.action = u"prevImage"_s, .shortcut = u"Up"_s}), 2);
-        QCOMPARE(table.put({.action = u""_s, .shortcut = u"X"_s}), -1);
-        QCOMPARE(table.put({.action = u"zoomIn"_s, .shortcut = u""_s}), -1);
+        QCOMPARE(model.put(rebound), 2);
+        QCOMPARE(model.entries(), (ShortcutList{kPrevImage, rebound}));
+        // A new shortcut of an action goes after its others.
+        QCOMPARE(model.put(kNextImageWheel), 0);
+        QCOMPARE(model.put({.action = u"prevImage"_s, .shortcut = u"Up"_s}), 1);
+        QCOMPARE(model.put({.action = u""_s, .shortcut = u"X"_s}), -1);
+        QCOMPARE(model.put({.action = u"zoomIn"_s, .shortcut = u""_s}), -1);
     }
 
-    void editingARowReplacesIt() {
-        ShortcutTableModel table;
-        table.setEntries({kNextImage, kPrevImage, kZoomIn});
-        const ShortcutEntry edited{.action = u"prevImage"_s, .shortcut = u"PgUp"_s};
-        QCOMPARE(table.put(edited, 1), 1);
-        QCOMPARE(table.entries(), (ShortcutList{kNextImage, edited, kZoomIn}));
-        QVERIFY(table.removeAt(0));
-        QVERIFY(!table.removeAt(5));
-        QCOMPARE(table.entries(), (ShortcutList{edited, kZoomIn}));
+    void editingAShortcutReplacesItInPlace() {
+        ActionShortcutModel model;
+        model.setActions({{u"nextImage"_s, {}}, {u"prevImage"_s, {}}, {u"zoomIn"_s, {}}}, {});
+        model.setEntries({kNextImage, kNextImageWheel, kZoomIn});
+        const ShortcutEntry edited{.action = u"nextImage"_s, .shortcut = u"PgDown"_s};
+        QCOMPARE(model.put(edited, kNextImage), 0);
+        QCOMPARE(model.entries(), (ShortcutList{edited, kNextImageWheel, kZoomIn}));
+        QVERIFY(model.remove(edited));
+        QVERIFY(!model.remove(edited));
+        QCOMPARE(model.entries(), (ShortcutList{kNextImageWheel, kZoomIn}));
+    }
+
+    void everyActionHasACategory() {
+        const Actions actions;
+        QCOMPARE(actions.category(u"nextImage"_s), ActionCategory::Navigation);
+        QCOMPARE(actions.category(u"zoomIn"_s), ActionCategory::View);
+        QCOMPARE(actions.category(u"crop"_s), ActionCategory::Editing);
+        QCOMPARE(actions.category(u"save"_s), ActionCategory::File);
+        QCOMPARE(actions.category(u"copyPathClipboard"_s), ActionCategory::Clipboard);
+        QCOMPARE(actions.category(u"toggleUpscayl"_s), ActionCategory::Upscale);
+        QCOMPARE(actions.category(u"exit"_s), ActionCategory::Application);
+        QCOMPARE(actions.category(u"noSuchAction"_s), ActionCategory::Application);
+
+        QSet<QString> titles;
+        for (const ActionCategory category :
+             {ActionCategory::Navigation, ActionCategory::View, ActionCategory::Editing, ActionCategory::File,
+              ActionCategory::Clipboard, ActionCategory::Upscale, ActionCategory::Application})
+            titles.insert(Actions::categoryTitle(category));
+        QCOMPARE(titles.size(), 7);
+        QVERIFY(!titles.contains(QString()));
+    }
+
+    void rowsFollowTheCategoriesWithScriptsAndUnknownActionsLast() {
+        ActionShortcutModel model;
+        model.setActions({{u"zoomIn"_s, {.title = u"Zoom in"_s, .category = u"View"_s, .categoryOrder = 1}},
+                          {u"fitWindow"_s, {.title = u"Fit to window"_s, .category = u"View"_s, .categoryOrder = 1}},
+                          {u"nextImage"_s, {.title = u"Next image"_s, .category = u"Navigation"_s, .categoryOrder = 0}}},
+                         {u"gimp"_s});
+        const ShortcutEntry unknown{.action = u"gone"_s, .shortcut = u"F9"_s};
+        model.setEntries({unknown, kZoomIn});
+        QCOMPARE(column(model, ActionShortcutModel::ActionRole),
+                 (QStringList{u"nextImage"_s, u"fitWindow"_s, u"zoomIn"_s, u"s:gimp"_s, u"gone"_s}));
+        QCOMPARE(column(model, ActionShortcutModel::CategoryRole),
+                 (QStringList{u"Navigation"_s, u"View"_s, u"View"_s, u"Scripts"_s, u"Other"_s}));
+        // The category names the script; the dialog and warnings do too.
+        QCOMPARE(column(model, ActionShortcutModel::TitleRole).at(3), u"gimp"_s);
+        QCOMPARE(shortcutActionInfo(u"s:gimp"_s, {}).title, u"Script: gimp"_s);
+        QCOMPARE(model.entries(), (ShortcutList{kZoomIn, unknown}));
+    }
+
+    void theFilterMatchesTitlesCategoriesAndShortcuts() {
+        ActionShortcutModel model;
+        model.setActions({{u"nextImage"_s, {.title = u"Next image"_s, .category = u"Navigation"_s, .categoryOrder = 0}},
+                          {u"zoomIn"_s, {.title = u"Zoom in"_s, .category = u"View"_s, .categoryOrder = 1}}},
+                         {});
+        model.setEntries({kNextImage, kZoomIn});
+        ShortcutFilterModel filter;
+        filter.setSourceModel(&model);
+        const QStringList everything{u"nextImage"_s, u"zoomIn"_s};
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), everything);
+
+        filter.setFilterText(u"  ZOOM "_s);
+        QCOMPARE(filter.filterText(), u"ZOOM"_s);
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), QStringList{u"zoomIn"_s});
+        filter.setFilterText(u"navig"_s);
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), QStringList{u"nextImage"_s});
+        filter.setFilterText(u"right"_s);
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), QStringList{u"nextImage"_s});
+
+        // A row is filtered again when its shortcuts change.
+        filter.setFilterText(u"PgDown"_s);
+        QCOMPARE(filter.rowCount(), 0);
+        model.put({.action = u"zoomIn"_s, .shortcut = u"PgDown"_s});
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), QStringList{u"zoomIn"_s});
+
+        filter.setFilterText({});
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), everything);
+    }
+
+    void theEditorFiltersTheShortcutsAndLoadClearsTheSearch() {
+        EditorFixture f;
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        ShortcutEditorModel &creator = *editor.shortcutEditor();
+        QSignalSpy filterChanged(&editor, &SettingsEditorModel::shortcutFilterChanged);
+        QSignalSpy put(&editor, &SettingsEditorModel::shortcutPut);
+
+        editor.setShortcutFilter(u"zoom"_s);
+        QCOMPARE(filterChanged.count(), 1);
+        QCOMPARE(column(*editor.shortcutView(), ActionShortcutModel::ActionRole), QStringList{u"zoomIn"_s});
+        // Spaces around the text search the same.
+        editor.setShortcutFilter(u" zoom "_s);
+        QCOMPARE(filterChanged.count(), 1);
+
+        // The put shortcut is reported by its row among the shown rows.
+        editor.addShortcut(u"zoomIn"_s);
+        creator.setShortcut(u"Ctrl+K"_s);
+        creator.accept();
+        QCOMPARE(put.count(), 1);
+        QCOMPARE(put.constFirst().constFirst().toInt(), 0);
+
+        editor.load();
+        QVERIFY(editor.shortcutFilter().isEmpty());
+        QCOMPARE(filterChanged.count(), 2);
+        QCOMPARE(editor.shortcutView()->rowCount(), 3);
+    }
+
+    void onlyAnActionWithARowCanGetAShortcut() {
+        EditorFixture f;
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        QTest::ignoreMessage(QtWarningMsg, "SettingsEditorModel: no action \"noSuchAction\"");
+        editor.addShortcut(u"noSuchAction"_s);
+        QVERIFY(!editor.shortcutEditor()->isOpen());
+        QTest::ignoreMessage(QtWarningMsg, "SettingsEditorModel: no shortcut \"F1\" of \"zoomIn\"");
+        editor.editShortcut(u"zoomIn"_s, u"F1"_s);
+        QVERIFY(!editor.shortcutEditor()->isOpen());
+        QTest::ignoreMessage(QtWarningMsg, "SettingsEditorModel: no shortcut \"F1\" of \"zoomIn\"");
+        editor.removeShortcut(u"zoomIn"_s, u"F1"_s);
+    }
+
+    void aNewScriptGetsARowAtOnce() {
+        EditorFixture f;
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        ScriptEditorModel &scriptEditor = *editor.scriptEditor();
+        editor.addScript();
+        scriptEditor.setName(u"krita"_s);
+        scriptEditor.setExecutablePath(u"C:/Apps/krita.exe"_s);
+        scriptEditor.accept();
+        QCOMPARE(editor.actionShortcuts()->rowOf(u"s:krita"_s), 3);
+        editor.addShortcut(u"s:krita"_s);
+        QCOMPARE(editor.shortcutEditor()->actionTitle(), u"Script: krita"_s);
+        QCOMPARE(editor.shortcutEditor()->categoryTitle(), u"Scripts"_s);
     }
 
     void resetRestoresTheDefaultShortcuts() {
@@ -367,8 +504,8 @@ private slots:
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
         editor.resetShortcuts();
-        QCOMPARE(editor.shortcutTable()->entries(), (ShortcutList{kZoomIn}));
-        // Like every table edit, the reset waits for apply(): Cancel keeps
+        QCOMPARE(editor.actionShortcuts()->entries(), (ShortcutList{kZoomIn}));
+        // Like every shortcut edit, the reset waits for apply(): Cancel keeps
         // the shortcuts the application has.
         QCOMPARE(f.shortcuts.live, (ShortcutList{kNextImage, kPrevImage}));
         editor.apply();
@@ -381,10 +518,11 @@ private slots:
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
         ShortcutEditorModel &creator = *editor.shortcutEditor();
-        editor.addShortcut();
+        editor.addShortcut(u"zoomIn"_s);
         QVERIFY(creator.isOpen());
         QVERIFY(creator.isCreated());
         QVERIFY(!creator.canAccept());
+        QCOMPARE(creator.actionTitle(), u"zoomIn"_s);
         QCOMPARE(creator.shortcutText(), u"[Enter shortcut]"_s);
         creator.accept();
         QVERIFY(creator.isOpen());
@@ -402,55 +540,53 @@ private slots:
         editor.load();
         ShortcutEditorModel &creator = *editor.shortcutEditor();
         QSignalSpy put(&editor, &SettingsEditorModel::shortcutPut);
-        editor.addShortcut();
-        creator.setActionIndex(2);
+        editor.addShortcut(u"zoomIn"_s);
         creator.setShortcut(u"Right"_s);
         QCOMPARE(creator.warning(), u"This shortcut is used for action: nextImage. Replace?"_s);
         creator.accept();
         QVERIFY(!creator.isOpen());
         QCOMPARE(put.count(), 1);
         const ShortcutEntry bound{.action = u"zoomIn"_s, .shortcut = u"Right"_s};
-        QCOMPARE(editor.shortcutTable()->entries(), (ShortcutList{kPrevImage, bound}));
-        QCOMPARE(put.constFirst().constFirst().toInt(), 1);
+        QCOMPARE(editor.actionShortcuts()->entries(), (ShortcutList{kPrevImage, bound}));
+        QCOMPARE(put.constFirst().constFirst().toInt(), 2);
     }
 
-    void theCreatorChecksTheTableBeingEdited() {
+    void theCreatorChecksTheShortcutsBeingEdited() {
         EditorFixture f;
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
         ShortcutEditorModel &creator = *editor.shortcutEditor();
 
-        // Removed from the table, not applied yet: free.
-        editor.removeShortcut(0);
-        editor.addShortcut();
+        // Removed, not applied yet: free.
+        editor.removeShortcut(kNextImage.action, kNextImage.shortcut);
+        editor.addShortcut(u"zoomIn"_s);
         creator.setShortcut(u"Right"_s);
         QVERIFY(creator.warning().isEmpty());
-        creator.setActionIndex(2);
         creator.accept();
 
-        // Added to the table, not applied yet: bound.
-        editor.addShortcut();
+        // Added, not applied yet: bound.
+        editor.addShortcut(u"prevImage"_s);
         creator.setShortcut(u"Right"_s);
         QCOMPARE(creator.warning(), u"This shortcut is used for action: zoomIn. Replace?"_s);
         creator.reject();
         QVERIFY(f.shortcuts.live.contains(kNextImage));
     }
 
-    void theEditedRowIsNoConflict() {
+    void theEditedShortcutIsNoConflict() {
         EditorFixture f;
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
         ShortcutEditorModel &creator = *editor.shortcutEditor();
-        editor.editShortcut(0);
+        editor.editShortcut(kNextImage.action, kNextImage.shortcut);
         QCOMPARE(creator.shortcut(), kNextImage.shortcut);
         creator.setShortcut(kNextImage.shortcut);
         QVERIFY(creator.warning().isEmpty());
-        // Another row's shortcut still is one.
+        // The shortcut of another binding still is one.
         creator.setShortcut(kPrevImage.shortcut);
         QCOMPARE(creator.warning(), u"This shortcut is used for action: prevImage. Replace?"_s);
     }
 
-    void theEditorStartsWithTheEditedScriptBinding() {
+    void aScriptBindingIsEditedInItsRow() {
         EditorFixture f;
         f.shortcuts.scripts = {{u"a"_s, {}}, {u"b"_s, {}}};
         const ShortcutEntry scriptEntry{.action = u"s:b"_s, .shortcut = u"F5"_s};
@@ -458,18 +594,16 @@ private slots:
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
         ShortcutEditorModel &creator = *editor.shortcutEditor();
-        QCOMPARE(editor.shortcutTable()->entries(), (ShortcutList{kNextImage, scriptEntry}));
-        editor.editShortcut(1);
-        QVERIFY(creator.isScriptSelected());
-        QCOMPARE(creator.scriptIndex(), 1);
+        QCOMPARE(editor.actionShortcuts()->entries(), (ShortcutList{kNextImage, scriptEntry}));
+        editor.editShortcut(scriptEntry.action, scriptEntry.shortcut);
+        QCOMPARE(creator.actionTitle(), u"Script: b"_s);
         QCOMPARE(creator.shortcut(), u"F5"_s);
         QVERIFY(creator.warning().isEmpty());
-        QCOMPARE(creator.editedRow(), 1);
-        creator.setScriptIndex(0);
+        QCOMPARE(creator.edited(), std::optional<ShortcutEntry>(scriptEntry));
         creator.setShortcut(u"F6"_s);
         creator.accept();
-        QCOMPARE(editor.shortcutTable()->entries(),
-                 (ShortcutList{kNextImage, {.action = u"s:a"_s, .shortcut = u"F6"_s}}));
+        QCOMPARE(editor.actionShortcuts()->entries(),
+                 (ShortcutList{kNextImage, {.action = u"s:b"_s, .shortcut = u"F6"_s}}));
     }
 
     void rejectingTheCreatorChangesNothing() {
@@ -478,22 +612,11 @@ private slots:
         editor.load();
         ShortcutEditorModel &creator = *editor.shortcutEditor();
         QSignalSpy rejected(&creator, &EditorSession::rejected);
-        editor.addShortcut();
+        editor.addShortcut(u"zoomIn"_s);
         creator.setShortcut(u"Ctrl+K"_s);
         creator.reject();
         QCOMPARE(rejected.count(), 1);
-        QCOMPARE(editor.shortcutTable()->entries(), (ShortcutList{kNextImage, kPrevImage}));
-    }
-
-    void aScriptCannotBeChosenWithoutScripts() {
-        EditorFixture f;
-        SettingsEditorModel editor(f.values, f.shortcuts);
-        editor.load();
-        ShortcutEditorModel &creator = *editor.shortcutEditor();
-        editor.addShortcut();
-        creator.setScriptSelected(true);
-        creator.setShortcut(u"Ctrl+K"_s);
-        QVERIFY(!creator.canAccept());
+        QCOMPARE(editor.actionShortcuts()->entries(), (ShortcutList{kNextImage, kPrevImage}));
     }
 
     //--- scripts ------------------------------------------------------------
@@ -549,12 +672,12 @@ private slots:
         f.shortcuts.live = {kNextImage, scriptEntry};
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
-        editor.shortcutTable()->put(kZoomIn);
+        editor.actionShortcuts()->put(kZoomIn);
         editor.removeScript(0);
         QVERIFY(f.shortcuts.scripts.isEmpty());
         QVERIFY(editor.scriptList()->stringList().isEmpty());
         // The unsaved table edits are kept.
-        QCOMPARE(editor.shortcutTable()->entries(), (ShortcutList{kNextImage, kZoomIn}));
+        QCOMPARE(editor.actionShortcuts()->entries(), (ShortcutList{kNextImage, kZoomIn}));
     }
 
     //--- Quick settings window ----------------------------------------------

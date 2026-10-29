@@ -61,6 +61,8 @@ add_library(wynpix_viewcomponents STATIC
     components/scalingfilter/scalingfilterselection.cpp
     components/scalingfilter/scalingfilterselection.h
     # The settings dialog's values, rules and view-models.
+    components/settingseditor/actionshortcutmodel.cpp
+    components/settingseditor/actionshortcutmodel.h
     components/settingseditor/editorsession.cpp
     components/settingseditor/editorsession.h
     components/settingseditor/scripteditormodel.cpp
@@ -75,8 +77,8 @@ add_library(wynpix_viewcomponents STATIC
     components/settingseditor/settingsvalues.h
     components/settingseditor/shortcuteditormodel.cpp
     components/settingseditor/shortcuteditormodel.h
-    components/settingseditor/shortcuttablemodel.cpp
-    components/settingseditor/shortcuttablemodel.h
+    components/settingseditor/shortcutfiltermodel.cpp
+    components/settingseditor/shortcutfiltermodel.h
     components/svgrasterizer/svgrasterizer.cpp
     components/svgrasterizer/svgrasterizer.h
     components/viewtransform/viewportinteraction.cpp

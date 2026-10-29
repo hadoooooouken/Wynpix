@@ -21,6 +21,8 @@ TestCase {
     // ThemeMode value of the light theme.
     readonly property int lightTheme: 2
     readonly property int activationTimeoutMs: 5000
+    // How long the shortcut list may take to lay its rows out.
+    readonly property int layoutTimeoutMs: 1000
 
     property var settingsWindow: null
 
@@ -83,6 +85,41 @@ TestCase {
         const found = findText(item, "Button", text);
         verify(found !== null, "no button " + text);
         return found;
+    }
+
+    // The row of action on the Controls page.
+    function rowOf(page, action) {
+        // By the view, once it has laid the rows out: rows of a reset model
+        // may wait for deletion.
+        const list = findAll(page, "QQuickListView", [])[0];
+        let found = null;
+        tryVerify(() => {
+            for (let i = 0; i < list.count && !found; ++i) {
+                const row = list.itemAtIndex(i);
+                if (row && row.action === action)
+                    found = row;
+            }
+            return found !== null;
+        }, layoutTimeoutMs, "no row of " + action);
+        return found;
+    }
+
+    // The "+" button of the row of action on the Controls page.
+    function addButtonOf(page, action) {
+        return findAll(rowOf(page, action), "ToolButton", [])[0];
+    }
+
+    // The chip of shortcut in the row of action on the Controls page.
+    function chipOf(page, action, shortcut) {
+        const chips = findAll(rowOf(page, action), "", [])
+            .filter(chip => chip.objectName === "shortcutChip" && chip.shortcut === shortcut);
+        verify(chips.length === 1, "no chip " + shortcut + " of " + action);
+        return chips[0];
+    }
+
+    // The number of rows the Controls page shows.
+    function shortcutRowCount(page) {
+        return findAll(page, "QQuickListView", [])[0].count;
     }
 
     // The sub-dialog window of a Loader in the settings window, once open
@@ -155,7 +192,7 @@ TestCase {
 
     function test_aCapturedKeyBecomesANewShortcut() {
         const page = openOn(controlsPage);
-        button(page, "Add").clicked();
+        addButtonOf(page, "nextImage").clicked();
         const creator = subDialog("ShortcutCreatorDialog");
         const ok = findText(creator.contentItem, "Button", "OK");
         verify(!ok.enabled);
@@ -165,13 +202,13 @@ TestCase {
         mouseClick(ok);
         tryVerify(() => !creator.visible);
         mouseClick(button(settingsWindow.contentItem, "Apply"));
-        // A new shortcut goes after the rows of its action.
+        // A new shortcut goes after the other shortcuts of its action.
         compare(Fixture.appliedShortcuts, "nextImage=Right;nextImage=K;prevImage=Left");
     }
 
     function test_aMouseButtonCanBeCaptured() {
         const page = openOn(controlsPage);
-        button(page, "Add").clicked();
+        addButtonOf(page, "nextImage").clicked();
         const creator = subDialog("ShortcutCreatorDialog");
         const field = findAll(creator.contentItem, "ShortcutCaptureField", [])[0];
         verify(field !== undefined);
@@ -183,6 +220,59 @@ TestCase {
         compare(Fixture.settingsDialog.editor.shortcutEditor.shortcut, "WheelUp");
         mouseClick(findText(creator.contentItem, "Button", "Cancel"));
         tryVerify(() => !creator.visible);
+    }
+
+    function test_aClickOnARowAddsAShortcutToItsAction() {
+        const page = openOn(controlsPage);
+        const row = rowOf(page, "prevImage");
+        mouseClick(row, row.width / 4, row.height / 2);
+        const creator = subDialog("ShortcutCreatorDialog");
+        compare(Fixture.settingsDialog.editor.shortcutEditor.title, "Add shortcut");
+        compare(Fixture.settingsDialog.editor.shortcutEditor.actionTitle, "prevImage");
+        mouseClick(findText(creator.contentItem, "Button", "Cancel"));
+        tryVerify(() => !creator.visible);
+    }
+
+    function test_aChipEditsItsShortcutAndItsCrossRemovesIt() {
+        const page = openOn(controlsPage);
+        let chip = chipOf(page, "nextImage", "Right");
+        // On its text, clear of the cross.
+        mouseClick(chip, chip.height / 2, chip.height / 2);
+        const creator = subDialog("ShortcutCreatorDialog");
+        compare(Fixture.settingsDialog.editor.shortcutEditor.title, "Edit shortcut");
+        compare(Fixture.settingsDialog.editor.shortcutEditor.shortcut, "Right");
+        mouseClick(findText(creator.contentItem, "Button", "Cancel"));
+        tryVerify(() => !creator.visible);
+
+        chip = chipOf(page, "nextImage", "Right");
+        mouseClick(chip, chip.width - page.chipRemovePadding - page.chipRemoveSize / 2, chip.height / 2);
+        mouseClick(button(settingsWindow.contentItem, "Apply"));
+        compare(Fixture.appliedShortcuts, "prevImage=Left");
+    }
+
+    function test_theSearchFiltersTheRowsUntilItIsCleared() {
+        const page = openOn(controlsPage);
+        const allRows = shortcutRowCount(page);
+        const field = findAll(page, "SearchField", [])[0];
+        verify(field !== undefined);
+
+        field.forceActiveFocus();
+        Fixture.sendText(settingsWindow, "prev");
+        tryCompare(Fixture.settingsDialog.editor, "shortcutFilter", "prev");
+        compare(shortcutRowCount(page), 1);
+        // Escape clears the search and keeps the window open.
+        Fixture.sendKey(settingsWindow, Qt.Key_Escape);
+        tryCompare(Fixture.settingsDialog.editor, "shortcutFilter", "");
+        compare(shortcutRowCount(page), allRows);
+        verify(settingsWindow.visible);
+
+        Fixture.sendText(settingsWindow, "zoom");
+        tryCompare(Fixture.settingsDialog.editor, "shortcutFilter", "zoom");
+        compare(shortcutRowCount(page), 1);
+        // So does the clear button.
+        mouseClick(field, field.width - field.rightPadding / 2, field.height / 2);
+        tryCompare(Fixture.settingsDialog.editor, "shortcutFilter", "");
+        compare(shortcutRowCount(page), allRows);
     }
 
     function test_aNewScriptIsAddedAtOnce() {

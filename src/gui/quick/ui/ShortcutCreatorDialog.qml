@@ -1,16 +1,17 @@
 import QtQuick
 import QtQuick.Layouts
+import wynpix.bridges
 import wynpix.style
 
 // Shortcut creator of the settings window (ShortcutCreatorDialog in the
-// widget UI): an action or a script, and the shortcut captured below. A
-// shortcut the application already binds shows a warning; OK replaces it.
+// widget UI): the action it was opened for, with its category, and the
+// shortcut captured below. A shortcut the application already binds shows a
+// warning; OK replaces it.
 DialogWindow {
     id: root
 
     required property ShortcutEditorModel dialog
 
-    readonly property int comboWidth: 200
     readonly property int captureSpacing: 10
     readonly property int warningMinimumHeight: 36
     readonly property int bodyWidth: 316
@@ -23,50 +24,29 @@ DialogWindow {
     onAcceptRequested: root.dialog.accept()
     onDismissRequested: root.dialog.reject()
 
-    GridLayout {
+    Label {
         Layout.fillWidth: true
-        columns: 2
-        columnSpacing: StyleConstants.dialogSpacing
-
-        RadioButton {
-            Layout.fillWidth: true
-            text: qsTranslate("ShortcutCreatorDialog", "Action:")
-            checkable: false
-            checked: !root.dialog.scriptSelected
-            onClicked: root.dialog.scriptSelected = false
-        }
-        ComboBox {
-            Layout.preferredWidth: root.comboWidth
-            enabled: !root.dialog.scriptSelected
-            model: root.dialog.actionTitles
-            currentIndex: root.dialog.actionIndex
-            onActivated: index => root.dialog.actionIndex = index
-        }
-        RadioButton {
-            Layout.fillWidth: true
-            text: qsTranslate("ShortcutCreatorDialog", "Script:")
-            checkable: false
-            checked: root.dialog.scriptSelected
-            onClicked: root.dialog.scriptSelected = true
-        }
-        ComboBox {
-            Layout.preferredWidth: root.comboWidth
-            enabled: root.dialog.scriptSelected
-            model: root.dialog.scripts
-            currentIndex: root.dialog.scriptIndex
-            onActivated: index => root.dialog.scriptIndex = index
-        }
+        Layout.maximumWidth: root.bodyWidth
+        text: root.dialog.actionTitle
+        textFormat: Text.PlainText
+        font: Theme.fonts.bodyStrong
+        elide: Text.ElideRight
     }
 
     Label {
-        Layout.topMargin: root.captureSpacing
-        Layout.alignment: Qt.AlignHCenter
-        text: qsTranslate("ShortcutCreatorDialog", "Shortcut:")
+        Layout.fillWidth: true
+        Layout.maximumWidth: root.bodyWidth
+        text: root.dialog.categoryTitle
+        textFormat: Text.PlainText
+        font: Theme.fonts.caption
+        color: Theme.tokens.textSecondary
+        elide: Text.ElideRight
     }
 
     ShortcutCaptureField {
         id: captureField
 
+        Layout.topMargin: root.captureSpacing
         Layout.fillWidth: true
         text: root.dialog.shortcutText
         onCaptured: shortcut => root.dialog.setShortcut(shortcut)
@@ -74,10 +54,34 @@ DialogWindow {
 
     Label {
         Layout.fillWidth: true
-        Layout.minimumHeight: root.warningMinimumHeight
-        text: root.dialog.warning
+        Layout.maximumWidth: root.bodyWidth
+        text: qsTranslate("ShortcutCreatorDialog", "Press a key combination, click a mouse button or turn the wheel over the field.")
         textFormat: Text.PlainText
+        font: Theme.fonts.caption
+        color: Theme.tokens.textSecondary
         wrapMode: Text.WordWrap
+    }
+
+    // Keeps its height without a warning, so the dialog does not resize.
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.maximumWidth: root.bodyWidth
+        Layout.minimumHeight: root.warningMinimumHeight
+        spacing: StyleConstants.dialogSpacing
+
+        IconGlyph {
+            Layout.alignment: Qt.AlignTop
+            visible: root.dialog.warning.length > 0
+            icon: FluentIcons.Warning20
+        }
+
+        Label {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
+            text: root.dialog.warning
+            textFormat: Text.PlainText
+            wrapMode: Text.WordWrap
+        }
     }
 
     DialogButtonBox {

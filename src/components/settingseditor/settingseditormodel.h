@@ -10,8 +10,9 @@
 #include "settingsoptions.h"
 #include "settingsscales.h"
 #include "settingsvalues.h"
+#include "actionshortcutmodel.h"
 #include "shortcuteditormodel.h"
-#include "shortcuttablemodel.h"
+#include "shortcutfiltermodel.h"
 
 class ISettingsValueStore;
 class IShortcutScriptStore;
@@ -72,7 +73,10 @@ class SettingsEditorModel final : public QObject {
     Q_PROPERTY(bool casOptionsVisible READ casOptionsVisible NOTIFY viewChanged FINAL)
     Q_PROPERTY(QString thumbnailCacheSizeText READ thumbnailCacheSizeText NOTIFY thumbnailCacheSizeChanged FINAL)
 
-    Q_PROPERTY(QAbstractItemModel *shortcuts READ shortcutTable CONSTANT FINAL)
+    // The rows of actionShortcuts() that match shortcutFilter.
+    Q_PROPERTY(QAbstractItemModel *shortcuts READ shortcutView CONSTANT FINAL)
+    // Search text of the shortcuts; cleared by load().
+    Q_PROPERTY(QString shortcutFilter READ shortcutFilter WRITE setShortcutFilter NOTIFY shortcutFilterChanged FINAL)
     // Script names, sorted; role "display".
     Q_PROPERTY(QAbstractItemModel *scripts READ scriptList CONSTANT FINAL)
     Q_PROPERTY(ShortcutEditorModel *shortcutEditor READ shortcutEditor CONSTANT FINAL)
@@ -137,7 +141,10 @@ public:
     [[nodiscard]] bool casOptionsVisible() const;
     [[nodiscard]] QString thumbnailCacheSizeText() const;
 
-    [[nodiscard]] ShortcutTableModel *shortcutTable();
+    [[nodiscard]] ActionShortcutModel *actionShortcuts();
+    [[nodiscard]] ShortcutFilterModel *shortcutView();
+    [[nodiscard]] QString shortcutFilter() const;
+    void setShortcutFilter(const QString &text);
     [[nodiscard]] QStringListModel *scriptList();
     [[nodiscard]] ShortcutEditorModel *shortcutEditor();
     [[nodiscard]] ScriptEditorModel *scriptEditor();
@@ -170,10 +177,11 @@ public:
 
     Q_INVOKABLE void clearThumbnailCache();
 
-    // Shortcut table: the creator / editor opens through shortcutEditor().
-    Q_INVOKABLE void addShortcut();
-    Q_INVOKABLE void editShortcut(int row);
-    Q_INVOKABLE void removeShortcut(int row);
+    // Shortcuts by action ("s:<name>" for a script) and shortcut text; the
+    // creator / editor opens through shortcutEditor().
+    Q_INVOKABLE void addShortcut(const QString &action);
+    Q_INVOKABLE void editShortcut(const QString &action, const QString &shortcut);
+    Q_INVOKABLE void removeShortcut(const QString &action, const QString &shortcut);
     Q_INVOKABLE void resetShortcuts();
 
     // Scripts by row of scripts(); the editor opens through scriptEditor().
@@ -202,7 +210,8 @@ signals:
     void upscaleStateChanged();
     void environmentChanged();
     void thumbnailCacheSizeChanged();
-    // A shortcut was put into the table at row (to select it).
+    void shortcutFilterChanged();
+    // A shortcut was put into the row row of shortcuts() (to show it).
     void shortcutPut(int row);
 
 private:
@@ -217,7 +226,8 @@ private:
     SettingsValues mValues;
     SettingsEnvironment mEnvironment;
     qint64 mThumbnailCacheBytes = 0;
-    ShortcutTableModel mShortcuts;
+    ActionShortcutModel mShortcuts;
+    ShortcutFilterModel mShortcutView;
     QStringListModel mScripts;
     ShortcutEditorModel mShortcutEditor;
     ScriptEditorModel mScriptEditor;

@@ -62,9 +62,11 @@ SettingsEditorModel::SettingsEditorModel(ISettingsValueStore &values,
       mValueStore(values),
       mShortcutStore(shortcuts),
       mShortcuts(this),
+      mShortcutView(this),
       mScripts(this),
       mShortcutEditor(shortcuts, this),
       mScriptEditor(shortcuts, this) {
+    mShortcutView.setSourceModel(&mShortcuts);
     connect(&mShortcutEditor, &EditorSession::accepted, this,
             &SettingsEditorModel::onShortcutAccepted);
     connect(&mScriptEditor, &EditorSession::accepted, this,
@@ -250,8 +252,23 @@ QString SettingsEditorModel::thumbnailCacheSizeText() const {
     return QLocale().formattedDataSize(mThumbnailCacheBytes);
 }
 
-ShortcutTableModel *SettingsEditorModel::shortcutTable() {
+ActionShortcutModel *SettingsEditorModel::actionShortcuts() {
     return &mShortcuts;
+}
+
+ShortcutFilterModel *SettingsEditorModel::shortcutView() {
+    return &mShortcutView;
+}
+
+QString SettingsEditorModel::shortcutFilter() const {
+    return mShortcutView.filterText();
+}
+
+void SettingsEditorModel::setShortcutFilter(const QString &text) {
+    if (text.trimmed() == mShortcutView.filterText())
+        return;
+    mShortcutView.setFilterText(text);
+    emit shortcutFilterChanged();
 }
 
 QStringListModel *SettingsEditorModel::scriptList() {
@@ -307,9 +324,9 @@ void SettingsEditorModel::load() {
     SettingsValues loaded = mValueStore.load();
     normalize(loaded);
     setValues(loaded);
-    mShortcuts.setActionInfos(mShortcutStore.actionInfos());
-    mShortcuts.setEntries(mShortcutStore.shortcuts());
+    setShortcutFilter({});
     refreshScripts();
+    mShortcuts.setEntries(mShortcutStore.shortcuts());
     refreshThumbnailCacheSize();
 }
 
@@ -456,22 +473,27 @@ void SettingsEditorModel::refreshThumbnailCacheSize() {
 }
 
 //--- shortcuts ----------------------------------------------------------------
-void SettingsEditorModel::addShortcut() {
-    mShortcutEditor.startAdd(mShortcuts.entries());
-}
-
-void SettingsEditorModel::editShortcut(int row) {
-    const std::optional<ShortcutEntry> entry = mShortcuts.entryAt(row);
-    if (!entry) {
-        qWarning() << "SettingsEditorModel: no shortcut in row" << row;
+void SettingsEditorModel::addShortcut(const QString &action) {
+    if (mShortcuts.rowOf(action) < 0) {
+        qWarning() << "SettingsEditorModel: no action" << action;
         return;
     }
-    mShortcutEditor.startEdit(*entry, row, mShortcuts.entries());
+    mShortcutEditor.startAdd(action, mShortcuts.entries());
 }
 
-void SettingsEditorModel::removeShortcut(int row) {
-    if (!mShortcuts.removeAt(row))
-        qWarning() << "SettingsEditorModel: no shortcut in row" << row;
+void SettingsEditorModel::editShortcut(const QString &action, const QString &shortcut) {
+    const ShortcutEntry entry{.action = action, .shortcut = shortcut};
+    const ShortcutList entries = mShortcuts.entries();
+    if (!entries.contains(entry)) {
+        qWarning() << "SettingsEditorModel: no shortcut" << shortcut << "of" << action;
+        return;
+    }
+    mShortcutEditor.startEdit(entry, entries);
+}
+
+void SettingsEditorModel::removeShortcut(const QString &action, const QString &shortcut) {
+    if (!mShortcuts.remove({.action = action, .shortcut = shortcut}))
+        qWarning() << "SettingsEditorModel: no shortcut" << shortcut << "of" << action;
 }
 
 void SettingsEditorModel::resetShortcuts() {
@@ -479,9 +501,12 @@ void SettingsEditorModel::resetShortcuts() {
 }
 
 void SettingsEditorModel::onShortcutAccepted() {
-    const int row = mShortcuts.put(mShortcutEditor.result(), mShortcutEditor.editedRow());
-    if (row >= 0)
-        emit shortcutPut(row);
+    const int row = mShortcuts.put(mShortcutEditor.result(), mShortcutEditor.edited());
+    if (row < 0)
+        return;
+    const QModelIndex shown = mShortcutView.mapFromSource(mShortcuts.index(row));
+    if (shown.isValid())
+        emit shortcutPut(shown.row());
 }
 
 //--- scripts ------------------------------------------------------------------
@@ -517,6 +542,7 @@ void SettingsEditorModel::refreshScripts() {
     QStringList names = mShortcutStore.scriptNames();
     names.sort();
     mScripts.setStringList(names);
+    mShortcuts.setActions(mShortcutStore.actionInfos(), names);
 }
 
 //--- texts --------------------------------------------------------------------

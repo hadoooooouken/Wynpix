@@ -160,7 +160,7 @@ public:
     friend bool operator==(const ThemeSettings &, const ThemeSettings &) = default;
 };
 
-// Page "Controls", without the shortcut table (ShortcutTableModel).
+// Page "Controls", without the shortcuts (ActionShortcutModel).
 struct ControlsSettings {
     Q_GADGET
     Q_PROPERTY(bool clickableEdges MEMBER clickableEdges FINAL)
