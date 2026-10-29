@@ -30,12 +30,16 @@ T.SearchField {
     spacing: StyleConstants.indicatorSpacing
     opacity: enabled ? 1.0 : StyleConstants.disabledOpacity
 
-    // The template takes the focus itself when the clear indicator is
-    // pressed, and the text typed then goes nowhere: the text input takes it.
+    // A press on the control takes the focus from the text input to the
+    // control itself, where the text typed then goes nowhere: the text input
+    // takes it back. While the input has the focus, the control (a focus
+    // scope) keeps its active focus through the press, so the clear button
+    // hands the focus back too.
     onActiveFocusChanged: {
         if (activeFocus)
             field.forceActiveFocus();
     }
+    onClearButtonPressed: field.forceActiveFocus()
 
     delegate: ItemDelegate {
         required property var model

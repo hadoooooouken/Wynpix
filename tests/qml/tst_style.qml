@@ -426,12 +426,22 @@ Item {
             searchField.text = "filter";
             verify(searchField.clearIndicator.indicator.visible);
             compare(searchField.clearIndicator.indicator.icon, FluentIcons.Dismiss16);
-            // The clear button keeps the typing in the field.
+            searchField.text = "";
+            // The clear button keeps the typing in the field, whether the
+            // field was being typed in or had no focus.
             const indicator = searchField.clearIndicator.indicator;
-            mouseClick(indicator, indicator.width / 2, indicator.height / 2);
-            compare(searchField.text, "");
+            mouseClick(searchField.contentItem);
             keyClick(Qt.Key_A);
             compare(searchField.text, "a");
+            mouseClick(indicator, indicator.width / 2, indicator.height / 2);
+            compare(searchField.text, "");
+            keyClick(Qt.Key_B);
+            compare(searchField.text, "b");
+            textField.forceActiveFocus();
+            mouseClick(indicator, indicator.width / 2, indicator.height / 2);
+            compare(searchField.text, "");
+            keyClick(Qt.Key_C);
+            compare(searchField.text, "c");
             searchField.text = "";
         }
 

@@ -162,6 +162,11 @@ Item {
             mouseClick(field, field.width - field.rightPadding / 2, field.height / 2);
             compare(Fixture.folderView.nameFilter, "");
             tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
+            // The typing goes on in the field.
+            keyClick(Qt.Key_B);
+            tryCompare(Fixture, "lastFolderRequest", "nameFilter:b", nameFilterTimeout);
+            mouseClick(field, field.width - field.rightPadding / 2, field.height / 2);
+            tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
         }
 
         function test_placesPanelShowsTheBookmarks() {
