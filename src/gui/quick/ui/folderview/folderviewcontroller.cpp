@@ -227,6 +227,13 @@ void FolderViewController::endFolderTreeRefresh() {
     notifyIfFilesystemViewReady();
 }
 
+// The view exists only once active: a hidden view has no field to focus.
+void FolderViewController::focusNameFilter() {
+    if (!mActive)
+        return;
+    emit nameFilterFocusRequested();
+}
+
 // The tree knows the folders up to path once asked for its index; the
 // folders above it are listed here, as the widget tree view listed them when
 // it expanded to the folder. The readiness waits for the parent; the tree

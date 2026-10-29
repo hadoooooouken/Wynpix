@@ -22,6 +22,8 @@ QuickFolderViewActions::QuickFolderViewActions(const QuickFolderViewContext &con
       actions(context.actions) {
     connect(&folderView, &FolderViewController::folderTreeRequested, this,
             &QuickFolderViewActions::createFolderTree);
+    connect(&actions, &ActionManager::focusNameFilter, &folderView,
+            &FolderViewController::focusNameFilter);
     forwardIntents();
     forwardGridRequests();
     storeLayout();

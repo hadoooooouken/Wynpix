@@ -545,6 +545,18 @@ private slots:
     QCOMPARE(view.nameFilter(), u"ab"_s);
   }
 
+  void nameFilterFocusNeedsTheActiveView() {
+    ThumbnailListModel model;
+    FolderGridController grid(model, folderSettings());
+    FolderViewController view(grid, folderSettings(), u"C:/home"_s);
+    QSignalSpy focus(&view, &FolderViewController::nameFilterFocusRequested);
+    view.focusNameFilter();
+    QCOMPARE(focus.count(), 0);
+    view.setActive(true);
+    view.focusNameFilter();
+    QCOMPARE(focus.count(), 1);
+  }
+
   void sortingRequestsAreChecked() {
     ThumbnailListModel model;
     FolderGridController grid(model, folderSettings());

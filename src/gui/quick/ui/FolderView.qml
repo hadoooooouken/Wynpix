@@ -316,6 +316,15 @@ FocusScope {
                 // Not textEdited: the clear button clears the text without
                 // it.
                 onTextChanged: root.controller.editNameFilter(text)
+                // Escape, Enter and Down hand the focus back to the grid;
+                // the filter stays.
+                Keys.onPressed: event => {
+                    if (event.key === Qt.Key_Escape || event.key === Qt.Key_Return
+                            || event.key === Qt.Key_Enter || event.key === Qt.Key_Down) {
+                        folderGrid.forceActiveFocus(Qt.OtherFocusReason);
+                        event.accepted = true;
+                    }
+                }
 
                 ToolTip {
                     visible: nameFilter.hovered && !nameFilter.activeFocus
@@ -389,9 +398,21 @@ FocusScope {
         }
 
         FolderGridView {
+            id: folderGrid
+
             SplitView.fillWidth: true
             controller: root.gridController
             focus: true
+        }
+    }
+
+    // The "focusNameFilter" action; the text is selected to be typed over.
+    Connections {
+        target: root.controller
+
+        function onNameFilterFocusRequested() {
+            nameFilter.forceActiveFocus(Qt.ShortcutFocusReason);
+            nameFilter.contentItem.selectAll();
         }
     }
 

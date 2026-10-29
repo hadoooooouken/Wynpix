@@ -145,4 +145,5 @@ void Actions::init() {
   add(u"toggleUpscayl"_s, QT_TRANSLATE_NOOP("Actions", "Toggle AI upscale"), ActionCategory::Upscale);
   add(u"cycleUpscaylModel"_s, QT_TRANSLATE_NOOP("Actions", "Next AI upscale model"), ActionCategory::Upscale);
   add(u"toggleHdrToneMapping"_s, QT_TRANSLATE_NOOP("Actions", "Toggle HDR tone mapping"), ActionCategory::View);
+  add(u"focusNameFilter"_s, QT_TRANSLATE_NOOP("Actions", "Name filter"), ActionCategory::Navigation);
 }

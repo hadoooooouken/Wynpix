@@ -7,9 +7,9 @@ import wynpix.tests
 // The folder view over the Fixture's FolderViewController, FolderGridController
 // and their ThumbnailListModel: a large directory keeps the delegates and the
 // requests to the visible rows, the pointer selects, activates, draws the
-// rubber band and asks for the context menu, keys move and type ahead, drops
-// keep their target, the name filter is published, the top bar compacts, and
-// the places panel shows the bookmarks. The view is a sibling of the
+// rubber band and asks for the context menu, keys move and letters do not,
+// drops keep their target, the name filter is published and focused by its
+// action, the top bar compacts, and the places panel shows the bookmarks. The view is a sibling of the
 // TestCase, which is not visible and would not get input.
 Item {
     id: root
@@ -168,6 +168,28 @@ Item {
             tryCompare(Fixture, "lastFolderRequest", "nameFilter:b", nameFilterTimeout);
             mouseClick(field, field.width - field.rightPadding / 2, field.height / 2);
             tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
+        }
+
+        // The action focuses the field with its text selected; Escape, Enter
+        // and Down hand the focus back to the grid and keep the filter.
+        function test_nameFilterActionFocusesTheField() {
+            const field = findType(view, "SearchField");
+            verify(field !== null);
+            Fixture.folderView.editNameFilter("ab");
+            const keys = [Qt.Key_Escape, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Down];
+            for (const key of keys) {
+                const point = centreOf(2);
+                mouseClick(root, point.x, point.y);
+                Fixture.focusNameFilter();
+                verify(field.contentItem.activeFocus, "no focus for key " + key);
+                compare(field.contentItem.selectedText, "ab");
+                keyClick(key);
+                verify(!field.activeFocus, "the field kept the focus on key " + key);
+                compare(field.text, "ab");
+                keyClick(Qt.Key_Right);
+                compare(Fixture.folderView.grid.model.currentIndex, 3);
+            }
+            Fixture.folderView.editNameFilter("");
         }
 
         function test_placesPanelShowsTheBookmarks() {

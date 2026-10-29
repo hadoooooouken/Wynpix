@@ -36,6 +36,7 @@ struct QuickFolderViewContext {
 //   (UiEvents);
 // - turns the grid's requests into the directory view's signals (drag
 //   hover, drops, opening the selection) and runs its actions;
+// - focuses the name filter on its action ("focusNameFilter");
 // - stores the icon size, the places panel layout and the bookmarks.
 // GUI thread only.
 class QuickFolderViewActions final : public QObject {

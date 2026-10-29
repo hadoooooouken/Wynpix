@@ -227,6 +227,8 @@ public:
   Q_INVOKABLE void populateFolder(int count, int dirCount, const QString &path);
   Q_INVOKABLE int deliverFolderThumbnails();
   Q_INVOKABLE void clearFolderRequest();
+  // The "focusNameFilter" action.
+  Q_INVOKABLE void focusNameFilter();
 
   // Dialog requests as QuickDialogPort starts them (without waiting).
   Q_INVOKABLE bool requestConfirmation(const QString &title, const QString &message);

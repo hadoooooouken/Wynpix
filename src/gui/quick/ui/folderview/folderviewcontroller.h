@@ -120,6 +120,8 @@ public:
     // waits for it again.
     void beginFolderTreeRefresh(const QString &path);
     void endFolderTreeRefresh();
+    // Puts the keyboard focus into the name filter while the view is active.
+    void focusNameFilter();
 
     // --- view (QML) ------------------------------------------------------
     Q_INVOKABLE void setViewWidth(qreal width);
@@ -164,6 +166,8 @@ signals:
     void folderTreeRequested();
     // Readiness for the cold-start reveal.
     void filesystemViewReady();
+    // The name filter should take the keyboard focus (focusNameFilter()).
+    void nameFilterFocusRequested();
 
     // User intents.
     void sortingSelected(SettingsEnums::SortingMode mode);

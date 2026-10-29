@@ -111,6 +111,7 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+I", "toggleUpscayl");
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+" + InputMap::keyNameShift() + "+I", "cycleUpscaylModel");
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+H", "toggleHdrToneMapping");
+  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+F", "focusNameFilter");
 }
 //------------------------------------------------------------------------------
 void ActionManager::initShortcuts() {

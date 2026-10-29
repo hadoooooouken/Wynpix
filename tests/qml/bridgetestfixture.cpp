@@ -829,6 +829,10 @@ void BridgeTestFixture::clearFolderRequest() {
   mLastFolderRequest.clear();
 }
 
+void BridgeTestFixture::focusNameFilter() {
+  mFolderView.focusNameFilter();
+}
+
 void BridgeTestFixture::panelPointerMoved(QPointF position, int buttons) {
   mThumbnailPanel.pointerMoved(position, Qt::MouseButtons::fromInt(buttons));
 }

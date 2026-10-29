@@ -18,7 +18,7 @@ enum ActionType {
 class ActionManager : public QObject {
     Q_OBJECT
 public:
-    static constexpr int kCurrentShortcutsVersion = 1;
+    static constexpr int kCurrentShortcutsVersion = 2;
     static bool mergeMissingDefaults(const QMap<QString, QString> &defaults,
                                      QMap<QString, QString> &shortcuts) {
         bool changed = false;
@@ -148,6 +148,7 @@ signals:
     void toggleUpscayl();
     void cycleUpscaylModel();
     void toggleHdrToneMapping();
+    void focusNameFilter();
 };
 
 extern ActionManager *actionManager;
