@@ -78,6 +78,10 @@ const QHash<FluentIcon, char32_t> &codepointTable() {
         { FluentIcon::Pin20,          0xF601 }, // ic_fluent_pin_20_regular <- Pin main panel
         { FluentIcon::Edit20,         0xF493 }, // ic_fluent_image_edit_20_regular <- Unsaved edits
 
+        // Settings shortcut list
+        { FluentIcon::Add16,     0xF108 }, // ic_fluent_add_16_regular <- Add a shortcut to an action
+        { FluentIcon::Dismiss12, 0xF367 }, // ic_fluent_dismiss_12_regular <- Remove a shortcut
+
         // Settings sidebar
         { FluentIcon::BrainSparkle32,      0xF0B3A }, // ic_fluent_brain_sparkle_32_regular <- AI Upscale page
         { FluentIcon::ColorFill32,         0xF0BCB }, // ic_fluent_color_fill_32_regular <- Theme page

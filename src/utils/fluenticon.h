@@ -91,6 +91,8 @@ enum class FluentIcon {
     Next20,
     ArrowTurnDownLeft20,
     ArrowRepeatAll20,
+    Add16,
+    Dismiss12,
 };
 Q_ENUM_NS(FluentIcon)
 
