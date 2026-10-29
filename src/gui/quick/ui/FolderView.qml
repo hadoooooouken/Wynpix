@@ -313,7 +313,9 @@ FocusScope {
                 Layout.rightMargin: root.controlMarginH
                 placeholderText: qsTr("Name filter")
                 text: root.controller.nameFilter
-                onTextEdited: root.controller.editNameFilter(text)
+                // Not textEdited: the clear button clears the text without
+                // it.
+                onTextChanged: root.controller.editNameFilter(text)
 
                 ToolTip {
                     visible: nameFilter.hovered && !nameFilter.activeFocus

@@ -154,6 +154,14 @@ Item {
             // The field follows the controller.
             Fixture.folderView.editNameFilter("");
             compare(field.text, "");
+            tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
+
+            keyClick(Qt.Key_A);
+            tryCompare(Fixture, "lastFolderRequest", "nameFilter:a", nameFilterTimeout);
+            // So does the clear button.
+            mouseClick(field, field.width - field.rightPadding / 2, field.height / 2);
+            compare(Fixture.folderView.nameFilter, "");
+            tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
         }
 
         function test_placesPanelShowsTheBookmarks() {
