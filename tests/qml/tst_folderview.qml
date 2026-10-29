@@ -170,13 +170,13 @@ Item {
             tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
         }
 
-        // The action focuses the field with its text selected; Escape, Enter
-        // and Down hand the focus back to the grid and keep the filter.
+        // The action focuses the field with its text selected; Enter and Down
+        // hand the focus back to the grid and keep the filter.
         function test_nameFilterActionFocusesTheField() {
             const field = findType(view, "SearchField");
             verify(field !== null);
             Fixture.folderView.editNameFilter("ab");
-            const keys = [Qt.Key_Escape, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Down];
+            const keys = [Qt.Key_Return, Qt.Key_Enter, Qt.Key_Down];
             for (const key of keys) {
                 const point = centreOf(2);
                 mouseClick(root, point.x, point.y);
@@ -190,6 +190,28 @@ Item {
                 compare(Fixture.folderView.grid.model.currentIndex, 3);
             }
             Fixture.folderView.editNameFilter("");
+        }
+
+        // Escape clears the filter first, then hands the focus to the grid.
+        function test_escapeClearsTheNameFilterThenLeaves() {
+            const field = findType(view, "SearchField");
+            verify(field !== null);
+            const point = centreOf(2);
+            mouseClick(root, point.x, point.y);
+            Fixture.folderView.editNameFilter("ab");
+            Fixture.focusNameFilter();
+            keyClick(Qt.Key_Escape);
+            compare(Fixture.folderView.nameFilter, "");
+            compare(field.text, "");
+            verify(field.contentItem.activeFocus);
+            keyClick(Qt.Key_Escape);
+            verify(!field.activeFocus);
+            keyClick(Qt.Key_Right);
+            compare(Fixture.folderView.grid.model.currentIndex, 3);
+            // The cleared filter is published late; it stays out of the next
+            // test.
+            tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);
+            Fixture.clearFolderRequest();
         }
 
         function test_placesPanelShowsTheBookmarks() {

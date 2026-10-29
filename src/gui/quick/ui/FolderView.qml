@@ -316,10 +316,14 @@ FocusScope {
                 // Not textEdited: the clear button clears the text without
                 // it.
                 onTextChanged: root.controller.editNameFilter(text)
-                // Escape, Enter and Down hand the focus back to the grid;
-                // the filter stays.
+                // Escape clears the filter, and in an empty field hands the
+                // focus back to the grid, as Enter and Down do (the filter
+                // stays).
                 Keys.onPressed: event => {
-                    if (event.key === Qt.Key_Escape || event.key === Qt.Key_Return
+                    if (event.key === Qt.Key_Escape && nameFilter.text.length > 0) {
+                        root.controller.editNameFilter("");
+                        event.accepted = true;
+                    } else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Return
                             || event.key === Qt.Key_Enter || event.key === Qt.Key_Down) {
                         folderGrid.forceActiveFocus(Qt.OtherFocusReason);
                         event.accepted = true;
