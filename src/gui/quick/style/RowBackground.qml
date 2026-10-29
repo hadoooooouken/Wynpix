@@ -17,9 +17,9 @@ Rectangle {
     property color restColor: "transparent"
 
     radius: StyleConstants.rowRadius
-    color: pressed ? Theme.tokens.fillPressed
-         : selected ? (hovered ? Theme.tokens.fillRest : Theme.tokens.fillHover)
-         : hovered ? Theme.tokens.fillHover
+    color: pressed ? Theme.tokens.rowPressed
+         : selected ? (hovered ? Theme.tokens.rowSelectedHover : Theme.tokens.rowSelected)
+         : hovered ? Theme.tokens.rowHover
          : restColor
 
     Rectangle {

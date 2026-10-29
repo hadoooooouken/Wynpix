@@ -394,11 +394,11 @@ Item {
             verifyColor(pixel(rowBackground, x, y), Theme.tokens.surfacePopup, "rest");
             verifyColor(pixel(rowBackground, edge, y), Theme.tokens.surfacePopup, "no indicator");
             rowBackground.hovered = true;
-            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.fillHover), "hovered");
+            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.rowHover), "hovered");
             rowBackground.selected = true;
-            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.fillRest), "selected, hovered");
+            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.rowSelectedHover), "selected, hovered");
             rowBackground.hovered = false;
-            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.fillHover), "selected");
+            verifyColor(pixel(rowBackground, x, y), fillOver(Theme.tokens.rowSelected), "selected");
             verifyColor(pixel(rowBackground, edge, y), Theme.tokens.accent, "indicator");
             rowBackground.selected = false;
             rowBackground.restColor = Theme.tokens.surfaceViewRaised;

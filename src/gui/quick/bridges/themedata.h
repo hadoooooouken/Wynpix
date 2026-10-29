@@ -40,6 +40,10 @@ struct ThemeTokens {
   Q_PROPERTY(QColor fieldPressed MEMBER fieldPressed)
   Q_PROPERTY(QColor hudHover MEMBER hudHover)
   Q_PROPERTY(QColor hudPressed MEMBER hudPressed)
+  Q_PROPERTY(QColor rowHover MEMBER rowHover)
+  Q_PROPERTY(QColor rowSelected MEMBER rowSelected)
+  Q_PROPERTY(QColor rowSelectedHover MEMBER rowSelectedHover)
+  Q_PROPERTY(QColor rowPressed MEMBER rowPressed)
   Q_PROPERTY(QColor accent MEMBER accent)
   Q_PROPERTY(QColor accentHover MEMBER accentHover)
   Q_PROPERTY(QColor accentPressed MEMBER accentPressed)
@@ -94,6 +98,10 @@ public:
   QColor fieldPressed;
   QColor hudHover;
   QColor hudPressed;
+  QColor rowHover;
+  QColor rowSelected;
+  QColor rowSelectedHover;
+  QColor rowPressed;
   QColor accent;
   QColor accentHover;
   QColor accentPressed;

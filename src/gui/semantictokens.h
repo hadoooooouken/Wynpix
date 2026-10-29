@@ -47,6 +47,10 @@ struct Colors {
   QColor fieldPressed;
   QColor hudHover;
   QColor hudPressed;
+  QColor rowHover;
+  QColor rowSelected;
+  QColor rowSelectedHover;
+  QColor rowPressed;
   QColor accent;
   QColor accentHover;
   QColor accentPressed;
@@ -136,6 +140,10 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
       .fieldPressed = scheme.combo_field_pressed,
       .hudHover = fills.hudHover,
       .hudPressed = fills.hudPressed,
+      .rowHover = fills.rowHover,
+      .rowSelected = fills.rowSelected,
+      .rowSelectedHover = fills.rowSelectedHover,
+      .rowPressed = fills.rowPressed,
       .accent = scheme.accent,
       .accentHover = AccentContrast::stateFill(
           scheme.accent, accentText, AccentContrast::kHoverStepPercent),
