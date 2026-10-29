@@ -47,7 +47,7 @@ public:
     [[nodiscard]] virtual ShortcutList shortcuts() = 0;
     // The default shortcuts; changes nothing.
     [[nodiscard]] virtual ShortcutList defaultShortcuts() = 0;
-    [[nodiscard]] virtual ActionTitleMap actionTitles() = 0;
+    [[nodiscard]] virtual ActionInfoMap actionInfos() = 0;
 
     [[nodiscard]] virtual QStringList scriptNames() = 0;
     [[nodiscard]] virtual bool scriptExists(const QString &name) = 0;

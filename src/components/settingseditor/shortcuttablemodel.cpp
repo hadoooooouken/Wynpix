@@ -8,12 +8,13 @@ namespace {
 constexpr char kContext[] = "SettingsDialog";
 } // namespace
 
-QString shortcutActionTitle(const QString &action, const ActionTitleMap &titles) {
+QString shortcutActionTitle(const QString &action, const ActionInfoMap &actions) {
     if (action.startsWith(kScriptActionPrefix)) {
         return QCoreApplication::translate(kContext, QT_TRANSLATE_NOOP("SettingsDialog", "Script: %1"))
             .arg(action.mid(kScriptActionPrefix.size()));
     }
-    return titles.value(action, action);
+    const auto info = actions.constFind(action);
+    return info == actions.cend() ? action : info->title;
 }
 
 ShortcutTableModel::ShortcutTableModel(QObject *parent) : QAbstractTableModel(parent) {}
@@ -60,9 +61,9 @@ QHash<int, QByteArray> ShortcutTableModel::roleNames() const {
     return {{ActionRole, "action"}, {TitleRole, "title"}, {ShortcutRole, "shortcut"}};
 }
 
-void ShortcutTableModel::setActionTitles(const ActionTitleMap &titles) {
+void ShortcutTableModel::setActionInfos(const ActionInfoMap &actions) {
     beginResetModel();
-    mTitles = titles;
+    mActions = actions;
     sortEntries();
     endResetModel();
 }
@@ -108,7 +109,7 @@ bool ShortcutTableModel::removeAt(int row) {
 }
 
 QString ShortcutTableModel::title(const QString &action) const {
-    return shortcutActionTitle(action, mTitles);
+    return shortcutActionTitle(action, mActions);
 }
 
 bool ShortcutTableModel::titleLess(const ShortcutEntry &a, const ShortcutEntry &b) const {

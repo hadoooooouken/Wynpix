@@ -1,5 +1,7 @@
 #include "appsettingsstore.h"
 
+#include <utility>
+
 #include "components/actionmanager/actionmanager.h"
 #include "components/cache/thumbnailcache.h"
 #include "components/scriptmanager/scriptmanager.h"
@@ -91,11 +93,15 @@ ShortcutList AppShortcutStore::defaultShortcuts() {
     return shortcutList(mActions.defaultShortcuts());
 }
 
-ActionTitleMap AppShortcutStore::actionTitles() {
-    ActionTitleMap titles;
-    for (const QString &action : mActions.actionList())
-        titles.insert(action, mActions.actionTitle(action));
-    return titles;
+ActionInfoMap AppShortcutStore::actionInfos() {
+    ActionInfoMap infos;
+    for (const QString &action : mActions.actionList()) {
+        const ActionCategory category = mActions.actionCategory(action);
+        infos.insert(action, {.title = mActions.actionTitle(action),
+                              .category = Actions::categoryTitle(category),
+                              .categoryOrder = std::to_underlying(category)});
+    }
+    return infos;
 }
 
 QStringList AppShortcutStore::scriptNames() {

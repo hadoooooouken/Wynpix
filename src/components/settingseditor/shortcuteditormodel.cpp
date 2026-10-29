@@ -119,14 +119,14 @@ void ShortcutEditorModel::startEdit(const ShortcutEntry &entry, int row, const S
 void ShortcutEditorModel::startRequest(const QString &title, int row, const ShortcutList &table) {
     mTable = table;
     mTitle = title;
-    mTitles = mStore.actionTitles();
-    mActions = mTitles.keys();
+    mInfos = mStore.actionInfos();
+    mActions = mInfos.keys();
     std::ranges::sort(mActions, [this](const QString &a, const QString &b) {
-        return mTitles.value(a).localeAwareCompare(mTitles.value(b)) < 0;
+        return mInfos.value(a).title.localeAwareCompare(mInfos.value(b).title) < 0;
     });
     mActionTitles.clear();
     for (const QString &action : std::as_const(mActions))
-        mActionTitles.append(mTitles.value(action));
+        mActionTitles.append(mInfos.value(action).title);
     mScripts = mStore.scriptNames();
     mScriptSelected = false;
     mActionIndex = 0;
@@ -150,7 +150,7 @@ void ShortcutEditorModel::setShortcut(const QString &shortcut) {
         // One string, so that a translation can place the action anywhere.
         mWarning = QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog",
                                                                                   "This shortcut is used for action: %1. Replace?"))
-                       .arg(shortcutActionTitle(action, mTitles));
+                       .arg(shortcutActionTitle(action, mInfos));
     }
     emit shortcutChanged();
 }

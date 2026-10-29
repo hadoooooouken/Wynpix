@@ -281,5 +281,15 @@ struct ScriptDefinition {
 // Prefix of the shortcut actions that run a script.
 inline constexpr QStringView kScriptActionPrefix = u"s:";
 
-// Every action with the title the settings show for it, translated.
-using ActionTitleMap = QHash<QString, QString>;
+// An action as the settings show it: its title and the title of its
+// category, translated; categoryOrder orders the categories.
+struct ActionInfo {
+    QString title;
+    QString category;
+    int categoryOrder = 0;
+
+    friend bool operator==(const ActionInfo &, const ActionInfo &) = default;
+};
+
+// Every action with the way the settings show it.
+using ActionInfoMap = QHash<QString, ActionInfo>;

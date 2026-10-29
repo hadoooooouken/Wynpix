@@ -58,7 +58,7 @@ public:
 
     [[nodiscard]] ShortcutList shortcuts() override;
     [[nodiscard]] ShortcutList defaultShortcuts() override;
-    [[nodiscard]] ActionTitleMap actionTitles() override;
+    [[nodiscard]] ActionInfoMap actionInfos() override;
 
     [[nodiscard]] QStringList scriptNames() override;
     [[nodiscard]] bool scriptExists(const QString &name) override;

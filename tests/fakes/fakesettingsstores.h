@@ -68,10 +68,13 @@ class FakeShortcutScriptStore final : public IShortcutScriptStore {
 public:
     ShortcutList shortcuts() override { return live; }
     ShortcutList defaultShortcuts() override { return defaults; }
-    ActionTitleMap actionTitles() override {
-        ActionTitleMap map;
-        for (const QString &action : actions)
-            map.insert(action, titles.value(action, action));
+    ActionInfoMap actionInfos() override {
+        ActionInfoMap map;
+        for (const QString &action : actions) {
+            ActionInfo info = categories.value(action);
+            info.title = titles.value(action, action);
+            map.insert(action, info);
+        }
         return map;
     }
 
@@ -97,5 +100,8 @@ public:
     QStringList actions;
     // Titles of actions; an action without one is its own title.
     QHash<QString, QString> titles;
+    // Categories of actions (their titles are ignored); an action without
+    // one is in the unnamed category 0.
+    QHash<QString, ActionInfo> categories;
     QMap<QString, ScriptDefinition> scripts;
 };

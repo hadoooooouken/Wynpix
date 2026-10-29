@@ -6,9 +6,9 @@
 
 #include "settingsvalues.h"
 
-// The title the settings show for action: its title in titles, "Script:
+// The title the settings show for action: its title in actions, "Script:
 // <name>" for a script, or action itself when it has no title.
-[[nodiscard]] QString shortcutActionTitle(const QString &action, const ActionTitleMap &titles);
+[[nodiscard]] QString shortcutActionTitle(const QString &action, const ActionInfoMap &actions);
 
 // The shortcut table of the settings dialog ("Controls"): one row per
 // shortcut, sorted by action title (rows of the same action keep their
@@ -34,7 +34,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
     // The titles the Action column shows; sorts the table again.
-    void setActionTitles(const ActionTitleMap &titles);
+    void setActionInfos(const ActionInfoMap &actions);
 
     [[nodiscard]] const ShortcutList &entries() const;
     // Replaces the table; entries are sorted by action title.
@@ -57,5 +57,5 @@ private:
     [[nodiscard]] int insertionRow(const ShortcutEntry &entry) const;
 
     ShortcutList mEntries;
-    ActionTitleMap mTitles;
+    ActionInfoMap mActions;
 };

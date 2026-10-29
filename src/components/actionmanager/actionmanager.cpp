@@ -133,6 +133,10 @@ QStringList ActionManager::actionList() { return appActions->getList(); }
 QString ActionManager::actionTitle(const QString &action) {
   return appActions->title(action);
 }
+
+ActionCategory ActionManager::actionCategory(const QString &action) {
+  return appActions->category(action);
+}
 //------------------------------------------------------------------------------
 const QMap<QString, QString> &ActionManager::allShortcuts() {
   return actionManager->shortcuts;

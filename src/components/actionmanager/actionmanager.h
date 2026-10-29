@@ -49,6 +49,8 @@ public:
     QStringList actionList();
     // The title the settings show for action, translated.
     QString actionTitle(const QString &action);
+    // The group the settings show action in.
+    ActionCategory actionCategory(const QString &action);
     const QMap<QString,QString>& allShortcuts();
     const QMap<QString,QString>& defaultShortcuts();
     void removeShortcut(const QString &keys);

@@ -82,7 +82,7 @@ private:
     IShortcutScriptStore &mStore;
     ShortcutList mTable;
     QString mTitle;
-    ActionTitleMap mTitles;
+    ActionInfoMap mInfos;
     QStringList mActions;
     QStringList mActionTitles;
     QStringList mScripts;
