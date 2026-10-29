@@ -21,7 +21,7 @@ T.TextField {
     color: Theme.tokens.textPrimary
     selectionColor: Theme.tokens.accent
     selectedTextColor: Theme.tokens.accentText
-    placeholderTextColor: Color.transparent(Theme.tokens.textSecondary, StyleConstants.secondaryTextOpacity)
+    placeholderTextColor: Color.transparent(Theme.tokens.textSecondary, StyleConstants.placeholderTextOpacity)
     verticalAlignment: TextInput.AlignVCenter
     opacity: enabled ? 1.0 : StyleConstants.disabledOpacity
 

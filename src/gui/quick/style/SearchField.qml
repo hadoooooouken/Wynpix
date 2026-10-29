@@ -62,7 +62,7 @@ T.SearchField {
 
         text: control.text
         placeholderText: control.placeholderText
-        placeholderTextColor: Color.transparent(Theme.tokens.textSecondary, StyleConstants.secondaryTextOpacity)
+        placeholderTextColor: Color.transparent(Theme.tokens.textSecondary, StyleConstants.placeholderTextOpacity)
         selectByMouse: control.selectTextByMouse
 
         font: control.font

@@ -116,9 +116,12 @@ QtObject {
     readonly property int indicatorPadding: 6
 
     // Colour factors.
-    // Secondary text (shortcuts, disabled menu items, placeholders,
-    // thumbnail details): text at this opacity.
+    // Secondary text (shortcuts, disabled menu items, thumbnail details):
+    // text at this opacity.
     readonly property real secondaryTextOpacity: 0.62
+    // Placeholders of entry fields: secondary text at this opacity, which
+    // keeps the AA text contrast on the field in both schemes.
+    readonly property real placeholderTextOpacity: 0.8
     // Disabled icons, indicators and control content.
     readonly property real disabledOpacity: 0.45
     // Hovered slider handle: accent lightened by this factor.
