@@ -42,6 +42,6 @@ T.ItemDelegate {
         implicitHeight: StyleConstants.itemMinimumHeight
         radius: StyleConstants.itemRadius
         visible: control.down || control.highlighted || control.visualFocus
-        color: control.down ? Theme.tokens.fillPressed : Theme.tokens.fillHover
+        color: control.down ? Theme.tokens.rowPressed : Theme.tokens.rowHover
     }
 }
