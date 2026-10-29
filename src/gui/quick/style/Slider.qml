@@ -21,6 +21,9 @@ T.Slider {
     // Base color beneath trackGradient, used to blend the gradient with
     // Theme.tokens.accent (e.g. for exposure, contrast and brightness).
     property color trackBaseColor: "transparent"
+    // Ring around the handle: the colour of the surface under the slider,
+    // so the ring reads as a gap between the handle and the groove.
+    property color handleRingColor: Theme.tokens.surfacePopup
 
     handle: Rectangle {
         x: control.leftPadding + (control.horizontal
@@ -39,7 +42,7 @@ T.Slider {
              : control.hovered || control.pressed ? Color.lighter(Theme.tokens.accent, StyleConstants.accentLightFactor)
              : Theme.tokens.accent
         border.width: StyleConstants.sliderHandleBorderWidth
-        border.color: Theme.tokens.surfacePopup
+        border.color: control.handleRingColor
 
         // The shared focus ring, outside the ring of the widget colour.
         Rectangle {

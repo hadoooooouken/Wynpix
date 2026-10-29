@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import wynpix.bridges
 import wynpix.style
 
 // One slider option of the settings window: its label, the slider over a
@@ -39,6 +40,8 @@ RowLayout {
         to: root.range.to
         stepSize: root.range.step
         snapMode: Slider.SnapAlways
+        // The rows lie on the settings section cards.
+        handleRingColor: Theme.tokens.surfaceCard
         value: root.value
         onMoved: root.moved(Math.round(slider.value))
         onPressedChanged: {
