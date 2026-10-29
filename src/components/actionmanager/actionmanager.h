@@ -47,6 +47,8 @@ public:
     const QString shortcutForAction(QString action);
     const QList<QString> shortcutsForAction(QString action);
     QStringList actionList();
+    // The title the settings show for action, translated.
+    QString actionTitle(const QString &action);
     const QMap<QString,QString>& allShortcuts();
     const QMap<QString,QString>& defaultShortcuts();
     void removeShortcut(const QString &keys);

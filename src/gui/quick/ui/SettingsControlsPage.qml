@@ -105,7 +105,7 @@ SettingsPage {
                     id: shortcutRow
 
                     required property int index
-                    required property string action
+                    required property string title
                     required property string shortcut
 
                     width: ListView.view.width
@@ -123,7 +123,7 @@ SettingsPage {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
-                            text: shortcutRow.action
+                            text: shortcutRow.title
                         }
                         Label {
                             width: parent.width / 2

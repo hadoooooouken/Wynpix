@@ -307,6 +307,7 @@ void SettingsEditorModel::load() {
     SettingsValues loaded = mValueStore.load();
     normalize(loaded);
     setValues(loaded);
+    mShortcuts.setActionTitles(mShortcutStore.actionTitles());
     mShortcuts.setEntries(mShortcutStore.shortcuts());
     refreshScripts();
     refreshThumbnailCacheSize();

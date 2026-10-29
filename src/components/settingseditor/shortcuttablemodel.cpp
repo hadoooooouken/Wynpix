@@ -6,11 +6,15 @@
 
 namespace {
 constexpr char kContext[] = "SettingsDialog";
-
-bool actionLess(const ShortcutEntry &a, const ShortcutEntry &b) {
-    return a.action < b.action;
-}
 } // namespace
+
+QString shortcutActionTitle(const QString &action, const ActionTitleMap &titles) {
+    if (action.startsWith(kScriptActionPrefix)) {
+        return QCoreApplication::translate(kContext, QT_TRANSLATE_NOOP("SettingsDialog", "Script: %1"))
+            .arg(action.mid(kScriptActionPrefix.size()));
+    }
+    return titles.value(action, action);
+}
 
 ShortcutTableModel::ShortcutTableModel(QObject *parent) : QAbstractTableModel(parent) {}
 
@@ -28,11 +32,13 @@ QVariant ShortcutTableModel::data(const QModelIndex &index, int role) const {
     const ShortcutEntry &entry = mEntries.at(index.row());
     switch (role) {
     case Qt::DisplayRole:
-        return index.column() == ActionColumn ? entry.action : entry.shortcut;
+        return index.column() == ActionColumn ? title(entry.action) : entry.shortcut;
     case Qt::TextAlignmentRole:
         return QVariant::fromValue(Qt::Alignment(Qt::AlignCenter));
     case ActionRole:
         return entry.action;
+    case TitleRole:
+        return title(entry.action);
     case ShortcutRole:
         return entry.shortcut;
     default:
@@ -51,7 +57,14 @@ QVariant ShortcutTableModel::headerData(int section, Qt::Orientation orientation
 }
 
 QHash<int, QByteArray> ShortcutTableModel::roleNames() const {
-    return {{ActionRole, "action"}, {ShortcutRole, "shortcut"}};
+    return {{ActionRole, "action"}, {TitleRole, "title"}, {ShortcutRole, "shortcut"}};
+}
+
+void ShortcutTableModel::setActionTitles(const ActionTitleMap &titles) {
+    beginResetModel();
+    mTitles = titles;
+    sortEntries();
+    endResetModel();
 }
 
 const ShortcutList &ShortcutTableModel::entries() const {
@@ -61,7 +74,7 @@ const ShortcutList &ShortcutTableModel::entries() const {
 void ShortcutTableModel::setEntries(const ShortcutList &entries) {
     beginResetModel();
     mEntries = entries;
-    std::ranges::stable_sort(mEntries, actionLess);
+    sortEntries();
     endResetModel();
 }
 
@@ -78,7 +91,7 @@ int ShortcutTableModel::put(const ShortcutEntry &entry, int replacedRow) {
     const auto bound = std::ranges::find(mEntries, entry.shortcut, &ShortcutEntry::shortcut);
     if (bound != mEntries.cend())
         removeAt(static_cast<int>(std::distance(mEntries.begin(), bound)));
-    const int row = insertionRow(entry.action);
+    const int row = insertionRow(entry);
     beginInsertRows({}, row, row);
     mEntries.insert(row, entry);
     endInsertRows();
@@ -94,8 +107,22 @@ bool ShortcutTableModel::removeAt(int row) {
     return true;
 }
 
-int ShortcutTableModel::insertionRow(const QString &action) const {
-    const auto position = std::ranges::upper_bound(mEntries, action, std::less<>{},
-                                                   &ShortcutEntry::action);
+QString ShortcutTableModel::title(const QString &action) const {
+    return shortcutActionTitle(action, mTitles);
+}
+
+bool ShortcutTableModel::titleLess(const ShortcutEntry &a, const ShortcutEntry &b) const {
+    return title(a.action).localeAwareCompare(title(b.action)) < 0;
+}
+
+void ShortcutTableModel::sortEntries() {
+    std::ranges::stable_sort(mEntries, [this](const ShortcutEntry &a, const ShortcutEntry &b) {
+        return titleLess(a, b);
+    });
+}
+
+int ShortcutTableModel::insertionRow(const ShortcutEntry &entry) const {
+    const auto position = std::ranges::upper_bound(
+        mEntries, entry, [this](const ShortcutEntry &a, const ShortcutEntry &b) { return titleLess(a, b); });
     return static_cast<int>(std::distance(mEntries.cbegin(), position));
 }

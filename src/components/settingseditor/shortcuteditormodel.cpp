@@ -2,7 +2,10 @@
 
 #include <QCoreApplication>
 
+#include <algorithm>
+
 #include "settingsstores.h"
+#include "shortcuttablemodel.h"
 
 namespace {
 // The texts keep the translation contexts of the widget dialogs.
@@ -19,6 +22,10 @@ QString ShortcutEditorModel::title() const {
 
 QStringList ShortcutEditorModel::actions() const {
     return mActions;
+}
+
+QStringList ShortcutEditorModel::actionTitles() const {
+    return mActionTitles;
 }
 
 QStringList ShortcutEditorModel::scripts() const {
@@ -112,7 +119,14 @@ void ShortcutEditorModel::startEdit(const ShortcutEntry &entry, int row, const S
 void ShortcutEditorModel::startRequest(const QString &title, int row, const ShortcutList &table) {
     mTable = table;
     mTitle = title;
-    mActions = mStore.actionNames();
+    mTitles = mStore.actionTitles();
+    mActions = mTitles.keys();
+    std::ranges::sort(mActions, [this](const QString &a, const QString &b) {
+        return mTitles.value(a).localeAwareCompare(mTitles.value(b)) < 0;
+    });
+    mActionTitles.clear();
+    for (const QString &action : std::as_const(mActions))
+        mActionTitles.append(mTitles.value(action));
     mScripts = mStore.scriptNames();
     mScriptSelected = false;
     mActionIndex = 0;
@@ -136,7 +150,7 @@ void ShortcutEditorModel::setShortcut(const QString &shortcut) {
         // One string, so that a translation can place the action anywhere.
         mWarning = QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog",
                                                                                   "This shortcut is used for action: %1. Replace?"))
-                       .arg(action);
+                       .arg(shortcutActionTitle(action, mTitles));
     }
     emit shortcutChanged();
 }

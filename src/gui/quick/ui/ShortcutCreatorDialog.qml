@@ -38,7 +38,7 @@ DialogWindow {
         ComboBox {
             Layout.preferredWidth: root.comboWidth
             enabled: !root.dialog.scriptSelected
-            model: root.dialog.actions
+            model: root.dialog.actionTitles
             currentIndex: root.dialog.actionIndex
             onActivated: index => root.dialog.actionIndex = index
         }

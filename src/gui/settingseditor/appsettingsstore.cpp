@@ -91,8 +91,11 @@ ShortcutList AppShortcutStore::defaultShortcuts() {
     return shortcutList(mActions.defaultShortcuts());
 }
 
-QStringList AppShortcutStore::actionNames() {
-    return mActions.actionList();
+ActionTitleMap AppShortcutStore::actionTitles() {
+    ActionTitleMap titles;
+    for (const QString &action : mActions.actionList())
+        titles.insert(action, mActions.actionTitle(action));
+    return titles;
 }
 
 QStringList AppShortcutStore::scriptNames() {

@@ -20,7 +20,9 @@ class IShortcutScriptStore;
 class ShortcutEditorModel final : public EditorSession {
     Q_OBJECT
     Q_PROPERTY(QString title READ title NOTIFY requestChanged FINAL)
+    // The actions sorted by title, and their titles in the same order.
     Q_PROPERTY(QStringList actions READ actions NOTIFY requestChanged FINAL)
+    Q_PROPERTY(QStringList actionTitles READ actionTitles NOTIFY requestChanged FINAL)
     Q_PROPERTY(QStringList scripts READ scripts NOTIFY requestChanged FINAL)
     Q_PROPERTY(bool scriptSelected READ isScriptSelected WRITE setScriptSelected NOTIFY selectionChanged FINAL)
     Q_PROPERTY(int actionIndex READ actionIndex WRITE setActionIndex NOTIFY selectionChanged FINAL)
@@ -37,6 +39,7 @@ public:
 
     [[nodiscard]] QString title() const;
     [[nodiscard]] QStringList actions() const;
+    [[nodiscard]] QStringList actionTitles() const;
     [[nodiscard]] QStringList scripts() const;
     [[nodiscard]] bool isScriptSelected() const;
     void setScriptSelected(bool selected);
@@ -79,7 +82,9 @@ private:
     IShortcutScriptStore &mStore;
     ShortcutList mTable;
     QString mTitle;
+    ActionTitleMap mTitles;
     QStringList mActions;
+    QStringList mActionTitles;
     QStringList mScripts;
     bool mScriptSelected = false;
     int mActionIndex = 0;

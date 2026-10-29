@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QHash>
 #include <QMap>
 #include <QStringList>
 
@@ -67,7 +68,12 @@ class FakeShortcutScriptStore final : public IShortcutScriptStore {
 public:
     ShortcutList shortcuts() override { return live; }
     ShortcutList defaultShortcuts() override { return defaults; }
-    QStringList actionNames() override { return actions; }
+    ActionTitleMap actionTitles() override {
+        ActionTitleMap map;
+        for (const QString &action : actions)
+            map.insert(action, titles.value(action, action));
+        return map;
+    }
 
     QStringList scriptNames() override { return scripts.keys(); }
     bool scriptExists(const QString &name) override { return scripts.contains(name); }
@@ -89,5 +95,7 @@ public:
     ShortcutList live;
     ShortcutList defaults;
     QStringList actions;
+    // Titles of actions; an action without one is its own title.
+    QHash<QString, QString> titles;
     QMap<QString, ScriptDefinition> scripts;
 };

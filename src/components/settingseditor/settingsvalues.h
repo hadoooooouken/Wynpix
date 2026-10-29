@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QColor>
+#include <QHash>
 #include <QList>
 #include <QMetaType>
 #include <QString>
@@ -279,3 +280,6 @@ struct ScriptDefinition {
 
 // Prefix of the shortcut actions that run a script.
 inline constexpr QStringView kScriptActionPrefix = u"s:";
+
+// Every action with the title the settings show for it, translated.
+using ActionTitleMap = QHash<QString, QString>;
