@@ -319,6 +319,8 @@ Rectangle {
             anchors.fill: parent
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
+            anchors.topMargin: StyleConstants.rowFillInset
+            anchors.bottomMargin: StyleConstants.rowFillInset
             selected: row.highlighted
             hovered: rowHover.hovered || dropArea.containsDrag
         }
@@ -470,6 +472,8 @@ Rectangle {
             anchors.leftMargin: root.rowInset
             anchors.rightMargin: root.rowInset
                                  + (treeScrollBar.size < 1.0 ? StyleConstants.scrollBarThickness : 0)
+            anchors.topMargin: StyleConstants.rowFillInset
+            anchors.bottomMargin: StyleConstants.rowFillInset
             selected: treeRow.current
             hovered: treeHover.hovered || treeDrop.containsDrag
         }

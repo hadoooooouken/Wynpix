@@ -102,6 +102,9 @@ QtObject {
     readonly property int indicatorDashLength: 8
     readonly property int indicatorDashThickness: 2
     readonly property int radioDotSize: 8
+    // Space between the fill of a row (RowBackground) and the row's top and
+    // bottom edges, so the fills of adjacent rows stay apart.
+    readonly property int rowFillInset: 1
     // Accent pill on the leading edge of a selected row (RowBackground).
     readonly property int selectionIndicatorWidth: 3
     readonly property int selectionIndicatorLength: 16

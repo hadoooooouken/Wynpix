@@ -129,6 +129,8 @@ Window {
 
                             width: ListView.view.width
                             height: root.sidebarRowHeight
+                            topInset: StyleConstants.rowFillInset
+                            bottomInset: StyleConstants.rowFillInset
                             highlighted: ListView.isCurrentItem
                             hoverEnabled: true
                             onClicked: root.controller.page = entry.index
