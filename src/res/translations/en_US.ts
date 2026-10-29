@@ -4,367 +4,402 @@
 <context>
     <name>Actions</name>
     <message>
-        <location filename="../../utils/actions.cpp" line="43"/>
-        <source>Next image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="44"/>
-        <source>Previous image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="45"/>
-        <source>Toggle fullscreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../utils/actions.cpp" line="46"/>
-        <source>Fit to window</source>
-        <translation type="unfinished">Fit to window</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="47"/>
-        <source>Fit to width</source>
-        <translation type="unfinished">Fit to width</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="48"/>
-        <source>Original size</source>
-        <translation type="unfinished">Original size</translation>
+        <source>Navigation</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="49"/>
-        <source>Fit to height</source>
-        <translation type="unfinished">Fit to height</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="50"/>
-        <source>Switch fit mode</source>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="51"/>
-        <source>Resize</source>
-        <translation type="unfinished">Resize</translation>
-    </message>
-    <message>
         <location filename="../../utils/actions.cpp" line="52"/>
-        <source>Rotate right</source>
-        <translation type="unfinished">Rotate right</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="53"/>
-        <source>Rotate left</source>
-        <translation type="unfinished">Rotate left</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="54"/>
-        <source>Scroll up</source>
+        <source>Editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="55"/>
-        <source>Scroll down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="56"/>
-        <source>Scroll left</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="57"/>
-        <source>Scroll right</source>
+        <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="58"/>
-        <source>Zoom in</source>
-        <translation type="unfinished">Zoom in</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="59"/>
-        <source>Zoom out</source>
-        <translation type="unfinished">Zoom out</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="60"/>
-        <source>Zoom in at cursor</source>
+        <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="61"/>
-        <source>Zoom out at cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="62"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="63"/>
-        <source>Save as</source>
+        <source>AI upscale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="64"/>
-        <source>Set as wallpaper</source>
+        <source>Application</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="65"/>
-        <source>Crop</source>
-        <translation type="unfinished">Crop</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="66"/>
-        <source>Delete permanently</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="67"/>
-        <source>Quick copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="68"/>
-        <source>Quick move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="69"/>
-        <source>First image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="70"/>
-        <source>Last image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="71"/>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="72"/>
-        <source>Exit fullscreen or quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="73"/>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="74"/>
-        <source>Flip horizontal</source>
-        <translation type="unfinished">Flip horizontal</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="75"/>
-        <source>Flip vertical</source>
-        <translation type="unfinished">Flip vertical</translation>
+        <source>Next image</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="76"/>
-        <source>Folder view</source>
+        <source>Previous image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="77"/>
-        <source>Image view</source>
+        <source>Toggle fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="78"/>
-        <source>Toggle folder view</source>
-        <translation type="unfinished"></translation>
+        <source>Fit to window</source>
+        <translation type="unfinished">Fit to window</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="79"/>
-        <source>Move to trash</source>
-        <translation type="unfinished"></translation>
+        <source>Fit to width</source>
+        <translation type="unfinished">Fit to width</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="80"/>
-        <source>Reload image</source>
-        <translation type="unfinished"></translation>
+        <source>Original size</source>
+        <translation type="unfinished">Original size</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="81"/>
-        <source>Copy image to clipboard</source>
-        <translation type="unfinished"></translation>
+        <source>Fit to height</source>
+        <translation type="unfinished">Fit to height</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="82"/>
-        <source>Copy file path</source>
+        <source>Switch fit mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="83"/>
-        <source>Copy visible area to clipboard</source>
-        <translation type="unfinished"></translation>
+        <source>Resize</source>
+        <translation type="unfinished">Resize</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="84"/>
-        <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <source>Rotate right</source>
+        <translation type="unfinished">Rotate right</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="85"/>
-        <source>Context menu</source>
-        <translation type="unfinished"></translation>
+        <source>Rotate left</source>
+        <translation type="unfinished">Rotate left</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="86"/>
-        <source>Toggle transparency grid</source>
+        <source>Scroll up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="87"/>
-        <source>Sort by name</source>
+        <source>Scroll down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="88"/>
-        <source>Sort by date</source>
+        <source>Scroll left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="89"/>
-        <source>Sort by size</source>
+        <source>Scroll right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="90"/>
-        <source>Toggle image info</source>
-        <translation type="unfinished"></translation>
+        <source>Zoom in</source>
+        <translation type="unfinished">Zoom in</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="91"/>
-        <source>Toggle shuffle</source>
-        <translation type="unfinished"></translation>
+        <source>Zoom out</source>
+        <translation type="unfinished">Zoom out</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="92"/>
-        <source>Toggle scaling filter</source>
+        <source>Zoom in at cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="93"/>
-        <source>Next scaling filter</source>
+        <source>Zoom out at cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="94"/>
-        <source>Toggle slideshow</source>
+        <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="95"/>
-        <source>Show in folder</source>
+        <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="96"/>
-        <source>Parent folder</source>
+        <source>Set as wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="97"/>
-        <source>Discard edits</source>
-        <translation type="unfinished"></translation>
+        <source>Crop</source>
+        <translation type="unfinished">Crop</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="98"/>
-        <source>Next folder</source>
+        <source>Delete permanently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="99"/>
-        <source>Previous folder</source>
+        <source>Quick copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="100"/>
-        <source>Lock zoom</source>
+        <source>Quick move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="101"/>
-        <source>Lock view</source>
+        <source>First image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="102"/>
-        <source>Print</source>
+        <source>Last image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="103"/>
-        <source>Toggle fullscreen info bar</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="104"/>
-        <source>Open from clipboard</source>
+        <source>Exit fullscreen or quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="105"/>
-        <source>Panorama mode</source>
+        <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="106"/>
-        <source>Color adjustments</source>
-        <translation type="unfinished"></translation>
+        <source>Flip horizontal</source>
+        <translation type="unfinished">Flip horizontal</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="107"/>
-        <source>CAS settings</source>
-        <translation type="unfinished"></translation>
+        <source>Flip vertical</source>
+        <translation type="unfinished">Flip vertical</translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="108"/>
-        <source>New folder</source>
+        <source>Folder view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="109"/>
-        <source>Next page</source>
+        <source>Image view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="110"/>
-        <source>Previous page</source>
+        <source>Toggle folder view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="111"/>
-        <source>First page</source>
+        <source>Move to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="112"/>
-        <source>Last page</source>
+        <source>Reload image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="113"/>
-        <source>Toggle AI upscale</source>
+        <source>Copy image to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="114"/>
-        <source>Next AI upscale model</source>
+        <source>Copy file path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="115"/>
+        <source>Copy visible area to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="116"/>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="117"/>
+        <source>Context menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="118"/>
+        <source>Toggle transparency grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="119"/>
+        <source>Sort by name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="120"/>
+        <source>Sort by date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="121"/>
+        <source>Sort by size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="122"/>
+        <source>Toggle image info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="123"/>
+        <source>Toggle shuffle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="124"/>
+        <source>Toggle scaling filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="125"/>
+        <source>Next scaling filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="126"/>
+        <source>Toggle slideshow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="127"/>
+        <source>Show in folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="128"/>
+        <source>Parent folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="129"/>
+        <source>Discard edits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="130"/>
+        <source>Next folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="131"/>
+        <source>Previous folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="132"/>
+        <source>Lock zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="133"/>
+        <source>Lock view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="134"/>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="135"/>
+        <source>Toggle fullscreen info bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="136"/>
+        <source>Open from clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="137"/>
+        <source>Panorama mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="138"/>
+        <source>Color adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="139"/>
+        <source>CAS settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="140"/>
+        <source>New folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="141"/>
+        <source>Next page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="142"/>
+        <source>Previous page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="143"/>
+        <source>First page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="144"/>
+        <source>Last page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="145"/>
+        <source>Toggle AI upscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="146"/>
+        <source>Next AI upscale model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="147"/>
         <source>Toggle HDR tone mapping</source>
         <translation type="unfinished"></translation>
     </message>
@@ -871,8 +906,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stopping...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3306,12 +3341,12 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="313"/>
         <source>Select Monitor Color Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="317"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3583,7 +3618,7 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="274"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="291"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
@@ -3792,47 +3827,43 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="19"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="30"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="35"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="31"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="39"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="35"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="44"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="106"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="40"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="117"/>
+        <source>Search actions or shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="124"/>
         <source>Reset to defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="91"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="53"/>
-        <source>Action</source>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="301"/>
+        <source>No matching actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="99"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="55"/>
-        <source>Shortcut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="171"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="327"/>
         <source>Scroll image with:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3852,23 +3883,29 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="180"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="336"/>
         <source>Note: you can also zoom by holding RMB and moving the mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="190"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="346"/>
         <source>Trackpad detection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="195"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="351"/>
         <source>Disable if you have issues with mouse scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="20"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="18"/>
         <source>Scripts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="27"/>
+        <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3918,17 +3955,17 @@ Example: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="156"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="312"/>
         <source>Switch image by clicking window edges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="161"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="317"/>
         <source>Visible edges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="183"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="339"/>
         <source>Mouse scrolling speed:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4004,7 +4041,7 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
         <source>Preferences — </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4056,7 +4093,7 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="100"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="58"/>
         <source>Edit shortcut</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4086,7 +4123,7 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="13"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="18"/>
         <source>Script: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4094,42 +4131,33 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
 <context>
     <name>ShortcutCreatorDialog</name>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="94"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
         <source>Add shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="151"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="88"/>
         <source>This shortcut is used for action: %1. Replace?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="33"/>
-        <source>Action:</source>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="58"/>
+        <source>Press a key combination, click a mouse button or turn the wheel over the field.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="47"/>
-        <source>Script:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="64"/>
-        <source>Shortcut:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="93"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="97"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="98"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="102"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="75"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="35"/>
         <source>[Enter shortcut]</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,367 +4,402 @@
 <context>
     <name>Actions</name>
     <message>
-        <location filename="../../utils/actions.cpp" line="43"/>
+        <location filename="../../utils/actions.cpp" line="46"/>
+        <source>Navigation</source>
+        <translation>Навігація</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="49"/>
+        <source>View</source>
+        <translation>Перегляд</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="52"/>
+        <source>Editing</source>
+        <translation>Редагування</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="55"/>
+        <source>File</source>
+        <translation>Файл</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="58"/>
+        <source>Clipboard</source>
+        <translation>Буфер обміну</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="61"/>
+        <source>AI upscale</source>
+        <translation>ШІ-масштабування</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="64"/>
+        <source>Application</source>
+        <translation>Застосунок</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="75"/>
         <source>Next image</source>
         <translation>Наступне зображення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="44"/>
+        <location filename="../../utils/actions.cpp" line="76"/>
         <source>Previous image</source>
         <translation>Попереднє зображення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="45"/>
+        <location filename="../../utils/actions.cpp" line="77"/>
         <source>Toggle fullscreen</source>
         <translation>Перемкнути повноекранний режим</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="46"/>
+        <location filename="../../utils/actions.cpp" line="78"/>
         <source>Fit to window</source>
         <translation>За розміром вікна</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="47"/>
+        <location filename="../../utils/actions.cpp" line="79"/>
         <source>Fit to width</source>
         <translation>За шириною</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="48"/>
+        <location filename="../../utils/actions.cpp" line="80"/>
         <source>Original size</source>
         <translation>Оригінальний розмір</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="49"/>
+        <location filename="../../utils/actions.cpp" line="81"/>
         <source>Fit to height</source>
         <translation>За висотою</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="50"/>
+        <location filename="../../utils/actions.cpp" line="82"/>
         <source>Switch fit mode</source>
         <translation>Змінити режим масштабу</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="51"/>
+        <location filename="../../utils/actions.cpp" line="83"/>
         <source>Resize</source>
         <translation>Змінити розмір</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="52"/>
+        <location filename="../../utils/actions.cpp" line="84"/>
         <source>Rotate right</source>
         <translation>Повернути праворуч</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="53"/>
+        <location filename="../../utils/actions.cpp" line="85"/>
         <source>Rotate left</source>
         <translation>Повернути ліворуч</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="54"/>
+        <location filename="../../utils/actions.cpp" line="86"/>
         <source>Scroll up</source>
         <translation>Прокрутити вгору</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="55"/>
+        <location filename="../../utils/actions.cpp" line="87"/>
         <source>Scroll down</source>
         <translation>Прокрутити вниз</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="56"/>
+        <location filename="../../utils/actions.cpp" line="88"/>
         <source>Scroll left</source>
         <translation>Прокрутити ліворуч</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="57"/>
+        <location filename="../../utils/actions.cpp" line="89"/>
         <source>Scroll right</source>
         <translation>Прокрутити праворуч</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="58"/>
+        <location filename="../../utils/actions.cpp" line="90"/>
         <source>Zoom in</source>
         <translation>Збільшити</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="59"/>
+        <location filename="../../utils/actions.cpp" line="91"/>
         <source>Zoom out</source>
         <translation>Зменшити</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="60"/>
+        <location filename="../../utils/actions.cpp" line="92"/>
         <source>Zoom in at cursor</source>
         <translation>Збільшити під курсором</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="61"/>
+        <location filename="../../utils/actions.cpp" line="93"/>
         <source>Zoom out at cursor</source>
         <translation>Зменшити під курсором</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="62"/>
+        <location filename="../../utils/actions.cpp" line="94"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="63"/>
+        <location filename="../../utils/actions.cpp" line="95"/>
         <source>Save as</source>
         <translation>Зберегти як</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="64"/>
+        <location filename="../../utils/actions.cpp" line="96"/>
         <source>Set as wallpaper</source>
         <translation>Встановити як шпалери</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="65"/>
+        <location filename="../../utils/actions.cpp" line="97"/>
         <source>Crop</source>
         <translation>Обрізати</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="66"/>
+        <location filename="../../utils/actions.cpp" line="98"/>
         <source>Delete permanently</source>
         <translation>Видалити назавжди</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="67"/>
+        <location filename="../../utils/actions.cpp" line="99"/>
         <source>Quick copy</source>
         <translation>Швидке копіювання</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="68"/>
+        <location filename="../../utils/actions.cpp" line="100"/>
         <source>Quick move</source>
         <translation>Швидке переміщення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="69"/>
+        <location filename="../../utils/actions.cpp" line="101"/>
         <source>First image</source>
         <translation>Перше зображення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="70"/>
+        <location filename="../../utils/actions.cpp" line="102"/>
         <source>Last image</source>
         <translation>Останнє зображення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="71"/>
+        <location filename="../../utils/actions.cpp" line="103"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="72"/>
+        <location filename="../../utils/actions.cpp" line="104"/>
         <source>Exit fullscreen or quit</source>
         <translation>Вийти з повноекранного режиму або закрити</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="73"/>
+        <location filename="../../utils/actions.cpp" line="105"/>
         <source>Quit</source>
         <translation>Вихід</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="74"/>
+        <location filename="../../utils/actions.cpp" line="106"/>
         <source>Flip horizontal</source>
         <translation>Віддзеркалити горизонтально</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="75"/>
+        <location filename="../../utils/actions.cpp" line="107"/>
         <source>Flip vertical</source>
         <translation>Віддзеркалити вертикально</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="76"/>
+        <location filename="../../utils/actions.cpp" line="108"/>
         <source>Folder view</source>
         <translation>Режим галереї</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="77"/>
+        <location filename="../../utils/actions.cpp" line="109"/>
         <source>Image view</source>
         <translation>Режим перегляду</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="78"/>
+        <location filename="../../utils/actions.cpp" line="110"/>
         <source>Toggle folder view</source>
         <translation>Перемкнути режим галереї</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="79"/>
+        <location filename="../../utils/actions.cpp" line="111"/>
         <source>Move to trash</source>
         <translation>Перемістити до кошика</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="80"/>
+        <location filename="../../utils/actions.cpp" line="112"/>
         <source>Reload image</source>
         <translation>Перезавантажити зображення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="81"/>
+        <location filename="../../utils/actions.cpp" line="113"/>
         <source>Copy image to clipboard</source>
         <translation>Копіювати зображення в буфер обміну</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="82"/>
+        <location filename="../../utils/actions.cpp" line="114"/>
         <source>Copy file path</source>
         <translation>Копіювати шлях до файлу</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="83"/>
+        <location filename="../../utils/actions.cpp" line="115"/>
         <source>Copy visible area to clipboard</source>
         <translation>Копіювати видиму область у буфер обміну</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="84"/>
+        <location filename="../../utils/actions.cpp" line="116"/>
         <source>Rename</source>
         <translation>Перейменувати</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="85"/>
+        <location filename="../../utils/actions.cpp" line="117"/>
         <source>Context menu</source>
         <translation>Контекстне меню</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="86"/>
+        <location filename="../../utils/actions.cpp" line="118"/>
         <source>Toggle transparency grid</source>
         <translation>Перемкнути сітку прозорості</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="87"/>
+        <location filename="../../utils/actions.cpp" line="119"/>
         <source>Sort by name</source>
         <translation>Сортувати за назвою</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="88"/>
+        <location filename="../../utils/actions.cpp" line="120"/>
         <source>Sort by date</source>
         <translation>Сортувати за датою</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="89"/>
+        <location filename="../../utils/actions.cpp" line="121"/>
         <source>Sort by size</source>
         <translation>Сортувати за розміром</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="90"/>
+        <location filename="../../utils/actions.cpp" line="122"/>
         <source>Toggle image info</source>
         <translation>Перемкнути інформацію про зображення</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="91"/>
+        <location filename="../../utils/actions.cpp" line="123"/>
         <source>Toggle shuffle</source>
         <translation>Перемкнути випадковий порядок</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="92"/>
+        <location filename="../../utils/actions.cpp" line="124"/>
         <source>Toggle scaling filter</source>
         <translation>Перемкнути фільтр масштабування</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="93"/>
+        <location filename="../../utils/actions.cpp" line="125"/>
         <source>Next scaling filter</source>
         <translation>Наступний фільтр масштабування</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="94"/>
+        <location filename="../../utils/actions.cpp" line="126"/>
         <source>Toggle slideshow</source>
         <translation>Перемкнути слайд-шоу</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="95"/>
+        <location filename="../../utils/actions.cpp" line="127"/>
         <source>Show in folder</source>
         <translation>Показати в теці</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="96"/>
+        <location filename="../../utils/actions.cpp" line="128"/>
         <source>Parent folder</source>
         <translation>Батьківська тека</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="97"/>
+        <location filename="../../utils/actions.cpp" line="129"/>
         <source>Discard edits</source>
         <translation>Скасувати зміни</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="98"/>
+        <location filename="../../utils/actions.cpp" line="130"/>
         <source>Next folder</source>
         <translation>Наступна тека</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="99"/>
+        <location filename="../../utils/actions.cpp" line="131"/>
         <source>Previous folder</source>
         <translation>Попередня тека</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="100"/>
+        <location filename="../../utils/actions.cpp" line="132"/>
         <source>Lock zoom</source>
         <translation>Зафіксувати масштаб</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="101"/>
+        <location filename="../../utils/actions.cpp" line="133"/>
         <source>Lock view</source>
         <translation>Зафіксувати вигляд</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="102"/>
+        <location filename="../../utils/actions.cpp" line="134"/>
         <source>Print</source>
         <translation>Друк</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="103"/>
+        <location filename="../../utils/actions.cpp" line="135"/>
         <source>Toggle fullscreen info bar</source>
         <translation>Перемкнути інфопанель у повноекранному режимі</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="104"/>
+        <location filename="../../utils/actions.cpp" line="136"/>
         <source>Open from clipboard</source>
         <translation>Відкрити з буфера обміну</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="105"/>
+        <location filename="../../utils/actions.cpp" line="137"/>
         <source>Panorama mode</source>
         <translation>Панорамний режим</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="106"/>
+        <location filename="../../utils/actions.cpp" line="138"/>
         <source>Color adjustments</source>
         <translation>Корекція кольорів</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="107"/>
+        <location filename="../../utils/actions.cpp" line="139"/>
         <source>CAS settings</source>
         <translation>Налаштування CAS</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="108"/>
+        <location filename="../../utils/actions.cpp" line="140"/>
         <source>New folder</source>
         <translation>Нова тека</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="109"/>
+        <location filename="../../utils/actions.cpp" line="141"/>
         <source>Next page</source>
         <translation>Наступна сторінка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="110"/>
+        <location filename="../../utils/actions.cpp" line="142"/>
         <source>Previous page</source>
         <translation>Попередня сторінка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="111"/>
+        <location filename="../../utils/actions.cpp" line="143"/>
         <source>First page</source>
         <translation>Перша сторінка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="112"/>
+        <location filename="../../utils/actions.cpp" line="144"/>
         <source>Last page</source>
         <translation>Остання сторінка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="113"/>
+        <location filename="../../utils/actions.cpp" line="145"/>
         <source>Toggle AI upscale</source>
         <translation>Перемкнути масштабування ШІ</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="114"/>
+        <location filename="../../utils/actions.cpp" line="146"/>
         <source>Next AI upscale model</source>
         <translation>Наступна модель масштабування ШІ</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="115"/>
+        <location filename="../../utils/actions.cpp" line="147"/>
         <source>Toggle HDR tone mapping</source>
         <translation>Перемкнути тональну компресію HDR</translation>
     </message>
@@ -864,8 +899,8 @@
         <translation>Якість (1 - найнижча, 100 - найвища)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stopping...</source>
         <translation>Зупинка...</translation>
     </message>
@@ -1836,10 +1871,6 @@ Staged copy:
         <location filename="../../core.cpp" line="1950"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Масштабування ШІ завершено, але зображення більше немає в списку.</translation>
-    </message>
-    <message>
-        <source>Could not apply AI resize.</source>
-        <translation type="vanished">Не вдалося застосувати масштабування ШІ.</translation>
     </message>
     <message>
         <location filename="../../core.cpp" line="1968"/>
@@ -3141,14 +3172,20 @@ Staged copy:
         <translation>Загальні</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="19"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="30"/>
         <source>Controls</source>
         <translation>Керування</translation>
     </message>
     <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="20"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="18"/>
         <source>Scripts</source>
         <translation>Скріпти</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="27"/>
+        <source>Other</source>
+        <translation>Інше</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="15"/>
@@ -3593,62 +3630,58 @@ Staged copy:
         <translation>Трекпад &amp; колесо миші</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="35"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="31"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="39"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="35"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="44"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="106"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="40"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="117"/>
+        <source>Search actions or shortcuts</source>
+        <translation>Пошук дій і сполучень</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="124"/>
         <source>Reset to defaults</source>
         <translation>За замовчуванням</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="91"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="53"/>
-        <source>Action</source>
-        <translation>Дія</translation>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="301"/>
+        <source>No matching actions</source>
+        <translation>Немає відповідних дій</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="99"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="55"/>
-        <source>Shortcut</source>
-        <translation>Комбінація клавіш</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="156"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="312"/>
         <source>Switch image by clicking window edges</source>
         <translation>Перемикати зображення кліком по краях вікна</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="161"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="317"/>
         <source>Visible edges</source>
         <translation>Видимі краї</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="183"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="339"/>
         <source>Mouse scrolling speed:</source>
         <translation>Швидкість прокручування миші:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="190"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="346"/>
         <source>Trackpad detection</source>
         <translation>Виявлення трекпада</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="195"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="351"/>
         <source>Disable if you have issues with mouse scrolling</source>
         <translation>Вимкніть, якщо виникають проблеми з прокручуванням миші</translation>
     </message>
@@ -3700,12 +3733,12 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation>Інші налаштування вікна</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="171"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="327"/>
         <source>Scroll image with:</source>
         <translation>Прокручувати зображення з:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="180"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="336"/>
         <source>Note: you can also zoom by holding RMB and moving the mouse</source>
         <translation>Примітка: також ви можете зумувати утримуючи праву кл. миші</translation>
     </message>
@@ -3797,7 +3830,7 @@ Example: %1</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
         <source>Preferences — </source>
         <translation>Налаштування — </translation>
     </message>
@@ -3944,12 +3977,12 @@ Example: %1</source>
         <translation>Огляд...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="313"/>
         <source>Select Monitor Color Profile</source>
         <translation>Виберіть колірний профіль монітора</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="317"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>Колірні профілі (*.icc *.icm)</translation>
     </message>
@@ -4019,7 +4052,7 @@ Example: %1</source>
         <translation>Не знайдено моделей ШІ в папці models/.</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="100"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="58"/>
         <source>Edit shortcut</source>
         <translation>Редагувати комбінацію клавіш</translation>
     </message>
@@ -4100,7 +4133,7 @@ Example: %1</source>
         <translation>Виключити шляхи з кешування (через крапку з комою «;»):</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="274"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="291"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
@@ -4123,7 +4156,7 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
 </translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="13"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="18"/>
         <source>Script: %1</source>
         <translation>Скрипт: %1</translation>
     </message>
@@ -4131,52 +4164,35 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
 <context>
     <name>ShortcutCreatorDialog</name>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="94"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
         <source>Add shortcut</source>
         <translation>Додати сполучення</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="151"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="88"/>
         <source>This shortcut is used for action: %1. Replace?</source>
         <translation>Це сполучення клавіш використовується для дії: %1. Замінити?</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="33"/>
-        <source>Action:</source>
-        <translation>Дія:</translation>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="58"/>
+        <source>Press a key combination, click a mouse button or turn the wheel over the field.</source>
+        <translation>Натисніть комбінацію клавіш, кнопку миші або прокрутіть коліщатко над полем.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="47"/>
-        <source>Script:</source>
-        <translation>Скріпт:</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="64"/>
-        <source>Shortcut:</source>
-        <translation>Комбінація клавіш:</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="93"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="97"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="98"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="102"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="75"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="35"/>
         <source>[Enter shortcut]</source>
         <translation>[Уведіть комбінацію]</translation>
-    </message>
-    <message>
-        <source>This shortcut is used for action: </source>
-        <translation type="vanished">Це сполучення клавіш використовується для дії: </translation>
-    </message>
-    <message>
-        <source>. Replace?</source>
-        <translation type="vanished">. Замінити?</translation>
     </message>
 </context>
 <context>

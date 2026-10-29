@@ -4,367 +4,402 @@
 <context>
     <name>Actions</name>
     <message>
-        <location filename="../../utils/actions.cpp" line="43"/>
+        <location filename="../../utils/actions.cpp" line="46"/>
+        <source>Navigation</source>
+        <translation>Навигация</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="49"/>
+        <source>View</source>
+        <translation>Просмотр</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="52"/>
+        <source>Editing</source>
+        <translation>Редактирование</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="55"/>
+        <source>File</source>
+        <translation>Файл</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="58"/>
+        <source>Clipboard</source>
+        <translation>Буфер обмена</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="61"/>
+        <source>AI upscale</source>
+        <translation>Масштабирование ИИ</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="64"/>
+        <source>Application</source>
+        <translation>Приложение</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="75"/>
         <source>Next image</source>
         <translation>Следующее изображение</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="44"/>
+        <location filename="../../utils/actions.cpp" line="76"/>
         <source>Previous image</source>
         <translation>Предыдущее изображение</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="45"/>
+        <location filename="../../utils/actions.cpp" line="77"/>
         <source>Toggle fullscreen</source>
         <translation>Переключить полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="46"/>
+        <location filename="../../utils/actions.cpp" line="78"/>
         <source>Fit to window</source>
         <translation>По размеру окна</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="47"/>
+        <location filename="../../utils/actions.cpp" line="79"/>
         <source>Fit to width</source>
         <translation>По ширине</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="48"/>
+        <location filename="../../utils/actions.cpp" line="80"/>
         <source>Original size</source>
         <translation>Исходный размер</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="49"/>
+        <location filename="../../utils/actions.cpp" line="81"/>
         <source>Fit to height</source>
         <translation>По высоте</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="50"/>
+        <location filename="../../utils/actions.cpp" line="82"/>
         <source>Switch fit mode</source>
         <translation>Сменить режим масштаба</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="51"/>
+        <location filename="../../utils/actions.cpp" line="83"/>
         <source>Resize</source>
         <translation>Изменить размер</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="52"/>
+        <location filename="../../utils/actions.cpp" line="84"/>
         <source>Rotate right</source>
         <translation>Повернуть вправо</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="53"/>
+        <location filename="../../utils/actions.cpp" line="85"/>
         <source>Rotate left</source>
         <translation>Повернуть влево</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="54"/>
+        <location filename="../../utils/actions.cpp" line="86"/>
         <source>Scroll up</source>
         <translation>Прокрутить вверх</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="55"/>
+        <location filename="../../utils/actions.cpp" line="87"/>
         <source>Scroll down</source>
         <translation>Прокрутить вниз</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="56"/>
+        <location filename="../../utils/actions.cpp" line="88"/>
         <source>Scroll left</source>
         <translation>Прокрутить влево</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="57"/>
+        <location filename="../../utils/actions.cpp" line="89"/>
         <source>Scroll right</source>
         <translation>Прокрутить вправо</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="58"/>
+        <location filename="../../utils/actions.cpp" line="90"/>
         <source>Zoom in</source>
         <translation>Увеличить</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="59"/>
+        <location filename="../../utils/actions.cpp" line="91"/>
         <source>Zoom out</source>
         <translation>Уменьшить</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="60"/>
+        <location filename="../../utils/actions.cpp" line="92"/>
         <source>Zoom in at cursor</source>
         <translation>Увеличить под курсором</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="61"/>
+        <location filename="../../utils/actions.cpp" line="93"/>
         <source>Zoom out at cursor</source>
         <translation>Уменьшить под курсором</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="62"/>
+        <location filename="../../utils/actions.cpp" line="94"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="63"/>
+        <location filename="../../utils/actions.cpp" line="95"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="64"/>
+        <location filename="../../utils/actions.cpp" line="96"/>
         <source>Set as wallpaper</source>
         <translation>Сделать обоями рабочего стола</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="65"/>
+        <location filename="../../utils/actions.cpp" line="97"/>
         <source>Crop</source>
         <translation>Обрезать</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="66"/>
+        <location filename="../../utils/actions.cpp" line="98"/>
         <source>Delete permanently</source>
         <translation>Удалить навсегда</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="67"/>
+        <location filename="../../utils/actions.cpp" line="99"/>
         <source>Quick copy</source>
         <translation>Быстрое копирование</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="68"/>
+        <location filename="../../utils/actions.cpp" line="100"/>
         <source>Quick move</source>
         <translation>Быстрое перемещение</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="69"/>
+        <location filename="../../utils/actions.cpp" line="101"/>
         <source>First image</source>
         <translation>Первое изображение</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="70"/>
+        <location filename="../../utils/actions.cpp" line="102"/>
         <source>Last image</source>
         <translation>Последнее изображение</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="71"/>
+        <location filename="../../utils/actions.cpp" line="103"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="72"/>
+        <location filename="../../utils/actions.cpp" line="104"/>
         <source>Exit fullscreen or quit</source>
         <translation>Выйти из полноэкранного режима или закрыть</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="73"/>
+        <location filename="../../utils/actions.cpp" line="105"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="74"/>
+        <location filename="../../utils/actions.cpp" line="106"/>
         <source>Flip horizontal</source>
         <translation>Отразить по горизонтали</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="75"/>
+        <location filename="../../utils/actions.cpp" line="107"/>
         <source>Flip vertical</source>
         <translation>Отразить по вертикали</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="76"/>
+        <location filename="../../utils/actions.cpp" line="108"/>
         <source>Folder view</source>
         <translation>Режим галереи</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="77"/>
+        <location filename="../../utils/actions.cpp" line="109"/>
         <source>Image view</source>
         <translation>Режим просмотра</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="78"/>
+        <location filename="../../utils/actions.cpp" line="110"/>
         <source>Toggle folder view</source>
         <translation>Переключить режим галереи</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="79"/>
+        <location filename="../../utils/actions.cpp" line="111"/>
         <source>Move to trash</source>
         <translation>Переместить в корзину</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="80"/>
+        <location filename="../../utils/actions.cpp" line="112"/>
         <source>Reload image</source>
         <translation>Перезагрузить изображение</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="81"/>
+        <location filename="../../utils/actions.cpp" line="113"/>
         <source>Copy image to clipboard</source>
         <translation>Копировать изображение в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="82"/>
+        <location filename="../../utils/actions.cpp" line="114"/>
         <source>Copy file path</source>
         <translation>Копировать путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="83"/>
+        <location filename="../../utils/actions.cpp" line="115"/>
         <source>Copy visible area to clipboard</source>
         <translation>Копировать видимую область в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="84"/>
+        <location filename="../../utils/actions.cpp" line="116"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="85"/>
+        <location filename="../../utils/actions.cpp" line="117"/>
         <source>Context menu</source>
         <translation>Контекстное меню</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="86"/>
+        <location filename="../../utils/actions.cpp" line="118"/>
         <source>Toggle transparency grid</source>
         <translation>Переключить сетку прозрачности</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="87"/>
+        <location filename="../../utils/actions.cpp" line="119"/>
         <source>Sort by name</source>
         <translation>Сортировать по имени</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="88"/>
+        <location filename="../../utils/actions.cpp" line="120"/>
         <source>Sort by date</source>
         <translation>Сортировать по дате</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="89"/>
+        <location filename="../../utils/actions.cpp" line="121"/>
         <source>Sort by size</source>
         <translation>Сортировать по размеру</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="90"/>
+        <location filename="../../utils/actions.cpp" line="122"/>
         <source>Toggle image info</source>
         <translation>Переключить информацию об изображении</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="91"/>
+        <location filename="../../utils/actions.cpp" line="123"/>
         <source>Toggle shuffle</source>
         <translation>Переключить случайный порядок</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="92"/>
+        <location filename="../../utils/actions.cpp" line="124"/>
         <source>Toggle scaling filter</source>
         <translation>Переключить фильтр масштабирования</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="93"/>
+        <location filename="../../utils/actions.cpp" line="125"/>
         <source>Next scaling filter</source>
         <translation>Следующий фильтр масштабирования</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="94"/>
+        <location filename="../../utils/actions.cpp" line="126"/>
         <source>Toggle slideshow</source>
         <translation>Переключить слайд-шоу</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="95"/>
+        <location filename="../../utils/actions.cpp" line="127"/>
         <source>Show in folder</source>
         <translation>Показать в папке</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="96"/>
+        <location filename="../../utils/actions.cpp" line="128"/>
         <source>Parent folder</source>
         <translation>Родительская папка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="97"/>
+        <location filename="../../utils/actions.cpp" line="129"/>
         <source>Discard edits</source>
         <translation>Отменить правки</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="98"/>
+        <location filename="../../utils/actions.cpp" line="130"/>
         <source>Next folder</source>
         <translation>Следующая папка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="99"/>
+        <location filename="../../utils/actions.cpp" line="131"/>
         <source>Previous folder</source>
         <translation>Предыдущая папка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="100"/>
+        <location filename="../../utils/actions.cpp" line="132"/>
         <source>Lock zoom</source>
         <translation>Зафиксировать масштаб</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="101"/>
+        <location filename="../../utils/actions.cpp" line="133"/>
         <source>Lock view</source>
         <translation>Зафиксировать вид</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="102"/>
+        <location filename="../../utils/actions.cpp" line="134"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="103"/>
+        <location filename="../../utils/actions.cpp" line="135"/>
         <source>Toggle fullscreen info bar</source>
         <translation>Переключить инфопанель в полноэкранном режиме</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="104"/>
+        <location filename="../../utils/actions.cpp" line="136"/>
         <source>Open from clipboard</source>
         <translation>Открыть из буфера обмена</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="105"/>
+        <location filename="../../utils/actions.cpp" line="137"/>
         <source>Panorama mode</source>
         <translation>Режим панорамы</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="106"/>
+        <location filename="../../utils/actions.cpp" line="138"/>
         <source>Color adjustments</source>
         <translation>Цветокоррекция</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="107"/>
+        <location filename="../../utils/actions.cpp" line="139"/>
         <source>CAS settings</source>
         <translation>Настройки CAS</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="108"/>
+        <location filename="../../utils/actions.cpp" line="140"/>
         <source>New folder</source>
         <translation>Новая папка</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="109"/>
+        <location filename="../../utils/actions.cpp" line="141"/>
         <source>Next page</source>
         <translation>Следующая страница</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="110"/>
+        <location filename="../../utils/actions.cpp" line="142"/>
         <source>Previous page</source>
         <translation>Предыдущая страница</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="111"/>
+        <location filename="../../utils/actions.cpp" line="143"/>
         <source>First page</source>
         <translation>Первая страница</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="112"/>
+        <location filename="../../utils/actions.cpp" line="144"/>
         <source>Last page</source>
         <translation>Последняя страница</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="113"/>
+        <location filename="../../utils/actions.cpp" line="145"/>
         <source>Toggle AI upscale</source>
         <translation>Переключить масштабирование ИИ</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="114"/>
+        <location filename="../../utils/actions.cpp" line="146"/>
         <source>Next AI upscale model</source>
         <translation>Следующая модель масштабирования ИИ</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="115"/>
+        <location filename="../../utils/actions.cpp" line="147"/>
         <source>Toggle HDR tone mapping</source>
         <translation>Переключить тональную компрессию HDR</translation>
     </message>
@@ -864,8 +899,8 @@
         <translation>Качество (1 - худшее, 100 - лучшее)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stopping...</source>
         <translation>Остановка...</translation>
     </message>
@@ -1836,10 +1871,6 @@ Staged copy:
         <location filename="../../core.cpp" line="1950"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Масштабирование ИИ завершено, но изображения больше нет в списке.</translation>
-    </message>
-    <message>
-        <source>Could not apply AI resize.</source>
-        <translation type="vanished">Не удалось применить масштабирование ИИ.</translation>
     </message>
     <message>
         <location filename="../../core.cpp" line="1968"/>
@@ -3659,57 +3690,48 @@ Staged copy:
         <translation>По высоте</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="19"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="30"/>
         <source>Controls</source>
         <translation>Управление</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="35"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="31"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="39"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="35"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="44"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="106"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="40"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="117"/>
+        <source>Search actions or shortcuts</source>
+        <translation>Поиск действий и сочетаний</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="124"/>
         <source>Reset to defaults</source>
         <translation>Сбросить к умолчанию</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="91"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="53"/>
-        <source>Action</source>
-        <translation>Действие</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="99"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="55"/>
-        <source>Shortcut</source>
-        <translation>Сочетание</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="156"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="312"/>
         <source>Switch image by clicking window edges</source>
         <translation>Переключать картинки кликом по краям окна</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="161"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="317"/>
         <source>Visible edges</source>
         <translation>Видимые края</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="171"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="327"/>
         <source>Scroll image with:</source>
         <translation>Прокручивать изображение с помощью:</translation>
     </message>
@@ -3729,29 +3751,40 @@ Staged copy:
         <translation>Тачпад и колесо мыши</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="180"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="301"/>
+        <source>No matching actions</source>
+        <translation>Нет подходящих действий</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="336"/>
         <source>Note: you can also zoom by holding RMB and moving the mouse</source>
         <translation>Прим.: также можно масштабировать, зажав ПКМ и двигая мышь</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="183"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="339"/>
         <source>Mouse scrolling speed:</source>
         <translation>Скорость прокрутки мыши:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="190"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="346"/>
         <source>Trackpad detection</source>
         <translation>Обнаружение тачпада</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="195"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="351"/>
         <source>Disable if you have issues with mouse scrolling</source>
         <translation>Отключите, если есть проблемы с прокруткой мыши</translation>
     </message>
     <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="20"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="18"/>
         <source>Scripts</source>
         <translation>Скрипты</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="27"/>
+        <source>Other</source>
+        <translation>Прочее</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="22"/>
@@ -3908,7 +3941,7 @@ Example: %1</source>
         <translation>О Wynpix</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="274"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="291"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
@@ -3946,7 +3979,7 @@ Wynpix распространяется под лицензией [GNU GPL ве�
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
         <source>Preferences — </source>
         <translation>Настройки — </translation>
     </message>
@@ -4088,17 +4121,17 @@ Wynpix распространяется под лицензией [GNU GPL ве�
         <translation>Обзор...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="313"/>
         <source>Select Monitor Color Profile</source>
         <translation>Выберите цветовой профиль монитора</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="317"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>Цветовые профили (*.icc *.icm)</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="100"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="58"/>
         <source>Edit shortcut</source>
         <translation>Редактировать сочетание клавиш</translation>
     </message>
@@ -4123,7 +4156,7 @@ Wynpix распространяется под лицензией [GNU GPL ве�
         <translation>Максимальное</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="13"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="18"/>
         <source>Script: %1</source>
         <translation>Скрипт: %1</translation>
     </message>
@@ -4131,52 +4164,35 @@ Wynpix распространяется под лицензией [GNU GPL ве�
 <context>
     <name>ShortcutCreatorDialog</name>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="94"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
         <source>Add shortcut</source>
         <translation>Добавить сочетание</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="151"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="88"/>
         <source>This shortcut is used for action: %1. Replace?</source>
         <translation>Это сочетание клавиш используется для действия: %1. Заменить?</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="33"/>
-        <source>Action:</source>
-        <translation>Действие:</translation>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="58"/>
+        <source>Press a key combination, click a mouse button or turn the wheel over the field.</source>
+        <translation>Нажмите сочетание клавиш, кнопку мыши или прокрутите колесо над полем.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="47"/>
-        <source>Script:</source>
-        <translation>Скрипт:</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="64"/>
-        <source>Shortcut:</source>
-        <translation>Сочетание:</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="93"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="97"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="98"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="102"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="75"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="35"/>
         <source>[Enter shortcut]</source>
         <translation>[Введите сочетание]</translation>
-    </message>
-    <message>
-        <source>This shortcut is used for action: </source>
-        <translation type="vanished">Это сочетание клавиш используется для действия: </translation>
-    </message>
-    <message>
-        <source>. Replace?</source>
-        <translation type="vanished">. Заменить?</translation>
     </message>
 </context>
 <context>

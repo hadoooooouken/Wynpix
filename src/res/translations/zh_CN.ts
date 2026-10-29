@@ -4,367 +4,402 @@
 <context>
     <name>Actions</name>
     <message>
-        <location filename="../../utils/actions.cpp" line="43"/>
+        <location filename="../../utils/actions.cpp" line="46"/>
+        <source>Navigation</source>
+        <translation>导航</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="49"/>
+        <source>View</source>
+        <translation>查看</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="52"/>
+        <source>Editing</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="55"/>
+        <source>File</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="58"/>
+        <source>Clipboard</source>
+        <translation>剪贴板</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="61"/>
+        <source>AI upscale</source>
+        <translation>AI 放大</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="64"/>
+        <source>Application</source>
+        <translation>应用程序</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="75"/>
         <source>Next image</source>
         <translation>下一张图像</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="44"/>
+        <location filename="../../utils/actions.cpp" line="76"/>
         <source>Previous image</source>
         <translation>上一张图像</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="45"/>
+        <location filename="../../utils/actions.cpp" line="77"/>
         <source>Toggle fullscreen</source>
         <translation>切换全屏</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="46"/>
+        <location filename="../../utils/actions.cpp" line="78"/>
         <source>Fit to window</source>
         <translation>适应窗口</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="47"/>
+        <location filename="../../utils/actions.cpp" line="79"/>
         <source>Fit to width</source>
         <translation>适应宽度</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="48"/>
+        <location filename="../../utils/actions.cpp" line="80"/>
         <source>Original size</source>
         <translation>原始大小</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="49"/>
+        <location filename="../../utils/actions.cpp" line="81"/>
         <source>Fit to height</source>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="50"/>
+        <location filename="../../utils/actions.cpp" line="82"/>
         <source>Switch fit mode</source>
         <translation>切换适应模式</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="51"/>
+        <location filename="../../utils/actions.cpp" line="83"/>
         <source>Resize</source>
         <translation>调整大小</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="52"/>
+        <location filename="../../utils/actions.cpp" line="84"/>
         <source>Rotate right</source>
         <translation>向右旋转</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="53"/>
+        <location filename="../../utils/actions.cpp" line="85"/>
         <source>Rotate left</source>
         <translation>向左旋转</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="54"/>
+        <location filename="../../utils/actions.cpp" line="86"/>
         <source>Scroll up</source>
         <translation>向上滚动</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="55"/>
+        <location filename="../../utils/actions.cpp" line="87"/>
         <source>Scroll down</source>
         <translation>向下滚动</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="56"/>
+        <location filename="../../utils/actions.cpp" line="88"/>
         <source>Scroll left</source>
         <translation>向左滚动</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="57"/>
+        <location filename="../../utils/actions.cpp" line="89"/>
         <source>Scroll right</source>
         <translation>向右滚动</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="58"/>
+        <location filename="../../utils/actions.cpp" line="90"/>
         <source>Zoom in</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="59"/>
+        <location filename="../../utils/actions.cpp" line="91"/>
         <source>Zoom out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="60"/>
+        <location filename="../../utils/actions.cpp" line="92"/>
         <source>Zoom in at cursor</source>
         <translation>在光标处放大</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="61"/>
+        <location filename="../../utils/actions.cpp" line="93"/>
         <source>Zoom out at cursor</source>
         <translation>在光标处缩小</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="62"/>
+        <location filename="../../utils/actions.cpp" line="94"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="63"/>
+        <location filename="../../utils/actions.cpp" line="95"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="64"/>
+        <location filename="../../utils/actions.cpp" line="96"/>
         <source>Set as wallpaper</source>
         <translation>设为壁纸</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="65"/>
+        <location filename="../../utils/actions.cpp" line="97"/>
         <source>Crop</source>
         <translation>裁剪</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="66"/>
+        <location filename="../../utils/actions.cpp" line="98"/>
         <source>Delete permanently</source>
         <translation>永久删除</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="67"/>
+        <location filename="../../utils/actions.cpp" line="99"/>
         <source>Quick copy</source>
         <translation>快速拷贝</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="68"/>
+        <location filename="../../utils/actions.cpp" line="100"/>
         <source>Quick move</source>
         <translation>快速移动</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="69"/>
+        <location filename="../../utils/actions.cpp" line="101"/>
         <source>First image</source>
         <translation>第一张图像</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="70"/>
+        <location filename="../../utils/actions.cpp" line="102"/>
         <source>Last image</source>
         <translation>最后一张图像</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="71"/>
+        <location filename="../../utils/actions.cpp" line="103"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="72"/>
+        <location filename="../../utils/actions.cpp" line="104"/>
         <source>Exit fullscreen or quit</source>
         <translation>退出全屏或关闭</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="73"/>
+        <location filename="../../utils/actions.cpp" line="105"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="74"/>
+        <location filename="../../utils/actions.cpp" line="106"/>
         <source>Flip horizontal</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="75"/>
+        <location filename="../../utils/actions.cpp" line="107"/>
         <source>Flip vertical</source>
         <translation>垂直翻转</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="76"/>
+        <location filename="../../utils/actions.cpp" line="108"/>
         <source>Folder view</source>
         <translation>文件夹视图</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="77"/>
+        <location filename="../../utils/actions.cpp" line="109"/>
         <source>Image view</source>
         <translation>图像视图</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="78"/>
+        <location filename="../../utils/actions.cpp" line="110"/>
         <source>Toggle folder view</source>
         <translation>切换文件夹视图</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="79"/>
+        <location filename="../../utils/actions.cpp" line="111"/>
         <source>Move to trash</source>
         <translation>移到回收站</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="80"/>
+        <location filename="../../utils/actions.cpp" line="112"/>
         <source>Reload image</source>
         <translation>重新加载图像</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="81"/>
+        <location filename="../../utils/actions.cpp" line="113"/>
         <source>Copy image to clipboard</source>
         <translation>复制图像到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="82"/>
+        <location filename="../../utils/actions.cpp" line="114"/>
         <source>Copy file path</source>
         <translation>复制文件路径</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="83"/>
+        <location filename="../../utils/actions.cpp" line="115"/>
         <source>Copy visible area to clipboard</source>
         <translation>复制可见区域到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="84"/>
+        <location filename="../../utils/actions.cpp" line="116"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="85"/>
+        <location filename="../../utils/actions.cpp" line="117"/>
         <source>Context menu</source>
         <translation>右键菜单</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="86"/>
+        <location filename="../../utils/actions.cpp" line="118"/>
         <source>Toggle transparency grid</source>
         <translation>切换透明网格</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="87"/>
+        <location filename="../../utils/actions.cpp" line="119"/>
         <source>Sort by name</source>
         <translation>按名称排序</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="88"/>
+        <location filename="../../utils/actions.cpp" line="120"/>
         <source>Sort by date</source>
         <translation>按日期排序</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="89"/>
+        <location filename="../../utils/actions.cpp" line="121"/>
         <source>Sort by size</source>
         <translation>按大小排序</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="90"/>
+        <location filename="../../utils/actions.cpp" line="122"/>
         <source>Toggle image info</source>
         <translation>切换图像信息</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="91"/>
+        <location filename="../../utils/actions.cpp" line="123"/>
         <source>Toggle shuffle</source>
         <translation>切换随机顺序</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="92"/>
+        <location filename="../../utils/actions.cpp" line="124"/>
         <source>Toggle scaling filter</source>
         <translation>切换缩放滤镜</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="93"/>
+        <location filename="../../utils/actions.cpp" line="125"/>
         <source>Next scaling filter</source>
         <translation>下一个缩放滤镜</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="94"/>
+        <location filename="../../utils/actions.cpp" line="126"/>
         <source>Toggle slideshow</source>
         <translation>切换幻灯片</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="95"/>
+        <location filename="../../utils/actions.cpp" line="127"/>
         <source>Show in folder</source>
         <translation>在文件夹中显示</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="96"/>
+        <location filename="../../utils/actions.cpp" line="128"/>
         <source>Parent folder</source>
         <translation>上级文件夹</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="97"/>
+        <location filename="../../utils/actions.cpp" line="129"/>
         <source>Discard edits</source>
         <translation>放弃编辑</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="98"/>
+        <location filename="../../utils/actions.cpp" line="130"/>
         <source>Next folder</source>
         <translation>下一个文件夹</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="99"/>
+        <location filename="../../utils/actions.cpp" line="131"/>
         <source>Previous folder</source>
         <translation>上一个文件夹</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="100"/>
+        <location filename="../../utils/actions.cpp" line="132"/>
         <source>Lock zoom</source>
         <translation>锁定缩放</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="101"/>
+        <location filename="../../utils/actions.cpp" line="133"/>
         <source>Lock view</source>
         <translation>锁定视图</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="102"/>
+        <location filename="../../utils/actions.cpp" line="134"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="103"/>
+        <location filename="../../utils/actions.cpp" line="135"/>
         <source>Toggle fullscreen info bar</source>
         <translation>切换全屏信息栏</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="104"/>
+        <location filename="../../utils/actions.cpp" line="136"/>
         <source>Open from clipboard</source>
         <translation>从剪贴板打开</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="105"/>
+        <location filename="../../utils/actions.cpp" line="137"/>
         <source>Panorama mode</source>
         <translation>全景模式</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="106"/>
+        <location filename="../../utils/actions.cpp" line="138"/>
         <source>Color adjustments</source>
         <translation>色彩调整</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="107"/>
+        <location filename="../../utils/actions.cpp" line="139"/>
         <source>CAS settings</source>
         <translation>CAS 设置</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="108"/>
+        <location filename="../../utils/actions.cpp" line="140"/>
         <source>New folder</source>
         <translation>新建文件夹</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="109"/>
+        <location filename="../../utils/actions.cpp" line="141"/>
         <source>Next page</source>
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="110"/>
+        <location filename="../../utils/actions.cpp" line="142"/>
         <source>Previous page</source>
         <translation>上一页</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="111"/>
+        <location filename="../../utils/actions.cpp" line="143"/>
         <source>First page</source>
         <translation>第一页</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="112"/>
+        <location filename="../../utils/actions.cpp" line="144"/>
         <source>Last page</source>
         <translation>最后一页</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="113"/>
+        <location filename="../../utils/actions.cpp" line="145"/>
         <source>Toggle AI upscale</source>
         <translation>切换 AI 放大</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="114"/>
+        <location filename="../../utils/actions.cpp" line="146"/>
         <source>Next AI upscale model</source>
         <translation>下一个 AI 放大模型</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="115"/>
+        <location filename="../../utils/actions.cpp" line="147"/>
         <source>Toggle HDR tone mapping</source>
         <translation>切换 HDR 色调映射</translation>
     </message>
@@ -874,8 +909,8 @@
         <translation>质量 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
         <source>Stopping...</source>
         <translation>正在停止...</translation>
     </message>
@@ -1832,10 +1867,6 @@ Staged copy:
         <location filename="../../core.cpp" line="1950"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>AI缩放已完成，但该图像已不再列表中。</translation>
-    </message>
-    <message>
-        <source>Could not apply AI resize.</source>
-        <translation type="vanished">无法应用AI缩放。</translation>
     </message>
     <message>
         <location filename="../../core.cpp" line="1968"/>
@@ -3138,14 +3169,20 @@ Staged copy:
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="19"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="30"/>
         <source>Controls</source>
         <translation>控制中心</translation>
     </message>
     <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="20"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="18"/>
         <source>Scripts</source>
         <translation>脚本</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="27"/>
+        <source>Other</source>
+        <translation>其他</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="15"/>
@@ -3560,62 +3597,58 @@ Staged copy:
         <translation>触摸板与鼠标中键</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="35"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="31"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="39"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="35"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="44"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="106"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="40"/>
         <source>Remove</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="117"/>
+        <source>Search actions or shortcuts</source>
+        <translation>搜索操作或快捷键</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="124"/>
         <source>Reset to defaults</source>
         <translation>重置为标准</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="91"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="53"/>
-        <source>Action</source>
-        <translation>行为</translation>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="301"/>
+        <source>No matching actions</source>
+        <translation>没有匹配的操作</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="99"/>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="55"/>
-        <source>Shortcut</source>
-        <translation>快捷键</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="156"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="312"/>
         <source>Switch image by clicking window edges</source>
         <translation>点击窗口边缘切换图片</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="161"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="317"/>
         <source>Visible edges</source>
         <translation>可见边缘</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="183"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="339"/>
         <source>Mouse scrolling speed:</source>
         <translation>鼠标滚动速度:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="190"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="346"/>
         <source>Trackpad detection</source>
         <translation>触摸板检测</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="195"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="351"/>
         <source>Disable if you have issues with mouse scrolling</source>
         <translation>如果鼠标滚动遇到问题请禁用此项</translation>
     </message>
@@ -3725,12 +3758,12 @@ Staged copy:
         <translation>其他窗口调整</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="171"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="327"/>
         <source>Scroll image with:</source>
         <translation>滚动图片方式：</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="180"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="336"/>
         <source>Note: you can also zoom by holding RMB and moving the mouse</source>
         <translation>注意：您也可以按住鼠标右键并移动鼠标来进行缩放</translation>
     </message>
@@ -3789,7 +3822,7 @@ Example: %1</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="270"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
         <source>Preferences — </source>
         <translation>首选项 — </translation>
     </message>
@@ -3936,12 +3969,12 @@ Example: %1</source>
         <translation>浏览...</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="296"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="313"/>
         <source>Select Monitor Color Profile</source>
         <translation>选择显示器色彩配置文件</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="300"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="317"/>
         <source>Color Profiles (*.icc *.icm)</source>
         <translation>色彩配置文件 (*.icc *.icm)</translation>
     </message>
@@ -4011,7 +4044,7 @@ Example: %1</source>
         <translation>在 models/ 目录中未找到 AI 模型。</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="100"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="58"/>
         <source>Edit shortcut</source>
         <translation>编辑快捷键</translation>
     </message>
@@ -4097,7 +4130,7 @@ Example: %1</source>
         <translation>使用 Upscayl</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="274"/>
+        <location filename="../../components/settingseditor/settingseditormodel.cpp" line="291"/>
         <source>This is a fast and easy to use image viewer
 
 **Github page:** [https://github.com/hadoooooouken/wynpix](https://github.com/hadoooooouken/wynpix)
@@ -4120,7 +4153,7 @@ Wynpix 采用 [GNU GPL 第 3 版](https://www.gnu.org/licenses/gpl-3.0.en.html) 
 </translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuttablemodel.cpp" line="13"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="18"/>
         <source>Script: %1</source>
         <translation>脚本：%1</translation>
     </message>
@@ -4128,52 +4161,35 @@ Wynpix 采用 [GNU GPL 第 3 版](https://www.gnu.org/licenses/gpl-3.0.en.html) 
 <context>
     <name>ShortcutCreatorDialog</name>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="94"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
         <source>Add shortcut</source>
         <translation>添加快捷键</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="151"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="88"/>
         <source>This shortcut is used for action: %1. Replace?</source>
         <translation>此快捷键已用于操作：%1。是否替换？</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="33"/>
-        <source>Action:</source>
-        <translation>行为:</translation>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="58"/>
+        <source>Press a key combination, click a mouse button or turn the wheel over the field.</source>
+        <translation>在此字段上按下组合键、点击鼠标按钮或滚动滚轮。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="47"/>
-        <source>Script:</source>
-        <translation>脚本:</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="64"/>
-        <source>Shortcut:</source>
-        <translation>快捷键:</translation>
-    </message>
-    <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="93"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="97"/>
         <source>OK</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="98"/>
+        <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="102"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="75"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="35"/>
         <source>[Enter shortcut]</source>
         <translation>[输入快捷方式]</translation>
-    </message>
-    <message>
-        <source>This shortcut is used for action: </source>
-        <translation type="vanished">此快捷键已被用于以下操作：</translation>
-    </message>
-    <message>
-        <source>. Replace?</source>
-        <translation type="vanished">。是否替换？</translation>
     </message>
 </context>
 <context>
