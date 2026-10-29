@@ -46,6 +46,9 @@ Item {
     readonly property int hoverOutDuration: 60
     readonly property int statusIconSize: 72
     readonly property real dropHoverFillOpacity: 0.1
+    // The status glyph is drawn opaque: the panel colour it is shaded from
+    // carries the panel opacity, which would fade the glyph with it.
+    readonly property real statusIconOpacity: 1.0
 
     readonly property bool hasImage: loaded && thumbnail.valid
     readonly property color labelColor: selected ? selectedLabelColor
@@ -133,7 +136,8 @@ Item {
         visible: !cell.hasImage
         icon: cell.unavailable || cell.loaded ? FluentIcons.ClockDismiss24 : FluentIcons.Clock24
         size: cell.statusIconSize
-        color: cell.selected ? Theme.tokens.accent : Theme.tokens.surfaceChromeRaised
+        color: cell.selected ? Theme.tokens.accent
+                             : Color.transparent(Theme.tokens.surfaceChromeRaised, cell.statusIconOpacity)
     }
 
     Text {
