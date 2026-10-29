@@ -347,24 +347,33 @@ Item {
             spin.value = value;
         }
 
+        // Indicators are sampled at the top middle: inside the box or circle
+        // and clear of its mark, and on the box outline above it; and at the
+        // centre, on the dash or dot. The circle outline is curved there and
+        // only partly covers the pixel, so it is not sampled.
         function test_selectionIndicators(data) {
             useScheme(data.dark);
-            compare(checkBox.indicator.text, Theme.glyph(FluentIcons.CheckboxUnchecked16));
+            const box = checkBox.indicator;
+            const middle = box.width / 2;
+            const inside = 2;
+            verifyColor(pixel(box, middle, 0), Theme.tokens.iconDefault, "unchecked box outline");
+            verifyColor(pixel(box, middle, inside), Theme.tokens.surfacePopup, "unchecked box");
             mouseClick(checkBox);
-            compare(checkBox.indicator.text, Theme.glyph(FluentIcons.CheckboxChecked16));
+            verifyColor(pixel(box, middle, inside), Theme.tokens.accent, "checked box");
             checkBox.tristate = true;
             checkBox.checkState = Qt.PartiallyChecked;
-            compare(checkBox.indicator.text, Theme.glyph(FluentIcons.CheckboxIndeterminate16));
+            verifyColor(pixel(box, middle, inside), Theme.tokens.accent, "partially checked box");
+            verifyColor(pixel(box, middle, box.height / 2), Theme.tokens.accentText, "dash");
             checkBox.checkState = Qt.Unchecked;
             checkBox.tristate = false;
 
-            compare(radioButton.indicator.text, Theme.glyph(FluentIcons.RadioButton16));
+            const circle = radioButton.indicator;
+            verifyColor(pixel(circle, middle, inside), Theme.tokens.surfacePopup, "unchecked circle");
             mouseClick(radioButton);
-            compare(radioButton.indicator.text, Theme.glyph(FluentIcons.Record16));
+            verifyColor(pixel(circle, middle, inside), Theme.tokens.accent, "checked circle");
+            verifyColor(pixel(circle, middle, circle.height / 2), Theme.tokens.accentText, "dot");
             radioButton.checked = false;
 
-            compare(checkBox.indicator.font.family, Theme.iconFontFamily);
-            verifyColor(checkBox.indicator.color, Theme.tokens.iconDefault, "indicator");
             checkBox.enabled = false;
             compare(checkBox.indicator.opacity, StyleConstants.disabledOpacity);
             checkBox.enabled = true;

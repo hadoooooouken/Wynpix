@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Templates as T
 import wynpix.bridges
 
-// Check box with the Fluent glyph indicators ProxyStyle draws for QCheckBox.
+// Check box with a Windows 11 indicator: an outlined box when unchecked, a
+// box filled with the accent and a check mark or dash on it otherwise.
 T.CheckBox {
     id: control
 
@@ -15,16 +16,35 @@ T.CheckBox {
     padding: StyleConstants.indicatorPadding
     spacing: StyleConstants.indicatorSpacing
 
-    indicator: IconGlyph {
+    indicator: Rectangle {
+        readonly property bool filled: control.checkState !== Qt.Unchecked
+
         x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding)
                         : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
-        icon: control.checkState === Qt.Checked ? FluentIcons.CheckboxChecked16
-            : control.checkState === Qt.PartiallyChecked ? FluentIcons.CheckboxIndeterminate16
-            : FluentIcons.CheckboxUnchecked16
-        size: StyleConstants.indicatorSize
-        color: control.checkState === Qt.Unchecked ? Theme.tokens.iconDefault : Theme.tokens.accent
+        implicitWidth: StyleConstants.indicatorSize
+        implicitHeight: StyleConstants.indicatorSize
+        radius: StyleConstants.indicatorRadius
+        color: filled ? Theme.tokens.accent : "transparent"
+        border.width: filled ? 0 : StyleConstants.indicatorBorderWidth
+        border.color: Theme.tokens.iconDefault
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
+
+        IconGlyph {
+            anchors.centerIn: parent
+            visible: control.checkState === Qt.Checked
+            icon: FluentIcons.Checkmark16
+            size: StyleConstants.indicatorSize
+            color: Theme.tokens.accentText
+        }
+
+        Rectangle {
+            anchors.centerIn: parent
+            visible: control.checkState === Qt.PartiallyChecked
+            width: StyleConstants.indicatorDashLength
+            height: StyleConstants.indicatorDashThickness
+            color: Theme.tokens.accentText
+        }
     }
 
     // The shared focus ring (FieldBackground), shown for keyboard focus.

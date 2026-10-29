@@ -93,8 +93,16 @@ QtObject {
     // Gap between a shown scroll bar and the content beside it.
     readonly property int scrollBarContentSpacing: 8
 
-    // Glyph sizes: check and radio indicators, chevrons.
+    // Check and radio indicators: the box or circle, its outline when
+    // unchecked, the corner radius of the box, the dash of a partially
+    // checked box and the dot of a checked radio button.
     readonly property int indicatorSize: 16
+    readonly property int indicatorBorderWidth: 1
+    readonly property int indicatorRadius: 3
+    readonly property int indicatorDashLength: 8
+    readonly property int indicatorDashThickness: 2
+    readonly property int radioDotSize: 8
+    // Glyph size of chevrons.
     readonly property int chevronSize: 12
     // Rotation that turns a downward chevron sideways.
     readonly property real quarterTurn: 90

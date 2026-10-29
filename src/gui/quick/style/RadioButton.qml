@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Templates as T
 import wynpix.bridges
 
-// Radio button with the Fluent glyph indicators ProxyStyle draws for
-// QRadioButton.
+// Radio button with a Windows 11 indicator: an outlined circle when
+// unchecked, a circle filled with the accent and a dot on it when checked.
 T.RadioButton {
     id: control
 
@@ -16,14 +16,26 @@ T.RadioButton {
     padding: StyleConstants.indicatorPadding
     spacing: StyleConstants.indicatorSpacing
 
-    indicator: IconGlyph {
+    indicator: Rectangle {
         x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding)
                         : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
-        icon: control.checked ? FluentIcons.Record16 : FluentIcons.RadioButton16
-        size: StyleConstants.indicatorSize
-        color: control.checked ? Theme.tokens.accent : Theme.tokens.iconDefault
+        implicitWidth: StyleConstants.indicatorSize
+        implicitHeight: StyleConstants.indicatorSize
+        radius: width / 2
+        color: control.checked ? Theme.tokens.accent : "transparent"
+        border.width: control.checked ? 0 : StyleConstants.indicatorBorderWidth
+        border.color: Theme.tokens.iconDefault
         opacity: control.enabled ? 1.0 : StyleConstants.disabledOpacity
+
+        Rectangle {
+            anchors.centerIn: parent
+            visible: control.checked
+            width: StyleConstants.radioDotSize
+            height: width
+            radius: width / 2
+            color: Theme.tokens.accentText
+        }
     }
 
     // The shared focus ring (FieldBackground), shown for keyboard focus.
