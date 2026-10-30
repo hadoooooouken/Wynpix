@@ -13,6 +13,7 @@
 class ScriptManager : public QObject {
     Q_OBJECT
 public:
+    explicit ScriptManager(QObject *parent = nullptr);
     static ScriptManager* getInstance();
     ~ScriptManager();
     void runScript(const QString &scriptName, const QString &filePath);
@@ -30,7 +31,6 @@ signals:
     void error(QString);
 
 private:
-    explicit ScriptManager(QObject *parent = nullptr);
     static constexpr int kBlockingScriptTimeoutMs = 10000;
     QMap<QString, Script> scripts; // <name, script>
     bool blockingScriptActive = false;

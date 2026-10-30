@@ -15,14 +15,22 @@ AppServices::AppServices() {
     // idempotent and a failed font load just means glyph rendering will log
     // a warning and return null pixmaps instead of crashing.
     IconFontManager::init();
-    // getInstance() publishes each instance through its global before
-    // returning, so later services can already use the earlier ones while
-    // they initialize (ScriptManager reads its scripts from settings).
-    mInputMap.reset(InputMap::getInstance());
-    mActions.reset(Actions::getInstance());
-    mSettings.reset(Settings::getInstance());
-    mScriptManager.reset(ScriptManager::getInstance());
-    mActionManager.reset(ActionManager::getInstance());
+    // Each instance is published through its global before it initializes,
+    // so later services can already use the earlier ones while they
+    // initialize (ScriptManager reads its scripts from settings).
+    mInputMap = std::make_unique<InputMap>();
+    inputMap = mInputMap.get();
+    mActions = std::make_unique<Actions>();
+    appActions = mActions.get();
+    mSettings = std::make_unique<Settings>();
+    settings = mSettings.get();
+    mSettings->init();
+    mScriptManager = std::make_unique<ScriptManager>();
+    scriptManager = mScriptManager.get();
+    mScriptManager->readScripts();
+    mActionManager = std::make_unique<ActionManager>();
+    actionManager = mActionManager.get();
+    mActionManager->init();
 }
 //------------------------------------------------------------------------------
 AppServices::~AppServices() {

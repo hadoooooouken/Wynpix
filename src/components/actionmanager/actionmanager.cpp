@@ -7,19 +7,16 @@ ActionManager *actionManager = nullptr;
 
 ActionManager::ActionManager(QObject *parent) : QObject(parent) {}
 //------------------------------------------------------------------------------
-ActionManager::~ActionManager() {
-  if (actionManager == this) {
-    actionManager = nullptr;
-  }
-}
+ActionManager::~ActionManager() = default;
 //------------------------------------------------------------------------------
 ActionManager *ActionManager::getInstance() {
-  if (!actionManager) {
-    actionManager = new ActionManager();
-    initDefaults();
-    initShortcuts();
-  }
+  Q_ASSERT(actionManager);
   return actionManager;
+}
+//------------------------------------------------------------------------------
+void ActionManager::init() {
+  initDefaults();
+  initShortcuts();
 }
 //------------------------------------------------------------------------------
 void ActionManager::initDefaults() {

@@ -152,12 +152,13 @@ Settings::~Settings() {
 }
 //------------------------------------------------------------------------------
 Settings *Settings::getInstance() {
-  if (!settings) {
-    settings = new Settings();
-    settings->setupCache();
-    settings->loadTheme();
-  }
+  Q_ASSERT(settings);
   return settings;
+}
+//------------------------------------------------------------------------------
+void Settings::init() {
+  setupCache();
+  loadTheme();
 }
 //------------------------------------------------------------------------------
 void Settings::setupCache() {

@@ -10,9 +10,11 @@ class Settings;
 
 // Owns the process-wide services published through the legacy globals
 // (inputMap, appActions, settings, scriptManager, actionManager)
-// for the lifetime of one application run. Construction initializes them in
-// dependency order; destruction releases them in the reverse dependency
-// order and resets every global to nullptr.
+// for the lifetime of one application run. Construction creates them in
+// dependency order, publishing each through its global before initializing
+// it; destruction releases them in the reverse dependency order and resets
+// every global to nullptr. getInstance() only hands out the published
+// instance.
 class AppServices {
 public:
     AppServices();

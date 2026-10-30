@@ -46,9 +46,7 @@ InputMap::InputMap() {
 }
 
 InputMap *InputMap::getInstance() {
-    if(!inputMap) {
-       inputMap = new InputMap();
-    }
+    Q_ASSERT(inputMap);
     return inputMap;
 }
 

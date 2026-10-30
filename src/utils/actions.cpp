@@ -13,8 +13,7 @@ Actions *appActions = nullptr;
 Actions::Actions() { init(); }
 
 Actions *Actions::getInstance() {
-  if (!appActions)
-    appActions = new Actions();
+  Q_ASSERT(appActions);
   return appActions;
 }
 

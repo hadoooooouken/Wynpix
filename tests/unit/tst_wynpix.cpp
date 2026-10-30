@@ -291,7 +291,6 @@ void WynpixTests::shortcutBuilder_namesANumpadKeyByNumLock() {
   QFETCH(quint32, scanCode);
   QFETCH(QString, text);
   QFETCH(QString, shortcut);
-  InputMap::getInstance();
   QKeyEvent event(QEvent::KeyPress, key, Qt::KeyboardModifiers::fromInt(modifiers), scanCode, 0,
                   0, text);
   QCOMPARE(ShortcutBuilder::fromEvent(&event), shortcut);

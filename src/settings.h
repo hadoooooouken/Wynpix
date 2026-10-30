@@ -48,7 +48,10 @@ public:
   static constexpr int DefaultFolderViewIconSize = 256;
   static constexpr qint64 DefaultThumbnailCacheMaxEntries = 100'000;
 
+  explicit Settings(QObject *parent = nullptr);
   static Settings *getInstance();
+  // Run once the instance is published through settings.
+  void init();
   // The folder that holds the .ini files: conf/ next to the executable when
   // it is writable (it is created if missing), AppData otherwise.
   static QString configDirPath();
@@ -341,7 +344,6 @@ public:
 
 
 private:
-  explicit Settings(QObject *parent = nullptr);
   std::unique_ptr<QSettings> settingsConf, stateConf, themeConf;
   std::unique_ptr<QDir> mTmpDir, mThumbCacheDir, mConfDir;
   ColorScheme mColorScheme;

@@ -1,12 +1,52 @@
 #include <QGuiApplication>
 
+#include <memory>
+
+#include "settings.h"
 #include "testsuites.h"
+#include "utils/actions.h"
+#include "utils/inputmap.h"
+
+namespace {
+// Owns the services the tested code reaches through their globals
+// (ShortcutMap, ShortcutBuilder, ImageLib, Settings) for the whole run, as
+// AppServices does in the application.
+class TestServices {
+public:
+  TestServices() {
+    mInputMap = std::make_unique<InputMap>();
+    inputMap = mInputMap.get();
+    mActions = std::make_unique<Actions>();
+    appActions = mActions.get();
+    mSettings = std::make_unique<Settings>();
+    settings = mSettings.get();
+    mSettings->init();
+  }
+  ~TestServices() {
+    mSettings.reset();
+    settings = nullptr;
+    mActions.reset();
+    appActions = nullptr;
+    mInputMap.reset();
+    inputMap = nullptr;
+  }
+
+  TestServices(const TestServices &) = delete;
+  TestServices &operator=(const TestServices &) = delete;
+
+private:
+  std::unique_ptr<InputMap> mInputMap;
+  std::unique_ptr<Actions> mActions;
+  std::unique_ptr<Settings> mSettings;
+};
+} // namespace
 
 // Runs every suite, so one failing suite does not hide the others; the exit
 // code is non-zero when any suite failed. QMovie (AnimationPlayer) needs a
 // QGuiApplication; CTest runs the suites on the offscreen platform.
 int main(int argc, char **argv) {
   QGuiApplication app(argc, argv);
+  const TestServices services;
   int status = 0;
   status |= runWynpixTests(argc, argv);
   status |= runViewTransformTests(argc, argv);

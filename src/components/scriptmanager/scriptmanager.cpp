@@ -13,16 +13,10 @@ ScriptManager::ScriptManager(QObject *parent)
 
 ScriptManager::~ScriptManager() {
     saveScripts();
-    if (scriptManager == this) {
-        scriptManager = nullptr;
-    }
 }
 
 ScriptManager *ScriptManager::getInstance() {
-    if(!scriptManager) {
-        scriptManager = new ScriptManager();
-        scriptManager->readScripts();
-    }
+    Q_ASSERT(scriptManager);
     return scriptManager;
 }
 

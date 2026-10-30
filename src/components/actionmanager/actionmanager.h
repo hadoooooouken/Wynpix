@@ -22,8 +22,11 @@ class ActionManager : public QObject {
 public:
     static constexpr int kCurrentShortcutsVersion = 5;
 
+    explicit ActionManager(QObject *parent = nullptr);
     static ActionManager* getInstance();
     ~ActionManager();
+    // Run once the instance is published through actionManager.
+    void init();
     bool processEvent(QInputEvent*);
     void addShortcut(const QString &keys, const QString &action);
     void resetDefaults();
@@ -49,7 +52,6 @@ public:
 public slots:
     bool invokeAction(const QString &actionName);
 private:
-    explicit ActionManager(QObject *parent = nullptr);
     ShortcutMap defaults, shortcuts;
     bool mFolderViewActive = false;
 
