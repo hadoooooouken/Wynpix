@@ -163,7 +163,7 @@ void Actions::init() {
   add(u"flipV"_s, QT_TRANSLATE_NOOP("Actions", "Flip vertical"), ActionCategory::Common, ActionGroup::Editing);
   add(u"folderView"_s, QT_TRANSLATE_NOOP("Actions", "Go to folder view"), ActionCategory::Viewer, ActionGroup::Navigation);
   add(u"documentView"_s, QT_TRANSLATE_NOOP("Actions", "Go to image view"), ActionCategory::FolderView, ActionGroup::Navigation);
-  add(u"toggleFolderView"_s, QT_TRANSLATE_NOOP("Actions", "Toggle folder view"), ActionCategory::Common, ActionGroup::Application);
+  add(u"toggleFolderView"_s, QT_TRANSLATE_NOOP("Actions", "Toggle folder/image view"), ActionCategory::Common, ActionGroup::Application);
   add(u"moveToTrash"_s, QT_TRANSLATE_NOOP("Actions", "Move to trash"), ActionCategory::Common, ActionGroup::File);
   add(u"reloadImage"_s, QT_TRANSLATE_NOOP("Actions", "Reload image"), ActionCategory::Common, ActionGroup::File);
   add(u"copyFileClipboard"_s, QT_TRANSLATE_NOOP("Actions", "Copy image to clipboard"), ActionCategory::Common, ActionGroup::Clipboard);
