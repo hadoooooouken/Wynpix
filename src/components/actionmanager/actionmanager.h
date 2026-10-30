@@ -9,6 +9,7 @@
 #include <QSet>
 #include <QDebug>
 #include <QStringList>
+#include "components/actionmanager/shortcutmap.h"
 #include "utils/actions.h"
 enum ActionType {
     ACTION_INVALID,
@@ -16,26 +17,10 @@ enum ActionType {
     ACTION_SCRIPT
 };
 
-// <shortcut, action>. A shortcut has at most one action per mode (see
-// Actions::categoriesOverlap()): one of the folder view and one of the viewer,
-// or one common to both.
-using ShortcutMap = QMultiMap<QString, QString>;
-
 class ActionManager : public QObject {
     Q_OBJECT
 public:
     static constexpr int kCurrentShortcutsVersion = 4;
-    // Adds to shortcuts the defaults of the actions without a shortcut whose
-    // shortcut has no action of a common mode yet; true when one was added.
-    static bool mergeMissingDefaults(const ShortcutMap &defaults, ShortcutMap &shortcuts);
-    // Removes from shortcuts stored before version the defaults that later
-    // versions dropped; true when one was removed.
-    static bool removeRetiredDefaults(int version, ShortcutMap &shortcuts);
-    // The action that shortcut runs in the folder view (folderView) or in the
-    // viewer; empty for none. In the folder view a shortcut with Shift runs
-    // the selection move of the shortcut without it (Actions::extendsWithShift()).
-    static QString actionFor(const ShortcutMap &shortcuts, const QString &shortcut,
-                             bool folderView);
 
     static ActionManager* getInstance();
     ~ActionManager();

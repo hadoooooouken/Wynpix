@@ -8,6 +8,7 @@ target_sources(wynpix PRIVATE
 
     scriptmanager/scriptmanager.cpp
     actionmanager/actionmanager.cpp
+    actionmanager/shortcutmap.cpp
 
     cache/cache.cpp
     cache/decodedthumbnailcache.cpp

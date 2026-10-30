@@ -80,7 +80,7 @@ void WynpixTests::actionManager_mergeMissingDefaults_addsNewActions() {
       {"Right", "nextImage"}
   };
 
-  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  const bool changed = ShortcutRules::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(changed);
   QCOMPARE(userShortcuts.value("Ctrl+,"), QString("firstPage"));
   QCOMPARE(userShortcuts.value("Ctrl+."), QString("lastPage"));
@@ -99,7 +99,7 @@ void WynpixTests::actionManager_mergeMissingDefaults_preservesCustomActionMappin
       {"Right", "nextImage"}
   };
 
-  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  const bool changed = ShortcutRules::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(!changed);
   QVERIFY(!userShortcuts.contains("Ctrl+,"));
   QCOMPARE(userShortcuts.value("Alt+,"), QString("firstPage"));
@@ -116,7 +116,7 @@ void WynpixTests::actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey
       {"Right", "nextImage"}
   };
 
-  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  const bool changed = ShortcutRules::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(!changed);
   QCOMPARE(userShortcuts.value("Ctrl+,"), QString("jumpToFirst"));
   QVERIFY(userShortcuts.key("firstPage").isEmpty());
@@ -133,7 +133,7 @@ void WynpixTests::actionManager_mergeMissingDefaults_addsMultipleDefaultsForSame
       {"Right", "nextImage"}
   };
 
-  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  const bool changed = ShortcutRules::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(changed);
   QCOMPARE(userShortcuts.value("F"), QString("toggleFullscreen"));
   QCOMPARE(userShortcuts.value("Enter"), QString("toggleFullscreen"));
@@ -151,7 +151,7 @@ void WynpixTests::actionManager_mergeMissingDefaults_addsAKeyTakenInTheOtherMode
       {"Left", "prevImage"}
   };
 
-  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  const bool changed = ShortcutRules::mergeMissingDefaults(defaults, userShortcuts);
   QVERIFY(changed);
   QCOMPARE(userShortcuts.values("Right").size(), 2);
   QVERIFY(userShortcuts.contains("Right", "goUp"));
@@ -164,11 +164,11 @@ void WynpixTests::actionManager_actionFor_picksTheActionOfTheMode() {
       {"Right", "goUp"},
       {"F", "toggleFullscreen"}
   };
-  QCOMPARE(ActionManager::actionFor(shortcuts, "Right", false), QString("nextImage"));
-  QCOMPARE(ActionManager::actionFor(shortcuts, "Right", true), QString("goUp"));
-  QCOMPARE(ActionManager::actionFor(shortcuts, "F", false), QString("toggleFullscreen"));
-  QCOMPARE(ActionManager::actionFor(shortcuts, "F", true), QString("toggleFullscreen"));
-  QVERIFY(ActionManager::actionFor(shortcuts, "Left", false).isEmpty());
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Right", false), QString("nextImage"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Right", true), QString("goUp"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "F", false), QString("toggleFullscreen"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "F", true), QString("toggleFullscreen"));
+  QVERIFY(ShortcutRules::actionFor(shortcuts, "Left", false).isEmpty());
 }
 
 void WynpixTests::actionManager_actionFor_extendsASelectionMoveWithShift() {
@@ -178,9 +178,9 @@ void WynpixTests::actionManager_actionFor_extendsASelectionMoveWithShift() {
       {"B", "save"}
   };
   // In the folder view the viewer's Shift+Left does not run.
-  QCOMPARE(ActionManager::actionFor(shortcuts, "Shift+Left", true), QString("folderMoveLeft"));
-  QCOMPARE(ActionManager::actionFor(shortcuts, "Shift+Left", false), QString("prevDirectory"));
-  QVERIFY(ActionManager::actionFor(shortcuts, "Shift+B", true).isEmpty());
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Shift+Left", true), QString("folderMoveLeft"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Shift+Left", false), QString("prevDirectory"));
+  QVERIFY(ShortcutRules::actionFor(shortcuts, "Shift+B", true).isEmpty());
 }
 
 void WynpixTests::actionManager_removeRetiredDefaults_dropsEnterFullscreen() {
@@ -188,12 +188,12 @@ void WynpixTests::actionManager_removeRetiredDefaults_dropsEnterFullscreen() {
       {"Enter", "toggleFullscreen"},
       {"F", "toggleFullscreen"}
   };
-  QVERIFY(ActionManager::removeRetiredDefaults(2, shortcuts));
+  QVERIFY(ShortcutRules::removeRetiredDefaults(2, shortcuts));
   QVERIFY(!shortcuts.contains("Enter"));
   QVERIFY(shortcuts.contains("F", "toggleFullscreen"));
 
   ShortcutMap current = {{"Enter", "toggleFullscreen"}};
-  QVERIFY(!ActionManager::removeRetiredDefaults(ActionManager::kCurrentShortcutsVersion, current));
+  QVERIFY(!ShortcutRules::removeRetiredDefaults(ActionManager::kCurrentShortcutsVersion, current));
   QVERIFY(current.contains("Enter", "toggleFullscreen"));
 }
 

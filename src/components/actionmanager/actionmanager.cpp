@@ -5,62 +5,6 @@
 
 ActionManager *actionManager = nullptr;
 
-namespace {
-// Whether shortcut runs an action of shortcuts in a mode that action works in.
-bool shortcutTaken(const ShortcutMap &shortcuts, const QString &shortcut,
-                   const QString &action) {
-  const ActionCategory category = Actions::getInstance()->category(action);
-  for (auto it = shortcuts.constFind(shortcut);
-       it != shortcuts.cend() && it.key() == shortcut; ++it) {
-    if (Actions::categoriesOverlap(Actions::getInstance()->category(it.value()),
-                                   category))
-      return true;
-  }
-  return false;
-}
-} // namespace
-
-bool ActionManager::mergeMissingDefaults(const ShortcutMap &defaults,
-                                         ShortcutMap &shortcuts) {
-  bool changed = false;
-  QSet<QString> boundActions;
-  boundActions.reserve(shortcuts.size());
-  for (auto it = shortcuts.cbegin(); it != shortcuts.cend(); ++it)
-    boundActions.insert(it.value());
-
-  for (auto it = defaults.cbegin(); it != defaults.cend(); ++it) {
-    if (!boundActions.contains(it.value()) &&
-        !shortcutTaken(shortcuts, it.key(), it.value())) {
-      shortcuts.insert(it.key(), it.value());
-      changed = true;
-    }
-  }
-  return changed;
-}
-
-bool ActionManager::removeRetiredDefaults(int version, ShortcutMap &shortcuts) {
-  // Since then Enter opens the selected folder view item, not fullscreen.
-  constexpr int kEnterOpensSelectionVersion = 3;
-  if (version >= kEnterOpensSelectionVersion)
-    return false;
-  return shortcuts.remove("Enter", "toggleFullscreen") > 0;
-}
-
-QString ActionManager::actionFor(const ShortcutMap &shortcuts,
-                                 const QString &shortcut, bool folderView) {
-  for (auto it = shortcuts.constFind(shortcut);
-       it != shortcuts.cend() && it.key() == shortcut; ++it) {
-    if (Actions::worksIn(Actions::getInstance()->category(it.value()), folderView))
-      return it.value();
-  }
-  const QString shiftPrefix = InputMap::keyNameShift() + "+";
-  if (!folderView || !shortcut.contains(shiftPrefix))
-    return {};
-  const QString action =
-      actionFor(shortcuts, QString(shortcut).remove(shiftPrefix), folderView);
-  return Actions::getInstance()->extendsWithShift(action) ? action : QString();
-}
-
 ActionManager::ActionManager(QObject *parent) : QObject(parent) {}
 //------------------------------------------------------------------------------
 ActionManager::~ActionManager() {
@@ -281,7 +225,8 @@ bool ActionManager::invokeAction(const QString &actionName) {
 bool ActionManager::invokeActionForShortcut(const QString &shortcut) {
   if (shortcut.isEmpty())
     return false;
-  const QString action = actionFor(shortcuts, shortcut, mFolderViewActive);
+  const QString action =
+      ShortcutRules::actionFor(shortcuts, shortcut, mFolderViewActive);
   return !action.isEmpty() && invokeAction(action);
 }
 //------------------------------------------------------------------------------
@@ -314,8 +259,8 @@ void ActionManager::readShortcuts() {
     resetDefaults();
     actionManager->saveShortcuts();
   } else if (storedVersion < kCurrentShortcutsVersion) {
-    const bool removed = removeRetiredDefaults(storedVersion, shortcuts);
-    if (mergeMissingDefaults(defaults, shortcuts) || removed) {
+    const bool removed = ShortcutRules::removeRetiredDefaults(storedVersion, shortcuts);
+    if (ShortcutRules::mergeMissingDefaults(defaults, shortcuts) || removed) {
       actionManager->saveShortcuts();
     } else {
       settings->setShortcutsVersion(kCurrentShortcutsVersion);
