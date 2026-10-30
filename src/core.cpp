@@ -30,6 +30,7 @@
 #include <QCursor>
 #include <tchar.h>
 #include <windows.h>
+#include <dwmapi.h>
 #include <psapi.h>
 #include "utils/colormanager.h"
 #include "utils/hdrtonemapper.h"
@@ -233,6 +234,10 @@ Core::Core(const UiPorts &ports)
     m_raiseWindowAwaitingDocumentRendering = false;
     m_raiseWindowDocumentRenderingSettled = false;
     m_raiseWindowConcealed = false;
+    // A presented frame reaches the screen with the next DWM composition;
+    // uncloaking before it can show the window's previous frame once.
+    if (FAILED(DwmFlush()))
+      qWarning() << "DwmFlush failed; revealing the raised window anyway";
     ui.window.setWindowConcealed(false);
   });
   connect(&ui.events, &UiEvents::documentRenderingSettled, this, [this]() {
