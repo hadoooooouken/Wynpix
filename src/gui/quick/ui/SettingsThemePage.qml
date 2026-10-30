@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Dialogs
 import QtQuick.Layouts
 import wynpix.style
 
@@ -55,10 +54,7 @@ SettingsPage {
                     color: root.editor.theme.accentColor
                     opacity: accentButton.enabled ? 1.0 : StyleConstants.disabledOpacity
                 }
-                onClicked: {
-                    accentDialog.selectedColor = root.editor.theme.accentColor;
-                    accentDialog.open();
-                }
+                onClicked: accentDialog.openWith(root.editor.theme.accentColor)
             }
         }
     }
@@ -110,10 +106,10 @@ SettingsPage {
         }
     }
 
-    ColorDialog {
+    AccentColorDialog {
         id: accentDialog
 
-        title: qsTranslate("SettingsDialog", "Accent color")
-        onAccepted: root.editor.setAccentColor(accentDialog.selectedColor)
+        transientParent: root.Window.window
+        onColorAccepted: picked => root.editor.setAccentColor(picked)
     }
 }

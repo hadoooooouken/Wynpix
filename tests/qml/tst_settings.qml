@@ -4,7 +4,7 @@ import wynpix.tests
 
 // The settings window (SettingsDialog) over an editor with in-memory
 // stores: lazily created pages, OK / Apply / Cancel, the previewed theme
-// values, the shortcut creator and the script editor.
+// values, the accent picker, the shortcut creator and the script editor.
 TestCase {
     id: testCase
 
@@ -134,6 +134,31 @@ TestCase {
             window = loaders.length > 0 ? loaders[0].item : null;
             return window !== null && window.visible;
         });
+        return activated(window, typeName);
+    }
+
+    // The accent picker of the Theme page, opened by its swatch button once
+    // the custom accent is on; it is a resource of the page, not a child.
+    function openAccentPicker(page) {
+        const customAccent = findText(page, "CheckBox", "Use custom accent");
+        if (!customAccent.checked)
+            mouseClick(customAccent);
+        const swatch = findAll(customAccent.parent, "Button", [])[0];
+        verify(swatch.enabled);
+        mouseClick(swatch);
+        const pickers = [];
+        for (const item of findAll(page, "", [])) {
+            for (let i = 0; i < item.resources.length; ++i) {
+                if (item.resources[i].toString().startsWith("AccentColorDialog"))
+                    pickers.push(item.resources[i]);
+            }
+        }
+        compare(pickers.length, 1);
+        tryVerify(() => pickers[0].visible);
+        return activated(pickers[0], "AccentColorDialog");
+    }
+
+    function activated(window, typeName) {
         tryVerify(() => window.active, activationTimeoutMs,
                   typeName + " was not activated (settings window active: " + settingsWindow.active + ")");
         tryVerify(() => window.activeFocusItem !== null, activationTimeoutMs,
@@ -190,6 +215,44 @@ TestCase {
         combos[0].activated(lightTheme);
         compare(Fixture.previewedThemeMode, lightTheme);
         compare(Fixture.settingsApplyCount, 0);
+    }
+
+    function test_theAccentPickerReturnsAnUnchangedAccentAsItWas() {
+        const page = openOn(themePage);
+        const editor = Fixture.settingsDialog.editor;
+        const accent = editor.theme.accentColor;
+        const picker = openAccentPicker(page);
+        compare(findAll(picker.contentItem, "TextField", [])[0].text, accent.toString());
+        mouseClick(findText(picker.contentItem, "Button", "OK"));
+        tryVerify(() => !picker.visible);
+        verify(Qt.colorEqual(editor.theme.accentColor, accent));
+    }
+
+    function test_theAccentPickerTakesATypedHexCodeAndAClickedShade() {
+        const page = openOn(themePage);
+        const editor = Fixture.settingsDialog.editor;
+        let picker = openAccentPicker(page);
+        const hexField = findAll(picker.contentItem, "TextField", [])[0];
+        hexField.forceActiveFocus();
+        hexField.selectAll();
+        Fixture.sendText(picker, "#ff8800");
+        mouseClick(findText(picker.contentItem, "Button", "OK"));
+        tryVerify(() => !picker.visible);
+        verify(Qt.colorEqual(editor.theme.accentColor, "#ff8800"));
+
+        // Near the top right corner: the hue at about full saturation, full
+        // value. Cancel keeps the accent.
+        picker = openAccentPicker(page);
+        const field = findAll(picker.contentItem, "QQuickRectangle", [])
+            .filter(rectangle => rectangle.height === picker.fieldHeight)[0];
+        mouseClick(field, field.width - 1, 0);
+        compare(picker.value, 1.0);
+        verify(picker.saturation > 0.99);
+        verify(Qt.colorEqual(picker.selectedColor, Qt.hsva(picker.hue, picker.saturation, picker.value, 1.0)));
+        compare(hexField.text, picker.selectedColor.toString());
+        mouseClick(findText(picker.contentItem, "Button", "Cancel"));
+        tryVerify(() => !picker.visible);
+        verify(Qt.colorEqual(editor.theme.accentColor, "#ff8800"));
     }
 
     function test_aCapturedKeyBecomesANewShortcut() {

@@ -88,6 +88,7 @@ qt_add_qml_module(wynpix_ui
         thumbnails/thumbnailstriplayout.cpp
         thumbnails/thumbnailstriplayout.h
     QML_FILES
+        AccentColorDialog.qml
         AdjustmentSliders.qml
         AnimationPlaybackOverlay.qml
         BatchConverterDialog.qml
@@ -179,6 +180,6 @@ target_link_libraries(wynpix_ui
         Qt6::QuickControls2
         # FolderDialog of the copy / move overlay and the batch converter,
         # FileDialog of "Save as" and the PDF export, the settings window's
-        # FileDialogs and ColorDialog.
+        # FileDialogs.
         Qt6::QuickDialogs2
 )
