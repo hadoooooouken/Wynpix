@@ -172,6 +172,8 @@ QuickMainWindowController::QuickMainWindowController(
 
     connect(&actions, &ActionManager::toggleFullscreen, this,
             [this]() { windowState.toggleFullscreen(); });
+    connect(&actions, &ActionManager::folderToggleFullscreen, this,
+            [this]() { windowState.toggleFullscreen(); });
     connect(&actions, &ActionManager::closeFullScreenOrExit, this,
             &QuickMainWindowController::closeFullscreenOrExit);
 

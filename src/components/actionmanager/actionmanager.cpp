@@ -115,6 +115,7 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert("Enter", "folderOpenSelected");
   actionManager->defaults.insert("XButton1", "folderBack");
   actionManager->defaults.insert("XButton2", "folderForward");
+  actionManager->defaults.insert("F", "folderToggleFullscreen");
   actionManager->defaults.insert("Backspace", "goUp");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+A", "folderSelectAll");
   actionManager->defaults.insert("Left", "folderMoveLeft");

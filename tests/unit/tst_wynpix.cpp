@@ -25,6 +25,7 @@ private slots:
   void actionManager_actionFor_extendsASelectionMoveWithShift();
   void actionManager_removeRetiredDefaults_dropsEnterFullscreen();
   void actionManager_actionFor_fallsBackFromANumpadKey();
+  void actionManager_mergeMissingDefaults_keepsEnterFullscreenInTheViewer();
   void inputMap_mainKeyShortcut_data();
   void inputMap_mainKeyShortcut();
   void shortcutBuilder_namesANumpadKeyByNumLock_data();
@@ -169,12 +170,12 @@ void WynpixTests::actionManager_actionFor_picksTheActionOfTheMode() {
   const ShortcutMap shortcuts = {
       {"Right", "nextImage"},
       {"Right", "goUp"},
-      {"F", "toggleFullscreen"}
+      {"R", "resize"}
   };
   QCOMPARE(ShortcutRules::actionFor(shortcuts, "Right", false), QString("nextImage"));
   QCOMPARE(ShortcutRules::actionFor(shortcuts, "Right", true), QString("goUp"));
-  QCOMPARE(ShortcutRules::actionFor(shortcuts, "F", false), QString("toggleFullscreen"));
-  QCOMPARE(ShortcutRules::actionFor(shortcuts, "F", true), QString("toggleFullscreen"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "R", false), QString("resize"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "R", true), QString("resize"));
   QVERIFY(ShortcutRules::actionFor(shortcuts, "Left", false).isEmpty());
 }
 
@@ -220,6 +221,26 @@ void WynpixTests::actionManager_actionFor_fallsBackFromANumpadKey() {
   QVERIFY(ShortcutRules::actionFor(shortcuts, "Num2", false).isEmpty());
   // Shift extends the selection move of the main keyboard key.
   QCOMPARE(ShortcutRules::actionFor(shortcuts, "Shift+NumDown", true), QString("folderMoveDown"));
+}
+
+// Fullscreen is an action of each mode, so Enter can toggle it in the viewer
+// and open the selection in the folder view.
+void WynpixTests::actionManager_mergeMissingDefaults_keepsEnterFullscreenInTheViewer() {
+  const ShortcutMap defaults = {
+      {"F", "toggleFullscreen"},
+      {"F", "folderToggleFullscreen"},
+      {"Enter", "folderOpenSelected"}
+  };
+  ShortcutMap userShortcuts = {
+      {"Enter", "toggleFullscreen"},
+      {"Enter", "folderOpenSelected"}
+  };
+
+  QVERIFY(ShortcutRules::mergeMissingDefaults(defaults, userShortcuts));
+  QVERIFY(userShortcuts.contains("F", "folderToggleFullscreen"));
+  QCOMPARE(ShortcutRules::actionFor(userShortcuts, "Enter", false), QString("toggleFullscreen"));
+  QCOMPARE(ShortcutRules::actionFor(userShortcuts, "Enter", true), QString("folderOpenSelected"));
+  QCOMPARE(ShortcutRules::actionFor(userShortcuts, "F", true), QString("folderToggleFullscreen"));
 }
 
 void WynpixTests::inputMap_mainKeyShortcut_data() {

@@ -20,7 +20,7 @@ enum ActionType {
 class ActionManager : public QObject {
     Q_OBJECT
 public:
-    static constexpr int kCurrentShortcutsVersion = 4;
+    static constexpr int kCurrentShortcutsVersion = 5;
 
     static ActionManager* getInstance();
     ~ActionManager();
@@ -142,6 +142,7 @@ signals:
     void folderSelectAll();
     void folderBack();
     void folderForward();
+    void folderToggleFullscreen();
     void folderMoveLeft();
     void folderMoveRight();
     void folderMoveUp();

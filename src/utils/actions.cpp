@@ -130,7 +130,7 @@ void Actions::addSelectionMove(const QString &action, const char *title) {
 void Actions::init() {
   add(u"nextImage"_s, QT_TRANSLATE_NOOP("Actions", "Next image"), ActionCategory::Viewer, ActionGroup::Navigation);
   add(u"prevImage"_s, QT_TRANSLATE_NOOP("Actions", "Previous image"), ActionCategory::Viewer, ActionGroup::Navigation);
-  add(u"toggleFullscreen"_s, QT_TRANSLATE_NOOP("Actions", "Toggle fullscreen"), ActionCategory::Common, ActionGroup::Application);
+  add(u"toggleFullscreen"_s, QT_TRANSLATE_NOOP("Actions", "Toggle fullscreen"), ActionCategory::Viewer, ActionGroup::View);
   add(u"fitWindow"_s, QT_TRANSLATE_NOOP("Actions", "Fit to window"), ActionCategory::Viewer, ActionGroup::View);
   add(u"fitWidth"_s, QT_TRANSLATE_NOOP("Actions", "Fit to width"), ActionCategory::Viewer, ActionGroup::View);
   add(u"fitNormal"_s, QT_TRANSLATE_NOOP("Actions", "Original size"), ActionCategory::Viewer, ActionGroup::View);
@@ -206,6 +206,7 @@ void Actions::init() {
   add(u"folderSelectAll"_s, QT_TRANSLATE_NOOP("Actions", "Select all"), ActionCategory::FolderView, ActionGroup::Selection);
   add(u"folderBack"_s, QT_TRANSLATE_NOOP("Actions", "Back"), ActionCategory::FolderView, ActionGroup::Navigation);
   add(u"folderForward"_s, QT_TRANSLATE_NOOP("Actions", "Forward"), ActionCategory::FolderView, ActionGroup::Navigation);
+  add(u"folderToggleFullscreen"_s, QT_TRANSLATE_NOOP("Actions", "Toggle fullscreen"), ActionCategory::FolderView, ActionGroup::View);
   addSelectionMove(u"folderMoveLeft"_s, QT_TRANSLATE_NOOP("Actions", "Move selection left"));
   addSelectionMove(u"folderMoveRight"_s, QT_TRANSLATE_NOOP("Actions", "Move selection right"));
   addSelectionMove(u"folderMoveUp"_s, QT_TRANSLATE_NOOP("Actions", "Move selection up"));
