@@ -3,6 +3,7 @@
 
 #include "components/actionmanager/actionmanager.h"
 #include "components/viewmode/viewmodecontroller.h"
+#include "shortcutbuilder.h"
 #include "testsuites.h"
 
 // Qt Test suite for UI-independent wynpix components. Test cases are added
@@ -23,6 +24,12 @@ private slots:
   void actionManager_actionFor_picksTheActionOfTheMode();
   void actionManager_actionFor_extendsASelectionMoveWithShift();
   void actionManager_removeRetiredDefaults_dropsEnterFullscreen();
+  void actionManager_actionFor_fallsBackFromANumpadKey();
+  void inputMap_mainKeyShortcut_data();
+  void inputMap_mainKeyShortcut();
+  void shortcutBuilder_namesANumpadKeyByNumLock_data();
+  void shortcutBuilder_namesANumpadKeyByNumLock();
+  void inputMap_keysKeepTheMainNamesOfTheNumpad();
 };
 
 void WynpixTests::viewModeController_keepsInitialMode_data() {
@@ -195,6 +202,85 @@ void WynpixTests::actionManager_removeRetiredDefaults_dropsEnterFullscreen() {
   ShortcutMap current = {{"Enter", "toggleFullscreen"}};
   QVERIFY(!ShortcutRules::removeRetiredDefaults(ActionManager::kCurrentShortcutsVersion, current));
   QVERIFY(current.contains("Enter", "toggleFullscreen"));
+}
+
+void WynpixTests::actionManager_actionFor_fallsBackFromANumpadKey() {
+  const ShortcutMap shortcuts = {
+      {"1", "fitWindow"},
+      {"Num1", "fitWidth"},
+      {"Home", "jumpToFirst"},
+      {"Ctrl+Home", "firstPage"},
+      {"Down", "folderMoveDown"}
+  };
+  // A numpad key of its own shortcut runs its own action.
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Num1", false), QString("fitWidth"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "1", false), QString("fitWindow"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "NumHome", false), QString("jumpToFirst"));
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Ctrl+NumHome", false), QString("firstPage"));
+  QVERIFY(ShortcutRules::actionFor(shortcuts, "Num2", false).isEmpty());
+  // Shift extends the selection move of the main keyboard key.
+  QCOMPARE(ShortcutRules::actionFor(shortcuts, "Shift+NumDown", true), QString("folderMoveDown"));
+}
+
+void WynpixTests::inputMap_mainKeyShortcut_data() {
+  QTest::addColumn<QString>("shortcut");
+  QTest::addColumn<QString>("mainKey");
+  QTest::newRow("digit") << "Num7" << "7";
+  QTest::newRow("NumLock off") << "NumHome" << "Home";
+  QTest::newRow("modifiers") << "Alt+Ctrl+Shift+NumPgDown" << "Alt+Ctrl+Shift+PgDown";
+  QTest::newRow("plus") << "Ctrl+Num+" << "Ctrl++";
+  QTest::newRow("enter") << "NumEnter" << "Enter";
+  QTest::newRow("Num5 with NumLock off") << "NumClear" << "";
+  QTest::newRow("NumLock") << "NumLock" << "";
+  QTest::newRow("main keyboard") << "Ctrl+7" << "";
+}
+
+void WynpixTests::inputMap_mainKeyShortcut() {
+  QFETCH(QString, shortcut);
+  QFETCH(QString, mainKey);
+  QCOMPARE(InputMap::mainKeyShortcut(shortcut), mainKey);
+}
+
+void WynpixTests::shortcutBuilder_namesANumpadKeyByNumLock_data() {
+  QTest::addColumn<int>("key");
+  QTest::addColumn<int>("modifiers");
+  QTest::addColumn<quint32>("scanCode");
+  QTest::addColumn<QString>("text");
+  QTest::addColumn<QString>("shortcut");
+  const int keypad = Qt::KeypadModifier;
+  QTest::newRow("Num7") << int(Qt::Key_7) << keypad << quint32(71) << "7" << "Num7";
+  QTest::newRow("Num7 with NumLock off") << int(Qt::Key_Home) << keypad << quint32(71) << ""
+                                         << "NumHome";
+  QTest::newRow("decimal comma") << int(Qt::Key_Comma) << keypad << quint32(83) << "," << "Num.";
+  QTest::newRow("Num. with NumLock off") << int(Qt::Key_Delete) << keypad << quint32(83) << ""
+                                         << "NumDel";
+  QTest::newRow("Ctrl+Num1") << int(Qt::Key_1) << (keypad | Qt::ControlModifier) << quint32(79)
+                             << "" << "Ctrl+Num1";
+  QTest::newRow("Num+") << int(Qt::Key_Plus) << keypad << quint32(78) << "+" << "Num+";
+  QTest::newRow("Shift+= types +") << int(Qt::Key_Plus) << int(Qt::ShiftModifier) << quint32(13)
+                                   << "+" << "+";
+  QTest::newRow("NumEnter") << int(Qt::Key_Enter) << keypad << quint32(284) << "\r" << "NumEnter";
+  QTest::newRow("Enter") << int(Qt::Key_Return) << 0 << quint32(28) << "\r" << "Enter";
+  QTest::newRow("Home") << int(Qt::Key_Home) << 0 << quint32(327) << "" << "Home";
+}
+
+void WynpixTests::shortcutBuilder_namesANumpadKeyByNumLock() {
+  QFETCH(int, key);
+  QFETCH(int, modifiers);
+  QFETCH(quint32, scanCode);
+  QFETCH(QString, text);
+  QFETCH(QString, shortcut);
+  InputMap::getInstance();
+  QKeyEvent event(QEvent::KeyPress, key, Qt::KeyboardModifiers::fromInt(modifiers), scanCode, 0,
+                  0, text);
+  QCOMPARE(ShortcutBuilder::fromEvent(&event), shortcut);
+}
+
+// The copy and move overlay picks its folders by these names.
+void WynpixTests::inputMap_keysKeepTheMainNamesOfTheNumpad() {
+  const auto &keys = InputMap::getInstance()->keys();
+  QCOMPARE(keys.value(79), QString("1"));
+  QCOMPARE(keys.value(284), QString("Enter"));
 }
 
 int runWynpixTests(int argc, char **argv) {

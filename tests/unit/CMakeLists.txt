@@ -60,6 +60,7 @@ qt_add_executable(wynpix_tests
     # The shortcut table rules (tst_wynpix.cpp).
     "${WYNPIX_APP_SOURCE_DIR}/components/actionmanager/shortcutmap.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/utils/inputmap.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/shortcutbuilder.cpp"
     # The application's Settings under SettingsValueMapping (golden-ini test).
     "${WYNPIX_APP_SOURCE_DIR}/gui/settingseditor/settingsvaluemapping.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/settings.cpp"
