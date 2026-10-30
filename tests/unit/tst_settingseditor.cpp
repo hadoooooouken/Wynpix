@@ -377,21 +377,18 @@ private slots:
 
     void everyActionHasACategory() {
         const Actions actions;
-        QCOMPARE(actions.category(u"nextImage"_s), ActionCategory::Navigation);
-        QCOMPARE(actions.category(u"zoomIn"_s), ActionCategory::View);
-        QCOMPARE(actions.category(u"crop"_s), ActionCategory::Editing);
-        QCOMPARE(actions.category(u"save"_s), ActionCategory::File);
-        QCOMPARE(actions.category(u"copyPathClipboard"_s), ActionCategory::Clipboard);
-        QCOMPARE(actions.category(u"toggleUpscayl"_s), ActionCategory::Upscale);
-        QCOMPARE(actions.category(u"exit"_s), ActionCategory::Application);
-        QCOMPARE(actions.category(u"noSuchAction"_s), ActionCategory::Application);
+        QCOMPARE(actions.category(u"goUp"_s), ActionCategory::FolderView);
+        QCOMPARE(actions.category(u"nextImage"_s), ActionCategory::Viewer);
+        QCOMPARE(actions.category(u"zoomIn"_s), ActionCategory::Viewer);
+        QCOMPARE(actions.category(u"save"_s), ActionCategory::Common);
+        QCOMPARE(actions.category(u"contextMenu"_s), ActionCategory::Common);
+        QCOMPARE(actions.category(u"noSuchAction"_s), ActionCategory::Common);
 
         QSet<QString> titles;
         for (const ActionCategory category :
-             {ActionCategory::Navigation, ActionCategory::View, ActionCategory::Editing, ActionCategory::File,
-              ActionCategory::Clipboard, ActionCategory::Upscale, ActionCategory::Application})
+             {ActionCategory::FolderView, ActionCategory::Viewer, ActionCategory::Common})
             titles.insert(Actions::categoryTitle(category));
-        QCOMPARE(titles.size(), 7);
+        QCOMPARE(titles.size(), 3);
         QVERIFY(!titles.contains(QString()));
     }
 

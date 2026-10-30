@@ -4,8 +4,10 @@
 #include <QString>
 #include <QStringList>
 
-// The group the settings show an action in, in the order of the groups.
-enum class ActionCategory { Navigation, View, Editing, File, Clipboard, Upscale, Application };
+// The mode an action works in, which is the group the settings show it in, in
+// the order of the groups: only the folder view, only the viewer, or both
+// alike.
+enum class ActionCategory { FolderView, Viewer, Common };
 
 class Actions
 {
@@ -17,7 +19,7 @@ public:
     // The title the settings show for action, translated; action itself when
     // it is not a known action.
     QString title(const QString &action) const;
-    // The category of action; Application when it is not a known action.
+    // The category of action; Common when it is not a known action.
     ActionCategory category(const QString &action) const;
     // The title of category, translated.
     static QString categoryTitle(ActionCategory category);
@@ -26,7 +28,7 @@ private:
     struct Entry {
         // Untranslated title (context "Actions").
         const char *title = nullptr;
-        ActionCategory category = ActionCategory::Application;
+        ActionCategory category = ActionCategory::Common;
     };
 
     void init();
