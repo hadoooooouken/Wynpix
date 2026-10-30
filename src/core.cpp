@@ -32,7 +32,6 @@
 #include <QColorSpace>
 #include <QCursor>
 #include <windows.h>
-#include <dwmapi.h>
 #include <psapi.h>
 #include "utils/colormanager.h"
 #include "utils/formatregistry.h"
@@ -246,11 +245,7 @@ Core::Core(const UiPorts &ports)
     m_raiseWindowAwaitingDocumentRendering = false;
     m_raiseWindowDocumentRenderingSettled = false;
     m_raiseWindowConcealed = false;
-    // A presented frame reaches the screen with the next DWM composition;
-    // uncloaking before it can show the window's previous frame once.
-    if (FAILED(DwmFlush()))
-      qWarning() << "DwmFlush failed; revealing the raised window anyway";
-    ui.window.setWindowConcealed(false);
+    ui.window.revealWindowAfterComposition();
   });
   connect(&ui.events, &UiEvents::documentRenderingSettled, this, [this]() {
     if (!m_raiseWindowConcealed ||
@@ -499,21 +494,18 @@ void Core::showGui() {
 void Core::raiseWindow(const QString &pathReceived) {
   m_lastRaiseRequestTimer.start();
 
-  // The window may currently be hidden (standby) or minimized. Bringing
-  // it back involves several native Win32 calls further down (SW_RESTORE,
-  // a TOPMOST/NOTOPMOST toggle to steal focus, SetForegroundWindow...).
-  // On Windows, SetWindowPos(..., SWP_SHOWWINDOW, ...) right after a
-  // hide/minimize can make the OS present the window's raw backing
-  // surface for a frame before Qt/DWM has painted real content over it,
-  // which is what shows up as a brief white flash. Keeping the window
-  // fully transparent for the duration of that dance and only revealing
-  // it once everything has settled hides that frame regardless of its
-  // cause (same technique ColdStartWindowController uses on first launch).
-  // Qt counts a minimized window as visible, but SW_RESTORE shows its last
-  // frame (the previous image) before the new one is presented.
-  HWND hwnd = reinterpret_cast<HWND>(ui.window.nativeWindowHandle());
-  const bool needsDelayedReveal =
-      !ui.window.isWindowVisible() || IsIconic(hwnd) || m_raiseWindowConcealed;
+  // The window may currently be hidden (standby) or minimized. Raising it
+  // right after a hide/minimize can make Windows present the window's raw
+  // backing surface for a frame before Qt/DWM has painted real content over
+  // it, which is what shows up as a brief white flash. Keeping the window
+  // concealed while it is raised and only revealing it once everything has
+  // settled hides that frame regardless of its cause (same technique
+  // ColdStartWindowController uses on first launch). Qt counts a minimized
+  // window as visible, but restoring it shows its last frame (the previous
+  // image) before the new one is presented.
+  const bool needsDelayedReveal = !ui.window.isWindowVisible() ||
+                                  ui.window.isWindowMinimized() ||
+                                  m_raiseWindowConcealed;
   if (needsDelayedReveal) {
     m_raiseWindowRevealTimer.stop();
     m_raiseWindowAwaitingDocumentRendering = false;
@@ -525,17 +517,6 @@ void Core::raiseWindow(const QString &pathReceived) {
   processRaiseWindowRequest(pathReceived);
 
   showGui();
-
-  if (IsIconic(hwnd)) {
-    ShowWindow(hwnd, SW_RESTORE);
-  }
-
-  SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-  SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0,
-               SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
-
-  SetForegroundWindow(hwnd);
-  SetActiveWindow(hwnd);
   ui.window.raiseAndActivateWindow();
 
   if (needsDelayedReveal) {

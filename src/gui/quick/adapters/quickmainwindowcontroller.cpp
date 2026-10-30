@@ -227,13 +227,36 @@ void QuickMainWindowController::setWindowConcealed(bool concealed) {
     windowCloaked = concealed;
 }
 
-void QuickMainWindowController::raiseAndActivateWindow() {
-    window.raise();
-    window.requestActivate();
+void QuickMainWindowController::revealWindowAfterComposition() {
+    // A presented frame reaches the screen with the next DWM composition;
+    // uncloaking before it can show the window's previous frame once.
+    if (FAILED(DwmFlush()))
+        qWarning() << "DwmFlush failed; revealing the raised window anyway";
+    setWindowConcealed(false);
 }
 
-WId QuickMainWindowController::nativeWindowHandle() const {
-    return window.winId();
+bool QuickMainWindowController::isWindowMinimized() const {
+    return IsIconic(reinterpret_cast<HWND>(window.winId()));
+}
+
+void QuickMainWindowController::raiseAndActivateWindow() {
+    // SetWindowPos(..., SWP_SHOWWINDOW, ...) right after a hide/minimize can
+    // present the window's raw backing surface for a frame (a white flash);
+    // callers conceal the window around this call. The TOPMOST/NOTOPMOST
+    // toggle steals the focus from other applications.
+    const auto hwnd = reinterpret_cast<HWND>(window.winId());
+    if (IsIconic(hwnd)) {
+        ShowWindow(hwnd, SW_RESTORE);
+    }
+
+    SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+    SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+                 SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
+
+    SetForegroundWindow(hwnd);
+    SetActiveWindow(hwnd);
+    window.raise();
+    window.requestActivate();
 }
 
 void QuickMainWindowController::fitWindowToDocument(QSize size) {

@@ -86,8 +86,9 @@ public:
     void hideWindow() override;
     [[nodiscard]] bool isWindowVisible() const override;
     void setWindowConcealed(bool concealed) override;
+    void revealWindowAfterComposition() override;
+    [[nodiscard]] bool isWindowMinimized() const override;
     void raiseAndActivateWindow() override;
-    [[nodiscard]] WId nativeWindowHandle() const override;
     void saveWindowGeometry() override;
     void setWindowUpdatesSuspended(bool suspended) override;
 
