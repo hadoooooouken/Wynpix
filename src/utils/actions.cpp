@@ -139,10 +139,10 @@ void Actions::init() {
   add(u"resize"_s, QT_TRANSLATE_NOOP("Actions", "Resize"), ActionCategory::Common, ActionGroup::Editing);
   add(u"rotateRight"_s, QT_TRANSLATE_NOOP("Actions", "Rotate right"), ActionCategory::Common, ActionGroup::Editing);
   add(u"rotateLeft"_s, QT_TRANSLATE_NOOP("Actions", "Rotate left"), ActionCategory::Common, ActionGroup::Editing);
-  add(u"scrollUp"_s, QT_TRANSLATE_NOOP("Actions", "Scroll up"), ActionCategory::Viewer, ActionGroup::View);
-  add(u"scrollDown"_s, QT_TRANSLATE_NOOP("Actions", "Scroll down"), ActionCategory::Viewer, ActionGroup::View);
-  add(u"scrollLeft"_s, QT_TRANSLATE_NOOP("Actions", "Scroll left"), ActionCategory::Viewer, ActionGroup::View);
-  add(u"scrollRight"_s, QT_TRANSLATE_NOOP("Actions", "Scroll right"), ActionCategory::Viewer, ActionGroup::View);
+  add(u"scrollUp"_s, QT_TRANSLATE_NOOP("Actions", "Scroll image up"), ActionCategory::Viewer, ActionGroup::View);
+  add(u"scrollDown"_s, QT_TRANSLATE_NOOP("Actions", "Scroll image down"), ActionCategory::Viewer, ActionGroup::View);
+  add(u"scrollLeft"_s, QT_TRANSLATE_NOOP("Actions", "Scroll image left"), ActionCategory::Viewer, ActionGroup::View);
+  add(u"scrollRight"_s, QT_TRANSLATE_NOOP("Actions", "Scroll image right"), ActionCategory::Viewer, ActionGroup::View);
   add(u"zoomIn"_s, QT_TRANSLATE_NOOP("Actions", "Zoom in"), ActionCategory::Viewer, ActionGroup::View);
   add(u"zoomOut"_s, QT_TRANSLATE_NOOP("Actions", "Zoom out"), ActionCategory::Viewer, ActionGroup::View);
   add(u"zoomInCursor"_s, QT_TRANSLATE_NOOP("Actions", "Zoom in at cursor"), ActionCategory::Viewer, ActionGroup::View);
