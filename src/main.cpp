@@ -4,7 +4,6 @@
 #define NOMINMAX
 
 #include <QCommandLineParser>
-#include <QDataStream>
 #include <QDir>
 #include <QFileInfo>
 #include <QGuiApplication>
@@ -27,17 +26,6 @@
 #include "utils/cmdoptionsrunner.h"
 #include "utils/startuptiming.h"
 
-//------------------------------------------------------------------------------
-QDataStream &operator<<(QDataStream &out, const Script &v) {
-  out << v.command << v.blocking;
-  return out;
-}
-//------------------------------------------------------------------------------
-QDataStream &operator>>(QDataStream &in, Script &v) {
-  in >> v.command;
-  in >> v.blocking;
-  return in;
-}
 //------------------------------------------------------------------------------
 // The "multiInstance" setting, read before the services exist (they are
 // started only by the primary instance).

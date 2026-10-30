@@ -385,6 +385,8 @@ class SettingsValueMappingTests : public QObject {
 private slots:
   void initTestCase() {
     mSettings = Settings::getInstance();
+    // As main.cpp does: the ini can hold scripts of an earlier run.
+    qRegisterMetaType<Script>("Script");
     QVERIFY(mSettings);
   }
 
@@ -428,6 +430,34 @@ private slots:
       QCOMPARE(loaded.advanced, expected.advanced);
       QCOMPARE(loaded.upscale, expected.upscale);
     }
+  }
+
+  // A script goes through QDataStream into the ini, with the stream
+  // operators every translation unit sees in utils/script.h.
+  void scriptsSaveAndReadBack() {
+    QMap<QString, Script> scripts;
+    scripts.insert(u"blocking"_s, Script(u"cmd /c echo %file%"_s, true));
+    scripts.insert(u"detached"_s, Script(u"notepad.exe %file%"_s, false));
+    mSettings->saveScripts(scripts);
+    mSettings->sync();
+
+    QSettings ini(confPath(QCoreApplication::applicationName() + u".ini"_s),
+                  QSettings::IniFormat);
+    ini.beginGroup(u"Scripts"_s);
+    QCOMPARE(ini.beginReadArray(u"script"_s), 2);
+    for (int i = 0; i < 2; ++i) {
+      ini.setArrayIndex(i);
+      const QString name = ini.value(u"name"_s).toString();
+      QVERIFY2(scripts.contains(name), qPrintable(name));
+      const Script stored = ini.value(u"value"_s).value<Script>();
+      QCOMPARE(stored.command, scripts.value(name).command);
+      QCOMPARE(stored.blocking, scripts.value(name).blocking);
+    }
+    ini.endArray();
+    ini.endGroup();
+
+    mSettings->saveScripts({});
+    mSettings->sync();
   }
 
   void defaultThumbnailResolutionDependsOnDpr() {
