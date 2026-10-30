@@ -363,6 +363,28 @@ private slots:
         QCOMPARE(model.put({.action = u"zoomIn"_s, .shortcut = u""_s}), -1);
     }
 
+    void aShortcutIsBoundOncePerMode() {
+        ActionShortcutModel model;
+        model.setActions({{u"goUp"_s, {.scope = ShortcutScope::FolderView}},
+                          {u"nextImage"_s, {.scope = ShortcutScope::Viewer}},
+                          {u"zoomIn"_s, {.scope = ShortcutScope::Viewer}},
+                          {u"save"_s, {.scope = ShortcutScope::Common}}},
+                         {});
+        model.setEntries({kNextImage});
+        // A folder view action takes the shortcut of a viewer action too.
+        const ShortcutEntry folderRight{.action = u"goUp"_s, .shortcut = u"Right"_s};
+        model.put(folderRight);
+        QCOMPARE(model.entries(), (ShortcutList{folderRight, kNextImage}));
+        // Another viewer action takes it from the viewer action only.
+        const ShortcutEntry zoomRight{.action = u"zoomIn"_s, .shortcut = u"Right"_s};
+        model.put(zoomRight);
+        QCOMPARE(model.entries(), (ShortcutList{folderRight, zoomRight}));
+        // A common action takes it in both modes.
+        const ShortcutEntry saveRight{.action = u"save"_s, .shortcut = u"Right"_s};
+        model.put(saveRight);
+        QCOMPARE(model.entries(), (ShortcutList{saveRight}));
+    }
+
     void editingAShortcutReplacesItInPlace() {
         ActionShortcutModel model;
         model.setActions({{u"nextImage"_s, {}}, {u"prevImage"_s, {}}, {u"zoomIn"_s, {}}}, {});
@@ -607,6 +629,21 @@ private slots:
         QCOMPARE(creator.warning(), u"This shortcut is used for action: zoomIn. Replace?"_s);
         creator.reject();
         QVERIFY(f.shortcuts.live.contains(kNextImage));
+    }
+
+    void aShortcutOfTheOtherModeIsNoConflict() {
+        EditorFixture f;
+        f.shortcuts.actions.append(u"goUp"_s);
+        f.shortcuts.categories = {{u"goUp"_s, {.scope = ShortcutScope::FolderView}},
+                                  {u"nextImage"_s, {.scope = ShortcutScope::Viewer}}};
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        ShortcutEditorModel &creator = *editor.shortcutEditor();
+        editor.addShortcut(u"goUp"_s);
+        creator.setShortcut(kNextImage.shortcut);
+        QVERIFY(creator.warning().isEmpty());
+        creator.accept();
+        QVERIFY(editor.actionShortcuts()->entries().contains(kNextImage));
     }
 
     void theEditedShortcutIsNoConflict() {

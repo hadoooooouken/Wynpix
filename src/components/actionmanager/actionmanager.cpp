@@ -5,6 +5,49 @@
 
 ActionManager *actionManager = nullptr;
 
+namespace {
+// Whether shortcut runs an action of shortcuts in a mode that action works in.
+bool shortcutTaken(const ShortcutMap &shortcuts, const QString &shortcut,
+                   const QString &action) {
+  const ActionCategory category = Actions::getInstance()->category(action);
+  for (auto it = shortcuts.constFind(shortcut);
+       it != shortcuts.cend() && it.key() == shortcut; ++it) {
+    if (Actions::categoriesOverlap(Actions::getInstance()->category(it.value()),
+                                   category))
+      return true;
+  }
+  return false;
+}
+} // namespace
+
+bool ActionManager::mergeMissingDefaults(const ShortcutMap &defaults,
+                                         ShortcutMap &shortcuts) {
+  bool changed = false;
+  QSet<QString> boundActions;
+  boundActions.reserve(shortcuts.size());
+  for (auto it = shortcuts.cbegin(); it != shortcuts.cend(); ++it)
+    boundActions.insert(it.value());
+
+  for (auto it = defaults.cbegin(); it != defaults.cend(); ++it) {
+    if (!boundActions.contains(it.value()) &&
+        !shortcutTaken(shortcuts, it.key(), it.value())) {
+      shortcuts.insert(it.key(), it.value());
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+QString ActionManager::actionFor(const ShortcutMap &shortcuts,
+                                 const QString &shortcut, bool folderView) {
+  for (auto it = shortcuts.constFind(shortcut);
+       it != shortcuts.cend() && it.key() == shortcut; ++it) {
+    if (Actions::worksIn(Actions::getInstance()->category(it.value()), folderView))
+      return it.value();
+  }
+  return {};
+}
+
 ActionManager::ActionManager(QObject *parent) : QObject(parent) {}
 //------------------------------------------------------------------------------
 ActionManager::~ActionManager() {
@@ -120,7 +163,8 @@ void ActionManager::initShortcuts() {
 //------------------------------------------------------------------------------
 void ActionManager::addShortcut(const QString &keys, const QString &action) {
   ActionType type = validateAction(action);
-  if (type != ActionType::ACTION_INVALID) {
+  if (type != ActionType::ACTION_INVALID &&
+      !actionManager->shortcuts.contains(keys, action)) {
     actionManager->shortcuts.insert(keys, action);
   }
 }
@@ -139,12 +183,16 @@ ActionCategory ActionManager::actionCategory(const QString &action) {
   return appActions->category(action);
 }
 //------------------------------------------------------------------------------
-const QMap<QString, QString> &ActionManager::allShortcuts() {
+const ShortcutMap &ActionManager::allShortcuts() {
   return actionManager->shortcuts;
 }
 
-const QMap<QString, QString> &ActionManager::defaultShortcuts() {
+const ShortcutMap &ActionManager::defaultShortcuts() {
   return actionManager->defaults;
+}
+
+void ActionManager::setFolderViewActive(bool active) {
+  mFolderViewActive = active;
 }
 //------------------------------------------------------------------------------
 void ActionManager::removeAllShortcuts() { shortcuts.clear(); }
@@ -201,10 +249,10 @@ bool ActionManager::invokeAction(const QString &actionName) {
 }
 //------------------------------------------------------------------------------
 bool ActionManager::invokeActionForShortcut(const QString &shortcut) {
-  if (!shortcut.isEmpty() && actionManager->shortcuts.contains(shortcut)) {
-    return invokeAction(actionManager->shortcuts[shortcut]);
-  }
-  return false;
+  if (shortcut.isEmpty())
+    return false;
+  const QString action = actionFor(shortcuts, shortcut, mFolderViewActive);
+  return !action.isEmpty() && invokeAction(action);
 }
 //------------------------------------------------------------------------------
 void ActionManager::validateShortcuts() {

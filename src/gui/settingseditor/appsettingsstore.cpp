@@ -76,12 +76,24 @@ AppShortcutStore::AppShortcutStore(ActionManager &actions, ScriptManager &script
 
 namespace {
 // bound maps shortcuts to actions.
-ShortcutList shortcutList(const QMap<QString, QString> &bound) {
+ShortcutList shortcutList(const ShortcutMap &bound) {
     ShortcutList list;
     list.reserve(bound.size());
     for (auto it = bound.cbegin(); it != bound.cend(); ++it)
         list.append({.action = it.value(), .shortcut = it.key()});
     return list;
+}
+
+ShortcutScope shortcutScope(ActionCategory category) {
+    switch (category) {
+    case ActionCategory::FolderView:
+        return ShortcutScope::FolderView;
+    case ActionCategory::Viewer:
+        return ShortcutScope::Viewer;
+    case ActionCategory::Common:
+        break;
+    }
+    return ShortcutScope::Common;
 }
 } // namespace
 
@@ -99,7 +111,8 @@ ActionInfoMap AppShortcutStore::actionInfos() {
         const ActionCategory category = mActions.actionCategory(action);
         infos.insert(action, {.title = mActions.actionTitle(action),
                               .category = Actions::categoryTitle(category),
-                              .categoryOrder = std::to_underlying(category)});
+                              .categoryOrder = std::to_underlying(category),
+                              .scope = shortcutScope(category)});
     }
     return infos;
 }

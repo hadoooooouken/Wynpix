@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QMap>
+#include <QMultiMap>
 #include <QSet>
 #include <QDebug>
 #include <QStringList>
@@ -15,29 +16,22 @@ enum ActionType {
     ACTION_SCRIPT
 };
 
+// <shortcut, action>. A shortcut has at most one action per mode (see
+// Actions::categoriesOverlap()): one of the folder view and one of the viewer,
+// or one common to both.
+using ShortcutMap = QMultiMap<QString, QString>;
+
 class ActionManager : public QObject {
     Q_OBJECT
 public:
     static constexpr int kCurrentShortcutsVersion = 2;
-    static bool mergeMissingDefaults(const QMap<QString, QString> &defaults,
-                                     QMap<QString, QString> &shortcuts) {
-        bool changed = false;
-        QSet<QString> boundActions;
-        boundActions.reserve(shortcuts.size());
-        for (auto it = shortcuts.cbegin(); it != shortcuts.cend(); ++it) {
-            boundActions.insert(it.value());
-        }
-
-        for (auto it = defaults.cbegin(); it != defaults.cend(); ++it) {
-            const QString &defaultKey = it.key();
-            const QString &defaultAction = it.value();
-            if (!shortcuts.contains(defaultKey) && !boundActions.contains(defaultAction)) {
-                shortcuts.insert(defaultKey, defaultAction);
-                changed = true;
-            }
-        }
-        return changed;
-    }
+    // Adds to shortcuts the defaults of the actions without a shortcut whose
+    // shortcut has no action of a common mode yet; true when one was added.
+    static bool mergeMissingDefaults(const ShortcutMap &defaults, ShortcutMap &shortcuts);
+    // The action that shortcut runs in the folder view (folderView) or in the
+    // viewer; empty for none.
+    static QString actionFor(const ShortcutMap &shortcuts, const QString &shortcut,
+                             bool folderView);
 
     static ActionManager* getInstance();
     ~ActionManager();
@@ -51,8 +45,11 @@ public:
     QString actionTitle(const QString &action);
     // The group the settings show action in.
     ActionCategory actionCategory(const QString &action);
-    const QMap<QString,QString>& allShortcuts();
-    const QMap<QString,QString>& defaultShortcuts();
+    const ShortcutMap& allShortcuts();
+    const ShortcutMap& defaultShortcuts();
+    // The mode the shortcuts run the actions of: the folder view or the
+    // viewer.
+    void setFolderViewActive(bool active);
     void removeShortcut(const QString &keys);
     void removeAllShortcuts();
     void removeAllShortcuts(QString actionName);
@@ -62,7 +59,8 @@ public slots:
     bool invokeAction(const QString &actionName);
 private:
     explicit ActionManager(QObject *parent = nullptr);
-    QMap<QString, QString> defaults, shortcuts; // <shortcut, action>
+    ShortcutMap defaults, shortcuts;
+    bool mFolderViewActive = false;
 
     static void initDefaults();
     static void initActions();

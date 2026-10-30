@@ -21,8 +21,9 @@
 // The shortcuts of the settings dialog ("Controls"), one row per action:
 // every action and every script, with or without shortcuts, sorted by
 // category and then by title. A row lists the shortcuts of its action in the
-// order they were bound. A shortcut is bound once: putting a shortcut removes
-// it from the action that had it before. Edits stay in the model until the
+// order they were bound. A shortcut is bound once per mode (ShortcutScope):
+// putting a shortcut removes it from the action of a common mode that had it
+// before. Edits stay in the model until the
 // dialog applies them.
 //
 // QML reads the roles `action`, `title` (a script row shows the script name),
@@ -49,7 +50,8 @@ public:
     void setEntries(const ShortcutList &entries);
 
     // Binds shortcut to action: removes replaced (an edited binding) and the
-    // binding that had shortcut, then adds the entry, in place of replaced
+    // binding that had shortcut in a mode of action, then adds the entry, in
+    // place of replaced
     // when that is a binding of the same action. Returns the row of the
     // action, or -1 (nothing changed) when action or shortcut is empty.
     int put(const ShortcutEntry &entry, const std::optional<ShortcutEntry> &replaced = std::nullopt);

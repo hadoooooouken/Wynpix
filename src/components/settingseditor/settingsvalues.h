@@ -281,12 +281,24 @@ struct ScriptDefinition {
 // Prefix of the shortcut actions that run a script.
 inline constexpr QStringView kScriptActionPrefix = u"s:";
 
+// Where the shortcuts of an action work: only in the folder view, only in the
+// viewer, or in both. A shortcut has at most one action per mode.
+enum class ShortcutScope { FolderView, Viewer, Common };
+
+// Whether actions of the two scopes work in a common mode, so that one
+// shortcut cannot have both.
+[[nodiscard]] constexpr bool scopesOverlap(ShortcutScope one, ShortcutScope other) {
+    return one == other || one == ShortcutScope::Common || other == ShortcutScope::Common;
+}
+
 // An action as the settings show it: its title and the title of its
-// category, translated; categoryOrder orders the categories.
+// category, translated; categoryOrder orders the categories; scope is where
+// its shortcuts work.
 struct ActionInfo {
     QString title;
     QString category;
     int categoryOrder = 0;
+    ShortcutScope scope = ShortcutScope::Common;
 
     friend bool operator==(const ActionInfo &, const ActionInfo &) = default;
 };

@@ -93,8 +93,10 @@ void ShortcutEditorModel::setShortcut(const QString &shortcut) {
 }
 
 QString ShortcutEditorModel::boundAction(const QString &shortcut) const {
+    const ShortcutScope scope = shortcutActionInfo(mAction, mInfos).scope;
     for (const ShortcutEntry &entry : mTable) {
-        if (entry.shortcut == shortcut && entry != mEdited)
+        if (entry.shortcut == shortcut && entry != mEdited
+            && scopesOverlap(shortcutActionInfo(entry.action, mInfos).scope, scope))
             return entry.action;
     }
     return {};

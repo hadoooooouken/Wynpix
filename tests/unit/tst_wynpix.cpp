@@ -19,6 +19,8 @@ private slots:
   void actionManager_mergeMissingDefaults_preservesCustomActionMapping();
   void actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey();
   void actionManager_mergeMissingDefaults_addsMultipleDefaultsForSameAction();
+  void actionManager_mergeMissingDefaults_addsAKeyTakenInTheOtherMode();
+  void actionManager_actionFor_picksTheActionOfTheMode();
 };
 
 void WynpixTests::viewModeController_keepsInitialMode_data() {
@@ -67,12 +69,12 @@ void WynpixTests::viewModeController_notifiesRepeatedRequests() {
 }
 
 void WynpixTests::actionManager_mergeMissingDefaults_addsNewActions() {
-  const QMap<QString, QString> defaults = {
+  const ShortcutMap defaults = {
       {"Ctrl+,", "firstPage"},
       {"Ctrl+.", "lastPage"},
       {"Right", "nextImage"}
   };
-  QMap<QString, QString> userShortcuts = {
+  ShortcutMap userShortcuts = {
       {"Right", "nextImage"}
   };
 
@@ -85,12 +87,12 @@ void WynpixTests::actionManager_mergeMissingDefaults_addsNewActions() {
 }
 
 void WynpixTests::actionManager_mergeMissingDefaults_preservesCustomActionMapping() {
-  const QMap<QString, QString> defaults = {
+  const ShortcutMap defaults = {
       {"Ctrl+,", "firstPage"},
       {"Right", "nextImage"}
   };
   // User mapped firstPage to Alt+, instead of default Ctrl+,
-  QMap<QString, QString> userShortcuts = {
+  ShortcutMap userShortcuts = {
       {"Alt+,", "firstPage"},
       {"Right", "nextImage"}
   };
@@ -102,12 +104,12 @@ void WynpixTests::actionManager_mergeMissingDefaults_preservesCustomActionMappin
 }
 
 void WynpixTests::actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey() {
-  const QMap<QString, QString> defaults = {
+  const ShortcutMap defaults = {
       {"Ctrl+,", "firstPage"},
       {"Right", "nextImage"}
   };
   // User remapped Ctrl+, to do jumpToFirst
-  QMap<QString, QString> userShortcuts = {
+  ShortcutMap userShortcuts = {
       {"Ctrl+,", "jumpToFirst"},
       {"Right", "nextImage"}
   };
@@ -119,13 +121,13 @@ void WynpixTests::actionManager_mergeMissingDefaults_doesNotOverwriteOccupiedKey
 }
 
 void WynpixTests::actionManager_mergeMissingDefaults_addsMultipleDefaultsForSameAction() {
-  const QMap<QString, QString> defaults = {
+  const ShortcutMap defaults = {
       {"F", "toggleFullscreen"},
       {"Enter", "toggleFullscreen"},
       {"Right", "nextImage"}
   };
   // User config lacks toggleFullscreen completely
-  QMap<QString, QString> userShortcuts = {
+  ShortcutMap userShortcuts = {
       {"Right", "nextImage"}
   };
 
@@ -134,6 +136,37 @@ void WynpixTests::actionManager_mergeMissingDefaults_addsMultipleDefaultsForSame
   QCOMPARE(userShortcuts.value("F"), QString("toggleFullscreen"));
   QCOMPARE(userShortcuts.value("Enter"), QString("toggleFullscreen"));
   QCOMPARE(userShortcuts.size(), 3);
+}
+
+void WynpixTests::actionManager_mergeMissingDefaults_addsAKeyTakenInTheOtherMode() {
+  // goUp works in the folder view, nextImage in the viewer, save in both.
+  const ShortcutMap defaults = {
+      {"Right", "goUp"},
+      {"Left", "save"}
+  };
+  ShortcutMap userShortcuts = {
+      {"Right", "nextImage"},
+      {"Left", "prevImage"}
+  };
+
+  const bool changed = ActionManager::mergeMissingDefaults(defaults, userShortcuts);
+  QVERIFY(changed);
+  QCOMPARE(userShortcuts.values("Right").size(), 2);
+  QVERIFY(userShortcuts.contains("Right", "goUp"));
+  QVERIFY(!userShortcuts.contains("Left", "save"));
+}
+
+void WynpixTests::actionManager_actionFor_picksTheActionOfTheMode() {
+  const ShortcutMap shortcuts = {
+      {"Right", "nextImage"},
+      {"Right", "goUp"},
+      {"F", "toggleFullscreen"}
+  };
+  QCOMPARE(ActionManager::actionFor(shortcuts, "Right", false), QString("nextImage"));
+  QCOMPARE(ActionManager::actionFor(shortcuts, "Right", true), QString("goUp"));
+  QCOMPARE(ActionManager::actionFor(shortcuts, "F", false), QString("toggleFullscreen"));
+  QCOMPARE(ActionManager::actionFor(shortcuts, "F", true), QString("toggleFullscreen"));
+  QVERIFY(ActionManager::actionFor(shortcuts, "Left", false).isEmpty());
 }
 
 int runWynpixTests(int argc, char **argv) {

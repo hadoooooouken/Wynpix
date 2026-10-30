@@ -55,6 +55,15 @@ QString Actions::categoryTitle(ActionCategory category) {
   return QCoreApplication::translate(kTitleContext, source);
 }
 
+bool Actions::categoriesOverlap(ActionCategory one, ActionCategory other) {
+  return one == other || one == ActionCategory::Common || other == ActionCategory::Common;
+}
+
+bool Actions::worksIn(ActionCategory category, bool folderView) {
+  return categoriesOverlap(category, folderView ? ActionCategory::FolderView
+                                                : ActionCategory::Viewer);
+}
+
 void Actions::add(const QString &action, const char *title, ActionCategory category) {
   mEntries.insert(action, {.title = title, .category = category});
 }

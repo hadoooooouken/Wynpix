@@ -125,12 +125,15 @@ void ActionShortcutModel::setEntries(const ShortcutList &entries) {
 int ActionShortcutModel::put(const ShortcutEntry &entry, const std::optional<ShortcutEntry> &replaced) {
     if (entry.action.isEmpty() || entry.shortcut.isEmpty())
         return -1;
+    const ShortcutScope scope = shortcutActionInfo(entry.action, mActions).scope;
     const int row = rowOf(entry.action);
     if (row < 0) {
         // An action without a row: rebuilt with it.
         ShortcutList list = entries();
         list.removeIf([&](const ShortcutEntry &e) {
-            return e.shortcut == entry.shortcut || (replaced && e == *replaced);
+            return (e.shortcut == entry.shortcut
+                    && scopesOverlap(shortcutActionInfo(e.action, mActions).scope, scope))
+                || (replaced && e == *replaced);
         });
         list.append(entry);
         rebuild(list);
@@ -145,6 +148,8 @@ int ActionShortcutModel::put(const ShortcutEntry &entry, const std::optional<Sho
             position = taken;
     }
     for (int other = 0; other < mRows.size(); ++other) {
+        if (!scopesOverlap(mRows.at(other).info.scope, scope))
+            continue;
         const qsizetype taken = takeShortcut(other, entry.shortcut);
         if (other == row && taken >= 0 && taken < position)
             --position;

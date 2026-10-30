@@ -13,8 +13,9 @@ class IShortcutScriptStore;
 // The shortcut creator of the settings dialog (ShortcutCreatorDialog): binds
 // a shortcut to one action or script ("s:<name>"), the one whose row it was
 // opened from. The shortcut comes from the key, mouse button or wheel input
-// the dialog captures; a shortcut another binding of the table has shows a
-// warning (that binding is replaced when the dialog is accepted). The table
+// the dialog captures; a shortcut another binding of the table has in a mode
+// of the action shows a warning (that binding is replaced when the dialog is
+// accepted). The table
 // is the one being edited, with the changes not applied yet. It can be
 // accepted once a shortcut was entered.
 //
@@ -68,8 +69,8 @@ protected:
 
 private:
     void startRequest(const QString &title, const QString &action, const ShortcutList &table);
-    // Action of the table binding that has shortcut, other than the edited
-    // one; empty for none.
+    // Action of the table binding that has shortcut in a mode of the action
+    // (ShortcutScope), other than the edited one; empty for none.
     [[nodiscard]] QString boundAction(const QString &shortcut) const;
 
     IShortcutScriptStore &mStore;

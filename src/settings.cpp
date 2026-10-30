@@ -878,7 +878,7 @@ HdrToneMapParams Settings::hdrToneMapParams() {
 //------------------------------------------------------------------------------
 void Settings::sendChangeNotification() { emit settingsChanged(); }
 //------------------------------------------------------------------------------
-void Settings::readShortcuts(QMap<QString, QString> &shortcuts) {
+void Settings::readShortcuts(QMultiMap<QString, QString> &shortcuts) {
   settings->settingsConf->beginGroup("Controls");
   QStringList in, pair;
   in = settings->settingsConf->value("shortcuts").toStringList();
@@ -893,9 +893,9 @@ void Settings::readShortcuts(QMap<QString, QString> &shortcuts) {
   settings->settingsConf->endGroup();
 }
 
-void Settings::saveShortcuts(const QMap<QString, QString> &shortcuts) {
+void Settings::saveShortcuts(const QMultiMap<QString, QString> &shortcuts) {
   settings->settingsConf->beginGroup("Controls");
-  QMapIterator<QString, QString> i(shortcuts);
+  QMultiMapIterator<QString, QString> i(shortcuts);
   QStringList out;
   while (i.hasNext()) {
     i.next();

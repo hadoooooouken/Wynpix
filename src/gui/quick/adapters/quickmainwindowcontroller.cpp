@@ -146,6 +146,7 @@ QuickMainWindowController::QuickMainWindowController(
         contextMenu.setFolderViewActive(mode == MODE_FOLDERVIEW);
         crop.setFolderViewActive(mode == MODE_FOLDERVIEW);
         folderView.setActive(mode == MODE_FOLDERVIEW);
+        actions.setFolderViewActive(mode == MODE_FOLDERVIEW);
         updateTitle();
     });
     shell.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
@@ -157,6 +158,7 @@ QuickMainWindowController::QuickMainWindowController(
     crop.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
     folderView.setFullscreen(windowState.isFullscreen());
     folderView.setActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
+    actions.setFolderViewActive(viewMode.currentViewMode() == MODE_FOLDERVIEW);
     thumbnailPanel.setWindowSize(window.size());
 
     // The title shows the zoom, the view locks and (by setting) extended

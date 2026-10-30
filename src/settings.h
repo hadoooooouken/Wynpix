@@ -13,6 +13,7 @@
 #include <QImageReader>
 #include <QKeySequence>
 #include <QMap>
+#include <QMultiMap>
 #include <QObject>
 #include <QPalette>
 #include <QSettings>
@@ -93,8 +94,8 @@ public:
   void setPanelPosition(PanelPosition);
   bool loopSlideshow();
   void setLoopSlideshow(bool mode);
-  void readShortcuts(QMap<QString, QString> &shortcuts);
-  void saveShortcuts(const QMap<QString, QString> &shortcuts);
+  void readShortcuts(QMultiMap<QString, QString> &shortcuts);
+  void saveShortcuts(const QMultiMap<QString, QString> &shortcuts);
   int shortcutsVersion();
   void setShortcutsVersion(int version);
   bool panelEnabled();

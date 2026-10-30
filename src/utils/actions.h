@@ -23,6 +23,12 @@ public:
     ActionCategory category(const QString &action) const;
     // The title of category, translated.
     static QString categoryTitle(ActionCategory category);
+    // Whether actions of the two categories work in a common mode; one
+    // shortcut then runs only one of them.
+    static bool categoriesOverlap(ActionCategory one, ActionCategory other);
+    // Whether an action of category works in the folder view (folderView) or
+    // in the viewer.
+    static bool worksIn(ActionCategory category, bool folderView);
 
 private:
     struct Entry {
