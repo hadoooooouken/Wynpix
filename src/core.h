@@ -128,6 +128,9 @@ private:
     [[nodiscard]] ImageSaveResult saveFile(const QString &filePath);
 
     QList<QString> currentSelection();
+    // Deletes the selected paths, or moves them to the trash, after the
+    // confirmation the settings ask for.
+    void removeSelection(bool trash);
     // The decoded image at path that Core already holds: the cached one, or
     // the shown one before the folder scan has registered it
     // (modelDelayLoad()).

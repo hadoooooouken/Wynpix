@@ -1004,7 +1004,11 @@ void Core::goToPage(int pageIndex) {
   }
 }
 
-void Core::removePermanent() {
+void Core::removePermanent() { removeSelection(false); }
+
+void Core::moveToTrash() { removeSelection(true); }
+
+void Core::removeSelection(bool trash) {
   auto paths = currentSelection();
   if (!paths.count())
     return;
@@ -1019,26 +1023,30 @@ void Core::removePermanent() {
     }
   }
 
-  if (settings->confirmDelete()) {
+  if (trash ? settings->confirmTrash() : settings->confirmDelete()) {
     QString msg;
     if (paths.count() > 1) {
+      const QString count = QString::number(paths.count());
+      const QString verb = trash ? tr("Move ") : tr("Delete ");
       if (dirCount > 0 && fileCount == 0) {
-        msg = tr("Delete ") + QString::number(paths.count()) +
-              tr(" folders permanently?");
+        msg = verb + count +
+              (trash ? tr(" folders to trash?") : tr(" folders permanently?"));
       } else if (fileCount > 0 && dirCount == 0) {
-        msg = tr("Delete ") + QString::number(paths.count()) +
-              tr(" files permanently?");
+        msg = verb + count +
+              (trash ? tr(" files to trash?") : tr(" files permanently?"));
       } else {
-        msg = tr("Delete ") + QString::number(paths.count()) +
-              tr(" items permanently?");
+        msg = verb + count +
+              (trash ? tr(" items to trash?") : tr(" items permanently?"));
       }
     } else {
       if (dirCount > 0)
-        msg = tr("Delete folder permanently?");
+        msg = trash ? tr("Move folder to trash?")
+                    : tr("Delete folder permanently?");
       else
-        msg = tr("Delete file permanently?");
+        msg = trash ? tr("Move file to trash?") : tr("Delete file permanently?");
     }
-    if (!ui.dialogs.confirm({tr("Delete permanently"), msg}).accepted)
+    const QString title = trash ? tr("Move to trash") : tr("Delete permanently");
+    if (!ui.dialogs.confirm({title, msg}).accepted)
       return;
   }
   FileOpResult result;
@@ -1046,9 +1054,9 @@ void Core::removePermanent() {
   for (const auto &path : std::as_const(paths)) {
     QFileInfo fi(path);
     if (fi.isDir())
-      model->removeDir(path, false, true, result);
+      model->removeDir(path, trash, true, result);
     else
-      result = removeFile(path, false);
+      result = removeFile(path, trash);
     if (result == FileOpResult::SUCCESS)
       successCount++;
   }
@@ -1056,91 +1064,23 @@ void Core::removePermanent() {
     if (result == FileOpResult::SUCCESS) {
       if (dirCount > 0) {
         ui.shell.refreshFolderTree(QFileInfo(paths.first()).absolutePath());
-        ui.notifications.showSuccess(tr("Folder removed"));
+        ui.notifications.showSuccess(trash ? tr("Folder moved to trash")
+                                           : tr("Folder removed"));
       } else
-        ui.notifications.showSuccess(tr("File removed"));
+        ui.notifications.showSuccess(trash ? tr("Moved to trash")
+                                           : tr("File removed"));
     } else {
       outputError(result);
     }
   } else if (paths.count() > 1) {
+    const QString done = (trash ? tr("Moved to trash: ") : tr("Removed: ")) +
+                         QString::number(successCount);
     if (dirCount > 0 && fileCount == 0) {
-      ui.notifications.showSuccess(tr("Removed: ") + QString::number(successCount) +
-                             tr(" folders"));
+      ui.notifications.showSuccess(done + tr(" folders"));
     } else if (fileCount > 0 && dirCount == 0) {
-      ui.notifications.showSuccess(tr("Removed: ") + QString::number(successCount) +
-                             tr(" files"));
+      ui.notifications.showSuccess(done + tr(" files"));
     } else {
-      ui.notifications.showSuccess(tr("Removed: ") + QString::number(successCount) +
-                             tr(" items"));
-    }
-  }
-}
-
-void Core::moveToTrash() {
-  auto paths = currentSelection();
-  if (!paths.count())
-    return;
-
-  int dirCount = 0;
-  int fileCount = 0;
-  for (const auto &path : std::as_const(paths)) {
-    if (QFileInfo(path).isDir()) {
-      dirCount++;
-    } else {
-      fileCount++;
-    }
-  }
-
-  if (settings->confirmTrash()) {
-    QString msg;
-    if (paths.count() > 1) {
-      if (dirCount > 0 && fileCount == 0) {
-        msg = tr("Move ") + QString::number(paths.count()) + tr(" folders to trash?");
-      } else if (fileCount > 0 && dirCount == 0) {
-        msg = tr("Move ") + QString::number(paths.count()) + tr(" files to trash?");
-      } else {
-        msg = tr("Move ") + QString::number(paths.count()) + tr(" items to trash?");
-      }
-    } else {
-      if (dirCount > 0)
-        msg = tr("Move folder to trash?");
-      else
-        msg = tr("Move file to trash?");
-    }
-    if (!ui.dialogs.confirm({tr("Move to trash"), msg}).accepted)
-      return;
-  }
-  FileOpResult result;
-  int successCount = 0;
-  for (const auto &path : std::as_const(paths)) {
-    QFileInfo fi(path);
-    if (fi.isDir())
-      model->removeDir(path, true, true, result);
-    else
-      result = removeFile(path, true);
-    if (result == FileOpResult::SUCCESS)
-      successCount++;
-  }
-  if (paths.count() == 1) {
-    if (result == FileOpResult::SUCCESS) {
-      if (dirCount > 0) {
-        ui.shell.refreshFolderTree(QFileInfo(paths.first()).absolutePath());
-        ui.notifications.showSuccess(tr("Folder moved to trash"));
-      } else
-        ui.notifications.showSuccess(tr("Moved to trash"));
-    } else {
-      outputError(result);
-    }
-  } else if (paths.count() > 1) {
-    if (dirCount > 0 && fileCount == 0) {
-      ui.notifications.showSuccess(tr("Moved to trash: ") +
-                             QString::number(successCount) + tr(" folders"));
-    } else if (fileCount > 0 && dirCount == 0) {
-      ui.notifications.showSuccess(tr("Moved to trash: ") +
-                             QString::number(successCount) + tr(" files"));
-    } else {
-      ui.notifications.showSuccess(tr("Moved to trash: ") +
-                             QString::number(successCount) + tr(" items"));
+      ui.notifications.showSuccess(done + tr(" items"));
     }
   }
 }
