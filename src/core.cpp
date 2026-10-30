@@ -43,6 +43,8 @@
 
 namespace {
 constexpr int PreloadDebounceDelayMs = 200;
+// A file opened from another folder is shown before that folder is scanned.
+constexpr int ModelDelayLoadDelayMs = 40;
 constexpr int FolderViewRevealDelayMs = 100;
 constexpr int DocumentReadyFallbackMs = 1000;
 constexpr int SettledDocumentRevealDelayMs = 0;
@@ -2605,7 +2607,7 @@ void Core::onModelItemReady(std::shared_ptr<Image> img, const QString &path) {
     if (state.delayModel) {
       this->showGui();
       state.delayModel = false;
-      QTimer::singleShot(40, this, SLOT(modelDelayLoad()));
+      QTimer::singleShot(ModelDelayLoadDelayMs, this, &Core::modelDelayLoad);
     }
     model->unloadExcept(state.currentFilePath, settings->usePreloader());
     if (settings->usePreloader()) {
