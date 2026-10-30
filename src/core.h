@@ -183,6 +183,7 @@ private:
     [[nodiscard]] bool needsSaveOverlay(const std::shared_ptr<Image> &img) const;
 
 private slots:
+    void onSettingsChanged();
     void readSettings();
     void nextImage();
     void prevImage();

@@ -259,7 +259,6 @@ Core::Core(const UiPorts &ports)
     m_raiseWindowAwaitingDocumentRendering = false;
     m_raiseWindowRevealTimer.start(SettledDocumentRevealDelayMs);
   });
-  connect(settings, &Settings::settingsChanged, this, &Core::readSettings);
 
   upscaler = std::make_unique<Upscaler>(this);
   // Initial load: no active image/UI state yet to refresh, so the
@@ -373,6 +372,95 @@ Core::Core(const UiPorts &ports)
 
 Core::~Core() = default;
 
+void Core::onSettingsChanged() {
+  bool cmEnabled = settings->colorManagementEnabled();
+  QString cmType = settings->monitorColorProfileType();
+  QString cmPath = settings->monitorColorProfilePath();
+  bool hdrEnabled = settings->hdrToneMappingEnabled();
+  int hdrOp = settings->hdrToneMappingOperator();
+  int hdrWhite = settings->hdrTargetWhiteLevel();
+
+  bool cmChanged = (cmEnabled != lastCMEnabled) ||
+                   (cmType != lastCMType) ||
+                   (cmPath != lastCMPath);
+  bool hdrChanged = (hdrEnabled != lastHdrEnabled) ||
+                    (hdrOp != lastHdrOp) ||
+                    (hdrWhite != lastHdrWhite);
+
+  if (cmChanged || hdrChanged) {
+      lastCMEnabled = cmEnabled;
+      lastCMType = cmType;
+      lastCMPath = cmPath;
+      lastHdrEnabled = hdrEnabled;
+      lastHdrOp = hdrOp;
+      lastHdrWhite = hdrWhite;
+
+      ColorManager::invalidateCache();
+      // No reload on a tone mapping change: the viewer tone maps the
+      // decoded pixels with the current settings and DecodedPixels
+      // rebuilds the SDR copy for new params, while a reload would drop
+      // unsaved edits. Edits stay as baked; Discard shows the new mapping.
+      if (state.hasActiveImage && state.currentImg) {
+          guiSetImage(state.currentImg);
+          updateInfoString();
+      }
+  }
+
+  int newThumbnailResolution = settings->thumbnailResolution();
+  bool newShowSubfoldersInPanel = settings->showSubfoldersInPanel();
+  bool newShowHiddenFiles = settings->showHiddenFiles();
+  int newPanelPreviewsSize = settings->panelPreviewsSize();
+  bool newSortFolders = settings->sortFolders();
+  SortingMode newFolderIconSortingMode = settings->folderIconSortingMode();
+  ThumbPanelStyle newThumbPanelStyle = settings->thumbPanelStyle();
+
+  const bool thumbnailResolutionChanged =
+      newThumbnailResolution != lastThumbnailResolution;
+  bool layoutChanged = thumbnailResolutionChanged ||
+                       (newShowSubfoldersInPanel != lastShowSubfoldersInPanel) ||
+                       (newShowHiddenFiles != lastShowHiddenFiles) ||
+                       (newPanelPreviewsSize != lastPanelPreviewsSize) ||
+                       (newSortFolders != lastSortFolders) ||
+                       (newFolderIconSortingMode != lastFolderIconSortingMode) ||
+                       (newThumbPanelStyle != lastThumbPanelStyle);
+
+  if (thumbnailResolutionChanged && !thumbnailer->clearCache()) {
+      ui.notifications.showError(tr("Failed to clear thumbnail cache"));
+  }
+
+  if (layoutChanged) {
+      bool folderSortingChanged = (newFolderIconSortingMode != lastFolderIconSortingMode);
+
+      lastThumbnailResolution = newThumbnailResolution;
+      lastShowSubfoldersInPanel = newShowSubfoldersInPanel;
+      lastShowHiddenFiles = newShowHiddenFiles;
+      lastPanelPreviewsSize = newPanelPreviewsSize;
+      lastSortFolders = newSortFolders;
+      lastFolderIconSortingMode = newFolderIconSortingMode;
+      lastThumbPanelStyle = newThumbPanelStyle;
+
+      if (folderSortingChanged) {
+          ui.shell.notifyFolderSortingChanged(newFolderIconSortingMode);
+      }
+  }
+
+  if (hdrChanged || layoutChanged) {
+      // Re-request thumbnails for whatever is currently on screen so
+      // already-rendered folder view / thumbnail panel icons pick up
+      // the new tone-map settings without requiring the folder to be
+      // re-entered. This does not touch the on-disk cache itself -
+      // ThumbnailerRunnable's own staleness check (see
+      // isToneMapCacheStale) decides per item, on this re-request,
+      // whether a fresh decode is actually needed.
+      // setShowDirs() in readSettings() repopulates the panel itself.
+      if (thumbPanelPresenter.showDirs() == newShowSubfoldersInPanel)
+          thumbPanelPresenter.reloadModel();
+      folderViewPresenter.reloadModel();
+  }
+
+  readSettings();
+}
+
 void Core::readSettings() {
   if (upscaler) {
       const bool upscaylModelChanged = upscaler->readSettings();
@@ -386,9 +474,6 @@ void Core::readSettings() {
   loopSlideshow = settings->loopSlideshow();
   folderEndAction = settings->folderEndAction();
   slideshowTimer.setInterval(settings->slideshowInterval());
-  bool showDirs = true;
-  if (folderViewPresenter.showDirs() != showDirs)
-    folderViewPresenter.setShowDirs(showDirs);
 
   if (thumbPanelPresenter.showDirs() != settings->showSubfoldersInPanel())
     thumbPanelPresenter.setShowDirs(settings->showSubfoldersInPanel());
@@ -558,93 +643,7 @@ void Core::connectComponents() {
   connect(scriptManager, &ScriptManager::error, this,
           [this](const QString &error) { ui.notifications.showError(error); });
 
-  connect(settings, &Settings::settingsChanged, this, [this]() {
-      bool cmEnabled = settings->colorManagementEnabled();
-      QString cmType = settings->monitorColorProfileType();
-      QString cmPath = settings->monitorColorProfilePath();
-      bool hdrEnabled = settings->hdrToneMappingEnabled();
-      int hdrOp = settings->hdrToneMappingOperator();
-      int hdrWhite = settings->hdrTargetWhiteLevel();
-
-      bool cmChanged = (cmEnabled != lastCMEnabled) ||
-                       (cmType != lastCMType) ||
-                       (cmPath != lastCMPath);
-      bool hdrChanged = (hdrEnabled != lastHdrEnabled) ||
-                        (hdrOp != lastHdrOp) ||
-                        (hdrWhite != lastHdrWhite);
-
-      if (cmChanged || hdrChanged) {
-          lastCMEnabled = cmEnabled;
-          lastCMType = cmType;
-          lastCMPath = cmPath;
-          lastHdrEnabled = hdrEnabled;
-          lastHdrOp = hdrOp;
-          lastHdrWhite = hdrWhite;
-
-          ColorManager::invalidateCache();
-          // No reload on a tone mapping change: the viewer tone maps the
-          // decoded pixels with the current settings and DecodedPixels
-          // rebuilds the SDR copy for new params, while a reload would drop
-          // unsaved edits. Edits stay as baked; Discard shows the new mapping.
-          if (state.hasActiveImage && state.currentImg) {
-              guiSetImage(state.currentImg);
-              updateInfoString();
-          }
-      }
-
-      if (hdrChanged) {
-          // Re-request thumbnails for whatever is currently on screen so
-          // already-rendered folder view / thumbnail panel icons pick up
-          // the new tone-map settings without requiring the folder to be
-          // re-entered. This does not touch the on-disk cache itself -
-          // ThumbnailerRunnable's own staleness check (see
-          // isToneMapCacheStale) decides per item, on this re-request,
-          // whether a fresh decode is actually needed.
-          thumbPanelPresenter.reloadModel();
-          folderViewPresenter.reloadModel();
-      }
-
-      int newThumbnailResolution = settings->thumbnailResolution();
-      bool newShowSubfoldersInPanel = settings->showSubfoldersInPanel();
-      bool newShowHiddenFiles = settings->showHiddenFiles();
-      int newPanelPreviewsSize = settings->panelPreviewsSize();
-      bool newSortFolders = settings->sortFolders();
-      SortingMode newFolderIconSortingMode = settings->folderIconSortingMode();
-      ThumbPanelStyle newThumbPanelStyle = settings->thumbPanelStyle();
-
-      const bool thumbnailResolutionChanged =
-          newThumbnailResolution != lastThumbnailResolution;
-      bool layoutChanged = thumbnailResolutionChanged ||
-                           (newShowSubfoldersInPanel != lastShowSubfoldersInPanel) ||
-                           (newShowHiddenFiles != lastShowHiddenFiles) ||
-                           (newPanelPreviewsSize != lastPanelPreviewsSize) ||
-                           (newSortFolders != lastSortFolders) ||
-                           (newFolderIconSortingMode != lastFolderIconSortingMode) ||
-                           (newThumbPanelStyle != lastThumbPanelStyle);
-
-      if (thumbnailResolutionChanged && !thumbnailer->clearCache()) {
-          ui.notifications.showError(tr("Failed to clear thumbnail cache"));
-      }
-
-      if (layoutChanged) {
-          bool folderSortingChanged = (newFolderIconSortingMode != lastFolderIconSortingMode);
-
-          lastThumbnailResolution = newThumbnailResolution;
-          lastShowSubfoldersInPanel = newShowSubfoldersInPanel;
-          lastShowHiddenFiles = newShowHiddenFiles;
-          lastPanelPreviewsSize = newPanelPreviewsSize;
-          lastSortFolders = newSortFolders;
-          lastFolderIconSortingMode = newFolderIconSortingMode;
-          lastThumbPanelStyle = newThumbPanelStyle;
-
-          if (folderSortingChanged) {
-              ui.shell.notifyFolderSortingChanged(newFolderIconSortingMode);
-          }
-
-          thumbPanelPresenter.reloadModel();
-          folderViewPresenter.reloadModel();
-      }
-  });
+  connect(settings, &Settings::settingsChanged, this, &Core::onSettingsChanged);
 
   connect(model.get(), &DirectoryModel::fileAdded, this, &Core::onFileAdded);
   connect(model.get(), &DirectoryModel::fileRemoved, this,
