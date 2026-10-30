@@ -18,7 +18,9 @@ bool mergeMissingDefaults(const ShortcutMap &defaults, ShortcutMap &shortcuts);
 // versions dropped; true when one was removed.
 bool removeRetiredDefaults(int version, ShortcutMap &shortcuts);
 // The action that shortcut runs in the folder view (folderView) or in the
-// viewer; empty for none. In the folder view a shortcut with Shift runs the
-// selection move of the shortcut without it (Actions::extendsWithShift()).
+// viewer; empty for none. A numpad key without an action runs that of the
+// main keyboard key of the same meaning ("Num7" that of "7", "NumHome" that
+// of "Home"). In the folder view a shortcut with Shift runs the selection
+// move of the shortcut without it (Actions::extendsWithShift()).
 QString actionFor(const ShortcutMap &shortcuts, const QString &shortcut, bool folderView);
 } // namespace ShortcutRules

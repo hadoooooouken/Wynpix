@@ -2,6 +2,44 @@
 
 InputMap *inputMap = nullptr;
 
+namespace {
+// A numpad key: its names with NumLock on and off, the same for the keys
+// NumLock does not change.
+struct NumpadKey {
+    quint32 scanCode;
+    const char *numLockOn;
+    const char *numLockOff;
+};
+
+// The scan codes of the keys as reported by QKeyEvent::nativeScanCode(), as
+// in initKeyMap().
+constexpr NumpadKey kNumpadKeys[] = {
+    { 71, "Num7", "NumHome" },
+    { 72, "Num8", "NumUp" },
+    { 73, "Num9", "NumPgUp" },
+    { 75, "Num4", "NumLeft" },
+    { 76, "Num5", "NumClear" },
+    { 77, "Num6", "NumRight" },
+    { 79, "Num1", "NumEnd" },
+    { 80, "Num2", "NumDown" },
+    { 81, "Num3", "NumPgDown" },
+    { 82, "Num0", "NumIns" },
+    { 83, "Num.", "NumDel" },
+    { 55, "Num*", "Num*" },
+    { 74, "Num-", "Num-" },
+    { 78, "Num+", "Num+" },
+    { 309, "Num/", "Num/" },
+    { 57397, "Num/", "Num/" },
+    { 284, "NumEnter", "NumEnter" },
+    { 57372, "NumEnter", "NumEnter" },
+};
+
+// "Num" + the name of the main keyboard key of the same meaning.
+constexpr qsizetype kNumpadPrefixLength = 3;
+// The numpad key without a main keyboard key (Num5 with NumLock off).
+constexpr const char *kNumpadClear = "NumClear";
+} // namespace
+
 InputMap::InputMap() {
     initKeyMap();
     initModMap();
@@ -174,4 +212,34 @@ QString InputMap::keyNameAlt() {
 
 QString InputMap::keyNameShift() {
     return "Shift";
+}
+
+QString InputMap::numpadKeyName(quint32 scanCode, Qt::Key key) {
+    // With NumLock on the digit keys type digits and the decimal separator.
+    const bool numLockOn = (key >= Qt::Key_0 && key <= Qt::Key_9) ||
+                           key == Qt::Key_Period || key == Qt::Key_Comma;
+    for(const NumpadKey &numpadKey : kNumpadKeys) {
+        if(numpadKey.scanCode == scanCode)
+            return numLockOn ? numpadKey.numLockOn : numpadKey.numLockOff;
+    }
+    return "";
+}
+
+QString InputMap::mainKeyShortcut(const QString &shortcut) {
+    // The modifiers come first, as ShortcutBuilder writes them.
+    const QString modifierPrefixes[] = { keyNameAlt() + "+", keyNameCtrl() + "+",
+                                         keyNameShift() + "+" };
+    qsizetype keyStart = 0;
+    for(const QString &prefix : modifierPrefixes) {
+        if(QStringView(shortcut).mid(keyStart).startsWith(prefix))
+            keyStart += prefix.size();
+    }
+    const QStringView key = QStringView(shortcut).mid(keyStart);
+    if(key == QLatin1String(kNumpadClear))
+        return "";
+    for(const NumpadKey &numpadKey : kNumpadKeys) {
+        if(key == QLatin1String(numpadKey.numLockOn) || key == QLatin1String(numpadKey.numLockOff))
+            return shortcut.left(keyStart) + key.mid(kNumpadPrefixLength);
+    }
+    return "";
 }

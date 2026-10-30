@@ -18,6 +18,20 @@ bool shortcutTaken(const ShortcutMap &shortcuts, const QString &shortcut,
   }
   return false;
 }
+
+// The action of shortcuts bound to shortcut that works in the folder view
+// (folderView) or in the viewer; a numpad key without one runs that of its
+// main keyboard key.
+QString boundAction(const ShortcutMap &shortcuts, const QString &shortcut,
+                    bool folderView) {
+  for (auto it = shortcuts.constFind(shortcut);
+       it != shortcuts.cend() && it.key() == shortcut; ++it) {
+    if (Actions::worksIn(Actions::getInstance()->category(it.value()), folderView))
+      return it.value();
+  }
+  const QString mainKey = InputMap::mainKeyShortcut(shortcut);
+  return mainKey.isEmpty() ? QString() : boundAction(shortcuts, mainKey, folderView);
+}
 } // namespace
 
 namespace ShortcutRules {
@@ -47,11 +61,9 @@ bool removeRetiredDefaults(int version, ShortcutMap &shortcuts) {
 }
 
 QString actionFor(const ShortcutMap &shortcuts, const QString &shortcut, bool folderView) {
-  for (auto it = shortcuts.constFind(shortcut);
-       it != shortcuts.cend() && it.key() == shortcut; ++it) {
-    if (Actions::worksIn(Actions::getInstance()->category(it.value()), folderView))
-      return it.value();
-  }
+  const QString bound = boundAction(shortcuts, shortcut, folderView);
+  if (!bound.isEmpty())
+    return bound;
   const QString shiftPrefix = InputMap::keyNameShift() + "+";
   if (!folderView || !shortcut.contains(shiftPrefix))
     return {};

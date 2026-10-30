@@ -99,6 +99,11 @@ QString ShortcutBuilder::fromEventNativeScanCode(QKeyEvent *event) {
     // where on the same button you have a letter on one layout and some symbol on the other.
     // I'm leaving this as-is because trying to fix all layouts will turn into a mess real quick.
     // You can always just add the same keybind using your alt. layout if it doesnt work.
+    // A numpad key has a name of its own, by its meaning under NumLock.
+    const QString numpadKey = InputMap::numpadKeyName(event->nativeScanCode(), Qt::Key(event->key()));
+    if(!numpadKey.isEmpty())
+        return modifierKeys(event) + numpadKey;
+
     QString sequence = inputMap->keys().value(event->nativeScanCode());
 
     if(sequence.isEmpty())
