@@ -109,9 +109,10 @@ ActionInfoMap AppShortcutStore::actionInfos() {
     ActionInfoMap infos;
     for (const QString &action : mActions.actionList()) {
         const ActionCategory category = mActions.actionCategory(action);
+        const ActionGroup group = mActions.actionGroup(action);
         infos.insert(action, {.title = mActions.actionTitle(action),
-                              .category = Actions::categoryTitle(category),
-                              .categoryOrder = std::to_underlying(category),
+                              .category = Actions::sectionTitle(category, group),
+                              .categoryOrder = Actions::sectionOrder(category, group),
                               .scope = shortcutScope(category)});
     }
     return infos;

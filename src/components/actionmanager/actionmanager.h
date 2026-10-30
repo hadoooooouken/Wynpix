@@ -49,6 +49,8 @@ public:
     QString actionTitle(const QString &action);
     // The group the settings show action in.
     ActionCategory actionCategory(const QString &action);
+    // The subgroup the settings show action in within its group.
+    ActionGroup actionGroup(const QString &action);
     const ShortcutMap& allShortcuts();
     const ShortcutMap& defaultShortcuts();
     // The mode the shortcuts run the actions of: the folder view or the

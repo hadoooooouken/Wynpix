@@ -208,6 +208,10 @@ QString ActionManager::actionTitle(const QString &action) {
 ActionCategory ActionManager::actionCategory(const QString &action) {
   return appActions->category(action);
 }
+
+ActionGroup ActionManager::actionGroup(const QString &action) {
+  return appActions->group(action);
+}
 //------------------------------------------------------------------------------
 const ShortcutMap &ActionManager::allShortcuts() {
   return actionManager->shortcuts;
