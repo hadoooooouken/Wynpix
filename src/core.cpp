@@ -412,7 +412,11 @@ void Core::raiseWindow(const QString &pathReceived) {
   // fully transparent for the duration of that dance and only revealing
   // it once everything has settled hides that frame regardless of its
   // cause (same technique ColdStartWindowController uses on first launch).
-  const bool needsDelayedReveal = !ui.window.isWindowVisible() || m_raiseWindowConcealed;
+  // Qt counts a minimized window as visible, but SW_RESTORE shows its last
+  // frame (the previous image) before the new one is presented.
+  HWND hwnd = reinterpret_cast<HWND>(ui.window.nativeWindowHandle());
+  const bool needsDelayedReveal =
+      !ui.window.isWindowVisible() || IsIconic(hwnd) || m_raiseWindowConcealed;
   if (needsDelayedReveal) {
     m_raiseWindowRevealTimer.stop();
     m_raiseWindowAwaitingDocumentRendering = false;
@@ -425,7 +429,6 @@ void Core::raiseWindow(const QString &pathReceived) {
 
   showGui();
 
-  HWND hwnd = reinterpret_cast<HWND>(ui.window.nativeWindowHandle());
   if (IsIconic(hwnd)) {
     ShowWindow(hwnd, SW_RESTORE);
   }
