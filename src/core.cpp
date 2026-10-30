@@ -44,6 +44,10 @@ constexpr int PreloadDebounceDelayMs = 200;
 constexpr int FolderViewRevealDelayMs = 100;
 constexpr int DocumentReadyFallbackMs = 1000;
 constexpr int SettledDocumentRevealDelayMs = 0;
+// Explorer starts one instance per selected file; their requests arrived up
+// to 90 ms apart. The raised window is revealed once requests stop, so it
+// shows the last file only.
+constexpr qint64 RaiseRequestQuietMs = 150;
 constexpr Qt::DropActions SupportedFileDragActions =
     Qt::CopyAction | Qt::MoveAction;
 
@@ -220,6 +224,11 @@ Core::Core(const UiPorts &ports)
   preloadTimer.setSingleShot(true);
   m_raiseWindowRevealTimer.setSingleShot(true);
   connect(&m_raiseWindowRevealTimer, &QTimer::timeout, this, [this]() {
+    const qint64 sinceRequest = m_lastRaiseRequestTimer.elapsed();
+    if (sinceRequest < RaiseRequestQuietMs) {
+      m_raiseWindowRevealTimer.start(static_cast<int>(RaiseRequestQuietMs - sinceRequest));
+      return;
+    }
     if (m_raiseWindowDocumentRenderingSettled &&
         !ui.viewer.isRenderingSettled()) {
       m_raiseWindowDocumentRenderingSettled = false;
@@ -402,6 +411,7 @@ void Core::showGui() {
 }
 
 void Core::raiseWindow(const QString &pathReceived) {
+  m_lastRaiseRequestTimer.start();
   m_pendingRaiseWindowRequests.enqueue(pathReceived);
   if (m_raiseWindowActive) return;
 

@@ -5,6 +5,7 @@
 #include <QMutex>
 #include <QClipboard>
 #include <QDrag>
+#include <QElapsedTimer>
 #include <QImage>
 #include <QQueue>
 #include <QFileSystemModel>
@@ -328,6 +329,7 @@ private:
     bool m_raiseWindowDocumentRenderingSettled = false;
     QQueue<QString> m_pendingRaiseWindowRequests;
     QTimer m_raiseWindowRevealTimer;
+    QElapsedTimer m_lastRaiseRequestTimer;
 
     QStringList backHistory, forwardHistory;
     bool blockHistory = false;
