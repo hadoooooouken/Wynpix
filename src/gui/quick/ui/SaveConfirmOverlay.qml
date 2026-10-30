@@ -20,8 +20,6 @@ Item {
     visible: coordinator.saveConfirm.open
 
     OverlayPanel {
-        id: panel
-
         icon: FluentIcons.Edit20
         title: qsTr("Unsaved edits")
         width: buttons.implicitWidth + 2 * root.padding

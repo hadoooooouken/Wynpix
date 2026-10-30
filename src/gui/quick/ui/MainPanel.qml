@@ -131,8 +131,6 @@ Item {
     }
 
     Loader {
-        id: content
-
         anchors.fill: parent
         anchors.topMargin: panel.atBottom ? panel.bottomStrip : 0
         anchors.bottomMargin: panel.atTop ? panel.borderWidth : 0

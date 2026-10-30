@@ -392,8 +392,6 @@ Rectangle {
         }
 
         RowLayout {
-            id: content
-
             anchors.fill: parent
             anchors.leftMargin: root.bookmarkMarginH
             anchors.rightMargin: root.bookmarkMarginH

@@ -248,16 +248,12 @@ Item {
 
             // 6. Page counter (e.g. "3 / 17")
             Row {
-                id: pageCounterRow
-
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: 4
                 Layout.rightMargin: 4
                 spacing: 0
 
                 Text {
-                    id: currentPageText
-
                     width: Math.ceil(currentPageMetrics.width)
                     horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
@@ -269,8 +265,6 @@ Item {
                 }
 
                 Text {
-                    id: totalPagesText
-
                     verticalAlignment: Text.AlignVCenter
                     text: " / " + root.navigation.pageCount
                     color: Theme.tokens.textSecondary

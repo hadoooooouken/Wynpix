@@ -50,8 +50,6 @@ public:
 
     Q_INVOKABLE void setHovered(bool hovered);
     Q_INVOKABLE void togglePlayPause();
-    Q_INVOKABLE void play();
-    Q_INVOKABLE void pause();
     Q_INVOKABLE void nextFrame();
     Q_INVOKABLE void prevFrame();
     Q_INVOKABLE void firstFrame();

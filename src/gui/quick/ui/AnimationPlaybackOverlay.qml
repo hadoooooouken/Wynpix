@@ -429,8 +429,6 @@ Item {
 
             // 9. Timeline Slider
             Slider {
-                id: timelineSlider
-
                 implicitWidth: 160
                 Layout.alignment: Qt.AlignVCenter
                 from: 0
@@ -449,16 +447,12 @@ Item {
 
             // 10. Frame counter (e.g. "17 / 88")
             Row {
-                id: frameCounterRow
-
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: 4
                 Layout.rightMargin: 4
                 spacing: 0
 
                 Text {
-                    id: currentFrameText
-
                     width: Math.ceil(currentFrameMetrics.width)
                     horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
@@ -468,8 +462,6 @@ Item {
                 }
 
                 Text {
-                    id: totalFrameText
-
                     verticalAlignment: Text.AlignVCenter
                     text: " / " + root.playback.frameCount
                     color: Theme.tokens.textSecondary

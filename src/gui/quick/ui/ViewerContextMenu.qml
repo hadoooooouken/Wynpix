@@ -422,8 +422,6 @@ Menu {
     // current row (ContextMenuModel::setCurrentRow), by pointer or by key. It
     // never triggers: a triggered menu item closes the menu.
     component ExpanderRow: MenuItem {
-        id: expander
-
         required property string entryText
         required property int entryIcon
 

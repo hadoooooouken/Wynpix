@@ -112,16 +112,6 @@ void AnimationPlaybackController::togglePlayPause() {
         mPlayer->togglePlayPause();
 }
 
-void AnimationPlaybackController::play() {
-    if (mPlayer)
-        mPlayer->play();
-}
-
-void AnimationPlaybackController::pause() {
-    if (mPlayer)
-        mPlayer->pause();
-}
-
 void AnimationPlaybackController::nextFrame() {
     if (mPlayer)
         mPlayer->nextFrame();
