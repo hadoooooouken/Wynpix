@@ -86,7 +86,7 @@ bool FolderViewController::isFullscreen() const {
 }
 
 QString FolderViewController::directoryPath() const {
-    return mDirectoryPath;
+    return QDir::toNativeSeparators(mDirectoryPath);
 }
 
 QUrl FolderViewController::bookmarkDialogFolder() const {
