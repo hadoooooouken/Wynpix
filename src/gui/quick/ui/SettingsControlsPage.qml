@@ -137,6 +137,14 @@ SettingsPage {
             border.color: Theme.tokens.strokeDefault
             border.width: StyleConstants.separatorThickness
 
+            // The wheel turns the list leaves at its ends stop here instead of
+            // scrolling the page.
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                onWheel: wheel => wheel.accepted = true
+            }
+
             ListView {
                 id: shortcutList
 

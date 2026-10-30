@@ -23,6 +23,8 @@ TestCase {
     readonly property int activationTimeoutMs: 5000
     // How long the shortcut list may take to lay its rows out.
     readonly property int layoutTimeoutMs: 1000
+    // How long a view takes to scroll by a wheel turn.
+    readonly property int wheelScrollMs: 300
 
     property var settingsWindow: null
 
@@ -273,6 +275,16 @@ TestCase {
         mouseClick(field, field.width - field.rightPadding / 2, field.height / 2);
         tryCompare(Fixture.settingsDialog.editor, "shortcutFilter", "");
         compare(shortcutRowCount(page), allRows);
+    }
+
+    function test_theWheelOverTheShortcutListLeavesThePage() {
+        const page = openOn(controlsPage);
+        const list = findAll(page, "QQuickListView", [])[0];
+        verify(page.contentItem.contentHeight > page.height, "the page does not scroll");
+        compare(page.contentItem.contentY, 0);
+        mouseWheel(list, list.width / 2, list.height / 2, 0, -120);
+        wait(wheelScrollMs);
+        compare(page.contentItem.contentY, 0);
     }
 
     function test_aNewScriptIsAddedAtOnce() {
