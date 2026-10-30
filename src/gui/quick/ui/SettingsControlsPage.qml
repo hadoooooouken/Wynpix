@@ -153,36 +153,18 @@ SettingsPage {
 
                 section.property: "category"
                 section.criteria: ViewSection.FullString
-                section.labelPositioning: ViewSection.InlineLabels | ViewSection.CurrentLabelAtStart
-                // The header of the category at the top stays there; opaque, as
-                // the rows scroll under it. A fixed band at the top of the list
-                // is tinted with the accent: each header tints only its part
-                // inside the band, so while a header pushes the pinned one out
-                // the two parts make one band and the titles slide through it.
+                section.labelPositioning: ViewSection.InlineLabels
+                // The header of a category scrolls with its rows, tinted with
+                // the accent.
                 section.delegate: Rectangle {
                     id: sectionHeader
 
                     required property string section
 
-                    // Distance of the header from the band, up (< 0) or down.
-                    readonly property real bandOffset: y - shortcutList.contentY
-
                     width: ListView.view.width - shortcutList.scrollBarGap
                     height: root.sectionHeight
-                    color: Theme.tokens.surfaceView
-
-                    Rectangle {
-                        y: Math.max(0, -sectionHeader.bandOffset)
-                        width: parent.width
-                        height: Math.max(0, sectionHeader.height - Math.abs(sectionHeader.bandOffset))
-                        visible: height > 0
-                        color: Theme.tokens.accentTint
-                        // Rounded only where the part ends with the band.
-                        topLeftRadius: sectionHeader.bandOffset <= 0 ? StyleConstants.rowRadius : 0
-                        topRightRadius: topLeftRadius
-                        bottomLeftRadius: sectionHeader.bandOffset >= 0 ? StyleConstants.rowRadius : 0
-                        bottomRightRadius: bottomLeftRadius
-                    }
+                    radius: StyleConstants.rowRadius
+                    color: Theme.tokens.accentTint
 
                     Label {
                         anchors.left: parent.left
