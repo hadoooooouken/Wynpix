@@ -9,7 +9,7 @@ themselves are in the git history.
 
 ```
 main.cpp
- └─ QApplication (QtWidgets is kept for QPrintDialog / QPrinter only)
+ └─ QGuiApplication
      ├─ AppServices   owns the long-lived services (std::unique_ptr)
      ├─ Core          mediator; talks to the UI through the ports only
      ├─ UI ports      src/gui/ports: INotificationPort, IDialogPort,
@@ -18,7 +18,7 @@ main.cpp
      └─ QuickUiHost   implements the ports with the Qt Quick UI
           ├─ wynpix.ui       application shell (QML + controllers)
           ├─ wynpix.style    the controls' look (Button, ComboBox, ...)
-          ├─ wynpix.bridges  Theme, Settings, Actions, ... for QML
+          ├─ wynpix.bridges  Theme, Actions, SettingsEnums, ... for QML
           └─ wynpix.render   ImageRenderItem (QQuickRhiItem) and its shaders
 ```
 
