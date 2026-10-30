@@ -13,7 +13,10 @@ SettingsPage {
     required property SettingsEditorModel editor
 
     readonly property int listHeight: 300
-    readonly property int rowHeight: 26
+    readonly property int listPadding: 4
+    readonly property int rowHeight: 30
+    // Keeps the fills of a hovered and a selected row apart.
+    readonly property int rowSpacing: 2
 
     title: qsTranslate("SettingsDialog", "Scripts")
 
@@ -46,15 +49,30 @@ SettingsPage {
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: root.listHeight
+            radius: StyleConstants.controlRadius
             color: Theme.tokens.surfaceView
             border.color: Theme.tokens.strokeDefault
             border.width: StyleConstants.separatorThickness
 
+            Label {
+                anchors.centerIn: parent
+                text: qsTranslate("SettingsDialog", "No scripts yet")
+                color: Theme.tokens.textTertiary
+                visible: scriptList.count === 0
+            }
+
             ListView {
                 id: scriptList
 
+                // Clear of the scroll bar, which lies over the list's right edge,
+                // by the list padding: the handle gets the same space on both
+                // sides.
+                readonly property int scrollBarGap: visibleArea.heightRatio < 1.0
+                                                    ? StyleConstants.scrollBarThickness + root.listPadding : 0
+
                 anchors.fill: parent
-                anchors.margins: StyleConstants.separatorThickness
+                anchors.margins: root.listPadding
+                spacing: root.rowSpacing
                 clip: true
                 model: root.editor.scripts
                 currentIndex: -1
@@ -71,17 +89,21 @@ SettingsPage {
                     required property int index
                     required property string display
 
-                    width: ListView.view.width
+                    width: ListView.view.width - scriptList.scrollBarGap
                     height: root.rowHeight
-                    radius: 0
                     selected: ListView.isCurrentItem
-                    restColor: index % 2 ? Theme.tokens.surfaceViewRaised : "transparent"
+                    hovered: rowHover.hovered
+
+                    HoverHandler {
+                        id: rowHover
+                    }
 
                     Label {
                         anchors.fill: parent
-                        anchors.leftMargin: StyleConstants.itemHorizontalPadding
+                        anchors.leftMargin: StyleConstants.indicatorPadding
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
+                        textFormat: Text.PlainText
                         text: scriptRow.display
                     }
 

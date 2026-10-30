@@ -301,6 +301,47 @@ TestCase {
         compare(Fixture.settingsApplyCount, 0);
     }
 
+    // No alternate fills: only a hovered or selected row is filled, and a gap
+    // keeps two filled rows apart.
+    function test_theScriptRowsAreFilledApart() {
+        const page = openOn(scriptsPage);
+        button(page, "Add").clicked();
+        const scriptEditor = subDialog("ScriptEditorDialog");
+        Fixture.sendText(scriptEditor, "krita");
+        mouseClick(findText(scriptEditor.contentItem, "Button", "Create"));
+        tryVerify(() => !scriptEditor.visible);
+        // The focus back in the settings window, as the system gives it back,
+        // or the next test's first key goes to the closed editor ("active"
+        // holds while the editor has it).
+        settingsWindow.requestActivate();
+        tryVerify(() => settingsWindow.activeFocusItem !== null, activationTimeoutMs,
+                  "the focus did not come back to the settings window");
+        const list = findAll(page, "QQuickListView", [])[0];
+        tryCompare(list, "count", 2);
+        const first = list.itemAtIndex(0);
+        const second = list.itemAtIndex(1);
+        verify(second.y > first.y + first.height, "the rows touch");
+        compare(first.hovered || first.selected, false);
+        compare(first.color.a, 0);
+        compare(second.color.a, 0);
+        mouseClick(first);
+        verify(first.selected);
+        verify(first.color.a > 0, "the selected row is not filled");
+    }
+
+    function test_anEmptyScriptListSaysSo() {
+        const page = openOn(scriptsPage);
+        const hint = findText(page, "Label", "No scripts yet");
+        verify(hint !== null, "no empty list hint");
+        verify(!hint.visible);
+        const list = findAll(page, "QQuickListView", [])[0];
+        tryCompare(list, "count", 1);
+        mouseClick(list.itemAtIndex(0));
+        button(page, "Remove").clicked();
+        compare(Fixture.storedScripts, []);
+        tryVerify(() => hint.visible);
+    }
+
     function test_clearingTheCacheRequestsItAtOnce() {
         const page = openOn(advancedPage);
         button(page, "Clear").clicked();
