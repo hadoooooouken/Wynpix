@@ -17,7 +17,6 @@
 #include <QProcess>
 #include <algorithm>
 #include <cstdlib>
-#include <QRegularExpression>
 #include <QCoreApplication>
 #include <QThreadPool>
 #include <QTimer>
@@ -36,6 +35,7 @@
 #include <dwmapi.h>
 #include <psapi.h>
 #include "utils/colormanager.h"
+#include "utils/formatregistry.h"
 #include "utils/hdrtonemapper.h"
 #include "utils/imagelib.h"
 #include <QThread>
@@ -2231,13 +2231,15 @@ bool Core::loadPath(QString path) {
     // DirectoryManager only checks file extensions via regex (performance
     // reasons) But in this case we force check mimetype.
     // If the file index is not found (e.g. delayed loading), check against
-    // supported regex. Falls back to QMimeDatabase query if regex check is not
-    // matched.
+    // supported extensions. Falls back to QMimeDatabase query if the extension
+    // is not matched.
     if (index == -1) {
       bool isSupported = false;
-      QRegularExpression re(settings->supportedFormatsRegex(),
-                            QRegularExpression::CaseInsensitiveOption);
-      if (re.match(fileInfo.fileName()).hasMatch()) {
+      // Image plugin paths are set in main() before Core exists, so the set
+      // does not change after the first call.
+      static const QSet<QString> extensions =
+          FormatRegistry::supportedExtensionSet();
+      if (extensions.contains(fileInfo.suffix().toLower())) {
         isSupported = true;
       } else {
         QStringList types = settings->supportedMimeTypes();
