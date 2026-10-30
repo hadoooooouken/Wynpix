@@ -15,17 +15,21 @@ EDITS = [
      "                       << \"visible\" << ui.window.isWindowVisible();\n"
      "  m_lastRaiseRequestTimer.start();\n"),
     ("core.cpp",
-     "  if (IsIconic(hwnd)) {\n    ShowWindow(hwnd, SW_RESTORE);\n  }\n",
+     "  showGui();\n  ui.window.raiseAndActivateWindow();\n",
+     "  showGui();\n"
      "  qWarning() << \"TMPDIAG raiseWindow after drain+showGui; delayed\" << needsDelayedReveal\n"
-     "             << \"iconic\" << bool(IsIconic(hwnd)) << \"settled\" << ui.viewer.isRenderingSettled();\n"
-     "  if (IsIconic(hwnd)) {\n    ShowWindow(hwnd, SW_RESTORE);\n"
-     "    qWarning() << \"TMPDIAG SW_RESTORE done\";\n  }\n"),
-    ("core.cpp",
+     "             << \"iconic\" << ui.window.isWindowMinimized() << \"settled\" << ui.viewer.isRenderingSettled();\n"
+     "  ui.window.raiseAndActivateWindow();\n"),
+    (r"gui\quick\adapters\quickmainwindowcontroller.cpp",
+     "        ShowWindow(hwnd, SW_RESTORE);\n",
+     "        ShowWindow(hwnd, SW_RESTORE);\n"
+     "        qWarning() << \"TMPDIAG SW_RESTORE done\";\n"),
+    (r"gui\quick\adapters\quickmainwindowcontroller.cpp",
      "    if (FAILED(DwmFlush()))\n"
-     "      qWarning() << \"DwmFlush failed; revealing the raised window anyway\";\n",
+     "        qWarning() << \"DwmFlush failed; revealing the raised window anyway\";\n",
      "    qWarning() << \"TMPDIAG DwmFlush begin\";\n"
      "    if (FAILED(DwmFlush()))\n"
-     "      qWarning() << \"DwmFlush failed; revealing the raised window anyway\";\n"
+     "        qWarning() << \"DwmFlush failed; revealing the raised window anyway\";\n"
      "    qWarning() << \"TMPDIAG DwmFlush end\";\n"),
     (r"gui\quick\ui\imageviewportcontroller.cpp",
      "void ImageViewportController::onFramePresented() {\n",
