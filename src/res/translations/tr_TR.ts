@@ -2,406 +2,525 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="tr_TR">
 <context>
+    <name>AccentColorDialog</name>
+    <message>
+        <location filename="../../gui/quick/ui/AccentColorDialog.qml" line="157"/>
+        <source>Hex:</source>
+        <translation>Hex:</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/AccentColorDialog.qml" line="197"/>
+        <source>OK</source>
+        <translation>Tamam</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/AccentColorDialog.qml" line="201"/>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+</context>
+<context>
     <name>Actions</name>
     <message>
-        <location filename="../../utils/actions.cpp" line="46"/>
+        <location filename="../../utils/actions.cpp" line="65"/>
         <source>Navigation</source>
         <translation>Gezinme</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="49"/>
+        <location filename="../../utils/actions.cpp" line="71"/>
         <source>View</source>
         <translation>Görünüm</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="52"/>
+        <location filename="../../utils/actions.cpp" line="77"/>
         <source>Editing</source>
         <translation>Düzenleme</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="55"/>
+        <location filename="../../utils/actions.cpp" line="74"/>
         <source>File</source>
         <translation>Dosya</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="58"/>
+        <location filename="../../utils/actions.cpp" line="86"/>
         <source>Clipboard</source>
         <translation>Pano</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="61"/>
+        <location filename="../../utils/actions.cpp" line="83"/>
         <source>AI upscale</source>
         <translation>Yapay Zeka Ölçekleme</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="64"/>
+        <location filename="../../utils/actions.cpp" line="48"/>
+        <source>Viewer</source>
+        <translation>Görüntüleyici</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="51"/>
+        <source>Common</source>
+        <translation>Ortak</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="68"/>
+        <source>Selection</source>
+        <translation>Seçim</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="80"/>
+        <source>Files and clipboard</source>
+        <translation>Dosyalar ve pano</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="89"/>
+        <source>Sorting</source>
+        <translation>Sıralama</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="92"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="75"/>
+        <location filename="../../utils/actions.cpp" line="96"/>
+        <source>%1 › %2</source>
+        <translation>%1 › %2</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="130"/>
         <source>Next image</source>
         <translation>Sonraki görsel</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="76"/>
+        <location filename="../../utils/actions.cpp" line="131"/>
         <source>Previous image</source>
         <translation>Önceki görsel</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="77"/>
+        <location filename="../../utils/actions.cpp" line="132"/>
+        <location filename="../../utils/actions.cpp" line="208"/>
         <source>Toggle fullscreen</source>
         <translation>Tam ekranı aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="78"/>
+        <location filename="../../utils/actions.cpp" line="133"/>
         <source>Fit to window</source>
         <translation>Pencereye sığdır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="79"/>
+        <location filename="../../utils/actions.cpp" line="134"/>
         <source>Fit to width</source>
         <translation>Genişliğe sığdır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="80"/>
+        <location filename="../../utils/actions.cpp" line="135"/>
         <source>Original size</source>
         <translation>Orijinal boyut</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="81"/>
+        <location filename="../../utils/actions.cpp" line="136"/>
         <source>Fit to height</source>
         <translation>Yüksekliğe sığdır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="82"/>
+        <location filename="../../utils/actions.cpp" line="137"/>
         <source>Switch fit mode</source>
         <translation>Sığdırma modunu değiştir</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="83"/>
+        <location filename="../../utils/actions.cpp" line="138"/>
         <source>Resize</source>
         <translation>Yeniden boyutlandır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="84"/>
+        <location filename="../../utils/actions.cpp" line="139"/>
         <source>Rotate right</source>
         <translation>Sağa döndür</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="85"/>
+        <location filename="../../utils/actions.cpp" line="140"/>
         <source>Rotate left</source>
         <translation>Sola döndür</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="86"/>
-        <source>Scroll up</source>
-        <translation>Yukarı kaydır</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="87"/>
-        <source>Scroll down</source>
-        <translation>Aşağı kaydır</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="88"/>
-        <source>Scroll left</source>
-        <translation>Sola kaydır</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="89"/>
-        <source>Scroll right</source>
-        <translation>Sağa kaydır</translation>
-    </message>
-    <message>
-        <location filename="../../utils/actions.cpp" line="90"/>
+        <location filename="../../utils/actions.cpp" line="145"/>
         <source>Zoom in</source>
         <translation>Yakınlaştır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="91"/>
+        <location filename="../../utils/actions.cpp" line="146"/>
         <source>Zoom out</source>
         <translation>Uzaklaştır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="92"/>
+        <location filename="../../utils/actions.cpp" line="147"/>
         <source>Zoom in at cursor</source>
         <translation>İmleçte yakınlaştır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="93"/>
+        <location filename="../../utils/actions.cpp" line="148"/>
         <source>Zoom out at cursor</source>
         <translation>İmleçte uzaklaştır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="94"/>
+        <location filename="../../utils/actions.cpp" line="149"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="95"/>
+        <location filename="../../utils/actions.cpp" line="150"/>
         <source>Save as</source>
         <translation>Farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="96"/>
+        <location filename="../../utils/actions.cpp" line="151"/>
         <source>Set as wallpaper</source>
         <translation>Duvar kağıdı yap</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="97"/>
+        <location filename="../../utils/actions.cpp" line="152"/>
         <source>Crop</source>
         <translation>Kırp</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="98"/>
+        <location filename="../../utils/actions.cpp" line="153"/>
         <source>Delete permanently</source>
         <translation>Kalıcı olarak sil</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="99"/>
+        <location filename="../../utils/actions.cpp" line="154"/>
         <source>Quick copy</source>
         <translation>Hızlı kopyala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="100"/>
+        <location filename="../../utils/actions.cpp" line="155"/>
         <source>Quick move</source>
         <translation>Hızlı taşı</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="101"/>
+        <location filename="../../utils/actions.cpp" line="156"/>
         <source>First image</source>
         <translation>İlk görsel</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="102"/>
+        <location filename="../../utils/actions.cpp" line="157"/>
         <source>Last image</source>
         <translation>Son görsel</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="103"/>
+        <location filename="../../utils/actions.cpp" line="158"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="104"/>
+        <location filename="../../utils/actions.cpp" line="159"/>
         <source>Exit fullscreen or quit</source>
         <translation>Tam ekrandan çık veya kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="105"/>
+        <location filename="../../utils/actions.cpp" line="160"/>
         <source>Quit</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="106"/>
+        <location filename="../../utils/actions.cpp" line="161"/>
         <source>Flip horizontal</source>
         <translation>Yatay çevir</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="107"/>
+        <location filename="../../utils/actions.cpp" line="162"/>
         <source>Flip vertical</source>
         <translation>Dikey çevir</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="108"/>
+        <location filename="../../utils/actions.cpp" line="45"/>
         <source>Folder view</source>
         <translation>Klasör görünümü</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="109"/>
-        <source>Image view</source>
-        <translation>Görsel görünümü</translation>
+        <location filename="../../utils/actions.cpp" line="141"/>
+        <source>Scroll image up</source>
+        <translation>Görseli yukarı kaydır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="110"/>
-        <source>Toggle folder view</source>
-        <translation>Klasör görünümünü aç/kapat</translation>
+        <location filename="../../utils/actions.cpp" line="142"/>
+        <source>Scroll image down</source>
+        <translation>Görseli aşağı kaydır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="111"/>
+        <location filename="../../utils/actions.cpp" line="143"/>
+        <source>Scroll image left</source>
+        <translation>Görseli sola kaydır</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="144"/>
+        <source>Scroll image right</source>
+        <translation>Görseli sağa kaydır</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="163"/>
+        <source>Go to folder view</source>
+        <translation>Klasör görünümüne geç</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="164"/>
+        <source>Go to image view</source>
+        <translation>Görsel görünümüne geç</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="165"/>
+        <source>Toggle folder/image view</source>
+        <translation>Klasör/görsel görünümünü aç/kapat</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="166"/>
         <source>Move to trash</source>
         <translation>Çöp kutusuna taşı</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="112"/>
+        <location filename="../../utils/actions.cpp" line="167"/>
         <source>Reload image</source>
         <translation>Görseli yeniden yükle</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="113"/>
+        <location filename="../../utils/actions.cpp" line="168"/>
         <source>Copy image to clipboard</source>
         <translation>Görseli panoya kopyala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="114"/>
+        <location filename="../../utils/actions.cpp" line="169"/>
         <source>Copy file path</source>
         <translation>Dosya yolunu kopyala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="115"/>
+        <location filename="../../utils/actions.cpp" line="170"/>
         <source>Copy visible area to clipboard</source>
         <translation>Görünür alanı panoya kopyala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="116"/>
+        <location filename="../../utils/actions.cpp" line="171"/>
         <source>Rename</source>
         <translation>Yeniden adlandır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="117"/>
+        <location filename="../../utils/actions.cpp" line="172"/>
         <source>Context menu</source>
         <translation>Bağlam menüsü</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="118"/>
+        <location filename="../../utils/actions.cpp" line="173"/>
         <source>Toggle transparency grid</source>
         <translation>Saydamlık ızgarasını aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="119"/>
+        <location filename="../../utils/actions.cpp" line="174"/>
         <source>Sort by name</source>
         <translation>Ada göre sırala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="120"/>
+        <location filename="../../utils/actions.cpp" line="175"/>
         <source>Sort by date</source>
         <translation>Tarihe göre sırala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="121"/>
+        <location filename="../../utils/actions.cpp" line="176"/>
         <source>Sort by size</source>
         <translation>Boyuta göre sırala</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="122"/>
+        <location filename="../../utils/actions.cpp" line="177"/>
         <source>Toggle image info</source>
         <translation>Görsel bilgisini aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="123"/>
+        <location filename="../../utils/actions.cpp" line="178"/>
         <source>Toggle shuffle</source>
         <translation>Karışık sırayı aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="124"/>
+        <location filename="../../utils/actions.cpp" line="179"/>
         <source>Toggle scaling filter</source>
         <translation>Ölçekleme filtresini aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="125"/>
+        <location filename="../../utils/actions.cpp" line="180"/>
         <source>Next scaling filter</source>
         <translation>Sonraki ölçekleme filtresi</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="126"/>
+        <location filename="../../utils/actions.cpp" line="181"/>
         <source>Toggle slideshow</source>
         <translation>Slayt gösterisini aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="127"/>
+        <location filename="../../utils/actions.cpp" line="182"/>
         <source>Show in folder</source>
         <translation>Klasörde göster</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="128"/>
+        <location filename="../../utils/actions.cpp" line="183"/>
         <source>Parent folder</source>
         <translation>Üst klasör</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="129"/>
+        <location filename="../../utils/actions.cpp" line="184"/>
         <source>Discard edits</source>
         <translation>Düzenlemeleri at</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="130"/>
+        <location filename="../../utils/actions.cpp" line="185"/>
         <source>Next folder</source>
         <translation>Sonraki klasör</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="131"/>
+        <location filename="../../utils/actions.cpp" line="186"/>
         <source>Previous folder</source>
         <translation>Önceki klasör</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="132"/>
+        <location filename="../../utils/actions.cpp" line="187"/>
         <source>Lock zoom</source>
         <translation>Yakınlaştırmayı kilitle</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="133"/>
+        <location filename="../../utils/actions.cpp" line="188"/>
         <source>Lock view</source>
         <translation>Görünümü kilitle</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="134"/>
+        <location filename="../../utils/actions.cpp" line="189"/>
         <source>Print</source>
         <translation>Yazdır</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="135"/>
+        <location filename="../../utils/actions.cpp" line="190"/>
         <source>Toggle fullscreen info bar</source>
         <translation>Tam ekran bilgi çubuğunu aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="136"/>
+        <location filename="../../utils/actions.cpp" line="191"/>
         <source>Open from clipboard</source>
         <translation>Panodan aç</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="137"/>
+        <location filename="../../utils/actions.cpp" line="192"/>
         <source>Panorama mode</source>
         <translation>Panorama modu</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="138"/>
+        <location filename="../../utils/actions.cpp" line="193"/>
         <source>Color adjustments</source>
         <translation>Renk ayarları</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="139"/>
+        <location filename="../../utils/actions.cpp" line="194"/>
         <source>CAS settings</source>
         <translation>CAS ayarları</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="140"/>
+        <location filename="../../utils/actions.cpp" line="195"/>
         <source>New folder</source>
         <translation>Yeni klasör</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="141"/>
+        <location filename="../../utils/actions.cpp" line="196"/>
         <source>Next page</source>
         <translation>Sonraki sayfa</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="142"/>
+        <location filename="../../utils/actions.cpp" line="197"/>
         <source>Previous page</source>
         <translation>Önceki sayfa</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="143"/>
+        <location filename="../../utils/actions.cpp" line="198"/>
         <source>First page</source>
         <translation>İlk sayfa</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="144"/>
+        <location filename="../../utils/actions.cpp" line="199"/>
         <source>Last page</source>
         <translation>Son sayfa</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="145"/>
+        <location filename="../../utils/actions.cpp" line="200"/>
         <source>Toggle AI upscale</source>
         <translation>Yapay zeka büyütmeyi aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="146"/>
+        <location filename="../../utils/actions.cpp" line="201"/>
         <source>Next AI upscale model</source>
         <translation>Sonraki yapay zeka büyütme modeli</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="147"/>
+        <location filename="../../utils/actions.cpp" line="202"/>
         <source>Toggle HDR tone mapping</source>
         <translation>HDR ton eşlemeyi aç/kapat</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="203"/>
+        <source>Name filter</source>
+        <translation>İsim filtresi</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="204"/>
+        <source>Open selected</source>
+        <translation>Seçileni aç</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="205"/>
+        <source>Select all</source>
+        <translation>Tümünü seç</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="206"/>
+        <source>Back</source>
+        <translation>Geri</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="207"/>
+        <source>Forward</source>
+        <translation>İleri</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="209"/>
+        <source>Move selection left</source>
+        <translation>Seçimi sola taşı</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="210"/>
+        <source>Move selection right</source>
+        <translation>Seçimi sağa taşı</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="211"/>
+        <source>Move selection up</source>
+        <translation>Seçimi yukarı taşı</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="212"/>
+        <source>Move selection down</source>
+        <translation>Seçimi aşağı taşı</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="213"/>
+        <source>Move selection a page up</source>
+        <translation>Seçimi bir sayfa yukarı taşı</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="214"/>
+        <source>Move selection a page down</source>
+        <translation>Seçimi bir sayfa aşağı taşı</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="215"/>
+        <source>First item</source>
+        <translation>İlk öğe</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="216"/>
+        <source>Last item</source>
+        <translation>Son öğe</translation>
     </message>
 </context>
 <context>
@@ -461,17 +580,17 @@
         <translation>Oynatma hızı</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/AnimationPlaybackOverlay.qml" line="486"/>
+        <location filename="../../gui/quick/ui/AnimationPlaybackOverlay.qml" line="478"/>
         <source>Remember</source>
         <translation>Hatırla</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/AnimationPlaybackOverlay.qml" line="492"/>
+        <location filename="../../gui/quick/ui/AnimationPlaybackOverlay.qml" line="484"/>
         <source>Remember playback settings</source>
         <translation>Oynatma ayarlarını hatırla</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/AnimationPlaybackOverlay.qml" line="497"/>
+        <location filename="../../gui/quick/ui/AnimationPlaybackOverlay.qml" line="489"/>
         <source>Preserve playback settings across images</source>
         <translation>Görüntüler arasında oynatma ayarlarını koru</translation>
     </message>
@@ -624,82 +743,82 @@
         <translation>Tümünü seçme</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="234"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="240"/>
         <source>Save as type:</source>
         <translation>Tür olarak kaydet:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="279"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="285"/>
         <source>Resize</source>
         <translation>Yeniden Boyutlandır</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="295"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="301"/>
         <source>By Percent:</source>
         <translation>Yüzdeye göre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="337"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="343"/>
         <source>By Absolute Size:</source>
         <translation>Mutlak boyuta göre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="412"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="418"/>
         <source>By Megapixels:</source>
         <translation>Megapiksele göre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="427"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="433"/>
         <source>Megapixels:</source>
         <translation>Megapiksel:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="449"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="455"/>
         <source>Binary (1M = 1024x1024)</source>
         <translation>İkili (1M = 1024x1024)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="791"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="797"/>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="311"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="317"/>
         <source>Percent:</source>
         <translation>Yüzde:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="468"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="474"/>
         <source>Keep aspect ratio</source>
         <translation>En boy oranını koru</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="529"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="535"/>
         <source>Filter:</source>
         <translation>Filtre:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="544"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="550"/>
         <source>Model:</source>
         <translation>Model:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="582"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="588"/>
         <source>Flip horizontal</source>
         <translation>Yatay çevir</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="588"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="594"/>
         <source>Flip vertical</source>
         <translation>Dikey çevir</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="379"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="385"/>
         <source>Common sizes:</source>
         <translation>Ortak boyutlar:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="600"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="606"/>
         <source>Color adjustments</source>
         <translation>Renk ayarları</translation>
     </message>
@@ -739,17 +858,17 @@
         <translation>Doygunluk:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="482"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="482"/>
         <source>Width</source>
         <translation>Genişlik</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="476"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="482"/>
         <source>Height</source>
         <translation>Yükseklik</translation>
     </message>
@@ -764,22 +883,22 @@
         <translation>Canlılık:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="647"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="653"/>
         <source>Output folder:</source>
         <translation>Çıkış klasörü:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="659"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="665"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
         <source>Create subfolder for batch</source>
         <translation>Toplu işlem için alt klasör oluştur</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="671"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="677"/>
         <source>Filename pattern:</source>
         <translation>Dosya adı şablonu:</translation>
     </message>
@@ -794,7 +913,7 @@
         <translation>Kullanılabilir: {name}, {ext}, {date}, {index}</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="686"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="692"/>
         <source>Overwrite existing files</source>
         <translation>Mevcut dosyaların üzerine yaz</translation>
     </message>
@@ -804,32 +923,32 @@
         <translation>Dönüştürmeye hazır.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="717"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="723"/>
         <source>Convert</source>
         <translation>Dönüştür</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="725"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="731"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="639"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="645"/>
         <source>Reset Color Adjustments</source>
         <translation>Renk Ayarlarını Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="353"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="359"/>
         <source>Max Width:</source>
         <translation>Maks. Genişlik:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="391"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="397"/>
         <source>Max Height:</source>
         <translation>Maks. Yükseklik:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="504"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="510"/>
         <source>Upscayl</source>
         <translation>Upscayl kullan</translation>
     </message>
@@ -879,12 +998,12 @@
         <translation>Orijinal boyut</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="458"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="464"/>
         <source>Reset: %1 x %2</source>
         <translation>Sıfırla: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="516"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="522"/>
         <source>No AI models found in models/ directory.</source>
         <translation>models/ dizininde Yapay Zekâ modeli bulunamadı.</translation>
     </message>
@@ -894,7 +1013,7 @@
         <translation>%1 dosya seçildi (%2 MB)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="736"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="742"/>
         <source>Select Output Directory</source>
         <translation>Çıkış Dizinini Seçin</translation>
     </message>
@@ -910,12 +1029,12 @@
     </message>
     <message>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="724"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="730"/>
         <source>Stopping...</source>
         <translation>Durduruluyor...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="725"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="731"/>
         <source>Stop</source>
         <translation>Durdur</translation>
     </message>
@@ -1018,7 +1137,7 @@ Başarısız: %2
 Toplam dosya: %3</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="610"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="616"/>
         <source>Paste</source>
         <translation>Yapıştır</translation>
     </message>
@@ -1298,7 +1417,7 @@ Toplam dosya: %3</translation>
         <translation>Kalıcı olarak sil</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="482"/>
+        <location filename="../../gui/quick/ui/ViewerContextMenu.qml" line="480"/>
         <source>Configure menu</source>
         <translation>Menüyü düzenle</translation>
     </message>
@@ -1343,297 +1462,288 @@ Toplam dosya: %3</translation>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="787"/>
+        <location filename="../../core.cpp" line="761"/>
         <source>Updated: </source>
         <translation>Güncellendi: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="794"/>
+        <location filename="../../core.cpp" line="768"/>
         <source>Welcome to </source>
         <translation>Hoş geldiniz</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="795"/>
+        <location filename="../../core.cpp" line="769"/>
         <source> version </source>
         <translation> sürüm </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="813"/>
+        <location filename="../../core.cpp" line="787"/>
         <source>Shuffle mode: OFF</source>
         <translation>Karıştırma modu: KAPALI</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="816"/>
+        <location filename="../../core.cpp" line="790"/>
         <source>Shuffle mode: ON</source>
         <translation>Karıştırma modu: AÇIK</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="825"/>
+        <location filename="../../core.cpp" line="799"/>
         <source>Slideshow: OFF</source>
         <translation>Slayt gösterisi: KAPALI</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="829"/>
+        <location filename="../../core.cpp" line="803"/>
         <source>Slideshow: ON</source>
         <translation>Slayt gösterisi: AÇIK</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1033"/>
-        <location filename="../../core.cpp" line="1036"/>
-        <location filename="../../core.cpp" line="1039"/>
+        <location filename="../../core.cpp" line="1011"/>
         <source>Delete </source>
         <translation>Sil </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1034"/>
+        <location filename="../../core.cpp" line="1014"/>
         <source> folders permanently?</source>
         <translation> klasörü kalıcı olarak silinsin mi?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1037"/>
+        <location filename="../../core.cpp" line="1017"/>
         <source> files permanently?</source>
         <translation> dosyayı kalıcı olarak silinsin mi?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1040"/>
+        <location filename="../../core.cpp" line="1020"/>
         <source> items permanently?</source>
         <translation> öge kalıcı olarak silinsin mi?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1048"/>
+        <location filename="../../core.cpp" line="1029"/>
         <source>Delete permanently</source>
         <translation>Kalıcı olarak sil</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1068"/>
+        <location filename="../../core.cpp" line="1052"/>
         <source>File removed</source>
         <translation>Dosya kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1074"/>
-        <location filename="../../core.cpp" line="1077"/>
-        <location filename="../../core.cpp" line="1080"/>
+        <location filename="../../core.cpp" line="1057"/>
         <source>Removed: </source>
         <translation>Kaldırıldı: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1078"/>
-        <location filename="../../core.cpp" line="1147"/>
+        <location filename="../../core.cpp" line="1062"/>
         <source> files</source>
         <translation> dosya</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1105"/>
-        <location filename="../../core.cpp" line="1107"/>
-        <location filename="../../core.cpp" line="1109"/>
+        <location filename="../../core.cpp" line="1011"/>
         <source>Move </source>
         <translation>Taşı </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1109"/>
+        <location filename="../../core.cpp" line="1020"/>
         <source> items to trash?</source>
         <translation> öge çöp kutusuna taşınsın mı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1117"/>
+        <location filename="../../core.cpp" line="1029"/>
         <source>Move to trash</source>
         <translation>Çöp kutusuna taşı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1135"/>
+        <location filename="../../core.cpp" line="1048"/>
         <source>Folder moved to trash</source>
         <translation>Klasör çöp kutusuna taşındı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1137"/>
+        <location filename="../../core.cpp" line="1051"/>
         <source>Moved to trash</source>
         <translation>Çöp kutusuna taşındı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1143"/>
-        <location filename="../../core.cpp" line="1146"/>
-        <location filename="../../core.cpp" line="1149"/>
+        <location filename="../../core.cpp" line="1057"/>
         <source>Moved to trash: </source>
         <translation>Çöp kutusuna taşındı: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1238"/>
+        <location filename="../../core.cpp" line="1152"/>
         <source>File copied</source>
         <translation>Dosya kopyalandı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1245"/>
+        <location filename="../../core.cpp" line="1159"/>
         <source>Path copied</source>
         <translation>Dosya yolu kopyalandı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1375"/>
-        <location filename="../../core.cpp" line="1561"/>
-        <location filename="../../core.cpp" line="1585"/>
+        <location filename="../../core.cpp" line="1282"/>
+        <location filename="../../core.cpp" line="1468"/>
+        <location filename="../../core.cpp" line="1492"/>
         <source>File exists</source>
         <translation>Dosya zaten var</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1375"/>
+        <location filename="../../core.cpp" line="1282"/>
         <source>Overwrite file?</source>
         <translation>Dosyanın üzerine yazılsın mı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1467"/>
+        <location filename="../../core.cpp" line="1374"/>
         <source>Add folder</source>
         <translation>Klasör ekle</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1467"/>
+        <location filename="../../core.cpp" line="1374"/>
         <source>Folder name:</source>
         <translation>Klasör adı:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1474"/>
+        <location filename="../../core.cpp" line="1381"/>
         <source>Folder already exists</source>
         <translation>Klasör zaten var</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1483"/>
+        <location filename="../../core.cpp" line="1390"/>
         <source>Failed to create folder</source>
         <translation>Klasör oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1559"/>
+        <location filename="../../core.cpp" line="1466"/>
         <source>File moved.</source>
         <translation>Dosya taşındı.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1562"/>
-        <location filename="../../core.cpp" line="1586"/>
+        <location filename="../../core.cpp" line="1469"/>
+        <location filename="../../core.cpp" line="1493"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>Dosya hedefte var. Üzerine yazılsın mı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1583"/>
+        <location filename="../../core.cpp" line="1490"/>
         <source>File copied.</source>
         <translation>Dosya kopyalandı.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1751"/>
+        <location filename="../../core.cpp" line="1658"/>
         <source>Perform action &quot;</source>
         <translation>Eylemi gerçekleştir: &quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1752"/>
+        <location filename="../../core.cpp" line="1659"/>
         <source>Changes will be saved immediately.</source>
         <translation>Değişiklikler hemen kaydedilecektir.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1817"/>
+        <location filename="../../core.cpp" line="1724"/>
         <source>Flip horizontal</source>
         <translation>Yatay çevir</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1822"/>
+        <location filename="../../core.cpp" line="1729"/>
         <source>Flip vertical</source>
         <translation>Dikey çevir</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1827"/>
+        <location filename="../../core.cpp" line="1734"/>
         <source>Rotate</source>
         <translation>Döndür</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1808"/>
+        <location filename="../../core.cpp" line="1715"/>
         <source>Resize</source>
         <translation>Yeniden boyutlandır</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1958"/>
+        <location filename="../../core.cpp" line="1865"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>Yapay Zekâ boyutlandırma bitti ancak resim değişti.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1979"/>
-        <location filename="../../core.cpp" line="1990"/>
+        <location filename="../../core.cpp" line="1886"/>
+        <location filename="../../core.cpp" line="1897"/>
         <source>Crop</source>
         <translation>Kırp</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2080"/>
+        <location filename="../../core.cpp" line="1987"/>
         <source>File saved</source>
         <translation>Dosya kaydedildi</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="148"/>
+        <location filename="../../core.cpp" line="156"/>
         <source>Could not save file</source>
         <translation>Dosya kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="135"/>
+        <location filename="../../core.cpp" line="143"/>
         <source>Could not save file: the destination could not be replaced (Windows error %1)</source>
         <translation>Dosya kaydedilemedi: hedef değiştirilemedi (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="140"/>
+        <location filename="../../core.cpp" line="148"/>
         <source>Could not save file: automatic recovery failed (Windows error %1)</source>
         <translation>Dosya kaydedilemedi: otomatik kurtarma başarısız (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2169"/>
-        <location filename="../../core.cpp" line="2175"/>
+        <location filename="../../core.cpp" line="2076"/>
+        <location filename="../../core.cpp" line="2082"/>
         <source>Set wallpaper: file not supported</source>
         <translation>Duvar kağıdı yap: dosya desteklenmiyor</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2199"/>
-        <location filename="../../core.cpp" line="2208"/>
+        <location filename="../../core.cpp" line="2106"/>
+        <location filename="../../core.cpp" line="2115"/>
         <source>Could not open image</source>
         <translation>Görüntü açılamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2203"/>
+        <location filename="../../core.cpp" line="2110"/>
         <source>Can only print static images</source>
         <translation>Sadece hareketsiz görüntüler yazdırılabilir</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="303"/>
+        <location filename="../../core.cpp" line="312"/>
         <source>AI Upscaling...</source>
         <translation>Yapay Zeka Ölçekleme...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="53"/>
+        <location filename="../../core.cpp" line="61"/>
         <source>Set wallpaper: failed to create application data directory</source>
         <translation>Duvar kağıdı yap: uygulama veri klasörü oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="56"/>
+        <location filename="../../core.cpp" line="64"/>
         <source>Set wallpaper: failed to open desktop settings (Windows error %1)</source>
         <translation>Duvar kağıdı yap: masaüstü ayarları açılamadı (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="61"/>
+        <location filename="../../core.cpp" line="69"/>
         <source>Set wallpaper: failed to write wallpaper style (Windows error %1)</source>
         <translation>Duvar kağıdı yap: duvar kağıdı stili yazılamadı (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="66"/>
+        <location filename="../../core.cpp" line="74"/>
         <source>Set wallpaper: failed to write wallpaper tiling (Windows error %1)</source>
         <translation>Duvar kağıdı yap: duvar kağıdı döşeme ayarı yazılamadı (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="71"/>
+        <location filename="../../core.cpp" line="79"/>
         <source>Set wallpaper: failed to close desktop settings (Windows error %1)</source>
         <translation>Duvar kağıdı yap: masaüstü ayarları kapatılamadı (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="76"/>
+        <location filename="../../core.cpp" line="84"/>
         <source>Set wallpaper: Windows wallpaper update failed (Windows error %1)</source>
         <translation>Duvar kağıdı yap: Windows duvar kağıdı güncellenemedi (Windows hatası %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="84"/>
+        <location filename="../../core.cpp" line="92"/>
         <source>Set wallpaper: unknown error</source>
         <translation>Duvar kağıdı yap: bilinmeyen hata</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="90"/>
+        <location filename="../../core.cpp" line="98"/>
         <source>Could not save file. Recovery files were retained:
 Original backup:
 %1
@@ -1648,290 +1758,288 @@ Ara kopya:
 %2</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="99"/>
+        <location filename="../../core.cpp" line="107"/>
         <source>Could not save file. A staged recovery copy was retained at:
 %1</source>
         <translation>Dosya kaydedilemedi. Kurtarma için ara kopya şurada saklandı:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="106"/>
+        <location filename="../../core.cpp" line="114"/>
         <source>Could not save file. A recovery backup was retained at:
 %1</source>
         <translation>Dosya kaydedilemedi. Kurtarma yedeği şurada saklandı:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="114"/>
+        <location filename="../../core.cpp" line="122"/>
         <source>Could not save file: the image is invalid</source>
         <translation>Dosya kaydedilemedi: resim geçersiz</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="117"/>
+        <location filename="../../core.cpp" line="125"/>
         <source>Could not save file: the destination path is invalid</source>
         <translation>Dosya kaydedilemedi: hedef yolu geçersiz</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="120"/>
+        <location filename="../../core.cpp" line="128"/>
         <source>Could not save file: the source is unavailable</source>
         <translation>Dosya kaydedilemedi: kaynak kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="123"/>
+        <location filename="../../core.cpp" line="131"/>
         <source>Could not save file: a temporary file could not be created</source>
         <translation>Dosya kaydedilemedi: geçici dosya oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="126"/>
+        <location filename="../../core.cpp" line="134"/>
         <source>Could not save file: the image could not be encoded</source>
         <translation>Dosya kaydedilemedi: resim kodlanamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="129"/>
+        <location filename="../../core.cpp" line="137"/>
         <source>Could not save file: the temporary file could not be written</source>
         <translation>Dosya kaydedilemedi: geçici dosya yazılamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="132"/>
+        <location filename="../../core.cpp" line="140"/>
         <source>Could not save file: the file copy failed</source>
         <translation>Dosya kaydedilemedi: dosya kopyalanamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="152"/>
+        <location filename="../../core.cpp" line="160"/>
         <source>File saved, but a backup could not be removed:
 %1</source>
         <translation>Dosya kaydedildi ancak bir yedek kaldırılamadı:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="160"/>
+        <location filename="../../core.cpp" line="168"/>
         <source>Could not prepare image transfer: the image is unavailable</source>
         <translation>Resim aktarımı hazırlanamadı: resim kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="163"/>
+        <location filename="../../core.cpp" line="171"/>
         <source>Could not prepare image transfer: the source path is unavailable</source>
         <translation>Resim aktarımı hazırlanamadı: kaynak yolu kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="167"/>
+        <location filename="../../core.cpp" line="175"/>
         <source>Could not prepare image transfer: temporary storage is unavailable</source>
         <translation>Resim aktarımı hazırlanamadı: geçici depolama kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="171"/>
+        <location filename="../../core.cpp" line="179"/>
         <source>Could not prepare image transfer: the temporary directory could not be created</source>
         <translation>Resim aktarımı hazırlanamadı: geçici klasör oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="176"/>
+        <location filename="../../core.cpp" line="184"/>
         <source>Could not prepare image transfer: the temporary file could not be created</source>
         <translation>Resim aktarımı hazırlanamadı: geçici dosya oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="181"/>
+        <location filename="../../core.cpp" line="189"/>
         <source>Could not prepare image transfer: the image could not be encoded</source>
         <translation>Resim aktarımı hazırlanamadı: resim kodlanamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="184"/>
+        <location filename="../../core.cpp" line="192"/>
         <source>Could not prepare image transfer: the temporary file could not be written</source>
         <translation>Resim aktarımı hazırlanamadı: geçici dosya yazılamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="192"/>
+        <location filename="../../core.cpp" line="200"/>
         <source>Could not prepare image transfer</source>
         <translation>Resim aktarımı hazırlanamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="270"/>
+        <location filename="../../core.cpp" line="279"/>
         <source>Failed to clean up temporary image-transfer data: %1</source>
         <translation>Geçici resim aktarım verileri temizlenemedi: %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="298"/>
+        <location filename="../../core.cpp" line="307"/>
         <source>Set wallpaper: failed to clean up wallpaper file: %1</source>
         <translation>Duvar kağıdı yap: duvar kağıdı dosyası temizlenemedi: %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="637"/>
-        <location filename="../../core.cpp" line="1524"/>
+        <location filename="../../core.cpp" line="426"/>
+        <location filename="../../core.cpp" line="1431"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>Küçük resim önbelleği temizlenemedi</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1044"/>
+        <location filename="../../core.cpp" line="1025"/>
         <source>Delete folder permanently?</source>
         <translation>Klasörü kalıcı olarak sil?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1046"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Delete file permanently?</source>
         <translation>Dosyayı kalıcı olarak sil?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1066"/>
+        <location filename="../../core.cpp" line="1049"/>
         <source>Folder removed</source>
         <translation>Klasör kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1075"/>
-        <location filename="../../core.cpp" line="1144"/>
+        <location filename="../../core.cpp" line="1060"/>
         <source> folders</source>
         <translation> klasör</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1081"/>
-        <location filename="../../core.cpp" line="1150"/>
+        <location filename="../../core.cpp" line="1064"/>
         <source> items</source>
         <translation> öğe</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1105"/>
+        <location filename="../../core.cpp" line="1014"/>
         <source> folders to trash?</source>
         <translation> klasörü çöp kutusuna taşı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1107"/>
+        <location filename="../../core.cpp" line="1017"/>
         <source> files to trash?</source>
         <translation> dosyayı çöp kutusuna taşı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1113"/>
+        <location filename="../../core.cpp" line="1024"/>
         <source>Move folder to trash?</source>
         <translation>Klasörü çöp kutusuna taşı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1115"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source>Move file to trash?</source>
         <translation>Dosyayı çöp kutusuna taşı?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1506"/>
+        <location filename="../../core.cpp" line="1413"/>
         <source>Moving: %1 (%2)</source>
         <translation>Taşınıyor: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1507"/>
+        <location filename="../../core.cpp" line="1414"/>
         <source>Copying: %1 (%2)</source>
         <translation>Kopyalanıyor: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1516"/>
+        <location filename="../../core.cpp" line="1423"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>%n dosya taşındı</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1517"/>
+        <location filename="../../core.cpp" line="1424"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>%n dosya kopyalandı</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1765"/>
-        <location filename="../../core.cpp" line="1893"/>
+        <location filename="../../core.cpp" line="1672"/>
+        <location filename="../../core.cpp" line="1800"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1 başarısız: resim düzenlenemedi.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1842"/>
-        <location filename="../../core.cpp" line="1867"/>
+        <location filename="../../core.cpp" line="1749"/>
+        <location filename="../../core.cpp" line="1774"/>
         <source>AI resize is already running.</source>
         <translation>Yapay Zekâ boyutlandırma zaten çalışıyor.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1851"/>
+        <location filename="../../core.cpp" line="1758"/>
         <source>AI resize supports one image at a time.</source>
         <translation>Yapay Zekâ boyutlandırma aynı anda yalnızca bir resmi destekler.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1873"/>
-        <location filename="../../core.cpp" line="1879"/>
+        <location filename="../../core.cpp" line="1780"/>
+        <location filename="../../core.cpp" line="1786"/>
         <source>Could not resize image.</source>
         <translation>Resim boyutlandırılamadı.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1914"/>
+        <location filename="../../core.cpp" line="1821"/>
         <source>AI resizing...</source>
         <translation>Yapay Zekâ ile boyutlandırılıyor...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1945"/>
+        <location filename="../../core.cpp" line="1852"/>
         <source>AI resize failed.</source>
         <translation>Yapay Zekâ ile boyutlandırma başarısız.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1950"/>
+        <location filename="../../core.cpp" line="1857"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Yapay Zekâ boyutlandırma bitti ancak resim artık listede değil.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1968"/>
+        <location filename="../../core.cpp" line="1875"/>
         <source>AI resize finished.</source>
         <translation>Yapay Zekâ boyutlandırma bitti.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1970"/>
+        <location filename="../../core.cpp" line="1877"/>
         <source>AI resize finished for %1.</source>
         <translation>%1 için Yapay Zekâ boyutlandırma bitti.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2016"/>
+        <location filename="../../core.cpp" line="1923"/>
         <source>Could not adjust the image colors.</source>
         <translation>Resim renkleri ayarlanamadı.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2181"/>
+        <location filename="../../core.cpp" line="2088"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>Duvar kağıdı ayarla: resim alınamadı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="286"/>
+        <location filename="../../core.cpp" line="295"/>
         <source>Wallpaper set</source>
         <translation>Duvar kağıdı ayarlandı</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2292"/>
+        <location filename="../../core.cpp" line="2199"/>
         <source>Could not open path: </source>
         <translation>Dosya yolu açılamadı: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2357"/>
+        <location filename="../../core.cpp" line="2266"/>
         <source>Could not load folder: </source>
         <translation>Klasör yüklenemedi: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2416"/>
-        <location filename="../../core.cpp" line="2442"/>
+        <location filename="../../core.cpp" line="2325"/>
+        <location filename="../../core.cpp" line="2351"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>Komşu klasörler listelenemedi: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2581"/>
+        <location filename="../../core.cpp" line="2480"/>
         <source>End of directory.</source>
         <translation>Dizin sonu.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2615"/>
+        <location filename="../../core.cpp" line="2514"/>
         <source>Load failed: </source>
         <translation>Yükleme başarısız: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2693"/>
-        <location filename="../../core.cpp" line="2700"/>
+        <location filename="../../core.cpp" line="2592"/>
+        <location filename="../../core.cpp" line="2599"/>
         <source>Error: could not load image.</source>
         <translation>Hata: Görüntü yüklenemedi.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2717"/>
+        <location filename="../../core.cpp" line="2616"/>
         <source>HDR Profile</source>
         <translation>HDR profili</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2723"/>
+        <location filename="../../core.cpp" line="2622"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
@@ -2042,20 +2150,20 @@ Ara kopya:
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="625"/>
+        <location filename="../../components/directorypresenter.cpp" line="619"/>
         <source>Directory expansion failed: %1</source>
         <translation>Klasör genişletilemedi: %1</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="669"/>
+        <location filename="../../components/directorypresenter.cpp" line="663"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation>Seçim %1 adetten fazla desteklenen dosya içerdiği için klasör genişletme durduruldu. Seçimi daraltıp yeniden deneyin.</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="894"/>
-        <location filename="../../components/directorypresenter.cpp" line="961"/>
-        <location filename="../../components/directorypresenter.cpp" line="1015"/>
-        <location filename="../../components/directorypresenter.cpp" line="1046"/>
+        <location filename="../../components/directorypresenter.cpp" line="831"/>
+        <location filename="../../components/directorypresenter.cpp" line="898"/>
+        <location filename="../../components/directorypresenter.cpp" line="952"/>
+        <location filename="../../components/directorypresenter.cpp" line="983"/>
         <source>Folder</source>
         <translation>Klasör</translation>
     </message>
@@ -2155,37 +2263,37 @@ Ara kopya:
 <context>
     <name>FolderGridView</name>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="271"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="276"/>
         <source>Rename</source>
         <translation>Yeniden adlandır</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="246"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="251"/>
         <source>Open only selected</source>
         <translation>Yalnızca seçilenleri aç</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="252"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="257"/>
         <source>Add to Batch Converter</source>
         <translation>Toplu Dönüştürücüye Ekle</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="258"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="263"/>
         <source>Add folder</source>
         <translation>Klasör ekle</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="264"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="269"/>
         <source>Show in folder</source>
         <translation>Klasörde göster</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="278"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="283"/>
         <source>Move to trash</source>
         <translation>Çöp kutusuna taşı</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="286"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="291"/>
         <source>Delete permanently</source>
         <translation>Kalıcı olarak sil</translation>
     </message>
@@ -2263,22 +2371,22 @@ Ara kopya:
         <translation>İsim filtresi</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="320"/>
-        <source>Filter images by name</source>
-        <translation>Resimleri ada göre filtrele</translation>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="335"/>
+        <source>Filter folders and images by name</source>
+        <translation>Klasörleri ve resimleri ada göre filtrele</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="328"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="343"/>
         <source>Viewer</source>
         <translation>Görüntüleyici</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="336"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="351"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="344"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="359"/>
         <source>Quit Wynpix</source>
         <translation>Wynpix&apos;tan çık</translation>
     </message>
@@ -2380,22 +2488,22 @@ Ara kopya:
 <context>
     <name>ImageViewportController</name>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="339"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="337"/>
         <source>Display error: %1</source>
         <translation>Görüntüleme hatası: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="345"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="343"/>
         <source>The graphics device was lost. The view is drawn again on a new device.</source>
         <translation>Grafik aygıtı kaybedildi. Görünüm yeni bir aygıtta yeniden çiziliyor.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="458"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="456"/>
         <source>Cannot open the animation %1: %2</source>
         <translation>%1 animasyonu açılamıyor: %2</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="461"/>
+        <location filename="../../gui/quick/ui/imageviewportcontroller.cpp" line="459"/>
         <source>Cannot decode frame %1 of the animation %2: %3</source>
         <translation>%2 animasyonunun %1. karesi çözülemiyor: %3</translation>
     </message>
@@ -3059,22 +3167,22 @@ Ara kopya:
 <context>
     <name>SaveConfirmOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="26"/>
+        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="24"/>
         <source>Unsaved edits</source>
         <translation>Kaydedilmemiş değişiklikler</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="49"/>
+        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="47"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="54"/>
+        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="52"/>
         <source>Save as</source>
         <translation>Farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="61"/>
+        <location filename="../../gui/quick/ui/SaveConfirmOverlay.qml" line="59"/>
         <source>Discard</source>
         <translation>Vazgeç</translation>
     </message>
@@ -3158,7 +3266,7 @@ Ara kopya:
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="38"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="37"/>
         <source>Use custom accent</source>
         <translation>Özel vurgu rengi kullan</translation>
     </message>
@@ -3174,7 +3282,7 @@ Ara kopya:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="30"/>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="108"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="104"/>
         <source>Requires application restart</source>
         <translation>Uygulamanın yeniden başlatılması gerekir</translation>
     </message>
@@ -3489,12 +3597,12 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
 </translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="80"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="76"/>
         <source>Thumbnail bar opacity:</source>
         <translation>Küçük resim çubuğu saydamlığı:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="89"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="85"/>
         <source>Use black for background and thumbnail bar</source>
         <translation>Arka plan ve küçük resim çubuğu için siyah kullan</translation>
     </message>
@@ -3664,7 +3772,7 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
         <translation>Bilinear</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="19"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="18"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
@@ -3679,12 +3787,12 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="67"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="63"/>
         <source>Other window tweaks</source>
         <translation>Diğer pencere ayarlamaları</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="70"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="66"/>
         <source>Window opacity:</source>
         <translation>Pencere saydamlığı:</translation>
     </message>
@@ -3694,28 +3802,33 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
         <translation>Kontroller</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="31"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="34"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="35"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="38"/>
         <source>Edit</source>
         <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="106"/>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="40"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="59"/>
+        <source>No scripts yet</source>
+        <translation>Henüz komut dosyası yok</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="109"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="43"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="117"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="120"/>
         <source>Search actions or shortcuts</source>
         <translation>Eylem veya kısayol ara</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="124"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="127"/>
         <source>Reset to defaults</source>
         <translation>Varsayılan ayarlara sıfırla</translation>
     </message>
@@ -3775,23 +3888,63 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
         <translation>Fare kaydırma ile ilgili sorun yaşıyorsanız devre dışı bırakın.</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="20"/>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="18"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="23"/>
+        <source>Left click</source>
+        <translation>Sol tık</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="24"/>
+        <source>Right click</source>
+        <translation>Sağ tık</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="25"/>
+        <source>Middle click</source>
+        <translation>Orta tık</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="26"/>
+        <source>Mouse Back</source>
+        <translation>Fare: geri</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="27"/>
+        <source>Mouse Forward</source>
+        <translation>Fare: ileri</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="28"/>
+        <source>Double click</source>
+        <translation>Çift tık</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="29"/>
+        <source>Wheel up</source>
+        <translation>Tekerlek yukarı</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="30"/>
+        <source>Wheel down</source>
+        <translation>Tekerlek aşağı</translation>
+    </message>
+    <message>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="38"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="21"/>
         <source>Scripts</source>
         <translation>Komut dosyaları</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="27"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="45"/>
         <source>Other</source>
         <translation>Diğer</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="22"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="25"/>
         <source>Note: these will appear in &quot;Open with&quot; menu.</source>
         <translation>Not: bunlar &quot;Birlikte Aç&quot; menüsünde görünecektir.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="25"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="28"/>
         <source>Also, you can assign shortcuts to scripts (in &quot;Controls&quot; section).</source>
         <translation>Ayrıca, betiklere kısayollar atayabilirsiniz (&quot;Kontroller&quot; bölümünde).</translation>
     </message>
@@ -3905,7 +4058,7 @@ Example: %1</source>
         <translation>Tercihler — </translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="26"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="25"/>
         <source>Theme mode:</source>
         <translation>Tema modu:</translation>
     </message>
@@ -3915,7 +4068,7 @@ Example: %1</source>
         <translation>Sistem Varsayılanı (Otomatik)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="100"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="96"/>
         <source>Text rendering:</source>
         <translation>Metin oluşturma:</translation>
     </message>
@@ -3935,9 +4088,9 @@ Example: %1</source>
         <translation>Eğri</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="46"/>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="48"/>
-        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="116"/>
+        <location filename="../../gui/quick/ui/AccentColorDialog.qml" line="31"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="45"/>
+        <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="47"/>
         <source>Accent color</source>
         <translation>Vurgu rengi</translation>
     </message>
@@ -4152,7 +4305,7 @@ Example: %1</source>
         <translation>Yolları önbelleğe almaktan hariç tut (noktalı virgül &apos;;&apos; ile ayırın):</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="18"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="36"/>
         <source>Script: %1</source>
         <translation>Betik: %1</translation>
     </message>
@@ -4287,32 +4440,32 @@ Example: %1</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../../main.cpp" line="122"/>
+        <location filename="../../main.cpp" line="106"/>
         <source>File or directory path.</source>
         <translation>Dosya veya dizin yolu.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="125"/>
+        <location filename="../../main.cpp" line="109"/>
         <source>Generate all thumbnails for directory.</source>
         <translation>Dizindeki tüm küçük resimleri oluştur.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="127"/>
+        <location filename="../../main.cpp" line="111"/>
         <source>directory-path</source>
         <translation>dizin-yolu</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="129"/>
+        <location filename="../../main.cpp" line="113"/>
         <source>Thumbnail size. Current size is used if not specified.</source>
         <translation>Küçük resim boyutu. Belirtilmediği takdirde şu anki boyut kullanılır.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="131"/>
+        <location filename="../../main.cpp" line="115"/>
         <source>thumbnail-size</source>
         <translation>küçük resim-boyutu</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="133"/>
+        <location filename="../../main.cpp" line="117"/>
         <source>Show build options.</source>
         <translation>Derleme seçeneklerini göster.</translation>
     </message>
