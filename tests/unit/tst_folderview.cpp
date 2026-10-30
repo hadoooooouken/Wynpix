@@ -147,25 +147,25 @@ private slots:
     QCOMPARE(activated.count(), 1);
   }
 
-  void arrowsMoveInTheGrid() {
+  void selectionMovesFollowTheGrid() {
     GridFixture fixture;
     fixture.model.select(0);
-    fixture.key(Qt::Key_Left);
+    fixture.grid.selectPrevious();
     QCOMPARE(fixture.model.currentIndex(), 0);
-    fixture.key(Qt::Key_Right);
+    fixture.grid.selectNext();
     QCOMPARE(fixture.model.currentIndex(), 1);
-    fixture.key(Qt::Key_Down);
+    fixture.grid.selectBelow();
     QCOMPARE(fixture.model.currentIndex(), 5);
-    fixture.key(Qt::Key_Down);
+    fixture.grid.selectBelow();
     QCOMPARE(fixture.model.currentIndex(), 9);
-    // The last row: Down stays.
-    fixture.key(Qt::Key_Down);
+    // The last row: down stays.
+    fixture.grid.selectBelow();
     QCOMPARE(fixture.model.currentIndex(), 9);
-    fixture.key(Qt::Key_Up);
+    fixture.grid.selectAbove();
     QCOMPARE(fixture.model.currentIndex(), 5);
-    fixture.key(Qt::Key_Home);
+    fixture.grid.selectFirst();
     QCOMPARE(fixture.model.currentIndex(), 0);
-    fixture.key(Qt::Key_End);
+    fixture.grid.selectLast();
     QCOMPARE(fixture.model.currentIndex(), 9);
   }
 
@@ -173,71 +173,68 @@ private slots:
     GridFixture fixture;
     // Item 6 is in column 2; below it the short last row ends at 9 (column 1).
     fixture.model.select(6);
-    fixture.key(Qt::Key_Down);
+    fixture.grid.selectBelow();
     QCOMPARE(fixture.model.currentIndex(), 9);
-    fixture.key(Qt::Key_Up);
+    fixture.grid.selectAbove();
     QCOMPARE(fixture.model.currentIndex(), 6);
   }
 
-  void pageKeysMoveFourRows() {
+  void pagesMoveFourRows() {
     GridFixture fixture(40);
     fixture.model.select(1);
-    fixture.key(Qt::Key_PageDown);
+    fixture.grid.pageDown();
     QCOMPARE(fixture.model.currentIndex(), 1 + 4 * 4);
-    fixture.key(Qt::Key_PageUp);
+    fixture.grid.pageUp();
     QCOMPARE(fixture.model.currentIndex(), 1);
   }
 
   void shiftExtendsTheSelection() {
     GridFixture fixture;
     fixture.model.select(1);
-    fixture.key(Qt::Key_Shift, Qt::ShiftModifier);
-    fixture.key(Qt::Key_Right, Qt::ShiftModifier);
-    fixture.key(Qt::Key_Right, Qt::ShiftModifier);
+    QVERIFY(fixture.key(Qt::Key_Shift, Qt::ShiftModifier));
+    fixture.grid.selectNext();
+    fixture.grid.selectNext();
     QCOMPARE(fixture.model.selection(), (QList<int>{1, 2, 3}));
-    fixture.key(Qt::Key_Down, Qt::ShiftModifier);
+    fixture.grid.selectBelow();
     QCOMPARE(fixture.model.selection(), (QList<int>{1, 2, 3, 4, 5, 6, 7}));
     // Shift-click extends from the same anchor.
     fixture.grid.press(0, Qt::LeftButton, Qt::ShiftModifier, fixture.centreOf(0));
     QCOMPARE(fixture.model.selection(), (QList<int>{1, 0}));
     fixture.grid.keyReleased(Qt::Key_Shift);
-    fixture.key(Qt::Key_Right);
+    fixture.grid.selectNext();
     QCOMPARE(fixture.model.selection(), QList<int>{1});
   }
 
-  void controlAKeepsTheCurrentItem() {
+  void selectAllKeepsTheCurrentItem() {
     GridFixture fixture;
     fixture.model.select(3);
-    QVERIFY(fixture.key(Qt::Key_A, Qt::ControlModifier));
+    fixture.grid.selectAll();
     QCOMPARE(fixture.model.selection().count(), kItemCount);
     QCOMPARE(fixture.model.currentIndex(), 3);
-    // Other Ctrl shortcuts are left to the actions.
-    QVERIFY(!fixture.key(Qt::Key_R, Qt::ControlModifier));
-    QVERIFY(!fixture.key(Qt::Key_A, Qt::ControlModifier | Qt::ShiftModifier));
   }
 
-  void keysActivateAndGoUp() {
+  void activatingOpensTheCurrentItem() {
     GridFixture fixture;
     fixture.model.select(2);
     QSignalSpy activated(&fixture.model, &ThumbnailListModel::activated);
-    QSignalSpy actions(&fixture.grid, &FolderGridController::actionRequested);
-    QVERIFY(fixture.key(Qt::Key_Return));
+    fixture.grid.activateCurrent();
     QCOMPARE(activated.count(), 1);
     QCOMPARE(activated.first().at(0).toInt(), 2);
-    QVERIFY(fixture.key(Qt::Key_Backspace));
-    QCOMPARE(actions.count(), 1);
-    QCOMPARE(actions.first().at(0).toString(), u"goUp"_s);
   }
 
-  // Letters, with or without Shift, are left to the action shortcuts.
-  void lettersGoToTheActions() {
+  // Every key but Shift is left to the action shortcuts, which move the
+  // selection.
+  void keysGoToTheActions() {
     GridFixture fixture;
     fixture.model.select(2);
-    QVERIFY(!fixture.key(Qt::Key_B));
+    for (const int key : {Qt::Key_Right, Qt::Key_Return, Qt::Key_Backspace, Qt::Key_Home,
+                          Qt::Key_PageDown, Qt::Key_B, Qt::Key_F5})
+      QVERIFY(!fixture.key(key));
+    QVERIFY(!fixture.key(Qt::Key_A, Qt::ControlModifier));
     QVERIFY(!fixture.key(Qt::Key_B, Qt::ShiftModifier));
     QVERIFY(!fixture.key(Qt::Key_B, Qt::AltModifier));
-    QVERIFY(!fixture.key(Qt::Key_F5));
     QCOMPARE(fixture.model.selection(), QList<int>{2});
+    QCOMPARE(fixture.model.currentIndex(), 2);
   }
 
   void rubberBandSelectsTouchedCells() {

@@ -120,13 +120,17 @@ Item {
             compare(Fixture.lastFolderRequest, "drop:4:" + copyAction);
         }
 
-        function test_keysMoveAndLettersDoNot() {
+        // The grid's keys are action shortcuts: the grid does not move on
+        // its own.
+        function test_keysGoToTheActions() {
             const point = centreOf(2);
             mouseClick(root, point.x, point.y);
+            Fixture.clearInputLog();
             keyClick(Qt.Key_Right);
-            compare(Fixture.folderView.grid.model.currentIndex, 3);
+            compare(Fixture.lastKey, Qt.Key_Right);
+            compare(Fixture.folderView.grid.model.currentIndex, 2);
             keyClick(Qt.Key_X);
-            compare(Fixture.folderView.grid.model.currentIndex, 3);
+            compare(Fixture.lastKey, Qt.Key_X);
             compare(Fixture.lastFolderRequest, "");
         }
 
@@ -141,7 +145,7 @@ Item {
             // Scrolling to the end requests the last rows.
             const point = centreOf(0);
             mouseClick(root, point.x, point.y);
-            keyClick(Qt.Key_End);
+            Fixture.selectLastFolderItem();
             tryVerify(() => cellOf(largeDirectory - 1) !== null, createTimeout);
             verify(grid().contentItem.children.length < delegateLimit);
         }
@@ -186,8 +190,10 @@ Item {
                 keyClick(key);
                 verify(!field.activeFocus, "the field kept the focus on key " + key);
                 compare(field.text, "ab");
+                // The next key goes to the actions, not to the field.
+                Fixture.clearInputLog();
                 keyClick(Qt.Key_Right);
-                compare(Fixture.folderView.grid.model.currentIndex, 3);
+                compare(Fixture.lastKey, Qt.Key_Right);
             }
             Fixture.folderView.editNameFilter("");
         }
@@ -206,8 +212,9 @@ Item {
             verify(field.contentItem.activeFocus);
             keyClick(Qt.Key_Escape);
             verify(!field.activeFocus);
+            Fixture.clearInputLog();
             keyClick(Qt.Key_Right);
-            compare(Fixture.folderView.grid.model.currentIndex, 3);
+            compare(Fixture.lastKey, Qt.Key_Right);
             // The cleared filter is published late; it stays out of the next
             // test.
             tryCompare(Fixture, "lastFolderRequest", "nameFilter:", nameFilterTimeout);

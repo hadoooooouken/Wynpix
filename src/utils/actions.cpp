@@ -64,8 +64,18 @@ bool Actions::worksIn(ActionCategory category, bool folderView) {
                                                 : ActionCategory::Viewer);
 }
 
+bool Actions::extendsWithShift(const QString &action) const {
+  return mEntries.value(action).extendsWithShift;
+}
+
 void Actions::add(const QString &action, const char *title, ActionCategory category) {
   mEntries.insert(action, {.title = title, .category = category});
+}
+
+void Actions::addSelectionMove(const QString &action, const char *title) {
+  mEntries.insert(action, {.title = title,
+                           .category = ActionCategory::FolderView,
+                           .extendsWithShift = true});
 }
 
 void Actions::init() {
@@ -143,4 +153,14 @@ void Actions::init() {
   add(u"cycleUpscaylModel"_s, QT_TRANSLATE_NOOP("Actions", "Next AI upscale model"), ActionCategory::Viewer);
   add(u"toggleHdrToneMapping"_s, QT_TRANSLATE_NOOP("Actions", "Toggle HDR tone mapping"), ActionCategory::Viewer);
   add(u"focusNameFilter"_s, QT_TRANSLATE_NOOP("Actions", "Name filter"), ActionCategory::FolderView);
+  add(u"folderOpenSelected"_s, QT_TRANSLATE_NOOP("Actions", "Open selected"), ActionCategory::FolderView);
+  add(u"folderSelectAll"_s, QT_TRANSLATE_NOOP("Actions", "Select all"), ActionCategory::FolderView);
+  addSelectionMove(u"folderMoveLeft"_s, QT_TRANSLATE_NOOP("Actions", "Move selection left"));
+  addSelectionMove(u"folderMoveRight"_s, QT_TRANSLATE_NOOP("Actions", "Move selection right"));
+  addSelectionMove(u"folderMoveUp"_s, QT_TRANSLATE_NOOP("Actions", "Move selection up"));
+  addSelectionMove(u"folderMoveDown"_s, QT_TRANSLATE_NOOP("Actions", "Move selection down"));
+  addSelectionMove(u"folderPageUp"_s, QT_TRANSLATE_NOOP("Actions", "Move selection a page up"));
+  addSelectionMove(u"folderPageDown"_s, QT_TRANSLATE_NOOP("Actions", "Move selection a page down"));
+  addSelectionMove(u"folderFirstItem"_s, QT_TRANSLATE_NOOP("Actions", "First item"));
+  addSelectionMove(u"folderLastItem"_s, QT_TRANSLATE_NOOP("Actions", "Last item"));
 }

@@ -295,54 +295,11 @@ bool FolderGridController::keyPressed(int key, int modifiers) {
     }
     if ((keyboardModifiers & Qt::ShiftModifier) && !mModel.rangeSelectionActive())
         mModel.beginRangeSelection();
-
-    if (key == Qt::Key_Enter || key == Qt::Key_Return) {
-        mModel.activate(current());
-        return true;
-    }
-    if (key == Qt::Key_Backspace) {
-        emit actionRequested(QStringLiteral("goUp"));
-        return true;
-    }
-    if (keyboardModifiers & Qt::ControlModifier) {
-        const Qt::KeyboardModifiers otherModifiers =
-            keyboardModifiers & ~(Qt::ControlModifier | Qt::KeypadModifier);
-        if (key == Qt::Key_A && otherModifiers == Qt::NoModifier) {
-            selectAll();
-            return true;
-        }
-        return false;
-    }
-
-    switch (key) {
-    case Qt::Key_Left:
-        selectPrevious();
-        return true;
-    case Qt::Key_Right:
-        selectNext();
-        return true;
-    case Qt::Key_Up:
-        selectAbove();
-        return true;
-    case Qt::Key_Down:
-        selectBelow();
-        return true;
-    case Qt::Key_PageUp:
-        pageUp();
-        return true;
-    case Qt::Key_PageDown:
-        pageDown();
-        return true;
-    case Qt::Key_Home:
-        selectFirst();
-        return true;
-    case Qt::Key_End:
-        selectLast();
-        return true;
-    default:
-        break;
-    }
     return false;
+}
+
+void FolderGridController::activateCurrent() {
+    mModel.activate(current());
 }
 
 void FolderGridController::keyReleased(int key) {

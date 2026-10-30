@@ -229,6 +229,8 @@ public:
   Q_INVOKABLE void clearFolderRequest();
   // The "focusNameFilter" action.
   Q_INVOKABLE void focusNameFilter();
+  // The "folderLastItem" action.
+  Q_INVOKABLE void selectLastFolderItem();
 
   // Dialog requests as QuickDialogPort starts them (without waiting).
   Q_INVOKABLE bool requestConfirmation(const QString &title, const QString &message);

@@ -23,10 +23,9 @@
 //   rules), the rubber band over the background (Ctrl toggles against the
 //   selection held at its start), the context menu on a right click that
 //   was no scroll gesture, Ctrl + wheel zoom;
-// - keyboard: arrows (Up / Down keep the column a short last row moved
-//   away from), Page Up / Down by four rows, Home / End, Shift ranges,
-//   Ctrl+A, Enter activates, Backspace goes up; everything else is left to
-//   the action shortcuts;
+// - keyboard: Shift anchors a range; the keys themselves are action
+//   shortcuts, which call the selection moves below (Up / Down keep the
+//   column a short last row moved away from, Page Up / Down move four rows);
 // - icon size: 128 - 512, the zoom slider on a log2 scale, reset to default
 //   (256) on double-click, stored when the slider is released;
 // - drops: copy and move onto items or the background;
@@ -97,7 +96,7 @@ public:
     Q_INVOKABLE void doubleClick(int index, int button);
     Q_INVOKABLE void wheel(QPoint angleDelta, QPoint pixelDelta, int modifiers);
     // A key press (Qt::Key, Qt::KeyboardModifiers); returns false when the
-    // action shortcuts should handle it.
+    // action shortcuts should handle it (every key but Shift).
     Q_INVOKABLE bool keyPressed(int key, int modifiers);
     Q_INVOKABLE void keyReleased(int key);
     // The grid lost the keyboard focus or was hidden.
@@ -117,6 +116,17 @@ public:
 
     // Selects every item; the current item stays current.
     void selectAll();
+    // The folder view actions: activate the current item, move the selection
+    // (extended from the range anchor while Shift is held).
+    void activateCurrent();
+    void selectAbove();
+    void selectBelow();
+    void selectNext();
+    void selectPrevious();
+    void pageUp();
+    void pageDown();
+    void selectFirst();
+    void selectLast();
 
 signals:
     void layoutChanged();
@@ -126,8 +136,6 @@ signals:
     void batchListPendingChanged();
     // The icon size changed by the user; to be stored.
     void iconSizeCommitted(int size);
-    // An application action to run ("goUp").
-    void actionRequested(const QString &name);
     // A right click that was no gesture, at position (view coordinates).
     void contextMenuRequested(QPointF position);
     void draggedOver(int index);
@@ -145,14 +153,6 @@ private:
     [[nodiscard]] bool sameRow(int one, int two) const;
 
     void selectOrExtend(int index);
-    void selectAbove();
-    void selectBelow();
-    void selectNext();
-    void selectPrevious();
-    void pageUp();
-    void pageDown();
-    void selectFirst();
-    void selectLast();
 
     void updateRubberBand(QPointF position, Qt::KeyboardModifiers modifiers);
     void endRubberBand();

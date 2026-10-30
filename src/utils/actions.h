@@ -29,16 +29,22 @@ public:
     // Whether an action of category works in the folder view (folderView) or
     // in the viewer.
     static bool worksIn(ActionCategory category, bool folderView);
+    // Whether action moves the folder view selection, so that its shortcut
+    // with Shift added extends the selection instead.
+    bool extendsWithShift(const QString &action) const;
 
 private:
     struct Entry {
         // Untranslated title (context "Actions").
         const char *title = nullptr;
         ActionCategory category = ActionCategory::Common;
+        bool extendsWithShift = false;
     };
 
     void init();
     void add(const QString &action, const char *title, ActionCategory category);
+    // A folder view action that moves the selection.
+    void addSelectionMove(const QString &action, const char *title);
     // Every action with its title and category.
     QHash<QString, Entry> mEntries;
 

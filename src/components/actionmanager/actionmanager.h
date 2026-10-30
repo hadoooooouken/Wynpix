@@ -24,12 +24,16 @@ using ShortcutMap = QMultiMap<QString, QString>;
 class ActionManager : public QObject {
     Q_OBJECT
 public:
-    static constexpr int kCurrentShortcutsVersion = 2;
+    static constexpr int kCurrentShortcutsVersion = 3;
     // Adds to shortcuts the defaults of the actions without a shortcut whose
     // shortcut has no action of a common mode yet; true when one was added.
     static bool mergeMissingDefaults(const ShortcutMap &defaults, ShortcutMap &shortcuts);
+    // Removes from shortcuts stored before version the defaults that later
+    // versions dropped; true when one was removed.
+    static bool removeRetiredDefaults(int version, ShortcutMap &shortcuts);
     // The action that shortcut runs in the folder view (folderView) or in the
-    // viewer; empty for none.
+    // viewer; empty for none. In the folder view a shortcut with Shift runs
+    // the selection move of the shortcut without it (Actions::extendsWithShift()).
     static QString actionFor(const ShortcutMap &shortcuts, const QString &shortcut,
                              bool folderView);
 
@@ -147,6 +151,16 @@ signals:
     void cycleUpscaylModel();
     void toggleHdrToneMapping();
     void focusNameFilter();
+    void folderOpenSelected();
+    void folderSelectAll();
+    void folderMoveLeft();
+    void folderMoveRight();
+    void folderMoveUp();
+    void folderMoveDown();
+    void folderPageUp();
+    void folderPageDown();
+    void folderFirstItem();
+    void folderLastItem();
 };
 
 extern ActionManager *actionManager;

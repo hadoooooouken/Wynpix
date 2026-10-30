@@ -100,8 +100,27 @@ void QuickFolderViewActions::forwardGridRequests() {
                 mimeData.setUrls(urls);
                 emit view->droppedInto(&mimeData, source, index, action);
             });
-    connect(&grid, &FolderGridController::actionRequested, this,
-            [this](const QString &name) { actions.invokeAction(name); });
+    FolderGridController *gridController = &grid;
+    connect(&actions, &ActionManager::folderOpenSelected, gridController,
+            &FolderGridController::activateCurrent);
+    connect(&actions, &ActionManager::folderSelectAll, gridController,
+            &FolderGridController::selectAll);
+    connect(&actions, &ActionManager::folderMoveLeft, gridController,
+            &FolderGridController::selectPrevious);
+    connect(&actions, &ActionManager::folderMoveRight, gridController,
+            &FolderGridController::selectNext);
+    connect(&actions, &ActionManager::folderMoveUp, gridController,
+            &FolderGridController::selectAbove);
+    connect(&actions, &ActionManager::folderMoveDown, gridController,
+            &FolderGridController::selectBelow);
+    connect(&actions, &ActionManager::folderPageUp, gridController,
+            &FolderGridController::pageUp);
+    connect(&actions, &ActionManager::folderPageDown, gridController,
+            &FolderGridController::pageDown);
+    connect(&actions, &ActionManager::folderFirstItem, gridController,
+            &FolderGridController::selectFirst);
+    connect(&actions, &ActionManager::folderLastItem, gridController,
+            &FolderGridController::selectLast);
 }
 
 void QuickFolderViewActions::storeLayout() {

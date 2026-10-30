@@ -21,6 +21,8 @@ private slots:
   void actionManager_mergeMissingDefaults_addsMultipleDefaultsForSameAction();
   void actionManager_mergeMissingDefaults_addsAKeyTakenInTheOtherMode();
   void actionManager_actionFor_picksTheActionOfTheMode();
+  void actionManager_actionFor_extendsASelectionMoveWithShift();
+  void actionManager_removeRetiredDefaults_dropsEnterFullscreen();
 };
 
 void WynpixTests::viewModeController_keepsInitialMode_data() {
@@ -167,6 +169,32 @@ void WynpixTests::actionManager_actionFor_picksTheActionOfTheMode() {
   QCOMPARE(ActionManager::actionFor(shortcuts, "F", false), QString("toggleFullscreen"));
   QCOMPARE(ActionManager::actionFor(shortcuts, "F", true), QString("toggleFullscreen"));
   QVERIFY(ActionManager::actionFor(shortcuts, "Left", false).isEmpty());
+}
+
+void WynpixTests::actionManager_actionFor_extendsASelectionMoveWithShift() {
+  const ShortcutMap shortcuts = {
+      {"Left", "folderMoveLeft"},
+      {"Shift+Left", "prevDirectory"},
+      {"B", "save"}
+  };
+  // In the folder view the viewer's Shift+Left does not run.
+  QCOMPARE(ActionManager::actionFor(shortcuts, "Shift+Left", true), QString("folderMoveLeft"));
+  QCOMPARE(ActionManager::actionFor(shortcuts, "Shift+Left", false), QString("prevDirectory"));
+  QVERIFY(ActionManager::actionFor(shortcuts, "Shift+B", true).isEmpty());
+}
+
+void WynpixTests::actionManager_removeRetiredDefaults_dropsEnterFullscreen() {
+  ShortcutMap shortcuts = {
+      {"Enter", "toggleFullscreen"},
+      {"F", "toggleFullscreen"}
+  };
+  QVERIFY(ActionManager::removeRetiredDefaults(2, shortcuts));
+  QVERIFY(!shortcuts.contains("Enter"));
+  QVERIFY(shortcuts.contains("F", "toggleFullscreen"));
+
+  ShortcutMap current = {{"Enter", "toggleFullscreen"}};
+  QVERIFY(!ActionManager::removeRetiredDefaults(ActionManager::kCurrentShortcutsVersion, current));
+  QVERIFY(current.contains("Enter", "toggleFullscreen"));
 }
 
 int runWynpixTests(int argc, char **argv) {

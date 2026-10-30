@@ -38,6 +38,14 @@ bool ActionManager::mergeMissingDefaults(const ShortcutMap &defaults,
   return changed;
 }
 
+bool ActionManager::removeRetiredDefaults(int version, ShortcutMap &shortcuts) {
+  // Since then Enter opens the selected folder view item, not fullscreen.
+  constexpr int kEnterOpensSelectionVersion = 3;
+  if (version >= kEnterOpensSelectionVersion)
+    return false;
+  return shortcuts.remove("Enter", "toggleFullscreen") > 0;
+}
+
 QString ActionManager::actionFor(const ShortcutMap &shortcuts,
                                  const QString &shortcut, bool folderView) {
   for (auto it = shortcuts.constFind(shortcut);
@@ -45,7 +53,12 @@ QString ActionManager::actionFor(const ShortcutMap &shortcuts,
     if (Actions::worksIn(Actions::getInstance()->category(it.value()), folderView))
       return it.value();
   }
-  return {};
+  const QString shiftPrefix = InputMap::keyNameShift() + "+";
+  if (!folderView || !shortcut.contains(shiftPrefix))
+    return {};
+  const QString action =
+      actionFor(shortcuts, QString(shortcut).remove(shiftPrefix), folderView);
+  return Actions::getInstance()->extendsWithShift(action) ? action : QString();
 }
 
 ActionManager::ActionManager(QObject *parent) : QObject(parent) {}
@@ -73,7 +86,6 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert("WheelDown", "zoomOut");
   actionManager->defaults.insert("WheelUp", "zoomIn");
   actionManager->defaults.insert("F", "toggleFullscreen");
-  actionManager->defaults.insert("Enter", "toggleFullscreen");
   actionManager->defaults.insert("LMB_DoubleClick", "fitNormal");
   actionManager->defaults.insert("MiddleButton", "folderView");
   actionManager->defaults.insert("Backspace", "folderView");
@@ -155,6 +167,18 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+" + InputMap::keyNameShift() + "+I", "cycleUpscaylModel");
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+H", "toggleHdrToneMapping");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+F", "focusNameFilter");
+  // The folder view grid; Shift with a selection move extends the selection.
+  actionManager->defaults.insert("Enter", "folderOpenSelected");
+  actionManager->defaults.insert("Backspace", "goUp");
+  actionManager->defaults.insert(InputMap::keyNameCtrl() + "+A", "folderSelectAll");
+  actionManager->defaults.insert("Left", "folderMoveLeft");
+  actionManager->defaults.insert("Right", "folderMoveRight");
+  actionManager->defaults.insert("Up", "folderMoveUp");
+  actionManager->defaults.insert("Down", "folderMoveDown");
+  actionManager->defaults.insert("PgUp", "folderPageUp");
+  actionManager->defaults.insert("PgDown", "folderPageDown");
+  actionManager->defaults.insert("Home", "folderFirstItem");
+  actionManager->defaults.insert("End", "folderLastItem");
 }
 //------------------------------------------------------------------------------
 void ActionManager::initShortcuts() {
@@ -284,7 +308,8 @@ void ActionManager::readShortcuts() {
     resetDefaults();
     actionManager->saveShortcuts();
   } else if (storedVersion < kCurrentShortcutsVersion) {
-    if (mergeMissingDefaults(defaults, shortcuts)) {
+    const bool removed = removeRetiredDefaults(storedVersion, shortcuts);
+    if (mergeMissingDefaults(defaults, shortcuts) || removed) {
       actionManager->saveShortcuts();
     } else {
       settings->setShortcutsVersion(kCurrentShortcutsVersion);
