@@ -167,8 +167,10 @@ void ActionManager::initDefaults() {
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+" + InputMap::keyNameShift() + "+I", "cycleUpscaylModel");
   actionManager->defaults.insert(InputMap::keyNameAlt() + "+H", "toggleHdrToneMapping");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+F", "focusNameFilter");
-  // The folder view grid; Shift with a selection move extends the selection.
+  // The folder view; Shift with a selection move extends the selection.
   actionManager->defaults.insert("Enter", "folderOpenSelected");
+  actionManager->defaults.insert("XButton1", "folderBack");
+  actionManager->defaults.insert("XButton2", "folderForward");
   actionManager->defaults.insert("Backspace", "goUp");
   actionManager->defaults.insert(InputMap::keyNameCtrl() + "+A", "folderSelectAll");
   actionManager->defaults.insert("Left", "folderMoveLeft");

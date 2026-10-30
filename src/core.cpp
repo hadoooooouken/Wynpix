@@ -739,6 +739,8 @@ void Core::initActions() {
   connect(actionManager, &ActionManager::removeFile, this,
           &Core::removePermanent);
   connect(actionManager, &ActionManager::moveToTrash, this, &Core::moveToTrash);
+  connect(actionManager, &ActionManager::folderBack, this, &Core::historyBack);
+  connect(actionManager, &ActionManager::folderForward, this, &Core::historyForward);
   connect(actionManager, &ActionManager::jumpToFirst, this, &Core::jumpToFirst);
   connect(actionManager, &ActionManager::jumpToLast, this, &Core::jumpToLast);
   connect(actionManager, &ActionManager::runScript, this, &Core::runScript);
@@ -2508,11 +2510,6 @@ void Core::historyForward() {
 }
 
 void Core::nextImage() {
-  if (ui.viewMode.currentViewMode() == MODE_FOLDERVIEW) {
-    historyForward();
-    return;
-  }
-
   if ((model->isEmpty() && folderEndAction != FOLDER_END_GOTO_ADJACENT))
     return;
   stopSlideshow();
@@ -2537,11 +2534,6 @@ void Core::nextImage() {
 }
 
 void Core::prevImage() {
-  if (ui.viewMode.currentViewMode() == MODE_FOLDERVIEW) {
-    historyBack();
-    return;
-  }
-
   if ((model->isEmpty() && folderEndAction != FOLDER_END_GOTO_ADJACENT))
     return;
   stopSlideshow();

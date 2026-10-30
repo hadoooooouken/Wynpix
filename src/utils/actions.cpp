@@ -155,6 +155,8 @@ void Actions::init() {
   add(u"focusNameFilter"_s, QT_TRANSLATE_NOOP("Actions", "Name filter"), ActionCategory::FolderView);
   add(u"folderOpenSelected"_s, QT_TRANSLATE_NOOP("Actions", "Open selected"), ActionCategory::FolderView);
   add(u"folderSelectAll"_s, QT_TRANSLATE_NOOP("Actions", "Select all"), ActionCategory::FolderView);
+  add(u"folderBack"_s, QT_TRANSLATE_NOOP("Actions", "Back"), ActionCategory::FolderView);
+  add(u"folderForward"_s, QT_TRANSLATE_NOOP("Actions", "Forward"), ActionCategory::FolderView);
   addSelectionMove(u"folderMoveLeft"_s, QT_TRANSLATE_NOOP("Actions", "Move selection left"));
   addSelectionMove(u"folderMoveRight"_s, QT_TRANSLATE_NOOP("Actions", "Move selection right"));
   addSelectionMove(u"folderMoveUp"_s, QT_TRANSLATE_NOOP("Actions", "Move selection up"));

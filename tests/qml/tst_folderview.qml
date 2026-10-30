@@ -134,6 +134,20 @@ Item {
             compare(Fixture.lastFolderRequest, "");
         }
 
+        // The mouse back and forward buttons are action shortcuts over the
+        // grid ("folderBack", "folderForward") and leave the selection alone.
+        function test_backAndForwardButtonsGoToTheActions() {
+            const point = centreOf(2);
+            mouseClick(root, point.x, point.y);
+            Fixture.clearInputLog();
+            mousePress(root, point.x, point.y, Qt.BackButton);
+            mouseRelease(root, point.x, point.y, Qt.BackButton);
+            mousePress(root, point.x, point.y, Qt.ForwardButton);
+            mouseRelease(root, point.x, point.y, Qt.ForwardButton);
+            compare(Fixture.mouseButtons, [Qt.BackButton, Qt.ForwardButton]);
+            compare(Fixture.folderView.grid.model.currentIndex, 2);
+        }
+
         function test_largeDirectoryKeepsTheDelegatesBounded() {
             Fixture.populateFolder(largeDirectory, dirCount, "C:/");
             tryVerify(() => Fixture.folderThumbnailRequestCount > 0, createTimeout);

@@ -24,7 +24,7 @@ using ShortcutMap = QMultiMap<QString, QString>;
 class ActionManager : public QObject {
     Q_OBJECT
 public:
-    static constexpr int kCurrentShortcutsVersion = 3;
+    static constexpr int kCurrentShortcutsVersion = 4;
     // Adds to shortcuts the defaults of the actions without a shortcut whose
     // shortcut has no action of a common mode yet; true when one was added.
     static bool mergeMissingDefaults(const ShortcutMap &defaults, ShortcutMap &shortcuts);
@@ -153,6 +153,8 @@ signals:
     void focusNameFilter();
     void folderOpenSelected();
     void folderSelectAll();
+    void folderBack();
+    void folderForward();
     void folderMoveLeft();
     void folderMoveRight();
     void folderMoveUp();

@@ -158,6 +158,11 @@ FocusScope {
         onContainsMouseChanged: root.updateHoveredIndex()
         onPressed: mouse => {
             root.forceActiveFocus(Qt.MouseFocusReason);
+            // The back and forward buttons are action shortcuts here.
+            if (mouse.button === Qt.BackButton || mouse.button === Qt.ForwardButton) {
+                Actions.handleMousePress(mouse);
+                return;
+            }
             root.controller.press(root.itemAt(mouse.x, mouse.y), mouse.button, mouse.modifiers,
                                   Qt.point(mouse.x, mouse.y));
         }
