@@ -58,10 +58,6 @@ int runCore(QGuiApplication &app, const UiPorts &ports,
   else
     core.loadDefaultPath();
 
-  // wait for event queue to catch up before showing window
-  // this avoids white background flicker on windows (or not?)
-  qApp->processEvents();
-
   core.showGui();
   return app.exec();
 }
