@@ -161,6 +161,10 @@ SettingsPage {
                 boundsBehavior: Flickable.StopAtBounds
                 ScrollBar.vertical: ScrollBar {}
 
+                DialogWheelScroller {
+                    flickable: shortcutList
+                }
+
                 section.property: "category"
                 section.criteria: ViewSection.FullString
                 section.labelPositioning: ViewSection.InlineLabels

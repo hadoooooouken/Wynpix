@@ -17,6 +17,8 @@ qt_add_qml_module(wynpix_style
     IMPORTS QtQuick.Controls.Basic
     DEPENDENCIES QtQuick wynpix.bridges
     SOURCES
+        dialogwheelscroller.cpp
+        dialogwheelscroller.h
         shortcuttext.cpp
         shortcuttext.h
     QML_FILES

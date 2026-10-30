@@ -186,6 +186,8 @@ Window {
                         border.color: Theme.tokens.strokeDefault
 
                         ListView {
+                            id: queueList
+
                             objectName: "batchQueue"
                             anchors.fill: parent
                             anchors.margins: root.queueFrameWidth
@@ -194,6 +196,10 @@ Window {
                             boundsBehavior: Flickable.StopAtBounds
                             ScrollBar.vertical: ScrollBar {
                                 id: queueScrollBar
+                            }
+
+                            DialogWheelScroller {
+                                flickable: queueList
                             }
 
                             // The scroll bar overlays the view: keep the rows

@@ -61,6 +61,10 @@ SettingsPage {
                 boundsBehavior: Flickable.StopAtBounds
                 ScrollBar.vertical: ScrollBar {}
 
+                DialogWheelScroller {
+                    flickable: scriptList
+                }
+
                 delegate: RowBackground {
                     id: scriptRow
 

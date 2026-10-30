@@ -92,6 +92,8 @@ T.ComboBox {
         font: control.font
 
         contentItem: ListView {
+            id: popupList
+
             clip: true
             implicitHeight: contentHeight
             model: control.delegateModel
@@ -99,6 +101,10 @@ T.ComboBox {
             highlightMoveDuration: 0
 
             T.ScrollBar.vertical: ScrollBar {}
+
+            DialogWheelScroller {
+                flickable: popupList
+            }
         }
 
         background: PopupBackground {

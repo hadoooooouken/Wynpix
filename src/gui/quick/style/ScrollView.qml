@@ -5,8 +5,14 @@ import QtQuick.Templates as T
 // must also provide ScrollView, which otherwise creates the fallback
 // style's scroll bars). The vertical bar overlays the view, so while it is
 // shown its thickness is reserved beside the content, as QScrollArea does.
+// In a dialog window the wheel scrolls on that window's frames.
 T.ScrollView {
     id: control
+
+    // A property, not a child: a child would become content of the view.
+    readonly property DialogWheelScroller wheelScroller: DialogWheelScroller {
+        flickable: control.contentItem
+    }
 
     readonly property bool verticalBarShown: {
         const bar = control.T.ScrollBar.vertical
