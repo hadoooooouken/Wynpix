@@ -415,6 +415,31 @@ private slots:
         QVERIFY(!titles.contains(QString()));
     }
 
+    void everyActionHasASectionWithinItsCategory() {
+        const Actions actions;
+        QCOMPARE(actions.group(u"goUp"_s), ActionGroup::Navigation);
+        QCOMPARE(actions.group(u"folderMoveLeft"_s), ActionGroup::Selection);
+        QCOMPARE(actions.group(u"zoomIn"_s), ActionGroup::View);
+        QCOMPARE(actions.group(u"setWallpaper"_s), ActionGroup::FilesAndClipboard);
+        QCOMPARE(actions.group(u"save"_s), ActionGroup::File);
+        QCOMPARE(actions.group(u"noSuchAction"_s), ActionGroup::Application);
+        QCOMPARE(Actions::sectionTitle(ActionCategory::Viewer, ActionGroup::Navigation),
+                 u"Viewer › Navigation"_s);
+
+        // The sections follow the categories, then the subgroups.
+        const QList<std::pair<ActionCategory, ActionGroup>> ordered{
+            {ActionCategory::FolderView, ActionGroup::Navigation},
+            {ActionCategory::FolderView, ActionGroup::Selection},
+            {ActionCategory::Viewer, ActionGroup::Navigation},
+            {ActionCategory::Viewer, ActionGroup::Upscale},
+            {ActionCategory::Common, ActionGroup::File},
+            {ActionCategory::Common, ActionGroup::Application}};
+        for (qsizetype i = 1; i < ordered.size(); ++i) {
+            QVERIFY(Actions::sectionOrder(ordered.at(i - 1).first, ordered.at(i - 1).second)
+                    < Actions::sectionOrder(ordered.at(i).first, ordered.at(i).second));
+        }
+    }
+
     void rowsFollowTheCategoriesWithScriptsAndUnknownActionsLast() {
         ActionShortcutModel model;
         model.setActions({{u"zoomIn"_s, {.title = u"Zoom in"_s, .category = u"View"_s, .categoryOrder = 1}},
