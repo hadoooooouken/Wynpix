@@ -413,6 +413,22 @@ private slots:
     QTRY_VERIFY_WITH_TIMEOUT(!chrome.areControlsShown(), kChromeWaitMs);
   }
 
+  void chromeIsInactiveInFolderView() {
+    FullscreenChromeController chrome;
+    chrome.applySettings(settingsWith(true, false, SettingsEnums::PanelPosition::Top));
+    chrome.setFullscreen(true);
+    QVERIFY(chrome.isInfoBarActive());
+    QVERIFY(chrome.areControlsActive());
+    chrome.setViewMode(MODE_FOLDERVIEW);
+    QVERIFY(!chrome.isInfoBarActive());
+    QVERIFY(!chrome.isInfoBarShown());
+    QVERIFY(!chrome.areControlsActive());
+    QVERIFY(!chrome.areControlsShown());
+    chrome.setViewMode(MODE_DOCUMENT);
+    QVERIFY(chrome.isInfoBarActive());
+    QVERIFY(chrome.areControlsActive());
+  }
+
   //--- coordinator ------------------------------------------------------------
   void folderViewClosesDocumentOverlays() {
     OverlayCoordinator overlays(defaultSettings());

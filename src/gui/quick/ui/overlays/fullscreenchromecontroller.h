@@ -10,8 +10,9 @@
 #include "gui/quick/bridges/uisettings.h"
 #include "settings_types.h"
 
-// The window chrome shown only in fullscreen (FullscreenInfoOverlay.qml and
-// ControlsOverlay.qml), with the rules of the widget UI:
+// The window chrome shown only in the fullscreen viewer, never in folder view
+// (FullscreenInfoOverlay.qml and ControlsOverlay.qml), with the rules of the
+// widget UI:
 // - the info bar (position, file name, details) is active in fullscreen
 //   while the infoBarFullscreen setting is on; it shows when it becomes
 //   active, when the file changes and when the pointer moves, and fades out

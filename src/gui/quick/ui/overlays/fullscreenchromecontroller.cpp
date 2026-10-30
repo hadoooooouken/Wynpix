@@ -79,6 +79,7 @@ void FullscreenChromeController::setViewMode(ViewMode mode) {
         return;
     mViewMode = mode;
     updateTexts();
+    updateActive();
 }
 
 void FullscreenChromeController::toggleInfoBar() {
@@ -114,8 +115,9 @@ void FullscreenChromeController::setControlsHovered(bool hovered) {
 }
 
 void FullscreenChromeController::updateActive() {
-    const bool infoBarActive = mFullscreen && mInfoBarEnabled;
-    const bool controlsActive = mFullscreen && mControlsAllowed;
+    const bool inViewer = mFullscreen && mViewMode != MODE_FOLDERVIEW;
+    const bool infoBarActive = inViewer && mInfoBarEnabled;
+    const bool controlsActive = inViewer && mControlsAllowed;
     if (infoBarActive != mInfoBarActive) {
         mInfoBarActive = infoBarActive;
         emit infoBarActiveChanged();
