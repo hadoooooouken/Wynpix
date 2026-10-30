@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QSettings>
+#include <QTimer>
 
 #include <cstdlib>
 #include <memory>

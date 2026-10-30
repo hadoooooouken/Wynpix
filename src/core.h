@@ -1,15 +1,8 @@
 #pragma once
 
 #include <QObject>
-#include <QDebug>
-#include <QMutex>
-#include <QClipboard>
-#include <QDrag>
 #include <QElapsedTimer>
 #include <QImage>
-#include <QFileSystemModel>
-#include <QDesktopServices>
-#include <QSet>
 #include <QTimer>
 #include <functional>
 #include <memory>
@@ -80,8 +73,6 @@ public slots:
 
 
 private:
-    QElapsedTimer t;
-
     void initComponents();
     void connectComponents();
     void connectUiEvents();
@@ -95,8 +86,10 @@ private:
     std::unique_ptr<ColdStartWindowController> coldStartWindowController;
 
     State state;
-    bool loopSlideshow, slideshow, shuffle;
-    FolderEndAction folderEndAction;
+    bool loopSlideshow = false;
+    bool slideshow = false;
+    bool shuffle = false;
+    FolderEndAction folderEndAction = FOLDER_END_NO_ACTION;
 
     // components
     std::shared_ptr<DirectoryModel> model;
@@ -116,8 +109,6 @@ private:
     void rotateByDegrees(int degrees);
     void reset();
     bool setDirectory(QString path);
-
-    QDrag *mDrag;
 
     Randomizer randomizer;
     void syncRandomizer();

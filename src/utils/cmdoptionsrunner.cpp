@@ -1,4 +1,6 @@
 #include "cmdoptionsrunner.h"
+#include "components/directorymanager/directorymanager.h"
+#include "components/thumbnailer/thumbnailer.h"
 
 void CmdOptionsRunner::generateThumbs(QString dirPath, int size) {
     if(size <= 50 || size > 400) {

@@ -7,7 +7,11 @@
 
 #include "core.h"
 #include "settings.h"
+#include <QClipboard>
+#include <QDebug>
+#include <QDesktopServices>
 #include <QDir>
+#include <QDrag>
 #include <QGuiApplication>
 #include <QMimeDatabase>
 #include <QProcess>
@@ -28,14 +32,12 @@
 #include "components/imagepreparer/imagepreparer.h"
 #include <QColorSpace>
 #include <QCursor>
-#include <tchar.h>
 #include <windows.h>
 #include <dwmapi.h>
 #include <psapi.h>
 #include "utils/colormanager.h"
 #include "utils/hdrtonemapper.h"
 #include "utils/imagelib.h"
-#include <QScreen>
 #include <QThread>
 #include "sourcecontainers/imagestatic.h"
 
@@ -200,8 +202,7 @@ QString mimePayloadFailureMessage(MimePayloadError error) {
 }
 
 Core::Core(const UiPorts &ports)
-    : QObject(), ui(ports), folderEndAction(FOLDER_END_NO_ACTION),
-      loopSlideshow(false), mDrag(nullptr), slideshow(false), shuffle(false) {
+    : ui(ports) {
   initComponents();
   connectComponents();
   connectUiEvents();
@@ -1342,11 +1343,10 @@ void Core::onDraggedOut(QList<QString> paths) {
       urlList << QUrl::fromLocalFile(path);
     mimeData->setUrls(urlList);
   }
-  mDrag = new QDrag(this);
-  mDrag->setMimeData(mimeData);
-  mDrag->exec(SupportedFileDragActions, Qt::CopyAction);
-  mDrag->deleteLater();
-  mDrag = nullptr;
+  auto *drag = new QDrag(this);
+  drag->setMimeData(mimeData);
+  drag->exec(SupportedFileDragActions, Qt::CopyAction);
+  drag->deleteLater();
 }
 
 void Core::sortBy(SortingMode mode) { model->setSortingMode(mode); }
