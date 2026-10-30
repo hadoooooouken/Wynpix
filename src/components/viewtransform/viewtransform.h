@@ -53,8 +53,6 @@ struct ViewTransformEvents {
     // An anchored zoom changed (or re-applied) the scale; the widget viewer
     // requests a high-quality rescale at this point.
     bool anchoredZoom = false;
-    // The image was centred as a whole by a fit-to-window operation.
-    bool imageCentered = false;
 };
 
 // UI-independent zoom / pan / fit model of the image viewer.

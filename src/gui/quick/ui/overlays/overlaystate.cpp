@@ -1,7 +1,6 @@
 #include "overlaystate.h"
 
-OverlayState::OverlayState(bool takesKeyboardFocus, QObject *parent)
-    : QObject(parent), mTakesKeyboardFocus(takesKeyboardFocus) {}
+OverlayState::OverlayState(QObject *parent) : QObject(parent) {}
 
 bool OverlayState::isOpen() const {
     return mOpen;
@@ -9,10 +8,6 @@ bool OverlayState::isOpen() const {
 
 bool OverlayState::isCreated() const {
     return mCreated;
-}
-
-bool OverlayState::takesKeyboardFocus() const {
-    return mTakesKeyboardFocus;
 }
 
 QPointF OverlayState::anchor() const {

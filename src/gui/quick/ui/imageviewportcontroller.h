@@ -85,7 +85,6 @@ class ImageViewportController final : public QObject, private IViewSurface {
     Q_PROPERTY(bool clickZonesDrawn READ clickZonesDrawn NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(ClickZone highlightedClickZone READ highlightedClickZone NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(bool clickZonePressed READ isClickZonePressed NOTIFY clickZonesChanged FINAL)
-    Q_PROPERTY(int clickZoneWidth READ clickZoneWidth CONSTANT FINAL)
     Q_PROPERTY(int sidePanelLeftInset READ sidePanelLeftInset WRITE setSidePanelLeftInset NOTIFY sidePanelInsetsChanged FINAL)
     Q_PROPERTY(int sidePanelRightInset READ sidePanelRightInset WRITE setSidePanelRightInset NOTIFY sidePanelInsetsChanged FINAL)
     Q_PROPERTY(bool reducedMotion READ reducedMotion NOTIFY reducedMotionChanged FINAL)
@@ -208,7 +207,6 @@ public:
     [[nodiscard]] bool clickZonesDrawn() const;
     [[nodiscard]] ClickZone highlightedClickZone() const;
     [[nodiscard]] bool isClickZonePressed() const;
-    [[nodiscard]] int clickZoneWidth() const;
     [[nodiscard]] int sidePanelLeftInset() const;
     void setSidePanelLeftInset(int inset);
     [[nodiscard]] int sidePanelRightInset() const;
@@ -265,8 +263,6 @@ signals:
     // The pointer started acting on the image: a drag or a gesture zoom
     // (once per press-move-release sequence) or a wheel turn (every turn).
     void interactionStarted();
-    // Image area on screen after a fit-to-window centring (crop overlay).
-    void imageAreaChanged(QRect area);
     void imageGeometryChanged();
     // Translated text of an animation open or decode failure, for the user.
     void playbackError(const QString &message);

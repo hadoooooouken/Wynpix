@@ -58,10 +58,6 @@ int ThumbnailPanelController::slideDistance() const {
     return kSlideDistancePx;
 }
 
-int ThumbnailPanelController::animationDuration() const {
-    return kAnimationDurationMs;
-}
-
 int ThumbnailPanelController::animationInDuration() const {
     return kAnimationInDurationMs;
 }

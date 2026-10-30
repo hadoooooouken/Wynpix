@@ -61,7 +61,6 @@ public:
     Q_INVOKABLE void toggleLoop();
     Q_INVOKABLE void toggleReverse();
     Q_INVOKABLE void setRememberSettings(bool remember);
-    Q_INVOKABLE void toggleRememberSettings();
     Q_INVOKABLE void onScrubbingStarted();
     Q_INVOKABLE void onScrubbingFinished();
 

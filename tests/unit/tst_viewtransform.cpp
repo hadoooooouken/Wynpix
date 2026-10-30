@@ -156,7 +156,6 @@ private slots:
 
   void controller_zoomNotifiesInOrder();
   void controller_scrollNotifiesPositionOnly();
-  void controller_fitWindowNotifiesCentred();
   void controller_samplesViewportAndPointer();
   void controller_panoramaNotifies();
 };
@@ -680,19 +679,6 @@ void ViewTransformTests::controller_scrollNotifiesPositionOnly() {
   // Nothing moves: nothing is announced.
   controller.saveViewportPosition();
   QCOMPARE(positionSpy.count(), 1);
-}
-
-void ViewTransformTests::controller_fitWindowNotifiesCentred() {
-  FakeViewSurface surface;
-  ViewTransformController controller(surface);
-  controller.showImage(kLargeImage);
-  controller.setZoomAnchor(QPointF(400, 300));
-  controller.zoomTo(1.0f);
-
-  QSignalSpy centredSpy(&controller, &ViewTransformController::imageCentered);
-  controller.forceFitMode(FIT_WINDOW);
-  QCOMPARE(centredSpy.count(), 1);
-  QCOMPARE(controller.transform().fitMode(), FIT_WINDOW);
 }
 
 void ViewTransformTests::controller_samplesViewportAndPointer() {

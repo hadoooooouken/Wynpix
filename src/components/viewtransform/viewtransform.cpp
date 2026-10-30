@@ -527,7 +527,6 @@ void ViewTransform::centerImage() {
     const QSizeF size = scaledSizeF();
     mImagePos = QPointF(centeredEdge(mViewportSize.width(), size.width()),
                         centeredEdge(mViewportSize.height(), size.height()));
-    mEvents.imageCentered = true;
 }
 
 void ViewTransform::centerIfNecessary() {

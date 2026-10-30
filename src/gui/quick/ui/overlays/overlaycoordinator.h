@@ -130,18 +130,18 @@ private:
 
     NotificationOverlayModel mMessages;
     FullscreenChromeController mFullscreenChrome;
-    OverlayState mImageInfo{false};
+    OverlayState mImageInfo;
     ImageInfoModel mImageInfoModel;
     PageNavigationController mPageNavigation;
     AnimationPlaybackController mAnimationPlayback;
-    OverlayState mSaveConfirm{false};
-    OverlayState mCopy{true};
+    OverlayState mSaveConfirm;
+    OverlayState mCopy;
     CopyTargetsModel mCopyTargets;
-    OverlayState mRename{true};
+    OverlayState mRename;
     RenamePromptController mRenamePrompt;
-    OverlayState mColorAdjustments{false};
+    OverlayState mColorAdjustments;
     ColorAdjustmentsEditor mColorAdjustmentsEditor;
-    OverlayState mCasSettings{false};
+    OverlayState mCasSettings;
     CasSettingsEditor mCasSettingsEditor;
 
     bool mFolderViewActive = false;

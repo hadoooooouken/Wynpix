@@ -32,7 +32,6 @@ const QHash<FluentIcon, char32_t> &codepointTable() {
 
         // Context menu
         { FluentIcon::ArrowAutofitHeight20,          0xE077 }, // ic_fluent_arrow_autofit_height_20_regular <- Fit Height
-        { FluentIcon::ArrowLeft,                     0xF15B }, // ic_fluent_arrow_left_20_regular <- Back from the Open With page
         { FluentIcon::ArrowRotateClockwise20,        0xF185 }, // ic_fluent_arrow_rotate_clockwise_20_regular <- Rotate clockwise
         { FluentIcon::ArrowRotateCounterclockwise20, 0xF187 }, // ic_fluent_arrow_rotate_counterclockwise_20_regular <- Rotate counterclockwise
         { FluentIcon::ChevronDown20,                 0xF2A3 }, // ic_fluent_chevron_down_20_regular <- Expand More actions

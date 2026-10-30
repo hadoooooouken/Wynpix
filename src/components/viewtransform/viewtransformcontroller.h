@@ -75,8 +75,6 @@ signals:
     void transformChanged();
     void scaleChanged(qreal scale);
     void positionChanged();
-    // The whole image was centred by fit-to-window.
-    void imageCentered();
     // An anchored zoom was applied (the view refreshes high-quality scaling).
     void anchoredZoomApplied();
     void panoramaChanged();

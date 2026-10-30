@@ -136,8 +136,6 @@ ImageViewportController::ImageViewportController(const UiSettingsSnapshot &setti
             &ImageViewportController::onScaleChanged);
     connect(&mTransform, &ViewTransformController::positionChanged, this,
             &ImageViewportController::onViewPositionChanged);
-    connect(&mTransform, &ViewTransformController::imageCentered, this,
-            [this]() { emit imageAreaChanged(mTransform.transform().scaledRect()); });
     connect(&mTransform, &ViewTransformController::anchoredZoomApplied, this,
             &ImageViewportController::requestScaling);
     connect(&mTransform, &ViewTransformController::panoramaChanged, this,
@@ -1395,10 +1393,6 @@ void ImageViewportController::applyInteractionStep(const InteractionStep &step) 
 //------------------------------------------------------------------------------
 // Click zones
 //------------------------------------------------------------------------------
-int ImageViewportController::clickZoneWidth() const {
-    return kClickZoneWidth;
-}
-
 bool ImageViewportController::clickZonesEnabled() const {
     return mClickZonesEnabled;
 }

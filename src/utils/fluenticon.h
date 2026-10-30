@@ -25,7 +25,6 @@ enum class FluentIcon {
     ArrowAutofitWidth20,
     ArrowExit20,
     ArrowExpand20,
-    ArrowLeft,
     ArrowNext20,
     ArrowPrevious20,
     ArrowRotateClockwise20,

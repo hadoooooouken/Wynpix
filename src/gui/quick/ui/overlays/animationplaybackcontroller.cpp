@@ -167,11 +167,6 @@ void AnimationPlaybackController::setRememberSettings(bool remember) {
         mPlayer->setRememberSettings(remember);
 }
 
-void AnimationPlaybackController::toggleRememberSettings() {
-    if (mPlayer)
-        mPlayer->setRememberSettings(!mPlayer->rememberSettings());
-}
-
 void AnimationPlaybackController::onScrubbingStarted() {
     mScrubbing = true;
     if (mPlayer) {

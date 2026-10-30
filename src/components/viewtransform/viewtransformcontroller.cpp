@@ -35,8 +35,6 @@ void ViewTransformController::run(Operation &&operation) {
         emit scaleChanged(viewTransform.scale());
     if (positionChangedNow)
         emit positionChanged();
-    if (events.imageCentered)
-        emit imageCentered();
     if (events.anchoredZoom)
         emit anchoredZoomApplied();
 }

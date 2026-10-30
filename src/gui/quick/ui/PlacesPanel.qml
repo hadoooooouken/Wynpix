@@ -462,7 +462,6 @@ Rectangle {
         id: treeRow
 
         required property TreeView treeView
-        required property bool isTreeNode
         required property bool expanded
         required property bool hasChildren
         required property int depth
