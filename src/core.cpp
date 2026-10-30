@@ -1244,12 +1244,6 @@ void Core::openFromClipboard() {
   auto mimeData = cb->mimeData();
   if (!mimeData)
     return;
-  qDebug() << "=====================================";
-  qDebug() << "hasUrls:" << mimeData->hasUrls();
-  qDebug() << "hasImage:" << mimeData->hasImage();
-  qDebug() << "hasText:" << mimeData->hasText();
-
-  qDebug() << "TEXT:" << cb->text();
 
   // try opening url
   if (mimeData->hasUrls()) {
