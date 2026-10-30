@@ -402,6 +402,7 @@ private slots:
         QCOMPARE(actions.category(u"goUp"_s), ActionCategory::FolderView);
         QCOMPARE(actions.category(u"nextImage"_s), ActionCategory::Viewer);
         QCOMPARE(actions.category(u"zoomIn"_s), ActionCategory::Viewer);
+        QCOMPARE(actions.category(u"setWallpaper"_s), ActionCategory::Viewer);
         QCOMPARE(actions.category(u"save"_s), ActionCategory::Common);
         QCOMPARE(actions.category(u"contextMenu"_s), ActionCategory::Common);
         QCOMPARE(actions.category(u"noSuchAction"_s), ActionCategory::Common);

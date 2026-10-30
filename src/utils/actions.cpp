@@ -100,7 +100,7 @@ void Actions::init() {
   add(u"zoomOutCursor"_s, QT_TRANSLATE_NOOP("Actions", "Zoom out at cursor"), ActionCategory::Viewer);
   add(u"save"_s, QT_TRANSLATE_NOOP("Actions", "Save"), ActionCategory::Common);
   add(u"saveAs"_s, QT_TRANSLATE_NOOP("Actions", "Save as"), ActionCategory::Common);
-  add(u"setWallpaper"_s, QT_TRANSLATE_NOOP("Actions", "Set as wallpaper"), ActionCategory::Common);
+  add(u"setWallpaper"_s, QT_TRANSLATE_NOOP("Actions", "Set as wallpaper"), ActionCategory::Viewer);
   add(u"crop"_s, QT_TRANSLATE_NOOP("Actions", "Crop"), ActionCategory::Viewer);
   add(u"removeFile"_s, QT_TRANSLATE_NOOP("Actions", "Delete permanently"), ActionCategory::Common);
   add(u"copyFile"_s, QT_TRANSLATE_NOOP("Actions", "Quick copy"), ActionCategory::Viewer);
