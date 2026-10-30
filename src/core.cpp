@@ -457,15 +457,6 @@ void Core::raiseWindow(const QString &pathReceived) {
   ui.window.raiseAndActivateWindow();
 
   if (needsDelayedReveal) {
-    // The native restore/topmost-toggle sequence above can itself trigger
-    // a resize on some setups (e.g. DWM finishing the restore animation a
-    // frame late after resuming from standby). Keep draining second-instance
-    // requests while transparent so the reveal timer cannot expose an
-    // intermediate image or layout.
-    m_raiseWindowAwaitingDocumentRendering = true;
-    m_raiseWindowDocumentRenderingSettled = false;
-    drainRaiseWindowRequests();
-
     const bool waitsForDocumentRendering =
         ui.viewMode.currentViewMode() == MODE_DOCUMENT;
     m_raiseWindowAwaitingDocumentRendering = waitsForDocumentRendering;
@@ -511,17 +502,12 @@ void Core::processRaiseWindowRequest(const QString &pathReceived) {
 }
 
 void Core::drainRaiseWindowRequests() {
-  // Let the event queue catch up before showing the window, same as the
-  // cold-start path in main.cpp: without this, resuming from standby (or
-  // a second instance handing off a path) paints the bare window for one
-  // frame before pending layout/style events are processed. If processing
-  // events delivers another request, load it in the same hidden transaction
-  // and settle its events before returning.
-  do {
-    while (!m_pendingRaiseWindowRequests.isEmpty())
-      processRaiseWindowRequest(m_pendingRaiseWindowRequests.dequeue());
-    QCoreApplication::processEvents();
-  } while (!m_pendingRaiseWindowRequests.isEmpty());
+  // Loads the queued requests while the window is still concealed. No events
+  // are processed here: the reveal waits for documentRenderingSettled (or the
+  // folder-view delay), so requests that arrive later go through their own
+  // raiseWindow() call from the event loop.
+  while (!m_pendingRaiseWindowRequests.isEmpty())
+    processRaiseWindowRequest(m_pendingRaiseWindowRequests.dequeue());
 }
 
 void Core::attachModel(DirectoryModel *_model) {
