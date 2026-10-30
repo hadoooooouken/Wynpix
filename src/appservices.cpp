@@ -4,17 +4,10 @@
 #include "components/scriptmanager/scriptmanager.h"
 #include "settings.h"
 #include "utils/actions.h"
-#include "utils/iconfontmanager.h"
 #include "utils/inputmap.h"
 
 //------------------------------------------------------------------------------
-AppServices::AppServices() {
-    // Must run before the UI is created: the folder tree resolves its icons
-    // through IconFontManager::pixmap() and the QML style reads
-    // IconFontManager::family(). Safe to call unconditionally: init() is
-    // idempotent and a failed font load just means glyph rendering will log
-    // a warning and return null pixmaps instead of crashing.
-    IconFontManager::init();
+AppServices::AppServices(Scope scope) {
     // Each instance is published through its global before it initializes,
     // so later services can already use the earlier ones while they
     // initialize (ScriptManager reads its scripts from settings).
@@ -25,6 +18,8 @@ AppServices::AppServices() {
     mSettings = std::make_unique<Settings>();
     settings = mSettings.get();
     mSettings->init();
+    if (scope == Scope::SettingsOnly)
+        return;
     mScriptManager = std::make_unique<ScriptManager>();
     scriptManager = mScriptManager.get();
     mScriptManager->readScripts();

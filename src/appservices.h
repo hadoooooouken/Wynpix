@@ -17,7 +17,11 @@ class Settings;
 // instance.
 class AppServices {
 public:
-    AppServices();
+    // The services one run creates: the command-line thumbnail generation
+    // needs only Settings, the user interface needs all of them.
+    enum class Scope { SettingsOnly, All };
+
+    explicit AppServices(Scope scope);
     ~AppServices();
 
     AppServices(const AppServices &) = delete;

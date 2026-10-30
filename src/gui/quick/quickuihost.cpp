@@ -14,6 +14,7 @@
 #include "components/actionmanager/actionmanager.h"
 #include "gui/quick/adapters/bridgesnapshots.h"
 #include "settings.h"
+#include "utils/iconfontmanager.h"
 #include "utils/startuptiming.h"
 
 // The QML modules are static libraries; importing their static plugins keeps
@@ -82,6 +83,14 @@ bool presentsTranslucentWindows(QuickGraphicsApi api) {
   return false;
 }
 
+// The theme snapshot carries the icon font family and is the first member
+// built from it; the folder tree paints its icons with the same font later.
+// A failed font load only makes the icon pixmaps null, with a warning.
+ThemeSnapshot loadIconFontAndReadTheme(Settings &settings) {
+  IconFontManager::init();
+  return BridgeSnapshots::readTheme(settings);
+}
+
 GraphicsApiInfo graphicsApiInfo(QuickGraphicsApi api) {
   switch (api) {
   case QuickGraphicsApi::Direct3D12:
@@ -105,7 +114,7 @@ QuickUiHost::QuickUiHost(Settings &settings, ActionManager &actionManager,
       mThumbnailPanelView(std::make_shared<DirectoryViewAdapter>()),
       mFolderGridView(std::make_shared<DirectoryViewAdapter>()),
       mDispatcher(actionManager),
-      mThemeBridge(BridgeSnapshots::readTheme(settings)),
+      mThemeBridge(loadIconFontAndReadTheme(settings)),
       mActionBridge(mDispatcher),
       mViewport(BridgeSnapshots::readUiSettings(settings)),
       mViewerPort(mViewport),

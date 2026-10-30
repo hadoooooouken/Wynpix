@@ -79,7 +79,9 @@ int main(int argc, char *argv[]) {
   // event loop objects still exist. Engaged only on the paths that need the
   // services.
   std::optional<AppServices> services;
-  const auto startServices = [&services]() { services.emplace(); };
+  const auto startServices = [&services](AppServices::Scope scope) {
+    services.emplace(scope);
+  };
 
   QCoreApplication::setOrganizationName("Wynpix");
   QCoreApplication::setOrganizationDomain(
@@ -121,13 +123,11 @@ int main(int argc, char *argv[]) {
 
   int exitCode = 0;
   if (parser.isSet("build-options")) {
-    startServices();
-
     CmdOptionsRunner r;
     QTimer::singleShot(0, &r, &CmdOptionsRunner::showBuildOptions);
     exitCode = a.exec();
   } else if (parser.isSet("gen-thumbs")) {
-    startServices();
+    startServices(AppServices::Scope::SettingsOnly);
 
     int size = settings->folderViewIconSize();
     if (parser.isSet("gen-thumbs-size"))
@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Primary instance, initialize all services
-    startServices();
+    startServices(AppServices::Scope::All);
 
     // Closing the window may only suspend to standby; the exit action quits.
     QGuiApplication::setQuitOnLastWindowClosed(false);
