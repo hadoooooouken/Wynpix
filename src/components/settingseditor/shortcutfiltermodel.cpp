@@ -29,5 +29,6 @@ bool ShortcutFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sou
     if (matches(row.data(ActionShortcutModel::TitleRole).toString())
         || matches(row.data(ActionShortcutModel::CategoryRole).toString()))
         return true;
-    return std::ranges::any_of(row.data(ActionShortcutModel::ShortcutsRole).toStringList(), matches);
+    return std::ranges::any_of(row.data(ActionShortcutModel::ShortcutsRole).toStringList(), matches)
+        || std::ranges::any_of(row.data(ActionShortcutModel::ShortcutTextsRole).toStringList(), matches);
 }

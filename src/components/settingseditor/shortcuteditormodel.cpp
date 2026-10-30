@@ -33,7 +33,7 @@ QString ShortcutEditorModel::shortcut() const {
 QString ShortcutEditorModel::shortcutText() const {
     if (mShortcut.isEmpty())
         return QCoreApplication::translate(kCreatorContext, QT_TRANSLATE_NOOP("ShortcutCreatorDialog", "[Enter shortcut]"));
-    return mShortcut;
+    return shortcutDisplayText(mShortcut);
 }
 
 QString ShortcutEditorModel::warning() const {

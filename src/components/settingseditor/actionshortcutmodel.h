@@ -13,6 +13,11 @@
 // last.
 [[nodiscard]] ActionInfo shortcutActionInfo(const QString &action, const ActionInfoMap &actions);
 
+// How the settings show shortcut: a mouse input by its name ("Mouse Back" for
+// "XButton1"), after its modifiers ("Ctrl+Wheel up"); any other shortcut as it
+// is stored.
+[[nodiscard]] QString shortcutDisplayText(const QString &shortcut);
+
 // The shortcuts of the settings dialog ("Controls"), one row per action:
 // every action and every script, with or without shortcuts, sorted by
 // category and then by title. A row lists the shortcuts of its action in the
@@ -21,12 +26,13 @@
 // dialog applies them.
 //
 // QML reads the roles `action`, `title` (a script row shows the script name),
-// `category` and `shortcuts`. GUI thread only.
+// `category`, `shortcuts` and `shortcutTexts` (the shortcuts as the settings
+// show them, see shortcutDisplayText()). GUI thread only.
 class ActionShortcutModel final : public QAbstractListModel {
     Q_OBJECT
 
 public:
-    enum Role { ActionRole = Qt::UserRole + 1, TitleRole, CategoryRole, ShortcutsRole };
+    enum Role { ActionRole = Qt::UserRole + 1, TitleRole, CategoryRole, ShortcutsRole, ShortcutTextsRole };
 
     explicit ActionShortcutModel(QObject *parent = nullptr);
 

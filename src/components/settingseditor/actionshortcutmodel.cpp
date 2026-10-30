@@ -11,6 +11,24 @@ constexpr char kContext[] = "SettingsDialog";
 // last.
 constexpr int kScriptCategoryOrder = std::numeric_limits<int>::max() - 1;
 constexpr int kUnknownCategoryOrder = std::numeric_limits<int>::max();
+
+// The stored names of the mouse inputs (ShortcutBuilder) with the names the
+// settings show.
+struct MouseInputName {
+    QStringView stored;
+    const char *shown;
+};
+
+constexpr MouseInputName kMouseInputNames[] = {
+    {u"LMB", QT_TRANSLATE_NOOP("SettingsDialog", "Left click")},
+    {u"RMB", QT_TRANSLATE_NOOP("SettingsDialog", "Right click")},
+    {u"MiddleButton", QT_TRANSLATE_NOOP("SettingsDialog", "Middle click")},
+    {u"XButton1", QT_TRANSLATE_NOOP("SettingsDialog", "Mouse Back")},
+    {u"XButton2", QT_TRANSLATE_NOOP("SettingsDialog", "Mouse Forward")},
+    {u"LMB_DoubleClick", QT_TRANSLATE_NOOP("SettingsDialog", "Double click")},
+    {u"WheelUp", QT_TRANSLATE_NOOP("SettingsDialog", "Wheel up")},
+    {u"WheelDown", QT_TRANSLATE_NOOP("SettingsDialog", "Wheel down")},
+};
 } // namespace
 
 ActionInfo shortcutActionInfo(const QString &action, const ActionInfoMap &actions) {
@@ -26,6 +44,19 @@ ActionInfo shortcutActionInfo(const QString &action, const ActionInfoMap &action
     return {.title = action,
             .category = QCoreApplication::translate(kContext, QT_TRANSLATE_NOOP("SettingsDialog", "Other")),
             .categoryOrder = kUnknownCategoryOrder};
+}
+
+QString shortcutDisplayText(const QString &shortcut) {
+    // The input follows the last "+" of the modifiers; a shortcut ending
+    // with "+" is the "+" key.
+    if (shortcut.endsWith(u'+'))
+        return shortcut;
+    const qsizetype inputStart = shortcut.lastIndexOf(u'+') + 1;
+    const QStringView input = QStringView(shortcut).mid(inputStart);
+    const auto name = std::ranges::find(kMouseInputNames, input, &MouseInputName::stored);
+    if (name == std::ranges::end(kMouseInputNames))
+        return shortcut;
+    return shortcut.left(inputStart) + QCoreApplication::translate(kContext, name->shown);
 }
 
 ActionShortcutModel::ActionShortcutModel(QObject *parent) : QAbstractListModel(parent) {}
@@ -51,6 +82,13 @@ QVariant ActionShortcutModel::data(const QModelIndex &index, int role) const {
         return row.info.category;
     case ShortcutsRole:
         return row.shortcuts;
+    case ShortcutTextsRole: {
+        QStringList texts;
+        texts.reserve(row.shortcuts.size());
+        for (const QString &shortcut : row.shortcuts)
+            texts.append(shortcutDisplayText(shortcut));
+        return texts;
+    }
     default:
         return {};
     }
@@ -60,7 +98,8 @@ QHash<int, QByteArray> ActionShortcutModel::roleNames() const {
     return {{ActionRole, "action"},
             {TitleRole, "title"},
             {CategoryRole, "category"},
-            {ShortcutsRole, "shortcuts"}};
+            {ShortcutsRole, "shortcuts"},
+            {ShortcutTextsRole, "shortcutTexts"}};
 }
 
 void ActionShortcutModel::setActions(const ActionInfoMap &actions, const QStringList &scripts) {
@@ -116,7 +155,7 @@ int ActionShortcutModel::put(const ShortcutEntry &entry, const std::optional<Sho
     else
         shortcuts.append(entry.shortcut);
     const QModelIndex changed = index(row);
-    emit dataChanged(changed, changed, {ShortcutsRole});
+    emit dataChanged(changed, changed, {ShortcutsRole, ShortcutTextsRole});
     return row;
 }
 
@@ -167,6 +206,6 @@ qsizetype ActionShortcutModel::takeShortcut(int row, const QString &shortcut) {
         return -1;
     mRows[row].shortcuts.removeAt(position);
     const QModelIndex changed = index(row);
-    emit dataChanged(changed, changed, {ShortcutsRole});
+    emit dataChanged(changed, changed, {ShortcutsRole, ShortcutTextsRole});
     return position;
 }

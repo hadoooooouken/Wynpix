@@ -27,7 +27,8 @@ class ShortcutEditorModel final : public EditorSession {
     Q_PROPERTY(QString actionTitle READ actionTitle NOTIFY requestChanged FINAL)
     Q_PROPERTY(QString categoryTitle READ categoryTitle NOTIFY requestChanged FINAL)
     Q_PROPERTY(QString shortcut READ shortcut NOTIFY shortcutChanged FINAL)
-    // The shortcut, or a prompt while none was entered.
+    // The shortcut as the settings show it (shortcutDisplayText()), or a
+    // prompt while none was entered.
     Q_PROPERTY(QString shortcutText READ shortcutText NOTIFY shortcutChanged FINAL)
     Q_PROPERTY(QString warning READ warning NOTIFY shortcutChanged FINAL)
     Q_PROPERTY(bool canAccept READ canAccept NOTIFY shortcutChanged FINAL)

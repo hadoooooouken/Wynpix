@@ -48,6 +48,8 @@ SettingsPage {
 
         required property string action
         required property string shortcut
+        // The shortcut as the settings show it ("Mouse Back" for "XButton1").
+        required property string shortcutText
 
         objectName: "shortcutChip"
         implicitWidth: StyleConstants.indicatorPadding + chipLabel.implicitWidth + root.chipRemoveGap
@@ -73,7 +75,7 @@ SettingsPage {
 
             x: StyleConstants.indicatorPadding
             anchors.verticalCenter: parent.verticalCenter
-            text: chip.shortcut
+            text: chip.shortcutText
             textFormat: Text.PlainText
         }
 
@@ -182,6 +184,7 @@ SettingsPage {
                     required property string action
                     required property string title
                     required property list<string> shortcuts
+                    required property list<string> shortcutTexts
 
                     readonly property bool lastOfCategory: ListView.nextSection !== ListView.section
 
@@ -242,9 +245,11 @@ SettingsPage {
 
                                 ShortcutChip {
                                     required property string modelData
+                                    required property int index
 
                                     action: actionRow.action
                                     shortcut: modelData
+                                    shortcutText: actionRow.shortcutTexts[index] ?? modelData
                                 }
                             }
                         }
