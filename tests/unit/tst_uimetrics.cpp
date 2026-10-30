@@ -78,9 +78,16 @@ constexpr qreal kMaxContrast = 21.0;
 constexpr int kHueCount = 360;
 // Luminance at which white and black have the same contrast (about 0.179).
 constexpr qreal kEqualContrastLuminance = 0.179;
-// White is kept up to the luminance where it still has the AA contrast
-// (about 0.183).
-constexpr qreal kWhiteMaxLuminance = 0.184;
+// White is kept up to the luminance where it still has the contrast of
+// AccentContrast::kWhiteTextMinContrast (about 0.1886).
+constexpr qreal kWhiteMaxLuminance = 0.189;
+
+// Contrast the accent text must reach: white is kept a little below the AA
+// contrast, black reaches it.
+qreal minContrastOf(const QColor &text) {
+  return text == QColor(Qt::white) ? AccentContrast::kWhiteTextMinContrast
+                                   : AccentContrast::kMinTextContrast;
+}
 } // namespace
 
 // The control metrics and colours of the Qt Quick Theme bridge, and the
@@ -213,41 +220,39 @@ private slots:
              AccentContrast::contrastRatio(grey(200), grey(40)));
   }
 
-  void accentTextKeepsTheAaContrastOnEveryAccentSample_data() {
+  void accentTextKeepsItsContrastOnEveryAccentSample_data() {
     QTest::addColumn<QString>("accent");
     for (const QString &name : kAccentSamples) {
       QTest::newRow(qPrintable(name)) << name;
     }
   }
 
-  void accentTextKeepsTheAaContrastOnEveryAccentSample() {
+  void accentTextKeepsItsContrastOnEveryAccentSample() {
     QFETCH(QString, accent);
     const QColor fill(accent);
     const QColor text = AccentContrast::textOn(fill);
     QVERIFY(text == QColor(Qt::white) || text == QColor(Qt::black));
-    QCOMPARE_GE(AccentContrast::contrastRatio(text, fill),
-                AccentContrast::kMinTextContrast);
+    QCOMPARE_GE(AccentContrast::contrastRatio(text, fill), minContrastOf(text));
   }
 
-  void accentTextKeepsTheAaContrastOnEveryGrey() {
+  void accentTextKeepsItsContrastOnEveryGrey() {
     for (int value = 0; value <= kMaxChannel; value += kGreyStep) {
       const QColor fill = grey(value);
-      QVERIFY2(AccentContrast::contrastRatio(AccentContrast::textOn(fill),
-                                             fill) >=
-                   AccentContrast::kMinTextContrast,
+      const QColor text = AccentContrast::textOn(fill);
+      QVERIFY2(AccentContrast::contrastRatio(text, fill) >= minContrastOf(text),
                qPrintable(fill.name()));
     }
   }
 
-  void accentTextKeepsTheAaContrastOnTheColourWheel() {
+  void accentTextKeepsItsContrastOnTheColourWheel() {
     for (int hue = 0; hue < kHueCount; hue += kHueStep) {
       for (int saturation = 0; saturation <= kMaxChannel;
            saturation += kSaturationStep) {
         for (int value = 0; value <= kMaxChannel; value += kValueStep) {
           const QColor fill = QColor::fromHsv(hue, saturation, value);
-          QVERIFY2(AccentContrast::contrastRatio(AccentContrast::textOn(fill),
-                                                 fill) >=
-                       AccentContrast::kMinTextContrast,
+          const QColor text = AccentContrast::textOn(fill);
+          QVERIFY2(AccentContrast::contrastRatio(text, fill) >=
+                       minContrastOf(text),
                    qPrintable(fill.name()));
         }
       }
@@ -258,6 +263,10 @@ private slots:
     // The Windows blue: black has the slightly higher contrast, but white
     // still passes AA and is what the UI shows on it.
     QCOMPARE(AccentContrast::textOn(QColor(u"#0078d4"_s)), QColor(Qt::white));
+    // The Windows 10 blue and green miss the AA contrast for white by a
+    // rounding (4.499:1 and 4.497:1) and keep white too.
+    QCOMPARE(AccentContrast::textOn(QColor(u"#0078d7"_s)), QColor(Qt::white));
+    QCOMPARE(AccentContrast::textOn(QColor(u"#10893e"_s)), QColor(Qt::white));
     // A light accent needs black.
     QCOMPARE(AccentContrast::textOn(QColor(u"#ffb900"_s)), QColor(Qt::black));
     // Both extremes of the grey ramp.

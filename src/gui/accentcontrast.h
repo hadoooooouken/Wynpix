@@ -10,10 +10,10 @@
 // is picked from the accent so that the text stays readable on any of them.
 //
 // Contrast is the WCAG 2.x ratio of relative luminances. Text is white while
-// white keeps the AA contrast for normal text, which is the Windows convention
-// and what the UI used before; otherwise it is black. At least one of the two
-// always reaches the AA contrast (the worst case, a fill of luminance ~0.18,
-// gives about 4.6:1), so the result is readable on every opaque fill.
+// white keeps about the AA contrast for normal text, which is the Windows
+// convention and what the UI used before; otherwise it is black, which then
+// reaches the AA contrast (on a fill where white falls below 4.4:1 black has
+// at least 4.7:1), so the result is readable on every opaque fill.
 //
 // Also the fills of the accent hovered and pressed, which move away from the
 // text colour so that the text stays readable on them.
@@ -21,6 +21,10 @@ namespace AccentContrast {
 
 // WCAG 2.x AA minimum contrast ratio for normal text.
 inline constexpr qreal kMinTextContrast = 4.5;
+// Lowest contrast at which white text is still taken. The Windows accent
+// palette is laid out for white text at about the AA contrast, and some of its
+// accents miss it by a rounding: the Windows 10 blue #0078d7 gives 4.499:1.
+inline constexpr qreal kWhiteTextMinContrast = 4.4;
 
 inline constexpr Qt::GlobalColor kLightText = Qt::white;
 inline constexpr Qt::GlobalColor kDarkText = Qt::black;
@@ -61,11 +65,11 @@ inline constexpr qreal kContrastFlare = 0.05;
   return (std::max(a, b) + kContrastFlare) / (std::min(a, b) + kContrastFlare);
 }
 
-// Text colour for an opaque fill: white if it keeps the AA contrast on the
-// fill, black otherwise. Reaches the AA contrast on any fill.
+// Text colour for an opaque fill: white if it keeps about the AA contrast on
+// the fill, black otherwise.
 [[nodiscard]] inline QColor textOn(const QColor &fill) {
   const QColor light(kLightText);
-  if (contrastRatio(light, fill) >= kMinTextContrast) {
+  if (contrastRatio(light, fill) >= kWhiteTextMinContrast) {
     return light;
   }
   return QColor(kDarkText);
