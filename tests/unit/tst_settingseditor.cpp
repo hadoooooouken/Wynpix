@@ -442,6 +442,46 @@ private slots:
         QCOMPARE(column(filter, ActionShortcutModel::ActionRole), everything);
     }
 
+    void mouseInputsShowTheirNames() {
+        QCOMPARE(shortcutDisplayText(u"XButton1"_s), u"Mouse Back"_s);
+        QCOMPARE(shortcutDisplayText(u"XButton2"_s), u"Mouse Forward"_s);
+        QCOMPARE(shortcutDisplayText(u"LMB_DoubleClick"_s), u"Double click"_s);
+        QCOMPARE(shortcutDisplayText(u"Ctrl+Shift+WheelUp"_s), u"Ctrl+Shift+Wheel up"_s);
+        // Keys keep their names, the "+" key too.
+        QCOMPARE(shortcutDisplayText(u"Ctrl+Right"_s), u"Ctrl+Right"_s);
+        QCOMPARE(shortcutDisplayText(u"Ctrl++"_s), u"Ctrl++"_s);
+        QCOMPARE(shortcutDisplayText(u"+"_s), u"+"_s);
+    }
+
+    void rowsShowMouseInputsByNameAndTheFilterFindsBothNames() {
+        ActionShortcutModel model;
+        model.setActions({{u"nextImage"_s, {}}, {u"zoomIn"_s, {}}}, {});
+        model.setEntries({kNextImage, kNextImageWheel, kZoomIn});
+        QCOMPARE(model.data(model.index(0), ActionShortcutModel::ShortcutTextsRole).toStringList(),
+                 (QStringList{u"Right"_s, u"Wheel down"_s}));
+        // The stored shortcuts stay as they are.
+        QCOMPARE(model.data(model.index(0), ActionShortcutModel::ShortcutsRole).toStringList(),
+                 (QStringList{kNextImage.shortcut, kNextImageWheel.shortcut}));
+
+        ShortcutFilterModel filter;
+        filter.setSourceModel(&model);
+        filter.setFilterText(u"wheel down"_s);
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), QStringList{u"nextImage"_s});
+        filter.setFilterText(u"WheelDown"_s);
+        QCOMPARE(column(filter, ActionShortcutModel::ActionRole), QStringList{u"nextImage"_s});
+    }
+
+    void theCreatorShowsTheMouseInputByName() {
+        EditorFixture f;
+        SettingsEditorModel editor(f.values, f.shortcuts);
+        editor.load();
+        ShortcutEditorModel &creator = *editor.shortcutEditor();
+        editor.addShortcut(u"zoomIn"_s);
+        creator.setShortcut(u"XButton2"_s);
+        QCOMPARE(creator.shortcut(), u"XButton2"_s);
+        QCOMPARE(creator.shortcutText(), u"Mouse Forward"_s);
+    }
+
     void theEditorFiltersTheShortcutsAndLoadClearsTheSearch() {
         EditorFixture f;
         SettingsEditorModel editor(f.values, f.shortcuts);
