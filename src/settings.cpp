@@ -44,9 +44,8 @@ int normalizedPanelHideDelayMs(int delayMs) {
 }
 } // namespace
 
-Settings::Settings(QObject *parent) : QObject(parent) {
-  QString appDirPath = QCoreApplication::applicationDirPath();
-  QString confPath = appDirPath + "/conf";
+QString Settings::configDirPath() {
+  QString confPath = QCoreApplication::applicationDirPath() + "/conf";
   QDir confDir(confPath);
 
   bool isWritable = true;
@@ -67,8 +66,11 @@ Settings::Settings(QObject *parent) : QObject(parent) {
     confPath =
         QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   }
-
-  mConfDir = std::make_unique<QDir>(confPath);
+  return confPath;
+}
+//------------------------------------------------------------------------------
+Settings::Settings(QObject *parent) : QObject(parent) {
+  mConfDir = std::make_unique<QDir>(configDirPath());
   mConfDir->mkpath(mConfDir->absolutePath());
 
   settingsConf = std::make_unique<QSettings>(mConfDir->absolutePath() + "/" +

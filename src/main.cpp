@@ -8,7 +8,6 @@
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QSettings>
-#include <QStandardPaths>
 
 #include <cstdlib>
 #include <memory>
@@ -30,11 +29,9 @@
 // The "multiInstance" setting, read before the services exist (they are
 // started only by the primary instance).
 bool multiInstanceEnabled() {
-  const QString iniName = "/" + QCoreApplication::applicationName() + ".ini";
-  QString confPath = QCoreApplication::applicationDirPath() + "/conf";
-  if (!QFileInfo::exists(confPath + iniName))
-    confPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-  QSettings tempSettings(confPath + iniName, QSettings::IniFormat);
+  QSettings tempSettings(Settings::configDirPath() + "/" +
+                             QCoreApplication::applicationName() + ".ini",
+                         QSettings::IniFormat);
   return tempSettings.value("multiInstance", false).toBool();
 }
 //------------------------------------------------------------------------------
