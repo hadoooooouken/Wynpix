@@ -7,7 +7,6 @@
 #include <QDrag>
 #include <QElapsedTimer>
 #include <QImage>
-#include <QQueue>
 #include <QFileSystemModel>
 #include <QDesktopServices>
 #include <QSet>
@@ -90,7 +89,6 @@ private:
     void onUpdate();
     void onFirstRun();
     void processRaiseWindowRequest(const QString &pathReceived);
-    void drainRaiseWindowRequests();
 
     // ui stuff
     UiPorts ui;
@@ -311,23 +309,9 @@ private slots:
     void onAiResizeFinished(int generation, QString path, QImage image, bool success, QString error);
 
 private:
-    // Keeps one invocation responsible for draining re-entrant raise-window
-    // requests. Sets the flag for the guard's lifetime and resets it on every
-    // exit path via RAII.
-    class RaiseWindowGuard {
-    public:
-        explicit RaiseWindowGuard(bool &flag) : active(flag) { active = true; }
-        ~RaiseWindowGuard() { active = false; }
-        RaiseWindowGuard(const RaiseWindowGuard &) = delete;
-        RaiseWindowGuard &operator=(const RaiseWindowGuard &) = delete;
-    private:
-        bool &active;
-    };
-    bool m_raiseWindowActive = false;
     bool m_raiseWindowConcealed = false;
     bool m_raiseWindowAwaitingDocumentRendering = false;
     bool m_raiseWindowDocumentRenderingSettled = false;
-    QQueue<QString> m_pendingRaiseWindowRequests;
     QTimer m_raiseWindowRevealTimer;
     QElapsedTimer m_lastRaiseRequestTimer;
 

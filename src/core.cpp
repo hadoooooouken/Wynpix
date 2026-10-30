@@ -256,10 +256,8 @@ Core::Core(const UiPorts &ports)
     }
 
     m_raiseWindowDocumentRenderingSettled = true;
-    if (!m_raiseWindowActive) {
-      m_raiseWindowAwaitingDocumentRendering = false;
-      m_raiseWindowRevealTimer.start(SettledDocumentRevealDelayMs);
-    }
+    m_raiseWindowAwaitingDocumentRendering = false;
+    m_raiseWindowRevealTimer.start(SettledDocumentRevealDelayMs);
   });
   connect(settings, &Settings::settingsChanged, this, &Core::readSettings);
 
@@ -412,10 +410,6 @@ void Core::showGui() {
 
 void Core::raiseWindow(const QString &pathReceived) {
   m_lastRaiseRequestTimer.start();
-  m_pendingRaiseWindowRequests.enqueue(pathReceived);
-  if (m_raiseWindowActive) return;
-
-  RaiseWindowGuard raiseWindowGuard(m_raiseWindowActive);
 
   // The window may currently be hidden (standby) or minimized. Bringing
   // it back involves several native Win32 calls further down (SW_RESTORE,
@@ -440,7 +434,7 @@ void Core::raiseWindow(const QString &pathReceived) {
     ui.window.setWindowConcealed(true);
   }
 
-  drainRaiseWindowRequests();
+  processRaiseWindowRequest(pathReceived);
 
   showGui();
 
@@ -499,15 +493,6 @@ void Core::processRaiseWindowRequest(const QString &pathReceived) {
           loadDefaultPath();
       }
   }
-}
-
-void Core::drainRaiseWindowRequests() {
-  // Loads the queued requests while the window is still concealed. No events
-  // are processed here: the reveal waits for documentRenderingSettled (or the
-  // folder-view delay), so requests that arrive later go through their own
-  // raiseWindow() call from the event loop.
-  while (!m_pendingRaiseWindowRequests.isEmpty())
-    processRaiseWindowRequest(m_pendingRaiseWindowRequests.dequeue());
 }
 
 void Core::attachModel(DirectoryModel *_model) {
