@@ -10,7 +10,6 @@ public:
   // actionManager must outlive the dispatcher.
   explicit ActionManagerDispatcher(ActionManager &actionManager);
 
-  [[nodiscard]] QStringList actionNames() const override;
   [[nodiscard]] QString shortcutFor(const QString &action) const override;
   bool invoke(const QString &action) override;
   bool processEvent(QInputEvent &event) override;

@@ -206,10 +206,6 @@ bool ContextMenuModel::isOpen() const {
     return mOpen;
 }
 
-bool ContextMenuModel::isMoreExpanded() const {
-    return mMoreExpanded;
-}
-
 //------------------------------------------------------------------------------
 void ContextMenuModel::setFolderViewActive(bool active) {
     mFolderViewActive = active;
@@ -294,7 +290,6 @@ void ContextMenuModel::setMoreExpanded(bool expanded) {
         return;
     mMoreExpanded = expanded;
     rebuild();
-    emit moreExpandedChanged();
 }
 
 void ContextMenuModel::configureScripts() {

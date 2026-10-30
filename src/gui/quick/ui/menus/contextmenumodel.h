@@ -97,7 +97,6 @@ class ContextMenuModel final : public QObject {
     Q_PROPERTY(QAbstractItemModel *items READ items CONSTANT FINAL)
     Q_PROPERTY(QAbstractItemModel *scripts READ scripts CONSTANT FINAL)
     Q_PROPERTY(bool open READ isOpen NOTIFY openChanged FINAL)
-    Q_PROPERTY(bool moreExpanded READ isMoreExpanded NOTIFY moreExpandedChanged FINAL)
 
 public:
     enum class Kind { Action, Separator, Expander, Submenu };
@@ -118,7 +117,6 @@ public:
     [[nodiscard]] const std::vector<ContextMenuEntry> &scriptEntries() const;
 
     [[nodiscard]] bool isOpen() const;
-    [[nodiscard]] bool isMoreExpanded() const;
 
     // --- state of the window and the viewer -------------------------------
     void setFolderViewActive(bool active);
@@ -153,7 +151,6 @@ signals:
     void openChanged();
     // The menu is already open and must appear at the pointer again.
     void repositionRequested();
-    void moreExpandedChanged();
     void scriptSettingsRequested();
 
 private:

@@ -567,11 +567,9 @@ private slots:
     QCOMPARE(controller.cursorShape(), Qt::ArrowCursor);
 
     QVERIFY(controller.pointerPressed(kRightEdge, kLeft, kNoModifiers));
-    QVERIFY(controller.isClickZonePressed());
     // The second press of a double click acts, the double click itself not.
     QVERIFY(controller.pointerDoubleClicked(kRightEdge, kLeft, kNoModifiers));
     controller.pointerReleased(kRightEdge);
-    QVERIFY(!controller.isClickZonePressed());
     QVERIFY(controller.pointerPressed(kLeftEdge, kLeft, kNoModifiers));
     controller.pointerReleased(kLeftEdge);
     QCOMPARE(next.count(), 1);

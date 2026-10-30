@@ -176,9 +176,9 @@ Item {
         }
 
         function useScheme(dark) {
-            if (Theme.dark !== dark)
+            if (Fixture.dark !== dark)
                 Fixture.switchTheme();
-            compare(Theme.dark, dark);
+            compare(Fixture.dark, dark);
         }
 
         function cleanup() {
@@ -541,7 +541,7 @@ Item {
             verifyColor(darkButton, fillOver(Theme.tokens.fillRest), "dark button");
 
             Fixture.switchTheme();
-            verify(!Theme.dark);
+            verify(!Fixture.dark);
             const lightButton = pixel(button, 3, y);
             verifyColor(lightButton, fillOver(Theme.tokens.fillRest), "light button");
             verify(!colorClose(lightButton, darkButton));

@@ -60,8 +60,6 @@ public slots:
     // engine's own QML teardown.
     auto *fixture = new BridgeTestFixture(engine);
     const bool registered =
-        engine->setExternalSingletonInstance(bridgesModule, "AppSettings"_L1,
-                                             &fixture->settingsBridge()) &&
         engine->setExternalSingletonInstance(bridgesModule, "Theme"_L1,
                                              &fixture->themeBridge()) &&
         engine->setExternalSingletonInstance(bridgesModule, "Actions"_L1,

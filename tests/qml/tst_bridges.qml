@@ -3,7 +3,7 @@ import QtTest
 import wynpix.bridges
 import wynpix.tests
 
-// AppSettings, Theme and Actions as published by QmlTestSetup over the
+// Theme and Actions as published by QmlTestSetup over the
 // Fixture singleton (bridgetestfixture.h). The input items are siblings of
 // the TestCase: a TestCase is not visible, so its own children would not
 // receive pointer events.
@@ -13,17 +13,10 @@ Item {
     width: 200
     height: 200
 
-    // One row of Actions.actions.
-    component ActionRow: Item {
-        required property string name
-        required property string shortcut
-    }
-
     // A binding consumer, to check that notifications reach bindings.
     QtObject {
         id: consumer
 
-        property bool smoothZoom: AppSettings.viewer.smoothZoom
         property color background: Theme.tokens.surfaceCanvas
     }
 
@@ -33,13 +26,6 @@ Item {
         anchors.fill: parent
         focus: true
         Keys.onPressed: event => event.accepted = Actions.handleKeyEvent(event)
-
-        Repeater {
-            id: actionRows
-
-            model: Actions.actions
-            delegate: ActionRow {}
-        }
 
         MouseArea {
             id: wheelArea
@@ -59,34 +45,9 @@ Item {
         when: windowShown
 
         SignalSpy {
-            id: viewerSpy
-            target: AppSettings
-            signalName: "viewerChanged"
-        }
-        SignalSpy {
-            id: panelSpy
-            target: AppSettings
-            signalName: "panelChanged"
-        }
-        SignalSpy {
-            id: folderViewSpy
-            target: AppSettings
-            signalName: "folderViewChanged"
-        }
-        SignalSpy {
-            id: overlaysSpy
-            target: AppSettings
-            signalName: "overlaysChanged"
-        }
-        SignalSpy {
             id: tokensSpy
             target: Theme
             signalName: "tokensChanged"
-        }
-        SignalSpy {
-            id: darkSpy
-            target: Theme
-            signalName: "darkChanged"
         }
         SignalSpy {
             id: fontsSpy
@@ -98,54 +59,19 @@ Item {
             target: Theme
             signalName: "iconFontFamilyChanged"
         }
-        SignalSpy {
-            id: shortcutsSpy
-            target: Actions
-            signalName: "shortcutsChanged"
-        }
 
         function init() {
-            for (const spy of [viewerSpy, panelSpy, folderViewSpy, overlaysSpy,
-                               tokensSpy, darkSpy, fontsSpy, iconFontSpy, shortcutsSpy])
+            for (const spy of [tokensSpy, fontsSpy, iconFontSpy])
                 spy.clear();
         }
 
-        function test_settingsChangeNotifiesOnlyItsArea() {
-            const before = AppSettings.viewer.smoothZoom;
-            Fixture.toggleSmoothZoom();
-
-            compare(viewerSpy.count, 1);
-            compare(panelSpy.count, 0);
-            compare(folderViewSpy.count, 0);
-            compare(overlaysSpy.count, 0);
-            compare(AppSettings.viewer.smoothZoom, !before);
-            compare(consumer.smoothZoom, AppSettings.viewer.smoothZoom);
-        }
-
-        function test_unchangedSettingsDoNotNotify() {
-            Fixture.reapplySettings();
-
-            compare(viewerSpy.count, 0);
-            compare(panelSpy.count, 0);
-            compare(folderViewSpy.count, 0);
-            compare(overlaysSpy.count, 0);
-        }
-
-        function test_settingsEnums() {
-            compare(AppSettings.panel.position, SettingsEnums.PanelPosition.Bottom);
-            verify(AppSettings.panel.position !== SettingsEnums.PanelPosition.Top);
-        }
-
-        function test_themeSwitchNotifiesColorsAndMode() {
-            const wasDark = Theme.dark;
+        function test_themeSwitchNotifiesColors() {
             const background = Theme.tokens.surfaceCanvas;
             Fixture.switchTheme();
 
             compare(tokensSpy.count, 1);
-            compare(darkSpy.count, 1);
             compare(fontsSpy.count, 0);
             compare(iconFontSpy.count, 0);
-            compare(Theme.dark, !wasDark);
             verify(!Qt.colorEqual(Theme.tokens.surfaceCanvas, background));
             verify(Qt.colorEqual(consumer.background, Theme.tokens.surfaceCanvas));
         }
@@ -163,26 +89,6 @@ Item {
             verify(!Actions.invoke("noSuchAction"));
             compare(Actions.shortcutFor("nextImage"), "Right");
             compare(Actions.shortcutFor("noSuchAction"), "");
-        }
-
-        function test_actionsModel() {
-            // Sorted by action name: nextImage, prevImage, zoomIn.
-            compare(actionRows.count, 3);
-            const first = actionRows.itemAt(0) as ActionRow;
-            const last = actionRows.itemAt(2) as ActionRow;
-            compare(first.name, "nextImage");
-            compare(first.shortcut, "Right");
-            compare(last.name, "zoomIn");
-
-            Fixture.setShortcut("zoomIn", "Ctrl+=");
-            compare(shortcutsSpy.count, 1);
-            compare(Actions.shortcutFor("zoomIn"), "Ctrl+=");
-            // The model was reassigned, so the delegates were recreated.
-            compare((actionRows.itemAt(2) as ActionRow).shortcut, "Ctrl+=");
-
-            // Same shortcut again: nothing changed, nothing is announced.
-            Fixture.setShortcut("zoomIn", "Ctrl+=");
-            compare(shortcutsSpy.count, 1);
         }
 
         function test_keyForwarding() {

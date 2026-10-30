@@ -5,9 +5,9 @@
 
 class Settings;
 
-// Builds the snapshots published by SettingsBridge and ThemeBridge from the
-// application services. These are the only places that read Settings on
-// behalf of the Qt Quick UI's global bridges.
+// Builds the UI settings passed to the controllers and the theme published by
+// ThemeBridge from the application services. These are the only places that
+// read Settings on behalf of the Qt Quick UI.
 //
 // GUI thread only (ThemeSnapshot reads the application font and the
 // registered icon font).

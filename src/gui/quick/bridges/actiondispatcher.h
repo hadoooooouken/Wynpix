@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QString>
-#include <QStringList>
 
 class QInputEvent;
 class QKeyEvent;
@@ -15,8 +14,6 @@ class IActionDispatcher {
 public:
   virtual ~IActionDispatcher() = default;
 
-  // Names of all actions, in a stable order.
-  [[nodiscard]] virtual QStringList actionNames() const = 0;
   // Primary shortcut of action, or an empty string when it has none.
   [[nodiscard]] virtual QString shortcutFor(const QString &action) const = 0;
   // Runs action; returns false when it is unknown.

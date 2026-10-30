@@ -84,7 +84,6 @@ class ImageViewportController final : public QObject, private IViewSurface {
     Q_PROPERTY(bool clickZonesEnabled READ clickZonesEnabled NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(bool clickZonesDrawn READ clickZonesDrawn NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(ClickZone highlightedClickZone READ highlightedClickZone NOTIFY clickZonesChanged FINAL)
-    Q_PROPERTY(bool clickZonePressed READ isClickZonePressed NOTIFY clickZonesChanged FINAL)
     Q_PROPERTY(int sidePanelLeftInset READ sidePanelLeftInset WRITE setSidePanelLeftInset NOTIFY sidePanelInsetsChanged FINAL)
     Q_PROPERTY(int sidePanelRightInset READ sidePanelRightInset WRITE setSidePanelRightInset NOTIFY sidePanelInsetsChanged FINAL)
     Q_PROPERTY(bool reducedMotion READ reducedMotion NOTIFY reducedMotionChanged FINAL)
@@ -206,7 +205,6 @@ public:
     // The highlighted zone is painted (Settings::clickableEdgesVisible()).
     [[nodiscard]] bool clickZonesDrawn() const;
     [[nodiscard]] ClickZone highlightedClickZone() const;
-    [[nodiscard]] bool isClickZonePressed() const;
     [[nodiscard]] int sidePanelLeftInset() const;
     void setSidePanelLeftInset(int inset);
     [[nodiscard]] int sidePanelRightInset() const;

@@ -179,7 +179,7 @@ Item {
 
             // A row under it keeps it expanded, a row above collapses it.
             makeCurrent(renameRow);
-            tryCompare(Fixture.contextMenu, "moreExpanded", true);
+            tryVerify(() => rename.visible, timeout);
             makeCurrent(copyRow);
             tryVerify(() => !rename.visible, timeout);
 

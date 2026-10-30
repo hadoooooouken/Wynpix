@@ -21,7 +21,6 @@
 #include "gui/quick/adapters/quickvieweractions.h"
 #include "gui/quick/adapters/quickviewerport.h"
 #include "gui/quick/bridges/actionbridge.h"
-#include "gui/quick/bridges/settingsbridge.h"
 #include "gui/quick/bridges/themebridge.h"
 #include "gui/quick/ui/crop/cropcontroller.h"
 #include "gui/quick/ui/dialogs/dialogcoordinator.h"
@@ -115,7 +114,6 @@ private:
   // QQmlEngine::setExternalSingletonInstance() and the main window's
   // required properties require.
   ActionManagerDispatcher mDispatcher;
-  SettingsBridge mSettingsBridge;
   ThemeBridge mThemeBridge;
   ActionBridge mActionBridge;
   ImageViewportController mViewport;

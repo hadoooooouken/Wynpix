@@ -1405,10 +1405,6 @@ ImageViewportController::ClickZone ImageViewportController::highlightedClickZone
     return mHighlightedZone;
 }
 
-bool ImageViewportController::isClickZonePressed() const {
-    return mClickZonePressed;
-}
-
 void ImageViewportController::updateClickZonesEnabled() {
     const int availableWidth = viewportSize().width() - mSidePanelLeftInset - mSidePanelRightInset;
     const bool enabled = mSettings.viewer.clickableEdges &&

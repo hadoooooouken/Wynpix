@@ -68,7 +68,6 @@ struct Colors {
   QColor textOnHud;
   QColor iconDefault;
   QColor iconFolder;
-  QColor iconThumbFolder;
   // Glyphs on the chrome surface (the click-zone arrows of the viewer).
   QColor iconOnChrome;
   // textOnChrome at the opacity of the chrome: hovered thumbnails.
@@ -161,7 +160,6 @@ inline constexpr qreal kScrollbarMarkerAlpha = 0.30;
       .textOnHud = scheme.overlay_text,
       .iconDefault = scheme.icons,
       .iconFolder = scheme.folder_icons,
-      .iconThumbFolder = scheme.thumbnail_folder_icons,
       .iconOnChrome = QColor::fromRgb(
           scheme.thumbpanel.lightnessF() > kLightChromeLightness
               ? kIconOnLightChrome

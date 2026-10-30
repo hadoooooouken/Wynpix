@@ -18,7 +18,7 @@ QML_NAMED_ELEMENT(FluentIcons)
 // Colours by role, fonts, control metrics and icon glyphs for QML (Theme
 // singleton).
 //
-// Like SettingsBridge, it is fed by the composition root: QuickUiHost builds
+// It is fed by the composition root: QuickUiHost builds
 // a ThemeSnapshot whenever Settings::settingsChanged fires (a theme switch is
 // only announced through that signal) and passes it to apply(), which emits
 // only for the parts that changed.
@@ -35,7 +35,6 @@ class ThemeBridge : public QObject {
   Q_PROPERTY(ThemeTokens tokens READ tokens NOTIFY tokensChanged FINAL)
   Q_PROPERTY(ThemeFonts fonts READ fonts NOTIFY fontsChanged FINAL)
   Q_PROPERTY(ThemeMetrics metrics READ metrics NOTIFY metricsChanged FINAL)
-  Q_PROPERTY(bool dark READ dark NOTIFY darkChanged FINAL)
   Q_PROPERTY(QString iconFontFamily READ iconFontFamily NOTIFY iconFontFamilyChanged FINAL)
   Q_PROPERTY(int compactIconSize READ compactIconSize CONSTANT FINAL)
   Q_PROPERTY(int standardIconSize READ standardIconSize CONSTANT FINAL)
@@ -46,7 +45,6 @@ public:
   [[nodiscard]] const ThemeTokens &tokens() const;
   [[nodiscard]] const ThemeFonts &fonts() const;
   [[nodiscard]] const ThemeMetrics &metrics() const;
-  [[nodiscard]] bool dark() const;
   [[nodiscard]] const QString &iconFontFamily() const;
   [[nodiscard]] static constexpr int compactIconSize() {
     return UiMetrics::kCompactIconSizePx;
@@ -66,7 +64,6 @@ signals:
   void tokensChanged();
   void fontsChanged();
   void metricsChanged();
-  void darkChanged();
   void iconFontFamilyChanged();
 
 private:

@@ -154,10 +154,6 @@ QMetaProperty settingsField(const QMetaObject *page, const QString &field) {
 //------------------------------------------------------------------------------
 FakeActionDispatcher::FakeActionDispatcher() : mShortcuts(initialShortcuts()) {}
 
-QStringList FakeActionDispatcher::actionNames() const {
-  return mShortcuts.keys();
-}
-
 QString FakeActionDispatcher::shortcutFor(const QString &action) const {
   return mShortcuts.value(action);
 }
@@ -226,8 +222,8 @@ void FakeActionDispatcher::setShortcut(const QString &action,
 //------------------------------------------------------------------------------
 BridgeTestFixture::BridgeTestFixture(QObject *parent)
     : QObject(parent), mSettings(testSettings()),
-      mSettingsBridge(mSettings), mThemeBridge(testTheme(mDark)),
-      mActionBridge(mDispatcher), mViewport(mSettings), mOverlays(mSettings),
+      mThemeBridge(testTheme(mDark)), mActionBridge(mDispatcher),
+      mViewport(mSettings), mOverlays(mSettings),
       mThumbnailPanel(mThumbnails, mSettings), mContextMenu(mDispatcher),
       mCrop(mSettings), mFolderGrid(mFolderThumbnails, mSettings),
       mFolderView(mFolderGrid, mSettings, QDir::homePath()),
@@ -302,8 +298,6 @@ BridgeTestFixture::BridgeTestFixture(QObject *parent)
             mLastCropRequest = u"default:"_s + QString::number(static_cast<int>(action));
           });
 }
-
-SettingsBridge &BridgeTestFixture::settingsBridge() { return mSettingsBridge; }
 
 ThemeBridge &BridgeTestFixture::themeBridge() { return mThemeBridge; }
 
@@ -407,14 +401,6 @@ bool BridgeTestFixture::dropExternalFile(QQuickWindow *window, QPointF position,
 }
 
 //------------------------------------------------------------------------------
-void BridgeTestFixture::toggleSmoothZoom() {
-  mSettings.viewer.smoothZoom = !mSettings.viewer.smoothZoom;
-  mSettingsBridge.apply(mSettings);
-  mViewport.applySettings(mSettings);
-}
-
-void BridgeTestFixture::reapplySettings() { mSettingsBridge.apply(mSettings); }
-
 void BridgeTestFixture::switchTheme() {
   mDark = !mDark;
   mThemeBridge.apply(testTheme(mDark));
@@ -423,7 +409,6 @@ void BridgeTestFixture::switchTheme() {
 void BridgeTestFixture::setShortcut(const QString &action,
                                     const QString &shortcut) {
   mDispatcher.setShortcut(action, shortcut);
-  mActionBridge.refresh();
   mContextMenu.refreshShortcuts();
 }
 
@@ -523,6 +508,8 @@ QStringList BridgeTestFixture::storedScripts() const { return mShortcutScripts.s
 int BridgeTestFixture::previewedThemeMode() const { return mSettingsValues.previewedThemeMode; }
 
 int BridgeTestFixture::cacheClearCount() const { return mSettingsValues.cacheClearCount; }
+
+bool BridgeTestFixture::isDark() const { return mDark; }
 
 void BridgeTestFixture::openSettings(int page) {
   mSettingsDialog.show(static_cast<SettingsEditorModel::Page>(page));

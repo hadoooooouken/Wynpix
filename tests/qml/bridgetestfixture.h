@@ -15,7 +15,6 @@
 #include "fakesettingsstores.h"
 #include "gui/quick/bridges/actionbridge.h"
 #include "gui/quick/bridges/actiondispatcher.h"
-#include "gui/quick/bridges/settingsbridge.h"
 #include "gui/quick/bridges/themebridge.h"
 #include "gui/quick/ui/crop/cropcontroller.h"
 #include "gui/quick/ui/dialogs/dialogcoordinator.h"
@@ -36,7 +35,6 @@ class FakeActionDispatcher final : public IActionDispatcher {
 public:
   FakeActionDispatcher();
 
-  [[nodiscard]] QStringList actionNames() const override;
   [[nodiscard]] QString shortcutFor(const QString &action) const override;
   bool invoke(const QString &action) override;
   bool processEvent(QInputEvent &event) override;
@@ -106,11 +104,12 @@ class BridgeTestFixture : public QObject {
   Q_PROPERTY(QStringList storedScripts READ storedScripts FINAL)
   Q_PROPERTY(int previewedThemeMode READ previewedThemeMode FINAL)
   Q_PROPERTY(int cacheClearCount READ cacheClearCount FINAL)
+  // The published theme is the dark one (switchTheme() flips it).
+  Q_PROPERTY(bool dark READ isDark FINAL)
 
 public:
   explicit BridgeTestFixture(QObject *parent = nullptr);
 
-  [[nodiscard]] SettingsBridge &settingsBridge();
   [[nodiscard]] ThemeBridge &themeBridge();
   [[nodiscard]] ActionBridge &actionBridge();
 
@@ -154,14 +153,11 @@ public:
   [[nodiscard]] QStringList storedScripts() const;
   [[nodiscard]] int previewedThemeMode() const;
   [[nodiscard]] int cacheClearCount() const;
+  [[nodiscard]] bool isDark() const;
 
-  // Flips viewer.smoothZoom and publishes the snapshot (viewer area only).
-  Q_INVOKABLE void toggleSmoothZoom();
-  // Publishes the current snapshot again (no area changes).
-  Q_INVOKABLE void reapplySettings();
   // Switches between the application's dark and light theme.
   Q_INVOKABLE void switchTheme();
-  // Rebinds action and refreshes the actions bridge.
+  // Rebinds action and refreshes the context menu shortcuts.
   Q_INVOKABLE void setShortcut(const QString &action, const QString &shortcut);
   // Shows a plain image of width x height pixels in the viewport, as a new
   // document (fitted with the default fit mode).
@@ -283,7 +279,6 @@ private:
   FakeActionDispatcher mDispatcher;
   UiSettingsSnapshot mSettings;
   bool mDark = true;
-  SettingsBridge mSettingsBridge;
   ThemeBridge mThemeBridge;
   ActionBridge mActionBridge;
   ImageViewportController mViewport;

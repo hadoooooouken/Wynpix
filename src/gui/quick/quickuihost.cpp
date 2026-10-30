@@ -39,7 +39,6 @@ constexpr QLatin1StringView dialogsProperty = "dialogs"_L1;
 constexpr QLatin1StringView settingsDialogProperty = "settingsDialog"_L1;
 
 constexpr QLatin1StringView bridgesModule = "wynpix.bridges"_L1;
-constexpr QLatin1StringView settingsBridgeType = "AppSettings"_L1;
 constexpr QLatin1StringView themeBridgeType = "Theme"_L1;
 constexpr QLatin1StringView actionBridgeType = "Actions"_L1;
 
@@ -106,7 +105,6 @@ QuickUiHost::QuickUiHost(Settings &settings, ActionManager &actionManager,
       mThumbnailPanelView(std::make_shared<DirectoryViewAdapter>()),
       mFolderGridView(std::make_shared<DirectoryViewAdapter>()),
       mDispatcher(actionManager),
-      mSettingsBridge(BridgeSnapshots::readUiSettings(settings)),
       mThemeBridge(BridgeSnapshots::readTheme(settings)),
       mActionBridge(mDispatcher),
       mViewport(BridgeSnapshots::readUiSettings(settings)),
@@ -145,7 +143,7 @@ QuickUiHost::QuickUiHost(Settings &settings, ActionManager &actionManager,
       mSettingsDialog(mSettingsEditor) {
   // settingsChanged also announces theme switches and shortcut edits; each
   // receiver acts only on what actually changed.
-  QObject::connect(&settings, &Settings::settingsChanged, &mSettingsBridge,
+  QObject::connect(&settings, &Settings::settingsChanged, &mThemeBridge,
                    [this]() { onSettingsChanged(); });
   forwardViewportEvents();
   connectViewerToggles();
@@ -290,7 +288,6 @@ void QuickUiHost::connectSettingsDialog() {
 //------------------------------------------------------------------------------
 void QuickUiHost::onSettingsChanged() {
   const UiSettingsSnapshot snapshot = BridgeSnapshots::readUiSettings(mSettings);
-  mSettingsBridge.apply(snapshot);
   mViewport.applySettings(snapshot);
   mOverlays.applySettings(snapshot);
   mThumbnailPanel.applySettings(snapshot);
@@ -298,15 +295,12 @@ void QuickUiHost::onSettingsChanged() {
   mFolderView.applySettings(snapshot);
   mWindowShell.setWindowedBackgroundOpacity(windowedBackgroundOpacity());
   mThemeBridge.apply(BridgeSnapshots::readTheme(mSettings));
-  mActionBridge.refresh();
   mContextMenu.refreshShortcuts();
 }
 
 //------------------------------------------------------------------------------
 bool QuickUiHost::registerBridges() {
   const bool registered =
-      mEngine.setExternalSingletonInstance(bridgesModule, settingsBridgeType,
-                                           &mSettingsBridge) &&
       mEngine.setExternalSingletonInstance(bridgesModule, themeBridgeType,
                                            &mThemeBridge) &&
       mEngine.setExternalSingletonInstance(bridgesModule, actionBridgeType,

@@ -464,7 +464,6 @@ private slots:
     QCOMPARE(tokens.textOnHud, colors.overlay_text);
     QCOMPARE(tokens.iconDefault, colors.icons);
     QCOMPARE(tokens.iconFolder, colors.folder_icons);
-    QCOMPARE(tokens.iconThumbFolder, colors.thumbnail_folder_icons);
     QCOMPARE(tokens.contrastOnChrome, colors.thumbpanel_hc);
     QCOMPARE(tokens.accentText, AccentContrast::textOn(colors.accent));
     QCOMPARE(tokens.dropTarget, QColor(u"#be3c19"_s));
@@ -506,14 +505,12 @@ private slots:
 
   void snapshotCarriesTheSchemeAndMetrics_data() {
     QTest::addColumn<int>("scheme");
-    QTest::addColumn<bool>("dark");
-    QTest::newRow("dark") << static_cast<int>(COLORS_DARK) << true;
-    QTest::newRow("light") << static_cast<int>(COLORS_LIGHT) << false;
+    QTest::newRow("dark") << static_cast<int>(COLORS_DARK);
+    QTest::newRow("light") << static_cast<int>(COLORS_LIGHT);
   }
 
   void snapshotCarriesTheSchemeAndMetrics() {
     QFETCH(int, scheme);
-    QFETCH(bool, dark);
     const ColorScheme colors =
         ThemeStore::colorScheme(static_cast<ColorSchemes>(scheme));
     const QFont font = fontWithPointSize(kLargeFontPointSize);
@@ -521,7 +518,6 @@ private slots:
 
     const ThemeSnapshot snapshot = buildThemeSnapshot(colors, font, iconFamily);
 
-    QCOMPARE(snapshot.dark, dark);
     QCOMPARE(snapshot.iconFontFamily, iconFamily);
     QCOMPARE(snapshot.tokens.surfaceCanvas, colors.background);
     QCOMPARE(snapshot.tokens.surfaceViewRaised, colors.folderview_hc);

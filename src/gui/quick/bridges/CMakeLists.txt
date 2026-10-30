@@ -1,7 +1,7 @@
 ## QML MODULE wynpix.bridges
-# Typed, notifying QML views of the global services: AppSettings, Theme,
-# Actions and the SettingsEnums / FluentIcons enumerations. The bridges hold
-# snapshots or talk to IActionDispatcher only; they are fed by QuickUiHost
+# Typed, notifying QML views of the global services: Theme, Actions and
+# the SettingsEnums / FluentIcons enumerations. The bridges hold snapshots
+# or talk to IActionDispatcher only; they are fed by QuickUiHost
 # (gui/quick/adapters) and never read the global singletons, so the QML test
 # runner links them without the application services.
 
@@ -17,8 +17,6 @@ qt_add_qml_module(wynpix_bridges
         publish.h
         qmlinputevents.cpp
         qmlinputevents.h
-        settingsbridge.cpp
-        settingsbridge.h
         settingsenums.h
         themebridge.cpp
         themebridge.h

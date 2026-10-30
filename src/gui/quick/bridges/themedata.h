@@ -59,7 +59,6 @@ struct ThemeTokens {
   Q_PROPERTY(QColor textOnHud MEMBER textOnHud)
   Q_PROPERTY(QColor iconDefault MEMBER iconDefault)
   Q_PROPERTY(QColor iconFolder MEMBER iconFolder)
-  Q_PROPERTY(QColor iconThumbFolder MEMBER iconThumbFolder)
   Q_PROPERTY(QColor iconOnChrome MEMBER iconOnChrome)
   Q_PROPERTY(QColor contrastOnChrome MEMBER contrastOnChrome)
   Q_PROPERTY(QColor statusPending MEMBER statusPending)
@@ -117,7 +116,6 @@ public:
   QColor textOnHud;
   QColor iconDefault;
   QColor iconFolder;
-  QColor iconThumbFolder;
   QColor iconOnChrome;
   QColor contrastOnChrome;
   QColor statusPending;
@@ -189,7 +187,6 @@ struct ThemeSnapshot {
   ThemeTokens tokens;
   ThemeFonts fonts;
   ThemeMetrics metrics;
-  bool dark = false;
   QString iconFontFamily;
 
   friend bool operator==(const ThemeSnapshot &, const ThemeSnapshot &) = default;

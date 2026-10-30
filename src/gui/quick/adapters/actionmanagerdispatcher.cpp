@@ -10,10 +10,6 @@ ActionManagerDispatcher::ActionManagerDispatcher(ActionManager &actionManager)
     : mActionManager(actionManager) {}
 
 //------------------------------------------------------------------------------
-QStringList ActionManagerDispatcher::actionNames() const {
-  return mActionManager.actionList();
-}
-
 QString ActionManagerDispatcher::shortcutFor(const QString &action) const {
   return mActionManager.shortcutForAction(action);
 }

@@ -1,34 +1,11 @@
 #pragma once
 
-#include <QAbstractItemModel>
 #include <QEvent>
 #include <QObject>
-#include <QRangeModel>
-#include <QRangeModelAdapter>
 #include <QString>
 #include <QtQml/qqmlregistration.h>
 
-#include <vector>
-
 class IActionDispatcher;
-
-// One row of ActionBridge::actions: the action name and its primary shortcut.
-struct ActionEntry {
-  Q_GADGET
-  Q_PROPERTY(QString name MEMBER name)
-  Q_PROPERTY(QString shortcut MEMBER shortcut)
-
-public:
-  QString name;
-  QString shortcut;
-
-  friend bool operator==(const ActionEntry &, const ActionEntry &) = default;
-};
-
-// Each gadget property is a role (name, shortcut) of a single-column list.
-template <> struct QRangeModel::RowOptions<ActionEntry> {
-  static constexpr auto rowCategory = QRangeModel::RowCategory::MultiRoleItem;
-};
 
 // Actions and shortcuts for QML (Actions singleton).
 //
@@ -41,27 +18,17 @@ template <> struct QRangeModel::RowOptions<ActionEntry> {
 // shortcuts like the widget UI: presses of every button but the right one,
 // the release of the right button, and left-button double clicks.
 //
-// Shortcuts can be edited at runtime (settings dialog); the composition root
-// calls refresh() on Settings::settingsChanged, which updates the model and
-// emits shortcutsChanged() when anything changed.
-//
 // GUI thread only.
 class ActionBridge : public QObject {
   Q_OBJECT
   QML_NAMED_ELEMENT(Actions)
   QML_SINGLETON
   QML_UNCREATABLE("Provided by QuickUiHost via setExternalSingletonInstance()")
-  // Roles: name, shortcut. Read-only for QML by convention: edits made
-  // through the model do not reach the dispatcher.
-  Q_PROPERTY(QAbstractItemModel *actions READ actions CONSTANT FINAL)
 
 public:
   // dispatcher must outlive the bridge.
   explicit ActionBridge(IActionDispatcher &dispatcher,
                         QObject *parent = nullptr);
-  ~ActionBridge() override;
-
-  [[nodiscard]] QAbstractItemModel *actions() const;
 
   // Runs the action called name; returns false when it is unknown.
   Q_INVOKABLE bool invoke(const QString &name);
@@ -91,17 +58,9 @@ public:
   Q_INVOKABLE QString mouseReleaseShortcutText(QObject *event) const;
   Q_INVOKABLE QString mouseDoubleClickShortcutText(QObject *event) const;
 
-  // Re-reads actions and shortcuts from the dispatcher.
-  void refresh();
-
-signals:
-  void shortcutsChanged();
-
 private:
-  [[nodiscard]] std::vector<ActionEntry> readEntries() const;
   [[nodiscard]] bool handleMouseEvent(QObject *event, QEvent::Type type);
   [[nodiscard]] QString mouseShortcutText(QObject *event, QEvent::Type type) const;
 
   IActionDispatcher &mDispatcher;
-  QRangeModelAdapter<std::vector<ActionEntry>> mActions;
 };

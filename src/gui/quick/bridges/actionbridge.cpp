@@ -6,16 +6,10 @@
 #include <QDebug>
 
 #include <memory>
-#include <utility>
 
 //------------------------------------------------------------------------------
 ActionBridge::ActionBridge(IActionDispatcher &dispatcher, QObject *parent)
-    : QObject(parent), mDispatcher(dispatcher), mActions(readEntries()) {}
-
-ActionBridge::~ActionBridge() = default;
-
-//------------------------------------------------------------------------------
-QAbstractItemModel *ActionBridge::actions() const { return mActions.model(); }
+    : QObject(parent), mDispatcher(dispatcher) {}
 
 //------------------------------------------------------------------------------
 bool ActionBridge::invoke(const QString &name) {
@@ -122,23 +116,4 @@ bool ActionBridge::handleMouseEvent(QObject *event, QEvent::Type type) {
     return false;
   }
   return mDispatcher.processEvent(*mouseEvent);
-}
-
-//------------------------------------------------------------------------------
-void ActionBridge::refresh() {
-  std::vector<ActionEntry> entries = readEntries();
-  if (entries == mActions.range())
-    return;
-  mActions.assign(std::move(entries));
-  emit shortcutsChanged();
-}
-
-//------------------------------------------------------------------------------
-std::vector<ActionEntry> ActionBridge::readEntries() const {
-  const QStringList names = mDispatcher.actionNames();
-  std::vector<ActionEntry> entries;
-  entries.reserve(static_cast<size_t>(names.size()));
-  for (const QString &name : names)
-    entries.push_back({.name = name, .shortcut = mDispatcher.shortcutFor(name)});
-  return entries;
 }

@@ -51,7 +51,6 @@ ThemeTokens themeTokens(const SemanticTokens::Colors &colors) {
       .textOnHud = colors.textOnHud,
       .iconDefault = colors.iconDefault,
       .iconFolder = colors.iconFolder,
-      .iconThumbFolder = colors.iconThumbFolder,
       .iconOnChrome = colors.iconOnChrome,
       .contrastOnChrome = colors.contrastOnChrome,
       .statusPending = colors.statusPending,
@@ -102,7 +101,6 @@ ThemeSnapshot buildThemeSnapshot(const ColorScheme &scheme,
               .tooltipBorderRadius = metrics.tooltipBorderRadius,
               .contextMenuBorderRadius = metrics.contextMenuBorderRadius,
           },
-      .dark = scheme.tid == COLORS_DARK,
       .iconFontFamily = iconFontFamily,
   };
 }

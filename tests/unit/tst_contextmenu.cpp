@@ -23,7 +23,6 @@ constexpr int kRenameRow = 14;
 // map, like ActionManager::shortcutForAction() (scripts included).
 class FakeDispatcher final : public IActionDispatcher {
 public:
-  [[nodiscard]] QStringList actionNames() const override { return Actions().getList(); }
   [[nodiscard]] QString shortcutFor(const QString &action) const override {
     return shortcuts.value(action);
   }
@@ -194,12 +193,11 @@ private slots:
              static_cast<int>(FluentIcon::ChevronDown20));
     // A closed menu ignores its current row.
     menu.setCurrentRow(kMoreRow);
-    QVERIFY(!menu.isMoreExpanded());
+    QVERIFY(!entryFor(menu.itemEntries(), u"renameFile"_s).shown);
 
     menu.show();
     QSignalSpy reset(menu.items(), &QAbstractItemModel::modelReset);
     menu.setCurrentRow(kMoreRow);
-    QVERIFY(menu.isMoreExpanded());
     QCOMPARE(reset.count(), 0);
     QVERIFY(entryFor(menu.itemEntries(), u"renameFile"_s).shown);
     QVERIFY(entryFor(menu.itemEntries(), u"removeFile"_s).shown);
@@ -208,16 +206,15 @@ private slots:
              static_cast<int>(FluentIcon::ChevronUp20));
     // A row under "More" keeps it expanded, a row above it collapses it.
     menu.setCurrentRow(kRenameRow);
-    QVERIFY(menu.isMoreExpanded());
+    QVERIFY(entryFor(menu.itemEntries(), u"renameFile"_s).shown);
     menu.setCurrentRow(kCopyRow);
-    QVERIFY(!menu.isMoreExpanded());
     QVERIFY(!entryFor(menu.itemEntries(), u"renameFile"_s).shown);
 
     // The menu action collapses it, also on an open menu.
     menu.setCurrentRow(kMoreRow);
     menu.show();
     QVERIFY(menu.isOpen());
-    QVERIFY(!menu.isMoreExpanded());
+    QVERIFY(!entryFor(menu.itemEntries(), u"renameFile"_s).shown);
   }
 
   void menuActionOpensTheMenuAndMovesAnOpenOne() {
