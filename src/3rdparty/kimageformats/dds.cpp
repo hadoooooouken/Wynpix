@@ -992,6 +992,14 @@ static QImage readUnsignedImage(QDataStream &s, const DDSHeader &dds, quint32 wi
             masks[i] = (masks[i] >> shifts[i]) << (8 - bits[i]);
     }
 
+    const quint32 valueSize = dds.pixelFormat.rgbBitCount;
+    if (valueSize != 8 && valueSize != 16 && valueSize != 24 && valueSize != 32) {
+        s.setStatus(QDataStream::ReadCorruptData);
+        return QImage();
+    }
+    constexpr quint32 bitsPerByte = 8;
+    const quint32 bytesPerValue = valueSize / bitsPerByte;
+
     QImage::Format format = hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32;
     if (!hasAlpha && (flags & DDSPixelFormat::FlagLuminance))
         format = QImage::Format_Grayscale8;
@@ -1000,12 +1008,21 @@ static QImage readUnsignedImage(QDataStream &s, const DDSHeader &dds, quint32 wi
         return image;
     }
 
+    // Read a whole row at once: a stream read per byte dominates the decode time.
+    QByteArray rowData(qsizetype(width) * bytesPerValue, char());
     for (quint32 y = 0; y < height; y++) {
-        for (quint32 x = 0; x < width; x++) {
-            quint8 *byteLine = reinterpret_cast<quint8 *>(image.scanLine(y));
-            QRgb *line = reinterpret_cast<QRgb *>(byteLine);
+        if (s.readRawData(rowData.data(), rowData.size()) != rowData.size() || s.status() != QDataStream::Ok)
+            return QImage();
+        const quint8 *rowValues = reinterpret_cast<const quint8 *>(rowData.constData());
+        quint8 *byteLine = reinterpret_cast<quint8 *>(image.scanLine(y));
+        QRgb *line = reinterpret_cast<QRgb *>(byteLine);
 
-            quint32 value = readValue(s, dds.pixelFormat.rgbBitCount);
+        for (quint32 x = 0; x < width; x++) {
+            quint32 value = 0;
+            for (quint32 byte = 0; byte < bytesPerValue; ++byte) {
+                value |= quint32(rowValues[byte]) << (byte * bitsPerByte);
+            }
+            rowValues += bytesPerValue;
             quint8 colors[ColorCount];
 
             for (int c = 0; c < ColorCount; ++c) {
@@ -1034,9 +1051,6 @@ static QImage readUnsignedImage(QDataStream &s, const DDSHeader &dds, quint32 wi
             else {
                 line[x] = qRgba(colors[Red], colors[Green], colors[Blue], colors[Alpha]);
             }
-
-            if (s.status() != QDataStream::Ok)
-                return QImage();
         }
         strideAlignment(s, dds, width); // some dds seems aligned to 32 bits
     }
