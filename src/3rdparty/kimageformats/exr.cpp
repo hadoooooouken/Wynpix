@@ -71,6 +71,7 @@
 #include <ImfRgbaFile.h>
 #include <ImfStandardAttributes.h>
 #include <ImfVersion.h>
+#include <IlmThreadPool.h>
 
 #include <iostream>
 
@@ -415,6 +416,75 @@ static void readColorSpace(const Imf::Header &header, QImage &image)
 #endif
 }
 
+namespace {
+
+/*!
+ * \brief The ExrBlockConversion struct
+ * A block of decoded EXR lines and where its rows go in the destination image.
+ */
+struct ExrBlockConversion {
+    const Imf::Array2D<Imf::Rgba> *pixels = nullptr;
+    uchar *imageBits = nullptr;
+    qsizetype bytesPerLine = 0;
+    int firstImageRow = 0;
+    int width = 0;
+    bool isRgba = false;
+};
+
+void convertExrRows(const ExrBlockConversion &block, int firstRow, int endRow)
+{
+    for (int n = firstRow; n < endRow; ++n) {
+        auto scanLine = reinterpret_cast<qfloat16 *>(block.imageBits + qsizetype(block.firstImageRow + n) * block.bytesPerLine);
+        const Imf::Rgba *row = (*block.pixels)[n];
+        for (int x = 0; x < block.width; ++x) {
+            auto xcs = x * 4;
+            *(scanLine + xcs) = qfloat16(float(row[x].r));
+            *(scanLine + xcs + 1) = qfloat16(float(row[x].g));
+            *(scanLine + xcs + 2) = qfloat16(float(row[x].b));
+            *(scanLine + xcs + 3) = qfloat16(block.isRgba ? std::clamp(float(row[x].a), 0.f, 1.f) : 1.f);
+        }
+    }
+}
+
+class ExrConvertRowsTask : public IlmThread::Task
+{
+public:
+    ExrConvertRowsTask(IlmThread::TaskGroup *group, const ExrBlockConversion &block, int firstRow, int endRow)
+        : IlmThread::Task(group)
+        , m_block(block)
+        , m_firstRow(firstRow)
+        , m_endRow(endRow)
+    {
+    }
+
+    void execute() override
+    {
+        convertExrRows(m_block, m_firstRow, m_endRow);
+    }
+
+private:
+    ExrBlockConversion m_block;
+    int m_firstRow;
+    int m_endRow;
+};
+
+/*!
+ * \brief convertExrBlock
+ * Converts the rows of a block on the OpenEXR thread pool, which is idle between readPixels() calls.
+ * The tasks are owned and deleted by the pool; the group waits for all of them when it goes out of scope.
+ */
+void convertExrBlock(const ExrBlockConversion &block, int rowCount)
+{
+    const int taskCount = std::max(1, IlmThread::ThreadPool::globalThreadPool().numThreads());
+    const int rowsPerTask = (rowCount + taskCount - 1) / taskCount;
+    IlmThread::TaskGroup group;
+    for (int firstRow = 0; firstRow < rowCount; firstRow += rowsPerTask) {
+        IlmThread::ThreadPool::addGlobalTask(new ExrConvertRowsTask(&group, block, firstRow, std::min(firstRow + rowsPerTask, rowCount)));
+    }
+}
+
+} // namespace
+
 bool EXRHandler::read(QImage *outImage)
 {
     try {
@@ -461,6 +531,8 @@ bool EXRHandler::read(QImage *outImage)
         pixels.resizeErase(EXR_LINES_PER_BLOCK, width);
         std::memset(pixels[0], 0, sizeof(Imf::Rgba) * EXR_LINES_PER_BLOCK * width);
         bool isRgba = image.hasAlphaChannel();
+        // Detach once here: the conversion tasks write rows through this pointer concurrently.
+        uchar *imageBits = image.bits();
 
         for (int y = 0, n = 0; y < height; y += n) {
             auto my = dw.min.y + y;
@@ -471,16 +543,8 @@ bool EXRHandler::read(QImage *outImage)
             file.setFrameBuffer(&pixels[0][0] - dw.min.x - qint64(my) * width, 1, width);
             file.readPixels(my, std::min(my + EXR_LINES_PER_BLOCK - 1, dw.max.y));
 
-            for (n = 0; n < std::min(EXR_LINES_PER_BLOCK, height - y); ++n) {
-                auto scanLine = reinterpret_cast<qfloat16 *>(image.scanLine(y + n));
-                for (int x = 0; x < width; ++x) {
-                    auto xcs = x * 4;
-                    *(scanLine + xcs) = qfloat16(float(pixels[n][x].r));
-                    *(scanLine + xcs + 1) = qfloat16(float(pixels[n][x].g));
-                    *(scanLine + xcs + 2) = qfloat16(float(pixels[n][x].b));
-                    *(scanLine + xcs + 3) = qfloat16(isRgba ? std::clamp(float(pixels[n][x].a), 0.f, 1.f) : 1.f);
-                }
-            }
+            n = std::min(EXR_LINES_PER_BLOCK, height - y);
+            convertExrBlock(ExrBlockConversion{&pixels, imageBits, image.bytesPerLine(), y, width, isRgba}, n);
         }
 
         // set some useful metadata
