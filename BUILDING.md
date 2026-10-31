@@ -167,7 +167,7 @@ wynpix/
 |---------|---------|----------|:---:|--------|
 | Imath | v3.2.3 | [AcademySoftwareFoundation/Imath](https://github.com/AcademySoftwareFoundation/Imath) | Yes | Static lib |
 | OpenJPH | 0.32.0 | [aous72/OpenJPH](https://github.com/aous72/OpenJPH) | Yes | HTJ2K codec |
-| OpenEXR | v3.5.0 | [AcademySoftwareFoundation/openexr](https://github.com/AcademySoftwareFoundation/openexr) | Yes | Static lib |
+| OpenEXR | v3.5.3 | [AcademySoftwareFoundation/openexr](https://github.com/AcademySoftwareFoundation/openexr) | Yes | Static lib |
 | libavif | v1.4.2 | [AOMediaCodec/libavif](https://github.com/AOMediaCodec/libavif) | Yes | Static lib |
 | libjxl | v0.12.0 | [libjxl/libjxl](https://github.com/libjxl/libjxl) | No | Static lib |
 | jxrlib | v2019.10.9 | [4creators/jxrlib](https://github.com/4creators/jxrlib) | Yes | Static lib |
