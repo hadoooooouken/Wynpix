@@ -24,9 +24,6 @@ public:
     // with keyboard focus.
     virtual void raiseAndActivateWindow() = 0;
     virtual void saveWindowGeometry() = 0;
-    // Suspends painting while several changes are applied; resuming repaints
-    // the window immediately.
-    virtual void setWindowUpdatesSuspended(bool suspended) = 0;
 
 protected:
     IWindowPort() = default;

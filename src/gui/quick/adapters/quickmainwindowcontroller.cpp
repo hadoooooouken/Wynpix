@@ -268,12 +268,6 @@ void QuickMainWindowController::saveWindowGeometry() {
     windowState.savePlacement();
 }
 
-void QuickMainWindowController::setWindowUpdatesSuspended(bool suspended) {
-    // The scene graph synchronizes with the GUI thread only between event
-    // loop iterations, so changes applied in one go are presented together.
-    Q_UNUSED(suspended)
-}
-
 //------------------------------------------------------------------------------
 // IShellPort
 

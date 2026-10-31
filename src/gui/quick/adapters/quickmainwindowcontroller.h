@@ -90,7 +90,6 @@ public:
     [[nodiscard]] bool isWindowMinimized() const override;
     void raiseAndActivateWindow() override;
     void saveWindowGeometry() override;
-    void setWindowUpdatesSuspended(bool suspended) override;
 
     // IShellPort
     void setDirectoryPath(const QString &path) override;

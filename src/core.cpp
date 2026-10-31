@@ -1453,8 +1453,6 @@ void Core::onDirectoryPresenterDroppedInto(QList<QString> paths, QString destDir
 void Core::moveCurrentFile(QString destDirectory) {
   if (model->isEmpty())
     return;
-  // pause updates to avoid flicker
-  ui.window.setWindowUpdatesSuspended(true);
   // move fails during file playback, so we close it temporarily
   ui.viewer.closeImage();
   // The overwrite prompt runs a nested event loop that can change the
@@ -1475,7 +1473,6 @@ void Core::moveCurrentFile(QString destDirectory) {
     if (result != FileOpResult::DESTINATION_FILE_EXISTS)
       outputError(result);
   }
-  ui.window.setWindowUpdatesSuspended(false);
 }
 
 void Core::copyCurrentFile(QString destDirectory) {
