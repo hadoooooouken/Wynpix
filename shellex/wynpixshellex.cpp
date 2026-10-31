@@ -259,6 +259,7 @@ struct QtLibraryRequirements {
   bool needsPdf;
   bool needsJpeg;
   bool needsZlib;
+  bool needsZstd;
 };
 
 static QtLibraryRequirements
@@ -278,6 +279,8 @@ qtLibraryRequirements(const ExtensionInfo &extensionInfo) noexcept {
       .needsJpeg = extensionInfo.isRaw || isTiff || isComicArchive,
       // PNG/TIFF pages inside comic archives may load plugins that depend on zlib1.dll.
       .needsZlib = isTiff || isLayeredArchive || isComicArchive,
+      // kimg_exr links OpenEXR, which depends on the root-level zstd.dll.
+      .needsZstd = _wcsicmp(extension, L".exr") == 0,
   };
 }
 
@@ -286,6 +289,7 @@ constexpr QtLibraryRequirements UNNAMED_SVG_LIBRARY_REQUIREMENTS{
     .needsPdf = false,
     .needsJpeg = false,
     .needsZlib = false,
+    .needsZstd = false,
 };
 
 using SvgReferenceGraph = QHash<QString, QSet<QString>>;
@@ -1135,11 +1139,15 @@ public:
         m_hZlib(requirements.needsZlib
                     ? loadFromDirectory(dllDir, L"zlib1.dll", m_error)
                     : nullptr),
+        m_hZstd(requirements.needsZstd
+                    ? loadFromDirectory(dllDir, L"zstd.dll", m_error)
+                    : nullptr),
         m_ready(m_hCore && m_hGui &&
                  (!requirements.needsSvg || m_hSvg) &&
                  (!requirements.needsPdf || m_hPdf) &&
                  (!requirements.needsJpeg || m_hJpeg) &&
-                 (!requirements.needsZlib || m_hZlib)) {}
+                 (!requirements.needsZlib || m_hZlib) &&
+                 (!requirements.needsZstd || m_hZstd)) {}
 
   ScopedQtLibraries(const ScopedQtLibraries &) = delete;
   ScopedQtLibraries &operator=(const ScopedQtLibraries &) = delete;
@@ -1153,6 +1161,7 @@ public:
     release(m_hCore);
     release(m_hJpeg);
     release(m_hZlib);
+    release(m_hZstd);
   }
 
   bool isReady() const noexcept { return m_ready; }
@@ -1202,6 +1211,7 @@ private:
   HMODULE m_hPdf;
   HMODULE m_hJpeg;
   HMODULE m_hZlib;
+  HMODULE m_hZstd;
   bool m_ready;
 };
 
