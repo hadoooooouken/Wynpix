@@ -1462,288 +1462,288 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="761"/>
+        <location filename="../../core.cpp" line="762"/>
         <source>Updated: </source>
         <translation>Оновлено: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="768"/>
+        <location filename="../../core.cpp" line="769"/>
         <source>Welcome to </source>
         <translation>Ласкаво просимо до </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="769"/>
+        <location filename="../../core.cpp" line="770"/>
         <source> version </source>
         <translation> версія </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="787"/>
+        <location filename="../../core.cpp" line="788"/>
         <source>Shuffle mode: OFF</source>
         <translation>Режим перемішування: Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="790"/>
+        <location filename="../../core.cpp" line="791"/>
         <source>Shuffle mode: ON</source>
         <translation>Режим перемішування: Увімкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="799"/>
+        <location filename="../../core.cpp" line="800"/>
         <source>Slideshow: OFF</source>
         <translation>Слайд-шоу: Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="803"/>
+        <location filename="../../core.cpp" line="804"/>
         <source>Slideshow: ON</source>
         <translation>Слайд-шоу: Увімкнено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1011"/>
+        <location filename="../../core.cpp" line="1012"/>
         <source>Delete </source>
         <translation>Видалити </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1014"/>
+        <location filename="../../core.cpp" line="1015"/>
         <source> folders permanently?</source>
         <translation> папок назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1017"/>
+        <location filename="../../core.cpp" line="1018"/>
         <source> files permanently?</source>
         <translation> файлів назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1020"/>
+        <location filename="../../core.cpp" line="1021"/>
         <source> items permanently?</source>
         <translation> елементів остаточно?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1029"/>
+        <location filename="../../core.cpp" line="1030"/>
         <source>Delete permanently</source>
         <translation>Видалити остаточно</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1052"/>
+        <location filename="../../core.cpp" line="1053"/>
         <source>File removed</source>
         <translation>Файл видалено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1057"/>
+        <location filename="../../core.cpp" line="1058"/>
         <source>Removed: </source>
         <translation>Видалено: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1062"/>
+        <location filename="../../core.cpp" line="1063"/>
         <source> files</source>
         <translation> файлів</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1011"/>
+        <location filename="../../core.cpp" line="1012"/>
         <source>Move </source>
         <translation>Помістити </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1020"/>
+        <location filename="../../core.cpp" line="1021"/>
         <source> items to trash?</source>
         <translation> елементів до кошику?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1029"/>
+        <location filename="../../core.cpp" line="1030"/>
         <source>Move to trash</source>
         <translation>Помістити в кошик</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1048"/>
+        <location filename="../../core.cpp" line="1049"/>
         <source>Folder moved to trash</source>
         <translation>Папку поміщено в кошик</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1051"/>
+        <location filename="../../core.cpp" line="1052"/>
         <source>Moved to trash</source>
         <translation>Переміщено в кошик</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1057"/>
+        <location filename="../../core.cpp" line="1058"/>
         <source>Moved to trash: </source>
         <translation>Переміщено в кошик: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1152"/>
+        <location filename="../../core.cpp" line="1153"/>
         <source>File copied</source>
         <translation>Файл скопійовано</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1159"/>
+        <location filename="../../core.cpp" line="1160"/>
         <source>Path copied</source>
         <translation>Шлях скопійовано</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1282"/>
-        <location filename="../../core.cpp" line="1468"/>
-        <location filename="../../core.cpp" line="1492"/>
+        <location filename="../../core.cpp" line="1275"/>
+        <location filename="../../core.cpp" line="1459"/>
+        <location filename="../../core.cpp" line="1482"/>
         <source>File exists</source>
         <translation>Файл існує</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1282"/>
+        <location filename="../../core.cpp" line="1275"/>
         <source>Overwrite file?</source>
         <translation>Перезаписати файл?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1374"/>
+        <location filename="../../core.cpp" line="1367"/>
         <source>Add folder</source>
         <translation>Додати папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1374"/>
+        <location filename="../../core.cpp" line="1367"/>
         <source>Folder name:</source>
         <translation>Назва папки:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1381"/>
+        <location filename="../../core.cpp" line="1374"/>
         <source>Folder already exists</source>
         <translation>Папка вже існує</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1390"/>
+        <location filename="../../core.cpp" line="1383"/>
         <source>Failed to create folder</source>
         <translation>Не вдалося створити папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1466"/>
+        <location filename="../../core.cpp" line="1457"/>
         <source>File moved.</source>
         <translation>Файл переміщено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1469"/>
-        <location filename="../../core.cpp" line="1493"/>
+        <location filename="../../core.cpp" line="1460"/>
+        <location filename="../../core.cpp" line="1483"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>Файл існує. Перезаписати?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1490"/>
+        <location filename="../../core.cpp" line="1480"/>
         <source>File copied.</source>
         <translation>Файл скопійовано.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1658"/>
+        <location filename="../../core.cpp" line="1648"/>
         <source>Perform action &quot;</source>
         <translation>Виконати дію &quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1659"/>
+        <location filename="../../core.cpp" line="1649"/>
         <source>Changes will be saved immediately.</source>
         <translation>Зміни будуть збережені негайно.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1724"/>
+        <location filename="../../core.cpp" line="1714"/>
         <source>Flip horizontal</source>
         <translation>Перевернути горизонтально</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1729"/>
+        <location filename="../../core.cpp" line="1719"/>
         <source>Flip vertical</source>
         <translation>Перевернути вертикально</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1734"/>
+        <location filename="../../core.cpp" line="1724"/>
         <source>Rotate</source>
         <translation>Повернути</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1715"/>
+        <location filename="../../core.cpp" line="1705"/>
         <source>Resize</source>
         <translation>Змінити розмір</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1865"/>
+        <location filename="../../core.cpp" line="1855"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>Масштабування ШІ завершено, але зображення змінилося.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1886"/>
-        <location filename="../../core.cpp" line="1897"/>
+        <location filename="../../core.cpp" line="1876"/>
+        <location filename="../../core.cpp" line="1887"/>
         <source>Crop</source>
         <translation>Обрізати</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1987"/>
+        <location filename="../../core.cpp" line="1977"/>
         <source>File saved</source>
         <translation>Файл збережено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="156"/>
+        <location filename="../../core.cpp" line="157"/>
         <source>Could not save file</source>
         <translation>Не вдалос зберегти файл</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="143"/>
+        <location filename="../../core.cpp" line="144"/>
         <source>Could not save file: the destination could not be replaced (Windows error %1)</source>
         <translation>Не вдалося зберегти файл: неможливо замінити файл призначення (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="148"/>
+        <location filename="../../core.cpp" line="149"/>
         <source>Could not save file: automatic recovery failed (Windows error %1)</source>
         <translation>Не вдалося зберегти файл: збій автоматичного відновлення (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2076"/>
-        <location filename="../../core.cpp" line="2082"/>
+        <location filename="../../core.cpp" line="2066"/>
+        <location filename="../../core.cpp" line="2072"/>
         <source>Set wallpaper: file not supported</source>
         <translation>Встановлення шпалер: файл не підтримується</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2106"/>
-        <location filename="../../core.cpp" line="2115"/>
+        <location filename="../../core.cpp" line="2096"/>
+        <location filename="../../core.cpp" line="2105"/>
         <source>Could not open image</source>
         <translation>Не вдалося відкрити зображення</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2110"/>
+        <location filename="../../core.cpp" line="2100"/>
         <source>Can only print static images</source>
         <translation>Можливий друк лише статичних зображень</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="312"/>
+        <location filename="../../core.cpp" line="313"/>
         <source>AI Upscaling...</source>
         <translation>Масштабування ШІ...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="61"/>
+        <location filename="../../core.cpp" line="62"/>
         <source>Set wallpaper: failed to create application data directory</source>
         <translation>Встановлення шпалер: не вдалося створити папку даних програми</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="64"/>
+        <location filename="../../core.cpp" line="65"/>
         <source>Set wallpaper: failed to open desktop settings (Windows error %1)</source>
         <translation>Встановлення шпалер: не вдалося відкрити параметри робочого столу (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="69"/>
+        <location filename="../../core.cpp" line="70"/>
         <source>Set wallpaper: failed to write wallpaper style (Windows error %1)</source>
         <translation>Встановлення шпалер: не вдалося записати стиль шпалер (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="74"/>
+        <location filename="../../core.cpp" line="75"/>
         <source>Set wallpaper: failed to write wallpaper tiling (Windows error %1)</source>
         <translation>Встановлення шпалер: не вдалося записати режим мозаїки шпалер (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="79"/>
+        <location filename="../../core.cpp" line="80"/>
         <source>Set wallpaper: failed to close desktop settings (Windows error %1)</source>
         <translation>Встановлення шпалер: не вдалося закрити параметри робочого столу (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="84"/>
+        <location filename="../../core.cpp" line="85"/>
         <source>Set wallpaper: Windows wallpaper update failed (Windows error %1)</source>
         <translation>Встановлення шпалер: не вдалося оновити шпалери Windows (помилка Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="92"/>
+        <location filename="../../core.cpp" line="93"/>
         <source>Set wallpaper: unknown error</source>
         <translation>Встановлення шпалер: невідома помилка</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="98"/>
+        <location filename="../../core.cpp" line="99"/>
         <source>Could not save file. Recovery files were retained:
 Original backup:
 %1
@@ -1758,174 +1758,174 @@ Staged copy:
 %2</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="107"/>
+        <location filename="../../core.cpp" line="108"/>
         <source>Could not save file. A staged recovery copy was retained at:
 %1</source>
         <translation>Не вдалося зберегти файл. Проміжну копію для відновлення збережено в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="114"/>
+        <location filename="../../core.cpp" line="115"/>
         <source>Could not save file. A recovery backup was retained at:
 %1</source>
         <translation>Не вдалося зберегти файл. Резервну копію для відновлення збережено в:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="122"/>
+        <location filename="../../core.cpp" line="123"/>
         <source>Could not save file: the image is invalid</source>
         <translation>Не вдалося зберегти файл: зображення недійсне</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="125"/>
+        <location filename="../../core.cpp" line="126"/>
         <source>Could not save file: the destination path is invalid</source>
         <translation>Не вдалося зберегти файл: недійсний шлях призначення</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="128"/>
+        <location filename="../../core.cpp" line="129"/>
         <source>Could not save file: the source is unavailable</source>
         <translation>Не вдалося зберегти файл: джерело недоступне</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="131"/>
+        <location filename="../../core.cpp" line="132"/>
         <source>Could not save file: a temporary file could not be created</source>
         <translation>Не вдалося зберегти файл: неможливо створити тимчасовий файл</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="134"/>
+        <location filename="../../core.cpp" line="135"/>
         <source>Could not save file: the image could not be encoded</source>
         <translation>Не вдалося зберегти файл: неможливо закодувати зображення</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="137"/>
+        <location filename="../../core.cpp" line="138"/>
         <source>Could not save file: the temporary file could not be written</source>
         <translation>Не вдалося зберегти файл: неможливо записати тимчасовий файл</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="140"/>
+        <location filename="../../core.cpp" line="141"/>
         <source>Could not save file: the file copy failed</source>
         <translation>Не вдалося зберегти файл: збій копіювання файлу</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="160"/>
+        <location filename="../../core.cpp" line="161"/>
         <source>File saved, but a backup could not be removed:
 %1</source>
         <translation>Файл збережено, але не вдалося видалити резервну копію:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="168"/>
+        <location filename="../../core.cpp" line="169"/>
         <source>Could not prepare image transfer: the image is unavailable</source>
         <translation>Не вдалося підготувати передавання зображення: зображення недоступне</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="171"/>
+        <location filename="../../core.cpp" line="172"/>
         <source>Could not prepare image transfer: the source path is unavailable</source>
         <translation>Не вдалося підготувати передавання зображення: шлях до джерела недоступний</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="175"/>
+        <location filename="../../core.cpp" line="176"/>
         <source>Could not prepare image transfer: temporary storage is unavailable</source>
         <translation>Не вдалося підготувати передавання зображення: тимчасове сховище недоступне</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="179"/>
+        <location filename="../../core.cpp" line="180"/>
         <source>Could not prepare image transfer: the temporary directory could not be created</source>
         <translation>Не вдалося підготувати передавання зображення: неможливо створити тимчасову папку</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="184"/>
+        <location filename="../../core.cpp" line="185"/>
         <source>Could not prepare image transfer: the temporary file could not be created</source>
         <translation>Не вдалося підготувати передавання зображення: неможливо створити тимчасовий файл</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="189"/>
+        <location filename="../../core.cpp" line="190"/>
         <source>Could not prepare image transfer: the image could not be encoded</source>
         <translation>Не вдалося підготувати передавання зображення: неможливо закодувати зображення</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="192"/>
+        <location filename="../../core.cpp" line="193"/>
         <source>Could not prepare image transfer: the temporary file could not be written</source>
         <translation>Не вдалося підготувати передавання зображення: неможливо записати тимчасовий файл</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="200"/>
+        <location filename="../../core.cpp" line="201"/>
         <source>Could not prepare image transfer</source>
         <translation>Не вдалося підготувати передавання зображення</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="279"/>
+        <location filename="../../core.cpp" line="280"/>
         <source>Failed to clean up temporary image-transfer data: %1</source>
         <translation>Не вдалося очистити тимчасові дані передавання зображення: %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="307"/>
+        <location filename="../../core.cpp" line="308"/>
         <source>Set wallpaper: failed to clean up wallpaper file: %1</source>
         <translation>Встановлення шпалер: не вдалося видалити файл шпалер: %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="426"/>
-        <location filename="../../core.cpp" line="1431"/>
+        <location filename="../../core.cpp" line="427"/>
+        <location filename="../../core.cpp" line="1424"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>Не вдалося очистити кеш ескізів</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1025"/>
+        <location filename="../../core.cpp" line="1026"/>
         <source>Delete folder permanently?</source>
         <translation>Видалити папку назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1028"/>
         <source>Delete file permanently?</source>
         <translation>Видалити файл назавжди?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1049"/>
+        <location filename="../../core.cpp" line="1050"/>
         <source>Folder removed</source>
         <translation>Папку видалено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1060"/>
+        <location filename="../../core.cpp" line="1061"/>
         <source> folders</source>
         <translation> папок</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1064"/>
+        <location filename="../../core.cpp" line="1065"/>
         <source> items</source>
         <translation> елементів</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1014"/>
+        <location filename="../../core.cpp" line="1015"/>
         <source> folders to trash?</source>
         <translation> папок у кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1017"/>
+        <location filename="../../core.cpp" line="1018"/>
         <source> files to trash?</source>
         <translation> файлів у кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1024"/>
+        <location filename="../../core.cpp" line="1025"/>
         <source>Move folder to trash?</source>
         <translation>Помістити папку в кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1028"/>
         <source>Move file to trash?</source>
         <translation>Помістити файл у кошик?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1413"/>
+        <location filename="../../core.cpp" line="1406"/>
         <source>Moving: %1 (%2)</source>
         <translation>Переміщення: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1414"/>
+        <location filename="../../core.cpp" line="1407"/>
         <source>Copying: %1 (%2)</source>
         <translation>Копіювання: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1423"/>
+        <location filename="../../core.cpp" line="1416"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>Переміщено %n файл</numerusform>
@@ -1934,7 +1934,7 @@ Staged copy:
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1424"/>
+        <location filename="../../core.cpp" line="1417"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>Скопійовано %n файл</numerusform>
@@ -1943,107 +1943,107 @@ Staged copy:
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1672"/>
-        <location filename="../../core.cpp" line="1800"/>
+        <location filename="../../core.cpp" line="1662"/>
+        <location filename="../../core.cpp" line="1790"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1: помилка, не вдалося змінити зображення.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1749"/>
-        <location filename="../../core.cpp" line="1774"/>
+        <location filename="../../core.cpp" line="1739"/>
+        <location filename="../../core.cpp" line="1764"/>
         <source>AI resize is already running.</source>
         <translation>Масштабування ШІ вже запущено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1758"/>
+        <location filename="../../core.cpp" line="1748"/>
         <source>AI resize supports one image at a time.</source>
         <translation>Масштабування ШІ підтримує лише одне зображення за раз.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1780"/>
-        <location filename="../../core.cpp" line="1786"/>
+        <location filename="../../core.cpp" line="1770"/>
+        <location filename="../../core.cpp" line="1776"/>
         <source>Could not resize image.</source>
         <translation>Не вдалося змінити розмір зображення.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1821"/>
+        <location filename="../../core.cpp" line="1811"/>
         <source>AI resizing...</source>
         <translation>Масштабування ШІ...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1852"/>
+        <location filename="../../core.cpp" line="1842"/>
         <source>AI resize failed.</source>
         <translation>Помилка масштабування ШІ.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1857"/>
+        <location filename="../../core.cpp" line="1847"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Масштабування ШІ завершено, але зображення більше немає в списку.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1875"/>
+        <location filename="../../core.cpp" line="1865"/>
         <source>AI resize finished.</source>
         <translation>Масштабування ШІ завершено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1877"/>
+        <location filename="../../core.cpp" line="1867"/>
         <source>AI resize finished for %1.</source>
         <translation>Масштабування ШІ для %1 завершено.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1923"/>
+        <location filename="../../core.cpp" line="1913"/>
         <source>Could not adjust the image colors.</source>
         <translation>Не вдалося налаштувати кольори зображення.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2088"/>
+        <location filename="../../core.cpp" line="2078"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>Встановлення шпалер: не вдалося отримати зображення</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="295"/>
+        <location filename="../../core.cpp" line="296"/>
         <source>Wallpaper set</source>
         <translation>Шпалери встановлено</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2199"/>
+        <location filename="../../core.cpp" line="2189"/>
         <source>Could not open path: </source>
         <translation>Не вдалося відкрити шлях: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2266"/>
+        <location filename="../../core.cpp" line="2256"/>
         <source>Could not load folder: </source>
         <translation>Не вдалося завантажити теку: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2325"/>
-        <location filename="../../core.cpp" line="2351"/>
+        <location filename="../../core.cpp" line="2315"/>
+        <location filename="../../core.cpp" line="2341"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>Не вдалося отримати список сусідніх папок: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2480"/>
+        <location filename="../../core.cpp" line="2470"/>
         <source>End of directory.</source>
         <translation>Кінець директорії.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2514"/>
+        <location filename="../../core.cpp" line="2504"/>
         <source>Load failed: </source>
         <translation>Завантаження не вдалося: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2592"/>
-        <location filename="../../core.cpp" line="2599"/>
+        <location filename="../../core.cpp" line="2582"/>
+        <location filename="../../core.cpp" line="2589"/>
         <source>Error: could not load image.</source>
         <translation>Помилка: не вдалося завантажити зображення.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2616"/>
+        <location filename="../../core.cpp" line="2606"/>
         <source>HDR Profile</source>
         <translation>Профіль HDR</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2622"/>
+        <location filename="../../core.cpp" line="2612"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
@@ -2164,10 +2164,10 @@ Staged copy:
         <translation>Розгортання папок зупинено: виділення містить понад %1 підтримуваних файлів. Зменште виділення та спробуйте ще раз.</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="831"/>
-        <location filename="../../components/directorypresenter.cpp" line="898"/>
-        <location filename="../../components/directorypresenter.cpp" line="952"/>
-        <location filename="../../components/directorypresenter.cpp" line="983"/>
+        <location filename="../../components/directorypresenter.cpp" line="830"/>
+        <location filename="../../components/directorypresenter.cpp" line="897"/>
+        <location filename="../../components/directorypresenter.cpp" line="951"/>
+        <location filename="../../components/directorypresenter.cpp" line="982"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
@@ -2517,22 +2517,22 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/adapters/quickvieweractions.cpp" line="97"/>
         <source>Zoom lock: ON</source>
-        <translation>Блокування масштабу: УКЛ</translation>
+        <translation>Блокування масштабу: УВІМК</translation>
     </message>
     <message>
         <location filename="../../gui/quick/adapters/quickvieweractions.cpp" line="98"/>
         <source>Zoom lock: OFF</source>
-        <translation>Блокування масштабу: ВИКЛ</translation>
+        <translation>Блокування масштабу: ВИМК</translation>
     </message>
     <message>
         <location filename="../../gui/quick/adapters/quickvieweractions.cpp" line="103"/>
         <source>View lock: ON</source>
-        <translation>Блокування прокрутки: УКЛ</translation>
+        <translation>Блокування прокрутки: УВІМК</translation>
     </message>
     <message>
         <location filename="../../gui/quick/adapters/quickvieweractions.cpp" line="104"/>
         <source>View lock: OFF</source>
-        <translation>Блокування прокрутки: ВИКЛ</translation>
+        <translation>Блокування прокрутки: ВИМК</translation>
     </message>
     <message>
         <location filename="../../gui/quick/adapters/quickvieweractions.cpp" line="119"/>
@@ -2577,22 +2577,22 @@ Staged copy:
     <message>
         <location filename="../../components/viewertoggles/viewertoggles.cpp" line="21"/>
         <source>Use Upscayl: ON</source>
-        <translation>Використовувати Upscayl: УКЛ</translation>
+        <translation>Використовувати Upscayl: УВІМК</translation>
     </message>
     <message>
         <location filename="../../components/viewertoggles/viewertoggles.cpp" line="22"/>
         <source>Use Upscayl: OFF</source>
-        <translation>Використовувати Upscayl: ВИКЛ</translation>
+        <translation>Використовувати Upscayl: ВИМК</translation>
     </message>
     <message>
         <location filename="../../components/viewertoggles/viewertoggles.cpp" line="47"/>
         <source>HDR Tone-Mapping: ON</source>
-        <translation>HDR Tone-Mapping: УКЛ</translation>
+        <translation>HDR Tone-Mapping: УВІМК</translation>
     </message>
     <message>
         <location filename="../../components/viewertoggles/viewertoggles.cpp" line="48"/>
         <source>HDR Tone-Mapping: OFF</source>
-        <translation>HDR Tone-Mapping: ВИКЛ</translation>
+        <translation>HDR Tone-Mapping: ВИМК</translation>
     </message>
     <message>
         <location filename="../../components/viewertoggles/viewertoggles.cpp" line="37"/>
@@ -2635,62 +2635,62 @@ Staged copy:
         <translation>Початок папки</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="53"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="52"/>
         <source>Sorting: By Name</source>
         <translation>Сортування: За назвою</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="55"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="54"/>
         <source>Sorting: By Name (desc.)</source>
         <translation>Сортування: За назвою (зворот.)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="57"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="56"/>
         <source>Sorting: By Time</source>
         <translation>Сортування: За часом</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="59"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="58"/>
         <source>Sorting: By Time (desc.)</source>
         <translation>Сортування: За часом (зворот.)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="61"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="60"/>
         <source>Sorting: By File Size</source>
         <translation>Сортування: За розміром</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="63"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="62"/>
         <source>Sorting: By File Size (desc.)</source>
         <translation>Сортування: За розміром (зворот.)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="72"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="71"/>
         <source>Folder Thumbnails: By Name</source>
         <translation>Ескізи тек: За назвою</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="74"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="73"/>
         <source>Folder Thumbnails: By Name (desc.)</source>
         <translation>Ескізи тек: За назвою (зв.)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="76"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="75"/>
         <source>Folder Thumbnails: Oldest</source>
         <translation>Ескізи тек: Найстаріші</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="78"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="77"/>
         <source>Folder Thumbnails: Newest</source>
         <translation>Ескізи тек: Найновіші</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="80"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="79"/>
         <source>Folder Thumbnails: By File Size</source>
         <translation>Ескізи тек: За розміром файлу</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="82"/>
+        <location filename="../../gui/quick/adapters/quickmainwindowcontroller.cpp" line="81"/>
         <source>Folder Thumbnails: By File Size (desc.)</source>
         <translation>Ескізи тек: За розміром файлу (зв.)</translation>
     </message>
@@ -3357,6 +3357,11 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <source>Animation playback controls</source>
+        <translation>Панель керування анімацією</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
         <source>Auto-hide cursor</source>
         <translation>Приховувати курсор</translation>
     </message>
@@ -3397,27 +3402,27 @@ Staged copy:
         <translation>Фокус в режимі 1:1:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="127"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="132"/>
         <source>Thumbnail panel</source>
         <translation>Панель превью</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="148"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="153"/>
         <source>Disable in windowed mode</source>
         <translation>Вимкнути у віконному режимі</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="153"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="158"/>
         <source>Center selected image</source>
         <translation>Центрувати на поточне зображення</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="190"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="195"/>
         <source>Position:</source>
         <translation>Позиція:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="143"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="148"/>
         <source>Pinned</source>
         <translation>Закріплена</translation>
     </message>
@@ -3447,7 +3452,7 @@ Staged copy:
         <translation>Перемкнутися на наступну</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="172"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="177"/>
         <source>Display style:</source>
         <translation>Стиль показу:</translation>
     </message>
@@ -3457,7 +3462,7 @@ Staged copy:
         <translation>%1 мс</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="164"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="169"/>
         <source>Hide delay:</source>
         <translation>Затримка приховування:</translation>
     </message>
@@ -3472,12 +3477,12 @@ Staged copy:
         <translation>Розширений</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="179"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="184"/>
         <source>Preview size:</source>
         <translation>Розмір превью:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="202"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
         <source>Folder navigation</source>
         <translation>Навігація по теці</translation>
     </message>
@@ -3512,27 +3517,27 @@ Staged copy:
         <translation>Найновіші</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="215"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="220"/>
         <source>Default sorting mode:</source>
         <translation>Сортування за замовчуванням:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="236"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="241"/>
         <source>Slideshow</source>
         <translation>Слайд-шоу</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="256"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="261"/>
         <source>Loop slideshow</source>
         <translation>Зациклити слайд-шоу</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="242"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="247"/>
         <source>Switch interval:</source>
         <translation>Інтервал перемикання:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="251"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="256"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
@@ -3552,7 +3557,7 @@ Staged copy:
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="104"/>
         <source>Zoom indicator:</source>
         <translation>Зум індикатор:</translation>
     </message>
@@ -3570,7 +3575,7 @@ Staged copy:
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="57"/>
         <source>On</source>
-        <translation>Вмк</translation>
+        <translation>Увімк</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="58"/>
@@ -3578,22 +3583,22 @@ Staged copy:
         <translation>Вимк</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="108"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="113"/>
         <source>Automatic window resize</source>
         <translation>Авто розмір вікна</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="113"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="118"/>
         <source>Match displayed content</source>
         <translation>Підігнати під розмір контенту</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="117"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="122"/>
         <source>Screen area limit for auto resize:</source>
         <translation>Обмеження щодо розміру екрана:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="163"/>
         <source>Show subfolders</source>
         <translation>Показувати підтеки</translation>
     </message>
@@ -3608,17 +3613,17 @@ Staged copy:
         <translation>Показати назву та розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="205"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
         <source>After reaching the end:</source>
         <translation>При досягненні кінця теки:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="224"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="229"/>
         <source>Apply sorting to folders</source>
         <translation>Застосовувати сортування до тек</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="229"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="234"/>
         <source>Show hidden files</source>
         <translation>Показувати приховані файли</translation>
     </message>
@@ -3861,17 +3866,17 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation>Попереднє завантаження</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="89"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="94"/>
         <source>Turn this off if you are using a touchpad with libinput driver.</source>
         <translation>Вимкніть цю опцію якщо ви використовуєте ОС Linux з драйверами libinput.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="84"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="89"/>
         <source>Smooth thumbnail scrolling</source>
         <translation>Увімкнути плавну прокрутку превью</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="94"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
         <source>Smooth zooming</source>
         <translation>Плавне масштабування</translation>
     </message>
@@ -4444,32 +4449,32 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
 <context>
     <name>main</name>
     <message>
-        <location filename="../../main.cpp" line="106"/>
+        <location filename="../../main.cpp" line="112"/>
         <source>File or directory path.</source>
         <translation>Шлях до файлу або директорії.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="109"/>
+        <location filename="../../main.cpp" line="115"/>
         <source>Generate all thumbnails for directory.</source>
         <translation>Згенерувати превью для дикерторії.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="111"/>
+        <location filename="../../main.cpp" line="117"/>
         <source>directory-path</source>
         <translation>шлях-до-папки</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="113"/>
+        <location filename="../../main.cpp" line="119"/>
         <source>Thumbnail size. Current size is used if not specified.</source>
         <translation>Розмір превью. За замовчуванням буде використано поточний розмір.</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="115"/>
+        <location filename="../../main.cpp" line="121"/>
         <source>thumbnail-size</source>
         <translation>розмір-ескізу</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="117"/>
+        <location filename="../../main.cpp" line="123"/>
         <source>Show build options.</source>
         <translation>Показати опції зборки.</translation>
     </message>
