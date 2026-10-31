@@ -98,6 +98,23 @@ function Write-OK($msg)   { Write-Host "  [OK]  $msg" -ForegroundColor Green  }
 function Write-Info($msg) { Write-Host "  [ ]   $msg" -ForegroundColor Gray   }
 function Write-Warn($msg) { Write-Host "  [!]   $msg" -ForegroundColor Yellow }
 
+# libaom (fetched by libavif) needs Perl. FindPerl only searches PATH and
+# the ActiveState / Strawberry locations, so outside Git Bash it misses the
+# perl.exe that ships with Git for Windows.
+function Find-Perl {
+    $perl = Get-Command perl -ErrorAction SilentlyContinue
+    if ($perl) { return $perl.Source }
+
+    $git = Get-Command git -ErrorAction SilentlyContinue
+    if ($git) {
+        # git.exe lives in <Git>\cmd or <Git>\bin; perl.exe in <Git>\usr\bin
+        $gitPerl = Join-Path (Split-Path (Split-Path $git.Source)) "usr\bin\perl.exe"
+        if (Test-Path $gitPerl) { return $gitPerl }
+    }
+
+    throw "Perl not found (needed by libaom). Install Git for Windows or put perl on PATH."
+}
+
 function Clear-BuildCache($buildDir) {
     if (Test-Path $buildDir) {
         $cache = Join-Path $buildDir "CMakeCache.txt"
@@ -239,6 +256,7 @@ $ALL_LIBS = [ordered]@{
             -Ipo `
             -ConfigArgs @(
                 "-DBUILD_SHARED_LIBS=OFF",
+                "-DPERL_EXECUTABLE=$(Find-Perl)",
                 "-DAVIF_CODEC_AOM=LOCAL",
                 "-DAVIF_CODEC_AOM_DECODE=OFF",
                 "-DAVIF_CODEC_AOM_ENCODE=ON",
