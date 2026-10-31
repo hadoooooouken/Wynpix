@@ -18,6 +18,7 @@
 
 #include <array>
 #include <cmath>
+#include <cstring>
 #if defined(__AVX2__)
 #include <immintrin.h>
 #include <type_traits>
@@ -304,6 +305,8 @@ constexpr int kRgbeExponentBias = 128;
 constexpr int kRgbeMinimumExponent = -31;
 constexpr int kRgbeMaximumExponent = 31;
 constexpr int kRgbeScaleCount = 256;
+constexpr uchar kRgbeRunFlag = 128;
+constexpr uchar kRgbeRunLengthMask = 127;
 #if defined(__AVX2__)
 constexpr int kRgbeExponentShift = 24;
 constexpr int kRgbePixelsPerAvx2Block = 8;
@@ -402,6 +405,22 @@ void RGBE_To_QRgbLine(const uchar *image, float_T *scanline, const Header& h)
                       exposureScale);
 }
 
+// Interleaves the four component planes of a run-length encoded scanline into RGBE pixels.
+void interleaveRgbePlanes(const uchar *planes, uchar *image, int width)
+{
+    const uchar *red = planes + kRgbeRedOffset * width;
+    const uchar *green = planes + kRgbeGreenOffset * width;
+    const uchar *blue = planes + kRgbeBlueOffset * width;
+    const uchar *exponent = planes + kRgbeExponentOffset * width;
+    for (int pixel = 0; pixel < width; ++pixel) {
+        image[kRgbeRedOffset] = red[pixel];
+        image[kRgbeGreenOffset] = green[pixel];
+        image[kRgbeBlueOffset] = blue[pixel];
+        image[kRgbeExponentOffset] = exponent[pixel];
+        image += kRgbeChannelCount;
+    }
+}
+
 } // namespace
 
 QImage::Format imageFormat()
@@ -431,6 +450,8 @@ static bool LoadHDR(QDataStream &s, const Header& h, QImage &img)
 
     QByteArray lineArray(4 * width, char());
     uchar *image = reinterpret_cast<uchar *>(lineArray.data());
+    QByteArray planeArray(kRgbeChannelCount * width, char());
+    uchar *planes = reinterpret_cast<uchar *>(planeArray.data());
 
     for (int cline = 0; cline < height; cline++) {
 #ifdef HDR_HALF_QUALITY
@@ -485,39 +506,35 @@ static bool LoadHDR(QDataStream &s, const Header& h, QImage &img)
             return false;
         }
 
-        // read each component
-        for (int i = 0, len = int(lineArray.size()); i < 4; i++) {
+        // Read each component into its own plane: one bounds clamp per run instead of per byte,
+        // and literal runs in one block read. Bytes past the scanline end are dropped, and literal
+        // bytes past it are left unread, as the per-byte loop did.
+        for (int i = 0; i < kRgbeChannelCount; i++) {
+            uchar *plane = planes + i * width;
             for (int j = 0; j < width;) {
                 s >> code;
                 if (s.status() != QDataStream::Ok) {
                     qCDebug(HDRPLUGIN) << "Truncated HDR file";
                     return false;
                 }
-                if (code > 128) {
-                    // run
-                    code &= 127;
+                if (code > kRgbeRunFlag) {
+                    const int runLength = code & kRgbeRunLengthMask;
                     s >> val;
-                    while (code != 0) {
-                        auto idx = i + j * 4;
-                        if (idx < len) {
-                            image[idx] = val;
-                        }
-                        j++;
-                        code--;
-                    }
+                    std::memset(plane + j, val, qMin(runLength, width - j));
+                    j += runLength;
                 } else {
-                    // non-run
-                    while (code != 0) {
-                        auto idx = i + j * 4;
-                        if (idx < len) {
-                            s >> image[idx];
-                        }
-                        j++;
-                        code--;
-                    }
+                    const int literalLength = code;
+                    const int storedLength = qMin(literalLength, width - j);
+                    s.readRawData(reinterpret_cast<char *>(plane + j), storedLength);
+                    j += literalLength;
                 }
             }
         }
+        if (s.status() != QDataStream::Ok) {
+            qCDebug(HDRPLUGIN) << "Truncated HDR file";
+            return false;
+        }
+        interleaveRgbePlanes(planes, image, width);
         RGBE_To_QRgbLine(image, scanline, h);
     }
 
