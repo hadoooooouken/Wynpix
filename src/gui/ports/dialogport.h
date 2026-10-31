@@ -41,10 +41,7 @@ struct FileReplaceDecision {
     bool all = false;
     bool cancel = false;
 
-    bool operator==(bool const &cmp) const {
-        return yes == cmp;
-    }
-    operator bool() const {
+    explicit operator bool() const {
         return yes;
     }
 };

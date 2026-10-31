@@ -231,7 +231,7 @@ void FileOperationTask::processCopy(const QString &path, const QString &destDire
     // ===========================================================================
     if (!srcFi.isDir()) {
         FileOpResult result;
-        FileOperations::copyFileTo(path, destDirectory, overwriteFiles, result);
+        FileOperations::copyFileTo(path, destDirectory, overwriteFiles.yes, result);
         if (result == FileOpResult::DESTINATION_FILE_EXISTS) {
             if (overwriteFiles.all) // skipping all
                 return;
@@ -325,7 +325,7 @@ void FileOperationTask::processMove(const QString &path, const QString &destDire
     // SINGLE FILE MOVE
     // ===========================================================================
     if (!srcFi.isDir()) {
-        FileOpResult result = moveFileOnGuiThread(path, destDirectory, overwriteFiles);
+        FileOpResult result = moveFileOnGuiThread(path, destDirectory, overwriteFiles.yes);
         if (isCancelled())
             return;
         if (result == FileOpResult::DESTINATION_FILE_EXISTS) {
