@@ -24,8 +24,8 @@ constexpr int kQuietPeriodMs = 200;
 // are whole and the third one's image descriptor is, but none of its image
 // data (QMovie still counts three frames and decodes two).
 constexpr qsizetype kTruncatedThreeFrameSize = 140;
-// AnimationPlaybackError::frameNumber is 1-based.
-constexpr int kFrameNumberBase = 1;
+// The frames QMovie decodes from that copy.
+constexpr int kTruncatedDecodableFrames = 2;
 
 QString writeFile(const QTemporaryDir &dir, const QString &name,
                   const unsigned char *data, qsizetype size) {
@@ -178,6 +178,10 @@ private slots:
     QVERIFY(player.isFinished());
     QVERIFY(!player.isPlaying());
     QCOMPARE(errors.count(), 0);
+    // Reaching the end of the data leaves the decodable frames as the whole
+    // animation, stopped on its last frame.
+    QCOMPARE(player.frameCount(), kTruncatedDecodableFrames);
+    QCOMPARE(player.frameIndex(), kTruncatedDecodableFrames - 1);
   }
 
   // Looping, the truncated file keeps playing its decodable frames.
@@ -198,21 +202,50 @@ private slots:
   }
 
   // Stepping to a frame past the decodable part used to step forever (the
-  // GUI thread hung); it now reports the frame and fails.
-  void steppingPastTruncatedEndReportsError() {
+  // GUI thread hung); it now shows the last decodable frame.
+  void steppingPastTruncatedEndShowsLastDecodableFrame() {
     const QString path = writeTruncatedThreeFrameGif();
     QVERIFY(!path.isEmpty());
     AnimationPlayer player;
     QVERIFY(player.open(path, kGifFormat));
     player.pause();
     QSignalSpy errors(&player, &AnimationPlayer::playbackError);
-    QVERIFY(!player.showFrame(kLastFrame));
-    QCOMPARE(errors.count(), 1);
-    const auto error = errors.first().first().value<AnimationPlaybackError>();
-    QCOMPARE(error.kind, AnimationPlaybackError::Kind::DecodeFrame);
-    QCOMPARE(error.filePath, path);
-    QCOMPARE(error.frameNumber, kLastFrame + kFrameNumberBase);
-    QVERIFY(!player.isPlaying());
+    QSignalSpy counts(&player, &AnimationPlayer::frameCountChanged);
+    QVERIFY(player.showFrame(kLastFrame));
+    QCOMPARE(errors.count(), 0);
+    QCOMPARE(counts.count(), 1);
+    QCOMPARE(player.frameCount(), kTruncatedDecodableFrames);
+    QCOMPARE(player.frameIndex(), kTruncatedDecodableFrames - 1);
+    // Stepping wraps around the decodable frames.
+    player.nextFrame();
+    QCOMPARE(player.frameIndex(), 0);
+    player.prevFrame();
+    QCOMPARE(player.frameIndex(), kTruncatedDecodableFrames - 1);
+    QCOMPARE(errors.count(), 0);
+  }
+
+  // Reversed, the truncated file loops its decodable frames backwards.
+  void truncatedFilePlaysBackwards() {
+    const QString path = writeTruncatedThreeFrameGif();
+    QVERIFY(!path.isEmpty());
+    AnimationPlayer player;
+    player.setLoop(true);
+    QSignalSpy errors(&player, &AnimationPlayer::playbackError);
+    std::vector<int> order;
+    connect(&player, &AnimationPlayer::frameReady, this,
+            [&](const std::shared_ptr<const QImage> &, int index) {
+              order.push_back(index);
+            });
+    QVERIFY(player.open(path, kGifFormat));
+    player.setReversed(true);
+    QTRY_VERIFY_WITH_TIMEOUT(order.size() >= 4,
+                             kFrameTimeoutMs * kThreeFrameCount);
+    QCOMPARE(order[0], 0);
+    QCOMPARE(order[1], 1);
+    QCOMPARE(order[2], 0);
+    QCOMPARE(order[3], 1);
+    QVERIFY(player.isPlaying());
+    QCOMPARE(errors.count(), 0);
   }
 
   void closeStopsPlayback() {

@@ -49,6 +49,7 @@ bool AnimationPlayer::open(const QString &path, const QByteArray &format) {
   // Frames are advanced by the player's own timer; the QMovie is never
   // started.
   mMovie = std::move(movie);
+  mFrameCount = mMovie->frameCount();
   if (!mMovie->jumpToFrame(kFirstFrame) || mMovie->currentImage().isNull()) {
     reportDecodeError(kFirstFrame);
     close();
@@ -58,7 +59,7 @@ bool AnimationPlayer::open(const QString &path, const QByteArray &format) {
   emit frameCountChanged();
   // Playing before the first frame is published, so that its delay is
   // already scheduled when frameReady() arrives.
-  if (mMovie->frameCount() >= kMinimumPlayableFrames)
+  if (mFrameCount >= kMinimumPlayableFrames)
     setPlaying(true);
   publishCurrentFrame();
   return true;
@@ -69,6 +70,7 @@ void AnimationPlayer::close() {
   const bool wasOpen = mMovie != nullptr;
   mMovie.reset();
   mFrame.reset();
+  mFrameCount = 0;
   setPlaying(false);
   setFinished(false);
   if (!mRememberSettings) {
@@ -91,10 +93,10 @@ bool AnimationPlayer::isOpen() const { return mMovie != nullptr; }
 
 //------------------------------------------------------------------------------
 void AnimationPlayer::play() {
-  if (!mMovie || mMovie->frameCount() < kMinimumPlayableFrames)
+  if (!mMovie || mFrameCount < kMinimumPlayableFrames)
     return;
-  const int startFrame = mReversed ? mMovie->frameCount() - 1 : kFirstFrame;
-  const int endFrame = mReversed ? kFirstFrame : mMovie->frameCount() - 1;
+  const int startFrame = mReversed ? mFrameCount - 1 : kFirstFrame;
+  const int endFrame = mReversed ? kFirstFrame : mFrameCount - 1;
   const bool restartNeeded =
       mFinished || (!mLoop && mMovie->currentFrameNumber() == endFrame);
   setFinished(false);
@@ -166,7 +168,7 @@ bool AnimationPlayer::isFinished() const { return mFinished; }
 
 //------------------------------------------------------------------------------
 bool AnimationPlayer::showFrame(int index) {
-  if (!mMovie || index < kFirstFrame || index >= mMovie->frameCount())
+  if (!mMovie || index < kFirstFrame || index >= mFrameCount)
     return false;
   setFinished(false);
   if (mMovie->currentFrameNumber() == index)
@@ -183,11 +185,18 @@ bool AnimationPlayer::showFrame(int index) {
     }
     while (mMovie->currentFrameNumber() != index) {
       const int next = mMovie->currentFrameNumber() + 1;
-      // A wrap means frame index is beyond the decodable part of the file:
-      // stepping on would never reach it.
-      if (stepForward() != FrameStep::Advanced) {
+      switch (stepForward()) {
+      case FrameStep::Failed:
         reportDecodeError(next);
         return false;
+      case FrameStep::Advanced:
+        break;
+      case FrameStep::Wrapped:
+        // Frame index is beyond the decodable part of the file: the last
+        // decodable frame stands in for it, as the end of the animation.
+        endAnimationAt(next);
+        index = mFrameCount - 1;
+        break;
       }
     }
   }
@@ -198,7 +207,7 @@ bool AnimationPlayer::showFrame(int index) {
 void AnimationPlayer::nextFrame() {
   if (!mMovie)
     return;
-  const int last = mMovie->frameCount() - 1;
+  const int last = mFrameCount - 1;
   showFrame(mMovie->currentFrameNumber() >= last
                 ? kFirstFrame
                 : mMovie->currentFrameNumber() + 1);
@@ -208,7 +217,7 @@ void AnimationPlayer::prevFrame() {
   if (!mMovie)
     return;
   showFrame(mMovie->currentFrameNumber() <= kFirstFrame
-                ? mMovie->frameCount() - 1
+                ? mFrameCount - 1
                 : mMovie->currentFrameNumber() - 1);
 }
 
@@ -219,7 +228,7 @@ void AnimationPlayer::firstFrame() {
 
 void AnimationPlayer::lastFrame() {
   if (mMovie)
-    showFrame(mMovie->frameCount() - 1);
+    showFrame(mFrameCount - 1);
 }
 
 int AnimationPlayer::frameIndex() const {
@@ -227,7 +236,7 @@ int AnimationPlayer::frameIndex() const {
 }
 
 int AnimationPlayer::frameCount() const {
-  return mMovie ? mMovie->frameCount() : 0;
+  return mFrameCount;
 }
 
 QSize AnimationPlayer::frameSize() const {
@@ -247,7 +256,7 @@ void AnimationPlayer::onTimer() {
   if (!mMovie || !mPlaying)
     return;
   if (!mReversed) {
-    if (mMovie->currentFrameNumber() < mMovie->frameCount() - 1) {
+    if (mMovie->currentFrameNumber() < mFrameCount - 1) {
       const int next = mMovie->currentFrameNumber() + 1;
       switch (stepForward()) {
       case FrameStep::Failed:
@@ -261,10 +270,15 @@ void AnimationPlayer::onTimer() {
         // The file ends before its last declared frame (a truncated GIF):
         // its decodable frames are the whole animation, and QMovie is back at
         // the first one.
-        if (mLoop)
+        endAnimationAt(next);
+        if (mLoop) {
           publishCurrentFrame();
-        else
-          finishPlayback();
+        } else {
+          // Back on the last frame, which is still the one on screen.
+          pause();
+          if (showFrame(mFrameCount - 1))
+            finishPlayback();
+        }
         return;
       }
     }
@@ -289,8 +303,7 @@ void AnimationPlayer::onTimer() {
       finishPlayback();
       return;
     }
-    const int last = mMovie->frameCount() - 1;
-    if (!showFrame(last)) {
+    if (!showFrame(mFrameCount - 1)) {
       pause();
       return;
     }
@@ -303,6 +316,13 @@ AnimationPlayer::FrameStep AnimationPlayer::stepForward() {
     return FrameStep::Failed;
   return mMovie->currentFrameNumber() > previous ? FrameStep::Advanced
                                                  : FrameStep::Wrapped;
+}
+
+void AnimationPlayer::endAnimationAt(int frameCount) {
+  if (frameCount >= mFrameCount)
+    return;
+  mFrameCount = frameCount;
+  emit frameCountChanged();
 }
 
 void AnimationPlayer::finishPlayback() {

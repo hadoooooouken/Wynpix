@@ -35,8 +35,9 @@ struct AnimationPlaybackError {
 // either restarts at frame 0 (loop) or stops and reports playbackFinished().
 // Stepping with nextFrame() / prevFrame() wraps around and does not change
 // the playing state. A file that ends before its declared last frame (a
-// truncated GIF, which QMovie decodes without an error) ends after its last
-// decodable frame.
+// truncated GIF, which QMovie decodes without an error) is played, stepped
+// and counted as its decodable frames, as browsers do; frameCount() drops to
+// that number once playback or a frame jump reaches the end of the data.
 //
 // GUI thread only.
 class AnimationPlayer : public QObject {
@@ -96,8 +97,10 @@ public:
   // play(), stepping and a new animation.
   [[nodiscard]] bool isFinished() const;
 
-  // Shows frame index (0 .. frameCount() - 1); false when it is out of
-  // range, not open, or cannot be decoded (reported by playbackError).
+  // Shows frame index (0 .. frameCount() - 1), or the last decodable frame
+  // when index lies beyond the data of a truncated file; false when it is
+  // out of range, not open, or cannot be decoded (reported by
+  // playbackError).
   bool showFrame(int index);
   void nextFrame();
   void prevFrame();
@@ -137,6 +140,9 @@ private:
 
   void onTimer();
   FrameStep stepForward();
+  // The data ends before frame frameCount (0-based): the frames before it
+  // are the whole animation from now on.
+  void endAnimationAt(int frameCount);
   // Stops after the last frame (looping off) and reports playbackFinished().
   void finishPlayback();
   // Publishes the movie's current frame and, while playing, schedules the
@@ -151,6 +157,8 @@ private:
   std::unique_ptr<QMovie> mMovie;
   QTimer mTimer;
   std::shared_ptr<const QImage> mFrame;
+  // QMovie::frameCount(), lowered by endAnimationAt(); 0 when not open.
+  int mFrameCount = 0;
   bool mPlaying = false;
   bool mLoop = false;
   bool mFinished = false;
