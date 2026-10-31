@@ -45,6 +45,17 @@
       }
     },
     {
+      "name": "wynpix-x64-dev",
+      "displayName": "wynpix: x64 Dev (Release without LTCG and hardening)",
+      "inherits": "windows-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "WYNPIX_BUILD_TESTS": "OFF",
+        "WYNPIX_DEV_BUILD": "ON",
+        "exiv2_DIR": "E:/wynpix/formats/exiv2/install-dev/lib/cmake/exiv2"
+      }
+    },
+    {
       "name": "wynpix-x64-relwithdebinfo",
       "displayName": "wynpix: x64 RelWithDebInfo",
       "inherits": "windows-base",
@@ -65,6 +76,10 @@
     {
       "name": "wynpix-x64-release-sse2",
       "configurePreset": "wynpix-x64-release-sse2"
+    },
+    {
+      "name": "wynpix-x64-dev",
+      "configurePreset": "wynpix-x64-dev"
     },
     {
       "name": "wynpix-x64-relwithdebinfo",

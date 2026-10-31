@@ -174,7 +174,12 @@ set(ZSTD_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/zstd/${WYNPIX_DEPS_
 # private ZLIB dependency of a static build with find_dependency(ZLIB), which
 # ZLIB_ROOT points at the same zlib-ng install as above.
 if(EXIV2)
-    set(EXIV2_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/exiv2/${WYNPIX_DEPS_INSTALL_NAME}")
+    if(WYNPIX_DEV_BUILD)
+        # Release only and without /GL (build_scripts/build_exiv2-dev.ps1).
+        set(EXIV2_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/exiv2/install-dev")
+    else()
+        set(EXIV2_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../formats/exiv2/${WYNPIX_DEPS_INSTALL_NAME}")
+    endif()
     set(ZLIB_ROOT "${ZLIB_INSTALL_DIR}")
     find_package(exiv2 REQUIRED CONFIG HINTS "${EXIV2_INSTALL_DIR}")
 

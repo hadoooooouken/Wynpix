@@ -21,6 +21,7 @@ bkp/
 *.7z
 release/
 release-sse2/
+release-dev/
 src/Output/
 Output/
 !*.iss

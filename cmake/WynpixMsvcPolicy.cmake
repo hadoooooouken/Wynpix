@@ -43,7 +43,22 @@ else()
 endif()
 set(WYNPIX_DEPS_INSTALL_NAME "install${WYNPIX_DEPS_SUFFIX}")
 set(WYNPIX_DEPS_BUILD_NAME "build${WYNPIX_DEPS_SUFFIX}")
-cmake_path(SET WYNPIX_RELEASE_DIR NORMALIZE "${CMAKE_CURRENT_LIST_DIR}/../release${WYNPIX_DEPS_SUFFIX}")
+
+# Development build (wynpix-x64-dev): the Release optimization baseline without
+# LTCG, whose whole-program link of wynpix.exe dominates rebuilds after an
+# edit, and without hardening. It links the non-LTCG exiv2 of
+# build_scripts/build_exiv2-dev.ps1 (the only prebuilt /GL library in
+# wynpix.exe) and deploys to release-dev.
+option(WYNPIX_DEV_BUILD "Release build without LTCG and hardening, deployed to release-dev (AVX2 only)" OFF)
+if(WYNPIX_DEV_BUILD)
+    if(NOT WYNPIX_ISA STREQUAL "AVX2")
+        message(FATAL_ERROR "WYNPIX_DEV_BUILD supports only WYNPIX_ISA AVX2")
+    endif()
+    set(WYNPIX_RELEASE_DIR_SUFFIX "-dev")
+else()
+    set(WYNPIX_RELEASE_DIR_SUFFIX "${WYNPIX_DEPS_SUFFIX}")
+endif()
+cmake_path(SET WYNPIX_RELEASE_DIR NORMALIZE "${CMAKE_CURRENT_LIST_DIR}/../release${WYNPIX_RELEASE_DIR_SUFFIX}")
 message(STATUS "wynpix ISA: ${WYNPIX_ISA} (dependencies: ${WYNPIX_DEPS_INSTALL_NAME}, output: ${WYNPIX_RELEASE_DIR})")
 
 # Compile-side hardening: Control Flow Guard, Spectre v1 mitigation and
@@ -53,6 +68,12 @@ set(WYNPIX_MSVC_SECURITY_COMPILE_OPTIONS /guard:cf /Qspectre /guard:ehcont)
 # Link-side hardening for executables and DLLs.
 set(WYNPIX_MSVC_SECURITY_LINK_OPTIONS /guard:cf /CETCOMPAT)
 set(WYNPIX_MSVC_EHCONT_LINK_OPTIONS /guard:ehcont)
+
+if(WYNPIX_DEV_BUILD)
+    set(WYNPIX_MSVC_SECURITY_COMPILE_OPTIONS)
+    set(WYNPIX_MSVC_SECURITY_LINK_OPTIONS)
+    set(WYNPIX_MSVC_EHCONT_LINK_OPTIONS)
+endif()
 
 # Dynamic CRT, debug flavour only in Debug.
 set(WYNPIX_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
@@ -81,7 +102,7 @@ function(wynpix_apply_msvc_profile target)
         target_compile_options(${target} PRIVATE
             "$<$<COMPILE_LANGUAGE:C,CXX>:${WYNPIX_MSVC_ISA_OPTIONS}>")
     endif()
-    if(NOT PROFILE_NO_IPO)
+    if(NOT PROFILE_NO_IPO AND NOT WYNPIX_DEV_BUILD)
         set_property(TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
     endif()
 
@@ -116,7 +137,9 @@ macro(wynpix_apply_msvc_directory_profile)
         add_compile_options(
             "$<$<COMPILE_LANGUAGE:C,CXX>:${WYNPIX_MSVC_ISA_OPTIONS}>"
             "$<$<COMPILE_LANGUAGE:C,CXX>:${WYNPIX_MSVC_SECURITY_COMPILE_OPTIONS}>")
-        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+        if(NOT WYNPIX_DEV_BUILD)
+            set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+        endif()
         set(CMAKE_MSVC_RUNTIME_LIBRARY "${WYNPIX_MSVC_RUNTIME_LIBRARY}")
     endif()
 endmacro()
