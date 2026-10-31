@@ -26,6 +26,22 @@ static_assert(static_cast<int>(RenderEnums::ToneMapOperator::AcesFilmic) ==
               static_cast<int>(ToneMapOperator::AcesFilmic));
 static_assert(static_cast<int>(RenderEnums::ToneMapOperator::Hable) ==
               static_cast<int>(ToneMapOperator::Hable));
+
+// Smart Enhance runs on the tone mapped colour (image.frag after the
+// conversion pass), and the CPU path measures the SDR copy of an HDR image
+// (ImageStatic::getImage()), so an HDR image is measured on its samples
+// converted like that copy. HdrToneMapper::toSdr() works per pixel.
+WhiteBalanceFactors measureWhiteBalance(const QImage &image, bool hdr,
+                                        const ToneMapping &toneMapping) {
+  if (!hdr)
+    return calculateWhiteBalanceFactors(&image);
+  const HdrToneMapParams params{
+      .enabled = toneMapping.enabled,
+      .op = static_cast<ToneMapOperator>(toneMapping.op),
+      .targetWhiteNits = toneMapping.whiteNits};
+  const QImage sdr = HdrToneMapper::toSdr(whiteBalanceSamples(image), params);
+  return calculateWhiteBalanceFactors(&sdr);
+}
 } // namespace
 
 //------------------------------------------------------------------------------
@@ -186,7 +202,8 @@ void ImageRenderItem::applyWhiteBalance(ImageFilter &filter) {
   }
 
   if (!mWbFactorsValid) {
-    mWbFactors = calculateWhiteBalanceFactors(mImage.get());
+    mWbFactors =
+        measureWhiteBalance(*mImage, mImageTraits.hdr, mToneMapping);
     mWbFactorsValid = true;
   }
 
@@ -275,6 +292,11 @@ void ImageRenderItem::setToneMapping(const ToneMapping &toneMapping) {
   if (mToneMapping == toneMapping)
     return;
   mToneMapping = toneMapping;
+  // The white balance of an HDR image is measured on its tone mapped colour.
+  if (mImageTraits.hdr) {
+    mWbFactorsValid = false;
+    updateWhiteBalanceFactors();
+  }
   refreshConversion();
   emit toneMappingChanged();
 }

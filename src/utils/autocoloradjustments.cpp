@@ -1,8 +1,11 @@
 #include "autocoloradjustments.h"
 
+#include <QColorSpace>
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <cstring>
 
 namespace {
 // Percentage of pixels to ignore at top and bottom of histogram (0.05% threshold).
@@ -31,6 +34,11 @@ void computeChannelFactors(int minVal, int maxVal, int minRequiredRange, float &
     scale = std::min(1.0f / diff, kMaxGain);
     bias = -minNorm * scale;
 }
+
+// Sample down large images for sub-millisecond histogram collection.
+int sampleStep(int extent) {
+    return std::max(1, extent / kMaxDimensionSamples);
+}
 } // namespace
 
 WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
@@ -42,9 +50,8 @@ WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
     const int width = image->width();
     const int height = image->height();
 
-    // Sample down large images for sub-millisecond histogram collection.
-    const int stepX = std::max(1, width / kMaxDimensionSamples);
-    const int stepY = std::max(1, height / kMaxDimensionSamples);
+    const int stepX = sampleStep(width);
+    const int stepY = sampleStep(height);
 
     std::uint32_t rHist[kHistogramBins]{};
     std::uint32_t gHist[kHistogramBins]{};
@@ -113,4 +120,40 @@ WhiteBalanceFactors calculateWhiteBalanceFactors(const QImage *image) {
     computeChannelFactors(bMin, bMax, minRequiredRange, factors.scale[2], factors.bias[2]);
 
     return factors;
+}
+
+QImage whiteBalanceSamples(const QImage &image) {
+    const int stepX = sampleStep(image.width());
+    const int stepY = sampleStep(image.height());
+    if (image.isNull() || image.depth() < 8 || (stepX == 1 && stepY == 1)) {
+        return image;
+    }
+
+    // Fewer than 2 * kMaxDimensionSamples samples per row and column, so
+    // calculateWhiteBalanceFactors() measures every one of them.
+    const int width = (image.width() + stepX - 1) / stepX;
+    const int height = (image.height() + stepY - 1) / stepY;
+    QImage samples(width, height, image.format());
+    if (samples.isNull()) {
+        return image;
+    }
+    if (image.format() == QImage::Format_Indexed8) {
+        samples.setColorTable(image.colorTable());
+    }
+    samples.setColorSpace(image.colorSpace());
+    for (const QString &key : image.textKeys()) {
+        samples.setText(key, image.text(key));
+    }
+
+    const int bytesPerPixel = image.depth() / 8;
+    for (int y = 0; y < height; ++y) {
+        const uchar *source = image.constScanLine(y * stepY);
+        uchar *target = samples.scanLine(y);
+        for (int x = 0; x < width; ++x) {
+            std::memcpy(target + x * bytesPerPixel,
+                        source + static_cast<qsizetype>(x) * stepX * bytesPerPixel,
+                        bytesPerPixel);
+        }
+    }
+    return samples;
 }

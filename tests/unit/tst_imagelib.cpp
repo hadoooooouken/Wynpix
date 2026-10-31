@@ -1,4 +1,6 @@
+#include <QColorSpace>
 #include <QImage>
+#include <QRgba64>
 #include <QTest>
 
 #include <memory>
@@ -17,6 +19,7 @@
 // change. The widths cover the 8-pixel AVX2 loops and their scalar tails.
 
 namespace {
+using namespace Qt::StringLiterals;
 
 // Wider than two 8-pixel AVX2 blocks, with a remainder for the scalar tail.
 constexpr int kOddWidth = 37;
@@ -273,6 +276,49 @@ private slots:
         std::make_shared<const QImage>(small), adj, &measured);
     QCOMPARE(smallResult.size(), small.size());
     QVERIFY(qRed(smallResult.pixel(0, 0)) < qRed(small.pixel(0, 0)));
+  }
+
+  void whiteBalanceSamplesGiveTheFactorsOfTheImage() {
+    // Large enough to be sampled down in both directions; low-contrast ramps
+    // give each channel its own, clearly not neutral stretch.
+    constexpr int kWidth = 1000;
+    constexpr int kHeight = 700;
+    constexpr int kRedBase = 16000;
+    constexpr int kRedStep = 24;
+    constexpr int kGreenBase = 20000;
+    constexpr int kGreenStep = 40;
+    constexpr int kBlueBase = 24000;
+    constexpr int kBlueStep = 12;
+    constexpr quint16 kOpaque16 = 0xffff;
+    QImage source(kWidth, kHeight, QImage::Format_RGBA64);
+    for (int y = 0; y < kHeight; ++y) {
+      auto *line = reinterpret_cast<QRgba64 *>(source.scanLine(y));
+      for (int x = 0; x < kWidth; ++x) {
+        line[x] = QRgba64::fromRgba64(
+            static_cast<quint16>(kRedBase + x * kRedStep),
+            static_cast<quint16>(kGreenBase + y * kGreenStep),
+            static_cast<quint16>(kBlueBase + (x + y) * kBlueStep), kOpaque16);
+      }
+    }
+    const QColorSpace pq(QColorSpace::Primaries::Bt2020,
+                         QColorSpace::TransferFunction::St2084);
+    source.setColorSpace(pq);
+    source.setText(u"HDR_IsHDR"_s, u"true"_s);
+
+    const QImage samples = whiteBalanceSamples(source);
+    QVERIFY(samples.width() < kWidth);
+    QVERIFY(samples.height() < kHeight);
+    QCOMPARE(samples.format(), source.format());
+    QCOMPARE(samples.colorSpace(), pq);
+    QCOMPARE(samples.text(u"HDR_IsHDR"_s), u"true"_s);
+
+    const WhiteBalanceFactors expected = calculateWhiteBalanceFactors(&source);
+    const WhiteBalanceFactors measured = calculateWhiteBalanceFactors(&samples);
+    QVERIFY(expected.scale[0] > 1.0f);
+    for (int channel = 0; channel < 3; ++channel) {
+      QCOMPARE(measured.scale[channel], expected.scale[channel]);
+      QCOMPARE(measured.bias[channel], expected.bias[channel]);
+    }
   }
 };
 

@@ -1,4 +1,6 @@
+#include <QColorSpace>
 #include <QRegion>
+#include <QRgba64>
 #include <algorithm>
 #include <QTest>
 #include <cmath>
@@ -8,7 +10,9 @@
 #include "gui/quick/render/imagerenderitem.h"
 #include "gui/quick/render/resamplegrid.h"
 #include "testsuites.h"
+#include "utils/autocoloradjustments.h"
 #include "utils/coloradjustments.h"
+#include "utils/hdrtonemapper.h"
 
 namespace {
 // Matrix entries are products of a few floats.
@@ -36,6 +40,14 @@ constexpr float kSmartEnhanceHigh = 0.8f;
 constexpr float kSmartEnhanceOff = 0.0f;
 constexpr float kIdentityScale = 1.0f;
 constexpr float kIdentityBias = 0.0f;
+constexpr int kPqImageWidth = 600;
+constexpr int kPqImageHeight = 520;
+// PQ codes of about 5 to 600 nits.
+constexpr float kPqLow = 0.3f;
+constexpr float kPqRange = 0.4f;
+constexpr float kMax16 = 65535.0f;
+constexpr quint16 kOpaque16 = 0xffff;
+constexpr float kLowWhiteNits = 100.0f;
 
 QImage makeDynamicRangeImage(int rOffset, int gOffset) {
   QImage img(kTestImageDimension, kTestImageDimension, QImage::Format_ARGB32_Premultiplied);
@@ -63,6 +75,47 @@ bool matrixEquals(const ColorMatrix &matrix, const float (&expected)[3][3],
     }
   }
   return near(matrix.offset, expectedOffset);
+}
+
+// PQ codes of a dim to bright scene (BT.2020), larger than the white balance
+// samples in both directions.
+QImage makePqImage() {
+  QImage img(kPqImageWidth, kPqImageHeight, QImage::Format_RGBX64);
+  for (int y = 0; y < kPqImageHeight; ++y) {
+    auto *line = reinterpret_cast<QRgba64 *>(img.scanLine(y));
+    for (int x = 0; x < kPqImageWidth; ++x) {
+      const float u = static_cast<float>(x) / kPqImageWidth;
+      const float v = static_cast<float>(y) / kPqImageHeight;
+      const auto code = [](float level) {
+        return static_cast<quint16>(std::lround(level * kMax16));
+      };
+      line[x] = QRgba64::fromRgba64(code(kPqLow + kPqRange * u),
+                                    code(kPqLow + kPqRange * v),
+                                    code(kPqLow + kPqRange * (u + v) / 2.0f),
+                                    kOpaque16);
+    }
+  }
+  img.setColorSpace(QColorSpace(QColorSpace::Primaries::Bt2020,
+                                QColorSpace::TransferFunction::St2084));
+  return img;
+}
+
+bool sameFactors(const WhiteBalanceFactors &a, const WhiteBalanceFactors &b) {
+  for (int channel = 0; channel < 3; ++channel) {
+    if (!near(a.scale[channel], b.scale[channel]) ||
+        !near(a.bias[channel], b.bias[channel]))
+      return false;
+  }
+  return true;
+}
+
+bool wbEquals(const ImageFilter &filter, const WhiteBalanceFactors &factors) {
+  WhiteBalanceFactors used;
+  for (int channel = 0; channel < 3; ++channel) {
+    used.scale[channel] = filter.wbScale[channel];
+    used.bias[channel] = filter.wbBias[channel];
+  }
+  return sameFactors(used, factors);
 }
 } // namespace
 
@@ -358,6 +411,31 @@ private slots:
     QCOMPARE(item.imageFilter().wbBias[0], kIdentityBias);
     QCOMPARE(item.imageFilter().wbBias[1], kIdentityBias);
     QCOMPARE(item.imageFilter().wbBias[2], kIdentityBias);
+  }
+
+  void renderItemMeasuresHdrWhiteBalanceOnToneMappedColour() {
+    // Smart Enhance runs on the tone mapped colour, and the CPU path
+    // measures the SDR copy, so the factors of a PQ image are those of the
+    // copy, not of its PQ codes; a new white level measures again.
+    const QImage pq = makePqImage();
+    ImageRenderItem item;
+    item.setImage(std::make_shared<const QImage>(pq));
+    ColorAdjustments adjustments;
+    adjustments.smartEnhance = kSmartEnhanceHalf;
+    item.setColorAdjustments(adjustments);
+
+    const WhiteBalanceFactors ofCodes = calculateWhiteBalanceFactors(&pq);
+    const QImage sdr = HdrToneMapper::toSdr(pq, HdrToneMapParams{});
+    const WhiteBalanceFactors ofSdr = calculateWhiteBalanceFactors(&sdr);
+    QVERIFY(!sameFactors(ofSdr, ofCodes));
+    QVERIFY(wbEquals(item.imageFilter(), ofSdr));
+
+    item.setHdrWhiteLevel(kLowWhiteNits);
+    const QImage brighter = HdrToneMapper::toSdr(
+        pq, HdrToneMapParams{.targetWhiteNits = kLowWhiteNits});
+    const WhiteBalanceFactors ofBrighter = calculateWhiteBalanceFactors(&brighter);
+    QVERIFY(!sameFactors(ofBrighter, ofSdr));
+    QVERIFY(wbEquals(item.imageFilter(), ofBrighter));
   }
 };
 
