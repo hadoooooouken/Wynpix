@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QDrag>
 #include <QGuiApplication>
+#include <QMimeData>
 #include <QMimeDatabase>
 #include <QProcess>
 #include <algorithm>
@@ -1217,20 +1218,12 @@ void Core::openFromClipboard() {
   }
 }
 
-void Core::onDropIn(const QMimeData *mimeData, QObject *source) {
+void Core::onDropIn(const QList<QUrl> &urls, QObject *source) {
   // ignore self
-  if (source == this)
+  if (source == this || urls.isEmpty())
     return;
-  // check for our needed mime type, here a file or a list of files
-  if (mimeData->hasUrls()) {
-    QStringList pathList;
-    QList<QUrl> urlList = mimeData->urls();
-    // extract the local paths of the files
-    for (int i = 0; i < urlList.size(); ++i)
-      pathList.append(urlList.at(i).toLocalFile());
-    // try to open first file in the list
-    loadPath(pathList.constFirst());
-  }
+  // try to open first file in the list
+  loadPath(urls.constFirst().toLocalFile());
 }
 
 // drag'n'drop

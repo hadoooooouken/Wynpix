@@ -244,7 +244,7 @@ private slots:
     void showRenameDialog();
     void onDraggedOut();
     void onDraggedOut(QList<QString> paths);
-    void onDropIn(const QMimeData *mimeData, QObject* source);
+    void onDropIn(const QList<QUrl> &urls, QObject *source);
     void toggleShuffle();
     void onModelLoaded();
     void outputError(const FileOpResult &error) const;

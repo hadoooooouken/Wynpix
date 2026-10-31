@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QGuiApplication>
 #include <QLocale>
-#include <QMimeData>
 #include <QMouseEvent>
 #include <QQuickWindow>
 #include <QScreen>
@@ -130,14 +129,7 @@ QuickMainWindowController::QuickMainWindowController(
     connect(qGuiApp, &QGuiApplication::aboutToQuit, this,
             [this]() { windowState.savePlacement(); });
 
-    // Core::onDropIn reads the URLs synchronously, so the payload can live on
-    // the stack for the duration of the emission.
-    connect(&shell, &MainWindowShell::urlsDropped, this,
-            [this](const QList<QUrl> &urls, QObject *source) {
-        QMimeData mimeData;
-        mimeData.setUrls(urls);
-        emit events.droppedIn(&mimeData, source);
-    });
+    connect(&shell, &MainWindowShell::urlsDropped, &events, &UiEvents::droppedIn);
 
     connect(&viewMode, &ViewModeController::viewModeApplied, this, [this](ViewMode mode) {
         shell.setFolderViewActive(mode == MODE_FOLDERVIEW);

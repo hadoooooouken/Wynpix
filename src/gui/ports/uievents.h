@@ -1,12 +1,12 @@
 #pragma once
 
 #include <QList>
-#include <QMimeData>
 #include <QObject>
 #include <QRect>
 #include <QSize>
 #include <QString>
 #include <QStringList>
+#include <QUrl>
 
 #include "settings_types.h"
 #include "utils/coloradjustments.h"
@@ -23,7 +23,7 @@ public:
 signals:
     // Navigation and file activation
     void pathOpened(QString path);
-    void droppedIn(const QMimeData *mimeData, QObject *source);
+    void droppedIn(QList<QUrl> urls, QObject *source);
     void draggedOut();
     void nextImageRequested();
     void prevImageRequested();
