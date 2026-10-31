@@ -156,6 +156,7 @@ $SINGLE_PATCHES = @(
     @{ Dep = "jxrlib";     Patch = "jxrlib-v2019.10.9-uintptr-fix.patch"   }
     @{ Dep = "jxrlib";     Patch = "jxrlib-v2019.10.9-cmake-build.patch"   }
     @{ Dep = "LibRaw";     Patch = "LibRaw-0.22.3-vcxproj-toolset.patch"   }
+    @{ Dep = "LibRaw";     Patch = "LibRaw-0.22.3-openmp-postprocessing.patch" }
 )
 
 # Multi-commit patch series (applied with git am)

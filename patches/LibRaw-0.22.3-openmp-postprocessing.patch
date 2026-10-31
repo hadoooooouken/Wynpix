@@ -1,0 +1,283 @@
+diff --git a/src/postprocessing/mem_image.cpp b/src/postprocessing/mem_image.cpp
+index 95d582a..f41a615 100644
+--- a/src/postprocessing/mem_image.cpp
++++ b/src/postprocessing/mem_image.cpp
+@@ -221,16 +221,24 @@ int LibRaw::copy_mem_image(void *scan0, int stride, int bgr)
+ 
+   if (S.flip & 4)
+     SWAP(S.height, S.width);
+-  uchar *ppm;
+-  ushort *ppm2;
+-  int c, row, col, soff, rstep, cstep;
++  int first_soff, rstep, cstep;
+ 
+-  soff = flip_index(0, 0);
+-  cstep = flip_index(0, 1) - soff;
++  first_soff = flip_index(0, 0);
++  cstep = flip_index(0, 1) - first_soff;
+   rstep = flip_index(1, 0) - flip_index(0, S.width);
+-
+-  for (row = 0; row < S.height; row++, soff += rstep)
++  // Each row starts where the previous one ended plus rstep, so a row's
++  // first source offset can be computed directly and rows run in parallel.
++  const int row_soff_step = S.width * cstep + rstep;
++
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp parallel for schedule(static) default(shared)
++#endif
++  for (int row = 0; row < S.height; row++)
+   {
++    uchar *ppm;
++    ushort *ppm2;
++    int c, col;
++    int soff = first_soff + row * row_soff_step;
+     uchar *bufp = ((uchar *)scan0) + size_t(row) * size_t(stride);
+     ppm2 = (ushort *)(ppm = bufp);
+     // keep trivial decisions in the outer loop for speed
+diff --git a/src/postprocessing/postprocessing_utils.cpp b/src/postprocessing/postprocessing_utils.cpp
+index 9e1d527..c9f2fa3 100644
+--- a/src/postprocessing/postprocessing_utils.cpp
++++ b/src/postprocessing/postprocessing_utils.cpp
+@@ -78,29 +78,46 @@ void LibRaw::exp_bef(float shift, float smooth)
+ 
+ void LibRaw::convert_to_rgb_loop(float out_cam[3][4])
+ {
+-  int row, col, c;
+-  float out[3];
+-  ushort *img;
+   memset(libraw_internal_data.output_data.histogram, 0,
+          sizeof(int) * LIBRAW_HISTOGRAM_SIZE * 4);
+-  if (libraw_internal_data.internal_output_params.raw_color)
++#ifdef LIBRAW_USE_OPENMP
++  int buffer_count = omp_get_max_threads();
++#else
++  int buffer_count = 1;
++#endif
++  // Every thread counts into its own histogram; they are summed afterwards.
++  char **buffers =
++      malloc_omp_buffers(buffer_count, sizeof(int) * LIBRAW_HISTOGRAM_SIZE * 4);
++  const int raw_color = libraw_internal_data.internal_output_params.raw_color;
++  const int colors = imgdata.idata.colors;
++
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp parallel for schedule(static) default(shared)
++#endif
++  for (int row = 0; row < S.height; row++)
+   {
+-    for (img = imgdata.image[0], row = 0; row < S.height; row++)
++#ifdef LIBRAW_USE_OPENMP
++    char *buffer = buffers[omp_get_thread_num()];
++#else
++    char *buffer = buffers[0];
++#endif
++    int(*histogram)[LIBRAW_HISTOGRAM_SIZE] =
++        (int(*)[LIBRAW_HISTOGRAM_SIZE])buffer;
++    ushort *img = imgdata.image[size_t(row) * S.width];
++    float out[3];
++    if (raw_color)
+     {
+-      for (col = 0; col < S.width; col++, img += 4)
++      for (int col = 0; col < S.width; col++, img += 4)
+       {
+-        for (c = 0; c < imgdata.idata.colors; c++)
++        for (int c = 0; c < colors; c++)
+         {
+-          libraw_internal_data.output_data.histogram[c][img[c] >> 3]++;
++          histogram[c][img[c] >> 3]++;
+         }
+       }
+     }
+-  }
+-  else if (imgdata.idata.colors == 3)
+-  {
+-    for (img = imgdata.image[0], row = 0; row < S.height; row++)
++    else if (colors == 3)
+     {
+-      for (col = 0; col < S.width; col++, img += 4)
++      for (int col = 0; col < S.width; col++, img += 4)
+       {
+         out[0] = out_cam[0][0] * img[0] + out_cam[0][1] * img[1] +
+                  out_cam[0][2] * img[2];
+@@ -111,17 +128,14 @@ void LibRaw::convert_to_rgb_loop(float out_cam[3][4])
+         img[0] = CLIP((int)out[0]);
+         img[1] = CLIP((int)out[1]);
+         img[2] = CLIP((int)out[2]);
+-        libraw_internal_data.output_data.histogram[0][img[0] >> 3]++;
+-        libraw_internal_data.output_data.histogram[1][img[1] >> 3]++;
+-        libraw_internal_data.output_data.histogram[2][img[2] >> 3]++;
++        histogram[0][img[0] >> 3]++;
++        histogram[1][img[1] >> 3]++;
++        histogram[2][img[2] >> 3]++;
+       }
+     }
+-  }
+-  else if (imgdata.idata.colors == 4)
+-  {
+-    for (img = imgdata.image[0], row = 0; row < S.height; row++)
++    else if (colors == 4)
+     {
+-      for (col = 0; col < S.width; col++, img += 4)
++      for (int col = 0; col < S.width; col++, img += 4)
+       {
+         out[0] = out_cam[0][0] * img[0] + out_cam[0][1] * img[1] +
+                  out_cam[0][2] * img[2] + out_cam[0][3] * img[3];
+@@ -132,29 +146,42 @@ void LibRaw::convert_to_rgb_loop(float out_cam[3][4])
+         img[0] = CLIP((int)out[0]);
+         img[1] = CLIP((int)out[1]);
+         img[2] = CLIP((int)out[2]);
+-        libraw_internal_data.output_data.histogram[0][img[0] >> 3]++;
+-        libraw_internal_data.output_data.histogram[1][img[1] >> 3]++;
+-        libraw_internal_data.output_data.histogram[2][img[2] >> 3]++;
+-        libraw_internal_data.output_data.histogram[3][img[3] >> 3]++;
++        histogram[0][img[0] >> 3]++;
++        histogram[1][img[1] >> 3]++;
++        histogram[2][img[2] >> 3]++;
++        histogram[3][img[3] >> 3]++;
+       }
+     }
+   }
++
++  for (int b = 0; b < buffer_count; b++)
++  {
++    int(*histogram)[LIBRAW_HISTOGRAM_SIZE] =
++        (int(*)[LIBRAW_HISTOGRAM_SIZE])buffers[b];
++    for (int c = 0; c < 4; c++)
++      for (int v = 0; v < LIBRAW_HISTOGRAM_SIZE; v++)
++        libraw_internal_data.output_data.histogram[c][v] += histogram[c][v];
++  }
++  free_omp_buffers(buffers, buffer_count);
+ }
+ 
+ void LibRaw::scale_colors_loop(float scale_mul[4])
+ {
+-  unsigned size = S.iheight * S.iwidth;
++  const int size = int(S.iheight * S.iwidth);
+ 
+   if (C.cblack[4] && C.cblack[5])
+   {
+-    int val;
+-    for (unsigned i = 0; i < size; i++)
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp parallel for schedule(static) default(shared)
++#endif
++    for (int i = 0; i < size; i++)
+     {
++      int val;
+       for (unsigned c = 0; c < 4; c++)
+       {
+         if (!(val = imgdata.image[i][c])) continue;
+-        val -= C.cblack[6 + i / S.iwidth % C.cblack[4] * C.cblack[5] +
+-                        i % S.iwidth % C.cblack[5]];
++        val -= C.cblack[6 + unsigned(i) / S.iwidth % C.cblack[4] * C.cblack[5] +
++                        unsigned(i) % S.iwidth % C.cblack[5]];
+         val -= C.cblack[c];
+         val = int(val * scale_mul[c]);
+         imgdata.image[i][c] = CLIP(val);
+@@ -163,7 +190,10 @@ void LibRaw::scale_colors_loop(float scale_mul[4])
+   }
+   else if (C.cblack[0] || C.cblack[1] || C.cblack[2] || C.cblack[3])
+   {
+-    for (unsigned i = 0; i < size; i++)
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp parallel for schedule(static) default(shared)
++#endif
++    for (int i = 0; i < size; i++)
+     {
+       for (unsigned c = 0; c < 4; c++)
+       {
+@@ -177,7 +207,10 @@ void LibRaw::scale_colors_loop(float scale_mul[4])
+   }
+   else // BL is zero
+   {
+-    for (unsigned i = 0; i < size; i++)
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp parallel for schedule(static) default(shared)
++#endif
++    for (int i = 0; i < size; i++)
+     {
+       for (unsigned c = 0; c < 4; c++)
+       {
+diff --git a/src/postprocessing/postprocessing_utils_dcrdefs.cpp b/src/postprocessing/postprocessing_utils_dcrdefs.cpp
+index 2c2ad33..e540234 100644
+--- a/src/postprocessing/postprocessing_utils_dcrdefs.cpp
++++ b/src/postprocessing/postprocessing_utils_dcrdefs.cpp
+@@ -129,33 +129,56 @@ void LibRaw::scale_colors()
+     memset(dsum, 0, sizeof dsum);
+     bottom = MIN(greybox[1] + greybox[3], height);
+     right = MIN(greybox[0] + greybox[2], width);
+-    for (row = greybox[1]; row < bottom; row += 8)
+-      for (col = greybox[0]; col < right; col += 8)
++    // Rows of 8x8 blocks run in parallel. Every block sum is an integer far
++    // below 2^53, so the doubles add up exactly in any order.
++    const int block_rows =
++        bottom > greybox[1] ? int((bottom - greybox[1] + 7) / 8) : 0;
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp parallel default(shared)
++#endif
++    {
++      double thread_dsum[8] = {0, 0, 0, 0, 0, 0, 0, 0};
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp for schedule(static)
++#endif
++      for (int block_row = 0; block_row < block_rows; block_row++)
+       {
+-        memset(sum, 0, sizeof sum);
+-        for (y = row; y < row + 8 && y < bottom; y++)
+-          for (x = col; x < col + 8 && x < right; x++)
+-            FORC4
+-            {
+-              if (filters)
++        const unsigned row = greybox[1] + unsigned(block_row) * 8;
++        for (unsigned col = greybox[0]; col < right; col += 8)
++        {
++          unsigned sum[8], c;
++          int val;
++          memset(sum, 0, sizeof sum);
++          for (unsigned y = row; y < row + 8 && y < bottom; y++)
++            for (unsigned x = col; x < col + 8 && x < right; x++)
++              FORC4
+               {
+-                c = fcol(y, x);
+-                val = BAYER2(y, x);
++                if (filters)
++                {
++                  c = fcol(y, x);
++                  val = BAYER2(y, x);
++                }
++                else
++                  val = image[y * width + x][c];
++                if (val > (int)maximum - 25)
++                  goto skip_block;
++                if ((val -= cblack[c]) < 0)
++                  val = 0;
++                sum[c] += val;
++                sum[c + 4]++;
++                if (filters)
++                  break;
+               }
+-              else
+-                val = image[y * width + x][c];
+-              if (val > (int)maximum - 25)
+-                goto skip_block;
+-              if ((val -= cblack[c]) < 0)
+-                val = 0;
+-              sum[c] += val;
+-              sum[c + 4]++;
+-              if (filters)
+-                break;
+-            }
+-        FORC(8) dsum[c] += sum[c];
+-      skip_block:;
++          FORC(8) thread_dsum[c] += sum[c];
++        skip_block:;
++        }
+       }
++#ifdef LIBRAW_USE_OPENMP
++#pragma omp critical(scale_colors_dsum)
++#endif
++      for (int k = 0; k < 8; k++)
++        dsum[k] += thread_dsum[k];
++    }
+     FORC4 if (dsum[c]) pre_mul[c] = float(dsum[c + 4] / dsum[c]);
+   }
+   if (use_camera_wb && cam_mul[0] > 0.00001f)
