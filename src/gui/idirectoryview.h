@@ -3,13 +3,13 @@
 #include <QtPlugin>
 #include <QList>
 #include <QSize>
+#include <QUrl>
 #include <memory>
 
 #include <QDropEvent>
 
 class Thumbnail;
 class QString;
-class QMimeData;
 
 class IDirectoryView {
 public:
@@ -42,7 +42,7 @@ public:
     virtual void thumbnailsRequested(QList<int>, QSize, bool, bool) = 0;
     virtual void draggedOut() = 0;
     virtual void draggedOver(int) = 0;
-    virtual void droppedInto(const QMimeData*, QObject*, int, Qt::DropAction) = 0;
+    virtual void droppedInto(QList<QUrl>, QObject*, int, Qt::DropAction) = 0;
     virtual void backRequested() = 0;
     virtual void forwardRequested() = 0;
     virtual void openSelectedRequested() {}

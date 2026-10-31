@@ -10,7 +10,6 @@
 #include <QColor>
 #include <QHash>
 #include <QMap>
-#include <QMimeData>
 #include <QPixmap>
 #include <QPointer>
 #include <QSize>
@@ -104,7 +103,7 @@ private slots:
     void onDraggedOut();
     void onDraggedOver(int index);
 
-    void onDroppedInto(const QMimeData *data, QObject *source, int targetIndex, Qt::DropAction action);
+    void onDroppedInto(const QList<QUrl> &urls, QObject *source, int targetIndex, Qt::DropAction action);
 
     // Delivered from the background DirectoryExpandWorker thread (queued
     // connection) with the immutable generation captured for that launch.

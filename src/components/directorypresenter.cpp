@@ -124,8 +124,8 @@ void DirectoryPresenter::setView(std::shared_ptr<IDirectoryView> _view) {
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(openSelectedRequested()), this,
           SLOT(onOpenSelectedRequested()));
   connect(dynamic_cast<QObject *>(view.get()),
-          SIGNAL(droppedInto(const QMimeData *, QObject *, int, Qt::DropAction)), this,
-          SLOT(onDroppedInto(const QMimeData *, QObject *, int, Qt::DropAction)));
+          SIGNAL(droppedInto(QList<QUrl>, QObject *, int, Qt::DropAction)), this,
+          SLOT(onDroppedInto(QList<QUrl>, QObject *, int, Qt::DropAction)));
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(backRequested()), this,
           SIGNAL(backRequested()));
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(forwardRequested()), this,
@@ -770,9 +770,9 @@ void DirectoryPresenter::onDraggedOver(int index) {
     view->setDragHover(index);
 }
 
-void DirectoryPresenter::onDroppedInto(const QMimeData *data, QObject *source,
+void DirectoryPresenter::onDroppedInto(const QList<QUrl> &urls, QObject *source,
                                        int targetIndex, Qt::DropAction action) {
-  if (!data->hasUrls() || model->source() != SOURCE_DIRECTORY)
+  if (urls.isEmpty() || model->source() != SOURCE_DIRECTORY)
     return;
 
   // ignore drops into selected / current folder when we are the source of
@@ -785,9 +785,8 @@ void DirectoryPresenter::onDroppedInto(const QMimeData *data, QObject *source,
 
   // convert urls to qstrings
   QStringList pathList;
-  QList<QUrl> urlList = data->urls();
-  for (int i = 0; i < urlList.size(); ++i)
-    pathList.append(urlList.at(i).toLocalFile());
+  for (const QUrl &url : urls)
+    pathList.append(url.toLocalFile());
 
   // get target dir path
   QString destDir;

@@ -1,7 +1,6 @@
 #include "quickfolderviewactions.h"
 
 #include <QDir>
-#include <QMimeData>
 
 #include "components/actionmanager/actionmanager.h"
 #include "gui/quick/adapters/filesystemmodelcustom.h"
@@ -92,14 +91,8 @@ void QuickFolderViewActions::forwardGridRequests() {
     connect(&grid, &FolderGridController::draggedOver, view, &DirectoryViewAdapter::draggedOver);
     connect(&grid, &FolderGridController::openSelectedRequested, view,
             &DirectoryViewAdapter::openSelectedRequested);
-    // DirectoryPresenter reads the URLs synchronously, so the payload can
-    // live on the stack for the duration of the emission.
     connect(&grid, &FolderGridController::urlsDropped, view,
-            [view](const QList<QUrl> &urls, QObject *source, int index, Qt::DropAction action) {
-                QMimeData mimeData;
-                mimeData.setUrls(urls);
-                emit view->droppedInto(&mimeData, source, index, action);
-            });
+            &DirectoryViewAdapter::droppedInto);
     FolderGridController *gridController = &grid;
     connect(&actions, &ActionManager::folderOpenSelected, gridController,
             &FolderGridController::activateCurrent);

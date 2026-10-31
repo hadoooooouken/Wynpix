@@ -46,7 +46,7 @@ signals:
     void thumbnailsRequested(QList<int>, QSize, bool, bool) override;
     void draggedOut() override;
     void draggedOver(int) override;
-    void droppedInto(const QMimeData *, QObject *, int, Qt::DropAction) override;
+    void droppedInto(QList<QUrl>, QObject *, int, Qt::DropAction) override;
     void backRequested() override;
     void forwardRequested() override;
     void openSelectedRequested() override;
