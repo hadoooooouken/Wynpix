@@ -42,6 +42,9 @@ public:
     void showMessage(const QString &text) {
         showNotification({text, NotificationKind::Info, std::nullopt});
     }
+    void showMessage(const QString &text, int durationMs) {
+        showNotification({text, NotificationKind::Info, durationMs});
+    }
     void showSuccess(const QString &text) {
         showNotification({text, NotificationKind::Success, std::nullopt});
     }
