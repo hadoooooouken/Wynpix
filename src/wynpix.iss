@@ -53,8 +53,6 @@ ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 CloseApplications=yes
-; Created by wynpix.exe (main.cpp); the uninstaller cannot delete the DLLs a running instance has loaded.
-AppMutex=WynpixRunning
 ChangesAssociations=yes
 
 [Languages]
@@ -126,6 +124,52 @@ french.AssociateFilesTaskDesc=Associer {#MyAppName} aux formats d'image pris en 
 japanese.AssociateFilesTaskDesc={#MyAppName} をサポートされている画像形式に関連付ける
 turkish.AssociateFilesTaskDesc={#MyAppName} uygulamasını desteklenen görüntü formatlarıyla ilişkilendir
 russian.AssociateFilesTaskDesc=Ассоциировать {#MyAppName} с поддерживаемыми форматами изображений
+
+; Uninstall prompt when the app is running
+english.AppRunningInstruction={#MyAppName} is running
+ukrainian.AppRunningInstruction={#MyAppName} запущено
+german.AppRunningInstruction={#MyAppName} wird ausgeführt
+spanish.AppRunningInstruction={#MyAppName} se está ejecutando
+french.AppRunningInstruction={#MyAppName} est en cours d'exécution
+japanese.AppRunningInstruction={#MyAppName} が実行中です
+turkish.AppRunningInstruction={#MyAppName} çalışıyor
+russian.AppRunningInstruction={#MyAppName} запущен
+
+english.AppRunningText=Close {#MyAppName} to continue uninstalling.
+ukrainian.AppRunningText=Закрийте {#MyAppName}, щоб продовжити видалення.
+german.AppRunningText=Schließen Sie {#MyAppName}, um die Deinstallation fortzusetzen.
+spanish.AppRunningText=Cierre {#MyAppName} para continuar con la desinstalación.
+french.AppRunningText=Fermez {#MyAppName} pour poursuivre la désinstallation.
+japanese.AppRunningText=アンインストールを続行するには {#MyAppName} を閉じてください。
+turkish.AppRunningText=Kaldırmaya devam etmek için {#MyAppName} uygulamasını kapatın.
+russian.AppRunningText=Закройте {#MyAppName}, чтобы продолжить удаление.
+
+english.AppNotClosedText={#MyAppName} did not close. Force it to close to continue uninstalling.
+ukrainian.AppNotClosedText={#MyAppName} не закрився. Закрийте його примусово, щоб продовжити видалення.
+german.AppNotClosedText={#MyAppName} wurde nicht beendet. Erzwingen Sie das Beenden, um die Deinstallation fortzusetzen.
+spanish.AppNotClosedText={#MyAppName} no se cerró. Fuerce su cierre para continuar con la desinstalación.
+french.AppNotClosedText={#MyAppName} ne s'est pas fermé. Forcez sa fermeture pour poursuivre la désinstallation.
+japanese.AppNotClosedText={#MyAppName} が終了しませんでした。アンインストールを続行するには強制終了してください。
+turkish.AppNotClosedText={#MyAppName} kapanmadı. Kaldırmaya devam etmek için zorla kapatın.
+russian.AppNotClosedText={#MyAppName} не закрылся. Закройте его принудительно, чтобы продолжить удаление.
+
+english.AppCloseButton=&Close {#MyAppName}
+ukrainian.AppCloseButton=&Закрити {#MyAppName}
+german.AppCloseButton={#MyAppName} &schließen
+spanish.AppCloseButton=&Cerrar {#MyAppName}
+french.AppCloseButton=&Fermer {#MyAppName}
+japanese.AppCloseButton={#MyAppName} を閉じる(&C)
+turkish.AppCloseButton={#MyAppName} uygulamasını &kapat
+russian.AppCloseButton=&Закрыть {#MyAppName}
+
+english.AppForceCloseButton=&Force close {#MyAppName}
+ukrainian.AppForceCloseButton=&Примусово закрити {#MyAppName}
+german.AppForceCloseButton={#MyAppName} &zwangsweise beenden
+spanish.AppForceCloseButton=&Forzar el cierre de {#MyAppName}
+french.AppForceCloseButton=&Forcer la fermeture de {#MyAppName}
+japanese.AppForceCloseButton={#MyAppName} を強制終了(&F)
+turkish.AppForceCloseButton={#MyAppName} uygulamasını &zorla kapat
+russian.AppForceCloseButton=&Принудительно закрыть {#MyAppName}
 
 ; AVX2 error messages (AVX2 installer only)
 #if Isa == "AVX2"
@@ -612,6 +656,11 @@ const
     'wynpix.AssocFile.tif;wynpix.AssocFile.tiff;' +
     'wynpix.AssocFile.jp2;wynpix.AssocFile.jph;' +
     'wynpix.AssocFile.svg';
+  { Created by wynpix.exe (main.cpp); the uninstaller cannot delete the DLLs a
+    running instance has loaded. }
+  AppRunningMutex = 'WynpixRunning';
+  CCH_RM_SESSION_KEY = 32;
+  RmForceShutdown = 1;
 
 var
   ForeignThumbnailHandlerPaths: array of String;
@@ -997,6 +1046,108 @@ begin
 
   if not CleanupSucceeded then
     RaiseThumbnailCleanupFailure;
+end;
+
+function RmStartSession(out SessionHandle: DWORD; SessionFlags: DWORD;
+  SessionKey: String): DWORD;
+  external 'RmStartSession@rstrtmgr.dll stdcall delayload';
+
+function RmRegisterResources(SessionHandle: DWORD; FileCount: UINT;
+  FileNames: TArrayOfString; ApplicationCount: UINT; Applications: NativeUInt;
+  ServiceCount: UINT; ServiceNames: NativeUInt): DWORD;
+  external 'RmRegisterResources@rstrtmgr.dll stdcall delayload';
+
+function RmShutdown(SessionHandle: DWORD; ActionFlags: ULONG;
+  StatusCallback: NativeUInt): DWORD;
+  external 'RmShutdown@rstrtmgr.dll stdcall delayload';
+
+function RmEndSession(SessionHandle: DWORD): DWORD;
+  external 'RmEndSession@rstrtmgr.dll stdcall delayload';
+
+{ Closes the instances running from this installation the way Setup's
+  CloseApplications does; a forced shutdown terminates them if they do not
+  respond in time. }
+procedure CloseRunningApp(Force: Boolean);
+var
+  Session: DWORD;
+  Files: TArrayOfString;
+  Flags: ULONG;
+  Error: DWORD;
+  I: Integer;
+begin
+  Error := RmStartSession(Session, 0,
+    StringOfChar(' ', CCH_RM_SESSION_KEY));
+  if Error <> 0 then
+  begin
+    Log(Format('RmStartSession failed: %d', [Error]));
+    exit;
+  end;
+
+  try
+    SetArrayLength(Files, 1);
+    Files[0] := ExpandConstant('{app}\{#MyAppExeName}');
+    Error := RmRegisterResources(Session, 1, Files, 0, 0, 0, 0);
+    if Error = 0 then
+    begin
+      Flags := 0;
+      if Force then
+        Flags := RmForceShutdown;
+      Error := RmShutdown(Session, Flags, 0);
+    end;
+    Log(Format('Closing %s returned %d', [Files[0], Error]));
+  finally
+    RmEndSession(Session);
+  end;
+
+  { The mutex lives until the process has fully exited. }
+  for I := 1 to 50 do
+  begin
+    if not CheckForMutexes(AppRunningMutex) then
+      exit;
+    Sleep(100);
+  end;
+end;
+
+function InitializeUninstall: Boolean;
+var
+  Attempted: Boolean;
+  Text: String;
+  CloseLabel: String;
+begin
+  Result := True;
+  Attempted := False;
+  while CheckForMutexes(AppRunningMutex) do
+  begin
+    if UninstallSilent then
+    begin
+      if Attempted then
+      begin
+        Log('{#MyAppName} is still running; aborting uninstall.');
+        Result := False;
+        exit;
+      end;
+    end
+    else
+    begin
+      Text := CustomMessage('AppRunningText');
+      CloseLabel := CustomMessage('AppCloseButton');
+      if Attempted then
+      begin
+        Text := CustomMessage('AppNotClosedText');
+        CloseLabel := CustomMessage('AppForceCloseButton');
+      end;
+      if TaskDialogMsgBox(CustomMessage('AppRunningInstruction'), Text,
+           mbInformation, MB_OKCANCEL, [CloseLabel,
+           SetupMessage(msgButtonCancel)], 0) <> IDOK then
+      begin
+        Result := False;
+        exit;
+      end;
+    end;
+    { A silent uninstall has nobody to ask, so it forces the first attempt. }
+    CloseRunningApp(Attempted or UninstallSilent);
+    Attempted := True;
+  end;
 end;
 
 procedure DeinitializeUninstall;
