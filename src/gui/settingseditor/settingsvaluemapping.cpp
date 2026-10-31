@@ -59,6 +59,7 @@ SettingsValues SettingsValueMapping::load() const {
     general.rememberLastFolder = s.rememberLastFolder();
     general.windowTitleExtendedInfo = s.windowTitleExtendedInfo();
     general.infoBarFullscreen = s.infoBarFullscreen();
+    general.showAnimationControls = s.showAnimationControls();
     general.cursorAutohide = s.cursorAutohide();
     general.smoothScroll = s.enableSmoothScroll();
     general.smoothZoom = s.enableSmoothZoom();
@@ -165,6 +166,7 @@ void SettingsValueMapping::storeGeneral(const GeneralSettings &general) {
     s.setRememberLastFolder(general.rememberLastFolder);
     s.setWindowTitleExtendedInfo(general.windowTitleExtendedInfo);
     s.setInfoBarFullscreen(general.infoBarFullscreen);
+    s.setShowAnimationControls(general.showAnimationControls);
     s.setCursorAutohide(general.cursorAutohide);
     s.setEnableSmoothScroll(general.smoothScroll);
     s.setEnableSmoothZoom(general.smoothZoom);

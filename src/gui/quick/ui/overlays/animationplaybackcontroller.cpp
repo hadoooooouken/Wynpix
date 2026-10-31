@@ -34,7 +34,7 @@ void AnimationPlaybackController::attachPlayer(AnimationPlayer *player) {
 }
 
 bool AnimationPlaybackController::isVisible() const {
-    return !mFolderViewActive && !mPanelAtTop && mPlayer && mPlayer->frameCount() > 1;
+    return mEnabled && !mFolderViewActive && !mPanelAtTop && mPlayer && mPlayer->frameCount() > 1;
 }
 
 bool AnimationPlaybackController::isShown() const {
@@ -71,6 +71,14 @@ QString AnimationPlaybackController::speedText() const {
 
 bool AnimationPlaybackController::isRememberSettings() const {
     return mPlayer ? mPlayer->rememberSettings() : false;
+}
+
+void AnimationPlaybackController::setEnabled(bool enabled) {
+    if (mEnabled == enabled)
+        return;
+    mEnabled = enabled;
+    emit stateChanged();
+    updateVisibilityState();
 }
 
 void AnimationPlaybackController::setFolderViewActive(bool active) {

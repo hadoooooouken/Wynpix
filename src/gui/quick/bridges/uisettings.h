@@ -80,11 +80,13 @@ struct FolderViewSettings {
                          const FolderViewSettings &) = default;
 };
 
-// Overlays drawn over the viewer: info bar, zoom indicator, save and crop.
+// Overlays drawn over the viewer: info bar, zoom indicator, save, animation
+// playback and crop.
 struct OverlaySettings {
   bool infoBarFullscreen{};
   SettingsEnums::ZoomIndicatorMode zoomIndicatorMode{};
   bool showSaveOverlay{};
+  bool showAnimationControls = true;
   SettingsEnums::CropAction defaultCropAction{};
 
   friend bool operator==(const OverlaySettings &,

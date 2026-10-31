@@ -45,6 +45,7 @@ public:
     [[nodiscard]] bool isRememberSettings() const;
 
     void setFolderViewActive(bool active);
+    void setEnabled(bool enabled);
     void setPanelAtTop(bool atTop);
     void pointerMoved();
 
@@ -75,6 +76,7 @@ private:
 
     QPointer<AnimationPlayer> mPlayer;
     QTimer mHideTimer;
+    bool mEnabled = true;
     bool mFolderViewActive = false;
     bool mPanelAtTop = false;
     bool mShown = false;

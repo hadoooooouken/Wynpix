@@ -162,6 +162,9 @@ public:
   bool infoBarFullscreen();
   void setInfoBarFullscreen(bool mode);
 
+  bool showAnimationControls();
+  void setShowAnimationControls(bool mode);
+
   bool windowTitleExtendedInfo();
   void setWindowTitleExtendedInfo(bool mode);
 

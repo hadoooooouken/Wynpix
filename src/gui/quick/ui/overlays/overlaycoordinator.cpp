@@ -78,6 +78,7 @@ void OverlayCoordinator::applySettings(const UiSettingsSnapshot &settings) {
     mFullscreenChrome.applySettings(settings);
     mPageNavigation.setPanelAtTop(settings.panel.enabled && settings.panel.position == SettingsEnums::PanelPosition::Top);
     mAnimationPlayback.setPanelAtTop(settings.panel.enabled && settings.panel.position == SettingsEnums::PanelPosition::Top);
+    mAnimationPlayback.setEnabled(settings.overlays.showAnimationControls);
     // An edit made in the overlay is already current; a different value in
     // the settings comes from elsewhere (settings dialog).
     const CasParameters settingsCas = casParametersOf(settings.viewer);

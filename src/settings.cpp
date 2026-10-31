@@ -1159,6 +1159,14 @@ bool Settings::infoBarFullscreen() {
 void Settings::setInfoBarFullscreen(bool mode) {
   settings->settingsConf->setValue("infoBarFullscreen", mode);
 }
+
+bool Settings::showAnimationControls() {
+  return settings->settingsConf->value("showAnimationControls", true).toBool();
+}
+
+void Settings::setShowAnimationControls(bool mode) {
+  settings->settingsConf->setValue("showAnimationControls", mode);
+}
 //------------------------------------------------------------------------------
 bool Settings::windowTitleExtendedInfo() {
   return settings->settingsConf->value("windowTitleExtendedInfo", true)

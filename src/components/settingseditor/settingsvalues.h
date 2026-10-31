@@ -28,6 +28,7 @@ struct GeneralSettings {
     Q_PROPERTY(bool rememberLastFolder MEMBER rememberLastFolder FINAL)
     Q_PROPERTY(bool windowTitleExtendedInfo MEMBER windowTitleExtendedInfo FINAL)
     Q_PROPERTY(bool infoBarFullscreen MEMBER infoBarFullscreen FINAL)
+    Q_PROPERTY(bool showAnimationControls MEMBER showAnimationControls FINAL)
     Q_PROPERTY(bool cursorAutohide MEMBER cursorAutohide FINAL)
     Q_PROPERTY(bool smoothScroll MEMBER smoothScroll FINAL)
     Q_PROPERTY(bool smoothZoom MEMBER smoothZoom FINAL)
@@ -59,6 +60,7 @@ public:
     bool rememberLastFolder = false;
     bool windowTitleExtendedInfo = false;
     bool infoBarFullscreen = false;
+    bool showAnimationControls = false;
     bool cursorAutohide = false;
     bool smoothScroll = false;
     bool smoothZoom = false;

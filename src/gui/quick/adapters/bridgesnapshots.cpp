@@ -72,6 +72,7 @@ UiSettingsSnapshot BridgeSnapshots::readUiSettings(Settings &settings) {
               .zoomIndicatorMode =
                   static_cast<Enums::ZoomIndicatorMode>(settings.zoomIndicatorMode()),
               .showSaveOverlay = settings.showSaveOverlay(),
+              .showAnimationControls = settings.showAnimationControls(),
               .defaultCropAction =
                   static_cast<Enums::CropAction>(settings.defaultCropAction()),
           },
