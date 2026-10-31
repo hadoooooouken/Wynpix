@@ -18,6 +18,10 @@
 #include <QIODevice>
 #include <QImage>
 #include <QLoggingCategory>
+#include <QtEndian>
+
+#include <cstring>
+#include <type_traits>
 
 Q_DECLARE_LOGGING_CATEGORY(LOG_PFMPLUGIN)
 Q_LOGGING_CATEGORY(LOG_PFMPLUGIN, "kf.imageformats.plugins.pfm", QtWarningMsg)
@@ -229,24 +233,50 @@ bool PFMHandler::canRead(QIODevice *device)
     return h.isValid();
 }
 
+namespace {
+
+constexpr qsizetype kGrayChannelCount = 1;
+constexpr qsizetype kColorChannelCount = 3;
+constexpr qsizetype kPixelChannelCount = 4;
+constexpr qsizetype kAlphaChannel = 3;
+
 template<class T>
-bool readScanLine(qint32 y, QDataStream &s, QImage &img, const PFMHeader &header)
+T readValue(const char *data, QDataStream::ByteOrder byteOrder)
+{
+    using Bits = std::conditional_t<sizeof(T) == sizeof(quint16), quint16, quint32>;
+    static_assert(sizeof(T) == sizeof(Bits));
+    const Bits bits = byteOrder == QDataStream::BigEndian ? qFromBigEndian<Bits>(data) : qFromLittleEndian<Bits>(data);
+    T value;
+    std::memcpy(&value, &bits, sizeof(value));
+    return value;
+}
+
+} // namespace
+
+// Reads a whole row at once into rowData: a stream read per value dominates the decode time.
+template<class T>
+bool readScanLine(qint32 y, QDataStream &s, QImage &img, const PFMHeader &header, QByteArray &rowData)
 {
     auto bw = header.isBlackAndWhite();
+    const qsizetype channelCount = bw ? kGrayChannelCount : kColorChannelCount;
+    rowData.resize(qsizetype(img.width()) * channelCount * qsizetype(sizeof(T)));
+    if (s.readRawData(rowData.data(), rowData.size()) != rowData.size() || s.status() != QDataStream::Ok) {
+        return false;
+    }
+    const char *values = rowData.constData();
+    const auto byteOrder = header.byteOrder();
     auto line = reinterpret_cast<T *>(img.scanLine(header.isPhotoshop() ? y : img.height() - y - 1));
-    for (auto x = 0, n = img.width() * 4; x < n; x += 4) {
-        line[x + 3] = T(1);
-        s >> line[x];
+    for (qsizetype x = 0, n = qsizetype(img.width()) * kPixelChannelCount; x < n; x += kPixelChannelCount) {
+        line[x + kAlphaChannel] = T(1);
+        line[x] = readValue<T>(values, byteOrder);
         if (bw) {
             line[x + 1] = line[x];
             line[x + 2] = line[x];
         } else {
-            s >> line[x + 1];
-            s >> line[x + 2];
+            line[x + 1] = readValue<T>(values + sizeof(T), byteOrder);
+            line[x + 2] = readValue<T>(values + 2 * sizeof(T), byteOrder);
         }
-        if (s.status() != QDataStream::Ok) {
-            return false;
-        }
+        values += channelCount * qsizetype(sizeof(T));
     }
     return true;
 }
@@ -269,12 +299,13 @@ bool PFMHandler::read(QImage *image)
         return false;
     }
 
+    QByteArray rowData;
     for (auto y = 0, h = img.height(); y < h; ++y) {
         auto ok = false;
         if (header.isHalfFloat()) {
-            ok = readScanLine<qfloat16>(y, s, img, header);
+            ok = readScanLine<qfloat16>(y, s, img, header, rowData);
         } else {
-            ok = readScanLine<float>(y, s, img, header);
+            ok = readScanLine<float>(y, s, img, header, rowData);
         }
         if (!ok) {
             qCWarning(LOG_PFMPLUGIN) << "PFMHandler::read() detected corrupted data";
