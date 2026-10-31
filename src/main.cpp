@@ -14,6 +14,8 @@
 #include <memory>
 #include <optional>
 
+#include <windows.h>
+
 #include "appservices.h"
 #include "apptranslator.h"
 #include "appversion.h"
@@ -64,6 +66,9 @@ int runCore(QGuiApplication &app, const UiPorts &ports,
 }
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
+  // Held until the process exits: the installer and uninstaller wait for it
+  // (AppMutex in wynpix.iss) instead of leaving the loaded DLLs behind.
+  CreateMutexW(nullptr, FALSE, L"WynpixRunning");
 
   // force some env variables
   qputenv("QT_PLUGIN_PATH", "");

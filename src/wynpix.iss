@@ -53,6 +53,8 @@ ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 CloseApplications=yes
+; Created by wynpix.exe (main.cpp); the uninstaller cannot delete the DLLs a running instance has loaded.
+AppMutex=WynpixRunning
 ChangesAssociations=yes
 
 [Languages]
