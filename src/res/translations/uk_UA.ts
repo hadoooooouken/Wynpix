@@ -2148,7 +2148,7 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/ui/CropPanel.qml" line="290"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
 </context>
 <context>
@@ -2226,7 +2226,7 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="132"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/FileReplaceDialog.qml" line="29"/>
@@ -2805,7 +2805,7 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/ui/PrintDialog.qml" line="211"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/PrintDialog.qml" line="221"/>
@@ -3004,7 +3004,7 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/ui/RenameOverlay.qml" line="110"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
 </context>
 <context>
@@ -3112,7 +3112,7 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/ui/ResizeDialog.qml" line="236"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/ResizeDialog.qml" line="158"/>
@@ -3224,7 +3224,7 @@ Staged copy:
     <message>
         <location filename="../../gui/quick/ui/ScriptEditorDialog.qml" line="98"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/scripteditormodel.cpp" line="26"/>
@@ -3980,7 +3980,7 @@ Example: %1</source>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="250"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
@@ -4340,7 +4340,7 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
     <message>
         <location filename="../../gui/quick/ui/ShortcutCreatorDialog.qml" line="102"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="35"/>
@@ -4358,7 +4358,7 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
     <message>
         <location filename="../../gui/quick/ui/TextInputDialog.qml" line="58"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
 </context>
 <context>
