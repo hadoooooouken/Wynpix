@@ -186,7 +186,7 @@ function Assert-ReleaseDirectoriesUnlocked {
     }
 }
 
-function Import-VcVars {
+function Get-VsInstallPath {
     $vswhere = Join-Path ([Environment]::GetEnvironmentVariable("ProgramFiles(x86)")) `
         "Microsoft Visual Studio\Installer\vswhere.exe"
     if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
@@ -197,8 +197,11 @@ function Import-VcVars {
     if ($LASTEXITCODE -ne 0 -or -not $vsInstallPath) {
         throw "vswhere could not locate a Visual Studio installation."
     }
+    return $vsInstallPath
+}
 
-    $vcvars = Join-Path $vsInstallPath "VC\Auxiliary\Build\vcvarsall.bat"
+function Import-VcVars {
+    $vcvars = Join-Path (Get-VsInstallPath) "VC\Auxiliary\Build\vcvarsall.bat"
     if (-not (Test-Path -LiteralPath $vcvars -PathType Leaf)) {
         throw "Could not locate vcvarsall.bat at $vcvars"
     }
@@ -218,7 +221,19 @@ function Import-VcVars {
     }
 }
 
-$cmake = Resolve-Executable -Names @("cmake.exe", "cmake")
+# The CMake bundled with Visual Studio rather than the first one on PATH:
+# Visual Studio configures the same build trees with it, and switching a tree
+# to another cmake.exe reruns its custom commands and links, whose command
+# lines embed that path.
+function Resolve-VsCMake {
+    $cmake = Join-Path (Get-VsInstallPath) "Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+    if (-not (Test-Path -LiteralPath $cmake -PathType Leaf)) {
+        throw "CMake bundled with Visual Studio not found at $cmake. Install the 'C++ CMake tools for Windows' component."
+    }
+    return $cmake
+}
+
+$cmake = Resolve-VsCMake
 $sevenZipPaths = @()
 $programFiles = [Environment]::GetFolderPath("ProgramFiles")
 $programFilesX86 = [Environment]::GetEnvironmentVariable("ProgramFiles(x86)")

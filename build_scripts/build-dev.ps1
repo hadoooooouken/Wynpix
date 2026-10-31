@@ -21,7 +21,7 @@ $releaseDir = Join-Path $projectRoot "release-dev"
 $buildDir = Join-Path $projectRoot "out\build\$preset"
 $exiv2Config = Join-Path $projectRoot "formats\exiv2\install-dev\lib\cmake\exiv2\exiv2Config.cmake"
 
-function Import-VcVars {
+function Get-VsInstallPath {
     $vswhere = Join-Path ([Environment]::GetEnvironmentVariable("ProgramFiles(x86)")) `
         "Microsoft Visual Studio\Installer\vswhere.exe"
     if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
@@ -32,8 +32,11 @@ function Import-VcVars {
     if ($LASTEXITCODE -ne 0 -or -not $vsInstallPath) {
         throw "vswhere could not locate a Visual Studio installation."
     }
+    return $vsInstallPath
+}
 
-    $vcvars = Join-Path $vsInstallPath "VC\Auxiliary\Build\vcvarsall.bat"
+function Import-VcVars {
+    $vcvars = Join-Path (Get-VsInstallPath) "VC\Auxiliary\Build\vcvarsall.bat"
     if (-not (Test-Path -LiteralPath $vcvars -PathType Leaf)) {
         throw "Could not locate vcvarsall.bat at $vcvars"
     }
@@ -52,6 +55,18 @@ function Import-VcVars {
     if (-not (Get-Command cl.exe -ErrorAction SilentlyContinue)) {
         throw "vcvarsall.bat ran but cl.exe is still not on PATH."
     }
+}
+
+# The CMake bundled with Visual Studio rather than the first one on PATH:
+# Visual Studio configures the same build trees with it, and switching a tree
+# to another cmake.exe reruns its custom commands and links, whose command
+# lines embed that path.
+function Resolve-VsCMake {
+    $cmake = Join-Path (Get-VsInstallPath) "Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+    if (-not (Test-Path -LiteralPath $cmake -PathType Leaf)) {
+        throw "CMake bundled with Visual Studio not found at $cmake. Install the 'C++ CMake tools for Windows' component."
+    }
+    return $cmake
 }
 
 function Invoke-External {
@@ -84,6 +99,7 @@ if (-not (Get-Command cl.exe -ErrorAction SilentlyContinue)) {
     Write-Host "Loading the Visual Studio x64 compiler environment..." -ForegroundColor DarkGray
     Import-VcVars
 }
+$cmake = Resolve-VsCMake
 
 $timer = [System.Diagnostics.Stopwatch]::StartNew()
 Push-Location $projectRoot
@@ -91,9 +107,9 @@ try {
     # The build step re-runs configure by itself; an explicit configure is
     # only needed for a new build tree.
     if (-not (Test-Path -LiteralPath (Join-Path $buildDir "CMakeCache.txt") -PathType Leaf)) {
-        Invoke-External -Executable "cmake" -Arguments @("--preset", $preset)
+        Invoke-External -Executable $cmake -Arguments @("--preset", $preset)
     }
-    Invoke-External -Executable "cmake" -Arguments @("--build", "--preset", $preset)
+    Invoke-External -Executable $cmake -Arguments @("--build", "--preset", $preset)
 } finally {
     Pop-Location
 }

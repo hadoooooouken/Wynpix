@@ -7,7 +7,7 @@ This guide walks you through building Wynpix and all its dependencies on Windows
 | Tool | Version | Download | Notes |
 |------|---------|----------|-------|
 | **Visual Studio** | 2022 (17.x+) | [visualstudio.microsoft.com](https://visualstudio.microsoft.com/) | "Desktop development with C++" workload |
-| **CMake** | 3.25+ | Included with VS or [cmake.org](https://cmake.org/download/) | |
+| **CMake** | 3.25+ | Included with VS | "C++ CMake tools for Windows" component; the build scripts run this CMake, the one Visual Studio configures the presets with, not one on `PATH` |
 | **Git** | Latest | [git-scm.com](https://git-scm.com/) | |
 | **Qt SDK** | 6.12+ | [qt.io](https://www.qt.io/download-qt-installer) | Components: Core, Gui, Network, Svg, PrintSupport, Sql, Pdf, Qml, Quick, QuickControls2, QuickDialogs2, ShaderTools, LinguistTools; Test and QuickTest for the tests |
 | **Vulkan SDK** | Latest | [vulkan.lunarg.com](https://vulkan.lunarg.com/sdk/home) | Required for upscayl-ncnn (AI upscaling) |
@@ -359,7 +359,7 @@ Once dependencies for both AVX2 and SSE2 have been built (see Step 1 below), you
 ```
 
 The script automates the complete release workflow:
-1. **Tool Discovery & Environment**: Resolves `cmake`, `7z` (or `7zz`), and Inno Setup `ISCC.exe`. Automatically imports the Visual Studio x64 compiler environment (`vcvarsall.bat x64`) via `vswhere` if `cl.exe` is not already on `PATH`.
+1. **Tool Discovery & Environment**: Resolves the CMake bundled with Visual Studio (via `vswhere`), `7z` (or `7zz`), and Inno Setup `ISCC.exe`. Automatically imports the Visual Studio x64 compiler environment (`vcvarsall.bat x64`) via `vswhere` if `cl.exe` is not already on `PATH`.
 2. **Lock Checks & Cleaning**: Ensures no running processes have locked files in `release/` or `release-sse2/`, then cleans old release files and existing packages in `INSTALL/`.
 3. **Clean Build**: Executes `cmake --fresh --preset <preset>` and `cmake --build --preset <preset>` for both AVX2 and SSE2 targets.
 4. **ISA Verification**: Runs `check-isa.ps1` against both variants to verify strict instruction set compliance.
