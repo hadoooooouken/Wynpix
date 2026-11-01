@@ -16,8 +16,10 @@
 
 #include <spng.h>
 
+#include <algorithm>
 #include <cstring>
 #include <memory>
+#include <optional>
 
 #ifdef QT_DEBUG
 Q_LOGGING_CATEGORY(LOG_PNGPLUGIN, "kf.imageformats.plugins.png", QtDebugMsg)
@@ -127,6 +129,105 @@ QImage::Format targetImageFormat()
     return QImage::Format_RGBA8888;
 }
 
+// Colour space of a PNG whose cICP chunk (PNG 3rd edition) describes PQ or
+// HLG samples with RGB coding, together with its video range flag. Other
+// cICP code points are left to the sRGB default.
+struct HdrCicp {
+    QColorSpace colorSpace;
+    bool fullRange = true;
+};
+
+std::optional<HdrCicp> hdrCicpFromCodePoints(const uchar *cp)
+{
+    QColorSpace::TransferFunction transfer;
+    switch (cp[1]) {
+    case 16:
+        transfer = QColorSpace::TransferFunction::St2084;
+        break;
+    case 18:
+        transfer = QColorSpace::TransferFunction::Hlg;
+        break;
+    default:
+        return std::nullopt;
+    }
+
+    QColorSpace::Primaries primaries;
+    switch (cp[0]) {
+    case 1:
+        primaries = QColorSpace::Primaries::SRgb;
+        break;
+    case 9:
+        primaries = QColorSpace::Primaries::Bt2020;
+        break;
+    case 12:
+        primaries = QColorSpace::Primaries::DciP3D65;
+        break;
+    default:
+        return std::nullopt;
+    }
+
+    if (cp[2] != 0) {
+        return std::nullopt;
+    }
+    return HdrCicp{QColorSpace(primaries, transfer), cp[3] != 0};
+}
+
+// Finds an HDR cICP chunk by walking the chunk headers in front of the image
+// data. libspng 0.7.4 does not know cICP, and its spng_get_unknown_chunks()
+// copies out only the first unknown chunk. Needs a random-access device; the
+// read position is restored.
+std::optional<HdrCicp> findHdrCicp(QIODevice *device)
+{
+    if (!device || device->isSequential()) {
+        return std::nullopt;
+    }
+
+    const qint64 start = device->pos();
+    std::optional<HdrCicp> result;
+    qint64 chunkPos = start + kPngSignatureSize;
+    // cICP comes before PLTE and IDAT, after at most a handful of chunks.
+    for (int i = 0; i < 64 && device->seek(chunkPos); ++i) {
+        uchar header[8];
+        if (device->read(reinterpret_cast<char *>(header), 8) != 8) {
+            break;
+        }
+        const quint32 length = (quint32(header[0]) << 24) | (quint32(header[1]) << 16) | (quint32(header[2]) << 8) | header[3];
+        const auto type = reinterpret_cast<const char *>(header + 4);
+        if (std::memcmp(type, "cICP", 4) == 0) {
+            uchar cp[4];
+            if (length == 4 && device->read(reinterpret_cast<char *>(cp), 4) == 4) {
+                result = hdrCicpFromCodePoints(cp);
+            }
+            break;
+        }
+        if (std::memcmp(type, "PLTE", 4) == 0 || std::memcmp(type, "IDAT", 4) == 0 || std::memcmp(type, "IEND", 4) == 0 || length > 0x7fffffffu) {
+            break;
+        }
+        chunkPos += 12 + qint64(length);
+    }
+    device->seek(start);
+    return result;
+}
+
+// Expands narrow-range (video) samples to full range in place, alpha aside.
+// Narrow range spans 16..235 scaled to the PNG's bit depth; libspng widens
+// 8-bit samples to 16 bits by multiplying by 257.
+void expandNarrowRange(QImage &img, int bitDepth)
+{
+    const int black = bitDepth == 16 ? 16 << 8 : 16 * 257;
+    const int white = bitDepth == 16 ? 235 << 8 : 235 * 257;
+    const float scale = 65535.0f / float(white - black);
+    for (int y = 0; y < img.height(); ++y) {
+        auto px = reinterpret_cast<quint16 *>(img.scanLine(y));
+        for (int x = 0; x < img.width() * 4; x += 4) {
+            for (int c = 0; c < 3; ++c) {
+                const float v = (float(px[x + c]) - float(black)) * scale;
+                px[x + c] = quint16(std::clamp(v, 0.0f, 65535.0f) + 0.5f);
+            }
+        }
+    }
+}
+
 } // namespace
 
 class SpngHandlerPrivate
@@ -134,6 +235,7 @@ class SpngHandlerPrivate
 public:
     spng_ihdr m_ihdr{};
     bool m_ihdrValid = false;
+    QImage::Format m_format = targetImageFormat();
 };
 
 SpngHandler::SpngHandler()
@@ -168,6 +270,12 @@ bool SpngHandler::read(QImage *image)
         return false;
     }
 
+    // PQ / HLG samples keep 16 bits and their colour space, so that the
+    // viewer tone maps them.
+    const std::optional<HdrCicp> hdr = findHdrCicp(dev);
+    const spng_format spngFormat = hdr ? SPNG_FMT_RGBA16 : SPNG_FMT_RGBA8;
+    const QImage::Format imageFormat = hdr ? QImage::Format_RGBA64 : targetImageFormat();
+
     SpngCtxPtr ctx(spng_ctx_new(0));
     if (!ctx) {
         qCWarning(LOG_PNGPLUGIN) << "spng_ctx_new failed";
@@ -193,14 +301,15 @@ bool SpngHandler::read(QImage *image)
     // ImageFormat after read()).
     d->m_ihdr = ihdr;
     d->m_ihdrValid = true;
+    d->m_format = imageFormat;
 
     size_t outSize = 0;
-    if (int ret = spng_decoded_image_size(ctx.get(), SPNG_FMT_RGBA8, &outSize); ret != 0) {
+    if (int ret = spng_decoded_image_size(ctx.get(), spngFormat, &outSize); ret != 0) {
         qCWarning(LOG_PNGPLUGIN) << "spng_decoded_image_size failed:" << spng_strerror(ret);
         return false;
     }
 
-    QImage img = imageAlloc(ihdr.width, ihdr.height, targetImageFormat());
+    QImage img = imageAlloc(ihdr.width, ihdr.height, imageFormat);
     if (img.isNull() || size_t(img.sizeInBytes()) < outSize) {
         qCWarning(LOG_PNGPLUGIN) << "image allocation failed or too small for decoded size" << outSize;
         return false;
@@ -210,12 +319,19 @@ bool SpngHandler::read(QImage *image)
     // native alpha channel (grayscale/indexed, e.g. 1-bit optimized icons)
     // but conveys transparency via a tRNS chunk instead. Without this flag
     // libspng leaves such pixels fully opaque when converting to RGBA8.
-    if (int ret = spng_decode_image(ctx.get(), img.bits(), outSize, SPNG_FMT_RGBA8, SPNG_DECODE_TRNS); ret != 0) {
+    if (int ret = spng_decode_image(ctx.get(), img.bits(), outSize, spngFormat, SPNG_DECODE_TRNS); ret != 0) {
         qCWarning(LOG_PNGPLUGIN) << "spng_decode_image failed:" << spng_strerror(ret);
         return false;
     }
 
-    img.setColorSpace(QColorSpace(QColorSpace::SRgb));
+    if (hdr) {
+        if (!hdr->fullRange) {
+            expandNarrowRange(img, ihdr.bit_depth);
+        }
+        img.setColorSpace(hdr->colorSpace);
+    } else {
+        img.setColorSpace(QColorSpace(QColorSpace::SRgb));
+    }
 
     *image = img;
     return true;
@@ -240,6 +356,10 @@ QVariant SpngHandler::option(ImageOption option) const
     if (!haveIhdr && peekIhdr(device(), ihdr)) {
         d->m_ihdr = ihdr;
         d->m_ihdrValid = true;
+        // read() decodes PQ / HLG samples to 16 bits.
+        if (findHdrCicp(device())) {
+            d->m_format = QImage::Format_RGBA64;
+        }
         haveIhdr = true;
     }
 
@@ -250,7 +370,7 @@ QVariant SpngHandler::option(ImageOption option) const
     if (option == QImageIOHandler::Size) {
         v = QVariant::fromValue(QSize(int(ihdr.width), int(ihdr.height)));
     } else if (option == QImageIOHandler::ImageFormat) {
-        v = QVariant::fromValue(targetImageFormat());
+        v = QVariant::fromValue(d->m_format);
     }
 
     return v;
