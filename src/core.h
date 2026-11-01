@@ -13,6 +13,8 @@
 #include "components/directorymodel.h"
 #include "components/directorypresenter.h"
 #include "components/fileoptask/fileopcontroller.h"
+#include "components/navigationpreview/navigationpreview.h"
+#include "components/navigationthrottle/navigationthrottle.h"
 #include "components/thumbnailer/thumbnailer.h"
 #include "components/scriptmanager/scriptmanager.h"
 #include "gui/ports/uiports.h"
@@ -118,6 +120,8 @@ private:
     void guiSetImage(std::shared_ptr<Image> img);
     QTimer slideshowTimer;
     QTimer preloadTimer;
+    NavigationThrottle navigationThrottle;
+    NavigationPreview navigationPreview;
 
     void startSlideshowTimer();
     void startSlideshow();
@@ -263,6 +267,12 @@ private slots:
     void openBatchConverter();
     bool loadFileList(const QList<QString> &filePaths, QString activePath = "");
     bool loadFileIndex(int index, bool async, bool preload);
+    // Steps to the file at the index; while the steps come rapidly its load
+    // waits until they stop (see NavigationThrottle).
+    void navigateToFileIndex(int index, bool preload);
+    void onNavigationSettled();
+    void onNavigationPreviewReady(const QImage &thumbnail, QSize sourceSize,
+                                  const QString &path);
     void enableDocumentView();
     void enableFolderView();
     void toggleFolderView();
@@ -299,6 +309,14 @@ private:
     std::optional<AiResizeOperation> activeAiResizeOperation;
     bool aiResizeBusyUiActive = false;
     void clearAiResizeBusyUi();
+
+    enum class FileIndexLoad {
+        Sync,
+        Async,
+        // The file becomes the current one; it is loaded later.
+        Deferred,
+    };
+    bool selectFileIndex(int index, FileIndexLoad load, bool preload);
 
 private slots:
     void onAiResizeFinished(int generation, QString path, QImage image, bool success, QString error);

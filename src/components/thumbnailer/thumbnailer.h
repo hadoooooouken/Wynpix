@@ -15,9 +15,11 @@
 // QThreadPool::start() dequeues higher-priority runnables first.
 // File thumbnails use the default (0); folder cover decodes use an
 // elevated value so they are not starved by bulk file tasks that
-// were submitted earlier.
+// were submitted earlier. The preview of the file being stepped to
+// (NavigationPreview) is shown in the viewer, so it goes first.
 constexpr int kDefaultThumbnailPriority = 0;
 constexpr int kFolderCoverThumbnailPriority = 1;
+constexpr int kNavigationPreviewThumbnailPriority = 2;
 
 struct ThumbnailSource {
     QString path;

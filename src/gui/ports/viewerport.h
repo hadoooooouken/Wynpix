@@ -18,6 +18,11 @@ public:
     virtual void showImage(std::shared_ptr<const QImage> image, const QString &filePath) = 0;
     virtual void showAnimation(const QString &filePath, const QString &format, QSize size) = 0;
     virtual void closeImage() = 0;
+    // Shows a thumbnail (made from an image of sourceSize) in place of the
+    // displayed document, fitted to the viewer, while the next document
+    // loads; the next showImage(), showAnimation() or closeImage() removes
+    // it. The view state of the displayed document is kept.
+    virtual void showPreview(const QImage &thumbnail, QSize sourceSize) = 0;
     // Looping animations restart at the first frame; without looping they
     // stop at the last one and the UI reports UiEvents::playbackFinished().
     virtual void setLoopPlayback(bool loop) = 0;

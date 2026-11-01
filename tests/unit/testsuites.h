@@ -29,6 +29,7 @@ int runDialogTests(int argc, char **argv);
 int runSettingsEditorTests(int argc, char **argv);
 int runBatchPrintTests(int argc, char **argv);
 int runViewerTogglesTests(int argc, char **argv);
+int runNavigationThrottleTests(int argc, char **argv);
 int runRenderErrorChannelTests(int argc, char **argv);
 int runHdrSourceTests(int argc, char **argv);
 int runSettingsValueMappingTests(int argc, char **argv);

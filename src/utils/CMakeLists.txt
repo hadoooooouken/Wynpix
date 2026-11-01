@@ -27,6 +27,7 @@ target_sources(wynpix PRIVATE
     imagefactory.cpp
     imagelib.cpp
     inputmap.cpp
+    keyboardrepeat.cpp
     randomizer.cpp
     script.cpp
     startuptiming.cpp

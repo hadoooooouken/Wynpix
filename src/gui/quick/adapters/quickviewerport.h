@@ -17,6 +17,7 @@ public:
     void showImage(std::shared_ptr<const QImage> image, const QString &filePath) override;
     void showAnimation(const QString &filePath, const QString &format, QSize size) override;
     void closeImage() override;
+    void showPreview(const QImage &thumbnail, QSize sourceSize) override;
     void setLoopPlayback(bool loop) override;
     void showUpscaledCrop(const QImage &crop, const QRect &originalRect) override;
     void hideUpscaledCrop() override;

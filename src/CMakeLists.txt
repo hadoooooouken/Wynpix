@@ -53,6 +53,9 @@ add_library(wynpix_viewcomponents STATIC
     components/batchconverter/batchstaging.h
     components/copytargets/copytargetlist.cpp
     components/copytargets/copytargetlist.h
+    # Defers image loads while the person steps through the folder rapidly.
+    components/navigationthrottle/navigationthrottle.cpp
+    components/navigationthrottle/navigationthrottle.h
     # Printing of an image (the print dialog).
     components/printing/imageprintsetup.cpp
     components/printing/imageprintsetup.h

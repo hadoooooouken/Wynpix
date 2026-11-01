@@ -24,6 +24,7 @@
 #include "gui/ports/notificationport.h"
 #include "gui/quick/bridges/uisettings.h"
 #include "gui/quick/render/imagerenderitem.h"
+#include "gui/quick/render/thumbnailitem.h"
 #include "gui/quick/ui/framepresentationtracker.h"
 #include "gui/quick/ui/graphicsdevicelossmonitor.h"
 #include "settings_types.h"
@@ -76,6 +77,7 @@ class ImageViewportController final : public QObject, private IViewSurface {
     QML_UNCREATABLE("Provided by the Quick UI host")
     Q_PROPERTY(ImageRenderItem *view READ view WRITE setView NOTIFY viewChanged FINAL)
     Q_PROPERTY(bool hasImage READ hasImage NOTIFY imageChanged FINAL)
+    Q_PROPERTY(ThumbnailHandle preview READ preview NOTIFY previewChanged FINAL)
     Q_PROPERTY(qreal scale READ currentScale NOTIFY scaleChanged FINAL)
     Q_PROPERTY(int zoomPercent READ zoomPercent NOTIFY scaleChanged FINAL)
     Q_PROPERTY(bool zoomIndicatorVisible READ isZoomIndicatorVisible NOTIFY zoomIndicatorVisibleChanged FINAL)
@@ -130,6 +132,12 @@ public:
     [[nodiscard]] const AnimationPlayer &animationPlayer() const { return mPlayer; }
     void closeImage();
     [[nodiscard]] bool hasImage() const;
+    // A thumbnail shown in place of the image, fitted to the viewport, while
+    // the next document loads (IViewerPort::showPreview()); the image and its
+    // view state stay underneath. Any document change removes it.
+    void showPreview(const QImage &thumbnail, QSize sourceSize);
+    // Invalid without a preview.
+    [[nodiscard]] ThumbnailHandle preview() const;
     // AI-upscaled crop (Core); ignored for SVG documents, which show their
     // own raster instead.
     void setUpscaledCrop(const QImage &crop, const QRect &sourceRect);
@@ -237,6 +245,7 @@ public:
 signals:
     void viewChanged();
     void imageChanged();
+    void previewChanged();
     void scaleChanged(qreal scale);
     void zoomIndicatorVisibleChanged();
     void panoramaModeChanged();
@@ -304,6 +313,7 @@ private:
     // After reset() left no image: refreshes the indicator and cursor and
     // tells the overlays when a shown image went away.
     void finishImageRemoval(bool hadImage);
+    void clearPreview();
     void onAnimationFrame(std::shared_ptr<const QImage> frame);
     void onPlaybackError(const AnimationPlaybackError &error);
 
@@ -409,6 +419,7 @@ private:
 
     std::shared_ptr<const QImage> mImage;
     QString mFilePath;
+    ThumbnailHandle mPreview;
     // Render errors already shown for the current image.
     QSet<QString> mReportedRenderErrors;
     bool mAwaitingFirstFrame = false;

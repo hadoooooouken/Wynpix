@@ -75,6 +75,7 @@ int main(int argc, char **argv) {
   status |= runSettingsEditorTests(argc, argv);
   status |= runBatchPrintTests(argc, argv);
   status |= runViewerTogglesTests(argc, argv);
+  status |= runNavigationThrottleTests(argc, argv);
   status |= runRenderErrorChannelTests(argc, argv);
   status |= runHdrSourceTests(argc, argv);
   status |= runSettingsValueMappingTests(argc, argv);

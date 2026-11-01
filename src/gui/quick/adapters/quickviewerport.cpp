@@ -24,6 +24,10 @@ void QuickViewerPort::closeImage() {
     viewport.closeImage();
 }
 
+void QuickViewerPort::showPreview(const QImage &thumbnail, QSize sourceSize) {
+    viewport.showPreview(thumbnail, sourceSize);
+}
+
 void QuickViewerPort::showUpscaledCrop(const QImage &crop, const QRect &originalRect) {
     viewport.setUpscaledCrop(crop, originalRect);
 }

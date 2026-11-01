@@ -32,6 +32,7 @@ qt_add_executable(wynpix_tests
     tst_settingseditor.cpp
     tst_batchprint.cpp
     tst_viewertoggles.cpp
+    tst_navigationthrottle.cpp
     tst_rendererrorchannel.cpp
     tst_hdrsource.cpp
     tst_settingsvaluemapping.cpp
@@ -60,6 +61,8 @@ qt_add_executable(wynpix_tests
     # The shortcut table rules (tst_wynpix.cpp).
     "${WYNPIX_APP_SOURCE_DIR}/components/actionmanager/shortcutmap.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/utils/inputmap.cpp"
+    # The keyboard repeat interval (tst_navigationthrottle.cpp).
+    "${WYNPIX_APP_SOURCE_DIR}/utils/keyboardrepeat.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/shortcutbuilder.cpp"
     # The application's Settings under SettingsValueMapping (golden-ini test).
     "${WYNPIX_APP_SOURCE_DIR}/gui/settingseditor/settingsvaluemapping.cpp"

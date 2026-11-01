@@ -515,10 +515,31 @@ void ImageViewportController::reset() {
         mView->setImage(nullptr);
     mTransform.clear();
     applyItemSettled();
+    clearPreview();
 }
 
 bool ImageViewportController::hasImage() const {
     return mImage != nullptr;
+}
+
+void ImageViewportController::showPreview(const QImage &thumbnail, QSize sourceSize) {
+    if (thumbnail.isNull()) {
+        qWarning() << "ImageViewportController::showPreview: null thumbnail";
+        return;
+    }
+    mPreview = ThumbnailHandle{.image = thumbnail, .sourceSize = sourceSize};
+    emit previewChanged();
+}
+
+ThumbnailHandle ImageViewportController::preview() const {
+    return mPreview;
+}
+
+void ImageViewportController::clearPreview() {
+    if (!mPreview.isValid())
+        return;
+    mPreview = ThumbnailHandle{};
+    emit previewChanged();
 }
 
 QRectF ImageViewportController::imageArea() const {

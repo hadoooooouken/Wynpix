@@ -23,6 +23,7 @@ target_sources(wynpix PRIVATE
     thumbnailer/thumbnailer.cpp
     thumbnailer/thumbnailgeometry.cpp
     thumbnailer/thumbnailerrunnable.cpp
+    navigationpreview/navigationpreview.cpp
 
     directorymanager/directorymanager.cpp
 

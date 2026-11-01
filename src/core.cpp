@@ -38,6 +38,7 @@
 #include "utils/formatregistry.h"
 #include "utils/hdrtonemapper.h"
 #include "utils/imagelib.h"
+#include "utils/keyboardrepeat.h"
 #include <QThread>
 #include "sourcecontainers/imagestatic.h"
 
@@ -426,6 +427,8 @@ void Core::onSettingsChanged() {
   if (thumbnailResolutionChanged && !thumbnailer->clearCache()) {
       ui.notifications.showError(tr("Failed to clear thumbnail cache"));
   }
+  if (thumbnailResolutionChanged)
+      navigationPreview.setThumbnailResolution(newThumbnailResolution);
 
   if (layoutChanged) {
       bool folderSortingChanged = (newFolderIconSortingMode != lastFolderIconSortingMode);
@@ -582,6 +585,11 @@ void Core::initComponents() {
   thumbnailer = std::make_shared<Thumbnailer>();
   thumbPanelPresenter.setThumbnailer(thumbnailer);
   folderViewPresenter.setThumbnailer(thumbnailer);
+  navigationPreview.setThumbnailer(thumbnailer);
+  navigationPreview.setThumbnailResolution(settings->thumbnailResolution());
+  // Read once: a changed repeat rate applies from the next start.
+  navigationThrottle.setTiming(NavigationThrottle::Timing::forRepeatInterval(
+      KeyboardRepeat::systemIntervalMs()));
   attachModel(new DirectoryModel());
   coldStartWindowController = std::make_unique<ColdStartWindowController>(
       ui.window, ui.viewMode, ui.viewer, ui.events);
@@ -646,6 +654,10 @@ void Core::connectComponents() {
 
   connect(&slideshowTimer, &QTimer::timeout, this, &Core::nextImageSlideshow);
   connect(&preloadTimer, &QTimer::timeout, this, &Core::preloadNeighbors);
+  connect(&navigationThrottle, &NavigationThrottle::settled, this,
+          &Core::onNavigationSettled);
+  connect(&navigationPreview, &NavigationPreview::previewReady, this,
+          &Core::onNavigationPreviewReady);
 }
 
 void Core::connectUiEvents() {
@@ -2263,6 +2275,40 @@ bool Core::setDirectory(QString path) {
 }
 
 bool Core::loadFileIndex(int index, bool async, bool preload) {
+  navigationThrottle.cancel();
+  navigationPreview.cancel();
+  return selectFileIndex(
+      index, async ? FileIndexLoad::Async : FileIndexLoad::Sync, preload);
+}
+
+void Core::navigateToFileIndex(int index, bool preload) {
+  const bool loadNow = navigationThrottle.admit();
+  // A cached image shows at once, so it needn't wait either.
+  if (loadNow || model->isLoaded(model->filePathAt(index))) {
+    loadFileIndex(index, true, preload);
+    return;
+  }
+  if (selectFileIndex(index, FileIndexLoad::Deferred, preload))
+    navigationPreview.request(state.currentFilePath);
+}
+
+void Core::onNavigationSettled() {
+  // The file may have been removed, or its folder left, while the load
+  // waited; whatever replaced it was loaded on its own.
+  if (!model || !model->containsFile(state.currentFilePath))
+    return;
+  model->load(state.currentFilePath, true);
+}
+
+// Stays until the image itself is shown, through the settle and its load.
+void Core::onNavigationPreviewReady(const QImage &thumbnail, QSize sourceSize,
+                                    const QString &path) {
+  if (path != state.currentFilePath)
+    return;
+  ui.viewer.showPreview(thumbnail, sourceSize);
+}
+
+bool Core::selectFileIndex(int index, FileIndexLoad load, bool preload) {
   if (!model)
     return false;
   auto entry = model->fileEntryAt(index);
@@ -2271,7 +2317,8 @@ bool Core::loadFileIndex(int index, bool async, bool preload) {
   state.currentFilePath = entry.path;
   preloadTimer.stop();
   model->unloadExcept(entry.path, preload);
-  model->load(entry.path, async);
+  if (load != FileIndexLoad::Deferred)
+    model->load(entry.path, load == FileIndexLoad::Async);
   thumbPanelPresenter.selectAndFocus(entry.path);
   folderViewPresenter.selectAndFocus(entry.path);
   updateInfoString();
@@ -2305,9 +2352,10 @@ void Core::loadParentDir() {
 }
 
 void Core::nextDirectory() {
+  // A held key stops at the folder's end until its last image has loaded.
   if (model->directoryPath().isEmpty() ||
       ui.viewMode.currentViewMode() != MODE_DOCUMENT ||
-      model->loaderBusy())
+      model->loaderBusy() || navigationThrottle.isPending())
     return;
   stopSlideshow();
   auto nextResult = model->nextSiblingDir(model->directoryPath());
@@ -2333,7 +2381,7 @@ void Core::nextDirectory() {
 void Core::prevDirectory(bool selectLast) {
   if (model->directoryPath().isEmpty() ||
       ui.viewMode.currentViewMode() != MODE_DOCUMENT ||
-      model->loaderBusy())
+      model->loaderBusy() || navigationThrottle.isPending())
     return;
   stopSlideshow();
   auto prevResult = model->prevSiblingDir(model->directoryPath());
@@ -2411,7 +2459,7 @@ void Core::nextImage() {
     return;
   stopSlideshow();
   if (shuffle) {
-    loadFileIndex(randomizer.next(), true, false);
+    navigateToFileIndex(randomizer.next(), false);
     return;
   }
   int newIndex = model->indexOfFile(state.currentFilePath) + 1;
@@ -2422,12 +2470,12 @@ void Core::nextImage() {
       nextDirectory();
       return;
     } else {
-      if (!model->loaderBusy())
+      if (!model->loaderBusy() && !navigationThrottle.isPending())
         ui.notifications.showDirectoryEnd();
       return;
     }
   }
-  loadFileIndex(newIndex, true, settings->usePreloader());
+  navigateToFileIndex(newIndex, settings->usePreloader());
 }
 
 void Core::prevImage() {
@@ -2435,7 +2483,7 @@ void Core::prevImage() {
     return;
   stopSlideshow();
   if (shuffle) {
-    loadFileIndex(randomizer.prev(), true, false);
+    navigateToFileIndex(randomizer.prev(), false);
     return;
   }
 
@@ -2447,12 +2495,12 @@ void Core::prevImage() {
       prevDirectory(true);
       return;
     } else {
-      if (!model->loaderBusy())
+      if (!model->loaderBusy() && !navigationThrottle.isPending())
         ui.notifications.showDirectoryStart();
       return;
     }
   }
-  loadFileIndex(newIndex, true, settings->usePreloader());
+  navigateToFileIndex(newIndex, settings->usePreloader());
 }
 
 void Core::nextImageSlideshow() {
@@ -2502,12 +2550,15 @@ void Core::jumpToLast() {
 
 void Core::onLoadFailed(const QString &path) {
   ui.notifications.showMessage(tr("Load failed: ") + path);
-  if (path == state.currentFilePath)
+  if (path == state.currentFilePath) {
+    navigationPreview.cancel();
     ui.viewer.closeImage();
+  }
 }
 
 void Core::onModelItemReady(std::shared_ptr<Image> img, const QString &path) {
   if (path == state.currentFilePath) {
+    navigationPreview.cancel();
     state.currentImg = img;
     guiSetImage(img);
     updateInfoString();

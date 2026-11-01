@@ -54,6 +54,21 @@ FocusScope {
 
         anchors.fill: parent
         backgroundColor: root.backgroundColor
+        // The preview stands in for the image while the next one loads.
+        visible: !root.controller.preview.valid
+    }
+
+    // Thumbnail of the file being stepped to, until its image is shown.
+    Rectangle {
+        anchors.fill: parent
+        color: root.backgroundColor
+        visible: root.controller.preview.valid
+
+        ThumbnailItem {
+            anchors.fill: parent
+            thumbnail: root.controller.preview
+            maximumSize: Qt.size(width, height)
+        }
     }
 
     Binding {
