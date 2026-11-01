@@ -2,6 +2,8 @@
 #include "settings.h"
 #include "components/comfymetadata/comfyksamplerparser.h"
 
+#include <QtEndian>
+
 #include <array>
 #include <memory>
 #include <string_view>
@@ -25,6 +27,9 @@ constexpr std::size_t kWebpFeatureFlagsSizeBytes = 1;
 constexpr std::string_view kWebpExtendedChunkType = "VP8X";
 constexpr std::string_view kAnimatedAvifFileType = "ftypavis";
 constexpr unsigned char kWebpAnimationFlag = 1U << 1;
+constexpr qint64 kPngSignatureSizeBytes = 8;
+constexpr qint64 kPngChunkHeaderSizeBytes = 8;
+constexpr qint64 kPngChunkCrcSizeBytes = 4;
 
 template<std::size_t Size>
 bool readExact(QDataStream &stream, std::array<char, Size> &buffer) {
@@ -245,16 +250,22 @@ void DocumentInfo::detectFormat() {
 }
 
 inline
-// dumb apng detector
+// An APNG has an acTL chunk in front of its image data. The chunk headers
+// are walked up to the first IDAT, since a large iCCP or text chunk can come
+// before acTL.
 bool DocumentInfo::detectAPNG() {
     QFile f(fileInfo.filePath());
-    if(f.open(QFile::ReadOnly)) {
-        QDataStream in(&f);
-        const int len = 120;
-        QByteArray qbuf("\0", len);
-        if (in.readRawData(qbuf.data(), len) > 0) {
-            return qbuf.contains("acTL");
-        }
+    if(!f.open(QFile::ReadOnly))
+        return false;
+    qint64 chunkPos = kPngSignatureSizeBytes;
+    std::array<char, kPngChunkHeaderSizeBytes> header{};
+    while(f.seek(chunkPos) && f.read(header.data(), kPngChunkHeaderSizeBytes) == kPngChunkHeaderSizeBytes) {
+        const std::string_view type(header.data() + 4, 4);
+        if(type == "acTL")
+            return true;
+        if(type == "IDAT" || type == "IEND")
+            return false;
+        chunkPos += kPngChunkHeaderSizeBytes + kPngChunkCrcSizeBytes + qFromBigEndian<quint32>(header.data());
     }
     return false;
 }
