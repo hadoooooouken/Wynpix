@@ -36,6 +36,7 @@ qt_add_executable(wynpix_tests
     tst_hdrsource.cpp
     tst_settingsvaluemapping.cpp
     tst_imagelib.cpp
+    tst_apng.cpp
     ../fakes/fakebatchconversionservice.h
     ../fakes/fakesettingsstores.h
     "${WYNPIX_APP_SOURCE_DIR}/components/viewmode/viewmodecontroller.cpp"
@@ -94,5 +95,13 @@ target_link_libraries(wynpix_tests PRIVATE
     # while switching to and from fullscreen).
     dwmapi
 )
+
+# The APNG tests load the PNG image plugin itself (tst_apng.cpp); it is not
+# built without libspng.
+if(TARGET kimg_png)
+    add_dependencies(wynpix_tests kimg_png)
+    target_compile_definitions(wynpix_tests PRIVATE
+        WYNPIX_TEST_PNG_PLUGIN="$<TARGET_FILE:kimg_png>")
+endif()
 
 wynpix_configure_test(wynpix_tests)

@@ -4,6 +4,10 @@
     Read-only: capabilities() only ever reports CanRead. Saving PNG files
     (e.g. from the batch converter) continues to go through the built-in
     Qt QPngHandler.
+
+    Read as "apng", an animated PNG plays its frames: libspng 0.7.4 does not
+    know APNG, so each frame is handed to it as a PNG of its own and composed
+    here.
 */
 
 #include "png_p.h"
@@ -12,11 +16,15 @@
 #include <QColorSpace>
 #include <QIODevice>
 #include <QImage>
+#include <QList>
 #include <QLoggingCategory>
+#include <QPainter>
 
 #include <spng.h>
+#include <zlib.h>
 
 #include <algorithm>
+#include <climits>
 #include <cstring>
 #include <memory>
 #include <optional>
@@ -228,6 +236,278 @@ void expandNarrowRange(QImage &img, int bitDepth)
     }
 }
 
+quint32 readBigEndian32(const uchar *p)
+{
+    return (quint32(p[0]) << 24) | (quint32(p[1]) << 16) | (quint32(p[2]) << 8) | p[3];
+}
+
+void writeBigEndian32(char *p, quint32 value)
+{
+    p[0] = char(value >> 24);
+    p[1] = char(value >> 16);
+    p[2] = char(value >> 8);
+    p[3] = char(value);
+}
+
+bool readAt(QIODevice *device, qint64 pos, void *dest, qint64 size)
+{
+    return device->seek(pos) && device->read(reinterpret_cast<char *>(dest), size) == size;
+}
+
+constexpr qint64 kMaxChunkLength = 0x7fffffff;
+
+// How the area of an APNG frame is cleared before the next frame is drawn
+// (fcTL dispose_op).
+enum class ApngDispose : uchar {
+    None = 0,
+    Background = 1,
+    Previous = 2,
+};
+
+// How an APNG frame is drawn onto the canvas (fcTL blend_op).
+enum class ApngBlend : uchar {
+    Source = 0,
+    Over = 1,
+};
+
+// The compressed image data of a frame in one chunk: an IDAT payload, or an
+// fdAT payload after its sequence number.
+struct ApngDataRange {
+    qint64 pos = 0;
+    qint64 size = 0;
+};
+
+struct ApngFrame {
+    QRect rect;
+    int delayMs = 0;
+    ApngDispose dispose = ApngDispose::None;
+    ApngBlend blend = ApngBlend::Source;
+    QList<ApngDataRange> data;
+};
+
+// The frames of an APNG, located by walking its chunk headers. The image
+// data stays in the file until a frame is decoded.
+struct ApngIndex {
+    QByteArray ihdr;
+    QByteArray plte;
+    QByteArray trns;
+    QSize size;
+    // 0 plays forever.
+    quint32 numPlays = 0;
+    QList<ApngFrame> frames;
+};
+
+// Frame delay in milliseconds. As in browsers, a delay of up to 10 ms plays
+// as 100 ms, so that frames written with no delay stay visible.
+int apngDelayMs(quint16 numerator, quint16 denominator)
+{
+    const qint64 den = denominator ? denominator : 100;
+    const int ms = int((qint64(numerator) * 1000 + den / 2) / den);
+    return ms <= 10 ? 100 : ms;
+}
+
+// Locates the frames of an APNG. A damaged file plays up to its last intact
+// frame: indexing stops at a truncated chunk, an out-of-order sequence number
+// or an invalid frame control chunk. Returns nothing for a PNG without
+// animation control (or frames), which decodes as a still image. Needs a
+// random-access device; the read position is restored.
+std::optional<ApngIndex> indexApng(QIODevice *device)
+{
+    if (!device || device->isSequential()) {
+        return std::nullopt;
+    }
+
+    const qint64 start = device->pos();
+    const qint64 end = device->size();
+    ApngIndex index;
+    bool animated = false;
+    quint32 numFrames = 0;
+    quint32 nextSequence = 0;
+    // An fdAT chunk was seen since the last fcTL.
+    bool frameHasFdat = false;
+    qint64 chunkPos = start + kPngSignatureSize;
+    for (;;) {
+        uchar header[8];
+        if (!readAt(device, chunkPos, header, 8)) {
+            break;
+        }
+        const qint64 length = readBigEndian32(header);
+        const qint64 dataPos = chunkPos + 8;
+        if (length > kMaxChunkLength || dataPos + length + 4 > end) {
+            break;
+        }
+        const auto is = [&header](const char *type) {
+            return std::memcmp(header + 4, type, 4) == 0;
+        };
+
+        if (is("IEND")) {
+            break;
+        } else if (is("IHDR")) {
+            index.ihdr.resize(13);
+            if (length != 13 || !readAt(device, dataPos, index.ihdr.data(), 13)) {
+                break;
+            }
+            const auto ihdr = reinterpret_cast<const uchar *>(index.ihdr.constData());
+            const quint32 width = readBigEndian32(ihdr);
+            const quint32 height = readBigEndian32(ihdr + 4);
+            if (width == 0 || height == 0 || width > PNG_MAX_IMAGE_WIDTH || height > PNG_MAX_IMAGE_HEIGHT) {
+                break;
+            }
+            index.size = QSize(int(width), int(height));
+        } else if (is("PLTE") || is("tRNS")) {
+            QByteArray &data = is("PLTE") ? index.plte : index.trns;
+            data.resize(length);
+            if (!readAt(device, dataPos, data.data(), length)) {
+                break;
+            }
+        } else if (is("acTL")) {
+            uchar actl[8];
+            if (length != 8 || !readAt(device, dataPos, actl, 8)) {
+                break;
+            }
+            numFrames = readBigEndian32(actl);
+            index.numPlays = readBigEndian32(actl + 4);
+            animated = true;
+        } else if (is("fcTL") && animated) {
+            uchar fctl[26];
+            if (length != 26 || !readAt(device, dataPos, fctl, 26) || readBigEndian32(fctl) != nextSequence++) {
+                break;
+            }
+            // A frame without image data ends the animation.
+            if ((!index.frames.isEmpty() && index.frames.last().data.isEmpty()) || quint32(index.frames.size()) == numFrames) {
+                break;
+            }
+            const qint64 width = readBigEndian32(fctl + 4);
+            const qint64 height = readBigEndian32(fctl + 8);
+            const qint64 x = readBigEndian32(fctl + 12);
+            const qint64 y = readBigEndian32(fctl + 16);
+            const uchar dispose = fctl[24];
+            const uchar blend = fctl[25];
+            if (width == 0 || height == 0 || x + width > index.size.width() || y + height > index.size.height() || dispose > 2 || blend > 1) {
+                break;
+            }
+            ApngFrame frame;
+            frame.rect = QRect(int(x), int(y), int(width), int(height));
+            frame.delayMs = apngDelayMs(quint16((fctl[20] << 8) | fctl[21]), quint16((fctl[22] << 8) | fctl[23]));
+            frame.dispose = ApngDispose(dispose);
+            frame.blend = ApngBlend(blend);
+            index.frames.append(frame);
+            frameHasFdat = false;
+        } else if (is("IDAT")) {
+            // The image data of the first frame when its fcTL comes first;
+            // otherwise the default image, which is not part of the
+            // animation.
+            if (index.frames.size() == 1 && !frameHasFdat) {
+                index.frames.last().data.append({dataPos, length});
+            }
+        } else if (is("fdAT") && animated) {
+            uchar sequence[4];
+            if (length <= 4 || !readAt(device, dataPos, sequence, 4) || readBigEndian32(sequence) != nextSequence++) {
+                break;
+            }
+            // The first frame takes its data from either IDAT or fdAT.
+            if (index.frames.isEmpty() || (index.frames.size() == 1 && !index.frames.last().data.isEmpty() && !frameHasFdat)) {
+                break;
+            }
+            index.frames.last().data.append({dataPos + 4, length - 4});
+            frameHasFdat = true;
+        }
+        chunkPos = dataPos + length + 4;
+    }
+    device->seek(start);
+
+    if (!index.frames.isEmpty() && index.frames.last().data.isEmpty()) {
+        index.frames.removeLast();
+    }
+    if (!animated || index.frames.isEmpty() || index.size.isEmpty()) {
+        return std::nullopt;
+    }
+    return index;
+}
+
+void appendChunk(QByteArray &png, const char *type, QByteArrayView data)
+{
+    char header[8];
+    writeBigEndian32(header, quint32(data.size()));
+    std::memcpy(header + 4, type, 4);
+    png.append(header, 8);
+    png.append(data);
+    uLong crc = crc32(0, reinterpret_cast<const Bytef *>(type), 4);
+    crc = crc32(crc, reinterpret_cast<const Bytef *>(data.data()), uInt(data.size()));
+    char crcBytes[4];
+    writeBigEndian32(crcBytes, quint32(crc));
+    png.append(crcBytes, 4);
+}
+
+// Decodes an APNG frame to RGBA8 by handing libspng a PNG of its own: the
+// file's IHDR with the frame's size, its PLTE and tRNS, and the frame's
+// image data as one IDAT chunk.
+QImage decodeApngFrame(QIODevice *device, const ApngIndex &apng, const ApngFrame &frame)
+{
+    qint64 dataSize = 0;
+    for (const ApngDataRange &range : frame.data) {
+        dataSize += range.size;
+    }
+    if (dataSize > kMaxChunkLength) {
+        return {};
+    }
+
+    QByteArray data(dataSize, Qt::Uninitialized);
+    char *dest = data.data();
+    for (const ApngDataRange &range : frame.data) {
+        if (!readAt(device, range.pos, dest, range.size)) {
+            qCWarning(LOG_PNGPLUGIN) << "reading APNG frame data failed";
+            return {};
+        }
+        dest += range.size;
+    }
+
+    QByteArray ihdr = apng.ihdr;
+    writeBigEndian32(ihdr.data(), quint32(frame.rect.width()));
+    writeBigEndian32(ihdr.data() + 4, quint32(frame.rect.height()));
+    QByteArray png;
+    png.reserve(kPngSignatureSize + 3 * 12 + ihdr.size() + apng.plte.size() + apng.trns.size() + 2 * 12 + dataSize);
+    png.append(reinterpret_cast<const char *>(kPngSignature), kPngSignatureSize);
+    appendChunk(png, "IHDR", ihdr);
+    if (!apng.plte.isEmpty()) {
+        appendChunk(png, "PLTE", apng.plte);
+    }
+    if (!apng.trns.isEmpty()) {
+        appendChunk(png, "tRNS", apng.trns);
+    }
+    appendChunk(png, "IDAT", data);
+    appendChunk(png, "IEND", {});
+
+    SpngCtxPtr ctx(spng_ctx_new(0));
+    if (!ctx) {
+        qCWarning(LOG_PNGPLUGIN) << "spng_ctx_new failed";
+        return {};
+    }
+    if (int ret = spng_set_image_limits(ctx.get(), PNG_MAX_IMAGE_WIDTH, PNG_MAX_IMAGE_HEIGHT); ret != 0) {
+        qCWarning(LOG_PNGPLUGIN) << "spng_set_image_limits failed:" << spng_strerror(ret);
+        return {};
+    }
+    if (int ret = spng_set_png_buffer(ctx.get(), png.constData(), size_t(png.size())); ret != 0) {
+        qCWarning(LOG_PNGPLUGIN) << "spng_set_png_buffer failed:" << spng_strerror(ret);
+        return {};
+    }
+    size_t outSize = 0;
+    if (int ret = spng_decoded_image_size(ctx.get(), SPNG_FMT_RGBA8, &outSize); ret != 0) {
+        qCWarning(LOG_PNGPLUGIN) << "spng_decoded_image_size failed:" << spng_strerror(ret);
+        return {};
+    }
+    QImage img = imageAlloc(frame.rect.size(), QImage::Format_RGBA8888);
+    if (img.isNull() || size_t(img.sizeInBytes()) < outSize) {
+        qCWarning(LOG_PNGPLUGIN) << "image allocation failed or too small for decoded size" << outSize;
+        return {};
+    }
+    if (int ret = spng_decode_image(ctx.get(), img.bits(), outSize, SPNG_FMT_RGBA8, SPNG_DECODE_TRNS); ret != 0) {
+        qCWarning(LOG_PNGPLUGIN) << "spng_decode_image failed for an APNG frame:" << spng_strerror(ret);
+        return {};
+    }
+    return img;
+}
+
 } // namespace
 
 class SpngHandlerPrivate
@@ -236,6 +516,20 @@ public:
     spng_ihdr m_ihdr{};
     bool m_ihdrValid = false;
     QImage::Format m_format = targetImageFormat();
+
+    // APNG playback (SpngHandler::isAnimation()).
+    bool m_apngIndexed = false;
+    std::optional<ApngIndex> m_apng;
+    QImage m_canvas;
+    // The frame composeNextFrame() draws next.
+    int m_nextFrame = 0;
+    int m_lastReadFrame = -1;
+    int m_lastDelayMs = 0;
+    // How the area of the frame drawn last is cleared before the next one,
+    // and what was under it for ApngDispose::Previous.
+    QRect m_disposeRect;
+    ApngDispose m_dispose = ApngDispose::None;
+    QImage m_previousArea;
 };
 
 SpngHandler::SpngHandler()
@@ -246,11 +540,73 @@ SpngHandler::SpngHandler()
 
 bool SpngHandler::canRead() const
 {
+    if (isAnimation()) {
+        return d->m_nextFrame < d->m_apng->frames.size();
+    }
     if (canRead(device())) {
         setFormat("png");
         return true;
     }
     return false;
+}
+
+bool SpngHandler::isAnimation() const
+{
+    if (format().compare("apng", Qt::CaseInsensitive) != 0) {
+        return false;
+    }
+    if (!d->m_apngIndexed) {
+        d->m_apng = indexApng(device());
+        d->m_apngIndexed = true;
+    }
+    return d->m_apng.has_value();
+}
+
+// Disposes of the previous frame's area as it asks, then draws the next
+// frame onto the canvas. The first frame starts from a transparent canvas.
+bool SpngHandler::composeNextFrame()
+{
+    const ApngIndex &apng = *d->m_apng;
+    if (d->m_nextFrame >= apng.frames.size()) {
+        return false;
+    }
+    const ApngFrame &frame = apng.frames.at(d->m_nextFrame);
+
+    if (d->m_nextFrame == 0) {
+        d->m_canvas = imageAlloc(apng.size, QImage::Format_RGBA8888_Premultiplied, ImageInitToZero::All);
+        if (d->m_canvas.isNull()) {
+            qCWarning(LOG_PNGPLUGIN) << "APNG canvas allocation failed";
+            return false;
+        }
+        d->m_canvas.setColorSpace(QColorSpace(QColorSpace::SRgb));
+    } else if (d->m_dispose != ApngDispose::None) {
+        QPainter painter(&d->m_canvas);
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
+        if (d->m_dispose == ApngDispose::Background) {
+            painter.fillRect(d->m_disposeRect, Qt::transparent);
+        } else {
+            painter.drawImage(d->m_disposeRect.topLeft(), d->m_previousArea);
+        }
+    }
+
+    // On the first frame this keeps the transparent canvas, which is what
+    // the specification asks for there.
+    d->m_previousArea = frame.dispose == ApngDispose::Previous ? d->m_canvas.copy(frame.rect) : QImage();
+    d->m_dispose = frame.dispose;
+    d->m_disposeRect = frame.rect;
+
+    const QImage pixels = decodeApngFrame(device(), apng, frame);
+    if (pixels.isNull()) {
+        return false;
+    }
+    QPainter painter(&d->m_canvas);
+    painter.setCompositionMode(frame.blend == ApngBlend::Over ? QPainter::CompositionMode_SourceOver : QPainter::CompositionMode_Source);
+    painter.drawImage(frame.rect.topLeft(), pixels);
+    painter.end();
+
+    d->m_lastDelayMs = frame.delayMs;
+    ++d->m_nextFrame;
+    return true;
 }
 
 bool SpngHandler::canRead(QIODevice *device)
@@ -268,6 +624,16 @@ bool SpngHandler::read(QImage *image)
     auto dev = device();
     if (!dev) {
         return false;
+    }
+
+    if (isAnimation()) {
+        if (!composeNextFrame()) {
+            return false;
+        }
+        d->m_lastReadFrame = d->m_nextFrame - 1;
+        // Shared with the caller; the next frame is drawn on a copy.
+        *image = d->m_canvas;
+        return true;
     }
 
     // PQ / HLG samples keep 16 bits and their colour space, so that the
@@ -339,6 +705,9 @@ bool SpngHandler::read(QImage *image)
 
 bool SpngHandler::supportsOption(ImageOption option) const
 {
+    if (option == QImageIOHandler::Animation) {
+        return isAnimation();
+    }
     return option == QImageIOHandler::Size || option == QImageIOHandler::ImageFormat;
 }
 
@@ -370,15 +739,62 @@ QVariant SpngHandler::option(ImageOption option) const
     if (option == QImageIOHandler::Size) {
         v = QVariant::fromValue(QSize(int(ihdr.width), int(ihdr.height)));
     } else if (option == QImageIOHandler::ImageFormat) {
-        v = QVariant::fromValue(d->m_format);
+        v = QVariant::fromValue(isAnimation() ? QImage::Format_RGBA8888_Premultiplied : d->m_format);
     }
 
     return v;
 }
 
+int SpngHandler::imageCount() const
+{
+    return isAnimation() ? int(d->m_apng->frames.size()) : QImageIOHandler::imageCount();
+}
+
+int SpngHandler::loopCount() const
+{
+    if (!isAnimation()) {
+        return 0;
+    }
+    const quint32 plays = d->m_apng->numPlays;
+    return plays == 0 ? -1 : int(std::min<quint32>(plays - 1, INT_MAX));
+}
+
+int SpngHandler::nextImageDelay() const
+{
+    return isAnimation() ? d->m_lastDelayMs : 0;
+}
+
+int SpngHandler::currentImageNumber() const
+{
+    return isAnimation() ? d->m_lastReadFrame : 0;
+}
+
+bool SpngHandler::jumpToNextImage()
+{
+    return isAnimation() && composeNextFrame();
+}
+
+// Frames build on the canvas left by the ones before them, so going back
+// starts over from the first frame.
+bool SpngHandler::jumpToImage(int imageNumber)
+{
+    if (!isAnimation() || imageNumber < 0 || imageNumber >= d->m_apng->frames.size()) {
+        return false;
+    }
+    if (imageNumber < d->m_nextFrame) {
+        d->m_nextFrame = 0;
+    }
+    while (d->m_nextFrame < imageNumber) {
+        if (!composeNextFrame()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 QImageIOPlugin::Capabilities SpngPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
-    if (format == "png" || format == "PNG") {
+    if (format == "png" || format == "PNG" || format == "apng" || format == "APNG") {
         return Capabilities(CanRead);
     }
     if (!format.isEmpty()) {

@@ -79,5 +79,6 @@ int main(int argc, char **argv) {
   status |= runHdrSourceTests(argc, argv);
   status |= runSettingsValueMappingTests(argc, argv);
   status |= runImageLibTests(argc, argv);
+  status |= runApngTests(argc, argv);
   return status;
 }

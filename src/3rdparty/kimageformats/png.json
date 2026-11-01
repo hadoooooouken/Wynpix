@@ -1,4 +1,4 @@
 {
-    "Keys": [ "png" ],
-    "MimeTypes": [ "image/png" ]
+    "Keys": [ "png", "apng" ],
+    "MimeTypes": [ "image/png", "image/apng" ]
 }

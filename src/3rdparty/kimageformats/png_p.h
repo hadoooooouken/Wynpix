@@ -20,9 +20,21 @@ public:
     bool supportsOption(QImageIOHandler::ImageOption option) const override;
     QVariant option(QImageIOHandler::ImageOption option) const override;
 
+    // Animation of an APNG, used when the handler is created for the "apng"
+    // format. Read as "png", an APNG gives its default image.
+    int imageCount() const override;
+    int loopCount() const override;
+    int nextImageDelay() const override;
+    int currentImageNumber() const override;
+    bool jumpToNextImage() override;
+    bool jumpToImage(int imageNumber) override;
+
     static bool canRead(QIODevice *device);
 
 private:
+    bool isAnimation() const;
+    bool composeNextFrame();
+
     const QScopedPointer<SpngHandlerPrivate> d;
 };
 
