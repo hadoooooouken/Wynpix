@@ -90,6 +90,11 @@ add_library(wynpix_viewcomponents STATIC
     # Upscayl and HDR tone mapping toggles of the viewer.
     components/viewertoggles/viewertoggles.cpp
     components/viewertoggles/viewertoggles.h
+    # Memory budgets scaled to the installed RAM (the animation frame cache
+    # among them) and the decode budget.
+    utils/decodebudget.cpp
+    utils/decodebudget.h
+    utils/decodecontext.h
     # Format categories of the folder view's format filter.
     utils/formatgroups.cpp
     utils/formatgroups.h

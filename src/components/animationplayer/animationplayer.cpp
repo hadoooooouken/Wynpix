@@ -1,5 +1,7 @@
 #include "animationplayer.h"
 
+#include "utils/decodebudget.h"
+
 #include <QImageReader>
 #include <QMovie>
 #include <algorithm>
@@ -10,10 +12,18 @@ namespace {
 // are shown, not played.
 constexpr int kFirstFrame = 0;
 constexpr int kMinimumPlayableFrames = 2;
-// Animations whose uncompressed frames fit within this threshold use CacheAll
-// for instant random access, scrub and reverse. Larger files stay on CacheNone
-// to protect physical RAM.
-constexpr qint64 kMaxCacheBytes = 256 * 1024 * 1024;
+// Animations whose uncompressed frames fit within this budget use CacheAll
+// for instant random access, scrub and reverse. Larger files stay on
+// CacheNone to protect physical RAM, where every step back decodes again from
+// the first frame (seconds per step for 100 frames of 2560 x 1440). This much
+// on 16 GiB of RAM, scaled to the machine.
+constexpr qint64 kCacheBytesAt16GiB = qint64{1024} * 1024 * 1024;
+constexpr qint64 kMaxCacheBytes = 4 * kCacheBytesAt16GiB;
+
+qint64 cacheBudgetBytes() {
+  static const qint64 budget = scaledToInstalledMemory(kCacheBytesAt16GiB, kMaxCacheBytes);
+  return budget;
+}
 } // namespace
 
 //------------------------------------------------------------------------------
@@ -43,7 +53,7 @@ bool AnimationPlayer::open(const QString &path, const QByteArray &format) {
   const qint64 estimatedBytes = size.isValid()
       ? static_cast<qint64>(size.width()) * size.height() * 4 * movie->frameCount()
       : 0;
-  if (estimatedBytes > 0 && estimatedBytes <= kMaxCacheBytes)
+  if (estimatedBytes > 0 && estimatedBytes <= cacheBudgetBytes())
     movie->setCacheMode(QMovie::CacheAll);
 
   // Frames are advanced by the player's own timer; the QMovie is never

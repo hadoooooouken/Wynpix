@@ -20,9 +20,6 @@ target_sources(wynpix PRIVATE
     autocoloradjustments.h
     blendreader.cpp
     coloradjustments.h
-    decodebudget.cpp
-    decodebudget.h
-    decodecontext.h
     djvureader.cpp
     fontpreview.cpp
     cmdoptionsrunner.cpp
