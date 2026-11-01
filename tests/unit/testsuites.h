@@ -35,3 +35,4 @@ int runHdrSourceTests(int argc, char **argv);
 int runSettingsValueMappingTests(int argc, char **argv);
 int runImageLibTests(int argc, char **argv);
 int runApngTests(int argc, char **argv);
+int runColdStartWindowTests(int argc, char **argv);

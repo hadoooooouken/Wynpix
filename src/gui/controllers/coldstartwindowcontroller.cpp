@@ -85,8 +85,15 @@ void ColdStartWindowController::onDirectoryModelLoaded() {
 
     directoryModelLoaded = true;
     visibleThumbnailsReady = false;
-    if(state == State::RevealScheduled)
+    // Only a folder view waits for the thumbnails of the reloaded directory;
+    // a scheduled document reveal must still run, or the window stays
+    // concealed with nothing left to reveal it.
+    if(state == State::RevealScheduled &&
+       viewMode.currentViewMode() == MODE_FOLDERVIEW) {
         state = State::WaitingForFolderView;
+        if(!maximumWaitTimer.isActive())
+            maximumWaitTimer.start();
+    }
 }
 
 void ColdStartWindowController::waitForFolderView() {

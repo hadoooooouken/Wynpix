@@ -38,6 +38,7 @@ qt_add_executable(wynpix_tests
     tst_settingsvaluemapping.cpp
     tst_imagelib.cpp
     tst_apng.cpp
+    tst_coldstartwindow.cpp
     ../fakes/fakebatchconversionservice.h
     ../fakes/fakesettingsstores.h
     "${WYNPIX_APP_SOURCE_DIR}/components/viewmode/viewmodecontroller.cpp"
@@ -69,6 +70,10 @@ qt_add_executable(wynpix_tests
     "${WYNPIX_APP_SOURCE_DIR}/settings.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/utils/formatregistry.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/utils/script.cpp"
+    # The cold-start reveal (tst_coldstartwindow.cpp).
+    "${WYNPIX_APP_SOURCE_DIR}/gui/controllers/coldstartwindowcontroller.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/gui/ports/uievents.h"
+    "${WYNPIX_APP_SOURCE_DIR}/utils/startuptiming.cpp"
 )
 
 # Components under test are compiled from the application sources and use
