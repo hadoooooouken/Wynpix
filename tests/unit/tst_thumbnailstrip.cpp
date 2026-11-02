@@ -570,6 +570,96 @@ private slots:
     QCOMPARE(scrolls.first().at(1).toInt(), 0);
   }
 
+  void pageScrollKeepsPartlyHiddenItemsInView() {
+    ThumbnailListModel model;
+    prepare(model, 100);
+    QSignalSpy scrolls(&model, &ThumbnailListModel::scrollRequested);
+    // 50 - 550 shows item 5 in part: it becomes the first one.
+    model.setViewport(50.0, kViewExtent);
+    model.scrollPage(true);
+    QCOMPARE(scrolls.count(), 1);
+    QCOMPARE(scrolls.first().at(0).toReal(), 500.0);
+    QCOMPARE(scrolls.first().at(1).toInt(), 0);
+    // 1050 - 1550 shows item 10 in part: it becomes the last one.
+    model.setViewport(1050.0, kViewExtent);
+    model.scrollPage(false);
+    QCOMPARE(model.viewOffset(), 1100.0 - kViewExtent);
+    // Rows that fit exactly move by the whole view.
+    model.setViewport(1000.0, kViewExtent);
+    model.scrollPage(true);
+    QCOMPARE(model.viewOffset(), 1500.0);
+    model.scrollPage(false);
+    QCOMPARE(model.viewOffset(), 1000.0);
+  }
+
+  void pageScrollStopsAtTheEnds() {
+    ThumbnailListModel model;
+    prepare(model, 100);
+    const qreal endOffset = 100.0 * kItemExtent - kViewExtent;
+    QSignalSpy scrolls(&model, &ThumbnailListModel::scrollRequested);
+    model.scrollPage(false);
+    QCOMPARE(scrolls.count(), 0);
+    model.setViewport(endOffset - 200.0, kViewExtent);
+    model.scrollPage(true);
+    QCOMPARE(model.viewOffset(), endOffset);
+    model.setViewport(endOffset, kViewExtent);
+    scrolls.clear();
+    model.scrollPage(true);
+    QCOMPARE(scrolls.count(), 0);
+    model.setViewport(300.0, kViewExtent);
+    model.scrollPage(false);
+    QCOMPARE(model.viewOffset(), 0.0);
+  }
+
+  void pageScrollMovesAViewShorterThanARow() {
+    ThumbnailListModel model;
+    prepare(model, 100);
+    constexpr qreal kShortExtent = 50.0;
+    model.setViewport(0.0, kShortExtent);
+    model.scrollPage(true);
+    QCOMPARE(model.viewOffset(), 100.0);
+    model.scrollPage(false);
+    QCOMPARE(model.viewOffset(), 0.0);
+  }
+
+  void smoothPageScrollPagesOnFromItsTarget() {
+    ThumbnailListModel model;
+    prepare(model, 100);
+    model.setScrollConfig({.itemExtent = kItemExtent,
+                           .thumbnailSize = kThumbnailSize,
+                           .smoothScroll = true});
+    model.setViewport(0.0, kViewExtent);
+    QSignalSpy scrolls(&model, &ThumbnailListModel::scrollRequested);
+    model.scrollPage(true);
+    QCOMPARE(scrolls.count(), 1);
+    QCOMPARE(scrolls.first().at(0).toReal(), 500.0);
+    QCOMPARE(scrolls.first().at(1).toInt(), ThumbnailListModel::kPageScrollDurationMs);
+    // Pressed again halfway: the next page follows the first one.
+    model.setViewport(250.0, kViewExtent);
+    model.scrollPage(true);
+    QCOMPARE(scrolls.count(), 2);
+    QCOMPARE(scrolls.last().at(0).toReal(), 1000.0);
+  }
+
+  void scrollEdgesFollowTheView() {
+    ThumbnailListModel model;
+    prepare(model, 100);
+    QSignalSpy edges(&model, &ThumbnailListModel::scrollEdgesChanged);
+    QVERIFY(!model.canScrollBackward());
+    QVERIFY(model.canScrollForward());
+    model.setViewport(1000.0, kViewExtent);
+    QVERIFY(model.canScrollBackward());
+    QVERIFY(model.canScrollForward());
+    model.setViewport(100.0 * kItemExtent - kViewExtent, kViewExtent);
+    QVERIFY(model.canScrollBackward());
+    QVERIFY(!model.canScrollForward());
+    QCOMPARE(edges.count(), 2);
+    // A directory that fits the view scrolls neither way.
+    model.populate(3);
+    QVERIFY(!model.canScrollBackward());
+    QVERIFY(!model.canScrollForward());
+  }
+
   //--- pointer ----------------------------------------------------------------
   void pressActivatesAnItem() {
     ThumbnailListModel model;

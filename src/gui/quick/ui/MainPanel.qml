@@ -6,8 +6,8 @@ import wynpix.bridges
 import wynpix.style
 
 // Thumbnail panel of the document view (MainPanel and SlidePanel in the
-// widget UI): the thumbnail strip with the settings, folder view, pin and
-// (fullscreen) exit buttons, at the side of the window the settings name. It
+// widget UI): the thumbnail strip with the settings, folder view, pin, page
+// and (fullscreen) exit buttons, at the side of the window the settings name. It
 // slides in and out by the controller's slide distance while fading, or
 // appears at once, as the controller says; while it slides, no thumbnails
 // are requested. The content
@@ -55,6 +55,14 @@ Item {
     // Gap between the buttons and the panel edges, half of it on each side
     // across the button group.
     readonly property int buttonInset: buttonSpacing / 2
+    // Held page buttons repeat only after a deliberate hold, and slowly
+    // enough for each page scroll to finish and be seen.
+    readonly property int pageRepeatDelay: 500
+    readonly property int pageRepeatInterval: 250
+    // Buttons along the button group besides the page buttons: the settings,
+    // folder view and pin buttons and the exit button when it is shown.
+    readonly property int fixedButtonCount: controller.exitButtonVisible ? 4 : 3
+    readonly property int pageButtonCount: 2
 
     x: atRight ? parent.width - width : 0
     y: atBottom ? parent.height - height : 0
@@ -158,12 +166,13 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
 
-                // Near the strip end: exit, folder view, pin (top to bottom or
-                // right to left); the settings button at the far end.
+                // Near the strip end: exit, folder view, pin, then the page
+                // buttons (top to bottom or right to left); the settings
+                // button at the far end.
                 Grid {
                     flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
                     layoutDirection: panel.horizontal ? Qt.LeftToRight : Qt.RightToLeft
-                    columns: panel.horizontal ? 1 : 3
+                    columns: panel.horizontal ? 1 : 4
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.margins: panel.buttonInset
@@ -185,6 +194,41 @@ Item {
                         glyph: FluentIcons.Pin20
                         active: panel.controller.pinned
                         onPressed: panel.controller.togglePinned()
+                    }
+
+                    // Page buttons, backward before forward: top to bottom
+                    // beside a horizontal strip, left to right above a
+                    // vertical one. They scroll the strip by a page and
+                    // press again while held. The chevrons point along the
+                    // strip. Left out when the panel is too short for them.
+                    Grid {
+                        flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
+                        columns: panel.horizontal ? 1 : panel.pageButtonCount
+                        visible: (panel.fixedButtonCount + panel.pageButtonCount) * panel.buttonSize
+                                 + 2 * panel.buttonInset
+                                 <= (panel.horizontal ? buttons.height : buttons.width)
+
+                        PanelButton {
+                            size: panel.buttonSize
+                            glyph: FluentIcons.ChevronDown20
+                            glyphRotation: panel.horizontal ? StyleConstants.quarterTurn
+                                                            : 2 * StyleConstants.quarterTurn
+                            enabled: panel.controller.model.canScrollBackward
+                            autoRepeat: true
+                            autoRepeatDelay: panel.pageRepeatDelay
+                            autoRepeatInterval: panel.pageRepeatInterval
+                            onPressed: panel.controller.model.scrollPage(false)
+                        }
+                        PanelButton {
+                            size: panel.buttonSize
+                            glyph: FluentIcons.ChevronDown20
+                            glyphRotation: panel.horizontal ? -StyleConstants.quarterTurn : 0
+                            enabled: panel.controller.model.canScrollForward
+                            autoRepeat: true
+                            autoRepeatDelay: panel.pageRepeatDelay
+                            autoRepeatInterval: panel.pageRepeatInterval
+                            onPressed: panel.controller.model.scrollPage(true)
+                        }
                     }
                 }
 
@@ -211,6 +255,7 @@ Item {
         // Edge of the square button.
         required property int size
         property int glyphSize: Theme.standardIconSize
+        property real glyphRotation: 0
         // Checked look (the pinned state), not toggled by a press.
         property bool active: false
 
@@ -237,6 +282,8 @@ Item {
         contentItem: IconGlyph {
             icon: button.glyph
             size: button.glyphSize
+            rotation: button.glyphRotation
+            opacity: button.enabled ? 1.0 : StyleConstants.disabledOpacity
         }
     }
 }

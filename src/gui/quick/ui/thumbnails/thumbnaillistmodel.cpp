@@ -16,6 +16,10 @@ const QList<int> kThumbnailRoles = {
     ThumbnailListModel::PendingRole, ThumbnailListModel::UnavailableRole,
 };
 
+// Offsets the view reports are fractional: within this distance a row edge
+// counts as at the view edge, and the view as at its start or end.
+constexpr qreal kScrollEdgeTolerancePx = 0.5;
+
 QSet<int> shiftedSet(const QSet<int> &set, int firstIndex, int offset) {
     QSet<int> shifted;
     shifted.reserve(set.size());
@@ -111,6 +115,14 @@ qreal ThumbnailListModel::viewOffset() const {
     return mOffset;
 }
 
+bool ThumbnailListModel::canScrollBackward() const {
+    return mCanScrollBackward;
+}
+
+bool ThumbnailListModel::canScrollForward() const {
+    return mCanScrollForward;
+}
+
 //------------------------------------------------------------------------------
 // Directory view
 
@@ -137,6 +149,7 @@ void ThumbnailListModel::populate(int count) {
     stopAnimation();
     mOffset = 0.0;
     emit scrollRequested(mOffset, 0);
+    updateScrollEdges();
     loadVisibleThumbnails();
     notifyIfVisibleThumbnailsReady();
 }
@@ -261,6 +274,7 @@ void ThumbnailListModel::insertItem(int index) {
     ++mCount;
     endInsertRows();
     emit countChanged();
+    updateScrollEdges();
     select(newSelection);
     loadVisibleThumbnailsDelayed();
 }
@@ -290,6 +304,7 @@ void ThumbnailListModel::removeItem(int index) {
     --mCount;
     endRemoveRows();
     emit countChanged();
+    updateScrollEdges();
     // The neighbour takes the selection of the removed item.
     if (newSelection.isEmpty() && mCount > 0)
         newSelection.append(index >= mCount ? mCount - 1 : index);
@@ -369,6 +384,7 @@ void ThumbnailListModel::setScrollConfig(const ThumbnailScrollConfig &config) {
     if (config == mScroll)
         return;
     mScroll = config;
+    updateScrollEdges();
     focusOnSelection();
     if (!mLoadTimer.isActive())
         loadVisibleThumbnails();
@@ -460,6 +476,7 @@ void ThumbnailListModel::setViewport(qreal offset, qreal extent) {
     const bool firstLayout = mExtent <= 0.0 && extent > 0.0;
     mOffset = offset;
     mExtent = extent;
+    updateScrollEdges();
     if (firstLayout) {
         focusOnSelection();
         loadVisibleThumbnails();
@@ -503,6 +520,50 @@ void ThumbnailListModel::wheelScrolled(QPoint angleDelta, QPoint pixelDelta) {
     // A touchpad: one of the deltas may be scaled, use the larger one.
     mLastTouchpadScroll.start();
     scrollPrecise(std::abs(angle) > std::abs(pixel) ? angle : pixel);
+}
+
+void ThumbnailListModel::scrollPage(bool forward) {
+    if (mCount == 0 || mExtent <= 0.0 || mScroll.itemExtent <= 0)
+        return;
+    const qreal start = mAnimating ? mAnimationTarget : mOffset;
+    if (forward ? start >= maximumOffset() - kScrollEdgeTolerancePx
+                : start <= kScrollEdgeTolerancePx)
+        return;
+    const qreal lineExtent = mScroll.itemExtent;
+    const auto lineStart = [this, lineExtent](int line) {
+        return mScroll.leadingSpace + static_cast<qreal>(line) * lineExtent;
+    };
+    const auto linePosition = [this, lineExtent](qreal position) {
+        return (position - mScroll.leadingSpace) / lineExtent;
+    };
+    qreal target = 0.0;
+    if (forward) {
+        // The first row that ends past the view end.
+        target = lineStart(static_cast<int>(
+            std::floor(linePosition(start + mExtent + kScrollEdgeTolerancePx))));
+        // A view shorter than a row moves on to the next row.
+        if (target <= start + kScrollEdgeTolerancePx)
+            target = lineStart(static_cast<int>(std::floor(linePosition(start))) + 1);
+    } else {
+        // The last row that starts before the view start; the first row
+        // brings back the space before it.
+        const int line = static_cast<int>(
+                             std::ceil(linePosition(start - kScrollEdgeTolerancePx))) - 1;
+        target = line <= 0 ? 0.0 : lineStart(line + 1) - mExtent;
+        if (target >= start - kScrollEdgeTolerancePx)
+            target = lineStart(line);
+    }
+    mScrollDirection = forward ? ScrollDirection::Forwards : ScrollDirection::Backwards;
+    if (!mScroll.smoothScroll) {
+        scrollTo(target);
+        return;
+    }
+    if (mAnimating) {
+        // Thumbnails are loaded between consecutive page scrolls.
+        mAnimating = false;
+        loadVisibleThumbnails();
+    }
+    animateTo(target, kPageScrollDurationMs, AnimationLoading::Deferred);
 }
 
 void ThumbnailListModel::press(int index, int button, int modifiers, QPointF position) {
@@ -661,6 +722,16 @@ bool ThumbnailListModel::atEnd() const {
     return mOffset >= maximumOffset();
 }
 
+void ThumbnailListModel::updateScrollEdges() {
+    const bool backward = mOffset > kScrollEdgeTolerancePx;
+    const bool forward = mOffset < maximumOffset() - kScrollEdgeTolerancePx;
+    if (backward == mCanScrollBackward && forward == mCanScrollForward)
+        return;
+    mCanScrollBackward = backward;
+    mCanScrollForward = forward;
+    emit scrollEdgesChanged();
+}
+
 bool ThumbnailListModel::loadingAllowed() const {
     return mActive && !mLoadingBlocked &&
            !(mAnimating && mAnimationLoading == AnimationLoading::Deferred);
@@ -797,6 +868,7 @@ void ThumbnailListModel::scrollTo(qreal offset) {
     stopAnimation();
     mOffset = qBound(0.0, offset, maximumOffset());
     emit scrollRequested(mOffset, 0);
+    updateScrollEdges();
     loadVisibleThumbnails();
 }
 

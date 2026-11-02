@@ -117,6 +117,9 @@ class ThumbnailListModel : public QAbstractListModel {
     QML_UNCREATABLE("Provided by the Quick UI host")
     Q_PROPERTY(int count READ itemCount NOTIFY countChanged FINAL)
     Q_PROPERTY(int currentIndex READ currentIndex NOTIFY selectionChanged FINAL)
+    // The view is not at its start / end: scrollPage() would move it.
+    Q_PROPERTY(bool canScrollBackward READ canScrollBackward NOTIFY scrollEdgesChanged FINAL)
+    Q_PROPERTY(bool canScrollForward READ canScrollForward NOTIFY scrollEdgesChanged FINAL)
 
 public:
     enum Role {
@@ -154,6 +157,8 @@ public:
     static constexpr double kEdgeScrollDistanceFactor = 5.0;
     static constexpr int kEdgeScrollMinimumMs = 300;
     static constexpr int kEdgeScrollMaximumMs = 1500;
+    // Duration of a smooth scroll by a page (scrollPage()).
+    static constexpr int kPageScrollDurationMs = 200;
     // The by-item wheel step moves at least half a thumbnail, at most this.
     static constexpr int kMaximumMinimumScrollPx = 100;
     // Touchpad detection: a wheel event is a mouse wheel when its angle is a
@@ -183,6 +188,8 @@ public:
     [[nodiscard]] ThumbnailScrollConfig scrollConfig() const;
     // Scroll offset of the view as last reported or requested.
     [[nodiscard]] qreal viewOffset() const;
+    [[nodiscard]] bool canScrollBackward() const;
+    [[nodiscard]] bool canScrollForward() const;
 
     // --- directory view (IDirectoryView) ---------------------------------
     void populate(int count);
@@ -242,6 +249,12 @@ public:
     Q_INVOKABLE void scrollAnimationFinished();
     // A wheel event over the view (QWheelEvent deltas).
     Q_INVOKABLE void wheelScrolled(QPoint angleDelta, QPoint pixelDelta);
+    // Scrolls by a page (the panel's chevron buttons): forwards, the first
+    // row that is not fully visible at the end becomes the first one;
+    // backwards, the last row not fully visible at the start becomes the last
+    // one. A page that runs past an end stops there. A press during a smooth
+    // page scroll pages on from its target.
+    Q_INVOKABLE void scrollPage(bool forward);
     // Pointer events of the view: index is the item under the pointer (-1
     // for none), button a Qt::MouseButton, buttons Qt::MouseButtons,
     // modifiers Qt::KeyboardModifiers, position in view coordinates.
@@ -263,6 +276,7 @@ signals:
     void visibleThumbnailsReady();
     // The view scrolls to offset, animated over durationMs (0: at once).
     void scrollRequested(qreal offset, int durationMs);
+    void scrollEdgesChanged();
 
 private:
     enum class ScrollDirection { Forwards, Backwards };
@@ -287,6 +301,8 @@ private:
     [[nodiscard]] qreal maximumOffset() const;
     [[nodiscard]] bool atStart() const;
     [[nodiscard]] bool atEnd() const;
+    // Emits scrollEdgesChanged() when atStart() or atEnd() changed.
+    void updateScrollEdges();
     [[nodiscard]] bool loadingAllowed() const;
 
     void loadVisibleThumbnails();
@@ -341,6 +357,8 @@ private:
     bool mAnimating = false;
     AnimationLoading mAnimationLoading = AnimationLoading::Deferred;
     qreal mAnimationTarget = 0.0;
+    bool mCanScrollBackward = false;
+    bool mCanScrollForward = false;
     QElapsedTimer mAnimationClock;
     QElapsedTimer mLastTouchpadScroll;
 
