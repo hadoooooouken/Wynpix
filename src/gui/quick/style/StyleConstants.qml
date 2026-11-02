@@ -17,8 +17,6 @@ QtObject {
     readonly property int surfaceRadius: 8
     // Current and hovered rows of the settings sidebar and the places panel.
     readonly property int rowRadius: 5
-    // Buttons of the main panel (ButtonSmall of the widget stylesheet).
-    readonly property int panelButtonRadius: 1
 
     // Push button padding.
     readonly property int buttonVerticalPadding: 7

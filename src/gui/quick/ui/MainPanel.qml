@@ -52,6 +52,9 @@ Item {
     readonly property int bottomStrip: 3
     readonly property int buttonSize: 30
     readonly property int buttonSpacing: 4
+    // Gap between the buttons and the panel edges, half of it on each side
+    // across the button group.
+    readonly property int buttonInset: buttonSpacing / 2
 
     x: atRight ? parent.width - width : 0
     y: atBottom ? parent.height - height : 0
@@ -163,6 +166,7 @@ Item {
                     columns: panel.horizontal ? 1 : 3
                     anchors.right: parent.right
                     anchors.top: parent.top
+                    anchors.margins: panel.buttonInset
 
                     PanelButton {
                         size: panel.buttonSize
@@ -191,6 +195,7 @@ Item {
                     anchors.right: panel.horizontal ? parent.right : undefined
                     anchors.left: panel.horizontal ? undefined : parent.left
                     anchors.top: panel.horizontal ? undefined : parent.top
+                    anchors.margins: panel.buttonInset
                     onPressed: Actions.invoke("openSettings")
                 }
             }
@@ -223,7 +228,7 @@ Item {
                                            : button.hovered ? Theme.tokens.fillHover
                                            : "transparent"
 
-            radius: StyleConstants.panelButtonRadius
+            radius: StyleConstants.controlRadius
             color: surface
             border.width: 1
             border.color: surface
