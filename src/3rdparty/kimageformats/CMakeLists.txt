@@ -312,10 +312,10 @@ endif()
 
 # OpenJPH (Enabled with local build)
 set(OPENJPH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../formats/OpenJPH/${WYNPIX_DEPS_INSTALL_NAME}")
-if(KIF_BUILD_RELEASE_ONLY_PLUGINS AND EXISTS "${OPENJPH_ROOT}/lib/openjph.0.32.lib")
+if(KIF_BUILD_RELEASE_ONLY_PLUGINS AND EXISTS "${OPENJPH_ROOT}/lib/openjph.0.33.lib")
     kimageformats_add_plugin(kimg_jph SOURCES jph.cpp)
     target_include_directories(kimg_jph SYSTEM PRIVATE "${OPENJPH_ROOT}/include")
-    target_link_libraries(kimg_jph PRIVATE "${OPENJPH_ROOT}/lib/openjph.0.32.lib")
+    target_link_libraries(kimg_jph PRIVATE "${OPENJPH_ROOT}/lib/openjph.0.33.lib")
 endif()
 
 # PNG (Enabled with local build using libspng, read-only decoder)

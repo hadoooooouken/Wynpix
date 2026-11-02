@@ -141,7 +141,7 @@ $GIT_DEPS = @(
     # This pinned baseline is required by the local patch series below.
     @{ Name = "kimageformats";  Url = "https://invent.kde.org/frameworks/kimageformats.git";       Tag = "v6.26.0"      }
     @{ Name = "openjpeg";       Url = "https://github.com/uclouvain/openjpeg.git";                 Tag = "v2.5.4"       }
-    @{ Name = "OpenJPH";        Url = "https://github.com/aous72/OpenJPH.git";                     Tag = "0.32.0"       }
+    @{ Name = "OpenJPH";        Url = "https://github.com/aous72/OpenJPH.git";                     Tag = "0.33.0"       }
     @{ Name = "libdeflate";     Url = "https://github.com/ebiggers/libdeflate.git";                Tag = "v1.26"        }
     @{ Name = "zlib-ng";        Url = "https://github.com/zlib-ng/zlib-ng.git";                    Tag = "2.3.3"        }
     @{ Name = "libjpeg-turbo";  Url = "https://github.com/libjpeg-turbo/libjpeg-turbo.git";        Tag = "3.2.1"        }

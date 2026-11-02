@@ -47,7 +47,7 @@ DEFAULT_DEPS = [
     {"name": "LibRaw", "url": "https://github.com/LibRaw/LibRaw.git", "current": "0.22.3", "patched": True},
     {"name": "ffmpeg", "url": "https://git.ffmpeg.org/ffmpeg.git", "current": "n9.0.2", "patched": False},
     {"name": "openjpeg", "url": "https://github.com/uclouvain/openjpeg.git", "current": "v2.5.4", "patched": True},
-    {"name": "OpenJPH", "url": "https://github.com/aous72/OpenJPH.git", "current": "0.32.0", "patched": False},
+    {"name": "OpenJPH", "url": "https://github.com/aous72/OpenJPH.git", "current": "0.33.0", "patched": False},
     {"name": "libdeflate", "url": "https://github.com/ebiggers/libdeflate.git", "current": "v1.26", "patched": False},
     {"name": "zlib-ng", "url": "https://github.com/zlib-ng/zlib-ng.git", "current": "2.3.3", "patched": False},
     {"name": "libjpeg-turbo", "url": "https://github.com/libjpeg-turbo/libjpeg-turbo.git", "current": "3.2.1", "patched": False},
