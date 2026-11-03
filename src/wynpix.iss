@@ -191,7 +191,7 @@ Name: "thumbnails"; Description: "{cm:ThumbnailsTaskDesc}"; GroupDescription: "{
 
 [Files]
 Source: "{#MyReleaseDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyReleaseDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs uninsrestartdelete; Excludes: "{#MyAppExeName},cache\*,conf\*,thumbnails\*"
+Source: "{#MyReleaseDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs uninsrestartdelete; Excludes: "{#MyAppExeName},cache\*,conf\*,thumbnails\*,*.spd,*.pdb,*.etl,*.spt"
 Source: "res\icons\common\logo\app\{#MyAppIconName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "res\filetypes\*"; DestDir: "{app}\res\filetypes"; Flags: ignoreversion
 Source: "{#MyReleaseDir}\wynpixshellex.dll"; DestDir: "{app}"; Flags: ignoreversion uninsrestartdelete
