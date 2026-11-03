@@ -29,9 +29,31 @@ FocusScope {
     readonly property real rubberBandFillOpacity: 0.25
     readonly property int rubberBandFrameWidth: 1
 
+    // The grid is rebuilding its delegates and does not report its viewport.
+    property bool regenerating: false
+
     // Content coordinates of the model start at the first row's top margin.
     function reportViewport() {
-        thumbnails.setViewport(grid.contentY + grid.topMargin, grid.height);
+        if (!regenerating)
+            thumbnails.setViewport(grid.contentY + grid.topMargin, grid.height);
+    }
+
+    // GridView keeps the row of its first visible delegate when the columns or
+    // the cell size change and lays the others out from it, so a grid scrolled
+    // into the directory moves its origin: the model's offsets then point at
+    // other rows, and the top of the directory is an empty band. Rebuilding
+    // the delegates lays them out from the first row again.
+    function normalizeOrigin() {
+        if (grid.originY === 0)
+            return;
+        const contentY = grid.contentY;
+        regenerating = true;
+        grid.model = null;
+        grid.model = thumbnails;
+        grid.contentY = contentY;
+        regenerating = false;
+        reportViewport();
+        updateHoveredIndex();
     }
 
     function itemAt(x: real, y: real): int {
@@ -132,6 +154,9 @@ FocusScope {
             root.updateHoveredIndex();
         }
         onHeightChanged: root.reportViewport()
+        // The origin moves during the grid's layout, which is no place to
+        // replace its model.
+        onOriginYChanged: Qt.callLater(root.normalizeOrigin)
 
         delegate: ThumbnailWidget {
             cellLayout: root.gridLayout.cell

@@ -35,6 +35,9 @@ Item {
         // directory.
         readonly property int delegateLimit: 200
         readonly property int compactWidth: 500
+        // Far into the directory, far from its end at any width.
+        readonly property int scrolledPages: 30
+        readonly property int scrollSettleMs: 100
         readonly property int nameFilterTimeout: 1000
         readonly property url droppedFile: "file:///C:/images/dropped.png"
         readonly property int copyAction: 1
@@ -162,6 +165,32 @@ Item {
             Fixture.selectLastFolderItem();
             tryVerify(() => cellOf(largeDirectory - 1) !== null, createTimeout);
             verify(grid().contentItem.children.length < delegateLimit);
+        }
+
+        // GridView keeps the row of its first delegate when the columns change;
+        // a grid widened inside the directory still starts at the top, where
+        // the model scrolls to.
+        function test_widenedGridKeepsItsRowsInPlace() {
+            const wideColumns = Fixture.folderView.grid.layout.columns;
+            root.width = compactWidth;
+            tryVerify(() => Fixture.folderView.grid.layout.columns < wideColumns);
+            Fixture.populateFolder(largeDirectory, dirCount, "C:/");
+            const model = Fixture.folderView.grid.model;
+            for (let page = 0; page < scrolledPages; ++page)
+                model.scrollPage(true);
+            tryVerify(() => {
+                const contentY = grid().contentY;
+                wait(scrollSettleMs);
+                return contentY > 0 && grid().contentY === contentY;
+            }, createTimeout, "the grid did not settle");
+            root.width = 1200;
+            tryVerify(() => Fixture.folderView.grid.layout.columns === wideColumns);
+            tryCompare(grid(), "originY", 0);
+            // The delegates sit where the model expects their rows.
+            const layout = Fixture.folderView.grid.layout;
+            const first = grid().indexAt(0, grid().contentY + grid().topMargin);
+            verify(first > 0);
+            compare(cellOf(first).y, Math.floor(first / layout.columns) * layout.cellHeight);
         }
 
         function test_nameFilterIsPublished() {
