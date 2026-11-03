@@ -42,7 +42,8 @@ FocusScope {
     // the cell size change and lays the others out from it, so a grid scrolled
     // into the directory moves its origin: the model's offsets then point at
     // other rows, and the top of the directory is an empty band. Rebuilding
-    // the delegates lays them out from the first row again.
+    // the delegates lays them out from the first row again. The offset was
+    // kept within the moved bounds and may lie past the end of the content.
     function normalizeOrigin() {
         if (grid.originY === 0)
             return;
@@ -50,7 +51,8 @@ FocusScope {
         regenerating = true;
         grid.model = null;
         grid.model = thumbnails;
-        grid.contentY = contentY;
+        const lastContentY = grid.contentHeight + grid.bottomMargin - grid.height;
+        grid.contentY = Math.max(-grid.topMargin, Math.min(contentY, lastContentY));
         regenerating = false;
         reportViewport();
         updateHoveredIndex();

@@ -38,6 +38,8 @@ Item {
         // Far into the directory, far from its end at any width.
         readonly property int scrolledPages: 30
         readonly property int scrollSettleMs: 100
+        // Its end in the wide grid comes well before its end in the compact one.
+        readonly property int smallDirectory: 73
         readonly property int nameFilterTimeout: 1000
         readonly property url droppedFile: "file:///C:/images/dropped.png"
         readonly property int copyAction: 1
@@ -191,6 +193,24 @@ Item {
             const first = grid().indexAt(0, grid().contentY + grid().topMargin);
             verify(first > 0);
             compare(cellOf(first).y, Math.floor(first / layout.columns) * layout.cellHeight);
+        }
+
+        // A grid widened at the end of a small directory shows its last row
+        // rather than the space past it.
+        function test_widenedGridShowsTheLastRow() {
+            const wideColumns = Fixture.folderView.grid.layout.columns;
+            root.width = compactWidth;
+            tryVerify(() => Fixture.folderView.grid.layout.columns < wideColumns);
+            Fixture.populateFolder(smallDirectory, dirCount, "C:/");
+            Fixture.selectLastFolderItem();
+            tryVerify(() => cellOf(smallDirectory - 1) !== null, createTimeout);
+            root.width = 1200;
+            tryVerify(() => Fixture.folderView.grid.layout.columns === wideColumns);
+            tryCompare(grid(), "originY", 0);
+            const last = cellOf(smallDirectory - 1);
+            verify(last !== null);
+            verify(last.y >= grid().contentY && last.y + last.height <= grid().contentY + grid().height,
+                   "the last cell at " + last.y + " is out of the viewport at " + grid().contentY);
         }
 
         function test_nameFilterIsPublished() {
