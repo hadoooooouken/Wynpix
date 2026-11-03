@@ -56,14 +56,6 @@
       }
     },
     {
-      "name": "wynpix-x64-release-spgo",
-      "displayName": "wynpix: x64 Release (SPGO)",
-      "inherits": "wynpix-x64-release",
-      "cacheVariables": {
-        "WYNPIX_SPGO": "ON"
-      }
-    },
-    {
       "name": "wynpix-x64-relwithdebinfo",
       "displayName": "wynpix: x64 RelWithDebInfo",
       "inherits": "windows-base",
@@ -88,10 +80,6 @@
     {
       "name": "wynpix-x64-dev",
       "configurePreset": "wynpix-x64-dev"
-    },
-    {
-      "name": "wynpix-x64-release-spgo",
-      "configurePreset": "wynpix-x64-release-spgo"
     },
     {
       "name": "wynpix-x64-relwithdebinfo",

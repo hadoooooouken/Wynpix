@@ -26,7 +26,7 @@ if(MSVC)
     target_compile_options(wynpixshellex PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:/std:c++latest>")
 endif()
 
-wynpix_apply_msvc_profile(wynpixshellex NO_SPGO)
+wynpix_apply_msvc_profile(wynpixshellex)
 wynpix_suppress_crt_deprecation(wynpixshellex)
 
 # Disable Qt version tagging to allow delay-loading (prevents data symbol imports)
