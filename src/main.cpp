@@ -38,10 +38,44 @@ bool multiInstanceEnabled() {
   return tempSettings.value("multiInstance", false).toBool();
 }
 //------------------------------------------------------------------------------
+// Decides whether this process is the primary instance. A secondary instance
+// hands its path to the running one and must exit: the returned value is its
+// exit code. nullopt means this process is the primary instance and channel
+// is already listening (early, so that a launch during the start of the
+// services and the user interface is not missed).
+std::optional<int> arbitrateInstances(SingleInstanceChannel &channel,
+                                      const QStringList &positionalArguments) {
+  switch (channel.claimRole()) {
+  case RoleClaim::Failed:
+    return EXIT_FAILURE;
+  case RoleClaim::Secondary: {
+    QString pathToSend;
+    if (!positionalArguments.isEmpty())
+      pathToSend = QFileInfo(positionalArguments.constFirst()).absoluteFilePath();
+    switch (channel.forwardToPrimary(pathToSend)) {
+    case ForwardOutcome::Delivered:
+    case ForwardOutcome::DeliveredUnacknowledged:
+      return EXIT_SUCCESS;
+    case ForwardOutcome::Failed:
+      return EXIT_FAILURE;
+    case ForwardOutcome::BecamePrimary:
+      break;
+    }
+    break;
+  }
+  case RoleClaim::Primary:
+    break;
+  }
+
+  if (!channel.listen())
+    return EXIT_FAILURE;
+  return std::nullopt;
+}
+//------------------------------------------------------------------------------
 // Runs Core over the user interface until the application exits: opens the
 // command-line path (or the default path), answers the paths sent by
-// secondary instances through channel (nullptr in multi-instance mode) and
-// shows the window.
+// secondary instances through channel (nullptr in multi-instance mode; a
+// listening channel otherwise) and shows the window.
 int runCore(QGuiApplication &app, const UiPorts &ports,
             SingleInstanceChannel *channel, const QStringList &paths) {
   QObject::connect(
@@ -53,7 +87,6 @@ int runCore(QGuiApplication &app, const UiPorts &ports,
   if (channel) {
     QObject::connect(channel, &SingleInstanceChannel::pathReceived, &core,
                      [&core](const QString &path) { core.raiseWindow(path); });
-    channel->listen();
   }
 
   if (!paths.isEmpty())
@@ -62,6 +95,12 @@ int runCore(QGuiApplication &app, const UiPorts &ports,
     core.loadDefaultPath();
 
   core.showGui();
+  // Paths that secondary instances sent while the application was starting
+  // are handled by the event loop, after the initial path.
+  if (channel) {
+    QMetaObject::invokeMethod(channel, &SingleInstanceChannel::drainPendingPaths,
+                              Qt::QueuedConnection);
+  }
   return app.exec();
 }
 //------------------------------------------------------------------------------
@@ -146,13 +185,10 @@ int main(int argc, char *argv[]) {
     std::optional<SingleInstanceChannel> channel;
     if (!multiInstanceEnabled()) {
       channel.emplace(SingleInstanceChannel::serverNameFor(QDir::tempPath()));
-      QString pathToSend;
-      if (!parser.positionalArguments().isEmpty()) {
-        pathToSend =
-            QFileInfo(parser.positionalArguments().constFirst()).absoluteFilePath();
+      if (const std::optional<int> secondaryExitCode =
+              arbitrateInstances(*channel, parser.positionalArguments())) {
+        return *secondaryExitCode;
       }
-      if (channel->forwardToPrimary(pathToSend))
-        return 0;
     }
 
     // Primary instance, initialize all services
