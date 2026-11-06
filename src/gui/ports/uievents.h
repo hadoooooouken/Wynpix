@@ -76,4 +76,5 @@ signals:
     void documentRenderingSettled();
     void visibleThumbnailsReady();
     void filesystemViewReady();
+    void firstFramePresented();
 };

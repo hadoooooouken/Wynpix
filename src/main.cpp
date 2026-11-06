@@ -89,12 +89,12 @@ int runCore(QGuiApplication &app, const UiPorts &ports,
                      [&core](const QString &path) { core.raiseWindow(path); });
   }
 
-  if (!paths.isEmpty())
-    core.loadPath(paths.constFirst());
-  else
-    core.loadDefaultPath();
+  const bool initialPathLoaded = !paths.isEmpty() ? core.loadPath(paths.constFirst())
+                                                  : core.loadDefaultPath();
 
   core.showGui();
+  if (!initialPathLoaded)
+    core.onInitialPathFailed();
   // Paths that secondary instances sent while the application was starting
   // are handled by the event loop, after the initial path.
   if (channel) {

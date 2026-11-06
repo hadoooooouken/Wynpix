@@ -23,6 +23,8 @@ ColdStartWindowController::ColdStartWindowController(
             this, &ColdStartWindowController::onVisibleThumbnailsReady);
     connect(&events, &UiEvents::filesystemViewReady,
             this, &ColdStartWindowController::onFilesystemViewReady);
+    connect(&events, &UiEvents::firstFramePresented,
+            this, &ColdStartWindowController::onFirstFramePresented);
     connect(&events, &UiEvents::documentRenderingSettled,
             this, &ColdStartWindowController::onDocumentRenderingSettled);
     connect(&documentReadyFallbackTimer, &QTimer::timeout, this, [this]() {
@@ -94,6 +96,26 @@ void ColdStartWindowController::onDirectoryModelLoaded() {
         if(!maximumWaitTimer.isActive())
             maximumWaitTimer.start();
     }
+}
+
+void ColdStartWindowController::onInitialPathFailed() {
+    if(state != State::WaitingForFolderView &&
+       state != State::WaitingForDocumentLayout &&
+       state != State::RevealScheduled)
+        return;
+
+    // No readiness signal can follow a path that was not loaded. The window is
+    // cloaked to keep its opening animation and early frames off the screen,
+    // so it is revealed once the first frame has been presented.
+    initialPathFailed = true;
+    if(firstFramePresented)
+        revealWindow();
+}
+
+void ColdStartWindowController::onFirstFramePresented() {
+    firstFramePresented = true;
+    if(initialPathFailed)
+        revealWindow();
 }
 
 void ColdStartWindowController::waitForFolderView() {

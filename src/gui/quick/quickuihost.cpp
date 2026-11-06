@@ -445,7 +445,12 @@ bool QuickUiHost::start() {
   createTranslucentNativeWindow(*window);
   QObject::connect(
       window, &QQuickWindow::frameSwapped, window,
-      []() { logStartupMilestone(u"Qt Quick UI: first frame presented"); },
+      [this]() {
+        logStartupMilestone(u"Qt Quick UI: first frame presented");
+        QMetaObject::invokeMethod(
+            &mEvents, [this]() { emit mEvents.firstFramePresented(); },
+            Qt::QueuedConnection);
+      },
       static_cast<Qt::ConnectionType>(Qt::DirectConnection |
                                       Qt::SingleShotConnection));
 

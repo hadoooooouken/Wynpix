@@ -2760,17 +2760,23 @@ bool Core::hasActiveState() const {
     return state.hasActiveImage || !state.directoryPath.isEmpty();
 }
 
-void Core::loadDefaultPath() {
+bool Core::loadDefaultPath() {
     if (settings->rememberLastFolder() && !settings->lastFolder().isEmpty() && QFileInfo(settings->lastFolder()).exists()) {
-        loadPath(settings->lastFolder());
+        return loadPath(settings->lastFolder());
     } else if (settings->defaultViewMode() == MODE_FOLDERVIEW) {
         QStringList bookmarks = settings->bookmarks();
         if (!bookmarks.isEmpty() && QFileInfo(bookmarks.first()).exists()) {
-            loadPath(bookmarks.first());
+            return loadPath(bookmarks.first());
         } else {
-            loadPath(QDir::homePath());
+            return loadPath(QDir::homePath());
         }
     }
+    return true;
+}
+
+void Core::onInitialPathFailed() {
+    if (coldStartWindowController)
+        coldStartWindowController->onInitialPathFailed();
 }
 
 // exit() rather than quit(): QGuiApplication handles quit() by closing every

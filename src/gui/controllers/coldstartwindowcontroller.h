@@ -20,10 +20,12 @@ public:
 
     void show();
     void onDirectoryModelLoaded();
+    void onInitialPathFailed();
 
 private slots:
     void onVisibleThumbnailsReady();
     void onFilesystemViewReady();
+    void onFirstFramePresented();
     void onDocumentRenderingSettled();
     void revealWindow();
 
@@ -53,4 +55,6 @@ private:
     bool directoryModelLoaded = false;
     bool visibleThumbnailsReady = false;
     bool filesystemViewReady = false;
+    bool firstFramePresented = false;
+    bool initialPathFailed = false;
 };

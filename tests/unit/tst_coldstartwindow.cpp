@@ -119,6 +119,50 @@ private slots:
         QVERIFY(!window.concealed);
     }
 
+    void failedInitialPathRevealsImmediatelyAfterTheFirstFrame() {
+        FakeWindow window;
+        FakeViewMode viewMode;
+        viewMode.mode = MODE_FOLDERVIEW;
+        FakeViewer viewer;
+        UiEvents events;
+        ColdStartWindowController controller(window, viewMode, viewer, events);
+
+        controller.show();
+        QVERIFY(window.visible);
+        QVERIFY(window.concealed);
+
+        emit events.firstFramePresented();
+        controller.onInitialPathFailed();
+        QCoreApplication::processEvents();
+
+        QVERIFY(!window.concealed);
+    }
+
+    void failedInitialPathWaitsForFirstFrameBeforeRevealing() {
+        FakeWindow window;
+        FakeViewMode viewMode;
+        viewMode.mode = MODE_FOLDERVIEW;
+        FakeViewer viewer;
+        UiEvents events;
+        ColdStartWindowController controller(window, viewMode, viewer, events);
+
+        controller.show();
+        QVERIFY(window.visible);
+        QVERIFY(window.concealed);
+
+        controller.onInitialPathFailed();
+        QCoreApplication::processEvents();
+
+        // Must still be concealed because the first frame has not been presented
+        QVERIFY(window.concealed);
+
+        emit events.firstFramePresented();
+        QCoreApplication::processEvents();
+
+        // Now revealed once the first frame has been presented
+        QVERIFY(!window.concealed);
+    }
+
     void filesystemViewReadyBeforeWaitForFolderViewRevealsOnceThumbnailsReady() {
         FakeWindow window;
         FakeViewMode viewMode;

@@ -64,7 +64,8 @@ public:
     ~Core();
     void showGui();
     bool hasActiveState() const;
-    void loadDefaultPath();
+    bool loadDefaultPath();
+    void onInitialPathFailed();
 
 public slots:
     void updateInfoString();
