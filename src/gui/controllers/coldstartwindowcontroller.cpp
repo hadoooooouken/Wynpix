@@ -100,7 +100,6 @@ void ColdStartWindowController::waitForFolderView() {
     documentReadyFallbackTimer.stop();
     state = State::WaitingForFolderView;
     visibleThumbnailsReady = false;
-    filesystemViewReady = false;
     window.setWindowConcealed(true);
     maximumWaitTimer.start();
     window.showWindow();
@@ -128,6 +127,13 @@ void ColdStartWindowController::onVisibleThumbnailsReady() {
 }
 
 void ColdStartWindowController::onFilesystemViewReady() {
+    // A drive root reports the folder tree as ready while its path loads,
+    // before show() starts waiting for the folder view, and the report is not
+    // repeated: keep it for that wait.
+    if(state == State::Initial) {
+        filesystemViewReady = true;
+        return;
+    }
     if(state != State::WaitingForFolderView)
         return;
 

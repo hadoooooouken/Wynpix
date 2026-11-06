@@ -118,6 +118,26 @@ private slots:
         QCoreApplication::processEvents();
         QVERIFY(!window.concealed);
     }
+
+    void filesystemViewReadyBeforeWaitForFolderViewRevealsOnceThumbnailsReady() {
+        FakeWindow window;
+        FakeViewMode viewMode;
+        viewMode.mode = MODE_FOLDERVIEW;
+        FakeViewer viewer;
+        UiEvents events;
+        ColdStartWindowController controller(window, viewMode, viewer, events);
+
+        emit events.filesystemViewReady();
+
+        controller.show();
+        controller.onDirectoryModelLoaded();
+        QVERIFY(window.concealed);
+
+        emit events.visibleThumbnailsReady();
+        QCoreApplication::processEvents();
+
+        QVERIFY(!window.concealed);
+    }
 };
 
 int runColdStartWindowTests(int argc, char **argv) {

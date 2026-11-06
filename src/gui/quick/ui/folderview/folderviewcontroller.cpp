@@ -275,6 +275,13 @@ void FolderViewController::notifyIfFilesystemViewReady() {
         emit filesystemViewReady();
         return;
     }
+    // A drive root has no parent in the tree model, so no directoryLoaded can
+    // arrive for the directory to wait for: its row is all there is to load.
+    if (mCurrentFolder.isValid() && !mCurrentFolder.parent().isValid()) {
+        mReadyReported = true;
+        emit filesystemViewReady();
+        return;
+    }
     if (mDirectoryToLoad.isEmpty() || !mLoadedDirectories.contains(mDirectoryToLoad))
         return;
     mReadyReported = true;

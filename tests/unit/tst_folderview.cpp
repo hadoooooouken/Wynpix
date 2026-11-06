@@ -656,6 +656,30 @@ private slots:
     view.setFolderTree(nullptr);
   }
 
+  void driveRootEmitsFilesystemViewReadyWithoutWaiting() {
+    ThumbnailListModel model;
+    FolderGridController grid(model, folderSettings());
+    UiSettingsSnapshot settings = folderSettings();
+    settings.folderView.placesPanel = true;
+    FolderViewController view(grid, settings, u"C:/home"_s);
+    view.setViewWidth(kFourColumnWidth);
+    QFileSystemModel tree;
+    tree.setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
+    tree.setRootPath(QString());
+    view.setFolderTree(&tree);
+    QSignalSpy ready(&view, &FolderViewController::filesystemViewReady);
+
+    const QString rootPath = QDir::rootPath();
+    view.setDirectoryPath(rootPath);
+    // A folder with no valid parent in the tree model (a drive root) must emit
+    // filesystemViewReady as soon as the index is valid, without waiting for
+    // directoryLoaded of mDirectoryToLoad.
+    QCOMPARE(ready.count(), 1);
+    QVERIFY(view.hasCurrentFolder());
+    QVERIFY(!view.currentFolder().parent().isValid());
+    view.setFolderTree(nullptr);
+  }
+
   void dropsOntoBookmarksAndFolders() {
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
