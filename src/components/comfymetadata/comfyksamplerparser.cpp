@@ -3,10 +3,12 @@
 #include "pngtextchunkreader.h"
 #include "comfyjsonsanitizer.h"
 
+#include <QDir>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QHash>
+#include <QLoggingCategory>
 #include <QQueue>
 #include <QSet>
 #include <QVector>
@@ -16,7 +18,15 @@
 #include <utility>
 
 namespace {
+Q_LOGGING_CATEGORY(lcComfyMetadata, "wynpix.comfymetadata", QtWarningMsg)
+
 constexpr qsizetype kTextSeparatorCharacters = 1;
+
+std::unexpected<ComfyParseError> invalid(QString message)
+{
+    return std::unexpected(
+        ComfyParseError{ComfyParseFailureKind::Invalid, std::move(message)});
+}
 
 std::expected<void, QString> validateJsonNesting(const QByteArray &json)
 {
@@ -302,11 +312,11 @@ ComfyKSamplerParser::validatePromptGraph(const QJsonObject &prompt)
     return {};
 }
 
-std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromPng(const QString &pngPath)
+std::expected<KSamplerInfo, ComfyParseError> ComfyKSamplerParser::parseFromPng(const QString &pngPath)
 {
     auto chunksResult = PngTextChunkReader::readTextChunks(pngPath);
     if (!chunksResult)
-        return std::unexpected(chunksResult.error());
+        return invalid(chunksResult.error());
 
     const auto &chunks = *chunksResult;
 
@@ -317,9 +327,11 @@ std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromPng(const QSt
     if (json.isEmpty())
         json = chunks.value("workflow");
 
-    if (json.isEmpty())
-        return std::unexpected(
-            QStringLiteral("No ComfyUI metadata in this PNG ('prompt'/'workflow' chunks not found)"));
+    if (json.isEmpty()) {
+        return std::unexpected(ComfyParseError{
+            ComfyParseFailureKind::NoMetadata,
+            QStringLiteral("No ComfyUI metadata in this PNG ('prompt'/'workflow' chunks not found)")});
+    }
 
     return parseFromJson(json);
 }
@@ -733,10 +745,10 @@ ComfyKSamplerParser::findMainKSamplerNode(const QJsonObject &prompt, QString &ou
     return prompt.value(outId).toObject();
 }
 
-std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromJson(const QByteArray &promptJson)
+std::expected<KSamplerInfo, ComfyParseError> ComfyKSamplerParser::parseFromJson(const QByteArray &promptJson)
 {
     if (promptJson.size() > ComfyMetadataLimits::kMaxMetadataBytes) {
-        return std::unexpected(
+        return invalid(
             QStringLiteral("ComfyUI JSON exceeds the %1-byte limit")
                 .arg(ComfyMetadataLimits::kMaxMetadataBytes));
     }
@@ -751,12 +763,12 @@ std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromJson(const QB
 
     auto nestingValidation = validateJsonNesting(sanitizedJson);
     if (!nestingValidation)
-        return std::unexpected(nestingValidation.error());
+        return invalid(nestingValidation.error());
 
     QJsonParseError err{};
     QJsonDocument doc = QJsonDocument::fromJson(sanitizedJson, &err);
     if (err.error != QJsonParseError::NoError || !doc.isObject())
-        return std::unexpected(
+        return invalid(
             QStringLiteral("JSON parse error: %1 (offset %2)")
                 .arg(err.errorString())
                 .arg(err.offset));
@@ -764,18 +776,21 @@ std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromJson(const QB
     QJsonObject prompt = doc.object();
     auto valueCountValidation = validateJsonValueCount(prompt);
     if (!valueCountValidation)
-        return std::unexpected(valueCountValidation.error());
+        return invalid(valueCountValidation.error());
 
     auto graphValidation = validatePromptGraph(prompt);
     if (!graphValidation)
-        return std::unexpected(graphValidation.error());
+        return invalid(graphValidation.error());
 
     QString mainId;
     auto ks = findMainKSamplerNode(prompt, mainId);
     if (!ks)
-        return std::unexpected(ks.error());
-    if (ks->isEmpty())
-        return std::unexpected(QStringLiteral("No KSampler/KSamplerAdvanced node found in the graph"));
+        return invalid(ks.error());
+    if (ks->isEmpty()) {
+        return std::unexpected(ComfyParseError{
+            ComfyParseFailureKind::UnsupportedGraph,
+            QStringLiteral("No KSampler/KSamplerAdvanced node found in the graph")});
+    }
 
     QJsonObject inputs = ks->value("inputs").toObject();
 
@@ -815,9 +830,25 @@ std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromJson(const QB
     auto positivePrompt =
         resolveConditioningText(prompt, inputs.value("positive"), unresolvedPromptNodeIds);
     if (!positivePrompt)
-        return std::unexpected(positivePrompt.error());
+        return invalid(positivePrompt.error());
     info.positivePrompt = *positivePrompt;
     info.unresolvedPromptNodeIds = unresolvedPromptNodeIds;
 
     return info;
+}
+
+void ComfyKSamplerParser::logFailure(const QString &filePath, const ComfyParseError &error)
+{
+    switch (error.kind) {
+    case ComfyParseFailureKind::NoMetadata:
+    case ComfyParseFailureKind::UnsupportedGraph:
+        qCDebug(lcComfyMetadata).noquote()
+            << QDir::toNativeSeparators(filePath) << "-" << error.message;
+        break;
+    case ComfyParseFailureKind::Invalid:
+        qCWarning(lcComfyMetadata).noquote()
+            << "Cannot read ComfyUI metadata from"
+            << QDir::toNativeSeparators(filePath) << "-" << error.message;
+        break;
+    }
 }

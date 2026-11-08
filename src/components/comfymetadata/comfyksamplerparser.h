@@ -32,17 +32,38 @@ struct KSamplerInfo
     QString sourceNodeId; // id of the KSampler node the parameters were taken from
 };
 
+// Why a ComfyUI metadata read produced no result. The kind decides how loudly
+// the failure is reported: only Invalid is worth a warning.
+enum class ComfyParseFailureKind
+{
+    NoMetadata,       // The PNG has no ComfyUI chunks: an ordinary image.
+    UnsupportedGraph, // A ComfyUI graph without a sampler this parser reads.
+    Invalid,          // Metadata is present but could not be read.
+};
+
+struct ComfyParseError
+{
+    ComfyParseFailureKind kind = ComfyParseFailureKind::Invalid;
+    QString message; // Human-readable cause, for logs.
+};
+
 class ComfyKSamplerParser
 {
 public:
     // Full path: reads the PNG, extracts the "prompt" chunk, parses it.
-    // On error returns a human-readable description of the cause (for display in the UI).
-    static std::expected<KSamplerInfo, QString> parseFromPng(const QString &pngPath);
+    // On failure returns the kind of failure and a human-readable cause.
+    static std::expected<KSamplerInfo, ComfyParseError> parseFromPng(const QString &pngPath);
 
     // If the JSON is already available as a QByteArray (ComfyUI's "prompt" chunk).
     // Python's non-standard NaN / Infinity / -Infinity literals are tolerated
     // and read as null (see ComfyJsonSanitizer).
-    static std::expected<KSamplerInfo, QString> parseFromJson(const QByteArray &promptJson);
+    static std::expected<KSamplerInfo, ComfyParseError> parseFromJson(const QByteArray &promptJson);
+
+    // Reports a failure of parseFromPng()/parseFromJson() for filePath to the
+    // "wynpix.comfymetadata" logging category: Invalid as a warning, the
+    // routine kinds (NoMetadata, UnsupportedGraph) at debug level only, so
+    // opening ordinary PNGs stays silent. Safe to call from any thread.
+    static void logFailure(const QString &filePath, const ComfyParseError &error);
 
 private:
     // Walks backward through a conditioning input (positive) to find

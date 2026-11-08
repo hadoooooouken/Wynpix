@@ -466,8 +466,12 @@ void DocumentInfo::loadGenerationInfo() {
         return;
 
     auto result = ComfyKSamplerParser::parseFromPng(filePath());
-    if (!result)
-        return; // no ComfyUI metadata in this file - not an application error
+    if (!result) {
+        // Most PNGs are not ComfyUI images; logFailure keeps those silent and
+        // warns only about metadata that is present but could not be read.
+        ComfyKSamplerParser::logFailure(filePath(), result.error());
+        return;
+    }
 
     const KSamplerInfo &info = *result;
 
