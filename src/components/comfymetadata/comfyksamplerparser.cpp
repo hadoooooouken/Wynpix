@@ -11,6 +11,10 @@
 #include <QSet>
 #include <QVector>
 
+#include <algorithm>
+#include <string_view>
+#include <utility>
+
 namespace {
 constexpr qsizetype kTextSeparatorCharacters = 1;
 
@@ -134,6 +138,59 @@ bool isInstructionKeyName(const QString &key)
             return true;
     }
     return false;
+}
+
+// "Power Lora Loader (rgthree)" keeps its LoRAs in numbered widget inputs
+// ("lora_1", "lora_2", ...), each an object such as
+// {"on": true, "lora": "name.safetensors", "strength": 0.5}, instead of the
+// single "lora_name" string of the stock loaders.
+constexpr std::string_view kPowerLoraSlotKeyPrefix = "lora_";
+constexpr std::string_view kPowerLoraEnabledKey = "on";
+constexpr std::string_view kPowerLoraNameKey = "lora";
+
+QLatin1String toLatin1(std::string_view text)
+{
+    return QLatin1String(text.data(), static_cast<qsizetype>(text.size()));
+}
+
+// Returns the names of the enabled LoRAs of a Power Lora Loader node in slot
+// order. Disabled slots and non-slot inputs (e.g. "lora_name") are skipped.
+// The slots are sorted by their number: QJsonObject iterates its keys
+// alphabetically, which would put "lora_10" before "lora_2".
+QStringList enabledPowerLoraNames(const QJsonObject &inputs)
+{
+    QList<std::pair<int, QString>> enabledSlots;
+
+    for (auto it = inputs.constBegin(); it != inputs.constEnd(); ++it) {
+        const QString key = it.key();
+        if (!key.startsWith(toLatin1(kPowerLoraSlotKeyPrefix)) || !it.value().isObject())
+            continue;
+
+        bool slotNumberValid = false;
+        const int slotNumber =
+            key.mid(static_cast<qsizetype>(kPowerLoraSlotKeyPrefix.size()))
+                .toInt(&slotNumberValid);
+        if (!slotNumberValid)
+            continue;
+
+        const QJsonObject slot = it.value().toObject();
+        const QString loraName = slot.value(toLatin1(kPowerLoraNameKey)).toString();
+        if (!slot.value(toLatin1(kPowerLoraEnabledKey)).toBool(false) || loraName.isEmpty())
+            continue;
+
+        enabledSlots.append(std::make_pair(slotNumber, loraName));
+    }
+
+    std::sort(enabledSlots.begin(), enabledSlots.end(),
+              [](const std::pair<int, QString> &left,
+                 const std::pair<int, QString> &right) {
+                  return left.first < right.first;
+              });
+
+    QStringList names;
+    for (const auto &slot : std::as_const(enabledSlots))
+        names.append(slot.second);
+    return names;
 }
 
 // An input is treated as potential prompt content purely by its key name —
@@ -317,6 +374,11 @@ QString ComfyKSamplerParser::resolveModelChain(const QJsonObject &prompt,
             QString loraName = srcInputs.value("lora_name").toString();
             if (!loraName.isEmpty())
                 loraNames.prepend(loraName);
+
+            // The walk runs from the sampler towards the loader, so this
+            // node's LoRAs go in front of the ones collected so far, keeping
+            // their own slot order.
+            loraNames = enabledPowerLoraNames(srcInputs) + loraNames;
 
             // for LoraLoader / LoraLoaderModelOnly the model input is named "model"
             modelInput = srcInputs.value("model");
