@@ -5,7 +5,7 @@
 <h1 align="center">Wynpix</h1>
 
 <p align="center">
-  <a href="https://github.com/hadoooooouken/wynpix/releases/latest"><img src="https://img.shields.io/github/v/tag/hadoooooouken/wynpix?color=blue&label=Version" alt="Version" /></a>
+  <a href="https://github.com/hadoooooouken/wynpix/releases/latest"><img src="https://img.shields.io/github/v/release/hadoooooouken/wynpix?color=blue&label=Version" alt="Version" /></a>
   <img src="https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white" alt="Platform" />
   <img src="https://img.shields.io/badge/C%2B%2B-26-00599C?logo=c%2B%2B&logoColor=white" alt="C++" />
   <img src="https://img.shields.io/badge/Qt-6.12-41CD52?logo=qt&logoColor=white" alt="Qt" />
