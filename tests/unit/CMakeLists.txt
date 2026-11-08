@@ -39,6 +39,7 @@ qt_add_executable(wynpix_tests
     tst_imagelib.cpp
     tst_apng.cpp
     tst_coldstartwindow.cpp
+    tst_comfyjsonsanitizer.cpp
     ../fakes/fakebatchconversionservice.h
     ../fakes/fakesettingsstores.h
     "${WYNPIX_APP_SOURCE_DIR}/components/viewmode/viewmodecontroller.cpp"
@@ -74,6 +75,10 @@ qt_add_executable(wynpix_tests
     "${WYNPIX_APP_SOURCE_DIR}/gui/controllers/coldstartwindowcontroller.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/ports/uievents.h"
     "${WYNPIX_APP_SOURCE_DIR}/utils/startuptiming.cpp"
+    # The ComfyUI JSON sanitizer (tst_comfyjsonsanitizer.cpp). The parser
+    # itself is not linked: it shares a translation unit with the PNG chunk
+    # reader, which needs zlib-ng.
+    "${WYNPIX_APP_SOURCE_DIR}/components/comfymetadata/comfyjsonsanitizer.cpp"
 )
 
 # Components under test are compiled from the application sources and use

@@ -40,6 +40,8 @@ public:
     static std::expected<KSamplerInfo, QString> parseFromPng(const QString &pngPath);
 
     // If the JSON is already available as a QByteArray (ComfyUI's "prompt" chunk).
+    // Python's non-standard NaN / Infinity / -Infinity literals are tolerated
+    // and read as null (see ComfyJsonSanitizer).
     static std::expected<KSamplerInfo, QString> parseFromJson(const QByteArray &promptJson);
 
 private:

@@ -52,6 +52,7 @@ target_sources(wynpix PRIVATE
 
     imagepreparer/imagepreparer.cpp
 
+    comfymetadata/comfyjsonsanitizer.cpp
     comfymetadata/comfyksamplerparser.cpp
     comfymetadata/pngtextchunkreader.cpp
 )

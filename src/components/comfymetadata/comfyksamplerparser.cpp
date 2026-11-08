@@ -1,6 +1,7 @@
 #include "comfyksamplerparser.h"
 #include "comfymetadatalimits.h"
 #include "pngtextchunkreader.h"
+#include "comfyjsonsanitizer.h"
 
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -678,12 +679,20 @@ std::expected<KSamplerInfo, QString> ComfyKSamplerParser::parseFromJson(const QB
                 .arg(ComfyMetadataLimits::kMaxMetadataBytes));
     }
 
-    auto nestingValidation = validateJsonNesting(promptJson);
+    // Python's json.dumps() writes NaN/Infinity for non-finite floats (custom
+    // nodes return NaN from IS_CHANGED), which RFC 8259 forbids and
+    // QJsonDocument rejects. Replacing them with null keeps the rest of the
+    // graph readable. The replacement grows the input by at most one third,
+    // so the size limit checked above still bounds the work.
+    const QByteArray sanitizedJson =
+        ComfyJsonSanitizer::replaceNonStandardNumberLiterals(promptJson);
+
+    auto nestingValidation = validateJsonNesting(sanitizedJson);
     if (!nestingValidation)
         return std::unexpected(nestingValidation.error());
 
     QJsonParseError err{};
-    QJsonDocument doc = QJsonDocument::fromJson(promptJson, &err);
+    QJsonDocument doc = QJsonDocument::fromJson(sanitizedJson, &err);
     if (err.error != QJsonParseError::NoError || !doc.isObject())
         return std::unexpected(
             QStringLiteral("JSON parse error: %1 (offset %2)")

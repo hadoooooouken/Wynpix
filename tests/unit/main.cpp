@@ -82,5 +82,6 @@ int main(int argc, char **argv) {
   status |= runImageLibTests(argc, argv);
   status |= runApngTests(argc, argv);
   status |= runColdStartWindowTests(argc, argv);
+  status |= runComfyJsonSanitizerTests(argc, argv);
   return status;
 }
