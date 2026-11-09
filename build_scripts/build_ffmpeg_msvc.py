@@ -1,3 +1,10 @@
+# Builds a minimal static FFmpeg (HEVC decoder and demuxer) with MSVC,
+# required for HEIF/HEIC format support via the kimg_heif plugin.
+#
+# Usage:
+#   python build_ffmpeg_msvc.py             # Default: AVX2 -> formats/ffmpeg/ffmpeg-build-msvc
+#   python build_ffmpeg_msvc.py --isa SSE2  # SSE2          -> formats/ffmpeg/ffmpeg-build-msvc-sse2
+
 import argparse
 import json
 import os

@@ -39,6 +39,31 @@ endif()
 option(EXIV2 "For reading/writing exif tags" ON)
 option(WYNPIX_BUILD_TESTS "Build the Qt Test and Qt Quick Test suites" ON)
 
+# --- VULKAN SDK RESOLUTION ---
+if(DEFINED ENV{VULKAN_SDK} AND EXISTS "$ENV{VULKAN_SDK}")
+    set(VULKAN_SDK_DEFAULT "$ENV{VULKAN_SDK}")
+elseif(EXISTS "F:/VULKAN")
+    set(VULKAN_SDK_DEFAULT "F:/VULKAN")
+elseif(EXISTS "E:/VULKAN")
+    set(VULKAN_SDK_DEFAULT "E:/VULKAN")
+else()
+    set(VULKAN_SDK_DEFAULT "E:/VULKAN")
+endif()
+
+set(VULKAN_SDK_PATH "${VULKAN_SDK_DEFAULT}" CACHE PATH "Path to Vulkan SDK")
+
+if(NOT EXISTS "${VULKAN_SDK_PATH}")
+    message(FATAL_ERROR "Vulkan SDK not found: ${VULKAN_SDK_PATH}")
+endif()
+
+message(STATUS "Configuring Vulkan SDK: ${VULKAN_SDK_PATH}")
+
+list(APPEND CMAKE_PREFIX_PATH "${VULKAN_SDK_PATH}")
+
+if(NOT DEFINED ENV{VULKAN_SDK} OR NOT EXISTS "$ENV{VULKAN_SDK}")
+    set(ENV{VULKAN_SDK} "${VULKAN_SDK_PATH}")
+endif()
+
 # FIND PACKAGES
 set(QT_VERSION_MAJOR 6)
 # GuiPrivate (QRhi) is used deliberately by wynpix.render; see its CMakeLists.
@@ -71,26 +96,6 @@ qt_policy(SET QTP0005 NEW)
 ##############################################################
 
 # --- UPSCAYL NCNN INTEGRATION ---
-
-if(DEFINED ENV{VULKAN_SDK})
-    set(VULKAN_SDK_DEFAULT "$ENV{VULKAN_SDK}")
-else()
-    set(VULKAN_SDK_DEFAULT "E:/VULKAN")
-endif()
-
-set(VULKAN_SDK_PATH "${VULKAN_SDK_DEFAULT}" CACHE PATH "Path to Vulkan SDK")
-
-if(NOT EXISTS "${VULKAN_SDK_PATH}")
-    message(FATAL_ERROR "Vulkan SDK not found: ${VULKAN_SDK_PATH}")
-endif()
-
-message(STATUS "Configuring Upscayl NCNN with Vulkan SDK: ${VULKAN_SDK_PATH}")
-
-list(APPEND CMAKE_PREFIX_PATH "${VULKAN_SDK_PATH}")
-
-if(NOT DEFINED ENV{VULKAN_SDK})
-    set(ENV{VULKAN_SDK} "${VULKAN_SDK_PATH}")
-endif()
 
 set(NCNN_VULKAN ON CACHE BOOL "Build NCNN with Vulkan support")
 set(NCNN_VULKAN_ONLINE_SPIRV ON CACHE BOOL "Build NCNN with Vulkan online SPIRV compilation support")

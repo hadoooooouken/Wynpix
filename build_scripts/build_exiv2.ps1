@@ -110,8 +110,9 @@ function Clear-BuildDir($buildDir) {
 
 function Invoke-CMake {
     param([string[]]$CmakeArgs)
+    $cmake = Resolve-CMake
     Write-Info "cmake $($CmakeArgs -join ' ')"
-    & cmake @CmakeArgs
+    & $cmake @CmakeArgs
     if ($LASTEXITCODE -ne 0) {
         throw "CMake failed (exit code $LASTEXITCODE)"
     }

@@ -113,3 +113,38 @@ function Get-MsvcPolicyCMakeArgs {
     }
     return $cmakeArgs
 }
+
+function Get-VsInstallPath {
+    $vswhere = Join-Path ([Environment]::GetEnvironmentVariable("ProgramFiles(x86)")) `
+        "Microsoft Visual Studio\Installer\vswhere.exe"
+    if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
+        throw "vswhere.exe not found at $vswhere"
+    }
+
+    $vsInstallPath = & $vswhere -latest -property installationPath
+    if ($LASTEXITCODE -ne 0 -or -not $vsInstallPath) {
+        throw "vswhere could not locate a Visual Studio installation."
+    }
+    return $vsInstallPath
+}
+
+function Resolve-CMake {
+    # 1. Prefer CMake bundled with Visual Studio (keeps compiler/presets consistent)
+    try {
+        $vsInstallPath = Get-VsInstallPath
+        $vsCMake = Join-Path $vsInstallPath "Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+        if (Test-Path -LiteralPath $vsCMake -PathType Leaf) {
+            return $vsCMake
+        }
+    } catch {
+        # Visual Studio not detected via vswhere, fall back to PATH
+    }
+
+    # 2. Fall back to cmake on PATH
+    $cmd = Get-Command cmake -ErrorAction SilentlyContinue
+    if ($cmd) {
+        return $cmd.Source
+    }
+
+    throw "cmake was not found on PATH and the CMake bundled with Visual Studio could not be found. Please install the 'C++ CMake tools for Windows' component in Visual Studio or add cmake to PATH."
+}
