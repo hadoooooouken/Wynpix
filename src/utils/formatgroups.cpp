@@ -8,7 +8,7 @@ QVector<FormatCategory> allFormatCategories() {
             { "WEBP",      {"webp"} },
             { "GIF",       {"gif"} },
             { "BMP",       {"bmp"} },
-            { "AVIF",      {"avif"} },
+            { "AVIF",      {"avif", "avifs"} },
             { "HEIF",      {"heif"} },
             { "HEIC",      {"heic"} },
             { "JXL",       {"jxl"} },
