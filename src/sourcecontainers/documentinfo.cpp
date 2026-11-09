@@ -185,7 +185,7 @@ void DocumentInfo::detectFormat() {
     } else if(mimeName == "image/jxl") {
         mFormat = "jxl";
         mDocumentType = detectAnimatedJxl() ? DocumentType::ANIMATED : DocumentType::STATIC;
-    } else if(mimeName == "image/avif") {
+    } else if(mimeName == "image/avif" || suffix == "avif" || suffix == "avifs") {
         mFormat = "avif";
         mDocumentType = detectAnimatedAvif() ? DocumentType::ANIMATED : DocumentType::STATIC;
     } else if(mimeName == "image/heif" || mimeName == "image/heic" || suffix == "heif" || suffix == "heic") {
