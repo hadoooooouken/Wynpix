@@ -24,8 +24,7 @@ class QFileSystemModel;
 // bar (path, sorting of files and of folders, format and name filters), the
 // places panel (bookmarks and the folder tree, both collapsible, next to the
 // grid behind a splitter) and its readiness for the cold-start reveal.
-// - The places panel shows while enabled in a view of at least 600 px; the
-//   grid size slider and its label hide below 510 px.
+// - The places panel shows while enabled in a view of at least 600 px.
 // - The name filter is published 150 ms after the last edit.
 // - The folder tree (a QFileSystemModel of folders, provided by the host
 //   when the view is first activated) follows the directory shown in the
@@ -66,14 +65,11 @@ class FolderViewController : public QObject {
     Q_PROPERTY(int placesPanelMinimumWidth READ placesPanelMinimumWidth CONSTANT FINAL)
     Q_PROPERTY(bool bookmarksExpanded READ bookmarksExpanded NOTIFY placesPanelChanged FINAL)
     Q_PROPERTY(bool treeExpanded READ treeExpanded NOTIFY placesPanelChanged FINAL)
-    Q_PROPERTY(bool compactTopBar READ isCompactTopBar NOTIFY compactTopBarChanged FINAL)
 
 public:
     // The places panel needs a view at least this wide.
     static constexpr int kPlacesPanelMinimumViewWidth = 600;
     static constexpr int kPlacesPanelMinimumWidth = 260;
-    // Below this view width the grid size slider and its label hide.
-    static constexpr int kCompactTopBarWidth = 510;
     static constexpr int kNameFilterDelayMs = 150;
 
     // grid must outlive the controller; settings: the initial UI settings;
@@ -102,7 +98,6 @@ public:
     [[nodiscard]] static int placesPanelMinimumWidth();
     [[nodiscard]] bool bookmarksExpanded() const;
     [[nodiscard]] bool treeExpanded() const;
-    [[nodiscard]] bool isCompactTopBar() const;
 
     // --- application (Quick UI host) -------------------------------------
     void applySettings(const UiSettingsSnapshot &settings);
@@ -161,7 +156,6 @@ signals:
     void folderSortingModeChanged();
     void nameFilterChanged();
     void placesPanelChanged();
-    void compactTopBarChanged();
     // The first activation needs the folder tree (setFolderTree()).
     void folderTreeRequested();
     // Readiness for the cold-start reveal.

@@ -494,9 +494,6 @@ private slots:
     QVERIFY(!view.isPlacesPanelShown());
     view.setViewWidth(FolderViewController::kPlacesPanelMinimumViewWidth);
     QVERIFY(view.isPlacesPanelShown());
-    QVERIFY(!view.isCompactTopBar());
-    view.setViewWidth(FolderViewController::kCompactTopBarWidth - 1);
-    QVERIFY(view.isCompactTopBar());
 
     QSignalSpy width(&view, &FolderViewController::placesPanelWidthRequested);
     view.resizePlacesPanel(10);

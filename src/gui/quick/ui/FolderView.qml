@@ -9,8 +9,8 @@ import wynpix.style
 // The folder view (FolderView in the widget UI): the top bar with the path,
 // the selection count and batch conversion, the grid size slider, the
 // folder and file sorting, the format and name filters and the window
-// buttons; below it the places panel and the thumbnail grid behind a
-// splitter. FolderViewController holds the state and the rules; this file
+// buttons, wrapping onto more rows when the width is short; below it the
+// places panel and the thumbnail grid behind a splitter. FolderViewController holds the state and the rules; this file
 // lays the parts out. Its strings keep the widget view's translation
 // context.
 FocusScope {
@@ -48,6 +48,19 @@ FocusScope {
     readonly property int splitterHandleWidth: 6
     readonly property int contentsBorderWidth: 1
 
+    // The width the top bar groups share (see topBarFlow). The path bar may
+    // shrink to its minimum before the groups wrap; the other groups keep
+    // their natural widths.
+    readonly property real topBarWidth: Math.max(0, width - topBarRightMargin)
+    readonly property int navigationMinimumWidth: placesButtonLeftMargin + placesButtonWidth
+                                                  + controlMarginH + controlMarginH
+                                                  + pathBarMinimumWidth + controlMarginH
+    readonly property real topBarTailWidth: Math.ceil(selectionGroup.implicitWidth
+                                                      + sortingGroup.implicitWidth
+                                                      + filterGroup.implicitWidth)
+    readonly property real navigationSingleRowWidth: topBarWidth - topBarTailWidth - pathBarSpacing
+    readonly property bool topBarSingleRow: navigationSingleRowWidth >= navigationMinimumWidth
+
     readonly property list<string> sortingNames: [
         qsTr("A - Z"), qsTr("Z - A"), qsTr("Size"), qsTr("Size (desc)"), qsTr("Oldest"),
         qsTr("Newest")
@@ -78,286 +91,320 @@ FocusScope {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: Theme.metrics.topPanelHeight
+        height: topBarFlow.implicitHeight
         color: Theme.tokens.surfaceBar
 
-        RowLayout {
-            anchors.fill: parent
+        // The groups wrap onto new rows when they do not fit the width. On a
+        // single row the spacer pushes every group but the first to the
+        // right edge, as the one-row bar always laid them out.
+        Flow {
+            id: topBarFlow
+
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.rightMargin: root.topBarRightMargin
             spacing: 0
 
-            TopBarButton {
-                Layout.preferredWidth: root.placesButtonWidth
-                Layout.leftMargin: root.placesButtonLeftMargin
-                glyph: FluentIcons.PanelLeft20
-                active: root.controller.placesPanelEnabled
-                toolTip: qsTr("Toggle side panel")
-                onPressed: root.controller.setPlacesPanelEnabled(!root.controller.placesPanelEnabled)
-            }
+            TopBarGroup {
+                id: navigationGroup
 
-            // Path bar: the up button and the directory.
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.topMargin: root.controlMarginV
-                Layout.bottomMargin: root.controlMarginV
-                Layout.leftMargin: root.controlMarginH
-                Layout.rightMargin: root.controlMarginH
-                Layout.minimumWidth: root.pathBarMinimumWidth
-                Layout.preferredWidth: root.upButtonWidth + pathText.implicitWidth
-                radius: StyleConstants.controlRadius
-                color: Theme.tokens.fillRest
+                // On a single row the path bar gives up room to the other
+                // groups; wrapped, the group is on a row of its own.
+                width: root.topBarSingleRow ? Math.min(implicitWidth, root.navigationSingleRowWidth)
+                                            : Math.min(implicitWidth, root.topBarWidth)
 
-                Row {
-                    anchors.fill: parent
+                TopBarButton {
+                    Layout.preferredWidth: root.placesButtonWidth
+                    Layout.leftMargin: root.placesButtonLeftMargin
+                    glyph: FluentIcons.PanelLeft20
+                    active: root.controller.placesPanelEnabled
+                    toolTip: qsTr("Toggle side panel")
+                    onPressed: root.controller.setPlacesPanelEnabled(!root.controller.placesPanelEnabled)
+                }
 
-                    T.AbstractButton {
-                        id: upButton
+                // Path bar: the up button and the directory. A layout item
+                // without fillWidth keeps its preferred width, so the bar
+                // must fill to shrink (elide the path) when the group is
+                // narrower than its natural width.
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.topMargin: root.controlMarginV
+                    Layout.bottomMargin: root.controlMarginV
+                    Layout.leftMargin: root.controlMarginH
+                    Layout.rightMargin: root.controlMarginH
+                    Layout.minimumWidth: root.pathBarMinimumWidth
+                    Layout.preferredWidth: root.upButtonWidth + pathText.implicitWidth
+                    radius: StyleConstants.controlRadius
+                    color: Theme.tokens.fillRest
 
-                        width: root.upButtonWidth
-                        height: parent.height
-                        focusPolicy: Qt.NoFocus
-                        hoverEnabled: true
-                        onClicked: Actions.invoke("goUp")
+                    Row {
+                        anchors.fill: parent
 
-                        ToolTip {
-                            visible: upButton.hovered
-                            text: qsTr("Go up")
+                        T.AbstractButton {
+                            id: upButton
+
+                            width: root.upButtonWidth
+                            height: parent.height
+                            focusPolicy: Qt.NoFocus
+                            hoverEnabled: true
+                            onClicked: Actions.invoke("goUp")
+
+                            ToolTip {
+                                visible: upButton.hovered
+                                text: qsTr("Go up")
+                            }
+
+                            background: Rectangle {
+                                radius: StyleConstants.controlRadius
+                                color: upButton.down ? Theme.tokens.fillPressed
+                                     : upButton.hovered ? Theme.tokens.fillHover
+                                     : "transparent"
+                            }
+                            contentItem: IconGlyph {
+                                icon: FluentIcons.ChevronUp16
+                                size: Theme.compactIconSize
+                            }
                         }
 
-                        background: Rectangle {
-                            radius: StyleConstants.controlRadius
-                            color: upButton.down ? Theme.tokens.fillPressed
-                                 : upButton.hovered ? Theme.tokens.fillHover
-                                 : "transparent"
-                        }
-                        contentItem: IconGlyph {
-                            icon: FluentIcons.ChevronUp16
-                            size: Theme.compactIconSize
-                        }
-                    }
+                        Text {
+                            id: pathText
 
-                    Text {
-                        id: pathText
+                            width: Math.max(0, parent.width - upButton.width)
+                            height: parent.height
+                            rightPadding: root.pathTextRightPadding
+                            text: root.controller.directoryPath
+                            color: Theme.tokens.textSecondary
+                            font: Theme.fonts.body
+                            elide: Text.ElideMiddle
+                            verticalAlignment: Text.AlignVCenter
 
-                        width: Math.max(0, parent.width - upButton.width)
-                        height: parent.height
-                        rightPadding: root.pathTextRightPadding
-                        text: root.controller.directoryPath
-                        color: Theme.tokens.textSecondary
-                        font: Theme.fonts.body
-                        elide: Text.ElideMiddle
-                        verticalAlignment: Text.AlignVCenter
-
-                        HoverHandler {
-                            cursorShape: Qt.IBeamCursor
+                            HoverHandler {
+                                cursorShape: Qt.IBeamCursor
+                            }
                         }
                     }
                 }
             }
 
             Item {
-                Layout.fillWidth: true
-                Layout.minimumWidth: root.controller.compactTopBar ? 0 : root.pathBarSpacing
+                width: Math.max(0, Math.floor(root.topBarWidth - navigationGroup.width
+                                              - (root.topBarSingleRow ? root.topBarTailWidth : 0)))
+                height: Theme.metrics.topPanelHeight
             }
 
-            Label {
-                Layout.rightMargin: root.selectionCountMargin
-                visible: root.gridController.selectedImageCount > 0
-                text: root.gridController.selectedImageCount === 1
-                      ? qsTr("1 image selected")
-                      : qsTr("%1 images selected").arg(root.gridController.selectedImageCount)
-                color: Theme.tokens.textPrimary
-            }
+            TopBarGroup {
+                id: selectionGroup
 
-            T.AbstractButton {
-                id: batchButton
-
-                Layout.fillHeight: true
-                Layout.topMargin: root.controlMarginV
-                Layout.bottomMargin: root.controlMarginV
-                Layout.leftMargin: root.controlMarginH
-                Layout.rightMargin: root.batchButtonMargin
-                implicitWidth: batchLabel.implicitWidth + root.batchTextPadding + root.batchIconPadding
-                visible: root.gridController.selectedImageCount > 0
-                         || root.gridController.batchListPending
-                focusPolicy: Qt.NoFocus
-                hoverEnabled: true
-                onClicked: root.gridController.requestBatchConversion()
-
-                background: Rectangle {
-                    radius: StyleConstants.controlRadius
-                    color: batchButton.down ? Theme.tokens.fillPressed
-                         : batchButton.hovered ? Theme.tokens.fillHover
-                         : Theme.tokens.fillRest
-                }
-                contentItem: Item {
-                    Label {
-                        id: batchLabel
-
-                        x: root.batchTextPadding
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Batch convert")
-                        color: Theme.tokens.textPrimary
-                    }
-                    IconGlyph {
-                        x: batchButton.width - width - root.batchIconGap
-                        anchors.verticalCenter: parent.verticalCenter
-                        icon: FluentIcons.BatchConvert16
-                        size: Theme.compactIconSize
-                    }
-                }
-            }
-
-            Label {
-                Layout.rightMargin: root.gridSizeLabelMargin
-                visible: !root.controller.compactTopBar
-                text: qsTr("Grid size")
-                color: Theme.tokens.textPrimary
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton
-                    onDoubleClicked: mouse => {
-                        mouse.accepted = true;
-                        root.gridController.resetIconSize();
-                    }
-                }
-            }
-
-            Slider {
-                id: zoomSlider
-
-                Layout.preferredWidth: root.sliderWidth
-                Layout.rightMargin: root.sliderSpacing
-                visible: !root.controller.compactTopBar
-                focusPolicy: Qt.NoFocus
-                from: root.gridController.zoomSliderMinimum
-                to: root.gridController.zoomSliderMaximum
-                stepSize: 1
-                value: root.gridController.zoomSliderValue
-
-                function setValueAt(x) {
-                    const handleRadius = zoomSlider.handle.width / 2;
-                    const trackLength = zoomSlider.availableWidth - zoomSlider.handle.width;
-                    if (trackLength <= 0)
-                        return;
-                    const position = Math.max(0, Math.min(1,
-                        (x - handleRadius - zoomSlider.leftPadding) / trackLength));
-                    const logicalPosition = zoomSlider.mirrored ? 1 - position : position;
-                    const rawValue = zoomSlider.valueAt(logicalPosition);
-                    root.gridController.setZoomSliderValue(Math.round(rawValue));
+                Label {
+                    Layout.leftMargin: root.placesButtonLeftMargin
+                    Layout.rightMargin: root.selectionCountMargin
+                    visible: root.gridController.selectedImageCount > 0
+                    text: root.gridController.selectedImageCount === 1
+                          ? qsTr("1 image selected")
+                          : qsTr("%1 images selected").arg(root.gridController.selectedImageCount)
+                    color: Theme.tokens.textPrimary
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    z: 1
-                    acceptedButtons: Qt.LeftButton
-                    onPressed: mouse => {
-                        root.gridController.setZoomSliderPressed(true);
-                        zoomSlider.setValueAt(mouse.x);
+                T.AbstractButton {
+                    id: batchButton
+
+                    Layout.fillHeight: true
+                    Layout.topMargin: root.controlMarginV
+                    Layout.bottomMargin: root.controlMarginV
+                    Layout.leftMargin: (root.gridController.selectedImageCount > 0)
+                                       ? root.controlMarginH : root.placesButtonLeftMargin
+                    Layout.rightMargin: root.batchButtonMargin
+                    implicitWidth: batchLabel.implicitWidth + root.batchTextPadding + root.batchIconPadding
+                    visible: root.gridController.selectedImageCount > 0
+                             || root.gridController.batchListPending
+                    focusPolicy: Qt.NoFocus
+                    hoverEnabled: true
+                    onClicked: root.gridController.requestBatchConversion()
+
+                    background: Rectangle {
+                        radius: StyleConstants.controlRadius
+                        color: batchButton.down ? Theme.tokens.fillPressed
+                             : batchButton.hovered ? Theme.tokens.fillHover
+                             : Theme.tokens.fillRest
                     }
-                    onPositionChanged: mouse => {
-                        if (pressed)
+                    contentItem: Item {
+                        Label {
+                            id: batchLabel
+
+                            x: root.batchTextPadding
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: qsTr("Batch convert")
+                            color: Theme.tokens.textPrimary
+                        }
+                        IconGlyph {
+                            x: batchButton.width - width - root.batchIconGap
+                            anchors.verticalCenter: parent.verticalCenter
+                            icon: FluentIcons.BatchConvert16
+                            size: Theme.compactIconSize
+                        }
+                    }
+                }
+
+                Label {
+                    Layout.leftMargin: batchButton.visible ? 0 : root.placesButtonLeftMargin
+                    Layout.rightMargin: root.gridSizeLabelMargin
+                    text: qsTr("Grid size")
+                    color: Theme.tokens.textPrimary
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton
+                        onDoubleClicked: mouse => {
+                            mouse.accepted = true;
+                            root.gridController.resetIconSize();
+                        }
+                    }
+                }
+
+                Slider {
+                    id: zoomSlider
+
+                    Layout.preferredWidth: root.sliderWidth
+                    Layout.rightMargin: root.sliderSpacing
+                    focusPolicy: Qt.NoFocus
+                    from: root.gridController.zoomSliderMinimum
+                    to: root.gridController.zoomSliderMaximum
+                    stepSize: 1
+                    value: root.gridController.zoomSliderValue
+
+                    function setValueAt(x) {
+                        const handleRadius = zoomSlider.handle.width / 2;
+                        const trackLength = zoomSlider.availableWidth - zoomSlider.handle.width;
+                        if (trackLength <= 0)
+                            return;
+                        const position = Math.max(0, Math.min(1,
+                            (x - handleRadius - zoomSlider.leftPadding) / trackLength));
+                        const logicalPosition = zoomSlider.mirrored ? 1 - position : position;
+                        const rawValue = zoomSlider.valueAt(logicalPosition);
+                        root.gridController.setZoomSliderValue(Math.round(rawValue));
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        z: 1
+                        acceptedButtons: Qt.LeftButton
+                        onPressed: mouse => {
+                            root.gridController.setZoomSliderPressed(true);
                             zoomSlider.setValueAt(mouse.x);
-                    }
-                    onReleased: root.gridController.setZoomSliderPressed(false)
-                    onCanceled: root.gridController.setZoomSliderPressed(false)
-                    onDoubleClicked: mouse => {
-                        mouse.accepted = true;
-                        root.gridController.resetIconSize();
-                    }
-                }
-            }
-
-            PanelComboBox {
-                glyph: FluentIcons.Folder16
-                model: root.sortingNames
-                currentIndex: root.controller.folderSortingMode
-                toolTip: qsTr("Folder icon sorting")
-                onActivated: index => root.controller.selectFolderSorting(index)
-            }
-
-            PanelComboBox {
-                Layout.leftMargin: root.comboSpacing
-                glyph: FluentIcons.ArrowSort16
-                model: root.sortingNames
-                currentIndex: root.controller.sortingMode
-                toolTip: qsTr("Sort folders and images")
-                onActivated: index => root.controller.selectSorting(index)
-            }
-
-            FormatFilterComboBox {
-                id: formatFilterBox
-
-                Layout.fillHeight: true
-                Layout.topMargin: root.controlMarginV
-                Layout.bottomMargin: root.controlMarginV
-                Layout.leftMargin: root.comboSpacing + root.controlMarginH
-                Layout.rightMargin: root.controlMarginH
-                filter: root.controller.formatFilter
-
-                ToolTip {
-                    visible: formatFilterBox.hovered && !formatFilterBox.popupOpen
-                    text: qsTr("Filter by file format")
-                }
-            }
-
-            SearchField {
-                id: nameFilter
-
-                Layout.preferredWidth: root.nameFilterWidth
-                Layout.fillHeight: true
-                Layout.topMargin: root.controlMarginV
-                Layout.bottomMargin: root.controlMarginV
-                Layout.leftMargin: root.comboSpacing + root.controlMarginH
-                Layout.rightMargin: root.controlMarginH
-                placeholderText: qsTr("Name filter")
-                text: root.controller.nameFilter
-                // Not textEdited: the clear button clears the text without
-                // it.
-                onTextChanged: root.controller.editNameFilter(text)
-                // Escape clears the filter, and in an empty field hands the
-                // focus back to the grid, as Enter and Down do (the filter
-                // stays).
-                Keys.onPressed: event => {
-                    if (event.key === Qt.Key_Escape && nameFilter.text.length > 0) {
-                        root.controller.editNameFilter("");
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Return
-                            || event.key === Qt.Key_Enter || event.key === Qt.Key_Down) {
-                        folderGrid.forceActiveFocus(Qt.OtherFocusReason);
-                        event.accepted = true;
+                        }
+                        onPositionChanged: mouse => {
+                            if (pressed)
+                                zoomSlider.setValueAt(mouse.x);
+                        }
+                        onReleased: root.gridController.setZoomSliderPressed(false)
+                        onCanceled: root.gridController.setZoomSliderPressed(false)
+                        onDoubleClicked: mouse => {
+                            mouse.accepted = true;
+                            root.gridController.resetIconSize();
+                        }
                     }
                 }
+            }
 
-                ToolTip {
-                    visible: nameFilter.hovered && !nameFilter.activeFocus
-                    text: qsTr("Filter folders and images by name")
+            TopBarGroup {
+                id: sortingGroup
+
+                PanelComboBox {
+                    Layout.leftMargin: root.placesButtonLeftMargin
+                    glyph: FluentIcons.Folder16
+                    model: root.sortingNames
+                    currentIndex: root.controller.folderSortingMode
+                    toolTip: qsTr("Folder icon sorting")
+                    onActivated: index => root.controller.selectFolderSorting(index)
+                }
+
+                PanelComboBox {
+                    Layout.leftMargin: root.comboSpacing
+                    glyph: FluentIcons.ArrowSort16
+                    model: root.sortingNames
+                    currentIndex: root.controller.sortingMode
+                    toolTip: qsTr("Sort folders and images")
+                    onActivated: index => root.controller.selectSorting(index)
+                }
+
+                FormatFilterComboBox {
+                    id: formatFilterBox
+
+                    Layout.fillHeight: true
+                    Layout.topMargin: root.controlMarginV
+                    Layout.bottomMargin: root.controlMarginV
+                    Layout.leftMargin: root.comboSpacing + root.controlMarginH
+                    Layout.rightMargin: root.comboSpacing
+                    filter: root.controller.formatFilter
+
+                    ToolTip {
+                        visible: formatFilterBox.hovered && !formatFilterBox.popupOpen
+                        text: qsTr("Filter by file format")
+                    }
                 }
             }
 
-            TopBarButton {
-                Layout.preferredWidth: root.windowButtonWidth
-                Layout.leftMargin: root.nameFilterSpacing
-                glyph: FluentIcons.DocumentView20
-                toolTip: qsTr("Viewer")
-                onPressed: Actions.invoke("documentView")
-            }
+            TopBarGroup {
+                id: filterGroup
 
-            TopBarButton {
-                Layout.preferredWidth: root.windowButtonWidth
-                Layout.leftMargin: root.captionSpacing
-                glyph: FluentIcons.Settings20
-                toolTip: qsTr("Settings")
-                onPressed: Actions.invoke("openSettings")
-            }
+                SearchField {
+                    id: nameFilter
 
-            TopBarButton {
-                Layout.preferredWidth: root.windowButtonWidth
-                Layout.leftMargin: root.controller.fullscreen ? 0 : root.captionSpacing
-                glyph: FluentIcons.ArrowExit20
-                toolTip: qsTr("Quit Wynpix")
-                onPressed: Actions.invoke("exit")
+                    Layout.preferredWidth: root.nameFilterWidth
+                    Layout.fillHeight: true
+                    Layout.topMargin: root.controlMarginV
+                    Layout.bottomMargin: root.controlMarginV
+                    Layout.leftMargin: root.placesButtonLeftMargin
+                    Layout.rightMargin: root.controlMarginH
+                    placeholderText: qsTr("Name filter")
+                    text: root.controller.nameFilter
+                    // Not textEdited: the clear button clears the text without
+                    // it.
+                    onTextChanged: root.controller.editNameFilter(text)
+                    // Escape clears the filter, and in an empty field hands the
+                    // focus back to the grid, as Enter and Down do (the filter
+                    // stays).
+                    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Escape && nameFilter.text.length > 0) {
+                            root.controller.editNameFilter("");
+                            event.accepted = true;
+                        } else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Return
+                                || event.key === Qt.Key_Enter || event.key === Qt.Key_Down) {
+                            folderGrid.forceActiveFocus(Qt.OtherFocusReason);
+                            event.accepted = true;
+                        }
+                    }
+
+                    ToolTip {
+                        visible: nameFilter.hovered && !nameFilter.activeFocus
+                        text: qsTr("Filter folders and images by name")
+                    }
+                }
+
+                TopBarButton {
+                    Layout.preferredWidth: root.windowButtonWidth
+                    Layout.leftMargin: root.nameFilterSpacing
+                    glyph: FluentIcons.DocumentView20
+                    toolTip: qsTr("Viewer")
+                    onPressed: Actions.invoke("documentView")
+                }
+
+                TopBarButton {
+                    Layout.preferredWidth: root.windowButtonWidth
+                    Layout.leftMargin: root.captionSpacing
+                    glyph: FluentIcons.Settings20
+                    toolTip: qsTr("Settings")
+                    onPressed: Actions.invoke("openSettings")
+                }
+
+                TopBarButton {
+                    Layout.preferredWidth: root.windowButtonWidth
+                    Layout.leftMargin: root.controller.fullscreen ? 0 : root.captionSpacing
+                    glyph: FluentIcons.ArrowExit20
+                    toolTip: qsTr("Quit Wynpix")
+                    onPressed: Actions.invoke("exit")
+                }
             }
         }
     }
@@ -418,6 +465,13 @@ FocusScope {
             nameFilter.forceActiveFocus(Qt.ShortcutFocusReason);
             nameFilter.contentItem.selectAll();
         }
+    }
+
+    // A part of the top bar that is never split: the Flow wraps whole groups.
+    component TopBarGroup: RowLayout {
+        width: Math.min(implicitWidth, root.topBarWidth)
+        height: Theme.metrics.topPanelHeight
+        spacing: 0
     }
 
     // CheckableButtonLE / PanelButton of the widget stylesheet.

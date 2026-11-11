@@ -130,10 +130,6 @@ bool FolderViewController::treeExpanded() const {
     return mTreeExpanded;
 }
 
-bool FolderViewController::isCompactTopBar() const {
-    return mViewWidth > 0 && mViewWidth < kCompactTopBarWidth;
-}
-
 //------------------------------------------------------------------------------
 // Application
 
@@ -310,12 +306,9 @@ void FolderViewController::setViewWidth(qreal width) {
     if (viewWidth == mViewWidth)
         return;
     const bool shown = isPlacesPanelShown();
-    const bool compact = isCompactTopBar();
     mViewWidth = viewWidth;
     if (shown != isPlacesPanelShown())
         emit placesPanelChanged();
-    if (compact != isCompactTopBar())
-        emit compactTopBarChanged();
     notifyIfFilesystemViewReady();
 }
 

@@ -9,7 +9,7 @@ import wynpix.tests
 // requests to the visible rows, the pointer selects, activates, draws the
 // rubber band and asks for the context menu, keys move and letters do not,
 // drops keep their target, the name filter is published and focused by its
-// action, the top bar compacts, and the places panel shows the bookmarks. The view is a sibling of the
+// action, the top bar wraps, and the places panel shows the bookmarks. The view is a sibling of the
 // TestCase, which is not visible and would not get input.
 Item {
     id: root
@@ -102,12 +102,14 @@ Item {
             tryVerify(() => cellOf(0) !== null, createTimeout, "the grid shows no cells");
         }
 
-        function test_compactTopBarHidesTheGridSize() {
+        function test_narrowTopBarWrapsControls() {
             const label = findText(view, qsTranslate("FolderView", "Grid size"));
             verify(label !== null);
             verify(label.visible);
+            const singleRowY = label.mapToItem(view, 0, 0).y;
             root.width = compactWidth;
-            tryVerify(() => !label.visible);
+            tryVerify(() => label.mapToItem(view, 0, 0).y > singleRowY);
+            verify(label.visible);
         }
 
         function test_doubleClickActivates() {
