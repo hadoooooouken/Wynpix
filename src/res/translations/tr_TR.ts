@@ -3307,12 +3307,12 @@ Ara kopya:
         <translation>Dosya bilgisini pencere başlığında göster</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>Animasyon oynatma denetimleri</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>Fare imlecini otomatik gizle</translation>
     </message>
@@ -3332,7 +3332,7 @@ Ara kopya:
         <translation>Pürüzsüz yakınlaştırma</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>Tam ekranda bilgi çubuğunu göster</translation>
     </message>
@@ -3735,6 +3735,11 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>Yakınlaştırma seçenekleri</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>Bindirmeler</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>

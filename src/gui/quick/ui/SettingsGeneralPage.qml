@@ -69,21 +69,6 @@ SettingsPage {
             onToggled: root.editor.general.windowTitleExtendedInfo = checked
         }
         CheckBox {
-            text: qsTranslate("SettingsDialog", "Fullscreen info bar")
-            checked: root.editor.general.infoBarFullscreen
-            onToggled: root.editor.general.infoBarFullscreen = checked
-        }
-        CheckBox {
-            text: qsTranslate("SettingsDialog", "Animation playback controls")
-            checked: root.editor.general.showAnimationControls
-            onToggled: root.editor.general.showAnimationControls = checked
-        }
-        CheckBox {
-            text: qsTranslate("SettingsDialog", "Auto-hide cursor")
-            checked: root.editor.general.cursorAutohide
-            onToggled: root.editor.general.cursorAutohide = checked
-        }
-        CheckBox {
             id: smoothScrollBox
 
             text: qsTranslate("SettingsDialog", "Smooth thumbnail scrolling")

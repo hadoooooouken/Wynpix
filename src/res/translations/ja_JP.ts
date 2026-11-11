@@ -3307,12 +3307,12 @@ Staged copy:
         <translation>ウィンドウタイトルに画像情報を表示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>アニメーション再生コントロール</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>カーソルを自動的に隠す</translation>
     </message>
@@ -3332,7 +3332,7 @@ Staged copy:
         <translation>スムーズズーム</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>フルスクリーン情報バー</translation>
     </message>
@@ -3735,6 +3735,11 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>ズームオプション</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>オーバーレイ</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>

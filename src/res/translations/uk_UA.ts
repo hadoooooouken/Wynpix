@@ -3356,12 +3356,12 @@ Staged copy:
         <translation>Відкривати в галереї за замовчуванням</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>Панель керування анімацією</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>Приховувати курсор</translation>
     </message>
@@ -3547,7 +3547,7 @@ Staged copy:
         <translation>Інфо про зображення у заголовку вікна</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>Повноекранна панель з інфо</translation>
     </message>
@@ -3761,6 +3761,11 @@ Staged copy:
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>Налаштування зуму</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>Оверлеї</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="78"/>

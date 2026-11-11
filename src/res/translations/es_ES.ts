@@ -3309,12 +3309,12 @@ Copia provisional:
         <translation>Informacion de la imagen en barra de titulos</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>Controles de reproducción de animaciones</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>Ocultar cursor automaticamente</translation>
     </message>
@@ -3334,7 +3334,7 @@ Copia provisional:
         <translation>Zoom suave</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>Barra de información en pantalla completa</translation>
     </message>
@@ -3737,6 +3737,11 @@ Informa de errores / solicita funciones [aquí](https://github.com/hadoooooouken
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>Opciones de zoom</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>Superposiciones</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>

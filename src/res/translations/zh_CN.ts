@@ -3353,12 +3353,12 @@ Staged copy:
         <translation>默认在文件夹视图中启动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>动画播放控件</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>自动隐藏鼠标</translation>
     </message>
@@ -3499,7 +3499,7 @@ Staged copy:
         <translation>窗口标题上显示图像信息</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>全屏信息栏</translation>
     </message>
@@ -3728,6 +3728,11 @@ Staged copy:
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>放大功能</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>叠加层</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="78"/>

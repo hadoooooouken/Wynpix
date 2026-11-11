@@ -3310,12 +3310,12 @@ Zwischenkopie:
         <translation>Bildinformationen im Fenstertitel</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>Steuerelemente für die Animationswiedergabe</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>Mauszeiger verstecken</translation>
     </message>
@@ -3335,7 +3335,7 @@ Zwischenkopie:
         <translation>Sanftes Zoomen</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>Vollbild Informationsleiste</translation>
     </message>
@@ -3723,6 +3723,11 @@ Probleme melden / Funktionen anfragen [hier](https://github.com/hadoooooouken/wy
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>Skalierungsoptionen</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>Overlays</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>

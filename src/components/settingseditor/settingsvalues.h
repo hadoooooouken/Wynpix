@@ -27,9 +27,6 @@ struct GeneralSettings {
     Q_PROPERTY(bool standbyMode MEMBER standbyMode FINAL)
     Q_PROPERTY(bool rememberLastFolder MEMBER rememberLastFolder FINAL)
     Q_PROPERTY(bool windowTitleExtendedInfo MEMBER windowTitleExtendedInfo FINAL)
-    Q_PROPERTY(bool infoBarFullscreen MEMBER infoBarFullscreen FINAL)
-    Q_PROPERTY(bool showAnimationControls MEMBER showAnimationControls FINAL)
-    Q_PROPERTY(bool cursorAutohide MEMBER cursorAutohide FINAL)
     Q_PROPERTY(bool smoothScroll MEMBER smoothScroll FINAL)
     Q_PROPERTY(bool autoResizeWindow MEMBER autoResizeWindow FINAL)
     Q_PROPERTY(int autoResizeLimitStep MEMBER autoResizeLimitStep FINAL)
@@ -57,9 +54,6 @@ public:
     bool standbyMode = false;
     bool rememberLastFolder = false;
     bool windowTitleExtendedInfo = false;
-    bool infoBarFullscreen = false;
-    bool showAnimationControls = false;
-    bool cursorAutohide = false;
     bool smoothScroll = false;
     bool autoResizeWindow = false;
     int autoResizeLimitStep = 0; // SettingsScales::autoResizeLimit*
@@ -93,6 +87,9 @@ struct ViewSettings {
     Q_PROPERTY(int expandLimit MEMBER expandLimit FINAL)
     Q_PROPERTY(bool smoothZoom MEMBER smoothZoom FINAL)
     Q_PROPERTY(int zoomIndicatorMode MEMBER zoomIndicatorMode FINAL)
+    Q_PROPERTY(bool infoBarFullscreen MEMBER infoBarFullscreen FINAL)
+    Q_PROPERTY(bool showAnimationControls MEMBER showAnimationControls FINAL)
+    Q_PROPERTY(bool cursorAutohide MEMBER cursorAutohide FINAL)
     Q_PROPERTY(bool unlockMinZoom MEMBER unlockMinZoom FINAL)
     Q_PROPERTY(int zoomStepPercent MEMBER zoomStepPercent FINAL)
     Q_PROPERTY(bool useFixedZoomLevels MEMBER useFixedZoomLevels FINAL)
@@ -116,6 +113,9 @@ public:
     int expandLimit = 0;         // factor, 0 for no limit
     bool smoothZoom = false;
     int zoomIndicatorMode = 0;   // ZoomIndicatorMode
+    bool infoBarFullscreen = false;
+    bool showAnimationControls = false;
+    bool cursorAutohide = false;
     bool unlockMinZoom = false;
     int zoomStepPercent = 0;     // SettingsScales::zoomStep*
     bool useFixedZoomLevels = false;

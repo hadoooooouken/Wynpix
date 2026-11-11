@@ -119,6 +119,26 @@ SettingsPage {
     }
 
     SettingsSection {
+        title: qsTranslate("SettingsDialog", "Overlays")
+
+        CheckBox {
+            text: qsTranslate("SettingsDialog", "Fullscreen info bar")
+            checked: root.editor.view.infoBarFullscreen
+            onToggled: root.editor.view.infoBarFullscreen = checked
+        }
+        CheckBox {
+            text: qsTranslate("SettingsDialog", "Animation playback controls")
+            checked: root.editor.view.showAnimationControls
+            onToggled: root.editor.view.showAnimationControls = checked
+        }
+        CheckBox {
+            text: qsTranslate("SettingsDialog", "Auto-hide cursor")
+            checked: root.editor.view.cursorAutohide
+            onToggled: root.editor.view.cursorAutohide = checked
+        }
+    }
+
+    SettingsSection {
         title: qsTranslate("SettingsDialog", "Scaling quality")
 
         RowLayout {

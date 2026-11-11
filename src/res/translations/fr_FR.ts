@@ -3309,12 +3309,12 @@ Copie intermédiaire :
         <translation>Informations sur l&apos;image dans le titre de la fenêtre</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="77"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
         <source>Animation playback controls</source>
         <translation>Commandes de lecture des animations</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
         <source>Auto-hide cursor</source>
         <translation>Masquer automatiquement le curseur</translation>
     </message>
@@ -3334,7 +3334,7 @@ Copie intermédiaire :
         <translation>Zoom fluide</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>Fullscreen info bar</source>
         <translation>Barre d&apos;information plein écran</translation>
     </message>
@@ -3742,6 +3742,11 @@ Signalez les problèmes / proposez des fonctionnalités [ici](https://github.com
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
         <source>Zoom options</source>
         <translation>Options de zoom</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Overlays</source>
+        <translation>Superpositions</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>

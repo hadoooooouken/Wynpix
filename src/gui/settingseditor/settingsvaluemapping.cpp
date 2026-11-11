@@ -58,9 +58,6 @@ SettingsValues SettingsValueMapping::load() const {
     general.standbyMode = s.standbyMode();
     general.rememberLastFolder = s.rememberLastFolder();
     general.windowTitleExtendedInfo = s.windowTitleExtendedInfo();
-    general.infoBarFullscreen = s.infoBarFullscreen();
-    general.showAnimationControls = s.showAnimationControls();
-    general.cursorAutohide = s.cursorAutohide();
     general.smoothScroll = s.enableSmoothScroll();
     general.autoResizeWindow = s.autoResizeWindow();
     general.autoResizeLimitStep = autoResizeLimitStep(s.autoResizeLimit());
@@ -89,6 +86,9 @@ SettingsValues SettingsValueMapping::load() const {
     view.expandLimit = s.expandLimit();
     view.smoothZoom = s.enableSmoothZoom();
     view.zoomIndicatorMode = s.zoomIndicatorMode();
+    view.infoBarFullscreen = s.infoBarFullscreen();
+    view.showAnimationControls = s.showAnimationControls();
+    view.cursorAutohide = s.cursorAutohide();
     view.unlockMinZoom = s.unlockMinZoom();
     view.zoomStepPercent = zoomStepPercent(s.zoomStep());
     view.useFixedZoomLevels = s.useFixedZoomLevels();
@@ -165,9 +165,6 @@ void SettingsValueMapping::storeGeneral(const GeneralSettings &general) {
     s.setStandbyMode(general.standbyMode);
     s.setRememberLastFolder(general.rememberLastFolder);
     s.setWindowTitleExtendedInfo(general.windowTitleExtendedInfo);
-    s.setInfoBarFullscreen(general.infoBarFullscreen);
-    s.setShowAnimationControls(general.showAnimationControls);
-    s.setCursorAutohide(general.cursorAutohide);
     s.setEnableSmoothScroll(general.smoothScroll);
     s.setAutoResizeWindow(general.autoResizeWindow);
     s.setAutoResizeLimit(autoResizeLimitPercent(general.autoResizeLimitStep));
@@ -198,6 +195,9 @@ void SettingsValueMapping::storeView(const ViewSettings &view) {
     s.setExpandLimit(view.expandLimit);
     s.setEnableSmoothZoom(view.smoothZoom);
     s.setZoomIndicatorMode(static_cast<ZoomIndicatorMode>(view.zoomIndicatorMode));
+    s.setInfoBarFullscreen(view.infoBarFullscreen);
+    s.setShowAnimationControls(view.showAnimationControls);
+    s.setCursorAutohide(view.cursorAutohide);
     s.setUnlockMinZoom(view.unlockMinZoom);
     s.setZoomStep(zoomStep(view.zoomStepPercent));
     s.setUseFixedZoomLevels(view.useFixedZoomLevels);
