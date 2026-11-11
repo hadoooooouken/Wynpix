@@ -507,7 +507,7 @@ if(WIN32)
     )
 
     # 8. Copy OpenMP runtime for LibRaw
-    set(OPENMP_DLL_PATH "E:/MVSC/VC/Redist/MSVC/14.51.36231/x64/Microsoft.VC145.OpenMP/vcomp140.dll")
+    set(OPENMP_DLL_PATH "E:/MVSC/VC/Redist/MSVC/14.52.37025/x64/Microsoft.VC145.OpenMP/vcomp140.dll")
     if(EXISTS "${OPENMP_DLL_PATH}")
         add_custom_command(TARGET wynpix POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENMP_DLL_PATH}" "$<TARGET_FILE_DIR:wynpix>/"

@@ -13,9 +13,6 @@ import sys
 from pathlib import Path
 
 # ==================== PATH SETTINGS ====================
-MSVC_VERSION = "14.51.36231"
-WINDOWS_SDK_VERSION = "10.0.26100.0"
-
 MSVC_BASE = Path(os.environ.get("VSINSTALLDIR", "E:/MVSC"))
 MSYS2_BIN = Path(os.environ.get("MSYS2_ROOT", "E:/MSYS2")) / "usr/bin/bash.exe"
 FFMPEG_SRC = Path(os.environ.get("FFMPEG_SRC", "E:/wynpix/formats/ffmpeg"))
@@ -23,6 +20,40 @@ FFMPEG_SRC = Path(os.environ.get("FFMPEG_SRC", "E:/wynpix/formats/ffmpeg"))
 # (ffmpeg-build-msvc for AVX2, ffmpeg-build-msvc-sse2 for SSE2).
 PREFIX_BASE_NAME = "ffmpeg-build-msvc"
 NASM_DIR = Path(os.environ.get("NASM_DIR", "E:/wynpix/formats/nasm"))
+
+
+def detect_msvc_version(base_dir):
+    env_ver = os.environ.get("VCToolsVersion")
+    if env_ver and (base_dir / f"VC/Tools/MSVC/{env_ver}/bin/Hostx64/x64").exists():
+        return env_ver
+    tools_dir = base_dir / "VC/Tools/MSVC"
+    if tools_dir.exists():
+        candidates = [d.name for d in tools_dir.iterdir() if d.is_dir() and (d / "bin/Hostx64/x64").exists()]
+        if candidates:
+            return sorted(candidates, reverse=True)[0]
+    return "14.52.37025"
+
+
+def detect_windows_sdk_base_and_version():
+    sdk_base = Path("E:/Windows Kits/10")
+    if not sdk_base.exists():
+        sdk_base = Path("C:/Program Files (x86)/Windows Kits/10")
+
+    env_ver = os.environ.get("WindowsSDKVersion", "").strip("\\/")
+    if env_ver and (sdk_base / "Include" / env_ver).exists():
+        return sdk_base, env_ver
+
+    inc_dir = sdk_base / "Include"
+    if inc_dir.exists():
+        candidates = [d.name for d in inc_dir.iterdir() if d.is_dir() and d.name.startswith("10.")]
+        if candidates:
+            return sdk_base, sorted(candidates, reverse=True)[0]
+
+    return sdk_base, "10.0.26100.0"
+
+
+MSVC_VERSION = detect_msvc_version(MSVC_BASE)
+WINDOWS_SDK_BASE, WINDOWS_SDK_VERSION = detect_windows_sdk_base_and_version()
 
 # ISA / hardening flags come from the policy file shared with the PowerShell
 # build scripts. FFmpeg's configure adds -O2 itself, so only the CRT selection
@@ -79,15 +110,18 @@ def run_build(isa):
     msvc_bin = MSVC_BASE / f"VC/Tools/MSVC/{MSVC_VERSION}/bin/Hostx64/x64"
     msvc_ide = MSVC_BASE / "Common7/IDE"
     
-    sdk_base = Path("E:/Windows Kits/10")
-    if not sdk_base.exists():
-        sdk_base = Path("C:/Program Files (x86)/Windows Kits/10")
-        
+    sdk_base = WINDOWS_SDK_BASE
     sdk_include = sdk_base / "Include" / WINDOWS_SDK_VERSION
     sdk_lib = sdk_base / "Lib" / WINDOWS_SDK_VERSION
 
-    if not msvc_bin.exists() or not MSYS2_BIN.exists():
-        print("[!] Error: Check MSVC or MSYS2 paths installation!")
+    if not msvc_bin.exists():
+        print(f"[!] Error: MSVC compiler path not found: {msvc_bin}")
+        sys.exit(1)
+    if not MSYS2_BIN.exists():
+        print(f"[!] Error: MSYS2 bash not found: {MSYS2_BIN}")
+        sys.exit(1)
+    if not sdk_include.exists() or not sdk_lib.exists():
+        print(f"[!] Error: Windows SDK paths not found: {sdk_include} or {sdk_lib}")
         sys.exit(1)
 
     # 2. Convert Windows paths to MSYS2-compatible format directly in Python
