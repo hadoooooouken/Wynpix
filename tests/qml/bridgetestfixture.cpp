@@ -90,7 +90,6 @@ constexpr qint64 kTestCacheBytes = 4096;
 SettingsValues testSettingsValues() {
   SettingsValues v;
   v.general.language = u"en_US"_s;
-  v.general.zoomIndicatorMode = INDICATOR_AUTO;
   v.general.autoResizeLimitStep = 18;
   v.general.panelEnabled = true;
   v.general.panelHideDelayMs = 600;
@@ -101,6 +100,7 @@ SettingsValues testSettingsValues() {
   v.general.sortingMode = SORT_NAME;
   v.general.slideshowIntervalMs = 3000;
   v.view.imageFitMode = FIT_WINDOW;
+  v.view.zoomIndicatorMode = INDICATOR_AUTO;
   v.view.focusPoint = FOCUS_CURSOR;
   v.view.expandLimit = 2;
   v.view.zoomStepPercent = 25;

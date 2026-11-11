@@ -37,7 +37,6 @@ QStringList column(const QAbstractItemModel &model, int role) {
 SettingsValues validValues() {
     SettingsValues v;
     v.general.language = u"de_DE"_s;
-    v.general.zoomIndicatorMode = INDICATOR_AUTO;
     v.general.autoResizeLimitStep = 18;
     v.general.panelEnabled = true;
     v.general.panelHideDelayMs = 600;
@@ -48,6 +47,7 @@ SettingsValues validValues() {
     v.general.sortingMode = SORT_TIME_DESC;
     v.general.slideshowIntervalMs = 3000;
     v.view.imageFitMode = FIT_WIDTH;
+    v.view.zoomIndicatorMode = INDICATOR_AUTO;
     v.view.focusPoint = FOCUS_CENTER;
     v.view.expandLimit = 2;
     v.view.zoomStepPercent = 25;

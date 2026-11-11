@@ -3327,7 +3327,7 @@ Ara kopya:
         <translation>Akıcı küçük resim kaydırması</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
         <source>Smooth zooming</source>
         <translation>Pürüzsüz yakınlaştırma</translation>
     </message>
@@ -3337,7 +3337,7 @@ Ara kopya:
         <translation>Tam ekranda bilgi çubuğunu göster</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="104"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
         <source>Zoom indicator:</source>
         <translation>Yakınlaştırma göstergesi:</translation>
     </message>

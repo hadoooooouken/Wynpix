@@ -31,8 +31,6 @@ struct GeneralSettings {
     Q_PROPERTY(bool showAnimationControls MEMBER showAnimationControls FINAL)
     Q_PROPERTY(bool cursorAutohide MEMBER cursorAutohide FINAL)
     Q_PROPERTY(bool smoothScroll MEMBER smoothScroll FINAL)
-    Q_PROPERTY(bool smoothZoom MEMBER smoothZoom FINAL)
-    Q_PROPERTY(int zoomIndicatorMode MEMBER zoomIndicatorMode FINAL)
     Q_PROPERTY(bool autoResizeWindow MEMBER autoResizeWindow FINAL)
     Q_PROPERTY(int autoResizeLimitStep MEMBER autoResizeLimitStep FINAL)
     Q_PROPERTY(bool panelEnabled MEMBER panelEnabled FINAL)
@@ -63,8 +61,6 @@ public:
     bool showAnimationControls = false;
     bool cursorAutohide = false;
     bool smoothScroll = false;
-    bool smoothZoom = false;
-    int zoomIndicatorMode = 0;   // ZoomIndicatorMode
     bool autoResizeWindow = false;
     int autoResizeLimitStep = 0; // SettingsScales::autoResizeLimit*
     bool panelEnabled = false;
@@ -95,6 +91,8 @@ struct ViewSettings {
     Q_PROPERTY(bool transparencyGrid MEMBER transparencyGrid FINAL)
     Q_PROPERTY(bool expandImage MEMBER expandImage FINAL)
     Q_PROPERTY(int expandLimit MEMBER expandLimit FINAL)
+    Q_PROPERTY(bool smoothZoom MEMBER smoothZoom FINAL)
+    Q_PROPERTY(int zoomIndicatorMode MEMBER zoomIndicatorMode FINAL)
     Q_PROPERTY(bool unlockMinZoom MEMBER unlockMinZoom FINAL)
     Q_PROPERTY(int zoomStepPercent MEMBER zoomStepPercent FINAL)
     Q_PROPERTY(bool useFixedZoomLevels MEMBER useFixedZoomLevels FINAL)
@@ -116,6 +114,8 @@ public:
     bool transparencyGrid = false;
     bool expandImage = false;
     int expandLimit = 0;         // factor, 0 for no limit
+    bool smoothZoom = false;
+    int zoomIndicatorMode = 0;   // ZoomIndicatorMode
     bool unlockMinZoom = false;
     int zoomStepPercent = 0;     // SettingsScales::zoomStep*
     bool useFixedZoomLevels = false;

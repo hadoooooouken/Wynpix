@@ -3329,7 +3329,7 @@ Copie intermédiaire :
         <translation>Défilement fluide des miniatures</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
         <source>Smooth zooming</source>
         <translation>Zoom fluide</translation>
     </message>
@@ -3339,7 +3339,7 @@ Copie intermédiaire :
         <translation>Barre d&apos;information plein écran</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="104"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
         <source>Zoom indicator:</source>
         <translation>Indicateur de zoom :</translation>
     </message>

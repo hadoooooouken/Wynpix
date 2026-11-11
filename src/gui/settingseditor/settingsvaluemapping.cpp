@@ -62,8 +62,6 @@ SettingsValues SettingsValueMapping::load() const {
     general.showAnimationControls = s.showAnimationControls();
     general.cursorAutohide = s.cursorAutohide();
     general.smoothScroll = s.enableSmoothScroll();
-    general.smoothZoom = s.enableSmoothZoom();
-    general.zoomIndicatorMode = s.zoomIndicatorMode();
     general.autoResizeWindow = s.autoResizeWindow();
     general.autoResizeLimitStep = autoResizeLimitStep(s.autoResizeLimit());
     general.panelEnabled = s.panelEnabled();
@@ -89,6 +87,8 @@ SettingsValues SettingsValueMapping::load() const {
     view.transparencyGrid = s.transparencyGrid();
     view.expandImage = s.expandImage();
     view.expandLimit = s.expandLimit();
+    view.smoothZoom = s.enableSmoothZoom();
+    view.zoomIndicatorMode = s.zoomIndicatorMode();
     view.unlockMinZoom = s.unlockMinZoom();
     view.zoomStepPercent = zoomStepPercent(s.zoomStep());
     view.useFixedZoomLevels = s.useFixedZoomLevels();
@@ -169,8 +169,6 @@ void SettingsValueMapping::storeGeneral(const GeneralSettings &general) {
     s.setShowAnimationControls(general.showAnimationControls);
     s.setCursorAutohide(general.cursorAutohide);
     s.setEnableSmoothScroll(general.smoothScroll);
-    s.setEnableSmoothZoom(general.smoothZoom);
-    s.setZoomIndicatorMode(static_cast<ZoomIndicatorMode>(general.zoomIndicatorMode));
     s.setAutoResizeWindow(general.autoResizeWindow);
     s.setAutoResizeLimit(autoResizeLimitPercent(general.autoResizeLimitStep));
     s.setPanelEnabled(general.panelEnabled);
@@ -198,6 +196,8 @@ void SettingsValueMapping::storeView(const ViewSettings &view) {
     s.setTransparencyGrid(view.transparencyGrid);
     s.setExpandImage(view.expandImage);
     s.setExpandLimit(view.expandLimit);
+    s.setEnableSmoothZoom(view.smoothZoom);
+    s.setZoomIndicatorMode(static_cast<ZoomIndicatorMode>(view.zoomIndicatorMode));
     s.setUnlockMinZoom(view.unlockMinZoom);
     s.setZoomStep(zoomStep(view.zoomStepPercent));
     s.setUseFixedZoomLevels(view.useFixedZoomLevels);

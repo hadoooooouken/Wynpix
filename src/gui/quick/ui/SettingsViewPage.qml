@@ -67,6 +67,17 @@ SettingsPage {
         title: qsTranslate("SettingsDialog", "Zoom options")
 
         CheckBox {
+            text: qsTranslate("SettingsDialog", "Smooth zooming")
+            checked: root.editor.view.smoothZoom
+            onToggled: root.editor.view.smoothZoom = checked
+        }
+        SettingsRadioRow {
+            label: qsTranslate("SettingsDialog", "Zoom indicator:")
+            options: root.editor.zoomIndicatorModes
+            value: root.editor.view.zoomIndicatorMode
+            onPicked: value => root.editor.view.zoomIndicatorMode = value
+        }
+        CheckBox {
             text: qsTranslate("SettingsDialog", "Unlock minimum zoom")
             checked: root.editor.view.unlockMinZoom
             onToggled: root.editor.view.unlockMinZoom = checked

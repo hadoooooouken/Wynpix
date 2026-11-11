@@ -3509,7 +3509,7 @@ Staged copy:
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="104"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
         <source>Zoom indicator:</source>
         <translation>放大指示器:</translation>
     </message>
@@ -3901,7 +3901,7 @@ Staged copy:
         <translation>开启缩略图平滑滚动</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
         <source>Smooth zooming</source>
         <translation>平滑缩放</translation>
     </message>

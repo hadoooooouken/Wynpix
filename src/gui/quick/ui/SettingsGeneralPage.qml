@@ -95,17 +95,6 @@ SettingsPage {
                 visible: smoothScrollBox.hovered
             }
         }
-        CheckBox {
-            text: qsTranslate("SettingsDialog", "Smooth zooming")
-            checked: root.editor.general.smoothZoom
-            onToggled: root.editor.general.smoothZoom = checked
-        }
-        SettingsRadioRow {
-            label: qsTranslate("SettingsDialog", "Zoom indicator:")
-            options: root.editor.zoomIndicatorModes
-            value: root.editor.general.zoomIndicatorMode
-            onPicked: value => root.editor.general.zoomIndicatorMode = value
-        }
         RowLayout {
             spacing: StyleConstants.dialogSpacing
 

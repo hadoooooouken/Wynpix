@@ -3557,7 +3557,7 @@ Staged copy:
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="104"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
         <source>Zoom indicator:</source>
         <translation>Зум індикатор:</translation>
     </message>
@@ -3876,7 +3876,7 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation>Увімкнути плавну прокрутку превью</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
         <source>Smooth zooming</source>
         <translation>Плавне масштабування</translation>
     </message>

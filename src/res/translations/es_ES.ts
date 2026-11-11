@@ -3329,7 +3329,7 @@ Copia provisional:
         <translation>Usar desplazamiento suave de miniaturas</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="99"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
         <source>Smooth zooming</source>
         <translation>Zoom suave</translation>
     </message>
@@ -3339,7 +3339,7 @@ Copia provisional:
         <translation>Barra de información en pantalla completa</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="104"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
         <source>Zoom indicator:</source>
         <translation>Indicador de zoom:</translation>
     </message>
