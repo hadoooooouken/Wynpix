@@ -507,14 +507,51 @@ if(WIN32)
     )
 
     # 8. Copy OpenMP runtime for LibRaw
-    set(OPENMP_DLL_PATH "E:/MVSC/VC/Redist/MSVC/14.52.37025/x64/Microsoft.VC145.OpenMP/vcomp140.dll")
-    if(EXISTS "${OPENMP_DLL_PATH}")
+    set(OPENMP_DLL_PATH "")
+    if(DEFINED ENV{VCToolsRedistDir})
+        file(GLOB _openmp_candidates "$ENV{VCToolsRedistDir}/x64/Microsoft.VC*.OpenMP/vcomp140.dll")
+        if(_openmp_candidates)
+            list(SORT _openmp_candidates ORDER DESCENDING)
+            list(GET _openmp_candidates 0 OPENMP_DLL_PATH)
+        endif()
+    endif()
+
+    if(NOT OPENMP_DLL_PATH AND CMAKE_CXX_COMPILER)
+        string(REGEX REPLACE "/VC/Tools/MSVC/.*" "" _vs_root "${CMAKE_CXX_COMPILER}")
+        file(GLOB _openmp_candidates "${_vs_root}/VC/Redist/MSVC/*/x64/Microsoft.VC*.OpenMP/vcomp140.dll")
+        if(_openmp_candidates)
+            list(SORT _openmp_candidates ORDER DESCENDING)
+            list(GET _openmp_candidates 0 OPENMP_DLL_PATH)
+        endif()
+    endif()
+
+    if(NOT OPENMP_DLL_PATH AND DEFINED ENV{VSINSTALLDIR})
+        file(GLOB _openmp_candidates "$ENV{VSINSTALLDIR}/VC/Redist/MSVC/*/x64/Microsoft.VC*.OpenMP/vcomp140.dll")
+        if(_openmp_candidates)
+            list(SORT _openmp_candidates ORDER DESCENDING)
+            list(GET _openmp_candidates 0 OPENMP_DLL_PATH)
+        endif()
+    endif()
+
+    if(NOT OPENMP_DLL_PATH)
+        file(GLOB _openmp_candidates
+            "E:/MVSC/VC/Redist/MSVC/*/x64/Microsoft.VC*.OpenMP/vcomp140.dll"
+            "C:/Program Files/Microsoft Visual Studio/*/*/VC/Redist/MSVC/*/x64/Microsoft.VC*.OpenMP/vcomp140.dll"
+            "C:/Program Files (x86)/Microsoft Visual Studio/*/*/VC/Redist/MSVC/*/x64/Microsoft.VC*.OpenMP/vcomp140.dll"
+        )
+        if(_openmp_candidates)
+            list(SORT _openmp_candidates ORDER DESCENDING)
+            list(GET _openmp_candidates 0 OPENMP_DLL_PATH)
+        endif()
+    endif()
+
+    if(OPENMP_DLL_PATH AND EXISTS "${OPENMP_DLL_PATH}")
         add_custom_command(TARGET wynpix POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENMP_DLL_PATH}" "$<TARGET_FILE_DIR:wynpix>/"
             COMMENT "Deploying OpenMP runtime (vcomp140.dll)..."
         )
     else()
-        message(WARNING "OpenMP runtime NOT found at: ${OPENMP_DLL_PATH}")
+        message(WARNING "OpenMP runtime (vcomp140.dll) NOT found.")
     endif()
 
 
