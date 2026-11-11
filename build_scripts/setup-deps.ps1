@@ -134,7 +134,7 @@ $GIT_DEPS = @(
     @{ Name = "Imath";          Url = "https://github.com/AcademySoftwareFoundation/Imath.git";   Tag = "v3.2.3"       }
     @{ Name = "openexr";        Url = "https://github.com/AcademySoftwareFoundation/openexr.git"; Tag = "v3.5.3"       }
     @{ Name = "libavif";        Url = "https://github.com/AOMediaCodec/libavif.git";              Tag = "v1.4.2";     Recursive = $true }
-    @{ Name = "libjxl";         Url = "https://github.com/libjxl/libjxl.git";                     Tag = "v0.12.0";    Recursive = $true }
+    @{ Name = "libjxl";         Url = "https://github.com/libjxl/libjxl.git";                     Tag = "v0.13.0";    Recursive = $true }
     @{ Name = "jxrlib";         Url = "https://github.com/4creators/jxrlib.git";                   Tag = "v2019.10.9"   }
     @{ Name = "LibRaw";         Url = "https://github.com/LibRaw/LibRaw.git";                      Tag = "0.22.3"       }
     @{ Name = "ffmpeg";         Url = "https://github.com/FFmpeg/FFmpeg.git";                      Tag = "n9.0.2"       }

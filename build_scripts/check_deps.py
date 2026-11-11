@@ -42,7 +42,7 @@ DEFAULT_DEPS = [
     {"name": "Imath", "url": "https://github.com/AcademySoftwareFoundation/Imath.git", "current": "v3.2.3", "patched": False},
     {"name": "openexr", "url": "https://github.com/AcademySoftwareFoundation/openexr.git", "current": "v3.5.3", "patched": False},
     {"name": "libavif", "url": "https://github.com/AOMediaCodec/libavif.git", "current": "v1.4.2", "patched": False},
-    {"name": "libjxl", "url": "https://github.com/libjxl/libjxl.git", "current": "v0.12.0", "patched": False},
+    {"name": "libjxl", "url": "https://github.com/libjxl/libjxl.git", "current": "v0.13.0", "patched": False},
     {"name": "jxrlib", "url": "https://github.com/4creators/jxrlib.git", "current": "v2019.10.9", "patched": True},
     {"name": "LibRaw", "url": "https://github.com/LibRaw/LibRaw.git", "current": "0.22.3", "patched": True},
     {"name": "ffmpeg", "url": "https://git.ffmpeg.org/ffmpeg.git", "current": "n9.0.2", "patched": False},
