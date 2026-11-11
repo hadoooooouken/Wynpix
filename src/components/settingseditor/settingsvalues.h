@@ -29,15 +29,6 @@ struct GeneralSettings {
     Q_PROPERTY(bool smoothScroll MEMBER smoothScroll FINAL)
     Q_PROPERTY(bool autoResizeWindow MEMBER autoResizeWindow FINAL)
     Q_PROPERTY(int autoResizeLimitStep MEMBER autoResizeLimitStep FINAL)
-    Q_PROPERTY(bool panelEnabled MEMBER panelEnabled FINAL)
-    Q_PROPERTY(bool panelPinned MEMBER panelPinned FINAL)
-    Q_PROPERTY(bool panelFullscreenOnly MEMBER panelFullscreenOnly FINAL)
-    Q_PROPERTY(bool panelCenterSelection MEMBER panelCenterSelection FINAL)
-    Q_PROPERTY(bool showSubfoldersInPanel MEMBER showSubfoldersInPanel FINAL)
-    Q_PROPERTY(int panelHideDelayMs MEMBER panelHideDelayMs FINAL)
-    Q_PROPERTY(int thumbPanelStyle MEMBER thumbPanelStyle FINAL)
-    Q_PROPERTY(int panelSizeStep MEMBER panelSizeStep FINAL)
-    Q_PROPERTY(int panelPosition MEMBER panelPosition FINAL)
     Q_PROPERTY(int sortingMode MEMBER sortingMode FINAL)
     Q_PROPERTY(bool sortFolders MEMBER sortFolders FINAL)
     Q_PROPERTY(bool showHiddenFiles MEMBER showHiddenFiles FINAL)
@@ -54,15 +45,6 @@ public:
     bool smoothScroll = false;
     bool autoResizeWindow = false;
     int autoResizeLimitStep = 0; // SettingsScales::autoResizeLimit*
-    bool panelEnabled = false;
-    bool panelPinned = false;
-    bool panelFullscreenOnly = false;
-    bool panelCenterSelection = false;
-    bool showSubfoldersInPanel = false;
-    int panelHideDelayMs = 0;
-    int thumbPanelStyle = 0;     // ThumbPanelStyle
-    int panelSizeStep = 0;       // SettingsScales::panelSize*
-    int panelPosition = 0;       // PanelPosition
     int sortingMode = 0;         // SortingMode
     bool sortFolders = false;
     bool showHiddenFiles = false;
@@ -92,6 +74,15 @@ struct ViewSettings {
     Q_PROPERTY(bool useFixedZoomLevels MEMBER useFixedZoomLevels FINAL)
     Q_PROPERTY(QString zoomLevels MEMBER zoomLevels FINAL)
     Q_PROPERTY(int folderEndAction MEMBER folderEndAction FINAL)
+    Q_PROPERTY(bool panelEnabled MEMBER panelEnabled FINAL)
+    Q_PROPERTY(bool panelPinned MEMBER panelPinned FINAL)
+    Q_PROPERTY(bool panelFullscreenOnly MEMBER panelFullscreenOnly FINAL)
+    Q_PROPERTY(bool panelCenterSelection MEMBER panelCenterSelection FINAL)
+    Q_PROPERTY(bool showSubfoldersInPanel MEMBER showSubfoldersInPanel FINAL)
+    Q_PROPERTY(int panelHideDelayMs MEMBER panelHideDelayMs FINAL)
+    Q_PROPERTY(int thumbPanelStyle MEMBER thumbPanelStyle FINAL)
+    Q_PROPERTY(int panelSizeStep MEMBER panelSizeStep FINAL)
+    Q_PROPERTY(int panelPosition MEMBER panelPosition FINAL)
     Q_PROPERTY(int scalingFilter MEMBER scalingFilter FINAL)
     Q_PROPERTY(int casSharpeningPercent MEMBER casSharpeningPercent FINAL)
     Q_PROPERTY(int casContrastPercent MEMBER casContrastPercent FINAL)
@@ -120,6 +111,15 @@ public:
     bool useFixedZoomLevels = false;
     QString zoomLevels;
     int folderEndAction = 0;     // FolderEndAction
+    bool panelEnabled = false;
+    bool panelPinned = false;
+    bool panelFullscreenOnly = false;
+    bool panelCenterSelection = false;
+    bool showSubfoldersInPanel = false;
+    int panelHideDelayMs = 0;
+    int thumbPanelStyle = 0;     // ThumbPanelStyle
+    int panelSizeStep = 0;       // SettingsScales::panelSize*
+    int panelPosition = 0;       // PanelPosition
     int scalingFilter = 0;       // ScalingFilter
     int casSharpeningPercent = 0;
     int casContrastPercent = 0;

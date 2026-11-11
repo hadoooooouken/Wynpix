@@ -3372,7 +3372,7 @@ Staged copy:
         <translation>自動リサイズのための画面領域制限:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="132"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="162"/>
         <source>Thumbnail panel</source>
         <translation>サムネイルパネル</translation>
     </message>

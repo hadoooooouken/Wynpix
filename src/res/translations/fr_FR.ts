@@ -3374,7 +3374,7 @@ Copie intermédiaire :
         <translation>Limite de la surface de l&apos;écran pour le redimensionnement automatique :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="132"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="162"/>
         <source>Thumbnail panel</source>
         <translation>Panneau des vignettes</translation>
     </message>

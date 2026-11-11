@@ -38,14 +38,14 @@ SettingsValues validValues() {
     SettingsValues v;
     v.general.language = u"de_DE"_s;
     v.general.autoResizeLimitStep = 18;
-    v.general.panelEnabled = true;
-    v.general.panelHideDelayMs = 600;
-    v.general.thumbPanelStyle = TH_PANEL_EXTENDED;
-    v.general.panelSizeStep = 20;
-    v.general.panelPosition = PANEL_BOTTOM;
     v.general.sortingMode = SORT_TIME_DESC;
     v.general.slideshowIntervalMs = 3000;
     v.view.folderEndAction = FOLDER_END_LOOP;
+    v.view.panelEnabled = true;
+    v.view.panelHideDelayMs = 600;
+    v.view.thumbPanelStyle = TH_PANEL_EXTENDED;
+    v.view.panelSizeStep = 20;
+    v.view.panelPosition = PANEL_BOTTOM;
     v.view.imageFitMode = FIT_WIDTH;
     v.view.zoomIndicatorMode = INDICATOR_AUTO;
     v.view.focusPoint = FOCUS_CENTER;
@@ -201,14 +201,14 @@ private slots:
     void loadLimitsValuesToTheirRanges() {
         EditorFixture f;
         f.values.stored.advanced.thumbnailResolution = 250;
-        f.values.stored.general.panelHideDelayMs = 2600;
+        f.values.stored.view.panelHideDelayMs = 2600;
         f.values.stored.upscale.limitPercent = 402;
         f.values.stored.view.zoomStepPercent = 0;
         f.values.stored.advanced.memoryLimitMB = 100;
         SettingsEditorModel editor(f.values, f.shortcuts);
         editor.load();
         QCOMPARE(editor.advanced().thumbnailResolution, 256);
-        QCOMPARE(editor.general().panelHideDelayMs, SettingsScales::kMaxPanelHideDelayMs);
+        QCOMPARE(editor.view().panelHideDelayMs, SettingsScales::kMaxPanelHideDelayMs);
         QCOMPARE(editor.upscale().limitPercent, SettingsScales::kMaxUpscaylLimitPercent);
         QCOMPARE(editor.view().zoomStepPercent, SettingsScales::kMinZoomStepPercent);
         QCOMPARE(editor.advanced().memoryLimitMB, SettingsScales::kMinMemoryLimitMB);

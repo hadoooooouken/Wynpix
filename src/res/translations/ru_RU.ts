@@ -3376,7 +3376,7 @@ Staged copy:
         <translation>Лимит размера экрана для авторазмера:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="132"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="162"/>
         <source>Thumbnail panel</source>
         <translation>Панель миниатюр</translation>
     </message>

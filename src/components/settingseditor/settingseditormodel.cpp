@@ -353,10 +353,10 @@ void SettingsEditorModel::normalize(SettingsValues &values) const {
     const SettingsRanges r = SettingsScales::ranges();
     GeneralSettings &general = values.general;
     general.autoResizeLimitStep = bounded(general.autoResizeLimitStep, r.autoResizeLimit);
-    general.panelHideDelayMs = boundedSnapped(general.panelHideDelayMs, r.panelHideDelay);
-    general.panelSizeStep = bounded(general.panelSizeStep, r.panelSize);
     general.slideshowIntervalMs = bounded(general.slideshowIntervalMs, r.slideshowInterval);
     ViewSettings &view = values.view;
+    view.panelHideDelayMs = boundedSnapped(view.panelHideDelayMs, r.panelHideDelay);
+    view.panelSizeStep = bounded(view.panelSizeStep, r.panelSize);
     view.expandLimit = bounded(view.expandLimit, r.expandLimit);
     view.zoomStepPercent = bounded(view.zoomStepPercent, r.zoomStep);
     view.casSharpeningPercent = bounded(view.casSharpeningPercent, r.casSharpening);

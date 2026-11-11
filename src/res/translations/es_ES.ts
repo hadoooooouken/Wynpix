@@ -3374,7 +3374,7 @@ Copia provisional:
         <translation>límite de pantalla para auto dimensionado:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="132"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="162"/>
         <source>Thumbnail panel</source>
         <translation>Panel de miniaturas</translation>
     </message>

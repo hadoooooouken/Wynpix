@@ -1,16 +1,18 @@
 import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Layouts
+import wynpix.bridges
 import wynpix.style
 
-// Settings page "Viewer": fit and focus, zoom, the scaling filter, colour
-// management and HDR tone mapping.
+// Settings page "Viewer": fit and focus, zoom, navigation, overlays,
+// thumbnail panel, the scaling filter, colour management and HDR tone mapping.
 SettingsPage {
     id: root
 
     required property SettingsEditorModel editor
 
     readonly property int zoomLevelsWidth: 380
+    readonly property int sliderLabelWidth: 200
 
     title: qsTranslate("SettingsDialog", "Viewer")
 
@@ -152,6 +154,82 @@ SettingsPage {
             text: qsTranslate("SettingsDialog", "Auto-hide cursor")
             checked: root.editor.view.cursorAutohide
             onToggled: root.editor.view.cursorAutohide = checked
+        }
+    }
+
+    SettingsSection {
+        CheckBox {
+            text: qsTranslate("SettingsDialog", "Thumbnail panel")
+            font: Theme.fonts.bodyStrong
+            checked: root.editor.view.panelEnabled
+            onToggled: root.editor.view.panelEnabled = checked
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: StyleConstants.dialogSpacing
+            enabled: root.editor.view.panelEnabled
+
+            GridLayout {
+                columns: 2
+                columnSpacing: StyleConstants.dialogSpacing
+
+                CheckBox {
+                    text: qsTranslate("SettingsDialog", "Pinned")
+                    checked: root.editor.view.panelPinned
+                    onToggled: root.editor.view.panelPinned = checked
+                }
+                CheckBox {
+                    text: qsTranslate("SettingsDialog", "Disable in windowed mode")
+                    checked: root.editor.view.panelFullscreenOnly
+                    onToggled: root.editor.view.panelFullscreenOnly = checked
+                }
+                CheckBox {
+                    text: qsTranslate("SettingsDialog", "Center selected image")
+                    checked: root.editor.view.panelCenterSelection
+                    onToggled: root.editor.view.panelCenterSelection = checked
+                }
+                CheckBox {
+                    text: qsTranslate("SettingsDialog", "Show subfolders")
+                    checked: root.editor.view.showSubfoldersInPanel
+                    onToggled: root.editor.view.showSubfoldersInPanel = checked
+                }
+            }
+            SettingsSliderRow {
+                label: qsTranslate("SettingsDialog", "Hide delay:")
+                labelWidth: root.sliderLabelWidth
+                range: root.editor.ranges.panelHideDelay
+                value: root.editor.view.panelHideDelayMs
+                valueText: root.editor.panelHideDelayText(value)
+                onMoved: value => root.editor.view.panelHideDelayMs = value
+            }
+            SettingsRadioRow {
+                label: qsTranslate("SettingsDialog", "Display style:")
+                vertical: true
+                options: root.editor.thumbPanelStyles
+                value: root.editor.view.thumbPanelStyle
+                onPicked: value => root.editor.view.thumbPanelStyle = value
+            }
+            SettingsSliderRow {
+                label: qsTranslate("SettingsDialog", "Preview size:")
+                labelWidth: root.sliderLabelWidth
+                range: root.editor.ranges.panelSize
+                value: root.editor.view.panelSizeStep
+                onMoved: value => root.editor.view.panelSizeStep = value
+            }
+            RowLayout {
+                spacing: StyleConstants.dialogSpacing
+
+                Label {
+                    Layout.preferredWidth: root.sliderLabelWidth
+                    text: qsTranslate("SettingsDialog", "Position:")
+                }
+                SettingsComboBox {
+                    options: root.editor.panelPositions
+                    value: root.editor.view.panelPosition
+                    onPicked: value => root.editor.view.panelPosition = value
+                }
+            }
         }
     }
 
