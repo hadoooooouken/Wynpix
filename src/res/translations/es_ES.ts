@@ -3132,8 +3132,8 @@ Copia provisional:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
-        <translation>Ver</translation>
+        <source>Viewer</source>
+        <translation>Visor</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="46"/>
@@ -3675,8 +3675,8 @@ Informa de errores / solicita funciones [aquí](https://github.com/hadoooooouken
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
-        <translation>Ver</translation>
+        <source>Viewer</source>
+        <translation>Visor</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>

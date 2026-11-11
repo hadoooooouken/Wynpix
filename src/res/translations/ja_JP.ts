@@ -3130,8 +3130,8 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
-        <translation>表示</translation>
+        <source>Viewer</source>
+        <translation>ビューア</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="46"/>
@@ -3673,8 +3673,8 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
-        <translation>表示</translation>
+        <source>Viewer</source>
+        <translation>ビューア</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>

@@ -42,7 +42,7 @@ Window {
     // of the widget dialog.
     readonly property list<var> pages: [
         {title: qsTranslate("SSideBar", "General"), icon: FluentIcons.Settings32},
-        {title: qsTranslate("SSideBar", "View"), icon: FluentIcons.Eye32},
+        {title: qsTranslate("SSideBar", "Viewer"), icon: FluentIcons.Eye32},
         {title: qsTranslate("SSideBar", "Theme"), icon: FluentIcons.ColorFill32},
         {title: qsTranslate("SSideBar", "Controls"), icon: FluentIcons.Controls32},
         {title: qsTranslate("SSideBar", "Scripts"), icon: FluentIcons.Scripts32},

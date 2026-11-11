@@ -3134,8 +3134,8 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
-        <translation>Просмотр</translation>
+        <source>Viewer</source>
+        <translation>Просмотрщик</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="46"/>
@@ -3568,8 +3568,8 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
-        <translation>Просмотр</translation>
+        <source>Viewer</source>
+        <translation>Просмотрщик</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>

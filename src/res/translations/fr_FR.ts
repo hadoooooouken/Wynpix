@@ -3132,8 +3132,8 @@ Copie intermédiaire :
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
-        <translation>Affichage</translation>
+        <source>Viewer</source>
+        <translation>Visionneuse</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="46"/>
@@ -3680,8 +3680,8 @@ Signalez les problèmes / proposez des fonctionnalités [ici](https://github.com
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
-        <translation>Affichage</translation>
+        <source>Viewer</source>
+        <translation>Visionneuse</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>

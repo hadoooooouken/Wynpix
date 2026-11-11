@@ -3130,8 +3130,8 @@ Ara kopya:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
-        <translation>Görünüm</translation>
+        <source>Viewer</source>
+        <translation>Görüntüleyici</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="46"/>
@@ -3673,8 +3673,8 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
-        <translation>Görünüm</translation>
+        <source>Viewer</source>
+        <translation>Görüntüleyici</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>

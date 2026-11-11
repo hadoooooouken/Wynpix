@@ -3112,7 +3112,7 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
+        <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3801,7 +3801,7 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
+        <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

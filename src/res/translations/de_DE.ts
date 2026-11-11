@@ -3133,8 +3133,8 @@ Zwischenkopie:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="45"/>
-        <source>View</source>
-        <translation>Ansicht</translation>
+        <source>Viewer</source>
+        <translation>Betrachter</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsDialog.qml" line="46"/>
@@ -3661,8 +3661,8 @@ Probleme melden / Funktionen anfragen [hier](https://github.com/hadoooooouken/wy
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
-        <source>View</source>
-        <translation>Ansicht</translation>
+        <source>Viewer</source>
+        <translation>Betrachter</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>

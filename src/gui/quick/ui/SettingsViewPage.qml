@@ -3,7 +3,7 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import wynpix.style
 
-// Settings page "View": fit and focus, zoom, the scaling filter, colour
+// Settings page "Viewer": fit and focus, zoom, the scaling filter, colour
 // management and HDR tone mapping.
 SettingsPage {
     id: root
@@ -12,7 +12,7 @@ SettingsPage {
 
     readonly property int zoomLevelsWidth: 380
 
-    title: qsTranslate("SettingsDialog", "View")
+    title: qsTranslate("SettingsDialog", "Viewer")
 
     SettingsSection {
         title: qsTranslate("SettingsDialog", "Display options")
