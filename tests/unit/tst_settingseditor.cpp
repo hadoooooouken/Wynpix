@@ -43,9 +43,9 @@ SettingsValues validValues() {
     v.general.thumbPanelStyle = TH_PANEL_EXTENDED;
     v.general.panelSizeStep = 20;
     v.general.panelPosition = PANEL_BOTTOM;
-    v.general.folderEndAction = FOLDER_END_LOOP;
     v.general.sortingMode = SORT_TIME_DESC;
     v.general.slideshowIntervalMs = 3000;
+    v.view.folderEndAction = FOLDER_END_LOOP;
     v.view.imageFitMode = FIT_WIDTH;
     v.view.zoomIndicatorMode = INDICATOR_AUTO;
     v.view.focusPoint = FOCUS_CENTER;

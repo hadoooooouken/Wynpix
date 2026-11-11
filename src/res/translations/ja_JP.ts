@@ -3494,9 +3494,9 @@ Staged copy:
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>フォルダーナビゲーション</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>ファイルとフォルダー</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="83"/>
@@ -3514,7 +3514,7 @@ Staged copy:
         <translation>次のフォルダーへ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>最後の画像に達した後:</translation>
     </message>
@@ -3738,6 +3738,11 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>ナビゲーション</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>オーバーレイ</translation>
     </message>

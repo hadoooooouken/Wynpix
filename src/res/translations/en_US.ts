@@ -3636,8 +3636,8 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3656,7 +3656,7 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3866,6 +3866,11 @@ Report any issues / request features [here](https://github.com/hadoooooouken/wyn
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation type="unfinished"></translation>
     </message>

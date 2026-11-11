@@ -119,6 +119,18 @@ SettingsPage {
     }
 
     SettingsSection {
+        title: qsTranslate("SettingsDialog", "Navigation")
+
+        SettingsRadioRow {
+            label: qsTranslate("SettingsDialog", "After reaching the end:")
+            vertical: true
+            options: root.editor.folderEndActions
+            value: root.editor.view.folderEndAction
+            onPicked: value => root.editor.view.folderEndAction = value
+        }
+    }
+
+    SettingsSection {
         title: qsTranslate("SettingsDialog", "Overlays")
 
         CheckBox {

@@ -173,15 +173,8 @@ SettingsPage {
     }
 
     SettingsSection {
-        title: qsTranslate("SettingsDialog", "Folder navigation")
+        title: qsTranslate("SettingsDialog", "Files & folders")
 
-        SettingsRadioRow {
-            label: qsTranslate("SettingsDialog", "After reaching the end:")
-            vertical: true
-            options: root.editor.folderEndActions
-            value: root.editor.general.folderEndAction
-            onPicked: value => root.editor.general.folderEndAction = value
-        }
         RowLayout {
             spacing: StyleConstants.dialogSpacing
 

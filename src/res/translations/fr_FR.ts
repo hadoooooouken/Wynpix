@@ -3496,9 +3496,9 @@ Copie intermédiaire :
         <translation>Droite</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>Navigation dans les dossiers</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>Fichiers et dossiers</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="83"/>
@@ -3516,7 +3516,7 @@ Copie intermédiaire :
         <translation>Aller au dossier suivant</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>Après avoir atteint la fin :</translation>
     </message>
@@ -3745,6 +3745,11 @@ Signalez les problèmes / proposez des fonctionnalités [ici](https://github.com
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>Navigation</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>Superpositions</translation>
     </message>

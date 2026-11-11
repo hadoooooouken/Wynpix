@@ -3434,9 +3434,9 @@ Staged copy:
         <translation>扩展</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>文件夹导航</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>文件和文件夹</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="91"/>
@@ -3585,7 +3585,7 @@ Staged copy:
         <translation>显示文件名和分辨率</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>到达末尾后：</translation>
     </message>
@@ -3731,6 +3731,11 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>导航</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>叠加层</translation>
     </message>

@@ -3494,9 +3494,9 @@ Ara kopya:
         <translation>Sağda</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>Klasörde gezinme</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>Dosyalar ve klasörler</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="83"/>
@@ -3514,7 +3514,7 @@ Ara kopya:
         <translation>Sonraki klasöre git</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>Sonuna ulaştıktan sonra:</translation>
     </message>
@@ -3738,6 +3738,11 @@ Sorunları bildirin / özellik talep edin [buradan](https://github.com/hadoooooo
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>Gezinme</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>Bindirmeler</translation>
     </message>

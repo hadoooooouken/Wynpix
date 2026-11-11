@@ -3477,9 +3477,9 @@ Staged copy:
         <translation>Справа</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>Навигация по папкам</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>Файлы и папки</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="83"/>
@@ -3497,7 +3497,7 @@ Staged copy:
         <translation>Перейти к следующей папке</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>После достижения конца:</translation>
     </message>
@@ -3633,6 +3633,11 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>Навигация</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>Оверлеи</translation>
     </message>

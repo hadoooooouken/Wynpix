@@ -3497,9 +3497,9 @@ Zwischenkopie:
         <translation>Rechts</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>Ordnernavigation</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>Dateien &amp; Ordner</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="83"/>
@@ -3517,7 +3517,7 @@ Zwischenkopie:
         <translation>Zum nächsten Ordner wechseln</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>Nach Erreichen des Endes:</translation>
     </message>
@@ -3726,6 +3726,11 @@ Probleme melden / Funktionen anfragen [hier](https://github.com/hadoooooouken/wy
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>Navigation</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>Overlays</translation>
     </message>

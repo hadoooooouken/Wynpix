@@ -69,7 +69,6 @@ SettingsValues SettingsValueMapping::load() const {
     general.thumbPanelStyle = s.thumbPanelStyle();
     general.panelSizeStep = panelSizeStep(s.panelPreviewsSize());
     general.panelPosition = s.panelPosition();
-    general.folderEndAction = s.folderEndAction();
     general.sortingMode = s.sortingMode();
     general.sortFolders = s.sortFolders();
     general.showHiddenFiles = s.showHiddenFiles();
@@ -93,6 +92,7 @@ SettingsValues SettingsValueMapping::load() const {
     view.zoomStepPercent = zoomStepPercent(s.zoomStep());
     view.useFixedZoomLevels = s.useFixedZoomLevels();
     view.zoomLevels = s.zoomLevels();
+    view.folderEndAction = s.folderEndAction();
     view.scalingFilter = s.scalingFilter();
     view.casSharpeningPercent = casPercent(s.casSharpening());
     view.casContrastPercent = casPercent(s.casContrast());
@@ -176,7 +176,6 @@ void SettingsValueMapping::storeGeneral(const GeneralSettings &general) {
     s.setThumbPanelStyle(static_cast<ThumbPanelStyle>(general.thumbPanelStyle));
     s.setPanelPreviewsSize(panelSizePixels(general.panelSizeStep));
     s.setPanelPosition(static_cast<PanelPosition>(general.panelPosition));
-    s.setFolderEndAction(static_cast<FolderEndAction>(general.folderEndAction));
     s.setSortingMode(static_cast<SortingMode>(general.sortingMode));
     s.setSortFolders(general.sortFolders);
     s.setShowHiddenFiles(general.showHiddenFiles);
@@ -202,6 +201,7 @@ void SettingsValueMapping::storeView(const ViewSettings &view) {
     s.setZoomStep(zoomStep(view.zoomStepPercent));
     s.setUseFixedZoomLevels(view.useFixedZoomLevels);
     s.setZoomLevels(view.zoomLevels);
+    s.setFolderEndAction(static_cast<FolderEndAction>(view.folderEndAction));
     s.setScalingFilter(static_cast<ScalingFilter>(view.scalingFilter));
     s.setCasSharpening(casValue(view.casSharpeningPercent));
     s.setCasContrast(casValue(view.casContrastPercent));

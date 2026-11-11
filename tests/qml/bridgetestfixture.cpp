@@ -96,9 +96,9 @@ SettingsValues testSettingsValues() {
   v.general.thumbPanelStyle = TH_PANEL_EXTENDED;
   v.general.panelSizeStep = 20;
   v.general.panelPosition = PANEL_BOTTOM;
-  v.general.folderEndAction = FOLDER_END_GOTO_ADJACENT;
   v.general.sortingMode = SORT_NAME;
   v.general.slideshowIntervalMs = 3000;
+  v.view.folderEndAction = FOLDER_END_GOTO_ADJACENT;
   v.view.imageFitMode = FIT_WINDOW;
   v.view.zoomIndicatorMode = INDICATOR_AUTO;
   v.view.focusPoint = FOCUS_CURSOR;

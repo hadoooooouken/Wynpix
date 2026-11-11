@@ -3482,9 +3482,9 @@ Staged copy:
         <translation>Розмір превью:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="207"/>
-        <source>Folder navigation</source>
-        <translation>Навігація по теці</translation>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <source>Files &amp; folders</source>
+        <translation>Файли та папки</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="91"/>
@@ -3613,7 +3613,7 @@ Staged copy:
         <translation>Показати назву та розмір</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
         <source>After reaching the end:</source>
         <translation>При досягненні кінця теки:</translation>
     </message>
@@ -3764,6 +3764,11 @@ Staged copy:
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <source>Navigation</source>
+        <translation>Навігація</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
         <source>Overlays</source>
         <translation>Оверлеї</translation>
     </message>
