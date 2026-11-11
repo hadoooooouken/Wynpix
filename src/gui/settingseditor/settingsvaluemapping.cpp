@@ -57,7 +57,6 @@ SettingsValues SettingsValueMapping::load() const {
     general.startInFolderView = s.defaultViewMode() == MODE_FOLDERVIEW;
     general.standbyMode = s.standbyMode();
     general.rememberLastFolder = s.rememberLastFolder();
-    general.windowTitleExtendedInfo = s.windowTitleExtendedInfo();
     general.smoothScroll = s.enableSmoothScroll();
     general.autoResizeWindow = s.autoResizeWindow();
     general.autoResizeLimitStep = autoResizeLimitStep(s.autoResizeLimit());
@@ -89,6 +88,7 @@ SettingsValues SettingsValueMapping::load() const {
     view.infoBarFullscreen = s.infoBarFullscreen();
     view.showAnimationControls = s.showAnimationControls();
     view.cursorAutohide = s.cursorAutohide();
+    view.windowTitleExtendedInfo = s.windowTitleExtendedInfo();
     view.unlockMinZoom = s.unlockMinZoom();
     view.zoomStepPercent = zoomStepPercent(s.zoomStep());
     view.useFixedZoomLevels = s.useFixedZoomLevels();
@@ -164,7 +164,6 @@ void SettingsValueMapping::storeGeneral(const GeneralSettings &general) {
     s.setDefaultViewMode(general.startInFolderView ? MODE_FOLDERVIEW : MODE_DOCUMENT);
     s.setStandbyMode(general.standbyMode);
     s.setRememberLastFolder(general.rememberLastFolder);
-    s.setWindowTitleExtendedInfo(general.windowTitleExtendedInfo);
     s.setEnableSmoothScroll(general.smoothScroll);
     s.setAutoResizeWindow(general.autoResizeWindow);
     s.setAutoResizeLimit(autoResizeLimitPercent(general.autoResizeLimitStep));
@@ -198,6 +197,7 @@ void SettingsValueMapping::storeView(const ViewSettings &view) {
     s.setInfoBarFullscreen(view.infoBarFullscreen);
     s.setShowAnimationControls(view.showAnimationControls);
     s.setCursorAutohide(view.cursorAutohide);
+    s.setWindowTitleExtendedInfo(view.windowTitleExtendedInfo);
     s.setUnlockMinZoom(view.unlockMinZoom);
     s.setZoomStep(zoomStep(view.zoomStepPercent));
     s.setUseFixedZoomLevels(view.useFixedZoomLevels);

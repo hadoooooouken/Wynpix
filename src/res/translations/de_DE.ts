@@ -3305,9 +3305,9 @@ Zwischenkopie:
         <translation>Benutzeroberfläche</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="67"/>
-        <source>Image info in window title</source>
-        <translation>Bildinformationen im Fenstertitel</translation>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <source>Extended image info in window title</source>
+        <translation>Erweiterte Bildinformationen im Fenstertitel</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>

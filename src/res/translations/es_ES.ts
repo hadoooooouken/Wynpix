@@ -3304,9 +3304,9 @@ Copia provisional:
         <translation>Interfaz de usuario</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="67"/>
-        <source>Image info in window title</source>
-        <translation>Informacion de la imagen en barra de titulos</translation>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <source>Extended image info in window title</source>
+        <translation>Información detallada de la imagen en el título de la ventana</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>

@@ -64,11 +64,6 @@ SettingsPage {
         title: qsTranslate("SettingsDialog", "User interface")
 
         CheckBox {
-            text: qsTranslate("SettingsDialog", "Image info in window title")
-            checked: root.editor.general.windowTitleExtendedInfo
-            onToggled: root.editor.general.windowTitleExtendedInfo = checked
-        }
-        CheckBox {
             id: smoothScrollBox
 
             text: qsTranslate("SettingsDialog", "Smooth thumbnail scrolling")

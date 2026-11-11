@@ -3494,9 +3494,9 @@ Staged copy:
         <translation>毫秒</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="67"/>
-        <source>Image info in window title</source>
-        <translation>窗口标题上显示图像信息</translation>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <source>Extended image info in window title</source>
+        <translation>在窗口标题中显示详细图像信息</translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>

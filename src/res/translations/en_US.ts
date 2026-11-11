@@ -3284,8 +3284,8 @@ Staged copy:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="67"/>
-        <source>Image info in window title</source>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <source>Extended image info in window title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -26,7 +26,6 @@ struct GeneralSettings {
     Q_PROPERTY(bool startInFolderView MEMBER startInFolderView FINAL)
     Q_PROPERTY(bool standbyMode MEMBER standbyMode FINAL)
     Q_PROPERTY(bool rememberLastFolder MEMBER rememberLastFolder FINAL)
-    Q_PROPERTY(bool windowTitleExtendedInfo MEMBER windowTitleExtendedInfo FINAL)
     Q_PROPERTY(bool smoothScroll MEMBER smoothScroll FINAL)
     Q_PROPERTY(bool autoResizeWindow MEMBER autoResizeWindow FINAL)
     Q_PROPERTY(int autoResizeLimitStep MEMBER autoResizeLimitStep FINAL)
@@ -53,7 +52,6 @@ public:
     bool startInFolderView = false;
     bool standbyMode = false;
     bool rememberLastFolder = false;
-    bool windowTitleExtendedInfo = false;
     bool smoothScroll = false;
     bool autoResizeWindow = false;
     int autoResizeLimitStep = 0; // SettingsScales::autoResizeLimit*
@@ -90,6 +88,7 @@ struct ViewSettings {
     Q_PROPERTY(bool infoBarFullscreen MEMBER infoBarFullscreen FINAL)
     Q_PROPERTY(bool showAnimationControls MEMBER showAnimationControls FINAL)
     Q_PROPERTY(bool cursorAutohide MEMBER cursorAutohide FINAL)
+    Q_PROPERTY(bool windowTitleExtendedInfo MEMBER windowTitleExtendedInfo FINAL)
     Q_PROPERTY(bool unlockMinZoom MEMBER unlockMinZoom FINAL)
     Q_PROPERTY(int zoomStepPercent MEMBER zoomStepPercent FINAL)
     Q_PROPERTY(bool useFixedZoomLevels MEMBER useFixedZoomLevels FINAL)
@@ -116,6 +115,7 @@ public:
     bool infoBarFullscreen = false;
     bool showAnimationControls = false;
     bool cursorAutohide = false;
+    bool windowTitleExtendedInfo = false;
     bool unlockMinZoom = false;
     int zoomStepPercent = 0;     // SettingsScales::zoomStep*
     bool useFixedZoomLevels = false;

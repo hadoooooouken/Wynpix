@@ -122,6 +122,11 @@ SettingsPage {
         title: qsTranslate("SettingsDialog", "Overlays")
 
         CheckBox {
+            text: qsTranslate("SettingsDialog", "Extended image info in window title")
+            checked: root.editor.view.windowTitleExtendedInfo
+            onToggled: root.editor.view.windowTitleExtendedInfo = checked
+        }
+        CheckBox {
             text: qsTranslate("SettingsDialog", "Fullscreen info bar")
             checked: root.editor.view.infoBarFullscreen
             onToggled: root.editor.view.infoBarFullscreen = checked
