@@ -3938,6 +3938,11 @@ Example: %1</source>
         <translation>Динамічно вивантажувати елементи з пам&apos;яті</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>Збереження</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>Показати оверлей збереження при редагуванні зображень</translation>

@@ -4018,6 +4018,11 @@ Example: %1</source>
         <translation>メモリを節約するために動的にアイテムをアンロードする</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>保存</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>画像編集中に保存オーバーレイを表示</translation>

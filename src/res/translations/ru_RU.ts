@@ -4039,6 +4039,11 @@ Example: %1</source>
         <translation>Динамически выгружать элементы для экономии памяти</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>Сохранение</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>Показывать оверлей сохранения при изменении картинок</translation>

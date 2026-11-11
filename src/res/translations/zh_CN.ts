@@ -3881,6 +3881,11 @@ Staged copy:
         <translation>卸载屏幕外的缩略图</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>保存</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>在编辑图像时显示保存覆盖</translation>

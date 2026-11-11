@@ -4020,6 +4020,11 @@ Ejemplo: %1</translation>
         <translation>Descargue elementos dinámicamente para ahorrar memoria</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>Guardado</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>Mostrar superposición de guardado al editar imágenes</translation>

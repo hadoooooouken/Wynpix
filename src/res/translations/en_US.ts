@@ -4159,6 +4159,11 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation type="unfinished"></translation>

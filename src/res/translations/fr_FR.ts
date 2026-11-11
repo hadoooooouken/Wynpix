@@ -4018,6 +4018,11 @@ Example: %1</source>
         <translation>« Décharger » dynamiquement les éléments pour économiser de la mémoire</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>Enregistrement</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>Afficher la fenêtre d&apos;enregistrement lors de l&apos;édition d&apos;images</translation>

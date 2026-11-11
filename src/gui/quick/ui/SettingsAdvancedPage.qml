@@ -118,6 +118,8 @@ SettingsPage {
     }
 
     SettingsSection {
+        title: qsTranslate("SettingsDialog", "Saving")
+
         CheckBox {
             text: qsTranslate("SettingsDialog", "Show save overlay when editing images")
             checked: root.editor.advanced.showSaveOverlay

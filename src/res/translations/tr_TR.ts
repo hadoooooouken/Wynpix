@@ -4018,6 +4018,11 @@ Example: %1</source>
         <translation>Bellek tasarrufu için öğeleri dinamik olarak kaldır</translation>
     </message>
     <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <source>Saving</source>
+        <translation>Kaydetme</translation>
+    </message>
+    <message>
         <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
         <source>Show save overlay when editing images</source>
         <translation>Görüntü düzenleme sırasında kaydetme ekranını göster</translation>
