@@ -79,7 +79,7 @@ const float kHalfTurn = 0.5;
 // Loop bound of the anisotropic filter; maxAnisotropy never exceeds it.
 const int kMaxAnisotropyTaps = 16;
 // Mip level bias in levels; negative values pick sharper levels.
-const float kLodBias = -0.5;
+const float kLodBias = -1.0;
 // Smallest minor footprint axis in texels, guards the axis ratio.
 const float kMinFootprint = 1e-6;
 const float kHalf = 0.5;
