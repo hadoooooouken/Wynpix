@@ -12,9 +12,13 @@
 //   sampling uses the mip level of the footprint instead of the smallest one
 //   along that seam.
 // - With trilinear sampling the texture is read with anisotropic filtering:
-//   several taps along the major axis of the footprint, each with the mip
-//   level of the minor axis, so surfaces seen at a grazing angle keep their
-//   detail. The mip level is biased towards the sharper level by kLodBias.
+//   several taps along the major axis of the pixel's footprint ellipse, each
+//   with the mip level of the minor axis, so surfaces seen at a grazing angle
+//   keep their detail. The ellipse axes are the singular vectors of the
+//   screen-to-texture Jacobian, so they stay correct where the two screen
+//   gradients are nearly parallel (near the zenith and the nadir). The mip
+//   level is biased towards the sharper level by kLodBias; the bias changes
+//   the mip level only, not the area the taps cover.
 // - Texels are premultiplied; the colour matrix applies to straight colour
 //   like in image.frag, and the result is blended over the background.
 
@@ -78,7 +82,7 @@ const int kMaxAnisotropyTaps = 16;
 const float kLodBias = -0.5;
 // Smallest minor footprint axis in texels, guards the axis ratio.
 const float kMinFootprint = 1e-6;
-const float kHalfTap = 0.5;
+const float kHalf = 0.5;
 
 // Mirror of applyColorAdjustmentVibrance() in utils/coloradjustments.h.
 vec3 applyVibrance(vec3 color, float amount)
@@ -110,32 +114,49 @@ vec4 sampleFootprint(vec2 tc, vec2 gradX, vec2 gradY)
     if (maxAnisotropy <= 1.0)
         return textureGrad(imageTexture, tc, gradX, gradY);
 
-    // Scaling the gradients by 2^bias shifts the selected mip level by bias.
-    float lodScale = exp2(kLodBias);
-    gradX *= lodScale;
-    gradY *= lodScale;
-
+    // The pixel's footprint is the ellipse that the screen-to-texture
+    // Jacobian J = [gradX gradY] (in texels) makes of a unit circle. Its
+    // axes are the singular values and left singular vectors of J, which
+    // are the eigen-decomposition of the symmetric matrix M = J * J^T.
     vec2 texSize = vec2(textureSize(imageTexture, 0));
-    float lenX = length(gradX * texSize);
-    float lenY = length(gradY * texSize);
-    bool xIsMajor = lenX >= lenY;
-    vec2 majorGrad = xIsMajor ? gradX : gradY;
-    vec2 minorGrad = xIsMajor ? gradY : gradX;
-    float minorLen = max(min(lenX, lenY), kMinFootprint);
-    float ratio = clamp(max(lenX, lenY) / minorLen, 1.0, maxAnisotropy);
-    int taps = min(int(ceil(ratio)), kMaxAnisotropyTaps);
+    vec2 texelX = gradX * texSize;
+    vec2 texelY = gradY * texSize;
+    float mxx = dot(vec2(texelX.x, texelY.x), vec2(texelX.x, texelY.x));
+    float myy = dot(vec2(texelX.y, texelY.y), vec2(texelX.y, texelY.y));
+    float mxy = texelX.x * texelX.y + texelY.x * texelY.y;
+    float mean = (mxx + myy) * kHalf;
+    float spread = sqrt((mxx - myy) * (mxx - myy) * kHalf * kHalf + mxy * mxy);
+    float majorLen = sqrt(mean + spread);
+    float minorLen = max(sqrt(max(mean - spread, 0.0)), kMinFootprint);
+    // Direction of the major axis; a round footprint has no preferred one.
+    float angle = spread > 0.0 ? kHalf * atan(2.0 * mxy, mxx - myy) : 0.0;
+    vec2 majorDir = vec2(cos(angle), sin(angle));
+    vec2 minorDir = vec2(-majorDir.y, majorDir.x);
 
-    vec2 tapGrad = majorGrad / float(taps);
+    // Axes as texture coordinate offsets, spanning the whole footprint.
+    vec2 majorGrad = majorDir * majorLen / texSize;
+    vec2 minorGrad = minorDir * minorLen / texSize;
+    float ratio = clamp(majorLen / minorLen, 1.0, maxAnisotropy);
+    int taps = min(int(ceil(ratio)), kMaxAnisotropyTaps);
+    float invTaps = 1.0 / float(taps);
+
+    // Each tap covers 1 / taps of the major axis. Scaling the gradients by
+    // 2^bias shifts the selected mip level by bias without moving the taps.
+    float lodScale = exp2(kLodBias);
+    vec2 tapGrad = majorGrad * invTaps;
+    vec2 mipTapGrad = tapGrad * lodScale;
+    vec2 mipMinorGrad = minorGrad * lodScale;
+
+    // Tap centres are spread evenly over the major axis around tc.
+    vec2 tapTc = tc - majorGrad * (kHalf - kHalf * invTaps);
     vec4 sum = vec4(0.0);
     for (int i = 0; i < kMaxAnisotropyTaps; ++i) {
         if (i >= taps)
             break;
-        // Tap centres are spread evenly over the major axis around tc.
-        float offset = (float(i) + kHalfTap) / float(taps) - kHalfTap;
-        sum += textureGrad(imageTexture, tc + majorGrad * offset, tapGrad,
-                           minorGrad);
+        sum += textureGrad(imageTexture, tapTc, mipTapGrad, mipMinorGrad);
+        tapTc += tapGrad;
     }
-    return sum / float(taps);
+    return sum * invTaps;
 }
 
 void main()
