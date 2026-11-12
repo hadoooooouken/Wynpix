@@ -200,6 +200,14 @@ function Get-VsInstallPath {
 }
 
 function Import-VcVars {
+    $cl = Get-Command cl.exe -ErrorAction SilentlyContinue
+    if ($cl -and $env:INCLUDE -and $env:LIB) {
+        $env:PATH = ($env:PATH -split ';' | Where-Object { $_ -ne "" } | Select-Object -Unique) -join ';'
+        return
+    }
+
+    $env:PATH = ($env:PATH -split ';' | Where-Object { $_ -ne "" } | Select-Object -Unique) -join ';'
+
     $vcvars = Join-Path (Get-VsInstallPath) "VC\Auxiliary\Build\vcvarsall.bat"
     if (-not (Test-Path -LiteralPath $vcvars -PathType Leaf)) {
         throw "Could not locate vcvarsall.bat at $vcvars"
@@ -211,7 +219,12 @@ function Import-VcVars {
     }
     foreach ($line in $environment) {
         if ($line -match "^(.*?)=(.*)$") {
-            [Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+            $varName = $matches[1]
+            $varVal  = $matches[2]
+            if ($varName -ieq "PATH") {
+                $varVal = ($varVal -split ';' | Where-Object { $_ -ne "" } | Select-Object -Unique) -join ';'
+            }
+            [Environment]::SetEnvironmentVariable($varName, $varVal)
         }
     }
 

@@ -48,6 +48,18 @@ $BUILD_NAME   = Get-IsaFolderName -BaseName "build" -Isa $Isa
 # from this script (cmake -> MSBuild -> custom build steps -> meson -> ninja).
 
 function Import-VcVars {
+    # If MSVC environment is already loaded in this session, do not re-run vcvarsall.
+    # Repeated invocations append duplicate paths and overflow cmd.exe's 8191-character limit.
+    $cl = Get-Command cl.exe -ErrorAction SilentlyContinue
+    if ($cl -and $env:INCLUDE -and $env:LIB) {
+        Write-Info "Visual Studio environment already active ($($cl.Source))"
+        $env:PATH = ($env:PATH -split ';' | Where-Object { $_ -ne "" } | Select-Object -Unique) -join ';'
+        return
+    }
+
+    # Deduplicate PATH before invoking vcvarsall to prevent buffer overflow in cmd.exe
+    $env:PATH = ($env:PATH -split ';' | Where-Object { $_ -ne "" } | Select-Object -Unique) -join ';'
+
     Write-Info "Locating Visual Studio vcvarsall.bat..."
     $vswhere = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
     if (-not (Test-Path $vswhere)) {
@@ -72,11 +84,16 @@ function Import-VcVars {
 
     foreach ($line in $envDump) {
         if ($line -match "^(.*?)=(.*)$") {
-            [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
+            $varName = $matches[1]
+            $varVal  = $matches[2]
+            if ($varName -ieq "PATH") {
+                $varVal = ($varVal -split ';' | Where-Object { $_ -ne "" } | Select-Object -Unique) -join ';'
+            }
+            [System.Environment]::SetEnvironmentVariable($varName, $varVal)
         }
     }
 
-    $cl = Get-Command cl -ErrorAction SilentlyContinue
+    $cl = Get-Command cl.exe -ErrorAction SilentlyContinue
     if (-not $cl) {
         throw "vcvarsall.bat ran but cl.exe is still not on PATH."
     }
@@ -335,47 +352,44 @@ $ALL_LIBS = [ordered]@{
     }
 
     "LibRaw" = {
-        Write-Info "Locating Visual Studio vcvarsall.bat..."
-        $vsInstallPath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
-        if (-not $vsInstallPath -or -not (Test-Path "$vsInstallPath\VC\Auxiliary\Build\vcvarsall.bat")) {
-            throw "Could not locate vcvarsall.bat. Please ensure Visual Studio is installed."
-        }
-        $vcvars = "$vsInstallPath\VC\Auxiliary\Build\vcvarsall.bat"
-        Write-Info "Using $vcvars"
-
         $librawDir = "$ROOT\LibRaw"
         # nmake builds in-tree (obj\, lib\, bin\), so every run starts with a
         # clean and only the per-ISA copy below keeps the results apart.
         $destDir = "$librawDir\buildfiles\$(Get-IsaFolderName -BaseName "release-x86_64" -Isa $Isa)"
 
-        # Run nmake inside cmd with vcvarsall.bat environment loaded
-        Write-Info "Cleaning LibRaw..."
-        cmd.exe /c "call `"$vcvars`" x64 && cd /d `"$librawDir`" && nmake /f Makefile.msvc clean"
-        if ($LASTEXITCODE -ne 0) {
-            throw "LibRaw clean failed (exit code $LASTEXITCODE)"
-        }
+        Push-Location $librawDir
+        try {
+            Write-Info "Cleaning LibRaw..."
+            cmd.exe /c "nmake /f Makefile.msvc clean"
+            if ($LASTEXITCODE -ne 0) {
+                throw "LibRaw clean failed (exit code $LASTEXITCODE)"
+            }
 
-        Write-Info "Building LibRaw with $Isa, LTCG, OpenMP and hardening flags"
-        $policy = Get-MsvcPolicy
-        $librawCopt = "$($policy.release_baseline) /GL /openmp $(Get-MsvcPolicyCompileFlags $Isa)"
-        $librawLdflags = "/LTCG $($policy.link)"
-        cmd.exe /c "call `"$vcvars`" x64 && cd /d `"$librawDir`" && nmake /f Makefile.msvc COPT_OPT=`"$librawCopt`" CFLAGS=`"-DUSE_OPENMP`" LDFLAGS=`"$librawLdflags`""
-        if ($LASTEXITCODE -ne 0) {
-            throw "LibRaw build failed (exit code $LASTEXITCODE)"
-        }
+            Write-Info "Building LibRaw with $Isa, LTCG, OpenMP and hardening flags"
+            $policy = Get-MsvcPolicy
+            $librawCopt = "$($policy.release_baseline) /GL /openmp $(Get-MsvcPolicyCompileFlags $Isa)"
+            $librawLdflags = "/LTCG $($policy.link)"
+            cmd.exe /c "nmake /f Makefile.msvc COPT_OPT=`"$librawCopt`" CFLAGS=`"-DUSE_OPENMP`" LDFLAGS=`"$librawLdflags`""
+            if ($LASTEXITCODE -ne 0) {
+                throw "LibRaw build failed (exit code $LASTEXITCODE)"
+            }
 
-        # Copy the outputs to the buildfiles/release-x86_64<suffix> directory
-        # that kimg_raw and wynpixshellex link against
-        Write-Info "Deploying LibRaw binaries..."
-        if (-not (Test-Path $destDir)) {
-            New-Item -ItemType Directory -Path $destDir -Force | Out-Null
-        }
-        Copy-Item "$librawDir\bin\libraw.dll" "$destDir\" -Force
-        Copy-Item "$librawDir\lib\libraw.lib" "$destDir\" -Force
-        Copy-Item "$librawDir\lib\libraw.exp" "$destDir\" -Force
-        Copy-Item "$librawDir\lib\libraw_static.lib" "$destDir\" -Force
+            # Copy the outputs to the buildfiles/release-x86_64<suffix> directory
+            # that kimg_raw and wynpixshellex link against
+            Write-Info "Deploying LibRaw binaries..."
+            if (-not (Test-Path $destDir)) {
+                New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+            }
+            Copy-Item "$librawDir\bin\libraw.dll" "$destDir\" -Force
+            Copy-Item "$librawDir\lib\libraw.lib" "$destDir\" -Force
+            Copy-Item "$librawDir\lib\libraw.exp" "$destDir\" -Force
+            Copy-Item "$librawDir\lib\libraw_static.lib" "$destDir\" -Force
 
-        Write-OK "LibRaw compiled and deployed successfully."
+            Write-OK "LibRaw compiled and deployed successfully."
+        }
+        finally {
+            Pop-Location
+        }
     }
 }
 
