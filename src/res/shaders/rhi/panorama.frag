@@ -11,6 +11,10 @@
 //   corrected for the wrap at the panorama's back seam, so trilinear
 //   sampling uses the mip level of the footprint instead of the smallest one
 //   along that seam.
+// - With trilinear sampling the texture is read with anisotropic filtering:
+//   several taps along the major axis of the footprint, each with the mip
+//   level of the minor axis, so surfaces seen at a grazing angle keep their
+//   detail. The mip level is biased towards the sharper level by kLodBias.
 // - Texels are premultiplied; the colour matrix applies to straight colour
 //   like in image.frag, and the result is blended over the background.
 
@@ -45,6 +49,9 @@ layout(std140, binding = 0) uniform PanoramaParams {
     int wrapsHorizontally;
     // Vibrance in [-1, 1] applied after the colour matrix.
     float vibrance;
+    // Taps along the footprint's major axis at most; 1 samples once (nearest
+    // sampling). Padded to 16 bytes by std140.
+    float maxAnisotropy;
 };
 
 layout(binding = 1) uniform sampler2D imageTexture;
@@ -65,6 +72,13 @@ const float kVibranceMinPeak = 1e-4;
 // Longitude differences of neighbouring pixels larger than half the image
 // width are the wrap at the seam, not a footprint.
 const float kHalfTurn = 0.5;
+// Loop bound of the anisotropic filter; maxAnisotropy never exceeds it.
+const int kMaxAnisotropyTaps = 16;
+// Mip level bias in levels; negative values pick sharper levels.
+const float kLodBias = -0.5;
+// Smallest minor footprint axis in texels, guards the axis ratio.
+const float kMinFootprint = 1e-6;
+const float kHalfTap = 0.5;
 
 // Mirror of applyColorAdjustmentVibrance() in utils/coloradjustments.h.
 vec3 applyVibrance(vec3 color, float amount)
@@ -84,6 +98,44 @@ vec3 applyVibrance(vec3 color, float amount)
     float weight = kVibranceNegBase + kVibranceNegSlope * chroma;
     float factor = max(0.0, 1.0 + amount * weight);
     return clamp(vec3(luma) + (color - vec3(luma)) * factor, 0.0, 1.0);
+}
+
+// Reads the texture with the footprint given by the gradients in texture
+// coordinates. With maxAnisotropy > 1 the footprint is covered by several
+// taps along its longer axis (anisotropic filtering, which QRhiSampler does
+// not offer); the hardware chooses the mip level of each tap from the
+// longest gradient, which is the minor axis after the split.
+vec4 sampleFootprint(vec2 tc, vec2 gradX, vec2 gradY)
+{
+    if (maxAnisotropy <= 1.0)
+        return textureGrad(imageTexture, tc, gradX, gradY);
+
+    // Scaling the gradients by 2^bias shifts the selected mip level by bias.
+    float lodScale = exp2(kLodBias);
+    gradX *= lodScale;
+    gradY *= lodScale;
+
+    vec2 texSize = vec2(textureSize(imageTexture, 0));
+    float lenX = length(gradX * texSize);
+    float lenY = length(gradY * texSize);
+    bool xIsMajor = lenX >= lenY;
+    vec2 majorGrad = xIsMajor ? gradX : gradY;
+    vec2 minorGrad = xIsMajor ? gradY : gradX;
+    float minorLen = max(min(lenX, lenY), kMinFootprint);
+    float ratio = clamp(max(lenX, lenY) / minorLen, 1.0, maxAnisotropy);
+    int taps = min(int(ceil(ratio)), kMaxAnisotropyTaps);
+
+    vec2 tapGrad = majorGrad / float(taps);
+    vec4 sum = vec4(0.0);
+    for (int i = 0; i < kMaxAnisotropyTaps; ++i) {
+        if (i >= taps)
+            break;
+        // Tap centres are spread evenly over the major axis around tc.
+        float offset = (float(i) + kHalfTap) / float(taps) - kHalfTap;
+        sum += textureGrad(imageTexture, tc + majorGrad * offset, tapGrad,
+                           minorGrad);
+    }
+    return sum / float(taps);
 }
 
 void main()
@@ -126,8 +178,7 @@ void main()
         discard;
 
     vec2 tc = (uv - texRect.xy) / texRect.zw;
-    vec4 color = textureGrad(imageTexture, tc, dx / texRect.zw,
-                             dy / texRect.zw);
+    vec4 color = sampleFootprint(tc, dx / texRect.zw, dy / texRect.zw);
     // The matrix (colorEnabled) and vibrance switch independently.
     bool vibranceActive = abs(vibrance) > kVibranceEpsilon;
     if (colorEnabled != 0 || vibranceActive) {

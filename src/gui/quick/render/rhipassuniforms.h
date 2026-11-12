@@ -107,6 +107,8 @@ static_assert(sizeof(TileUniforms) % 16 == 0);
 struct PanoramaUniforms {
   static constexpr qint32 kDisabled = 0;
   static constexpr qint32 kEnabled = 1;
+  // maxAnisotropy value that samples the texture once per pixel.
+  static constexpr float kNoAnisotropy = 1.0f;
 
   float mvp[16]{};
   float colorRow0[4] = {TileUniforms::kIdentityRow0[0],
@@ -142,6 +144,10 @@ struct PanoramaUniforms {
   // horizontally: no horizontal core test, the texture wraps around.
   qint32 wrapsHorizontally = kDisabled;
   float vibrance = 0.0f;
+  // Most taps along the major axis of the pixel footprint (anisotropic
+  // filtering); kNoAnisotropy for a single tap.
+  float maxAnisotropy = kNoAnisotropy;
+  float padding[3]{};
 };
 static_assert(offsetof(PanoramaUniforms, colorRow0) == 64);
 static_assert(offsetof(PanoramaUniforms, colorRow1) == 80);
@@ -159,6 +165,7 @@ static_assert(offsetof(PanoramaUniforms, colorOffset) == 176);
 static_assert(offsetof(PanoramaUniforms, colorEnabled) == 180);
 static_assert(offsetof(PanoramaUniforms, wrapsHorizontally) == 184);
 static_assert(offsetof(PanoramaUniforms, vibrance) == 188);
+static_assert(offsetof(PanoramaUniforms, maxAnisotropy) == 192);
 static_assert(sizeof(PanoramaUniforms) % 16 == 0);
 // A tile's uniform buffer holds either block; a tile is never drawn flat and
 // as a panorama in the same frame.

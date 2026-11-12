@@ -28,6 +28,7 @@ layout(std140, binding = 0) uniform PanoramaParams {
     int colorEnabled;
     int wrapsHorizontally;
     float vibrance;
+    float maxAnisotropy;
 };
 
 void main()

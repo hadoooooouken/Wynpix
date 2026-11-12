@@ -22,6 +22,10 @@ constexpr double kHalf = 0.5;
 // exactly on the border (uv 0 or 1) still hit a tile.
 constexpr double kOpenEdgeLow = -1.0;
 constexpr double kOpenEdgeHigh = 2.0;
+// Most texture taps per pixel along the major axis of a panorama pixel's
+// footprint when the mipmapped (trilinear) sampler is in use. Matches the
+// loop bound kMaxAnisotropyTaps of panorama.frag.
+constexpr float kPanoramaMaxAnisotropy = 16.0f;
 
 QColor premultiplied(const QColor &color) {
   const float alpha = color.alphaF();
@@ -65,6 +69,10 @@ PanoramaUniforms panoramaUniforms(const RenderFrame &frame, QSize targetSize,
   }
   if (frame.filter.colorAdjustments.hasVibrance())
     uniforms.vibrance = frame.filter.colorAdjustments.vibrance;
+  // Nearest sampling must stay pixel-exact; only the mipmapped sampler is
+  // filtered anisotropically.
+  if (frame.settings.sampling == RenderEnums::TextureSampling::Trilinear)
+    uniforms.maxAnisotropy = kPanoramaMaxAnisotropy;
   return uniforms;
 }
 
