@@ -76,7 +76,7 @@ public:
     [[nodiscard]] bool clear();
 
     // Path of the sqlite database backing the cache, derived from
-    // Settings::thumbnailCacheDir(). Static so callers (e.g. Preferences UI)
+    // Settings::thumbnailCacheDir(). Static so callers (e.g. Settings UI)
     // can query cache location/size without needing a live instance.
     [[nodiscard]] static QString databaseFilePath();
     // Read-only on-disk footprint of the cache (db + WAL + SHM), for display

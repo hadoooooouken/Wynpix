@@ -840,6 +840,12 @@ private slots:
         QVERIFY(!text.contains(u"]("_s));
         QVERIFY(!text.contains(u'\n'));
     }
+
+    void windowTitleIncludesSettings() {
+        const QString title = SettingsEditorModel::windowTitle();
+        QVERIFY(title.startsWith(u"Settings \u2014 "_s));
+        QVERIFY(title.endsWith(QCoreApplication::applicationName()));
+    }
 };
 
 int runSettingsEditorTests(int argc, char **argv) {

@@ -4076,8 +4076,8 @@ Ejemplo: %1</translation>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
-        <source>Preferences — </source>
-        <translation>Preferencias — </translation>
+        <source>Settings — </source>
+        <translation>Configuración — </translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="25"/>

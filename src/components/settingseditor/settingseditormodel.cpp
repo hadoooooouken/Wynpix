@@ -284,7 +284,7 @@ ScriptEditorModel *SettingsEditorModel::scriptEditor() {
 }
 
 QString SettingsEditorModel::windowTitle() {
-    return translated(QT_TRANSLATE_NOOP("SettingsDialog", "Preferences — ")) + QCoreApplication::applicationName();
+    return translated(QT_TRANSLATE_NOOP("SettingsDialog", "Settings — ")) + QCoreApplication::applicationName();
 }
 
 QString SettingsEditorModel::aboutText() {

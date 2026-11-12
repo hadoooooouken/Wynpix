@@ -4215,7 +4215,7 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
     </message>
     <message>
         <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
-        <source>Preferences — </source>
+        <source>Settings — </source>
         <translation type="unfinished"></translation>
     </message>
     <message>

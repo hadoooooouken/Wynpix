@@ -3996,8 +3996,8 @@ Example: %1</source>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
-        <source>Preferences — </source>
-        <translation>首选项 — </translation>
+        <source>Settings — </source>
+        <translation>设置 — </translation>
     </message>
     <message>
         <location filename="../../gui/quick/ui/SettingsThemePage.qml" line="25"/>

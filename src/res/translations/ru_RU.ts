@@ -4153,7 +4153,7 @@ Wynpix распространяется под лицензией [GNU GPL ве�
     </message>
     <message>
         <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
-        <source>Preferences — </source>
+        <source>Settings — </source>
         <translation>Настройки — </translation>
     </message>
     <message>

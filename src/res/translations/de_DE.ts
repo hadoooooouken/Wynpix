@@ -4075,7 +4075,7 @@ Example: %1</source>
     </message>
     <message>
         <location filename="../../components/settingseditor/settingseditormodel.cpp" line="287"/>
-        <source>Preferences — </source>
+        <source>Settings — </source>
         <translation>Einstellungen — </translation>
     </message>
     <message>
