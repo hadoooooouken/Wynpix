@@ -61,6 +61,7 @@ const QHash<FluentIcon, char32_t> &codepointTable() {
         { FluentIcon::Home20,             0xF480 }, // ic_fluent_home_20_regular <- Navigate home
         { FluentIcon::OpenOnlySelected20, 0xF697 }, // ic_fluent_select_object_20_regular <- Open only selected files
         { FluentIcon::PanelLeft20,        0xE8B0 }, // ic_fluent_panel_left_20_regular <- Toggle places panel
+        { FluentIcon::Masonry20,          0xE6A7 }, // ic_fluent_glance_horizontal_20_regular <- Masonry thumbnails view
 
         // Floating notifications
         { FluentIcon::ArrowNext20,       0xF16A }, // ic_fluent_arrow_next_20_regular <- End-of-directory notification

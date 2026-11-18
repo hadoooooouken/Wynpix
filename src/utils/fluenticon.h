@@ -87,6 +87,7 @@ enum class FluentIcon {
     ClockDismiss24,
     Play20,
     Pause20,
+    Masonry20,
     Next20,
     ArrowTurnDownLeft20,
     ArrowRepeatAll20,
