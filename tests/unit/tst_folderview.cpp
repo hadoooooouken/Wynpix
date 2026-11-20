@@ -8,6 +8,7 @@
 #include <QTest>
 #include <QUrl>
 
+#include "components/imagesizeprovider.h"
 #include "gui/quick/ui/folderview/bookmarksmodel.h"
 #include "gui/quick/ui/folderview/foldergridcontroller.h"
 #include "gui/quick/ui/folderview/foldergridlayout.h"
@@ -265,6 +266,119 @@ private slots:
     }
     QVERIFY(sawFolders);
     QVERIFY(sawImages);
+  }
+
+  void populateWithKnownSizesPopulatesSourceSizesImmediately() {
+    GridFixture fixture(0);
+    const QList<QSize> knownSizes{QSize(), QSize(1920, 1080), QSize(800, 1200)};
+    fixture.model.populate(3, 1, knownSizes);
+
+    const QList<QSize> sourceSizes = fixture.model.sourceSizes();
+    QCOMPARE(sourceSizes.size(), 3);
+    QCOMPARE(sourceSizes.at(0), QSize());
+    QCOMPARE(sourceSizes.at(1), QSize(1920, 1080));
+    QCOMPARE(sourceSizes.at(2), QSize(800, 1200));
+  }
+
+  void masonryLayoutUsesKnownSizesImmediatelyOnPopulate() {
+    GridFixture fixture(0);
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+
+    // 1 folder, 2 images with 16:9 aspect ratio (1920x1080)
+    const QList<QSize> knownSizes{QSize(), QSize(1920, 1080), QSize(1920, 1080)};
+    fixture.model.populate(3, 1, knownSizes);
+
+    // Tiles model should reflect the masonry layout geometry immediately
+    QCOMPARE(fixture.grid.tiles()->rowCount(), 3);
+    const QVariant layout1 = fixture.grid.tiles()->data(
+        fixture.grid.tiles()->index(1, 0), MasonryTilesModel::CellLayoutRole);
+    const ThumbnailStripLayout cell1 = layout1.value<ThumbnailStripLayout>();
+    QVERIFY(cell1.cellWidth > cell1.cellHeight);
+  }
+
+  void imageSizeProviderCachePreservesAcrossReset() {
+    ImageSizeProvider provider;
+    const QString path = QStringLiteral("C:/test/sample.jpg");
+    const QSize size(1920, 1080);
+
+    QCOMPARE(provider.cachedSize(path), QSize());
+    provider.insert(path, size);
+    QCOMPARE(provider.cachedSize(path), size);
+
+    // reset() cancels tasks but preserves the LRU cache
+    provider.reset();
+    QCOMPARE(provider.cachedSize(path), size);
+
+    provider.invalidate(path);
+    QCOMPARE(provider.cachedSize(path), QSize());
+  }
+
+  void imageSizeProviderNormalizesPathAndRejectsInvalidSize() {
+    ImageSizeProvider provider;
+    const QString forwardSlash = QStringLiteral("C:/test/folder/Sample.JPG");
+    const QString backSlash = QStringLiteral("c:\\test\\folder\\sample.jpg");
+    const QSize size(1920, 1080);
+
+    // Invalid sizes should not be cached
+    provider.insert(forwardSlash, QSize());
+    QCOMPARE(provider.cachedSize(forwardSlash), QSize());
+
+    // Valid size should be accessible with normalized path variations
+    provider.insert(forwardSlash, size);
+    QCOMPARE(provider.cachedSize(backSlash), size);
+
+    // Invalidation works across path variations
+    provider.invalidate(backSlash);
+    QCOMPARE(provider.cachedSize(forwardSlash), QSize());
+  }
+
+  void imageSizeProviderEvictsLeastRecentlyUsed() {
+    // Cache capacity of 2 entries
+    ImageSizeProvider provider(2);
+    const QString path1 = QStringLiteral("C:/test/1.jpg");
+    const QString path2 = QStringLiteral("C:/test/2.jpg");
+    const QString path3 = QStringLiteral("C:/test/3.jpg");
+    const QString path4 = QStringLiteral("C:/test/4.jpg");
+
+    provider.insert(path1, QSize(100, 100));
+    provider.insert(path2, QSize(200, 200));
+
+    // Inserting path3 should evict path1 (the oldest)
+    provider.insert(path3, QSize(300, 300));
+    QCOMPARE(provider.cachedSize(path1), QSize());
+    QCOMPARE(provider.cachedSize(path2), QSize(200, 200));
+    QCOMPARE(provider.cachedSize(path3), QSize(300, 300));
+
+    // Accessing path2 refreshes its recency; inserting path4 should evict path3
+    QCOMPARE(provider.cachedSize(path2), QSize(200, 200));
+    provider.insert(path4, QSize(400, 400));
+    QCOMPARE(provider.cachedSize(path3), QSize());
+    QCOMPARE(provider.cachedSize(path2), QSize(200, 200));
+    QCOMPARE(provider.cachedSize(path4), QSize(400, 400));
+  }
+
+  void imageSizeProviderRequestReturnsCachedImmediately() {
+    ImageSizeProvider provider;
+    const QString path1 = QStringLiteral("C:/test/1.jpg");
+    const QString path2 = QStringLiteral("C:/test/2.jpg");
+    provider.insert(path1, QSize(800, 600));
+    provider.insert(path2, QSize(1024, 768));
+
+    QSignalSpy sizesSpy(&provider, &ImageSizeProvider::sizesReady);
+    QSignalSpy finishedSpy(&provider, &ImageSizeProvider::finished);
+
+    provider.request({path1, path2});
+
+    QCOMPARE(sizesSpy.count(), 1);
+    const auto results = sizesSpy.first().at(0).value<QList<ImageSizeResult>>();
+    QCOMPARE(results.size(), 2);
+    QCOMPARE(results.at(0).size, QSize(800, 600));
+    QCOMPARE(results.at(1).size, QSize(1024, 768));
+
+    QCOMPARE(finishedSpy.count(), 1);
+    QCOMPARE(finishedSpy.first().at(0).toInt(), 2);
+    QCOMPARE(finishedSpy.first().at(1).toInt(), 0);
   }
 
   void pressSelectsAndDoubleClickActivates() {

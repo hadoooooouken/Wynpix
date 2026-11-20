@@ -1,6 +1,7 @@
 #include "imagesizeprovider.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QImageIOHandler>
 #include <QImageReader>
 #include <QThread>
@@ -65,8 +66,10 @@ void ImageSizeNotifier::reportBatch(ImageSizeBatch batch) {
     emit batchReady(std::move(batch));
 }
 
-ImageSizeProvider::ImageSizeProvider(QObject *parent)
-    : QObject(parent), mCancelled(std::make_shared<std::atomic_bool>(false)) {
+ImageSizeProvider::ImageSizeProvider(int maxCacheEntries, QObject *parent)
+    : QObject(parent),
+      mMaxCacheEntries(qMax(1, maxCacheEntries)),
+      mCancelled(std::make_shared<std::atomic_bool>(false)) {
     qRegisterMetaType<ImageSizeBatch>();
     qRegisterMetaType<QList<ImageSizeResult>>();
     mPool.setMaxThreadCount(
@@ -90,14 +93,115 @@ void ImageSizeProvider::reset() {
     mRequested = 0;
     mAnswered = 0;
     mFailed = 0;
+    mInvalidatedPaths.clear();
+}
+
+QString ImageSizeProvider::normalizePath(const QString &path) {
+    if (path.isEmpty())
+        return {};
+    return QDir::cleanPath(QDir::fromNativeSeparators(path)).toCaseFolded();
 }
 
 void ImageSizeProvider::request(const QStringList &paths) {
-    for (qsizetype first = 0; first < paths.size(); first += kPathsPerTask) {
-        mPool.start(new ImageSizeRunnable(paths.mid(first, kPathsPerTask), mGeneration, mCancelled,
-                                          mNotifier));
+    Q_ASSERT(QThread::currentThread() == thread());
+    if (paths.isEmpty())
+        return;
+
+    QList<ImageSizeResult> cachedResults;
+    QStringList uncachedPaths;
+
+    for (const QString &path : paths) {
+        const QString key = normalizePath(path);
+        auto it = mCache.find(key);
+        if (it != mCache.end()) {
+            mRecency.splice(mRecency.begin(), mRecency, it->recencyPosition);
+            cachedResults.append(ImageSizeResult{
+                .path = path,
+                .size = it->size,
+                .error = QString(),
+            });
+        } else {
+            uncachedPaths.append(path);
+        }
     }
+
+    const quint64 generation = mGeneration;
     mRequested += static_cast<int>(paths.size());
+
+    // Schedule background workers before emitting any synchronous signals to
+    // avoid state corruption if a connected slot invokes reset().
+    for (qsizetype first = 0; first < uncachedPaths.size(); first += kPathsPerTask) {
+        mPool.start(new ImageSizeRunnable(uncachedPaths.mid(first, kPathsPerTask), generation,
+                                          mCancelled, mNotifier));
+    }
+
+    if (!cachedResults.isEmpty()) {
+        mAnswered += static_cast<int>(cachedResults.size());
+        emit sizesReady(cachedResults);
+        if (mGeneration != generation)
+            return;
+    }
+
+    if (mAnswered >= mRequested)
+        emit finished(mRequested, mFailed);
+}
+
+QSize ImageSizeProvider::cachedSize(const QString &path) const {
+    Q_ASSERT(QThread::currentThread() == thread());
+    if (path.isEmpty())
+        return {};
+    const QString key = normalizePath(path);
+    auto it = mCache.find(key);
+    if (it == mCache.end())
+        return {};
+    auto &recency = const_cast<std::list<QString> &>(mRecency);
+    recency.splice(recency.begin(), recency, it->recencyPosition);
+    return it->size;
+}
+
+void ImageSizeProvider::insert(const QString &path, const QSize &size) {
+    Q_ASSERT(QThread::currentThread() == thread());
+    if (path.isEmpty() || !size.isValid() || size.isEmpty())
+        return;
+    const QString key = normalizePath(path);
+    mInvalidatedPaths.remove(key);
+    insertCacheEntry(key, size);
+}
+
+void ImageSizeProvider::invalidate(const QString &path) {
+    Q_ASSERT(QThread::currentThread() == thread());
+    if (path.isEmpty())
+        return;
+    const QString key = normalizePath(path);
+    mInvalidatedPaths.insert(key);
+    auto it = mCache.find(key);
+    if (it != mCache.end()) {
+        mRecency.erase(it->recencyPosition);
+        mCache.erase(it);
+    }
+}
+
+void ImageSizeProvider::clearCache() {
+    Q_ASSERT(QThread::currentThread() == thread());
+    mCache.clear();
+    mRecency.clear();
+    mInvalidatedPaths.clear();
+}
+
+void ImageSizeProvider::insertCacheEntry(const QString &key, const QSize &size) {
+    auto it = mCache.find(key);
+    if (it != mCache.end()) {
+        it->size = size;
+        mRecency.splice(mRecency.begin(), mRecency, it->recencyPosition);
+        return;
+    }
+    if (static_cast<int>(mCache.size()) >= mMaxCacheEntries && !mRecency.empty()) {
+        const QString oldest = mRecency.back();
+        mRecency.pop_back();
+        mCache.remove(oldest);
+    }
+    mRecency.push_front(key);
+    mCache.insert(key, CacheEntry{size, mRecency.begin()});
 }
 
 ImageSizeResult ImageSizeProvider::readSize(const QString &path) {
@@ -129,6 +233,14 @@ void ImageSizeProvider::onBatchReady(ImageSizeBatch batch) {
     // A batch of an earlier request, queued before reset().
     if (batch.generation != mGeneration)
         return;
+    for (const ImageSizeResult &result : std::as_const(batch.results)) {
+        if (!result.size.isValid() || result.size.isEmpty())
+            continue;
+        const QString key = normalizePath(result.path);
+        if (mInvalidatedPaths.contains(key))
+            continue;
+        insertCacheEntry(key, result.size);
+    }
     mAnswered += static_cast<int>(batch.results.size());
     mFailed += static_cast<int>(std::count_if(batch.results.cbegin(), batch.results.cend(),
                                               [](const ImageSizeResult &result) {

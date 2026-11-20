@@ -15,8 +15,8 @@ DirectoryViewAdapter::DirectoryViewAdapter(QObject *parent) : ThumbnailListModel
             &DirectoryViewAdapter::forwardRequested);
 }
 
-void DirectoryViewAdapter::populate(int count, int dirCount) {
-    ThumbnailListModel::populate(count, dirCount);
+void DirectoryViewAdapter::populate(int count, int dirCount, const QList<QSize> &knownSizes) {
+    ThumbnailListModel::populate(count, dirCount, knownSizes);
 }
 
 void DirectoryViewAdapter::setThumbnail(int pos, std::shared_ptr<Thumbnail> thumb) {

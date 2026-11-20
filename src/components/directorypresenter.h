@@ -166,6 +166,7 @@ private:
     void refreshImageSizes();
     // Reads the size of one image that appeared in the directory.
     void requestImageSize(const QString &filePath);
+    [[nodiscard]] QList<QSize> collectKnownSizes() const;
 
     std::shared_ptr<QPixmap> defaultFolderPixmap(QSize targetSize);
     std::shared_ptr<Thumbnail>

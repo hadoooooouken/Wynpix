@@ -1,15 +1,18 @@
 #pragma once
 
+#include <QHash>
 #include <QList>
 #include <QMetaType>
 #include <QObject>
 #include <QRunnable>
+#include <QSet>
 #include <QSize>
 #include <QString>
 #include <QStringList>
 #include <QThreadPool>
 
 #include <atomic>
+#include <list>
 #include <memory>
 
 // The size of one image, read from its header.
@@ -59,7 +62,11 @@ public:
     // Threads of the pool at most: reading headers is bound by the storage.
     static constexpr int kMaximumThreads = 4;
 
-    explicit ImageSizeProvider(QObject *parent = nullptr);
+    // Default maximum number of image sizes to keep in the in-memory LRU cache.
+    static constexpr int kDefaultMaxCacheEntries = 50'000;
+
+    explicit ImageSizeProvider(int maxCacheEntries = kDefaultMaxCacheEntries,
+                               QObject *parent = nullptr);
     ~ImageSizeProvider() override;
 
     // Drops the queued paths and the results of the tasks that already run.
@@ -69,6 +76,19 @@ public:
 
     // The size of the image at path, read synchronously.
     [[nodiscard]] static ImageSizeResult readSize(const QString &path);
+
+    // Normalizes a file path for case- and slash-neutral lookups on Windows.
+    [[nodiscard]] static QString normalizePath(const QString &path);
+
+    // Queries the size of an image from the in-memory cache if known;
+    // returns an invalid QSize if not cached.
+    [[nodiscard]] QSize cachedSize(const QString &path) const;
+    // Inserts or updates an image size in the cache.
+    void insert(const QString &path, const QSize &size);
+    // Invalidates a path from the cache (e.g. when modified on disk).
+    void invalidate(const QString &path);
+    // Drops all cached sizes.
+    void clearCache();
 
 signals:
     void sizesReady(QList<ImageSizeResult> results);
@@ -80,6 +100,18 @@ private slots:
     void onBatchReady(ImageSizeBatch batch);
 
 private:
+    struct CacheEntry {
+        QSize size;
+        std::list<QString>::iterator recencyPosition;
+    };
+
+    void insertCacheEntry(const QString &key, const QSize &size);
+
+    int mMaxCacheEntries = kDefaultMaxCacheEntries;
+    QHash<QString, CacheEntry> mCache;
+    std::list<QString> mRecency;
+    QSet<QString> mInvalidatedPaths;
+
     ImageSizeNotifier mNotifier;
     QThreadPool mPool;
     // Set by reset() to stop the tasks queued or running for the previous

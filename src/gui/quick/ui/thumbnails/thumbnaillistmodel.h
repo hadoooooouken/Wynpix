@@ -206,7 +206,7 @@ public:
     [[nodiscard]] bool canScrollForward() const;
 
     // --- directory view (IDirectoryView) ---------------------------------
-    void populate(int count, int dirCount = 0);
+    void populate(int count, int dirCount = 0, const QList<QSize> &knownSizes = {});
     // Ignored unless entry.targetSize is the requested target box (the box
     // the request was made for, whatever the pixel size of the entry is),
     // the entry is made for the requested crop (or either) and pos is an item.

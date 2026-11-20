@@ -15,7 +15,7 @@ class IDirectoryView {
 public:
     virtual ~IDirectoryView() {}
 
-    virtual void populate(int totalCount, int dirCount = 0) = 0;
+    virtual void populate(int totalCount, int dirCount = 0, const QList<QSize> &knownSizes = {}) = 0;
     virtual void setThumbnail(int pos, std::shared_ptr<Thumbnail> thumb) = 0;
     virtual void setThumbnailPending(int pos, bool pending) {
         Q_UNUSED(pos)

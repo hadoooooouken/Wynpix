@@ -109,9 +109,10 @@ void DirectoryPresenter::setView(std::shared_ptr<IDirectoryView> _view) {
     return;
   view = _view;
   if (model) {
-    view->populate(mShowDirs ? model->totalCount() : model->fileCount(),
-                   mShowDirs ? model->dirCount() : 0);
-    view->setDirCount(mShowDirs ? model->dirCount() : 0);
+    const int dirCount = mShowDirs ? model->dirCount() : 0;
+    const int totalCount = mShowDirs ? model->totalCount() : model->fileCount();
+    view->populate(totalCount, dirCount, collectKnownSizes());
+    view->setDirCount(dirCount);
   }
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(itemActivated(int)), this,
           SLOT(onItemActivated(int)));
@@ -187,23 +188,43 @@ void DirectoryPresenter::populateView() {
   folderCoverResolver->invalidate(model->directoryPath());
   // Thumbnailer is shared with the other presenter. Clearing its pool here
   // would cancel that view's queued requests.
-  view->populate(mShowDirs ? model->totalCount() : model->fileCount(),
-                 mShowDirs ? model->dirCount() : 0);
-  view->setDirCount(mShowDirs ? model->dirCount() : 0);
+  const int dirCount = mShowDirs ? model->dirCount() : 0;
+  const int totalCount = mShowDirs ? model->totalCount() : model->fileCount();
+  view->populate(totalCount, dirCount, collectKnownSizes());
+  view->setDirCount(dirCount);
   refreshImageSizes();
   selectAndFocus(0);
+}
+
+QList<QSize> DirectoryPresenter::collectKnownSizes() const {
+  if (!model || !view || !view->imageSizesWanted())
+    return {};
+  const int dirCount = mShowDirs ? model->dirCount() : 0;
+  const int totalCount = mShowDirs ? model->totalCount() : model->fileCount();
+  const int fileCount = model->fileCount();
+  QList<QSize> knownSizes;
+  knownSizes.reserve(totalCount);
+  for (int i = 0; i < dirCount; ++i)
+    knownSizes.append(QSize());
+  for (int i = 0; i < fileCount; ++i)
+    knownSizes.append(imageSizeProvider->cachedSize(model->filePathAt(i)));
+  return knownSizes;
 }
 
 void DirectoryPresenter::refreshImageSizes() {
   imageSizeProvider->reset();
   if (!model || !view || !view->imageSizesWanted())
     return;
-  QStringList paths;
   const int fileCount = model->fileCount();
-  paths.reserve(fileCount);
-  for (int index = 0; index < fileCount; ++index)
-    paths.append(model->filePathAt(index));
-  imageSizeProvider->request(paths);
+  QStringList uncachedPaths;
+  uncachedPaths.reserve(fileCount);
+  for (int index = 0; index < fileCount; ++index) {
+    const QString path = model->filePathAt(index);
+    if (!imageSizeProvider->cachedSize(path).isValid())
+      uncachedPaths.append(path);
+  }
+  if (!uncachedPaths.isEmpty())
+    imageSizeProvider->request(uncachedPaths);
 }
 
 void DirectoryPresenter::requestImageSize(const QString &filePath) {
@@ -238,7 +259,7 @@ void DirectoryPresenter::onImageSizesFinished(int total, int failed) {
 //------------------------------------------------------------------------------
 
 void DirectoryPresenter::onFileRemoved(QString filePath, int index) {
-  Q_UNUSED(filePath)
+  imageSizeProvider->invalidate(filePath);
   if (!view)
     return;
   view->removeItem(mShowDirs ? index + model->dirCount() : index);
@@ -246,7 +267,11 @@ void DirectoryPresenter::onFileRemoved(QString filePath, int index) {
 
 void DirectoryPresenter::onFileRenamed(QString fromPath, int indexFrom,
                                        QString toPath, int indexTo) {
-  Q_UNUSED(fromPath)
+  const QSize size = imageSizeProvider->cachedSize(fromPath);
+  imageSizeProvider->invalidate(fromPath);
+  imageSizeProvider->invalidate(toPath);
+  if (size.isValid())
+    imageSizeProvider->insert(toPath, size);
   folderCoverResolver->invalidate(model->directoryPath());
   if (!view)
     return;
@@ -270,6 +295,7 @@ void DirectoryPresenter::onFileRenamed(QString fromPath, int indexFrom,
 }
 
 void DirectoryPresenter::onFileAdded(QString filePath) {
+  imageSizeProvider->invalidate(filePath);
   folderCoverResolver->invalidate(model->directoryPath());
   if (!view)
     return;
@@ -279,6 +305,7 @@ void DirectoryPresenter::onFileAdded(QString filePath) {
 }
 
 void DirectoryPresenter::onFileModified(QString filePath) {
+  imageSizeProvider->invalidate(filePath);
   folderCoverResolver->invalidate(model->directoryPath());
   if (!view)
     return;
@@ -466,6 +493,9 @@ void DirectoryPresenter::onThumbnailReady(std::shared_ptr<Thumbnail> thumb,
                << filePath;
     return;
   }
+
+  if (thumb->sourceSize().isValid())
+    imageSizeProvider->insert(filePath, thumb->sourceSize());
 
   const QString coverKey = thumbnailPathKey(filePath);
   auto folderTasks = dirThumbnailTasks.find(coverKey);

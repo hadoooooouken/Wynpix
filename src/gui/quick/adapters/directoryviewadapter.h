@@ -23,7 +23,7 @@ class DirectoryViewAdapter final : public ThumbnailListModel, public IDirectoryV
 public:
     explicit DirectoryViewAdapter(QObject *parent = nullptr);
 
-    void populate(int count, int dirCount = 0) override;
+    void populate(int count, int dirCount = 0, const QList<QSize> &knownSizes = {}) override;
     void setThumbnail(int pos, std::shared_ptr<Thumbnail> thumb) override;
     void setThumbnailPending(int pos, bool pending) override;
     void setThumbnailUnavailable(int pos, QSize targetSize) override;

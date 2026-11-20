@@ -126,7 +126,7 @@ bool ThumbnailListModel::canScrollForward() const {
 //------------------------------------------------------------------------------
 // Directory view
 
-void ThumbnailListModel::populate(int count, int dirCount) {
+void ThumbnailListModel::populate(int count, int dirCount, const QList<QSize> &knownSizes) {
     if (count < 0) {
         qWarning() << "ThumbnailListModel received a negative item count:" << count;
         return;
@@ -141,6 +141,10 @@ void ThumbnailListModel::populate(int count, int dirCount) {
     mDragHover = -1;
     mLoaded.clear();
     mSourceSizes.clear();
+    for (int i = 0; i < knownSizes.size() && i < count; ++i) {
+        if (knownSizes.at(i).isValid())
+            mSourceSizes.insert(i, knownSizes.at(i));
+    }
     mRequested.clear();
     mPendingFinal.clear();
     mUnavailable.clear();
