@@ -88,6 +88,14 @@ void DirectoryViewAdapter::setDirCount(int count) {
     ThumbnailListModel::setDirCount(count);
 }
 
+void DirectoryViewAdapter::setImageSize(int pos, QSize size) {
+    ThumbnailListModel::setSourceSize(pos, size);
+}
+
+bool DirectoryViewAdapter::imageSizesWanted() const {
+    return ThumbnailListModel::imageSizesWanted();
+}
+
 bool DirectoryViewAdapter::hasThumbnail(int pos) const {
     return ThumbnailListModel::hasThumbnail(pos);
 }

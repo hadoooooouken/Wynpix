@@ -4,6 +4,7 @@
 #include <memory>
 #include "gui/idirectoryview.h"
 #include "components/foldercoverresolver.h"
+#include "components/imagesizeprovider.h"
 #include "components/thumbnailer/thumbnailer.h"
 #include "directorymodel.h"
 #include "directoryexpandworker.h"
@@ -102,6 +103,10 @@ private slots:
     void onOpenSelectedRequested();
     void onDraggedOut();
     void onDraggedOver(int index);
+    // The view started or stopped laying images out by their proportions.
+    void onImageSizesWantedChanged();
+    void onImageSizesReady(QList<ImageSizeResult> results);
+    void onImageSizesFinished(int total, int failed);
 
     void onDroppedInto(const QList<QUrl> &urls, QObject *source, int targetIndex, Qt::DropAction action);
 
@@ -115,6 +120,8 @@ private:
     std::shared_ptr<DirectoryModel> model = nullptr;
     std::shared_ptr<Thumbnailer> thumbnailer;
     std::unique_ptr<FolderCoverResolver> folderCoverResolver;
+    // Reads the sizes of the images for a view that wants them.
+    std::unique_ptr<ImageSizeProvider> imageSizeProvider;
     bool mShowDirs;
 
     struct PendingFolderThumbnail {
@@ -153,6 +160,12 @@ private:
     // thumbnails that must be made again without a new request (a changed
     // cover sorting) use it.
     QSize lastThumbnailTargetSize;
+
+    // Starts reading the sizes of all the images of the model when the view
+    // wants them, and drops what was read for the previous directory.
+    void refreshImageSizes();
+    // Reads the size of one image that appeared in the directory.
+    void requestImageSize(const QString &filePath);
 
     std::shared_ptr<QPixmap> defaultFolderPixmap(QSize targetSize);
     std::shared_ptr<Thumbnail>

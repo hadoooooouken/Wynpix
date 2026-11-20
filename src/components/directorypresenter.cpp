@@ -58,6 +58,11 @@ DirectoryPresenter::DirectoryPresenter(QObject *parent)
           &DirectoryPresenter::onFolderCoverResolved, Qt::QueuedConnection);
   connect(settings, &Settings::settingsChanged, this,
           &DirectoryPresenter::onSettingsChanged);
+  imageSizeProvider = std::make_unique<ImageSizeProvider>();
+  connect(imageSizeProvider.get(), &ImageSizeProvider::sizesReady, this,
+          &DirectoryPresenter::onImageSizesReady);
+  connect(imageSizeProvider.get(), &ImageSizeProvider::finished, this,
+          &DirectoryPresenter::onImageSizesFinished);
 }
 
 DirectoryPresenter::~DirectoryPresenter() {
@@ -130,6 +135,14 @@ void DirectoryPresenter::setView(std::shared_ptr<IDirectoryView> _view) {
           SIGNAL(backRequested()));
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(forwardRequested()), this,
           SIGNAL(forwardRequested()));
+  const QMetaObject::Connection imageSizesConnection =
+      connect(dynamic_cast<QObject *>(view.get()), SIGNAL(imageSizesWantedChanged()), this,
+              SLOT(onImageSizesWantedChanged()));
+  if (!imageSizesConnection)
+    qWarning() << "[DirectoryPresenter] The view's imageSizesWantedChanged signal"
+                  " is not connected to onImageSizesWantedChanged; the sizes of"
+                  " the images will not be read";
+  refreshImageSizes();
 }
 
 void DirectoryPresenter::setModel(std::shared_ptr<DirectoryModel> newModel) {
@@ -173,7 +186,49 @@ void DirectoryPresenter::populateView() {
   // would cancel that view's queued requests.
   view->populate(mShowDirs ? model->totalCount() : model->fileCount());
   view->setDirCount(mShowDirs ? model->dirCount() : 0);
+  refreshImageSizes();
   selectAndFocus(0);
+}
+
+void DirectoryPresenter::refreshImageSizes() {
+  imageSizeProvider->reset();
+  if (!model || !view || !view->imageSizesWanted())
+    return;
+  QStringList paths;
+  const int fileCount = model->fileCount();
+  paths.reserve(fileCount);
+  for (int index = 0; index < fileCount; ++index)
+    paths.append(model->filePathAt(index));
+  imageSizeProvider->request(paths);
+}
+
+void DirectoryPresenter::requestImageSize(const QString &filePath) {
+  if (view && view->imageSizesWanted())
+    imageSizeProvider->request({filePath});
+}
+
+void DirectoryPresenter::onImageSizesWantedChanged() {
+  refreshImageSizes();
+}
+
+void DirectoryPresenter::onImageSizesReady(QList<ImageSizeResult> results) {
+  if (!view || !model)
+    return;
+  for (const ImageSizeResult &result : std::as_const(results)) {
+    if (!result.size.isValid())
+      continue;
+    const int index = model->indexOfFile(result.path);
+    if (index < 0)
+      continue;
+    view->setImageSize(mShowDirs ? model->dirCount() + index : index, result.size);
+  }
+}
+
+void DirectoryPresenter::onImageSizesFinished(int total, int failed) {
+  // The images without a size take the proportions of their thumbnail.
+  if (failed > 0)
+    qInfo() << "[DirectoryPresenter] The size of" << failed << "of" << total
+            << "images could not be read from the file header";
 }
 
 //------------------------------------------------------------------------------
@@ -188,7 +243,6 @@ void DirectoryPresenter::onFileRemoved(QString filePath, int index) {
 void DirectoryPresenter::onFileRenamed(QString fromPath, int indexFrom,
                                        QString toPath, int indexTo) {
   Q_UNUSED(fromPath)
-  Q_UNUSED(toPath)
   folderCoverResolver->invalidate(model->directoryPath());
   if (!view)
     return;
@@ -199,6 +253,7 @@ void DirectoryPresenter::onFileRenamed(QString fromPath, int indexFrom,
   auto oldSelection = view->selection();
   view->removeItem(indexFrom);
   view->insertItem(indexTo);
+  requestImageSize(toPath);
   // re-select if needed
   if (oldSelection.contains(indexFrom)) {
     if (oldSelection.count() == 1) {
@@ -216,6 +271,7 @@ void DirectoryPresenter::onFileAdded(QString filePath) {
     return;
   int index = model->indexOfFile(filePath);
   view->insertItem(mShowDirs ? model->dirCount() + index : index);
+  requestImageSize(filePath);
 }
 
 void DirectoryPresenter::onFileModified(QString filePath) {

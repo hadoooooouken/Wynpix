@@ -42,6 +42,14 @@ public:
                                       QSize maximumSize,
                                       qreal devicePixelRatio);
 
+// The size of the source image in the orientation of its thumbnail. The
+// thumbnailer rotates a thumbnail by the EXIF orientation but reports the size
+// the image is stored in, so a source size that is landscape where the
+// thumbnail is portrait (or the other way round) is transposed. An unknown
+// source size stays unknown.
+[[nodiscard]] QSize sourceSizeInThumbnailOrientation(QSize pixelSize,
+                                                     QSize sourceSize);
+
 // One thumbnail of the thumbnail strip and the folder view. The texture is
 // created from the decoded image with QQuickWindow::createTextureFromImage()
 // in updatePaintNode() - no image provider, no URL, no decoding - and only

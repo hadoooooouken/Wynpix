@@ -34,6 +34,15 @@ public:
     virtual void reloadItem(int index) = 0;
     virtual void setDragHover(int index) = 0;
     virtual void setDirCount(int count) { Q_UNUSED(count) }
+    // The size of the image at pos, read from its file. A view that lays
+    // images out by their proportions uses it.
+    virtual void setImageSize(int pos, QSize size) {
+        Q_UNUSED(pos)
+        Q_UNUSED(size)
+    }
+    // Whether the view lays images out by their proportions, and so wants
+    // setImageSize() for every image; reading them costs file accesses.
+    [[nodiscard]] virtual bool imageSizesWanted() const { return false; }
     [[nodiscard]] virtual bool hasThumbnail(int pos) const { Q_UNUSED(pos); return false; }
 
 //signals

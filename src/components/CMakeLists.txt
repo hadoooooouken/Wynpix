@@ -5,6 +5,7 @@ target_sources(wynpix PRIVATE
     directorypresenter.cpp
     directoryexpandworker.cpp
     foldercoverresolver.cpp
+    imagesizeprovider.cpp
 
     scriptmanager/scriptmanager.cpp
     actionmanager/actionmanager.cpp

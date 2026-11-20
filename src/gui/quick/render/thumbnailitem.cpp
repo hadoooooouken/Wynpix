@@ -18,6 +18,14 @@ float deviceEdgeWidth(qreal devicePixelRatio) {
 }
 } // namespace
 
+QSize sourceSizeInThumbnailOrientation(QSize pixelSize, QSize sourceSize) {
+  const bool sourceIsLandscape = sourceSize.width() > sourceSize.height();
+  const bool thumbnailIsLandscape = pixelSize.width() > pixelSize.height();
+  if (sourceIsLandscape != thumbnailIsLandscape)
+    sourceSize.transpose();
+  return sourceSize;
+}
+
 QSize thumbnailDrawSize(QSize pixelSize, QSize sourceSize, QSize maximumSize,
                         qreal devicePixelRatio) {
   if (pixelSize.isEmpty() || maximumSize.isEmpty())
@@ -27,10 +35,7 @@ QSize thumbnailDrawSize(QSize pixelSize, QSize sourceSize, QSize maximumSize,
   // A cached thumbnail may be smaller than its cell even though the source
   // image is large enough to fill it: enlargement is limited by the source
   // resolution, not by the resolution of the cached copy.
-  const bool sourceIsLandscape = sourceSize.width() > sourceSize.height();
-  const bool thumbnailIsLandscape = pixelSize.width() > pixelSize.height();
-  if (sourceIsLandscape != thumbnailIsLandscape)
-    sourceSize.transpose();
+  sourceSize = sourceSizeInThumbnailOrientation(pixelSize, sourceSize);
 
   const qreal effectiveRatio = qMax(devicePixelRatio, kMinimumDevicePixelRatio);
   const QSize maximumLogicalSize(qRound(sourceSize.width() / effectiveRatio),
