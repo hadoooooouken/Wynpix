@@ -382,8 +382,46 @@ private slots:
     fixture.model.populate(3, 1);
     QVERIFY(!fixture.grid.masonryReady());
 
-    // After the grace period timeout (50 ms), the layout is revealed regardless
+    // After the grace period timeout, the layout is revealed regardless
     QTRY_VERIFY_WITH_TIMEOUT(fixture.grid.masonryReady(), 300);
+  }
+
+  void masonryTargetRowHeightBoundsWideImagesToIconSize() {
+    // Standard icon size is 256. Target row height aims for 16:9 width <= iconSize.
+    const int iconSize = 256;
+    const int rowHeight = MasonryLayout::targetRowHeightFor(iconSize);
+    QCOMPARE(rowHeight, 144);
+
+    // At target row height, 16:9 image width equals icon size exactly.
+    const double wideAspect = 16.0 / 9.0;
+    const int targetWideWidth = qRound(rowHeight * wideAspect);
+    QCOMPARE(targetWideWidth, iconSize);
+
+    // Full layout test with 16:9 images to verify tiles do not blow up beyond icon size.
+    MasonryLayoutInput input;
+    input.viewWidth = 1000;
+    input.targetRowHeight = rowHeight;
+    input.itemCount = 4;
+    input.dirCount = 0;
+    input.sourceSizes = {QSize(1920, 1080), QSize(1920, 1080), QSize(1920, 1080), QSize(1920, 1080)};
+    const auto layout = MasonryLayout::create(input);
+    QVERIFY(layout != nullptr);
+    for (int i = 0; i < input.itemCount; ++i) {
+      const QRectF rect = layout->itemRect(i);
+      // With justified row planning across 1000px, 16:9 tiles stay bounded near iconSize.
+      QVERIFY(rect.width() <= iconSize + 16);
+    }
+
+    // Incomplete final row inherits height from previous full row so identical photos align.
+    input.itemCount = 6;
+    input.sourceSizes = {QSize(1920, 1080), QSize(1920, 1080), QSize(1920, 1080),
+                         QSize(1920, 1080), QSize(1920, 1080), QSize(1920, 1080)};
+    const auto multiRowLayout = MasonryLayout::create(input);
+    QVERIFY(multiRowLayout != nullptr);
+    QCOMPARE(multiRowLayout->rowCount(), 2);
+    QCOMPARE(multiRowLayout->rowExtent(1), multiRowLayout->rowExtent(0));
+    QCOMPARE(multiRowLayout->itemRect(4).x(), multiRowLayout->itemRect(0).x());
+    QCOMPARE(multiRowLayout->itemRect(4).width(), multiRowLayout->itemRect(0).width());
   }
 
   void imageSizeProviderCachePreservesAcrossReset() {

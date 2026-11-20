@@ -47,7 +47,10 @@ RowPlan planRow(const QList<double> &aspects, int first, double available, doubl
         }
         if (count > 0) {
             const double heightWithout = heightToFill(available, count, sum);
-            if (heightWithout - target < target - heightWith)
+            // Penalize stretching rows taller than target more than compressing them,
+            // avoiding upscale blur and keeping 16:9 thumbnails within the icon size.
+            constexpr double kStretchPenalty = 1.5;
+            if ((heightWithout - target) * kStretchPenalty < target - heightWith)
                 return {image - 1, sum, true};
         }
         return {image, withImage, true};
@@ -61,7 +64,7 @@ std::shared_ptr<const MasonryLayout> MasonryLayout::create(const MasonryLayoutIn
 }
 
 int MasonryLayout::targetRowHeightFor(int iconSize) {
-    return qRound(boundedFolderIconSize(iconSize) * ThumbnailStripLayout::kImageAspect);
+    return qRound(boundedFolderIconSize(iconSize) * kTargetAspect);
 }
 
 QSize MasonryLayout::thumbnailBoxFor(int targetRowHeight, qreal devicePixelRatio) {
@@ -105,11 +108,14 @@ void MasonryLayout::addImageRows(const MasonryLayoutInput &input, int count, int
     const double target = qMax(1, input.targetRowHeight);
     qreal top = mRows.isEmpty() ? kMargin : mContentExtent + kFolderSectionGap;
     int firstImage = 0;
+    double lastFullRowHeight = target;
     while (firstImage < aspects.size()) {
         const RowPlan plan = planRow(aspects, firstImage, available, target);
         const int imageCount = plan.last - firstImage + 1;
         const double height =
-            plan.full ? heightToFill(available, imageCount, plan.aspectSum) : target;
+            plan.full ? heightToFill(available, imageCount, plan.aspectSum) : lastFullRowHeight;
+        if (plan.full)
+            lastFullRowHeight = height;
         const int rowHeight = qMax(1, qRound(height));
         // The edges are rounded one by one from their exact position, so that
         // the last tile of a full row ends exactly at the right margin.

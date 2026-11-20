@@ -41,6 +41,9 @@ public:
     static constexpr int kMargin = 4;
     // Space between the folder strip and the images.
     static constexpr int kFolderSectionGap = 8;
+    // Height of the row relative to the icon size, targeted so that a 16:9
+    // image matches the icon size in width without exceeding it.
+    static constexpr double kTargetAspect = 9.0 / 16.0;
     // Proportions (width / height) of an image of unknown size, and the
     // limits the proportions of the others are held to; a thumbnail more
     // extreme than that is fitted into its tile with empty space around.
