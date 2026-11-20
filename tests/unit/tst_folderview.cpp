@@ -136,6 +136,137 @@ private slots:
     QVERIFY(!scroll.horizontal);
   }
 
+  void masonryPreservesFolderThumbnailTargetSize() {
+    GridFixture fixture;
+    fixture.model.setDirCount(2);
+    const QSize gridFolderTarget = fixture.grid.layout().cell.imageTargetSize(1.0);
+    QCOMPARE(fixture.model.requestConfig().folderTargetSize, gridFolderTarget);
+    QCOMPARE(fixture.model.requestConfig().targetSize, gridFolderTarget);
+
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+    const ThumbnailRequestConfig masonryRequest = fixture.model.requestConfig();
+    QCOMPARE(masonryRequest.folderTargetSize, gridFolderTarget);
+    QCOMPARE(masonryRequest.targetSize,
+             MasonryLayout::thumbnailBoxFor(
+                 MasonryLayout::targetRowHeightFor(fixture.grid.iconSize()), 1.0));
+    QVERIFY(masonryRequest.targetSize != gridFolderTarget);
+
+    fixture.grid.setMasonryEnabled(false);
+    QCOMPARE(fixture.model.requestConfig().folderTargetSize, gridFolderTarget);
+    QCOMPARE(fixture.model.requestConfig().targetSize, gridFolderTarget);
+  }
+
+  void togglingMasonryDoesNotReloadFolderThumbnails() {
+    GridFixture fixture(6);
+    fixture.model.setDirCount(2);
+    const QSize folderTarget = fixture.grid.layout().cell.imageTargetSize(1.0);
+    const QSize masonryTarget = MasonryLayout::thumbnailBoxFor(
+        MasonryLayout::targetRowHeightFor(fixture.grid.iconSize()), 1.0);
+
+    QImage folderImage(40, 30, QImage::Format_RGB32);
+    folderImage.fill(Qt::gray);
+    fixture.model.setThumbnail(
+        0,
+        ThumbnailEntry{
+            .handle = {.image = folderImage},
+            .name = u"folder0"_s,
+            .info = u"Folder"_s,
+            .targetSize = folderTarget,
+        });
+    QVERIFY(fixture.model.data(fixture.model.index(0), ThumbnailListModel::LoadedRole).toBool());
+
+    QSignalSpy requests(&fixture.model, &ThumbnailListModel::thumbnailsNeeded);
+    fixture.grid.setMasonryEnabled(true);
+
+    // Folder 0 remains loaded and valid.
+    QVERIFY(fixture.model.data(fixture.model.index(0), ThumbnailListModel::LoadedRole).toBool());
+
+    // Wait for the delayed thumbnail reload pass.
+    QTRY_VERIFY(!requests.isEmpty());
+
+    bool sawImagesWithMasonryTarget = false;
+    bool sawFolderWithFolderTarget = false;
+    for (const QList<QVariant> &args : std::as_const(requests)) {
+      const QList<int> requestedIndices = args.at(0).value<QList<int>>();
+      const QSize requestedSize = args.at(1).toSize();
+      // Loaded folder 0 must never be re-requested.
+      QVERIFY(!requestedIndices.contains(0));
+      if (requestedIndices.contains(1)) {
+        QCOMPARE(requestedSize, folderTarget);
+        sawFolderWithFolderTarget = true;
+      }
+      for (int i = 2; i < 6; ++i) {
+        if (requestedIndices.contains(i)) {
+          QCOMPARE(requestedSize, masonryTarget);
+          sawImagesWithMasonryTarget = true;
+        }
+      }
+    }
+    QVERIFY(sawFolderWithFolderTarget);
+    QVERIFY(sawImagesWithMasonryTarget);
+
+    // Toggle masonry back off: folder 0 remains loaded, images revert to grid target.
+    requests.clear();
+    fixture.grid.setMasonryEnabled(false);
+    QVERIFY(fixture.model.data(fixture.model.index(0), ThumbnailListModel::LoadedRole).toBool());
+
+    QTRY_VERIFY(!requests.isEmpty());
+    bool sawImagesWithGridTarget = false;
+    for (const QList<QVariant> &args : std::as_const(requests)) {
+      const QList<int> requestedIndices = args.at(0).value<QList<int>>();
+      const QSize requestedSize = args.at(1).toSize();
+      QVERIFY(!requestedIndices.contains(0));
+      for (int i = 2; i < 6; ++i) {
+        if (requestedIndices.contains(i)) {
+          QCOMPARE(requestedSize, folderTarget);
+          sawImagesWithGridTarget = true;
+        }
+      }
+    }
+    QVERIFY(sawImagesWithGridTarget);
+  }
+
+  void openingDirectoryInMasonryRequestsFoldersWithFolderTarget() {
+    GridFixture fixture(0);
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+
+    QSignalSpy requests(&fixture.model, &ThumbnailListModel::thumbnailsNeeded);
+
+    // Simulate opening a directory with 3 folders and 4 images.
+    const int dirCount = 3;
+    const int totalCount = 7;
+    fixture.model.populate(totalCount, dirCount);
+
+    QTRY_VERIFY(!requests.isEmpty());
+
+    const QSize folderTarget = fixture.grid.layout().cell.imageTargetSize(1.0);
+    const QSize masonryTarget = MasonryLayout::thumbnailBoxFor(
+        MasonryLayout::targetRowHeightFor(fixture.grid.iconSize()), 1.0);
+
+    bool sawFolders = false;
+    bool sawImages = false;
+    for (const QList<QVariant> &args : std::as_const(requests)) {
+      const QList<int> indices = args.at(0).value<QList<int>>();
+      const QSize targetSize = args.at(1).toSize();
+      for (int i = 0; i < dirCount; ++i) {
+        if (indices.contains(i)) {
+          QCOMPARE(targetSize, folderTarget);
+          sawFolders = true;
+        }
+      }
+      for (int i = dirCount; i < totalCount; ++i) {
+        if (indices.contains(i)) {
+          QCOMPARE(targetSize, masonryTarget);
+          sawImages = true;
+        }
+      }
+    }
+    QVERIFY(sawFolders);
+    QVERIFY(sawImages);
+  }
+
   void pressSelectsAndDoubleClickActivates() {
     GridFixture fixture;
     QSignalSpy activated(&fixture.model, &ThumbnailListModel::activated);

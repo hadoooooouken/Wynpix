@@ -108,8 +108,11 @@ void DirectoryPresenter::setView(std::shared_ptr<IDirectoryView> _view) {
   if (view)
     return;
   view = _view;
-  if (model)
-    view->populate(mShowDirs ? model->totalCount() : model->fileCount());
+  if (model) {
+    view->populate(mShowDirs ? model->totalCount() : model->fileCount(),
+                   mShowDirs ? model->dirCount() : 0);
+    view->setDirCount(mShowDirs ? model->dirCount() : 0);
+  }
   connect(dynamic_cast<QObject *>(view.get()), SIGNAL(itemActivated(int)), this,
           SLOT(onItemActivated(int)));
   // A string-based connection fails silently when the signatures differ, and
@@ -184,7 +187,8 @@ void DirectoryPresenter::populateView() {
   folderCoverResolver->invalidate(model->directoryPath());
   // Thumbnailer is shared with the other presenter. Clearing its pool here
   // would cancel that view's queued requests.
-  view->populate(mShowDirs ? model->totalCount() : model->fileCount());
+  view->populate(mShowDirs ? model->totalCount() : model->fileCount(),
+                 mShowDirs ? model->dirCount() : 0);
   view->setDirCount(mShowDirs ? model->dirCount() : 0);
   refreshImageSizes();
   selectAndFocus(0);

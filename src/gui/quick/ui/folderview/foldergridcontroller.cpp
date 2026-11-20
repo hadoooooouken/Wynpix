@@ -239,20 +239,23 @@ void FolderGridController::scheduleLayout() {
 
 // The grid requests thumbnails for the image area times the device pixel
 // ratio and never crops; the masonry layout for a box that fits the usual
-// proportions of its tiles. The rows of the masonry layout replace the
-// uniform ones, which are left empty so that only the rows differ while the
-// layout follows the sizes of the images.
+// proportions of its tiles. Folders keep their cell target box in both layouts
+// so their cover previews never change size or reload when masonry is toggled.
+// The rows of the masonry layout replace the uniform ones, which are left empty
+// so that only the rows differ while the layout follows the sizes of the images.
 void FolderGridController::configureModel() {
     const bool masonry = mMasonry && mMasonryLayout;
+    const QSize folderTarget = mLayout.cell.imageTargetSize(mDevicePixelRatio);
     const QSize target = masonry ? MasonryLayout::thumbnailBoxFor(
                                        MasonryLayout::targetRowHeightFor(mIconSize),
                                        mDevicePixelRatio)
-                                 : mLayout.cell.imageTargetSize(mDevicePixelRatio);
+                                 : folderTarget;
     std::shared_ptr<const ItemRows> rows;
     if (masonry)
         rows = mMasonryLayout;
     mModel.configure({
         .targetSize = target,
+        .folderTargetSize = folderTarget,
         .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,

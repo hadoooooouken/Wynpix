@@ -126,13 +126,16 @@ bool ThumbnailListModel::canScrollForward() const {
 //------------------------------------------------------------------------------
 // Directory view
 
-void ThumbnailListModel::populate(int count) {
+void ThumbnailListModel::populate(int count, int dirCount) {
     if (count < 0) {
         qWarning() << "ThumbnailListModel received a negative item count:" << count;
         return;
     }
+    const int newDirCount = qMax(0, dirCount);
+    const bool dirCountDiffers = newDirCount != mDirCount;
     beginResetModel();
     mCount = count;
+    mDirCount = newDirCount;
     refreshUniformRows();
     mSelection.clear();
     mDragHover = -1;
@@ -146,6 +149,8 @@ void ThumbnailListModel::populate(int count) {
     mRangeAnchor.clear();
     endResetModel();
     emit countChanged();
+    if (dirCountDiffers)
+        emit dirCountChanged();
     emit selectionChanged();
     // The view starts at the beginning of the new directory.
     stopAnimation();
@@ -157,13 +162,15 @@ void ThumbnailListModel::populate(int count) {
 }
 
 void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry) {
-    // The thumbnailer publishes to every view, and another view may request
-    // the same path and box with the other crop.
-    const bool otherCrop = entry.cropped.has_value() && *entry.cropped != mRequest.crop;
-    if (entry.targetSize != mRequest.targetSize || otherCrop || !checkRange(pos))
+    if (!checkRange(pos))
         return;
     mRequested.remove(pos);
     mUnavailable.remove(pos);
+    // The thumbnailer publishes to every view, and another view may request
+    // the same path and box with the other crop.
+    const bool otherCrop = entry.cropped.has_value() && *entry.cropped != mRequest.crop;
+    if (entry.targetSize != targetSizeFor(pos) || otherCrop)
+        return;
     if (!entry.handle.isValid()) {
         mLoaded.remove(pos);
         mUnavailable.insert(pos);
@@ -195,9 +202,11 @@ void ThumbnailListModel::setThumbnailPending(int pos, bool pending) {
 }
 
 void ThumbnailListModel::setThumbnailUnavailable(int pos, QSize targetSize) {
-    if (targetSize != mRequest.targetSize || !checkRange(pos))
+    if (!checkRange(pos))
         return;
     mRequested.remove(pos);
+    if (targetSize != targetSizeFor(pos))
+        return;
     mLoaded.remove(pos);
     mUnavailable.insert(pos);
     emitRowChanged(pos, kThumbnailRoles);
@@ -336,7 +345,7 @@ void ThumbnailListModel::reloadItem(int index) {
     mRequested.insert(index);
     if (!wasLoaded)
         emitRowChanged(index, kThumbnailRoles);
-    emit thumbnailsNeeded({index}, mRequest.targetSize, mRequest.crop, true);
+    emit thumbnailsNeeded({index}, targetSizeFor(index), mRequest.crop, true);
 }
 
 void ThumbnailListModel::setDragHover(int index) {
@@ -355,11 +364,15 @@ void ThumbnailListModel::setDirCount(int count) {
     const int newCount = qMax(0, count);
     if (newCount == mDirCount)
         return;
-    const int last = qMin(qMax(newCount, mDirCount), mCount) - 1;
+    const int firstChanged = qMin(newCount, mDirCount);
+    const int lastChanged = qMax(newCount, mDirCount) - 1;
     mDirCount = newCount;
-    if (last >= 0)
-        emit dataChanged(index(0), index(last), {DirectoryRole});
+    for (int i = firstChanged; i <= lastChanged; ++i)
+        mRequested.remove(i);
+    if (lastChanged >= 0)
+        emit dataChanged(index(firstChanged), index(lastChanged), {DirectoryRole});
     emit dirCountChanged();
+    loadVisibleThumbnails();
 }
 
 void ThumbnailListModel::setSourceSize(int pos, const QSize &size) {
@@ -403,6 +416,8 @@ void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
     if (config == mRequest)
         return;
     const bool targetSizeChanged = config.targetSize != mRequest.targetSize;
+    const bool folderTargetSizeChanged =
+        config.targetSizeFor(0, mDirCount) != mRequest.targetSizeFor(0, mDirCount);
     const bool unload = config.crop != mRequest.crop ||
                         config.cacheResolution != mRequest.cacheResolution;
     mRequest = config;
@@ -411,12 +426,28 @@ void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
         loadVisibleThumbnails();
         return;
     }
-    if (targetSizeChanged) {
+    if (targetSizeChanged || folderTargetSizeChanged) {
         // Keep existing loaded thumbnails in mLoaded so they can be smoothly scaled
         // by ThumbnailItem on the GPU without visual blinking or showing placeholders.
-        // In-flight requests for the previous targetSize are now obsolete.
-        mRequested.clear();
-        mUnavailable.clear();
+        // In-flight requests for the obsolete target size are cleared selectively.
+        auto removeMatching = [](QSet<int> &set, auto &&predicate) {
+            for (auto it = set.begin(); it != set.end();) {
+                if (predicate(*it))
+                    it = set.erase(it);
+                else
+                    ++it;
+            }
+        };
+        if (targetSizeChanged && folderTargetSizeChanged) {
+            mRequested.clear();
+            mUnavailable.clear();
+        } else if (targetSizeChanged) {
+            removeMatching(mRequested, [this](int pos) { return pos >= mDirCount; });
+            removeMatching(mUnavailable, [this](int pos) { return pos >= mDirCount; });
+        } else {
+            removeMatching(mRequested, [this](int pos) { return pos < mDirCount; });
+            removeMatching(mUnavailable, [this](int pos) { return pos < mDirCount; });
+        }
         if (mLoaded.isEmpty())
             loadVisibleThumbnails();
         else
@@ -753,6 +784,10 @@ void ThumbnailListModel::refreshUniformRows() {
         UniformItemRows(mCount, mScroll.columns, mScroll.itemExtent, mScroll.leadingSpace);
 }
 
+QSize ThumbnailListModel::targetSizeFor(int pos) const {
+    return mRequest.targetSizeFor(pos, mDirCount);
+}
+
 qreal ThumbnailListModel::maximumOffset() const {
     return qMax(0.0, contentExtent() - mExtent);
 }
@@ -808,21 +843,61 @@ void ThumbnailListModel::loadVisibleThumbnailsDelayed() {
 void ThumbnailListModel::requestMissingThumbnails(ItemRange range) {
     if (!range.isValid())
         return;
-    QList<int> loadList;
+    const bool splitTargets = mDirCount > 0 && targetSizeFor(0) != mRequest.targetSize;
+    if (!splitTargets) {
+        QList<int> loadList;
+        for (int index = range.first; index <= range.last; ++index) {
+            const auto it = mLoaded.constFind(index);
+            const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != mRequest.targetSize);
+            if ((it == mLoaded.cend() || needsTargetSize) && !mRequested.contains(index) &&
+                !mUnavailable.contains(index)) {
+                loadList.append(index);
+            }
+        }
+        if (loadList.isEmpty())
+            return;
+        if (mScrollDirection == ScrollDirection::Backwards)
+            std::reverse(loadList.begin(), loadList.end());
+        for (const int index : std::as_const(loadList))
+            mRequested.insert(index);
+        emit thumbnailsNeeded(loadList, mRequest.targetSize, mRequest.crop, false);
+        return;
+    }
+
+    QList<int> folderLoadList;
+    QList<int> imageLoadList;
     for (int index = range.first; index <= range.last; ++index) {
         const auto it = mLoaded.constFind(index);
-        const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != mRequest.targetSize);
+        const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != targetSizeFor(index));
         if ((it == mLoaded.cend() || needsTargetSize) && !mRequested.contains(index) &&
-            !mUnavailable.contains(index))
-            loadList.append(index);
+            !mUnavailable.contains(index)) {
+            if (index < mDirCount)
+                folderLoadList.append(index);
+            else
+                imageLoadList.append(index);
+        }
     }
-    if (loadList.isEmpty())
+    if (folderLoadList.isEmpty() && imageLoadList.isEmpty())
         return;
-    if (mScrollDirection == ScrollDirection::Backwards)
-        std::reverse(loadList.begin(), loadList.end());
-    for (const int index : std::as_const(loadList))
+    if (mScrollDirection == ScrollDirection::Backwards) {
+        std::reverse(folderLoadList.begin(), folderLoadList.end());
+        std::reverse(imageLoadList.begin(), imageLoadList.end());
+    }
+    for (const int index : std::as_const(folderLoadList))
         mRequested.insert(index);
-    emit thumbnailsNeeded(loadList, mRequest.targetSize, mRequest.crop, false);
+    for (const int index : std::as_const(imageLoadList))
+        mRequested.insert(index);
+    if (mScrollDirection == ScrollDirection::Backwards) {
+        if (!imageLoadList.isEmpty())
+            emit thumbnailsNeeded(imageLoadList, mRequest.targetSize, mRequest.crop, false);
+        if (!folderLoadList.isEmpty())
+            emit thumbnailsNeeded(folderLoadList, targetSizeFor(folderLoadList.first()), mRequest.crop, false);
+    } else {
+        if (!folderLoadList.isEmpty())
+            emit thumbnailsNeeded(folderLoadList, targetSizeFor(folderLoadList.first()), mRequest.crop, false);
+        if (!imageLoadList.isEmpty())
+            emit thumbnailsNeeded(imageLoadList, mRequest.targetSize, mRequest.crop, false);
+    }
 }
 
 // A view that was never laid out (the strip before its first creation) has

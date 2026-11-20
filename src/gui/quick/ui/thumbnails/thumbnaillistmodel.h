@@ -37,10 +37,18 @@ struct ThumbnailEntry {
 // keeps existing thumbnails while fetching the new resolution.
 struct ThumbnailRequestConfig {
     QSize targetSize;
+    // Target box for directory items (pos < dirCount). If invalid or empty, targetSize is used.
+    QSize folderTargetSize;
     bool crop = false;
     bool unloadOffscreen = false;
     // The thumbnailResolution setting (size of the cached thumbnails).
     int cacheResolution = 0;
+
+    [[nodiscard]] QSize targetSizeFor(int pos, int dirCount) const {
+        if (pos >= 0 && pos < dirCount && folderTargetSize.isValid() && !folderTargetSize.isEmpty())
+            return folderTargetSize;
+        return targetSize;
+    }
 
     friend bool operator==(const ThumbnailRequestConfig &, const ThumbnailRequestConfig &) = default;
 };
@@ -198,7 +206,7 @@ public:
     [[nodiscard]] bool canScrollForward() const;
 
     // --- directory view (IDirectoryView) ---------------------------------
-    void populate(int count);
+    void populate(int count, int dirCount = 0);
     // Ignored unless entry.targetSize is the requested target box (the box
     // the request was made for, whatever the pixel size of the entry is),
     // the entry is made for the requested crop (or either) and pos is an item.
@@ -353,6 +361,7 @@ private:
     // of the current item count.
     [[nodiscard]] const ItemRows &rows() const;
     void refreshUniformRows();
+    [[nodiscard]] QSize targetSizeFor(int pos) const;
 
     int mCount = 0;
     int mDirCount = 0;
