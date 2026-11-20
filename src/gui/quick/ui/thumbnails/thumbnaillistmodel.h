@@ -12,9 +12,11 @@
 #include <QTimer>
 #include <QtQml/qqmlregistration.h>
 
+#include <memory>
 #include <optional>
 
 #include "gui/quick/render/thumbnailitem.h"
+#include "gui/quick/ui/thumbnails/itemrows.h"
 
 // A thumbnail and its labels, as the thumbnailer made it.
 struct ThumbnailEntry {
@@ -45,7 +47,8 @@ struct ThumbnailRequestConfig {
 
 // How the view lays out and scrolls. Items fill rows of columns items each
 // (1 for the strip); rows follow each other along the scroll axis after
-// leadingSpace.
+// leadingSpace. A view whose rows differ in size (the masonry layout) gives
+// its own rows instead; they replace itemExtent, columns and leadingSpace.
 struct ThumbnailScrollConfig {
     // Preload distance of the thumbnail strip.
     static constexpr int kStripPreloadDistance = 3000;
@@ -55,6 +58,9 @@ struct ThumbnailScrollConfig {
     int itemExtent = 0;
     int columns = 1;
     int leadingSpace = 0;
+    // Rows of non-uniform size; empty for the uniform rows above. The model
+    // shares them, so they stay valid until the next configuration.
+    std::shared_ptr<const ItemRows> rows;
     // Distance beyond the visible range in which thumbnails are loaded.
     int preloadDistance = kStripPreloadDistance;
     // Focusing an item keeps half a row of its neighbours in view when the
@@ -211,6 +217,16 @@ public:
     void setDragHover(int index);
     // The first count items are directories.
     void setDirCount(int count);
+    // The size of the image at pos: read from its file, or reported by its
+    // thumbnail. An invalid size is ignored.
+    void setSourceSize(int pos, const QSize &size);
+    // Sizes by item; an invalid size is not known (yet), and so is that of a
+    // folder.
+    [[nodiscard]] QList<QSize> sourceSizes() const;
+    // Whether the view lays images out by their proportions and wants their
+    // sizes.
+    [[nodiscard]] bool imageSizesWanted() const;
+    void setImageSizesWanted(bool wanted);
     [[nodiscard]] bool hasThumbnail(int pos) const;
 
     // --- configuration (ThumbnailPanelController) ------------------------
@@ -235,6 +251,9 @@ public:
     // Scrolls until the item is fully visible (animated with smooth
     // scrolling).
     void scrollToItem(int index);
+    // Moves the view to offset at once, for rows before it that changed in
+    // size.
+    void restoreOffset(qreal offset);
     // Activates the item (Enter in the folder grid).
     void activate(int index);
     // The right button moved far enough since its press to scroll to an end.
@@ -266,6 +285,9 @@ public:
 signals:
     void countChanged();
     void dirCountChanged();
+    // A size was set or changed.
+    void sourceSizesChanged();
+    void imageSizesWantedChanged();
     void selectionChanged();
     // Requests the thumbnails of indices for the target box (device pixels).
     void thumbnailsNeeded(const QList<int> &indices, QSize targetSize, bool crop, bool force);
@@ -327,14 +349,18 @@ private:
     void scrollPrecise(int delta);
     void scrollByItem(int delta);
     void scrollToEdge(bool end);
-    [[nodiscard]] qreal itemStart(int index) const;
-    [[nodiscard]] int lineCount() const;
+    // The rows the view is laid out in: the configured ones, or uniform rows
+    // of the current item count.
+    [[nodiscard]] const ItemRows &rows() const;
+    void refreshUniformRows();
 
     int mCount = 0;
     int mDirCount = 0;
     QList<int> mSelection;
     int mDragHover = -1;
     QHash<int, ThumbnailEntry> mLoaded;
+    QHash<int, QSize> mSourceSizes;
+    bool mImageSizesWanted = false;
     QSet<int> mRequested;
     QSet<int> mPendingFinal;
     QSet<int> mUnavailable;
@@ -342,6 +368,7 @@ private:
 
     ThumbnailRequestConfig mRequest;
     ThumbnailScrollConfig mScroll;
+    UniformItemRows mUniformRows;
     ItemActivation mActivation = ItemActivation::OnPress;
     QList<int> mRangeAnchor;
     bool mRangeSelection = false;

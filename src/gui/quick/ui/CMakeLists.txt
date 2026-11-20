@@ -81,6 +81,12 @@ qt_add_qml_module(wynpix_ui
         settings/settingsdialogcontroller.cpp
         settings/settingsdialogcontroller.h
         settings/settingseditortypes.h
+        folderview/masonrylayout.cpp
+        folderview/masonrylayout.h
+        folderview/masonrytilesmodel.cpp
+        folderview/masonrytilesmodel.h
+        thumbnails/itemrows.cpp
+        thumbnails/itemrows.h
         thumbnails/thumbnaillistmodel.cpp
         thumbnails/thumbnaillistmodel.h
         thumbnails/thumbnailpanelcontroller.cpp
@@ -106,6 +112,7 @@ qt_add_qml_module(wynpix_ui
         FileReplaceDialog.qml
         FloatingMessage.qml
         FolderGridView.qml
+        FolderMasonryView.qml
         FolderView.qml
         FormatFilterComboBox.qml
         FullscreenInfoOverlay.qml

@@ -133,9 +133,11 @@ void ThumbnailListModel::populate(int count) {
     }
     beginResetModel();
     mCount = count;
+    refreshUniformRows();
     mSelection.clear();
     mDragHover = -1;
     mLoaded.clear();
+    mSourceSizes.clear();
     mRequested.clear();
     mPendingFinal.clear();
     mUnavailable.clear();
@@ -165,8 +167,17 @@ void ThumbnailListModel::setThumbnail(int pos, const ThumbnailEntry &entry) {
     if (!entry.handle.isValid()) {
         mLoaded.remove(pos);
         mUnavailable.insert(pos);
-    } else if (!mRequest.unloadOffscreen || preloadRange().contains(pos)) {
-        mLoaded.insert(pos, entry);
+    } else {
+        // The thumbnail knows the size of its image, whether it stays loaded
+        // or not, but reports it as stored: the tile follows the thumbnail,
+        // which is rotated by the EXIF orientation. A folder icon shows no
+        // image.
+        if (pos >= mDirCount) {
+            setSourceSize(pos, sourceSizeInThumbnailOrientation(entry.handle.pixelSize(),
+                                                                 entry.handle.sourceSize));
+        }
+        if (!mRequest.unloadOffscreen || preloadRange().contains(pos))
+            mLoaded.insert(pos, entry);
     }
     emitRowChanged(pos, kThumbnailRoles);
     notifyIfVisibleThumbnailsReady();
@@ -222,10 +233,12 @@ void ThumbnailListModel::deselect(int index) {
 }
 
 void ThumbnailListModel::focusOn(int index) {
-    if (!checkRange(index) || mExtent <= 0.0 || mScroll.itemExtent <= 0)
+    const ItemRows &itemRows = rows();
+    if (!checkRange(index) || mExtent <= 0.0 || itemRows.rowCount() == 0)
         return;
-    const qreal start = itemStart(index);
-    const qreal extent = mScroll.itemExtent;
+    const int row = itemRows.rowOf(index);
+    const qreal start = itemRows.rowStart(row);
+    const qreal extent = itemRows.rowExtent(row);
     if (mScroll.centerSelection) {
         const qreal targetCenter = start + extent / 2.0;
         // A hidden view scrolls at once: nobody sees the animation, and it
@@ -272,6 +285,7 @@ void ThumbnailListModel::insertItem(int index) {
     // rows beyond the count.
     mSelection.clear();
     ++mCount;
+    refreshUniformRows();
     endInsertRows();
     emit countChanged();
     updateScrollEdges();
@@ -292,6 +306,7 @@ void ThumbnailListModel::removeItem(int index) {
     }
     beginRemoveRows({}, index, index);
     mLoaded.remove(index);
+    mSourceSizes.remove(index);
     mRequested.remove(index);
     mPendingFinal.remove(index);
     mUnavailable.remove(index);
@@ -302,6 +317,7 @@ void ThumbnailListModel::removeItem(int index) {
         --mDragHover;
     mSelection.clear();
     --mCount;
+    refreshUniformRows();
     endRemoveRows();
     emit countChanged();
     updateScrollEdges();
@@ -346,6 +362,36 @@ void ThumbnailListModel::setDirCount(int count) {
     emit dirCountChanged();
 }
 
+void ThumbnailListModel::setSourceSize(int pos, const QSize &size) {
+    if (!checkRange(pos) || !size.isValid())
+        return;
+    const auto known = mSourceSizes.constFind(pos);
+    if (known != mSourceSizes.cend() && *known == size)
+        return;
+    mSourceSizes.insert(pos, size);
+    emit sourceSizesChanged();
+}
+
+QList<QSize> ThumbnailListModel::sourceSizes() const {
+    QList<QSize> sizes(mCount);
+    for (auto it = mSourceSizes.cbegin(); it != mSourceSizes.cend(); ++it) {
+        if (it.key() >= 0 && it.key() < mCount)
+            sizes[it.key()] = it.value();
+    }
+    return sizes;
+}
+
+bool ThumbnailListModel::imageSizesWanted() const {
+    return mImageSizesWanted;
+}
+
+void ThumbnailListModel::setImageSizesWanted(bool wanted) {
+    if (wanted == mImageSizesWanted)
+        return;
+    mImageSizesWanted = wanted;
+    emit imageSizesWantedChanged();
+}
+
 bool ThumbnailListModel::hasThumbnail(int pos) const {
     return mLoaded.contains(pos);
 }
@@ -383,9 +429,16 @@ void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
 void ThumbnailListModel::setScrollConfig(const ThumbnailScrollConfig &config) {
     if (config == mScroll)
         return;
+    // Rows laid out again (the sizes of the images became known) are no
+    // reason to bring the selection back into view; the view keeps its place.
+    ThumbnailScrollConfig withCurrentRows = config;
+    withCurrentRows.rows = mScroll.rows;
+    const bool onlyRowsChanged = withCurrentRows == mScroll;
     mScroll = config;
+    refreshUniformRows();
     updateScrollEdges();
-    focusOnSelection();
+    if (!onlyRowsChanged)
+        focusOnSelection();
     if (!mLoadTimer.isActive())
         loadVisibleThumbnails();
 }
@@ -523,35 +576,31 @@ void ThumbnailListModel::wheelScrolled(QPoint angleDelta, QPoint pixelDelta) {
 }
 
 void ThumbnailListModel::scrollPage(bool forward) {
-    if (mCount == 0 || mExtent <= 0.0 || mScroll.itemExtent <= 0)
+    const ItemRows &itemRows = rows();
+    if (mCount == 0 || mExtent <= 0.0 || itemRows.rowCount() == 0)
         return;
     const qreal start = mAnimating ? mAnimationTarget : mOffset;
     if (forward ? start >= maximumOffset() - kScrollEdgeTolerancePx
                 : start <= kScrollEdgeTolerancePx)
         return;
-    const qreal lineExtent = mScroll.itemExtent;
-    const auto lineStart = [this, lineExtent](int line) {
-        return mScroll.leadingSpace + static_cast<qreal>(line) * lineExtent;
-    };
-    const auto linePosition = [this, lineExtent](qreal position) {
-        return (position - mScroll.leadingSpace) / lineExtent;
-    };
     qreal target = 0.0;
     if (forward) {
         // The first row that ends past the view end.
-        target = lineStart(static_cast<int>(
-            std::floor(linePosition(start + mExtent + kScrollEdgeTolerancePx))));
+        target = itemRows.rowStart(
+            itemRows.rowAt(start + mExtent + kScrollEdgeTolerancePx));
         // A view shorter than a row moves on to the next row.
         if (target <= start + kScrollEdgeTolerancePx)
-            target = lineStart(static_cast<int>(std::floor(linePosition(start))) + 1);
+            target = itemRows.rowStart(itemRows.rowAt(start) + 1);
     } else {
         // The last row that starts before the view start; the first row
         // brings back the space before it.
-        const int line = static_cast<int>(
-                             std::ceil(linePosition(start - kScrollEdgeTolerancePx))) - 1;
-        target = line <= 0 ? 0.0 : lineStart(line + 1) - mExtent;
+        const qreal before = start - kScrollEdgeTolerancePx;
+        int row = itemRows.rowAt(before);
+        if (itemRows.rowStart(row) >= before)
+            --row;
+        target = row <= 0 ? 0.0 : itemRows.rowStart(row + 1) - mExtent;
         if (target >= start - kScrollEdgeTolerancePx)
-            target = lineStart(line);
+            target = itemRows.rowStart(qMax(row, 0));
     }
     mScrollDirection = forward ? ScrollDirection::Forwards : ScrollDirection::Backwards;
     if (!mScroll.smoothScroll) {
@@ -672,19 +721,14 @@ bool ThumbnailListModel::checkRange(int index) const {
 
 // The items of the rows that intersect start - end.
 ThumbnailListModel::ItemRange ThumbnailListModel::itemRange(qreal start, qreal end) const {
-    if (mCount == 0 || mScroll.itemExtent <= 0)
+    const ItemRows &itemRows = rows();
+    if (mCount == 0 || itemRows.rowCount() == 0)
         return {};
-    const int lastLine = lineCount() - 1;
-    const auto lineAt = [this, lastLine](qreal position) {
-        const qreal line = std::floor((position - mScroll.leadingSpace) / mScroll.itemExtent);
-        return static_cast<int>(qBound(0.0, line, static_cast<qreal>(lastLine)));
-    };
-    const int firstLine = lineAt(start);
-    const int endLine = lineAt(end);
-    if (firstLine > endLine)
+    const int firstRow = itemRows.rowAt(start);
+    const int endRow = itemRows.rowAt(end);
+    if (firstRow < 0 || firstRow > endRow)
         return {};
-    const int columns = qMax(1, mScroll.columns);
-    return ItemRange{firstLine * columns, qMin(mCount - 1, (endLine + 1) * columns - 1)};
+    return ItemRange{itemRows.firstItem(firstRow), qMin(mCount - 1, itemRows.lastItem(endRow))};
 }
 
 ThumbnailListModel::ItemRange ThumbnailListModel::preloadRange() const {
@@ -697,17 +741,16 @@ ThumbnailListModel::ItemRange ThumbnailListModel::visibleRange() const {
 }
 
 qreal ThumbnailListModel::contentExtent() const {
-    return mScroll.leadingSpace + static_cast<qreal>(lineCount()) * mScroll.itemExtent;
+    return rows().contentExtent();
 }
 
-int ThumbnailListModel::lineCount() const {
-    const int columns = qMax(1, mScroll.columns);
-    return (mCount + columns - 1) / columns;
+const ItemRows &ThumbnailListModel::rows() const {
+    return mScroll.rows ? *mScroll.rows : mUniformRows;
 }
 
-qreal ThumbnailListModel::itemStart(int index) const {
-    return mScroll.leadingSpace +
-           static_cast<qreal>(index / qMax(1, mScroll.columns)) * mScroll.itemExtent;
+void ThumbnailListModel::refreshUniformRows() {
+    mUniformRows =
+        UniformItemRows(mCount, mScroll.columns, mScroll.itemExtent, mScroll.leadingSpace);
 }
 
 qreal ThumbnailListModel::maximumOffset() const {
@@ -845,6 +888,11 @@ void ThumbnailListModel::shiftCachedItems(int firstIndex, int offset) {
     for (auto it = mLoaded.cbegin(); it != mLoaded.cend(); ++it)
         shiftedThumbnails.insert(it.key() >= firstIndex ? it.key() + offset : it.key(), it.value());
     mLoaded.swap(shiftedThumbnails);
+    QHash<int, QSize> shiftedSizes;
+    shiftedSizes.reserve(mSourceSizes.size());
+    for (auto it = mSourceSizes.cbegin(); it != mSourceSizes.cend(); ++it)
+        shiftedSizes.insert(it.key() >= firstIndex ? it.key() + offset : it.key(), it.value());
+    mSourceSizes.swap(shiftedSizes);
     mRequested = shiftedSet(mRequested, firstIndex, offset);
     mPendingFinal = shiftedSet(mPendingFinal, firstIndex, offset);
     mUnavailable = shiftedSet(mUnavailable, firstIndex, offset);
@@ -864,6 +912,10 @@ void ThumbnailListModel::emitAllRowsChanged(const QList<int> &roles) {
 // Scrolling (ThumbnailView::scroll*)
 
 // At once; the view reports the offset back, which changes nothing then.
+void ThumbnailListModel::restoreOffset(qreal offset) {
+    scrollTo(offset);
+}
+
 void ThumbnailListModel::scrollTo(qreal offset) {
     stopAnimation();
     mOffset = qBound(0.0, offset, maximumOffset());
@@ -931,8 +983,12 @@ void ThumbnailListModel::scrollByItem(int delta) {
 void ThumbnailListModel::scrollToItem(int index) {
     if (!checkRange(index))
         return;
-    const qreal start = itemStart(index);
-    const qreal end = start + mScroll.itemExtent;
+    const ItemRows &itemRows = rows();
+    if (itemRows.rowCount() == 0)
+        return;
+    const int row = itemRows.rowOf(index);
+    const qreal start = itemRows.rowStart(row);
+    const qreal end = start + itemRows.rowExtent(row);
     if (start >= mOffset && end <= mOffset + mExtent)
         return;
     const int delta = static_cast<int>(start >= mOffset ? (mOffset + mExtent) - end
