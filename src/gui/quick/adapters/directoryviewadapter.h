@@ -39,6 +39,7 @@ public:
     void setDragHover(int index) override;
     void setDirCount(int count) override;
     void setImageSize(int pos, QSize size) override;
+    void setImageSizes(const QList<QPair<int, QSize>> &sizes) override;
     [[nodiscard]] bool imageSizesWanted() const override;
     [[nodiscard]] bool hasThumbnail(int pos) const override;
 

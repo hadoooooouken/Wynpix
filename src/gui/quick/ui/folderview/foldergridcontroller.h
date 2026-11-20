@@ -58,6 +58,9 @@ class FolderGridController : public QObject {
     Q_PROPERTY(int selectedImageCount READ selectedImageCount NOTIFY selectedImageCountChanged FINAL)
     // The images are laid out in the masonry layout.
     Q_PROPERTY(bool masonryEnabled READ masonryEnabled NOTIFY masonryEnabledChanged FINAL)
+    // True when the masonry layout is settled (either cached sizes were known
+    // on entry, or the first batch has settled, or the grace period has elapsed).
+    Q_PROPERTY(bool masonryReady READ masonryReady NOTIFY masonryReadyChanged FINAL)
     // Height of the content of the masonry layout; 0 for the uniform grid.
     Q_PROPERTY(qreal masonryContentHeight READ masonryContentHeight NOTIFY masonryLayoutChanged FINAL)
     // The items near the viewport with their tiles, for the masonry view.
@@ -75,6 +78,13 @@ public:
     static constexpr int kSliderScale = 100;
     // The masonry layout follows the arriving image sizes at most this often.
     static constexpr int kLayoutDelayMs = 120;
+    // Faster layout delay for sizes arriving within the visible screen.
+    static constexpr int kVisibleLayoutDelayMs = 25;
+    // The maximum wait for the initial batch of image sizes before revealing the layout.
+    static constexpr int kGracePeriodMs = 75;
+    // Bounds for the number of initial visible image items to verify before considering the layout settled.
+    static constexpr int kMinInitialCheckCount = 16;
+    static constexpr int kMaxInitialCheckCount = 80;
     // A view moved by less than this after the layout changed stays put.
     static constexpr qreal kAnchorToleranceDevicePx = 0.5;
 
@@ -94,6 +104,7 @@ public:
     [[nodiscard]] bool batchListPending() const;
     void setBatchListPending(bool pending);
     [[nodiscard]] bool masonryEnabled() const;
+    [[nodiscard]] bool masonryReady() const;
     [[nodiscard]] qreal masonryContentHeight() const;
     [[nodiscard]] MasonryTilesModel *tiles();
     // Lays the images out in the masonry layout, or in the uniform grid.
@@ -164,6 +175,7 @@ signals:
     void selectedImageCountChanged();
     void batchListPendingChanged();
     void masonryEnabledChanged();
+    void masonryReadyChanged();
     // The masonry layout was made again (or dropped).
     void masonryLayoutChanged();
     // The icon size changed by the user; to be stored.
@@ -200,8 +212,17 @@ private:
     // Makes the masonry layout from the current sizes and hands it on.
     void rebuildMasonry();
     void scheduleLayout();
+    void scheduleFastLayout();
     void configureModel();
     void updateSelectedImageCount();
+
+    void onModelReset();
+    void onSourceSizesChanged();
+    void onGraceTimeout();
+    void setMasonryReady(bool ready);
+    void resetMasonryReadiness();
+    [[nodiscard]] int initialCheckCount() const;
+    [[nodiscard]] bool initialSizesKnown() const;
 
     ThumbnailListModel &mModel;
     FolderViewSettings mFolderView;
@@ -212,7 +233,10 @@ private:
     std::shared_ptr<const MasonryLayout> mMasonryLayout;
     MasonryTilesModel mTiles;
     QTimer mLayoutTimer;
+    QTimer mGraceTimer;
     bool mMasonry = false;
+    bool mMasonryReady = true;
+    bool mInitialBatchPending = false;
     // Horizontal position the first Up / Down of a series began at in the
     // masonry layout, -1 for none.
     qreal mNavigationX = -1.0;

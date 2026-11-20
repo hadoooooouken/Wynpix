@@ -40,6 +40,10 @@ public:
         Q_UNUSED(pos)
         Q_UNUSED(size)
     }
+    virtual void setImageSizes(const QList<QPair<int, QSize>> &sizes) {
+        for (const auto &pair : sizes)
+            setImageSize(pair.first, pair.second);
+    }
     // Whether the view lays images out by their proportions, and so wants
     // setImageSize() for every image; reading them costs file accesses.
     [[nodiscard]] virtual bool imageSizesWanted() const { return false; }

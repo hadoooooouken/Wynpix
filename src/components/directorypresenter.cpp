@@ -239,14 +239,18 @@ void DirectoryPresenter::onImageSizesWantedChanged() {
 void DirectoryPresenter::onImageSizesReady(QList<ImageSizeResult> results) {
   if (!view || !model)
     return;
+  QList<QPair<int, QSize>> sizes;
+  sizes.reserve(results.size());
   for (const ImageSizeResult &result : std::as_const(results)) {
-    if (!result.size.isValid())
+    if (!result.size.isValid() || result.size.isEmpty())
       continue;
     const int index = model->indexOfFile(result.path);
     if (index < 0)
       continue;
-    view->setImageSize(mShowDirs ? model->dirCount() + index : index, result.size);
+    sizes.append({mShowDirs ? model->dirCount() + index : index, result.size});
   }
+  if (!sizes.isEmpty())
+    view->setImageSizes(sizes);
 }
 
 void DirectoryPresenter::onImageSizesFinished(int total, int failed) {

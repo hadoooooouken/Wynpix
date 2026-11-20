@@ -295,6 +295,95 @@ private slots:
         fixture.grid.tiles()->index(1, 0), MasonryTilesModel::CellLayoutRole);
     const ThumbnailStripLayout cell1 = layout1.value<ThumbnailStripLayout>();
     QVERIFY(cell1.cellWidth > cell1.cellHeight);
+    QVERIFY(fixture.grid.masonryReady());
+  }
+
+  void masonryHoldsDisplayDuringGracePeriodAndSettlesOnFirstBatch() {
+    GridFixture fixture(0);
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+
+    // 1 folder, 2 images with unknown sizes
+    fixture.model.populate(3, 1);
+    // Display should be held initially during the grace period
+    QVERIFY(!fixture.grid.masonryReady());
+
+    // First batch of sizes arrives via batched setSourceSizes
+    fixture.model.setSourceSizes({{1, QSize(1920, 1080)}, {2, QSize(800, 1200)}});
+    // Immediately settled without waiting for the 120 ms throttle timer
+    QVERIFY(fixture.grid.masonryReady());
+  }
+
+  void singleThumbnailDoesNotPrematurelyDropGracePeriod() {
+    GridFixture fixture(0);
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+
+    // 1 folder, 3 images with unknown sizes
+    fixture.model.populate(4, 1);
+    QVERIFY(!fixture.grid.masonryReady());
+
+    // Single thumbnail arrives early for image 1 (e.g. from thumbnail decoder)
+    fixture.model.setSourceSize(1, QSize(1920, 1080));
+    // Still waiting for remaining visible images (2 and 3)
+    QVERIFY(!fixture.grid.masonryReady());
+
+    // Remaining sizes arrive
+    fixture.model.setSourceSizes({{2, QSize(800, 1200)}, {3, QSize(1024, 768)}});
+    // Now all visible items are known and layout settles
+    QVERIFY(fixture.grid.masonryReady());
+  }
+
+  void enablingMasonryOnOpenFolderWithUnknownSizesTriggersGracePeriod() {
+    GridFixture fixture(3);
+    fixture.model.setDirCount(1);
+    // Masonry initially disabled, ready is true for standard grid
+    QVERIFY(!fixture.grid.masonryEnabled());
+    QVERIFY(fixture.grid.masonryReady());
+
+    // Enable masonry: sizes for images 1 and 2 are not known, so grace period starts
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+    QVERIFY(!fixture.grid.masonryReady());
+
+    // Batch arrives
+    fixture.model.setSourceSizes({{1, QSize(1920, 1080)}, {2, QSize(800, 1200)}});
+    QVERIFY(fixture.grid.masonryReady());
+  }
+
+  void thumbnailListModelHasSourceSize() {
+    ThumbnailListModel model;
+    model.populate(3);
+    QVERIFY(!model.hasSourceSize(0));
+    QVERIFY(!model.hasSourceSize(1));
+    model.setSourceSize(1, QSize(1920, 1080));
+    QVERIFY(model.hasSourceSize(1));
+    QVERIFY(!model.hasSourceSize(0));
+    model.setSourceSize(2, QSize(0, 0));
+    QVERIFY(!model.hasSourceSize(2));
+    model.setSourceSizes({{2, QSize(0, 0)}});
+    QVERIFY(!model.hasSourceSize(2));
+  }
+
+  void thumbnailListModelViewExtent() {
+    ThumbnailListModel model;
+    QCOMPARE(model.viewExtent(), 0.0);
+    model.setViewport(100.0, 850.0);
+    QCOMPARE(model.viewOffset(), 100.0);
+    QCOMPARE(model.viewExtent(), 850.0);
+  }
+
+  void masonryGraceTimeoutRevealsLayoutWhenSizesDelayed() {
+    GridFixture fixture(0);
+    fixture.grid.setMasonryEnabled(true);
+    QVERIFY(fixture.grid.masonryEnabled());
+
+    // 1 folder, 2 images with unknown sizes
+    fixture.model.populate(3, 1);
+    QVERIFY(!fixture.grid.masonryReady());
+
+    // After the grace period timeout (50 ms), the layout is revealed regardless
+    QTRY_VERIFY_WITH_TIMEOUT(fixture.grid.masonryReady(), 300);
   }
 
   void imageSizeProviderCachePreservesAcrossReset() {

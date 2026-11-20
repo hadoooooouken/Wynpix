@@ -25,6 +25,25 @@ Flickable {
     interactive: false
     boundsBehavior: Flickable.StopAtBounds
 
+    states: State {
+        name: "hidden"
+        when: !view.controller.masonryReady
+        PropertyChanges {
+            target: view
+            opacity: 0.0
+        }
+    }
+
+    transitions: Transition {
+        from: "hidden"
+        to: ""
+        NumberAnimation {
+            property: "opacity"
+            duration: 60
+            easing.type: Easing.OutQuad
+        }
+    }
+
     onContentYChanged: viewportChanged()
     onHeightChanged: viewportChanged()
 

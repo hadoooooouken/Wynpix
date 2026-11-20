@@ -58,7 +58,7 @@ class ImageSizeProvider final : public QObject {
     Q_OBJECT
 public:
     // Paths per task of the pool.
-    static constexpr int kPathsPerTask = 64;
+    static constexpr int kPathsPerTask = 32;
     // Threads of the pool at most: reading headers is bound by the storage.
     static constexpr int kMaximumThreads = 4;
 

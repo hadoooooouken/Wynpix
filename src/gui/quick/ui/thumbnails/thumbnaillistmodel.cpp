@@ -115,6 +115,10 @@ qreal ThumbnailListModel::viewOffset() const {
     return mOffset;
 }
 
+qreal ThumbnailListModel::viewExtent() const {
+    return mExtent;
+}
+
 bool ThumbnailListModel::canScrollBackward() const {
     return mCanScrollBackward;
 }
@@ -380,13 +384,35 @@ void ThumbnailListModel::setDirCount(int count) {
 }
 
 void ThumbnailListModel::setSourceSize(int pos, const QSize &size) {
-    if (!checkRange(pos) || !size.isValid())
+    if (!checkRange(pos) || !size.isValid() || size.isEmpty())
         return;
     const auto known = mSourceSizes.constFind(pos);
     if (known != mSourceSizes.cend() && *known == size)
         return;
     mSourceSizes.insert(pos, size);
     emit sourceSizesChanged();
+}
+
+void ThumbnailListModel::setSourceSizes(const QList<QPair<int, QSize>> &sizes) {
+    bool anyChanged = false;
+    for (const auto &pair : sizes) {
+        const int pos = pair.first;
+        const QSize &size = pair.second;
+        if (!checkRange(pos) || !size.isValid() || size.isEmpty())
+            continue;
+        const auto known = mSourceSizes.constFind(pos);
+        if (known != mSourceSizes.cend() && *known == size)
+            continue;
+        mSourceSizes.insert(pos, size);
+        anyChanged = true;
+    }
+    if (anyChanged)
+        emit sourceSizesChanged();
+}
+
+bool ThumbnailListModel::hasSourceSize(int pos) const {
+    const auto it = mSourceSizes.constFind(pos);
+    return it != mSourceSizes.cend() && it.value().isValid() && !it.value().isEmpty();
 }
 
 QList<QSize> ThumbnailListModel::sourceSizes() const {

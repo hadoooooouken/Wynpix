@@ -202,6 +202,8 @@ public:
     [[nodiscard]] ThumbnailScrollConfig scrollConfig() const;
     // Scroll offset of the view as last reported or requested.
     [[nodiscard]] qreal viewOffset() const;
+    // Visible extent (height in vertical views) of the view.
+    [[nodiscard]] qreal viewExtent() const;
     [[nodiscard]] bool canScrollBackward() const;
     [[nodiscard]] bool canScrollForward() const;
 
@@ -228,6 +230,9 @@ public:
     // The size of the image at pos: read from its file, or reported by its
     // thumbnail. An invalid size is ignored.
     void setSourceSize(int pos, const QSize &size);
+    void setSourceSizes(const QList<QPair<int, QSize>> &sizes);
+    // Whether a valid source size has been set for pos.
+    [[nodiscard]] bool hasSourceSize(int pos) const;
     // Sizes by item; an invalid size is not known (yet), and so is that of a
     // folder.
     [[nodiscard]] QList<QSize> sourceSizes() const;

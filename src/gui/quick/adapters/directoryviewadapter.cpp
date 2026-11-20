@@ -92,6 +92,10 @@ void DirectoryViewAdapter::setImageSize(int pos, QSize size) {
     ThumbnailListModel::setSourceSize(pos, size);
 }
 
+void DirectoryViewAdapter::setImageSizes(const QList<QPair<int, QSize>> &sizes) {
+    ThumbnailListModel::setSourceSizes(sizes);
+}
+
 bool DirectoryViewAdapter::imageSizesWanted() const {
     return ThumbnailListModel::imageSizesWanted();
 }

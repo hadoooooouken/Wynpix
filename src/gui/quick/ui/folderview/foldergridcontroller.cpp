@@ -21,8 +21,10 @@ FolderGridController::FolderGridController(ThumbnailListModel &model,
     mTiles.setSource(&mModel);
     mLayoutTimer.setSingleShot(true);
     connect(&mLayoutTimer, &QTimer::timeout, this, &FolderGridController::updateLayout);
+    mGraceTimer.setSingleShot(true);
+    connect(&mGraceTimer, &QTimer::timeout, this, &FolderGridController::onGraceTimeout);
     connect(&mModel, &ThumbnailListModel::sourceSizesChanged, this,
-            &FolderGridController::scheduleLayout);
+            &FolderGridController::onSourceSizesChanged);
     // The folders form the strip of the masonry layout.
     connect(&mModel, &ThumbnailListModel::dirCountChanged, this,
             &FolderGridController::updateLayout);
@@ -30,7 +32,10 @@ FolderGridController::FolderGridController(ThumbnailListModel &model,
             &FolderGridController::updateSelectedImageCount);
     connect(&mModel, &ThumbnailListModel::dirCountChanged, this,
             &FolderGridController::updateSelectedImageCount);
-    // The centring of a row depends on whether the directory fills one.
+    // When a directory is populated / reset, determine initial masonry readiness.
+    connect(&mModel, &QAbstractItemModel::modelReset, this,
+            &FolderGridController::onModelReset);
+    // Dynamic additions and removals update the layout.
     connect(&mModel, &ThumbnailListModel::countChanged, this,
             &FolderGridController::updateLayout);
     // Any activation ends the column memory of Up / Down.
@@ -93,6 +98,10 @@ MasonryTilesModel *FolderGridController::tiles() {
     return &mTiles;
 }
 
+bool FolderGridController::masonryReady() const {
+    return !mMasonry || mMasonryReady;
+}
+
 void FolderGridController::setMasonryEnabled(bool enabled) {
     if (enabled == mMasonry)
         return;
@@ -101,6 +110,7 @@ void FolderGridController::setMasonryEnabled(bool enabled) {
     // Only a view in the masonry layout needs the sizes of the images.
     mModel.setImageSizesWanted(enabled);
     resetColumnMemory();
+    resetMasonryReadiness();
     emit masonryEnabledChanged();
     updateLayout();
 }
@@ -235,6 +245,100 @@ void FolderGridController::scheduleLayout() {
     if (!mMasonry || mLayoutTimer.isActive())
         return;
     mLayoutTimer.start(kLayoutDelayMs);
+}
+
+void FolderGridController::scheduleFastLayout() {
+    if (!mMasonry)
+        return;
+    if (mLayoutTimer.isActive() && mLayoutTimer.remainingTime() <= kVisibleLayoutDelayMs)
+        return;
+    mLayoutTimer.start(kVisibleLayoutDelayMs);
+}
+
+int FolderGridController::initialCheckCount() const {
+    const qreal extent = mModel.viewExtent();
+    if (mViewWidth <= 0 || extent <= 0.0)
+        return kMinInitialCheckCount;
+
+    const int targetRowHeight = qMax(1, MasonryLayout::targetRowHeightFor(mIconSize));
+    // Wide photos (~16:9 or 21:9) can result in rows shorter than targetRowHeight,
+    // so budget for minimum expected row height to ensure all visible rows are covered.
+    const qreal minExpectedRowHeight = qMax<qreal>(1.0, targetRowHeight * 0.7);
+    const int visibleRows = static_cast<int>(std::ceil(extent / minExpectedRowHeight)) + 1;
+
+    // Average tile width at targetRowHeight is targetRowHeight * 1.33.
+    const qreal avgTileWidth = qMax<qreal>(1.0, targetRowHeight * 1.2);
+    const int estimatedCols = qMax(1, static_cast<int>(mViewWidth / avgTileWidth));
+
+    const int count = estimatedCols * visibleRows;
+    return qBound(kMinInitialCheckCount, count, kMaxInitialCheckCount);
+}
+
+bool FolderGridController::initialSizesKnown() const {
+    const int count = mModel.itemCount();
+    const int dirCount = mModel.dirCount();
+    if (count <= dirCount)
+        return true;
+    const int checkLimit = qMin(count, dirCount + initialCheckCount());
+    for (int i = dirCount; i < checkLimit; ++i) {
+        if (!mModel.hasSourceSize(i))
+            return false;
+    }
+    return true;
+}
+
+void FolderGridController::resetMasonryReadiness() {
+    mLayoutTimer.stop();
+    if (!mMasonry || initialSizesKnown()) {
+        mGraceTimer.stop();
+        mInitialBatchPending = false;
+        setMasonryReady(true);
+    } else {
+        mInitialBatchPending = true;
+        setMasonryReady(false);
+        mGraceTimer.start(kGracePeriodMs);
+    }
+}
+
+void FolderGridController::onModelReset() {
+    resetMasonryReadiness();
+    updateLayout();
+}
+
+void FolderGridController::onSourceSizesChanged() {
+    if (!mMasonry)
+        return;
+
+    if (mInitialBatchPending) {
+        if (initialSizesKnown()) {
+            mGraceTimer.stop();
+            mInitialBatchPending = false;
+            mLayoutTimer.stop();
+            updateLayout();
+            setMasonryReady(true);
+            return;
+        }
+        return;
+    }
+
+    if (!initialSizesKnown())
+        scheduleFastLayout();
+    else
+        scheduleLayout();
+}
+
+void FolderGridController::onGraceTimeout() {
+    mInitialBatchPending = false;
+    mLayoutTimer.stop();
+    updateLayout();
+    setMasonryReady(true);
+}
+
+void FolderGridController::setMasonryReady(bool ready) {
+    if (ready == mMasonryReady)
+        return;
+    mMasonryReady = ready;
+    emit masonryReadyChanged();
 }
 
 // The grid requests thumbnails for the image area times the device pixel
