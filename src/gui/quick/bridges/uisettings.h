@@ -75,6 +75,8 @@ struct FolderViewSettings {
   int placesPanelWidth{};
   bool bookmarksExpanded{};
   bool treeExpanded{};
+  // The grid lays its images out in rows of equal height (masonry).
+  bool masonry{};
 
   friend bool operator==(const FolderViewSettings &,
                          const FolderViewSettings &) = default;

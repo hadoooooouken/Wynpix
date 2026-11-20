@@ -124,6 +124,11 @@ public:
     Q_INVOKABLE void selectFolderSorting(int mode);
     Q_INVOKABLE void editNameFilter(const QString &text);
     Q_INVOKABLE void setPlacesPanelEnabled(bool enabled);
+    // Shows the images of the grid in the masonry layout, or in the uniform
+    // grid again.
+    Q_INVOKABLE void setMasonryEnabled(bool enabled);
+    // The action that flips the layout.
+    void toggleMasonry();
     // The splitter was moved to width.
     Q_INVOKABLE void resizePlacesPanel(int width);
     Q_INVOKABLE void toggleBookmarks();
@@ -174,6 +179,7 @@ signals:
 
     // To be stored.
     void placesPanelEnabledRequested(bool enabled);
+    void masonryEnabledRequested(bool enabled);
     void placesPanelWidthRequested(int width);
     void bookmarksExpandedRequested(bool expanded);
     void treeExpandedRequested(bool expanded);

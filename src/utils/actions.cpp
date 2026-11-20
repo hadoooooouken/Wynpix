@@ -201,6 +201,7 @@ void Actions::init() {
   add(u"cycleUpscaylModel"_s, QT_TRANSLATE_NOOP("Actions", "Next AI upscale model"), ActionCategory::Viewer, ActionGroup::Upscale);
   add(u"toggleHdrToneMapping"_s, QT_TRANSLATE_NOOP("Actions", "Toggle HDR tone mapping"), ActionCategory::Viewer, ActionGroup::View);
   add(u"focusNameFilter"_s, QT_TRANSLATE_NOOP("Actions", "Name filter"), ActionCategory::FolderView, ActionGroup::Navigation);
+  add(u"toggleMasonry"_s, QT_TRANSLATE_NOOP("Actions", "Toggle masonry view"), ActionCategory::FolderView, ActionGroup::View);
   add(u"folderOpenSelected"_s, QT_TRANSLATE_NOOP("Actions", "Open selected"), ActionCategory::FolderView, ActionGroup::Selection);
   add(u"folderSelectAll"_s, QT_TRANSLATE_NOOP("Actions", "Select all"), ActionCategory::FolderView, ActionGroup::Selection);
   add(u"folderBack"_s, QT_TRANSLATE_NOOP("Actions", "Back"), ActionCategory::FolderView, ActionGroup::Navigation);

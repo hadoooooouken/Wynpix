@@ -140,6 +140,7 @@ signals:
     void cycleUpscaylModel();
     void toggleHdrToneMapping();
     void focusNameFilter();
+    void toggleMasonry();
     void folderOpenSelected();
     void folderSelectAll();
     void folderBack();

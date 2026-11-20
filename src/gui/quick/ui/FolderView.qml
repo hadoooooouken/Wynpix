@@ -385,6 +385,15 @@ FocusScope {
                 TopBarButton {
                     Layout.preferredWidth: root.windowButtonWidth
                     Layout.leftMargin: root.nameFilterSpacing
+                    glyph: FluentIcons.Masonry20
+                    active: root.controller.grid.masonryEnabled
+                    toolTip: qsTr("Masonry view")
+                    onPressed: root.controller.setMasonryEnabled(!root.controller.grid.masonryEnabled)
+                }
+
+                TopBarButton {
+                    Layout.preferredWidth: root.windowButtonWidth
+                    Layout.leftMargin: root.captionSpacing
                     glyph: FluentIcons.DocumentView20
                     toolTip: qsTr("Viewer")
                     onPressed: Actions.invoke("documentView")

@@ -1020,6 +1020,14 @@ bool Settings::placesPanel() {
 void Settings::setPlacesPanel(bool mode) {
   settings->stateConf->setValue("placesPanel", mode);
 }
+
+bool Settings::folderViewMasonry() {
+  return settings->stateConf->value("folderViewMasonry", false).toBool();
+}
+
+void Settings::setFolderViewMasonry(bool enabled) {
+  settings->stateConf->setValue("folderViewMasonry", enabled);
+}
 //------------------------------------------------------------------------------
 bool Settings::placesPanelBookmarksExpanded() {
   return settings->stateConf->value("placesPanelBookmarksExpanded", true)

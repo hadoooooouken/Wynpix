@@ -193,6 +193,9 @@ public:
   DefaultCropAction defaultCropAction();
   bool placesPanel();
   void setPlacesPanel(bool mode);
+  // The folder view shows its images in the masonry layout.
+  bool folderViewMasonry();
+  void setFolderViewMasonry(bool enabled);
 
   QStringList bookmarks();
   void setBookmarks(QStringList paths);

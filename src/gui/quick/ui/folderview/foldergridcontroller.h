@@ -8,11 +8,16 @@
 #include <QPointF>
 #include <QRectF>
 #include <QString>
+#include <QTimer>
 #include <QUrl>
 #include <QtQml/qqmlregistration.h>
 
+#include <memory>
+
 #include "gui/quick/bridges/uisettings.h"
 #include "gui/quick/ui/folderview/foldergridlayout.h"
+#include "gui/quick/ui/folderview/masonrylayout.h"
+#include "gui/quick/ui/folderview/masonrytilesmodel.h"
 #include "gui/quick/ui/thumbnails/thumbnaillistmodel.h"
 
 // The thumbnail grid of the folder view (FolderGridView in the widget UI):
@@ -28,6 +33,12 @@
 //   column a short last row moved away from, Page Up / Down move four rows);
 // - icon size: 128 - 512, the zoom slider on a log2 scale, reset to default
 //   (256) on double-click, stored when the slider is released;
+// - masonry: the folders keep the uniform cells in a strip, the images lie in
+//   rows of equal height that follow their proportions (MasonryLayout). The
+//   sizes of the images arrive while the directory loads, so the layout is
+//   made again at most every kLayoutDelayMs, and the view keeps the row at
+//   its top in place. Up / Down move to the tile of the next row nearest to
+//   where the first move began;
 // - drops: copy and move onto items or the background;
 // - the number of selected images and whether files wait in the batch
 //   converter, for the batch conversion button.
@@ -45,6 +56,12 @@ class FolderGridController : public QObject {
     Q_PROPERTY(int zoomSliderMaximum READ zoomSliderMaximum CONSTANT FINAL)
     Q_PROPERTY(QRectF rubberBand READ rubberBand NOTIFY rubberBandChanged FINAL)
     Q_PROPERTY(int selectedImageCount READ selectedImageCount NOTIFY selectedImageCountChanged FINAL)
+    // The images are laid out in the masonry layout.
+    Q_PROPERTY(bool masonryEnabled READ masonryEnabled NOTIFY masonryEnabledChanged FINAL)
+    // Height of the content of the masonry layout; 0 for the uniform grid.
+    Q_PROPERTY(qreal masonryContentHeight READ masonryContentHeight NOTIFY masonryLayoutChanged FINAL)
+    // The items near the viewport with their tiles, for the masonry view.
+    Q_PROPERTY(MasonryTilesModel *tiles READ tiles CONSTANT FINAL)
     // Files wait in the batch converter (hidden by its "Add more" button).
     Q_PROPERTY(bool batchListPending READ batchListPending NOTIFY batchListPendingChanged FINAL)
 
@@ -56,6 +73,10 @@ public:
     static constexpr int kPageRows = 4;
     // Zoom slider: hundredths of log2 of the icon size.
     static constexpr int kSliderScale = 100;
+    // The masonry layout follows the arriving image sizes at most this often.
+    static constexpr int kLayoutDelayMs = 120;
+    // A view moved by less than this after the layout changed stays put.
+    static constexpr qreal kAnchorToleranceDevicePx = 0.5;
 
     // model must outlive the controller; settings: the initial UI settings.
     FolderGridController(ThumbnailListModel &model, const UiSettingsSnapshot &settings,
@@ -72,6 +93,11 @@ public:
     [[nodiscard]] int selectedImageCount() const;
     [[nodiscard]] bool batchListPending() const;
     void setBatchListPending(bool pending);
+    [[nodiscard]] bool masonryEnabled() const;
+    [[nodiscard]] qreal masonryContentHeight() const;
+    [[nodiscard]] MasonryTilesModel *tiles();
+    // Lays the images out in the masonry layout, or in the uniform grid.
+    void setMasonryEnabled(bool enabled);
 
     // --- configuration (Quick UI host) -----------------------------------
     void applySettings(const UiSettingsSnapshot &settings);
@@ -94,6 +120,9 @@ public:
     Q_INVOKABLE void move(QPointF position, int buttons, int modifiers);
     Q_INVOKABLE void release(int index, int button, QPointF position);
     Q_INVOKABLE void doubleClick(int index, int button);
+    // The item of the masonry layout at the point x, contentY (content
+    // coordinates), -1 for none.
+    [[nodiscard]] Q_INVOKABLE int masonryItemAt(qreal x, qreal contentY) const;
     Q_INVOKABLE void wheel(QPoint angleDelta, QPoint pixelDelta, int modifiers);
     // A key press (Qt::Key, Qt::KeyboardModifiers); returns false when the
     // action shortcuts should handle it (every key but Shift).
@@ -134,6 +163,9 @@ signals:
     void rubberBandChanged();
     void selectedImageCountChanged();
     void batchListPendingChanged();
+    void masonryEnabledChanged();
+    // The masonry layout was made again (or dropped).
+    void masonryLayoutChanged();
     // The icon size changed by the user; to be stored.
     void iconSizeCommitted(int size);
     // A right click that was no gesture, at position (view coordinates).
@@ -153,11 +185,21 @@ private:
     [[nodiscard]] bool sameRow(int one, int two) const;
 
     void selectOrExtend(int index);
+    // Masonry: moves the selection rows up (negative) or down.
+    void moveByRows(int rows);
+    // Forgets the column (uniform grid) or the position (masonry) Up / Down
+    // keep across rows.
+    void resetColumnMemory();
+    // The items whose cell content touches the rubber band.
+    [[nodiscard]] QList<int> rubberBandHits(const QRectF &content) const;
 
     void updateRubberBand(QPointF position, Qt::KeyboardModifiers modifiers);
     void endRubberBand();
 
     void updateLayout();
+    // Makes the masonry layout from the current sizes and hands it on.
+    void rebuildMasonry();
+    void scheduleLayout();
     void configureModel();
     void updateSelectedImageCount();
 
@@ -166,6 +208,14 @@ private:
     PanelSettings mPanel;
     ViewerSettings mViewer;
     FolderGridLayout mLayout;
+    // Set while the masonry layout is on; null for the uniform grid.
+    std::shared_ptr<const MasonryLayout> mMasonryLayout;
+    MasonryTilesModel mTiles;
+    QTimer mLayoutTimer;
+    bool mMasonry = false;
+    // Horizontal position the first Up / Down of a series began at in the
+    // masonry layout, -1 for none.
+    qreal mNavigationX = -1.0;
     QFont mLabelFont;
     qreal mDevicePixelRatio = 1.0;
     int mViewWidth = 0;

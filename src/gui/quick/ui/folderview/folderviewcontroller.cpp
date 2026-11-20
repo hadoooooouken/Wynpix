@@ -343,6 +343,17 @@ void FolderViewController::setPlacesPanelEnabled(bool enabled) {
     emit placesPanelEnabledRequested(enabled);
 }
 
+void FolderViewController::setMasonryEnabled(bool enabled) {
+    if (enabled == mGrid.masonryEnabled())
+        return;
+    mGrid.setMasonryEnabled(enabled);
+    emit masonryEnabledRequested(enabled);
+}
+
+void FolderViewController::toggleMasonry() {
+    setMasonryEnabled(!mGrid.masonryEnabled());
+}
+
 void FolderViewController::resizePlacesPanel(int width) {
     const int boundedWidth = qMax(kPlacesPanelMinimumWidth, width);
     if (boundedWidth == mPlacesPanelWidth)

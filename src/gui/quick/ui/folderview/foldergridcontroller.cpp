@@ -14,8 +14,18 @@ FolderGridController::FolderGridController(ThumbnailListModel &model,
       mFolderView(settings.folderView),
       mPanel(settings.panel),
       mViewer(settings.viewer),
+      mMasonry(settings.folderView.masonry),
       mIconSize(boundedFolderIconSize(settings.folderView.iconSize)) {
     mModel.setItemActivation(ThumbnailListModel::ItemActivation::OnDoubleClick);
+    mModel.setImageSizesWanted(mMasonry);
+    mTiles.setSource(&mModel);
+    mLayoutTimer.setSingleShot(true);
+    connect(&mLayoutTimer, &QTimer::timeout, this, &FolderGridController::updateLayout);
+    connect(&mModel, &ThumbnailListModel::sourceSizesChanged, this,
+            &FolderGridController::scheduleLayout);
+    // The folders form the strip of the masonry layout.
+    connect(&mModel, &ThumbnailListModel::dirCountChanged, this,
+            &FolderGridController::updateLayout);
     connect(&mModel, &ThumbnailListModel::selectionChanged, this,
             &FolderGridController::updateSelectedImageCount);
     connect(&mModel, &ThumbnailListModel::dirCountChanged, this,
@@ -24,7 +34,7 @@ FolderGridController::FolderGridController(ThumbnailListModel &model,
     connect(&mModel, &ThumbnailListModel::countChanged, this,
             &FolderGridController::updateLayout);
     // Any activation ends the column memory of Up / Down.
-    connect(&mModel, &ThumbnailListModel::activated, this, [this]() { mShiftedColumn = -1; });
+    connect(&mModel, &ThumbnailListModel::activated, this, [this]() { resetColumnMemory(); });
     updateLayout();
 }
 
@@ -71,6 +81,30 @@ void FolderGridController::setBatchListPending(bool pending) {
     emit batchListPendingChanged();
 }
 
+bool FolderGridController::masonryEnabled() const {
+    return mMasonry;
+}
+
+qreal FolderGridController::masonryContentHeight() const {
+    return mMasonryLayout ? mMasonryLayout->contentExtent() : 0.0;
+}
+
+MasonryTilesModel *FolderGridController::tiles() {
+    return &mTiles;
+}
+
+void FolderGridController::setMasonryEnabled(bool enabled) {
+    if (enabled == mMasonry)
+        return;
+    mMasonry = enabled;
+    mFolderView.masonry = enabled;
+    // Only a view in the masonry layout needs the sizes of the images.
+    mModel.setImageSizesWanted(enabled);
+    resetColumnMemory();
+    emit masonryEnabledChanged();
+    updateLayout();
+}
+
 //------------------------------------------------------------------------------
 // Configuration
 
@@ -78,6 +112,7 @@ void FolderGridController::applySettings(const UiSettingsSnapshot &settings) {
     mFolderView = settings.folderView;
     mPanel = settings.panel;
     mViewer = settings.viewer;
+    setMasonryEnabled(settings.folderView.masonry);
     // FolderView::readSettings() applies the stored icon size.
     const int size = boundedFolderIconSize(settings.folderView.iconSize);
     if (size != mIconSize) {
@@ -143,33 +178,91 @@ QColor FolderGridController::labelTextColor(const QColor &background) {
 }
 
 void FolderGridController::updateLayout() {
+    mLayoutTimer.stop();
+    // The folder strip of the masonry layout centres by the folders alone.
     const FolderGridLayout layout = folderGridLayoutFor({
         .viewWidth = mViewWidth,
         .iconSize = mIconSize,
-        .itemCount = mModel.itemCount(),
+        .itemCount = mMasonry ? mModel.dirCount() : mModel.itemCount(),
         .textHeight = QFontMetrics(mLabelFont).height(),
     });
     if (layout != mLayout) {
         mLayout = layout;
         emit layoutChanged();
     }
+    // The row at the top of the view, to put back where it was when the
+    // rows before it change in size.
+    const std::shared_ptr<const MasonryLayout> previous = mMasonryLayout;
+    const qreal offset = mModel.viewOffset();
+    const int anchorRow = previous && offset > 0.0 ? previous->rowAt(offset) : -1;
+    const int anchorItem = anchorRow >= 0 ? previous->firstItem(anchorRow) : -1;
+    const qreal anchorDistance = anchorRow >= 0 ? previous->rowStart(anchorRow) - offset : 0.0;
+
+    rebuildMasonry();
     configureModel();
+
+    if (anchorItem >= 0 && mMasonryLayout) {
+        const qreal start = mMasonryLayout->rowStart(mMasonryLayout->rowOf(anchorItem));
+        const qreal target = start - anchorDistance;
+        if (std::abs(target - mModel.viewOffset()) > kAnchorToleranceDevicePx)
+            mModel.restoreOffset(target);
+    }
+}
+
+void FolderGridController::rebuildMasonry() {
+    if (!mMasonry) {
+        if (!mMasonryLayout)
+            return;
+        mMasonryLayout.reset();
+        mTiles.setLayout(nullptr, mLayout.cell);
+        emit masonryLayoutChanged();
+        return;
+    }
+    mMasonryLayout = MasonryLayout::create({
+        .viewWidth = mViewWidth,
+        .targetRowHeight = MasonryLayout::targetRowHeightFor(mIconSize),
+        .itemCount = mModel.itemCount(),
+        .dirCount = mModel.dirCount(),
+        .folders = mLayout,
+        .sourceSizes = mModel.sourceSizes(),
+    });
+    mTiles.setLayout(mMasonryLayout, mLayout.cell);
+    emit masonryLayoutChanged();
+}
+
+// Sizes arrive in a stream; the layout follows them in steps.
+void FolderGridController::scheduleLayout() {
+    if (!mMasonry || mLayoutTimer.isActive())
+        return;
+    mLayoutTimer.start(kLayoutDelayMs);
 }
 
 // The grid requests thumbnails for the image area times the device pixel
-// ratio and never crops.
+// ratio and never crops; the masonry layout for a box that fits the usual
+// proportions of its tiles. The rows of the masonry layout replace the
+// uniform ones, which are left empty so that only the rows differ while the
+// layout follows the sizes of the images.
 void FolderGridController::configureModel() {
+    const bool masonry = mMasonry && mMasonryLayout;
+    const QSize target = masonry ? MasonryLayout::thumbnailBoxFor(
+                                       MasonryLayout::targetRowHeightFor(mIconSize),
+                                       mDevicePixelRatio)
+                                 : mLayout.cell.imageTargetSize(mDevicePixelRatio);
+    std::shared_ptr<const ItemRows> rows;
+    if (masonry)
+        rows = mMasonryLayout;
     mModel.configure({
-        .targetSize = mLayout.cell.imageTargetSize(mDevicePixelRatio),
+        .targetSize = target,
         .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,
     });
     mModel.setScrollConfig({
         .horizontal = false,
-        .itemExtent = mLayout.cellHeight(),
-        .columns = mLayout.columns,
-        .leadingSpace = mLayout.top,
+        .itemExtent = masonry ? 0 : mLayout.cellHeight(),
+        .columns = masonry ? 1 : mLayout.columns,
+        .leadingSpace = masonry ? 0 : mLayout.top,
+        .rows = rows,
         .preloadDistance = kPreloadDistance,
         .focusShowsNeighbours = false,
         .thumbnailSize = mIconSize,
@@ -195,6 +288,7 @@ void FolderGridController::updateSelectedImageCount() {
 // Pointer
 
 void FolderGridController::press(int index, int button, int modifiers, QPointF position) {
+    mNavigationX = -1.0;
     mModel.press(index, button, modifiers, position);
     const auto mouseButton = static_cast<Qt::MouseButton>(button);
     if (mouseButton != Qt::LeftButton || checkRange(index))
@@ -225,6 +319,13 @@ void FolderGridController::doubleClick(int index, int button) {
     mModel.doubleClick(index, button);
 }
 
+int FolderGridController::masonryItemAt(qreal x, qreal contentY) const {
+    if (!mMasonryLayout)
+        return -1;
+    const int item = mMasonryLayout->itemAt(QPointF(x, contentY));
+    return checkRange(item) ? item : -1;
+}
+
 // FolderGridView::wheelEvent().
 void FolderGridController::wheel(QPoint angleDelta, QPoint pixelDelta, int modifiers) {
     if (!(Qt::KeyboardModifiers::fromInt(modifiers) & Qt::ControlModifier)) {
@@ -249,6 +350,26 @@ void FolderGridController::updateRubberBand(QPointF position, Qt::KeyboardModifi
 
     QList<int> selection = mRubberBandStartSelection;
     const bool toggle = modifiers & Qt::ControlModifier;
+    for (const int index : rubberBandHits(content)) {
+        if (toggle && mRubberBandStartSelection.contains(index))
+            selection.removeAll(index);
+        else if (!selection.contains(index))
+            selection.append(index);
+    }
+    std::ranges::sort(selection);
+    if (selection != mModel.selection())
+        mModel.select(selection);
+}
+
+QList<int> FolderGridController::rubberBandHits(const QRectF &content) const {
+    QList<int> hits;
+    if (mMasonryLayout) {
+        for (const int index : mMasonryLayout->itemsIn(content)) {
+            if (checkRange(index))
+                hits.append(index);
+        }
+        return hits;
+    }
     const int columns = qMax(1, mLayout.columns);
     const int cellHeight = qMax(1, mLayout.cellHeight());
     const int firstRow =
@@ -259,17 +380,11 @@ void FolderGridController::updateRubberBand(QPointF position, Qt::KeyboardModifi
             const int index = row * columns + column;
             if (!checkRange(index))
                 break;
-            if (!mLayout.itemRect(index).intersects(content))
-                continue;
-            if (toggle && mRubberBandStartSelection.contains(index))
-                selection.removeAll(index);
-            else if (!selection.contains(index))
-                selection.append(index);
+            if (mLayout.itemRect(index).intersects(content))
+                hits.append(index);
         }
     }
-    std::ranges::sort(selection);
-    if (selection != mModel.selection())
-        mModel.select(selection);
+    return hits;
 }
 
 void FolderGridController::endRubberBand() {
@@ -340,6 +455,29 @@ bool FolderGridController::sameRow(int one, int two) const {
     return one / columns == two / columns;
 }
 
+void FolderGridController::resetColumnMemory() {
+    mShiftedColumn = -1;
+    mNavigationX = -1.0;
+}
+
+// The first move of a series remembers the horizontal centre of the tile it
+// leaves, and each move lands on the tile of the target row nearest to it, so
+// that a column of tiles that happen to line up is followed.
+void FolderGridController::moveByRows(int rows) {
+    const int from = current();
+    if (!mMasonryLayout || !checkRange(from))
+        return;
+    const int row = mMasonryLayout->rowOf(from);
+    const int target = qBound(0, row + rows, mMasonryLayout->rowCount() - 1);
+    if (target == row)
+        return;
+    if (mNavigationX < 0.0)
+        mNavigationX = mMasonryLayout->itemRect(from).center().x();
+    const int item = mMasonryLayout->itemInRow(target, mNavigationX);
+    if (checkRange(item))
+        selectOrExtend(item);
+}
+
 void FolderGridController::selectOrExtend(int index) {
     if (mModel.rangeSelectionActive())
         mModel.selectRangeTo(index);
@@ -361,13 +499,17 @@ void FolderGridController::selectAll() {
 }
 
 void FolderGridController::selectAbove() {
+    if (mMasonryLayout) {
+        moveByRows(-1);
+        return;
+    }
     const int last = current();
     if (mModel.itemCount() == 0 || last < 0 || sameRow(0, last))
         return;
     int target = itemAbove(last);
     if (mShiftedColumn >= 0) {
         target += mShiftedColumn - columnOf(last);
-        mShiftedColumn = -1;
+        resetColumnMemory();
     }
     if (!checkRange(target))
         target = 0;
@@ -375,11 +517,15 @@ void FolderGridController::selectAbove() {
 }
 
 void FolderGridController::selectBelow() {
+    if (mMasonryLayout) {
+        moveByRows(1);
+        return;
+    }
     const int last = current();
     const int count = mModel.itemCount();
     if (count == 0 || last < 0 || sameRow(last, count - 1))
         return;
-    mShiftedColumn = -1;
+    resetColumnMemory();
     int target = itemBelow(last);
     if (!checkRange(target))
         target = count - 1;
@@ -392,18 +538,22 @@ void FolderGridController::selectNext() {
     const int count = mModel.itemCount();
     if (count == 0 || current() == count - 1)
         return;
-    mShiftedColumn = -1;
+    resetColumnMemory();
     selectOrExtend(qMin(current() + 1, count - 1));
 }
 
 void FolderGridController::selectPrevious() {
     if (mModel.itemCount() == 0 || current() == 0)
         return;
-    mShiftedColumn = -1;
+    resetColumnMemory();
     selectOrExtend(qMax(current() - 1, 0));
 }
 
 void FolderGridController::pageUp() {
+    if (mMasonryLayout) {
+        moveByRows(-kPageRows);
+        return;
+    }
     const int last = current();
     if (mModel.itemCount() == 0 || last < 0 || sameRow(0, last))
         return;
@@ -412,17 +562,21 @@ void FolderGridController::pageUp() {
         target = itemAbove(target);
     if (mShiftedColumn >= 0) {
         target += mShiftedColumn - columnOf(target);
-        mShiftedColumn = -1;
+        resetColumnMemory();
     }
     selectOrExtend(target);
 }
 
 void FolderGridController::pageDown() {
+    if (mMasonryLayout) {
+        moveByRows(kPageRows);
+        return;
+    }
     const int last = current();
     const int count = mModel.itemCount();
     if (count == 0 || last < 0 || sameRow(last, count - 1))
         return;
-    mShiftedColumn = -1;
+    resetColumnMemory();
     int target = last;
     for (int row = 0; row < kPageRows; ++row)
         target = itemBelow(target);
@@ -434,14 +588,14 @@ void FolderGridController::pageDown() {
 void FolderGridController::selectFirst() {
     if (mModel.itemCount() == 0)
         return;
-    mShiftedColumn = -1;
+    resetColumnMemory();
     selectOrExtend(0);
 }
 
 void FolderGridController::selectLast() {
     if (mModel.itemCount() == 0)
         return;
-    mShiftedColumn = -1;
+    resetColumnMemory();
     selectOrExtend(mModel.itemCount() - 1);
 }
 

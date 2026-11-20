@@ -23,6 +23,8 @@ QuickFolderViewActions::QuickFolderViewActions(const QuickFolderViewContext &con
             &QuickFolderViewActions::createFolderTree);
     connect(&actions, &ActionManager::focusNameFilter, &folderView,
             &FolderViewController::focusNameFilter);
+    connect(&actions, &ActionManager::toggleMasonry, &folderView,
+            &FolderViewController::toggleMasonry);
     forwardIntents();
     forwardGridRequests();
     storeLayout();
@@ -122,6 +124,8 @@ void QuickFolderViewActions::storeLayout() {
             &Settings::setFolderViewIconSize);
     connect(&folderView, &FolderViewController::placesPanelEnabledRequested, store,
             &Settings::setPlacesPanel);
+    connect(&folderView, &FolderViewController::masonryEnabledRequested, store,
+            &Settings::setFolderViewMasonry);
     connect(&folderView, &FolderViewController::placesPanelWidthRequested, store,
             &Settings::setPlacesPanelWidth);
     connect(&folderView, &FolderViewController::bookmarksExpandedRequested, store,

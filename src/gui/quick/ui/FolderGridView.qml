@@ -6,12 +6,12 @@ import wynpix.bridges
 import wynpix.style
 
 // The thumbnail grid of the folder view (FolderGridView in the widget UI): a
-// GridView of ThumbnailWidget cells that reuses its delegates, with the
-// rubber band, the scroll bar and the context menu. FolderGridController
-// lays it out and decides what to select, load and where to scroll; the grid
-// reports its width, viewport, pointer, keys and drops, and runs the scroll
-// animations the model asks for. Its strings keep the widget grid's
-// translation context.
+// GridView of ThumbnailWidget cells that reuses its delegates, or, in the
+// masonry layout, a FolderMasonryView, with the rubber band, the scroll bar
+// and the context menu. FolderGridController lays it out and decides what to
+// select, load and where to scroll; the grid reports its width, viewport,
+// pointer, keys and drops, and runs the scroll animations the model asks
+// for. Its strings keep the widget grid's translation context.
 FocusScope {
     id: root
 
@@ -19,6 +19,10 @@ FocusScope {
 
     readonly property ThumbnailListModel thumbnails: controller.model
     readonly property folderGridLayout gridLayout: controller.layout
+    // The images are laid out in rows of equal height instead of cells.
+    readonly property bool masonry: controller.masonryEnabled
+    // The view that is shown, and that scrolls.
+    readonly property Flickable activeView: masonry ? masonryView : grid
     // Item under the pointer, -1 for none.
     property int hoveredIndex: -1
     // The context menu exists from its first opening on.
@@ -32,10 +36,17 @@ FocusScope {
     // The grid is rebuilding its delegates and does not report its viewport.
     property bool regenerating: false
 
-    // Content coordinates of the model start at the first row's top margin.
+    // Content coordinates of the model start at the first row's top margin;
+    // those of the masonry view at the top of its content.
     function reportViewport() {
-        if (!regenerating)
+        if (regenerating)
+            return;
+        if (masonry) {
+            thumbnails.setViewport(masonryView.contentY, masonryView.height);
+            controller.tiles.setViewport(masonryView.contentY, masonryView.height);
+        } else {
             thumbnails.setViewport(grid.contentY + grid.topMargin, grid.height);
+        }
     }
 
     // GridView keeps the row of its first visible delegate when the columns or
@@ -45,12 +56,12 @@ FocusScope {
     // the delegates lays them out from the first row again. The offset was
     // kept within the moved bounds and may lie past the end of the content.
     function normalizeOrigin() {
-        if (grid.originY === 0)
+        if (masonry || grid.originY === 0)
             return;
         const contentY = grid.contentY;
         regenerating = true;
         grid.model = null;
-        grid.model = thumbnails;
+        grid.model = Qt.binding(() => root.masonry ? null : root.thumbnails);
         const lastContentY = grid.contentHeight + grid.bottomMargin - grid.height;
         grid.contentY = Math.max(-grid.topMargin, Math.min(contentY, lastContentY));
         regenerating = false;
@@ -59,6 +70,8 @@ FocusScope {
     }
 
     function itemAt(x: real, y: real): int {
+        if (masonry)
+            return controller.masonryItemAt(x, y + masonryView.contentY);
         const gridX = x - grid.x;
         if (gridX < 0 || gridX >= grid.width)
             return -1;
@@ -71,9 +84,9 @@ FocusScope {
 
     function scrollTo(offset: real, durationMs: int) {
         scrollAnimation.stop();
-        const contentY = offset - grid.topMargin;
+        const contentY = masonry ? offset : offset - grid.topMargin;
         if (durationMs <= 0) {
-            grid.contentY = contentY;
+            activeView.contentY = contentY;
             return;
         }
         scrollAnimation.to = contentY;
@@ -93,6 +106,12 @@ FocusScope {
         thumbnails.setActive(visible);
     }
     Component.onDestruction: thumbnails.setActive(false)
+    // The other view starts from its own position until the model scrolls it.
+    onMasonryChanged: {
+        scrollAnimation.stop();
+        Qt.callLater(reportViewport);
+        updateHoveredIndex();
+    }
 
     Keys.onPressed: event => {
         event.accepted = root.controller.keyPressed(event.key, event.modifiers)
@@ -111,6 +130,11 @@ FocusScope {
     Connections {
         target: root.controller
 
+        // The tiles moved under a pointer that did not.
+        function onMasonryLayoutChanged() {
+            root.updateHoveredIndex();
+        }
+
         function onContextMenuRequested(position: point) {
             root.contextMenuPosition = position;
             const menu = menuLoader.item as FolderContextMenu;
@@ -124,7 +148,7 @@ FocusScope {
     NumberAnimation {
         id: scrollAnimation
 
-        target: grid
+        target: root.activeView
         property: "contentY"
         easing.type: Easing.OutCubic
         onFinished: root.thumbnails.scrollAnimationFinished()
@@ -144,7 +168,9 @@ FocusScope {
         topMargin: root.gridLayout.top
         cellWidth: root.gridLayout.cellWidth
         cellHeight: root.gridLayout.cellHeight
-        model: root.thumbnails
+        visible: !root.masonry
+        // The masonry view draws the items in its layout.
+        model: root.masonry ? null : root.thumbnails
         interactive: false
         boundsBehavior: Flickable.StopAtBounds
         reuseItems: true
@@ -168,6 +194,25 @@ FocusScope {
             labelOnSurface: root.controller.labelTextColor(Theme.tokens.surfaceView)
             labelOnHover: root.controller.labelTextColor(Theme.tokens.surfaceViewRaised)
             selectedLabelColor: Theme.tokens.textOnView
+        }
+    }
+
+    FolderMasonryView {
+        id: masonryView
+
+        anchors.left: parent.left
+        anchors.right: scrollBar.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        visible: root.masonry
+        controller: root.controller
+        hoveredIndex: root.hoveredIndex
+
+        ScrollBar.vertical: masonryScrollBar
+
+        onViewportChanged: {
+            root.reportViewport();
+            root.updateHoveredIndex();
         }
     }
 
@@ -246,6 +291,8 @@ FocusScope {
         }
     }
 
+    // Each view has a scroll bar of its own; the one of the view that is not
+    // shown is hidden but keeps the width the pointer area is anchored to.
     ScrollBar {
         id: scrollBar
 
@@ -254,6 +301,18 @@ FocusScope {
         anchors.bottom: parent.bottom
         orientation: Qt.Vertical
         policy: ScrollBar.AlwaysOn
+        visible: !root.masonry
+    }
+
+    ScrollBar {
+        id: masonryScrollBar
+
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        orientation: Qt.Vertical
+        policy: ScrollBar.AlwaysOn
+        visible: root.masonry
     }
 
     Loader {

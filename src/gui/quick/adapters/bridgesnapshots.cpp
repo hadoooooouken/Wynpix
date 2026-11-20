@@ -65,6 +65,7 @@ UiSettingsSnapshot BridgeSnapshots::readUiSettings(Settings &settings) {
               .placesPanelWidth = settings.placesPanelWidth(),
               .bookmarksExpanded = settings.placesPanelBookmarksExpanded(),
               .treeExpanded = settings.placesPanelTreeExpanded(),
+              .masonry = settings.folderViewMasonry(),
           },
       .overlays =
           {

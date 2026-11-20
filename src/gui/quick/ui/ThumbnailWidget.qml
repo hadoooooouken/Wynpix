@@ -51,6 +51,9 @@ Item {
     readonly property real statusIconOpacity: 1.0
 
     readonly property bool hasImage: loaded && thumbnail.valid
+    // A cell without padding (a masonry tile) shows the selection over its
+    // thumbnail, where the surfaces would be covered by it.
+    readonly property bool selectionOver: cellLayout.selectionOverImage
     readonly property color labelColor: selected ? selectedLabelColor
                                                  : hovered ? labelOnHover : labelOnSurface
 
@@ -107,7 +110,7 @@ Item {
             anchors.fill: parent
             radius: StyleConstants.surfaceRadius
             color: Theme.tokens.accentTint
-            visible: cell.selected
+            visible: cell.selected && !cell.selectionOver
         }
 
         Rectangle {
@@ -116,7 +119,7 @@ Item {
             color: "transparent"
             border.width: cell.frameWidth
             border.color: Theme.tokens.accentFrame
-            visible: cell.selected
+            visible: cell.selected && !cell.selectionOver
         }
     }
 
@@ -129,6 +132,22 @@ Item {
         maximumSize: cell.cellLayout.imageArea
         cornerRadius: StyleConstants.controlRadius
         highlight: cell.hoverHighlight * cell.hoverAmount
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        radius: StyleConstants.controlRadius
+        color: Theme.tokens.accentTint
+        visible: cell.selected && cell.selectionOver
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        radius: StyleConstants.controlRadius
+        color: "transparent"
+        border.width: cell.frameWidth
+        border.color: Theme.tokens.accentFrame
+        visible: cell.selected && cell.selectionOver
     }
 
     IconGlyph {

@@ -44,6 +44,7 @@ struct ThumbnailStripLayout {
     Q_PROPERTY(int labelWidth MEMBER labelWidth FINAL)
     Q_PROPERTY(int textHeight MEMBER textHeight FINAL)
     Q_PROPERTY(int panelExtent MEMBER panelExtent FINAL)
+    Q_PROPERTY(bool selectionOverImage MEMBER selectionOverImage FINAL)
 
 public:
     static constexpr int kMinimumPreviewSize = 20;
@@ -87,6 +88,9 @@ public:
     int textHeight = 0;
     // Thickness of the panel across the strip.
     int panelExtent = 0;
+    // The thumbnail fills the cell (a tile of the masonry view), so the
+    // selection is drawn over it instead of around it.
+    bool selectionOverImage = false;
 
     // Size of a cell along the strip.
     [[nodiscard]] int itemExtent() const { return horizontal ? cellWidth : cellHeight; }
