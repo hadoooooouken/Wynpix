@@ -98,7 +98,7 @@
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="132"/>
-        <location filename="../../utils/actions.cpp" line="208"/>
+        <location filename="../../utils/actions.cpp" line="209"/>
         <source>Toggle fullscreen</source>
         <translation>全画面表示の切り替え</translation>
     </message>
@@ -464,61 +464,66 @@
     </message>
     <message>
         <location filename="../../utils/actions.cpp" line="204"/>
+        <source>Toggle masonry view</source>
+        <translation>メイソンリー表示の切り替え</translation>
+    </message>
+    <message>
+        <location filename="../../utils/actions.cpp" line="205"/>
         <source>Open selected</source>
         <translation>選択項目を開く</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="205"/>
+        <location filename="../../utils/actions.cpp" line="206"/>
         <source>Select all</source>
         <translation>すべて選択</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="206"/>
+        <location filename="../../utils/actions.cpp" line="207"/>
         <source>Back</source>
         <translation>戻る</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="207"/>
+        <location filename="../../utils/actions.cpp" line="208"/>
         <source>Forward</source>
         <translation>進む</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="209"/>
+        <location filename="../../utils/actions.cpp" line="210"/>
         <source>Move selection left</source>
         <translation>選択を左に移動</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="210"/>
+        <location filename="../../utils/actions.cpp" line="211"/>
         <source>Move selection right</source>
         <translation>選択を右に移動</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="211"/>
+        <location filename="../../utils/actions.cpp" line="212"/>
         <source>Move selection up</source>
         <translation>選択を上に移動</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="212"/>
+        <location filename="../../utils/actions.cpp" line="213"/>
         <source>Move selection down</source>
         <translation>選択を下に移動</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="213"/>
+        <location filename="../../utils/actions.cpp" line="214"/>
         <source>Move selection a page up</source>
         <translation>選択を1ページ上に移動</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="214"/>
+        <location filename="../../utils/actions.cpp" line="215"/>
         <source>Move selection a page down</source>
         <translation>選択を1ページ下に移動</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="215"/>
+        <location filename="../../utils/actions.cpp" line="216"/>
         <source>First item</source>
         <translation>最初の項目</translation>
     </message>
     <message>
-        <location filename="../../utils/actions.cpp" line="216"/>
+        <location filename="../../utils/actions.cpp" line="217"/>
         <source>Last item</source>
         <translation>最後の項目</translation>
     </message>
@@ -1028,8 +1033,8 @@
         <translation>品質 (1 - 最低, 100 - 最高)</translation>
     </message>
     <message>
-        <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
         <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="730"/>
+        <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
         <source>Stopping...</source>
         <translation>停止中...</translation>
     </message>
@@ -1462,288 +1467,288 @@ Total files: %3</source>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="762"/>
+        <location filename="../../core.cpp" line="774"/>
         <source>Updated: </source>
         <translation>更新: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="769"/>
+        <location filename="../../core.cpp" line="781"/>
         <source>Welcome to </source>
         <translation>ようこそ </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="770"/>
+        <location filename="../../core.cpp" line="782"/>
         <source> version </source>
         <translation> バージョン </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="788"/>
+        <location filename="../../core.cpp" line="800"/>
         <source>Shuffle mode: OFF</source>
         <translation>シャッフルモード: オフ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="791"/>
+        <location filename="../../core.cpp" line="803"/>
         <source>Shuffle mode: ON</source>
         <translation>シャッフルモード: オン</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="800"/>
+        <location filename="../../core.cpp" line="812"/>
         <source>Slideshow: OFF</source>
         <translation>スライドショー: オフ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="804"/>
+        <location filename="../../core.cpp" line="816"/>
         <source>Slideshow: ON</source>
         <translation>スライドショー: オン</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1012"/>
+        <location filename="../../core.cpp" line="1024"/>
         <source>Delete </source>
         <translation>削除 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1015"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source> folders permanently?</source>
         <translation> 個のフォルダを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1018"/>
+        <location filename="../../core.cpp" line="1030"/>
         <source> files permanently?</source>
         <translation> 個のファイルを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1021"/>
+        <location filename="../../core.cpp" line="1033"/>
         <source> items permanently?</source>
         <translation>個のアイテムを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1030"/>
+        <location filename="../../core.cpp" line="1042"/>
         <source>Delete permanently</source>
         <translation>完全に削除</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1053"/>
+        <location filename="../../core.cpp" line="1065"/>
         <source>File removed</source>
         <translation>ファイルを削除しました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1058"/>
+        <location filename="../../core.cpp" line="1070"/>
         <source>Removed: </source>
         <translation>削除済み: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1063"/>
+        <location filename="../../core.cpp" line="1075"/>
         <source> files</source>
         <translation> 個のファイル</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1012"/>
+        <location filename="../../core.cpp" line="1024"/>
         <source>Move </source>
         <translation>移動 </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1021"/>
+        <location filename="../../core.cpp" line="1033"/>
         <source> items to trash?</source>
         <translation>個のアイテムをゴミ箱へ移動しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1030"/>
+        <location filename="../../core.cpp" line="1042"/>
         <source>Move to trash</source>
         <translation>ゴミ箱へ移動</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1049"/>
+        <location filename="../../core.cpp" line="1061"/>
         <source>Folder moved to trash</source>
         <translation>フォルダがゴミ箱に移動されました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1052"/>
+        <location filename="../../core.cpp" line="1064"/>
         <source>Moved to trash</source>
         <translation>ゴミ箱に移動しました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1058"/>
+        <location filename="../../core.cpp" line="1070"/>
         <source>Moved to trash: </source>
         <translation>ゴミ箱に移動しました: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1153"/>
+        <location filename="../../core.cpp" line="1165"/>
         <source>File copied</source>
         <translation>ファイルがコピーされました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1160"/>
+        <location filename="../../core.cpp" line="1172"/>
         <source>Path copied</source>
         <translation>パスがコピーされました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1275"/>
-        <location filename="../../core.cpp" line="1459"/>
-        <location filename="../../core.cpp" line="1482"/>
+        <location filename="../../core.cpp" line="1287"/>
+        <location filename="../../core.cpp" line="1471"/>
+        <location filename="../../core.cpp" line="1494"/>
         <source>File exists</source>
         <translation>ファイルは存在します</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1275"/>
+        <location filename="../../core.cpp" line="1287"/>
         <source>Overwrite file?</source>
         <translation>ファイルを上書きしますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1367"/>
+        <location filename="../../core.cpp" line="1379"/>
         <source>Add folder</source>
         <translation>フォルダを追加</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1367"/>
+        <location filename="../../core.cpp" line="1379"/>
         <source>Folder name:</source>
         <translation>フォルダ名:</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1374"/>
+        <location filename="../../core.cpp" line="1386"/>
         <source>Folder already exists</source>
         <translation>フォルダはすでに存在します</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1383"/>
+        <location filename="../../core.cpp" line="1395"/>
         <source>Failed to create folder</source>
         <translation>フォルダの作成に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1457"/>
+        <location filename="../../core.cpp" line="1469"/>
         <source>File moved.</source>
         <translation>ファイルが移動されました。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1460"/>
-        <location filename="../../core.cpp" line="1483"/>
+        <location filename="../../core.cpp" line="1472"/>
+        <location filename="../../core.cpp" line="1495"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>移動先にファイルが存在します。上書きしますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1480"/>
+        <location filename="../../core.cpp" line="1492"/>
         <source>File copied.</source>
         <translation>ファイルがコピーされました。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1648"/>
+        <location filename="../../core.cpp" line="1660"/>
         <source>Perform action &quot;</source>
         <translation>アクションを実行 &quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1649"/>
+        <location filename="../../core.cpp" line="1661"/>
         <source>Changes will be saved immediately.</source>
         <translation>変更はすぐに保存されます。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1714"/>
+        <location filename="../../core.cpp" line="1726"/>
         <source>Flip horizontal</source>
         <translation>水平方向に反転</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1719"/>
+        <location filename="../../core.cpp" line="1731"/>
         <source>Flip vertical</source>
         <translation>垂直方向に反転</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1724"/>
+        <location filename="../../core.cpp" line="1736"/>
         <source>Rotate</source>
         <translation>回転</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1705"/>
+        <location filename="../../core.cpp" line="1717"/>
         <source>Resize</source>
         <translation>リサイズ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1855"/>
+        <location filename="../../core.cpp" line="1867"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>AIリサイズが完了しましたが、画像が変更されています。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1876"/>
-        <location filename="../../core.cpp" line="1887"/>
+        <location filename="../../core.cpp" line="1888"/>
+        <location filename="../../core.cpp" line="1899"/>
         <source>Crop</source>
         <translation>切り抜き</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1977"/>
+        <location filename="../../core.cpp" line="1989"/>
         <source>File saved</source>
         <translation>ファイルが保存されました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="157"/>
+        <location filename="../../core.cpp" line="158"/>
         <source>Could not save file</source>
         <translation>ファイルを保存できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="144"/>
+        <location filename="../../core.cpp" line="145"/>
         <source>Could not save file: the destination could not be replaced (Windows error %1)</source>
         <translation>ファイルを保存できませんでした: 保存先を置き換えられませんでした (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="149"/>
+        <location filename="../../core.cpp" line="150"/>
         <source>Could not save file: automatic recovery failed (Windows error %1)</source>
         <translation>ファイルを保存できませんでした: 自動復元に失敗しました (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2066"/>
-        <location filename="../../core.cpp" line="2072"/>
+        <location filename="../../core.cpp" line="2078"/>
+        <location filename="../../core.cpp" line="2084"/>
         <source>Set wallpaper: file not supported</source>
         <translation>壁紙に設定: サポートされていないファイルです</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2096"/>
-        <location filename="../../core.cpp" line="2105"/>
+        <location filename="../../core.cpp" line="2108"/>
+        <location filename="../../core.cpp" line="2117"/>
         <source>Could not open image</source>
         <translation>画像を開けませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2100"/>
+        <location filename="../../core.cpp" line="2112"/>
         <source>Can only print static images</source>
         <translation>静止画像のみ印刷できます</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="313"/>
+        <location filename="../../core.cpp" line="314"/>
         <source>AI Upscaling...</source>
         <translation>AIアップスケーリング...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="62"/>
+        <location filename="../../core.cpp" line="63"/>
         <source>Set wallpaper: failed to create application data directory</source>
         <translation>壁紙に設定: アプリケーションデータフォルダーを作成できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="65"/>
+        <location filename="../../core.cpp" line="66"/>
         <source>Set wallpaper: failed to open desktop settings (Windows error %1)</source>
         <translation>壁紙に設定: デスクトップ設定を開けませんでした (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="70"/>
+        <location filename="../../core.cpp" line="71"/>
         <source>Set wallpaper: failed to write wallpaper style (Windows error %1)</source>
         <translation>壁紙に設定: 壁紙のスタイルを書き込めませんでした (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="75"/>
+        <location filename="../../core.cpp" line="76"/>
         <source>Set wallpaper: failed to write wallpaper tiling (Windows error %1)</source>
         <translation>壁紙に設定: 壁紙のタイル設定を書き込めませんでした (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="80"/>
+        <location filename="../../core.cpp" line="81"/>
         <source>Set wallpaper: failed to close desktop settings (Windows error %1)</source>
         <translation>壁紙に設定: デスクトップ設定を閉じられませんでした (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="85"/>
+        <location filename="../../core.cpp" line="86"/>
         <source>Set wallpaper: Windows wallpaper update failed (Windows error %1)</source>
         <translation>壁紙に設定: Windows の壁紙を更新できませんでした (Windows エラー %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="93"/>
+        <location filename="../../core.cpp" line="94"/>
         <source>Set wallpaper: unknown error</source>
         <translation>壁紙に設定: 不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="99"/>
+        <location filename="../../core.cpp" line="100"/>
         <source>Could not save file. Recovery files were retained:
 Original backup:
 %1
@@ -1758,288 +1763,288 @@ Staged copy:
 %2</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="108"/>
+        <location filename="../../core.cpp" line="109"/>
         <source>Could not save file. A staged recovery copy was retained at:
 %1</source>
         <translation>ファイルを保存できませんでした。復元用の中間コピーの保存先:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="115"/>
+        <location filename="../../core.cpp" line="116"/>
         <source>Could not save file. A recovery backup was retained at:
 %1</source>
         <translation>ファイルを保存できませんでした。復元用バックアップの保存先:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="123"/>
+        <location filename="../../core.cpp" line="124"/>
         <source>Could not save file: the image is invalid</source>
         <translation>ファイルを保存できませんでした: 画像が無効です</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="126"/>
+        <location filename="../../core.cpp" line="127"/>
         <source>Could not save file: the destination path is invalid</source>
         <translation>ファイルを保存できませんでした: 保存先のパスが無効です</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="129"/>
+        <location filename="../../core.cpp" line="130"/>
         <source>Could not save file: the source is unavailable</source>
         <translation>ファイルを保存できませんでした: ソースを利用できません</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="132"/>
+        <location filename="../../core.cpp" line="133"/>
         <source>Could not save file: a temporary file could not be created</source>
         <translation>ファイルを保存できませんでした: 一時ファイルを作成できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="135"/>
+        <location filename="../../core.cpp" line="136"/>
         <source>Could not save file: the image could not be encoded</source>
         <translation>ファイルを保存できませんでした: 画像をエンコードできませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="138"/>
+        <location filename="../../core.cpp" line="139"/>
         <source>Could not save file: the temporary file could not be written</source>
         <translation>ファイルを保存できませんでした: 一時ファイルに書き込めませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="141"/>
+        <location filename="../../core.cpp" line="142"/>
         <source>Could not save file: the file copy failed</source>
         <translation>ファイルを保存できませんでした: ファイルのコピーに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="161"/>
+        <location filename="../../core.cpp" line="162"/>
         <source>File saved, but a backup could not be removed:
 %1</source>
         <translation>ファイルを保存しましたが、バックアップを削除できませんでした:
 %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="169"/>
+        <location filename="../../core.cpp" line="170"/>
         <source>Could not prepare image transfer: the image is unavailable</source>
         <translation>画像の転送を準備できませんでした: 画像を利用できません</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="172"/>
+        <location filename="../../core.cpp" line="173"/>
         <source>Could not prepare image transfer: the source path is unavailable</source>
         <translation>画像の転送を準備できませんでした: ソースのパスを利用できません</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="176"/>
+        <location filename="../../core.cpp" line="177"/>
         <source>Could not prepare image transfer: temporary storage is unavailable</source>
         <translation>画像の転送を準備できませんでした: 一時保存領域を利用できません</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="180"/>
+        <location filename="../../core.cpp" line="181"/>
         <source>Could not prepare image transfer: the temporary directory could not be created</source>
         <translation>画像の転送を準備できませんでした: 一時フォルダーを作成できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="185"/>
+        <location filename="../../core.cpp" line="186"/>
         <source>Could not prepare image transfer: the temporary file could not be created</source>
         <translation>画像の転送を準備できませんでした: 一時ファイルを作成できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="190"/>
+        <location filename="../../core.cpp" line="191"/>
         <source>Could not prepare image transfer: the image could not be encoded</source>
         <translation>画像の転送を準備できませんでした: 画像をエンコードできませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="193"/>
+        <location filename="../../core.cpp" line="194"/>
         <source>Could not prepare image transfer: the temporary file could not be written</source>
         <translation>画像の転送を準備できませんでした: 一時ファイルに書き込めませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="201"/>
+        <location filename="../../core.cpp" line="202"/>
         <source>Could not prepare image transfer</source>
         <translation>画像の転送を準備できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="280"/>
+        <location filename="../../core.cpp" line="281"/>
         <source>Failed to clean up temporary image-transfer data: %1</source>
         <translation>画像転送の一時データを削除できませんでした: %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="308"/>
+        <location filename="../../core.cpp" line="309"/>
         <source>Set wallpaper: failed to clean up wallpaper file: %1</source>
         <translation>壁紙に設定: 壁紙ファイルを削除できませんでした: %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="427"/>
-        <location filename="../../core.cpp" line="1424"/>
+        <location filename="../../core.cpp" line="428"/>
+        <location filename="../../core.cpp" line="1436"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>サムネイルキャッシュを消去できませんでした</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1026"/>
+        <location filename="../../core.cpp" line="1038"/>
         <source>Delete folder permanently?</source>
         <translation>フォルダを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1028"/>
+        <location filename="../../core.cpp" line="1040"/>
         <source>Delete file permanently?</source>
         <translation>ファイルを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1050"/>
+        <location filename="../../core.cpp" line="1062"/>
         <source>Folder removed</source>
         <translation>フォルダが削除されました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1061"/>
+        <location filename="../../core.cpp" line="1073"/>
         <source> folders</source>
         <translation> 個のフォルダ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1065"/>
+        <location filename="../../core.cpp" line="1077"/>
         <source> items</source>
         <translation> 個の項目</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1015"/>
+        <location filename="../../core.cpp" line="1027"/>
         <source> folders to trash?</source>
         <translation> 個のフォルダをゴミ箱に移動しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1018"/>
+        <location filename="../../core.cpp" line="1030"/>
         <source> files to trash?</source>
         <translation> 個のファイルをゴミ箱に移動しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1025"/>
+        <location filename="../../core.cpp" line="1037"/>
         <source>Move folder to trash?</source>
         <translation>フォルダをゴミ箱に移動しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1028"/>
+        <location filename="../../core.cpp" line="1040"/>
         <source>Move file to trash?</source>
         <translation>ファイルをゴミ箱に移動しますか？</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1406"/>
+        <location filename="../../core.cpp" line="1418"/>
         <source>Moving: %1 (%2)</source>
         <translation>移動中: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1407"/>
+        <location filename="../../core.cpp" line="1419"/>
         <source>Copying: %1 (%2)</source>
         <translation>コピー中: %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1416"/>
+        <location filename="../../core.cpp" line="1428"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>%n 個のファイルを移動しました</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1417"/>
+        <location filename="../../core.cpp" line="1429"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>%n 個のファイルをコピーしました</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1662"/>
-        <location filename="../../core.cpp" line="1790"/>
+        <location filename="../../core.cpp" line="1674"/>
+        <location filename="../../core.cpp" line="1802"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>%1 に失敗しました: 画像を編集できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1739"/>
-        <location filename="../../core.cpp" line="1764"/>
+        <location filename="../../core.cpp" line="1751"/>
+        <location filename="../../core.cpp" line="1776"/>
         <source>AI resize is already running.</source>
         <translation>AIリサイズはすでに実行されています。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1748"/>
+        <location filename="../../core.cpp" line="1760"/>
         <source>AI resize supports one image at a time.</source>
         <translation>AIリサイズは一度に1つの画像のみサポートします。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1770"/>
-        <location filename="../../core.cpp" line="1776"/>
+        <location filename="../../core.cpp" line="1782"/>
+        <location filename="../../core.cpp" line="1788"/>
         <source>Could not resize image.</source>
         <translation>画像をリサイズできませんでした。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1811"/>
+        <location filename="../../core.cpp" line="1823"/>
         <source>AI resizing...</source>
         <translation>AIリサイズ中...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1842"/>
+        <location filename="../../core.cpp" line="1854"/>
         <source>AI resize failed.</source>
         <translation>AIリサイズに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1847"/>
+        <location filename="../../core.cpp" line="1859"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>AIリサイズが完了しましたが、画像はもうリストにありません。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1865"/>
+        <location filename="../../core.cpp" line="1877"/>
         <source>AI resize finished.</source>
         <translation>AIリサイズが完了しました。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1867"/>
+        <location filename="../../core.cpp" line="1879"/>
         <source>AI resize finished for %1.</source>
         <translation>%1 のAIリサイズが完了しました。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1913"/>
+        <location filename="../../core.cpp" line="1925"/>
         <source>Could not adjust the image colors.</source>
         <translation>画像の色を調整できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2078"/>
+        <location filename="../../core.cpp" line="2090"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>壁紙設定: 画像の取得に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="296"/>
+        <location filename="../../core.cpp" line="297"/>
         <source>Wallpaper set</source>
         <translation>壁紙を設定しました</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2189"/>
+        <location filename="../../core.cpp" line="2201"/>
         <source>Could not open path: </source>
         <translation>パスを開けませんでした: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2256"/>
+        <location filename="../../core.cpp" line="2268"/>
         <source>Could not load folder: </source>
         <translation>フォルダを読み込めませんでした: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2315"/>
-        <location filename="../../core.cpp" line="2341"/>
+        <location filename="../../core.cpp" line="2363"/>
+        <location filename="../../core.cpp" line="2389"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>隣接するフォルダーを列挙できませんでした: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2470"/>
+        <location filename="../../core.cpp" line="2518"/>
         <source>End of directory.</source>
         <translation>ディレクトリの終わり。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2504"/>
+        <location filename="../../core.cpp" line="2552"/>
         <source>Load failed: </source>
         <translation>読み込みに失敗しました: </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2582"/>
-        <location filename="../../core.cpp" line="2589"/>
+        <location filename="../../core.cpp" line="2633"/>
+        <location filename="../../core.cpp" line="2640"/>
         <source>Error: could not load image.</source>
         <translation>エラー: 画像を読み込めませんでした。</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2606"/>
+        <location filename="../../core.cpp" line="2657"/>
         <source>HDR Profile</source>
         <translation>HDRプロファイル</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2612"/>
+        <location filename="../../core.cpp" line="2663"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
@@ -2150,20 +2155,20 @@ Staged copy:
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="619"/>
+        <location filename="../../components/directorypresenter.cpp" line="713"/>
         <source>Directory expansion failed: %1</source>
         <translation>フォルダーの展開に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="663"/>
+        <location filename="../../components/directorypresenter.cpp" line="757"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation>選択範囲に対応ファイルが %1 個を超えて含まれているため、フォルダーの展開を中止しました。選択範囲を絞って再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="830"/>
-        <location filename="../../components/directorypresenter.cpp" line="897"/>
-        <location filename="../../components/directorypresenter.cpp" line="951"/>
-        <location filename="../../components/directorypresenter.cpp" line="982"/>
+        <location filename="../../components/directorypresenter.cpp" line="924"/>
+        <location filename="../../components/directorypresenter.cpp" line="991"/>
+        <location filename="../../components/directorypresenter.cpp" line="1045"/>
+        <location filename="../../components/directorypresenter.cpp" line="1076"/>
         <source>Folder</source>
         <translation>フォルダ</translation>
     </message>
@@ -2263,37 +2268,37 @@ Staged copy:
 <context>
     <name>FolderGridView</name>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="276"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="362"/>
         <source>Rename</source>
         <translation>名前の変更</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="251"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="337"/>
         <source>Open only selected</source>
         <translation>選択したファイルのみ開く</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="257"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="343"/>
         <source>Add to Batch Converter</source>
         <translation>バッチコンバーターに追加</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="263"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="349"/>
         <source>Add folder</source>
         <translation>フォルダを追加</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="269"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="355"/>
         <source>Show in folder</source>
         <translation>フォルダで表示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="283"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="369"/>
         <source>Move to trash</source>
         <translation>ゴミ箱に移動</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderGridView.qml" line="291"/>
+        <location filename="../../gui/quick/ui/FolderGridView.qml" line="377"/>
         <source>Delete permanently</source>
         <translation>完全に削除</translation>
     </message>
@@ -2301,92 +2306,97 @@ Staged copy:
 <context>
     <name>FolderView</name>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="94"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="121"/>
         <source>Toggle side panel</source>
         <translation>サイドパネルを切り替え</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="124"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="155"/>
         <source>Go up</source>
         <translation>上に移動</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="199"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="237"/>
         <source>Batch convert</source>
         <translation>一括変換</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="214"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="252"/>
         <source>Grid size</source>
         <translation>グリッドサイズ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="65"/>
         <source>A - Z</source>
         <translation>A - Z</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="65"/>
         <source>Z - A</source>
         <translation>Z - A</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="65"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="65"/>
         <source>Size (desc)</source>
         <translation>サイズ (降順)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="52"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="65"/>
         <source>Oldest</source>
         <translation>古い順</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="53"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="66"/>
         <source>Newest</source>
         <translation>新しい順</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="276"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="318"/>
         <source>Folder icon sorting</source>
         <translation>フォルダアイコンの並べ替え</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="285"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="327"/>
         <source>Sort folders and images</source>
         <translation>フォルダと画像を並べ替え</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="301"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="343"/>
         <source>Filter by file format</source>
         <translation>ファイル形式で絞り込む</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="314"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="360"/>
         <source>Name filter</source>
         <translation>名前フィルター</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="335"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="381"/>
         <source>Filter folders and images by name</source>
         <translation>名前でフォルダーと画像を絞り込む</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="343"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="390"/>
+        <source>Masonry view</source>
+        <translation>メイソンリー表示</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="398"/>
         <source>Viewer</source>
         <translation>ビューア</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="351"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="406"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="359"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="414"/>
         <source>Quit Wynpix</source>
         <translation>Wynpixを終了</translation>
     </message>
@@ -2411,12 +2421,12 @@ Staged copy:
         <translation>フォルダーを選択</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="167"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="204"/>
         <source>1 image selected</source>
         <translation>1 枚の画像を選択中</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/FolderView.qml" line="168"/>
+        <location filename="../../gui/quick/ui/FolderView.qml" line="205"/>
         <source>%1 images selected</source>
         <translation>%1 枚の画像を選択中</translation>
     </message>
@@ -2480,7 +2490,7 @@ Staged copy:
 <context>
     <name>ImageViewport</name>
     <message>
-        <location filename="../../gui/quick/ui/ImageViewport.qml" line="217"/>
+        <location filename="../../gui/quick/ui/ImageViewport.qml" line="232"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
@@ -2822,114 +2832,114 @@ Staged copy:
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="381"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="392"/>
         <source>Make</source>
         <translation>メーカー</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="385"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="396"/>
         <source>Model</source>
         <translation>モデル</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="389"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="400"/>
         <source>Date/Time</source>
         <translation>日時</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="396"/>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="399"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="407"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="410"/>
         <source>ExposureTime</source>
         <translation>露出時間</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="396"/>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="399"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="407"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="410"/>
         <source> sec</source>
         <translation> 秒</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="407"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="418"/>
         <source>F Number</source>
         <translation>F値</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="412"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="423"/>
         <source>ISO Speed ratings</source>
         <translation>ISOスピードレート</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="416"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="427"/>
         <source>Flash</source>
         <translation>フラッシュ</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="422"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="433"/>
         <source>Focal Length</source>
         <translation>焦点距離</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="422"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="433"/>
         <source> mm</source>
         <translation> mm</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="430"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="441"/>
         <source>UserComment</source>
         <translation>ユーザーコメント</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="467"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="482"/>
         <source>Checkpoint</source>
         <translation>Checkpoint</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="469"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="484"/>
         <source>CLIP</source>
         <translation>CLIP</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="471"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="486"/>
         <source>VAE</source>
         <translation>VAE</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="473"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="488"/>
         <source>Sampler</source>
         <translation>Sampler</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="475"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="490"/>
         <source>Scheduler</source>
         <translation>Scheduler</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="476"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="491"/>
         <source>Seed</source>
         <translation>Seed</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="477"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="492"/>
         <source>CFG</source>
         <translation>CFG</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="478"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="493"/>
         <source>Denoise</source>
         <translation>Denoise</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="479"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="494"/>
         <source>Steps</source>
         <translation>Steps</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="481"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="496"/>
         <source>LoRA</source>
         <translation>LoRA</translation>
     </message>
     <message>
-        <location filename="../../sourcecontainers/documentinfo.cpp" line="483"/>
+        <location filename="../../sourcecontainers/documentinfo.cpp" line="498"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -3302,42 +3312,42 @@ Staged copy:
         <translation>ユーザーインターフェース</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="139"/>
         <source>Extended image info in window title</source>
         <translation>ウィンドウタイトルに拡張画像情報を表示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="130"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="149"/>
         <source>Animation playback controls</source>
         <translation>アニメーション再生コントロール</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="135"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="154"/>
         <source>Auto-hide cursor</source>
         <translation>カーソルを自動的に隠す</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="94"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="74"/>
         <source>Turn this off if you are using a touchpad with libinput driver.</source>
         <translation>libinputドライバー付きのタッチパッドを使用している場合は、これをオフにしてください。</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="89"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="69"/>
         <source>Smooth thumbnail scrolling</source>
         <translation>サムネイルのスムーズスクロールを有効にする</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="72"/>
         <source>Smooth zooming</source>
         <translation>スムーズズーム</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="144"/>
         <source>Fullscreen info bar</source>
         <translation>フルスクリーン情報バー</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="77"/>
         <source>Zoom indicator:</source>
         <translation>ズームインジケーター:</translation>
     </message>
@@ -3357,17 +3367,17 @@ Staged copy:
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="113"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="82"/>
         <source>Automatic window resize</source>
         <translation>ウィンドウの自動リサイズ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="118"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="87"/>
         <source>Match displayed content</source>
         <translation>表示内容に合わせる</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="122"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="91"/>
         <source>Screen area limit for auto resize:</source>
         <translation>自動リサイズのための画面領域制限:</translation>
     </message>
@@ -3408,22 +3418,22 @@ Staged copy:
         <translation>最後に開いたフォルダを記憶する</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="148"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="178"/>
         <source>Pinned</source>
         <translation>ピン留め</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="153"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="183"/>
         <source>Disable in windowed mode</source>
         <translation>ウィンドウモードでは無効</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="188"/>
         <source>Center selected image</source>
         <translation>選択した画像を中央に配置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="163"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="193"/>
         <source>Show subfolders</source>
         <translation>サブフォルダを表示</translation>
     </message>
@@ -3438,7 +3448,7 @@ Staged copy:
         <translation>プレビューのみ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="177"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="212"/>
         <source>Display style:</source>
         <translation>表示スタイル:</translation>
     </message>
@@ -3448,7 +3458,7 @@ Staged copy:
         <translation>%1 ミリ秒</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="169"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="204"/>
         <source>Hide delay:</source>
         <translation>非表示までの時間:</translation>
     </message>
@@ -3463,12 +3473,12 @@ Staged copy:
         <translation>シンプル</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="184"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="219"/>
         <source>Preview size:</source>
         <translation>プレビューサイズ:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="195"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="230"/>
         <source>Position:</source>
         <translation>位置:</translation>
     </message>
@@ -3494,7 +3504,7 @@ Staged copy:
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="176"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="100"/>
         <source>Files &amp; folders</source>
         <translation>ファイルとフォルダー</translation>
     </message>
@@ -3514,12 +3524,12 @@ Staged copy:
         <translation>次のフォルダーへ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="125"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="127"/>
         <source>After reaching the end:</source>
         <translation>最後の画像に達した後:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="220"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="106"/>
         <source>Default sorting mode:</source>
         <translation>デフォルトの並べ替えモード:</translation>
     </message>
@@ -3554,7 +3564,7 @@ Staged copy:
         <translation>新しい順</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="229"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="115"/>
         <source>Apply sorting to folders</source>
         <translation>フォルダーに並べ替えを適用</translation>
     </message>
@@ -3647,42 +3657,42 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
         <translation>Wynpix について</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="234"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="120"/>
         <source>Show hidden files</source>
         <translation>隠しファイルを表示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="241"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="127"/>
         <source>Slideshow</source>
         <translation>スライドショー</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="247"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="133"/>
         <source>Switch interval:</source>
         <translation>切り替え間隔:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="256"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="142"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="261"/>
+        <location filename="../../gui/quick/ui/SettingsGeneralPage.qml" line="147"/>
         <source>Loop slideshow</source>
         <translation>スライドショーをループ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="15"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="17"/>
         <source>Viewer</source>
         <translation>ビューア</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="18"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="20"/>
         <source>Display options</source>
         <translation>表示オプション</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="21"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="23"/>
         <source>Image fit:</source>
         <translation>画像のフィット:</translation>
     </message>
@@ -3692,12 +3702,12 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
         <translation>1:1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="27"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="29"/>
         <source>Keep fit mode selected via hotkey when switching images</source>
         <translation>画像切り替え時にショートカットキーで選択したフィットモードを維持</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="32"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="34"/>
         <source>Focus in 1:1 mode:</source>
         <translation>1:1モードでのフォーカス:</translation>
     </message>
@@ -3712,72 +3722,77 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
         <translation>カーソル位置</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="38"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="40"/>
         <source>Part of image that&apos;s focused after switching to 1:1</source>
         <translation>1:1 切り替え時にフォーカスする画像の部分</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="41"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="43"/>
         <source>Grid background on images with transparency</source>
         <translation>透明な画像にグリッド背景を表示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="49"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="51"/>
         <source>Expand images, up to:</source>
         <translation>画像を拡大、最大:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="62"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="64"/>
         <source>Images smaller than window will be zoomed in</source>
         <translation>ウィンドウより小さい画像は拡大表示されます</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="67"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="69"/>
         <source>Zoom options</source>
         <translation>ズームオプション</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="122"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="124"/>
         <source>Navigation</source>
         <translation>ナビゲーション</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="134"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="136"/>
         <source>Overlays</source>
         <translation>オーバーレイ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="70"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="83"/>
         <source>Unlock minimum zoom</source>
         <translation>最小ズームを解除</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="75"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="88"/>
         <source>Always allow zooming below 100%</source>
         <translation>常に100%未満のズームを許可</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="78"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="91"/>
         <source>Zoom step:</source>
         <translation>ズームステップ:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="85"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="98"/>
         <source>Use fixed zoom levels:</source>
         <translation>固定ズームレベルを使用:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="101"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="114"/>
         <source>Load defaults</source>
         <translation>デフォルトを読み込む</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="111"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="198"/>
+        <source>Masonry layout</source>
+        <translation>メイソンリーレイアウト</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="242"/>
         <source>Scaling quality</source>
         <translation>スケーリング品質</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="117"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="248"/>
         <source>Scaling filter:</source>
         <translation>スケーリングフィルター:</translation>
     </message>
@@ -3943,8 +3958,8 @@ Wynpix は [GNU GPL Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) の
         <translation>ホイール下</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="38"/>
         <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="21"/>
+        <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="38"/>
         <source>Scripts</source>
         <translation>スクリプト</translation>
     </message>
@@ -4023,37 +4038,37 @@ Example: %1</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="122"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="124"/>
         <source>Show save overlay when editing images</source>
         <translation>画像編集中に保存オーバーレイを表示</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="129"/>
         <source>Skip save overlay for rotate/flip only</source>
         <translation>回転/反転時のみ保存オーバーレイをスキップ</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="133"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="135"/>
         <source>JPEG save quality:</source>
         <translation>JPEG保存品質:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="160"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="162"/>
         <source>Confirm moving to trash</source>
         <translation>ゴミ箱への移動を確認</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="165"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="167"/>
         <source>Confirm file delete (!)</source>
         <translation>ファイルの削除を確認 (!)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="170"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="172"/>
         <source>Allow multiple instances</source>
         <translation>複数プロセスの起動を許可</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="178"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="180"/>
         <source>Memory allocation limit per image, MB:</source>
         <translation>画像あたりのメモリ割り当て制限（MB）:</translation>
     </message>
@@ -4125,37 +4140,37 @@ Example: %1</source>
         <translation>FidelityFX-CAS (GPU)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="131"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="262"/>
         <source>Sharpness:</source>
         <translation>シャープネス:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="138"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="269"/>
         <source>Contrast:</source>
         <translation>コントラスト:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="141"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
         <source>Modern formats quality (WebP, JXL, AVIF):</source>
         <translation>モダンフォーマットの品質 (WebP, JXL, AVIF):</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="149"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="151"/>
         <source>PNG compression level:</source>
         <translation>PNG 圧縮レベル:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="148"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="279"/>
         <source>Color Management</source>
         <translation>カラーマネジメント</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="151"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="282"/>
         <source>Enable color management</source>
         <translation>カラーマネジメントを有効にする</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="160"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="291"/>
         <source>Monitor profile:</source>
         <translation>モニタープロファイル:</translation>
     </message>
@@ -4205,12 +4220,12 @@ Example: %1</source>
         <translation>カスタムプロファイル (.icc/.icm)...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="174"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="305"/>
         <source>Profile file:</source>
         <translation>プロファイルファイル:</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="182"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="313"/>
         <source>Browse...</source>
         <translation>参照...</translation>
     </message>
@@ -4225,17 +4240,17 @@ Example: %1</source>
         <translation>カラープロファイル (*.icc *.icm)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="189"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="320"/>
         <source>HDR Tone-Mapping</source>
         <translation>HDRトーンマッピング</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="192"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="323"/>
         <source>Enable HDR Tone-Mapping</source>
         <translation>HDRトーンマッピングを有効にする</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="202"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="333"/>
         <source>Tone-mapping operator:</source>
         <translation>トーンマッピング演算子:</translation>
     </message>
@@ -4260,7 +4275,7 @@ Example: %1</source>
         <translation>Hable (Uncharted 2)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="210"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="341"/>
         <source>Target white level:</source>
         <translation>ターゲット白レベル:</translation>
     </message>
@@ -4333,8 +4348,8 @@ Example: %1</source>
 <context>
     <name>ShortcutCreatorDialog</name>
     <message>
-        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
         <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
+        <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
         <source>Add shortcut</source>
         <translation>ショートカットを追加</translation>
     </message>
@@ -4460,32 +4475,32 @@ Example: %1</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../../main.cpp" line="112"/>
+        <location filename="../../main.cpp" line="151"/>
         <source>File or directory path.</source>
         <translation>ファイルまたはディレクトリのパス。</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="115"/>
+        <location filename="../../main.cpp" line="154"/>
         <source>Generate all thumbnails for directory.</source>
         <translation>ディレクトリのすべてのサムネイルを生成します。</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="117"/>
+        <location filename="../../main.cpp" line="156"/>
         <source>directory-path</source>
         <translation>ディレクトリパス</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="119"/>
+        <location filename="../../main.cpp" line="158"/>
         <source>Thumbnail size. Current size is used if not specified.</source>
         <translation>サムネイルサイズ。指定しない場合は現在のサイズが使用されます。</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="121"/>
+        <location filename="../../main.cpp" line="160"/>
         <source>thumbnail-size</source>
         <translation>サムネイルサイズ</translation>
     </message>
     <message>
-        <location filename="../../main.cpp" line="123"/>
+        <location filename="../../main.cpp" line="162"/>
         <source>Show build options.</source>
         <translation>ビルドオプションを表示します。</translation>
     </message>
