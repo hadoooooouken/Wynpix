@@ -195,6 +195,8 @@ public:
   // hide delay, pinned or floating, at position (SettingsEnums::
   // PanelPosition), with the extended style or not.
   Q_INVOKABLE void configureThumbnailPanel(bool pinned, int position, bool extended);
+  // The masonry mode of the panel, kept by the following configurations.
+  Q_INVOKABLE void setPanelMasonry(bool enabled);
   Q_INVOKABLE void allowThumbnailPanelCreation();
   Q_INVOKABLE void setPanelWindowSize(int width, int height);
   // Populates the strip with count items and forgets the requests.

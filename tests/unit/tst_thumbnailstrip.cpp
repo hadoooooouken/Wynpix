@@ -27,6 +27,8 @@ constexpr int kTextHeight = 15;
 // A hide delay short enough to wait for.
 constexpr int kShortHideDelayMs = 10;
 constexpr int kWaitMarginMs = 100;
+// The default preview size: a 16:9 image is 256 wide in the masonry strip.
+constexpr int kDefaultPreviewSize = 256;
 constexpr QSize kLargeWindow(1200, 800);
 constexpr QSize kSmallWindow(600, 400);
 
@@ -127,6 +129,60 @@ private slots:
              ThumbnailStripLayout::kMinimumPreviewSize);
     QCOMPARE(thumbnailStripLayoutFor({.previewsSize = 500}).thumbnailSize,
              ThumbnailStripLayout::kMaximumPreviewSize);
+  }
+
+  void layoutOfMasonryStripHasNoLabelsAndKeepsTheButtonsInReach() {
+    const ThumbnailStripLayout bottom = thumbnailStripLayoutFor(
+        {.previewsSize = 256,
+         .style = Enums::PanelStyle::Extended,
+         .position = Enums::PanelPosition::Bottom,
+         .textHeight = kTextHeight,
+         .masonry = true});
+    QVERIFY(bottom.masonry);
+    QVERIFY(!bottom.labels);
+    // A 16:9 image is as wide as the preview size: 256 * 9 / 16 high.
+    QCOMPARE(bottom.laneExtent, 144);
+    // The tiles ask for 144 + 2 * 4 + 16 + 3 = 171, the buttons for
+    // (4 + 2) * 30 + 4 + the 3 px strip = 187.
+    QCOMPARE(bottom.panelExtent, 187);
+    // The lane is centred in the panel without its strip.
+    QCOMPARE(bottom.laneOffset, 20);
+    const ThumbnailStripLayout top = thumbnailStripLayoutFor(
+        {.previewsSize = 256, .position = Enums::PanelPosition::Top, .masonry = true});
+    // The border line is 1 px: (4 + 2) * 30 + 4 + 1.
+    QCOMPARE(top.panelExtent, 185);
+    QCOMPARE(top.laneOffset, 20);
+  }
+
+  void masonryStripIsAsThickAsItsTilesWhenTheyNeedMore() {
+    const ThumbnailStripLayout large = thumbnailStripLayoutFor(
+        {.previewsSize = 300, .position = Enums::PanelPosition::Bottom, .masonry = true});
+    QCOMPARE(large.laneExtent, 169);
+    QCOMPARE(large.panelExtent, 169 + 2 * ThumbnailStripLayout::kMasonryCrossMargin +
+                                    ThumbnailStripLayout::kPanelAllowance +
+                                    ThumbnailStripLayout::kBottomPanelStrip);
+    const ThumbnailStripLayout small = thumbnailStripLayoutFor(
+        {.previewsSize = 20, .position = Enums::PanelPosition::Bottom, .masonry = true});
+    QCOMPARE(small.panelExtent, 187);
+  }
+
+  void verticalMasonryStripHasTilesAsWideAsThePreviewSize() {
+    const ThumbnailStripLayout left = thumbnailStripLayoutFor(
+        {.previewsSize = 256, .position = Enums::PanelPosition::Left, .masonry = true});
+    QVERIFY(!left.horizontal);
+    QCOMPARE(left.laneExtent, 256);
+    QCOMPARE(left.panelExtent, 256 + 2 * ThumbnailStripLayout::kMasonryCrossMargin +
+                                   ThumbnailStripLayout::kPanelAllowance);
+    // 280 without the border line of 1 px, the lane in the middle.
+    QCOMPARE(left.laneOffset, (280 - 1 - 256) / 2);
+  }
+
+  void uniformStripIsNotAffectedByTheMasonryFields() {
+    const ThumbnailStripLayout layout = thumbnailStripLayoutFor(
+        {.previewsSize = 120, .position = Enums::PanelPosition::Bottom});
+    QVERIFY(!layout.masonry);
+    QCOMPARE(layout.laneExtent, 0);
+    QCOMPARE(layout.panelExtent, 135);
   }
 
   //--- draw size --------------------------------------------------------------
@@ -972,6 +1028,225 @@ private slots:
     QCOMPARE(pins.first().at(0).toBool(), true);
     QVERIFY(panel.isPinned());
     QVERIFY(panel.isDocked());
+  }
+
+  void masonryButtonPublishesTheModeAndSwitchesTheModel() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    ThumbnailPanelController panel(model, settings);
+    QSignalSpy requests(&panel, &ThumbnailPanelController::masonryRequested);
+    QVERIFY(!panel.layout().masonry);
+    QVERIFY(!model.imageSizesWanted());
+    QVERIFY(!model.scrollConfig().rows);
+    QCOMPARE(model.requestConfig().targetSize, QSize(256, 192));
+
+    panel.toggleMasonry();
+    QCOMPARE(requests.count(), 1);
+    QCOMPARE(requests.first().at(0).toBool(), true);
+    QVERIFY(panel.layout().masonry);
+    QVERIFY(model.imageSizesWanted());
+    // The thumbnails are made in the box of the lane: 4 tiles of the lane
+    // wide, so that a 16:9 image is 256 x 144 and drawn without a resize.
+    QCOMPARE(model.requestConfig().targetSize, QSize(576, 144));
+    QCOMPARE(model.requestConfig().folderTargetSize, QSize(192, 144));
+    QVERIFY(model.scrollConfig().rows);
+
+    panel.toggleMasonry();
+    QCOMPARE(requests.count(), 2);
+    QCOMPARE(requests.last().at(0).toBool(), false);
+    QVERIFY(!panel.layout().masonry);
+    QVERIFY(!model.imageSizesWanted());
+    QVERIFY(!model.scrollConfig().rows);
+    QCOMPARE(model.requestConfig().targetSize, QSize(256, 192));
+    QVERIFY(!model.requestConfig().folderTargetSize.isValid());
+  }
+
+  void masonryBoxFollowsTheDevicePixelRatio() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    panel.setDevicePixelRatio(1.25);
+    QCOMPARE(model.requestConfig().targetSize, QSize(720, 180));
+    QCOMPARE(model.requestConfig().folderTargetSize, QSize(240, 180));
+  }
+
+  void masonryRowsFollowTheSizesOfTheImages() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    model.populate(3, 0, {QSize(1920, 1080), QSize(1600, 1200), QSize()});
+
+    auto layout = panel.masonry()->layout();
+    QVERIFY(layout);
+    QCOMPARE(layout->itemCount(), 3);
+    // A 16:9 thumbnail is as wide as the preview size.
+    QCOMPARE(layout->itemRect(0).size(), QSizeF(256, 144));
+    QCOMPARE(layout->itemRect(1).size(), QSizeF(192, 144));
+    // The size of the third image is not known yet.
+    QCOMPARE(layout->itemRect(2).width(), qreal(192));
+    // The model scrolls along the rows of the layout.
+    QCOMPARE(static_cast<const ItemRows *>(layout.get()), model.scrollConfig().rows.get());
+
+    // A size that arrives later changes the layout in a step.
+    model.setSourceSize(2, QSize(2000, 1000));
+    QTRY_COMPARE(panel.masonry()->layout()->itemRect(2).width(), qreal(288));
+    QCOMPARE(static_cast<const ItemRows *>(panel.masonry()->layout().get()),
+             model.scrollConfig().rows.get());
+  }
+
+  void masonryStripKeepsTheSelectedImageInPlaceWhenSizesArrive() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    constexpr int kCount = 40;
+    constexpr int kSelected = 20;
+    QList<QSize> sizes(kCount, QSize(1600, 1200));
+    model.populate(kCount, 0, sizes);
+    model.setViewport(0.0, kViewExtent);
+    model.setActive(true);
+    model.select(kSelected);
+    model.focusOnSelection();
+    QVERIFY(model.viewOffset() > 0.0);
+    const auto before = panel.masonry()->layout();
+    const qreal startBefore = before->rowStart(kSelected) - model.viewOffset();
+
+    // The images in front of the selection turn out to be wider.
+    QList<QPair<int, QSize>> wider;
+    for (int item = 0; item < kSelected; ++item)
+      wider.append({item, QSize(1920, 1080)});
+    model.setSourceSizes(wider);
+    QTRY_VERIFY(panel.masonry()->layout() != before);
+    const auto after = panel.masonry()->layout();
+    QVERIFY(after->rowStart(kSelected) > before->rowStart(kSelected));
+    // The selected image stays where it was in the view.
+    QVERIFY(qAbs((after->rowStart(kSelected) - model.viewOffset()) - startBefore) <=
+            StripMasonryController::kAnchorTolerancePx);
+  }
+
+  void masonryItemAtFindsTheTileUnderThePointer() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    model.populate(2, 0, {QSize(1920, 1080), QSize(1000, 1000)});
+    const QRectF second = panel.masonry()->layout()->itemRect(1);
+    QCOMPARE(panel.masonry()->itemAt(second.center().x(), second.center().y()), 1);
+    QCOMPARE(panel.masonry()->itemAt(-10.0, second.center().y()), -1);
+  }
+
+  void masonryViewStaysInsideTheContentWhenItShrinks() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    constexpr int kCount = 40;
+    constexpr int kRemoved = 20;
+    model.populate(kCount, 0, QList<QSize>(kCount, QSize(1600, 1200)));
+    model.setViewport(0.0, kViewExtent);
+    model.setActive(true);
+    // The view is at the end of the strip.
+    model.restoreOffset(panel.masonry()->contentExtent());
+    QVERIFY(model.viewOffset() > 0.0);
+    // The last items go, one after the other: the view must not be left past
+    // the end of what remains, whichever of them anchored it.
+    for (int removed = 0; removed < kRemoved; ++removed) {
+      model.removeItem(model.rowCount() - 1);
+      const qreal maximum =
+          qMax(0.0, panel.masonry()->contentExtent() - static_cast<qreal>(kViewExtent));
+      QVERIFY2(model.viewOffset() <= maximum + StripMasonryController::kAnchorTolerancePx,
+               qPrintable(QStringLiteral("offset %1, end %2 after %3 removed")
+                              .arg(model.viewOffset()).arg(maximum).arg(removed + 1)));
+    }
+  }
+
+  void masonryToggleBringsTheSelectionIntoView() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    ThumbnailPanelController panel(model, settings);
+    constexpr int kCount = 60;
+    constexpr int kSelected = 40;
+    model.populate(kCount, 0, QList<QSize>(kCount, QSize(1920, 1080)));
+    model.setViewport(0.0, kViewExtent);
+    model.setActive(true);
+    model.select(kSelected);
+    model.focusOnSelection();
+    QVERIFY(model.viewOffset() > 0.0);
+
+    panel.toggleMasonry();
+    const auto layout = panel.masonry()->layout();
+    QVERIFY(layout);
+    const qreal start = layout->rowStart(kSelected);
+    QVERIFY2(start >= model.viewOffset() &&
+                 start + layout->rowExtent(kSelected) <= model.viewOffset() + kViewExtent,
+             qPrintable(QStringLiteral("selection at %1, view %2 - %3")
+                            .arg(start).arg(model.viewOffset())
+                            .arg(model.viewOffset() + kViewExtent)));
+
+    panel.toggleMasonry();
+    const qreal uniformStart = kSelected * panel.layout().itemExtent();
+    QVERIFY(uniformStart >= model.viewOffset() &&
+            uniformStart + panel.layout().itemExtent() <= model.viewOffset() + kViewExtent);
+  }
+
+  void populatingMakesTheLayoutOnce() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    QSignalSpy layouts(panel.masonry(), &StripMasonryController::layoutChanged);
+    // The reset, the count and the folders of a population are one layout.
+    model.populate(30, 2, QList<QSize>(30, QSize(1920, 1080)));
+    QCOMPARE(layouts.count(), 1);
+    // Items that come or go are another.
+    model.removeItem(29);
+    QCOMPARE(layouts.count(), 2);
+  }
+
+  void masonryModeIsOffWithoutTheSetting() {
+    ThumbnailListModel model;
+    ThumbnailPanelController panel(model, panelSettings(false, Enums::PanelPosition::Bottom));
+    model.populate(2, 0, {QSize(1920, 1080), QSize(1000, 1000)});
+    QVERIFY(!panel.masonry()->isEnabled());
+    QVERIFY(!panel.masonry()->layout());
+    QVERIFY(panel.masonry()->isReady());
+  }
+
+  void masonryWaitsForTheSizesAroundTheSelectionBeforeItIsReady() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    QSignalSpy ready(panel.masonry(), &StripMasonryController::readyChanged);
+    model.populate(4, 0, {});
+    QVERIFY(!panel.masonry()->isReady());
+    model.setSourceSizes({{0, QSize(1920, 1080)}, {1, QSize(1920, 1080)}, {2, QSize(1920, 1080)},
+                          {3, QSize(1920, 1080)}});
+    QVERIFY(panel.masonry()->isReady());
+    QVERIFY(ready.count() >= 2);
+  }
+
+  void masonryGivesUpWaitingForSizesAfterTheGracePeriod() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    ThumbnailPanelController panel(model, settings);
+    model.populate(4, 0, {});
+    QVERIFY(!panel.masonry()->isReady());
+    QTRY_VERIFY_WITH_TIMEOUT(panel.masonry()->isReady(),
+                             StripMasonryController::kGracePeriodMs + kWaitMarginMs);
   }
 
   void matchesThumbnailsByTheTargetBoxNotByTheirPixels() {

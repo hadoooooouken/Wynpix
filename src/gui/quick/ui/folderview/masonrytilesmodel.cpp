@@ -26,7 +26,7 @@ void MasonryTilesModel::setSource(ThumbnailListModel *source) {
             &MasonryTilesModel::onSourceStructureChanged);
 }
 
-void MasonryTilesModel::setLayout(std::shared_ptr<const MasonryLayout> layout,
+void MasonryTilesModel::setLayout(std::shared_ptr<const TileRows> layout,
                                   const ThumbnailStripLayout &folderCell) {
     mLayout = std::move(layout);
     mFolderCell = folderCell;
@@ -86,14 +86,7 @@ ThumbnailStripLayout MasonryTilesModel::cellLayoutFor(int item) const {
     if (!mSource || item < mSource->dirCount())
         return mFolderCell;
     const QSize size = mLayout ? mLayout->itemRect(item).size().toSize() : QSize();
-    ThumbnailStripLayout cell;
-    cell.horizontal = false;
-    cell.thumbnailSize = qMax(size.width(), size.height());
-    cell.cellWidth = size.width();
-    cell.cellHeight = size.height();
-    cell.imageArea = size;
-    cell.selectionOverImage = true;
-    return cell;
+    return thumbnailTileCellFor(size);
 }
 
 MasonryTilesModel::Window MasonryTilesModel::windowForViewport() const {

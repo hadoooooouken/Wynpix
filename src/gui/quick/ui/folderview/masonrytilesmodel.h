@@ -7,13 +7,14 @@
 
 #include <memory>
 
-#include "gui/quick/ui/folderview/masonrylayout.h"
 #include "gui/quick/ui/thumbnails/thumbnaillistmodel.h"
 #include "gui/quick/ui/thumbnails/thumbnailstriplayout.h"
+#include "gui/quick/ui/thumbnails/tilerows.h"
 
-// The items of the folder grid that a masonry view has to draw: those near
+// The items of a thumbnail view that a masonry view has to draw: those near
 // the viewport, with the position and the cell of each. It reads a
-// ThumbnailListModel (the items) and a MasonryLayout (where they are), and
+// ThumbnailListModel (the items) and a TileRows (where they are: the
+// MasonryLayout of the folder grid, the StripMasonryLayout of the strip), and
 // exposes the roles of the first plus
 //   tileX, tileY    position of the tile in content coordinates,
 //   cellLayout      the cell of the tile as the strip's cell item draws it:
@@ -50,7 +51,7 @@ public:
     // source must outlive the model.
     void setSource(ThumbnailListModel *source);
     // Positions of the items, and the cell of the folders.
-    void setLayout(std::shared_ptr<const MasonryLayout> layout,
+    void setLayout(std::shared_ptr<const TileRows> layout,
                    const ThumbnailStripLayout &folderCell);
     // The part of the content in view (ThumbnailListModel::setViewport()).
     Q_INVOKABLE void setViewport(qreal offset, qreal extent);
@@ -79,7 +80,7 @@ private:
     void onSourceStructureChanged();
 
     QPointer<ThumbnailListModel> mSource;
-    std::shared_ptr<const MasonryLayout> mLayout;
+    std::shared_ptr<const TileRows> mLayout;
     ThumbnailStripLayout mFolderCell;
     qreal mOffset = 0.0;
     qreal mExtent = 0.0;

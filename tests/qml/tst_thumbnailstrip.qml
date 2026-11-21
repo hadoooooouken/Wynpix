@@ -108,6 +108,7 @@ Item {
         }
 
         function cleanup() {
+            Fixture.setPanelMasonry(false);
             Fixture.configureThumbnailPanel(true, SettingsEnums.PanelPosition.Bottom, false);
         }
 
@@ -184,6 +185,93 @@ Item {
                 verify(bar.contentItem.visible, "the scroll bar handle is hidden");
                 verify(!idle.visible, "the other orientation's scroll bar is shown");
             }
+        }
+
+        // The masonry mode draws its tiles in a view of their own and leaves
+        // the list without delegates; the mode button switches back.
+        function test_masonryModeDrawsTilesInPlaceOfTheList() {
+            pinnedAt(SettingsEnums.PanelPosition.Bottom);
+            const view = list();
+            Fixture.populateThumbnails(20);
+            verify(cells(view).length > 0);
+            const tiles = findNamed(panel, "masonryTiles");
+            verify(tiles !== null);
+            verify(!tiles.visible);
+
+            panel.controller.toggleMasonry();
+            verify(panel.stripLayout.masonry);
+            verify(tiles.visible);
+            verify(!view.visible);
+            compare(cells(view).length, 0);
+            tryVerify(() => cells(tiles).length > 0, createTimeout, "no tiles were drawn");
+            const bar = findNamed(panel, "masonryHorizontalScrollBar");
+            const idle = findNamed(panel, "horizontalScrollBar");
+            verify(bar !== null && idle !== null);
+            verify(bar.visible, "the scroll bar of the tiles is hidden");
+            verify(bar.size < 1.0);
+            verify(!idle.visible, "the scroll bar of the list is shown");
+
+            panel.controller.toggleMasonry();
+            verify(!panel.stripLayout.masonry);
+            verify(view.visible);
+            verify(!tiles.visible);
+            tryVerify(() => cells(view).length > 0, createTimeout, "the list has no cells");
+        }
+
+        // A Flickable keeps its position across the strip, so the tiles of a
+        // strip that turned would have stayed out of view.
+        function test_masonryTilesStayInViewWhenTheStripTurns() {
+            pinnedAt(SettingsEnums.PanelPosition.Bottom);
+            list();
+            Fixture.setPanelMasonry(true);
+            Fixture.populateThumbnails(largeDirectory / 10);
+            const tiles = findNamed(panel, "masonryTiles");
+            verify(tiles !== null);
+            Fixture.selectThumbnail(500);
+            tryVerify(() => tiles.contentX > 0, createTimeout, "the selection was not brought into view");
+            const sides = [
+                { position: SettingsEnums.PanelPosition.Left, horizontal: false },
+                { position: SettingsEnums.PanelPosition.Bottom, horizontal: true },
+                { position: SettingsEnums.PanelPosition.Right, horizontal: false }
+            ];
+            for (const side of sides) {
+                pinnedAt(side.position);
+                verify(panel.stripLayout.masonry);
+                tryVerify(() => cells(tiles).length > 0, createTimeout, "no tiles in view");
+                // Nothing is scrolled across the strip.
+                compare(side.horizontal ? tiles.contentY : tiles.contentX, 0);
+                for (const cell of cells(tiles)) {
+                    const along = side.horizontal ? cell.x - tiles.contentX : cell.y - tiles.contentY;
+                    verify(along > -cell.width - cell.height && along < tiles.width + tiles.height,
+                           "a tile is far out of view");
+                }
+            }
+        }
+
+        // The selection stays in view across the switch, in both directions:
+        // the list is given its model again at the same moment as it is
+        // scrolled to the selection.
+        function test_masonryToggleKeepsTheSelectionInView() {
+            const selected = 150;
+            pinnedAt(SettingsEnums.PanelPosition.Bottom);
+            const view = list();
+            Fixture.populateThumbnails(200);
+            Fixture.selectThumbnail(selected);
+            tryVerify(() => cellOf(view, selected) !== null, createTimeout,
+                      "the selection was not brought into view");
+            const tiles = findNamed(panel, "masonryTiles");
+
+            panel.controller.toggleMasonry();
+            verify(tiles.visible);
+            tryVerify(() => tiles.contentX > 0, createTimeout, "the tiles stayed at the start");
+            tryVerify(() => cells(tiles).some(cell => cell.itemIndex === selected), createTimeout,
+                      "the selection is not among the tiles");
+
+            panel.controller.toggleMasonry();
+            verify(view.visible);
+            tryVerify(() => view.contentX > 0, createTimeout, "the list stayed at the start");
+            tryVerify(() => cellOf(view, selected) !== null, createTimeout,
+                      "the selection is not among the cells");
         }
 
         function test_largeDirectoryKeepsToTheVisibleRange() {

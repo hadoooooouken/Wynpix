@@ -10,6 +10,7 @@
 #include <QtQml/qqmlregistration.h>
 
 #include "gui/quick/bridges/uisettings.h"
+#include "gui/quick/ui/thumbnails/stripmasonrycontroller.h"
 #include "gui/quick/ui/thumbnails/thumbnaillistmodel.h"
 #include "gui/quick/ui/thumbnails/thumbnailstriplayout.h"
 
@@ -28,7 +29,12 @@
 //   press in the area (a drag of the image) keeps it hidden until the
 //   pointer leaves the area. Entering the folder view hides it at once;
 // - the exit button is shown in fullscreen for a panel at the top or right;
-// - the pin button publishes the new pinned state to store.
+// - the pin button publishes the new pinned state to store; the strip mode
+//   button does the same for the masonry mode, in which the thumbnails keep
+//   the proportions of their images (StripMasonryController) and show no
+//   labels. The layout of the tiles and the anchoring of the view are the
+//   business of StripMasonryController; this controller only turns the mode
+//   on and gives the model what the mode changes: the rows, the target boxes.
 // It also derives the strip layout from the settings and the label font, and
 // configures the thumbnail model with it (request size in device pixels,
 // crop, unloading, scrolling). While the panel slides, the model requests no
@@ -50,6 +56,7 @@ class ThumbnailPanelController final : public QObject {
     Q_PROPERTY(bool docked READ isDocked NOTIFY dockedChanged FINAL)
     Q_PROPERTY(SettingsEnums::PanelPosition position READ position NOTIFY positionChanged FINAL)
     Q_PROPERTY(ThumbnailStripLayout layout READ layout NOTIFY layoutChanged FINAL)
+    Q_PROPERTY(StripMasonryController *masonry READ masonry CONSTANT FINAL)
     Q_PROPERTY(bool exitButtonVisible READ isExitButtonVisible NOTIFY exitButtonVisibleChanged FINAL)
     Q_PROPERTY(int slideDistance READ slideDistance CONSTANT FINAL)
     Q_PROPERTY(int animationInDuration READ animationInDuration CONSTANT FINAL)
@@ -80,6 +87,7 @@ public:
     [[nodiscard]] bool isDocked() const;
     [[nodiscard]] SettingsEnums::PanelPosition position() const;
     [[nodiscard]] ThumbnailStripLayout layout() const;
+    [[nodiscard]] StripMasonryController *masonry();
     [[nodiscard]] bool isExitButtonVisible() const;
     [[nodiscard]] int slideDistance() const;
     [[nodiscard]] int animationInDuration() const;
@@ -110,6 +118,8 @@ public:
 
     // --- QML -------------------------------------------------------------
     Q_INVOKABLE void togglePinned();
+    // Switches the strip between the uniform and the masonry mode.
+    Q_INVOKABLE void toggleMasonry();
     // The show or hide slide runs.
     Q_INVOKABLE void setAnimationRunning(bool running);
     // Black or white, whichever reads on background (unselected labels).
@@ -128,6 +138,8 @@ signals:
     void exitButtonVisibleChanged();
     // The pin button changed the pinned state; to be stored.
     void pinRequested(bool pinned);
+    // The strip mode button changed the masonry mode; to be stored.
+    void masonryRequested(bool enabled);
 
 private:
     enum class HideSource { None, PointerExit, WindowExit };
@@ -143,11 +155,15 @@ private:
     void updateExitButton();
     void updateLayout();
     void configureModel();
+    // The model follows the new layout of the masonry strip, then the view is
+    // put back where it was.
+    void onMasonryLayoutChanged(const StripScrollAnchor &anchor);
     void scheduleHide(HideSource source);
     void cancelHide();
     void onHideTimeout();
 
     ThumbnailListModel &mModel;
+    StripMasonryController mMasonry;
     PanelSettings mPanel;
     ViewerSettings mViewer;
     QFont mLabelFont;

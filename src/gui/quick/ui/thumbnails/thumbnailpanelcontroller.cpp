@@ -8,9 +8,11 @@ namespace Enums = SettingsEnums;
 ThumbnailPanelController::ThumbnailPanelController(ThumbnailListModel &model,
                                                    const UiSettingsSnapshot &settings,
                                                    QObject *parent)
-    : QObject(parent), mModel(model) {
+    : QObject(parent), mModel(model), mMasonry(model) {
     mHideTimer.setSingleShot(true);
     connect(&mHideTimer, &QTimer::timeout, this, &ThumbnailPanelController::onHideTimeout);
+    connect(&mMasonry, &StripMasonryController::layoutChanged, this,
+            &ThumbnailPanelController::onMasonryLayoutChanged);
     applySettings(settings);
 }
 
@@ -48,6 +50,10 @@ Enums::PanelPosition ThumbnailPanelController::position() const {
 
 ThumbnailStripLayout ThumbnailPanelController::layout() const {
     return mLayout;
+}
+
+StripMasonryController *ThumbnailPanelController::masonry() {
+    return &mMasonry;
 }
 
 bool ThumbnailPanelController::isExitButtonVisible() const {
@@ -209,6 +215,14 @@ void ThumbnailPanelController::togglePinned() {
     emit pinRequested(pinned);
 }
 
+void ThumbnailPanelController::toggleMasonry() {
+    const bool enabled = !mPanel.masonry;
+    mPanel.masonry = enabled;
+    // The model follows through onMasonryLayoutChanged().
+    updateLayout();
+    emit masonryRequested(enabled);
+}
+
 void ThumbnailPanelController::setAnimationRunning(bool running) {
     mModel.setLoadingBlocked(running);
 }
@@ -295,31 +309,60 @@ void ThumbnailPanelController::updateLayout() {
         .style = mPanel.style,
         .position = mPanel.position,
         .textHeight = QFontMetrics(mLabelFont).height(),
+        // A panel that is off needs no sizes of the images.
+        .masonry = mPanel.masonry && mPanel.enabled,
     });
     if (layout == mLayout)
         return;
     mLayout = layout;
     emit layoutChanged();
+    // The masonry strip lays its tiles out for the new geometry; the model
+    // follows through onMasonryLayoutChanged().
+    mMasonry.setStripLayout(mLayout);
 }
 
 // ThumbnailStrip::readSettings() and ThumbnailView: thumbnails are requested
-// for the image area times the device pixel ratio.
+// for the image area times the device pixel ratio. The masonry strip requests
+// them in the box of its lane (StripMasonryLayout::thumbnailBoxFor()), in which
+// every image is made at the size of its tile, so it is drawn without a resize
+// and never enlarged; its folders are made at the size of their tile. The rows
+// of the masonry layout replace the uniform ones, which are left empty so that
+// only the rows differ while the layout follows the sizes of the images.
 void ThumbnailPanelController::configureModel() {
+    const std::shared_ptr<const StripMasonryLayout> masonryLayout = mMasonry.layout();
+    const bool masonry = mLayout.masonry && masonryLayout;
+    QSize target = mLayout.imageTargetSize(mDevicePixelRatio);
+    QSize folderTarget;
+    std::shared_ptr<const ItemRows> rows;
+    if (masonry) {
+        target = StripMasonryLayout::thumbnailBoxFor(mLayout.horizontal, mLayout.laneExtent,
+                                                      mDevicePixelRatio);
+        folderTarget = StripMasonryLayout::folderThumbnailBoxFor(
+            mLayout.horizontal, mLayout.laneExtent, mDevicePixelRatio);
+        rows = masonryLayout;
+    }
     mModel.configure({
-        .targetSize = mLayout.imageTargetSize(mDevicePixelRatio),
+        .targetSize = target,
+        .folderTargetSize = folderTarget,
         .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,
     });
     mModel.setScrollConfig({
         .horizontal = mLayout.horizontal,
-        .itemExtent = mLayout.itemExtent(),
+        .itemExtent = masonry ? 0 : mLayout.itemExtent(),
+        .rows = rows,
         .thumbnailSize = mLayout.thumbnailSize,
         .centerSelection = mPanel.centerSelection,
         .smoothScroll = mViewer.smoothScroll,
         .wheelSpeed = mViewer.mouseScrollingSpeed,
         .trackpadDetection = mViewer.trackpadDetection,
     });
+}
+
+void ThumbnailPanelController::onMasonryLayoutChanged(const StripScrollAnchor &anchor) {
+    configureModel();
+    mMasonry.restoreAnchor(anchor);
 }
 
 void ThumbnailPanelController::scheduleHide(HideSource source) {

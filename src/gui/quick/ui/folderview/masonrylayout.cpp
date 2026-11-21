@@ -1,5 +1,7 @@
 #include "masonrylayout.h"
 
+#include "gui/quick/ui/thumbnails/tileaspect.h"
+
 #include <QtGlobal>
 
 #include <algorithm>
@@ -17,13 +19,6 @@ struct RowPlan {
     // The row reaches the right margin; the last one may not.
     bool full = false;
 };
-
-double aspectOf(const QSize &size) {
-    if (size.width() <= 0 || size.height() <= 0)
-        return MasonryLayout::kUnknownAspect;
-    const double aspect = static_cast<double>(size.width()) / size.height();
-    return qBound(MasonryLayout::kMinimumAspect, aspect, MasonryLayout::kMaximumAspect);
-}
 
 // Height at which images with the proportions sum fill available with
 // spacing between them.
@@ -102,7 +97,7 @@ void MasonryLayout::addImageRows(const MasonryLayoutInput &input, int count, int
     QList<double> aspects;
     aspects.reserve(count - dirCount);
     for (int item = dirCount; item < count; ++item)
-        aspects.append(aspectOf(input.sourceSizes.value(item)));
+        aspects.append(TileAspect::of(input.sourceSizes.value(item)));
 
     const double available = qMax(1, input.viewWidth - 2 * kMargin);
     const double target = qMax(1, input.targetRowHeight);

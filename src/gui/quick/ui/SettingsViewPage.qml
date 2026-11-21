@@ -194,6 +194,11 @@ SettingsPage {
                     checked: root.editor.view.showSubfoldersInPanel
                     onToggled: root.editor.view.showSubfoldersInPanel = checked
                 }
+                CheckBox {
+                    text: qsTranslate("SettingsDialog", "Masonry layout")
+                    checked: root.editor.view.panelMasonry
+                    onToggled: root.editor.view.panelMasonry = checked
+                }
             }
             SettingsSliderRow {
                 label: qsTranslate("SettingsDialog", "Hide delay:")

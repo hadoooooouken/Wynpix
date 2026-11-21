@@ -8,6 +8,29 @@ namespace Enums = SettingsEnums;
 namespace {
 // Surfaces lighter than this qGray() value get black labels.
 constexpr int kLightSurfaceGray = 128;
+
+// The lane of the tiles and the thickness of the panel of the masonry strip.
+void applyMasonryGeometry(ThumbnailStripLayout &layout, Enums::PanelPosition position) {
+    using Layout = ThumbnailStripLayout;
+    layout.laneExtent = layout.horizontal
+                            ? qMax(1, qRound(layout.thumbnailSize * Layout::kMasonryLaneAspect))
+                            : layout.thumbnailSize;
+    // The strip above a bottom panel replaces the border line there.
+    const int edge =
+        position == Enums::PanelPosition::Bottom ? Layout::kBottomPanelStrip : Layout::kBorderWidth;
+    const int tilesExtent = layout.laneExtent + 2 * Layout::kMasonryCrossMargin +
+                            Layout::kPanelAllowance +
+                            (position == Enums::PanelPosition::Bottom ? Layout::kBottomPanelStrip
+                                                                      : 0);
+    // The buttons lie across the panel (a column, or a row in a vertical
+    // panel) and have to fit without the edge.
+    const int buttonsExtent =
+        (Layout::kFixedButtonCount + Layout::kPageButtonCount) * Layout::kButtonSize +
+        Layout::kButtonSpacing + edge;
+    layout.panelExtent = qMax(tilesExtent, buttonsExtent);
+    // The tiles are centred in the area of the strip.
+    layout.laneOffset = (layout.panelExtent - edge - layout.laneExtent) / 2;
+}
 } // namespace
 
 QColor thumbnailLabelColor(const QColor &background) {
@@ -29,7 +52,9 @@ ThumbnailStripLayout thumbnailStripLayoutFor(const ThumbnailStripLayoutInput &in
                                        : ThumbnailStripLayout::kVerticalMarginX;
     layout.marginY = layout.horizontal ? ThumbnailStripLayout::kHorizontalMarginY
                                        : ThumbnailStripLayout::kVerticalMarginY;
-    layout.labels = input.style != SettingsEnums::PanelStyle::Simple;
+    layout.masonry = input.masonry;
+    // The masonry strip shows no labels.
+    layout.labels = !input.masonry && input.style != SettingsEnums::PanelStyle::Simple;
     layout.textHeight = input.textHeight;
 
     // ThumbnailWidget::updateBoundingRect(); the strip uses the rounded size
@@ -62,5 +87,18 @@ ThumbnailStripLayout thumbnailStripLayoutFor(const ThumbnailStripLayoutInput &in
     } else {
         layout.panelExtent = layout.cellWidth + ThumbnailStripLayout::kPanelAllowance;
     }
+    if (layout.masonry)
+        applyMasonryGeometry(layout, input.position);
     return layout;
+}
+
+ThumbnailStripLayout thumbnailTileCellFor(QSize size) {
+    ThumbnailStripLayout cell;
+    cell.horizontal = false;
+    cell.thumbnailSize = qMax(size.width(), size.height());
+    cell.cellWidth = size.width();
+    cell.cellHeight = size.height();
+    cell.imageArea = size;
+    cell.selectionOverImage = true;
+    return cell;
 }

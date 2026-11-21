@@ -1028,6 +1028,7 @@ bool Settings::folderViewMasonry() {
 void Settings::setFolderViewMasonry(bool enabled) {
   settings->stateConf->setValue("folderViewMasonry", enabled);
 }
+
 //------------------------------------------------------------------------------
 bool Settings::placesPanelBookmarksExpanded() {
   return settings->stateConf->value("placesPanelBookmarksExpanded", true)
@@ -1432,6 +1433,14 @@ bool Settings::showSubfoldersInPanel() {
 
 void Settings::setShowSubfoldersInPanel(bool mode) {
   settings->settingsConf->setValue("showSubfoldersInPanel", mode);
+}
+
+bool Settings::panelMasonry() {
+  return settings->settingsConf->value("panelMasonry", false).toBool();
+}
+
+void Settings::setPanelMasonry(bool enabled) {
+  settings->settingsConf->setValue("panelMasonry", enabled);
 }
 //------------------------------------------------------------------------------
 bool Settings::useFixedZoomLevels() {

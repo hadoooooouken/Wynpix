@@ -255,6 +255,8 @@ void QuickUiHost::connectThumbnailPanel() {
   mThumbnailPanel.setDevicePixelRatio(qGuiApp->devicePixelRatio());
   QObject::connect(&mThumbnailPanel, &ThumbnailPanelController::pinRequested,
                    &mSettings, &Settings::setPanelPinned);
+  QObject::connect(&mThumbnailPanel, &ThumbnailPanelController::masonryRequested,
+                   &mSettings, &Settings::setPanelMasonry);
   QObject::connect(
       &mViewport, &ImageViewportController::renderingSettled, &mThumbnailPanel,
       [this]() { mThumbnailPanel.allowCreation(); },

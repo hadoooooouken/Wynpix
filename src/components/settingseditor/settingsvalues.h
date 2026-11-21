@@ -79,6 +79,7 @@ struct ViewSettings {
     Q_PROPERTY(bool panelFullscreenOnly MEMBER panelFullscreenOnly FINAL)
     Q_PROPERTY(bool panelCenterSelection MEMBER panelCenterSelection FINAL)
     Q_PROPERTY(bool showSubfoldersInPanel MEMBER showSubfoldersInPanel FINAL)
+    Q_PROPERTY(bool panelMasonry MEMBER panelMasonry FINAL)
     Q_PROPERTY(int panelHideDelayMs MEMBER panelHideDelayMs FINAL)
     Q_PROPERTY(int thumbPanelStyle MEMBER thumbPanelStyle FINAL)
     Q_PROPERTY(int panelSizeStep MEMBER panelSizeStep FINAL)
@@ -116,6 +117,7 @@ public:
     bool panelFullscreenOnly = false;
     bool panelCenterSelection = false;
     bool showSubfoldersInPanel = false;
+    bool panelMasonry = false;
     int panelHideDelayMs = 0;
     int thumbPanelStyle = 0;     // ThumbPanelStyle
     int panelSizeStep = 0;       // SettingsScales::panelSize*

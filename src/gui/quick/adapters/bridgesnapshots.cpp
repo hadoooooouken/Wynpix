@@ -52,6 +52,7 @@ UiSettingsSnapshot BridgeSnapshots::readUiSettings(Settings &settings) {
               .centerSelection = settings.panelCenterSelection(),
               .unloadThumbnails = settings.unloadThumbs(),
               .thumbnailResolution = settings.thumbnailResolution(),
+              .masonry = settings.panelMasonry(),
           },
       .folderView =
           {

@@ -89,6 +89,7 @@ SettingsValues SettingsValueMapping::load() const {
     view.panelFullscreenOnly = s.panelFullscreenOnly();
     view.panelCenterSelection = s.panelCenterSelection();
     view.showSubfoldersInPanel = s.showSubfoldersInPanel();
+    view.panelMasonry = s.panelMasonry();
     view.panelHideDelayMs = s.panelHideDelayMs();
     view.thumbPanelStyle = s.thumbPanelStyle();
     view.panelSizeStep = panelSizeStep(s.panelPreviewsSize());
@@ -198,6 +199,7 @@ void SettingsValueMapping::storeView(const ViewSettings &view) {
     s.setPanelFullscreenOnly(view.panelFullscreenOnly);
     s.setPanelCenterSelection(view.panelCenterSelection);
     s.setShowSubfoldersInPanel(view.showSubfoldersInPanel);
+    s.setPanelMasonry(view.panelMasonry);
     s.setPanelHideDelayMs(view.panelHideDelayMs);
     s.setThumbPanelStyle(static_cast<ThumbPanelStyle>(view.thumbPanelStyle));
     s.setPanelPreviewsSize(panelSizePixels(view.panelSizeStep));

@@ -6,8 +6,9 @@ import wynpix.bridges
 import wynpix.style
 
 // Thumbnail panel of the document view (MainPanel and SlidePanel in the
-// widget UI): the thumbnail strip with the settings, folder view, pin, page
-// and (fullscreen) exit buttons, at the side of the window the settings name. It
+// widget UI): the thumbnail strip with the settings, strip mode, folder view,
+// pin, page and (fullscreen) exit buttons, at the side of the window the
+// settings name. It
 // slides in and out by the controller's slide distance while fading, or
 // appears at once, as the controller says; while it slides, no thumbnails
 // are requested. The content
@@ -47,11 +48,12 @@ Item {
     readonly property real slide: 1 - visibility
 
     // MainPanel: border line and the strip above a bottom panel, button size
-    // and the spacing of the button group.
-    readonly property int borderWidth: 1
+    // and the spacing of the button group. The layout holds them, as the
+    // masonry strip keeps the panel thick enough for its buttons.
+    readonly property int borderWidth: stripLayout.borderWidth
     readonly property int bottomStrip: 3
-    readonly property int buttonSize: 30
-    readonly property int buttonSpacing: 4
+    readonly property int buttonSize: stripLayout.buttonSize
+    readonly property int buttonSpacing: stripLayout.buttonSpacing
     // Gap between the buttons and the panel edges, half of it on each side
     // across the button group.
     readonly property int buttonInset: buttonSpacing / 2
@@ -60,9 +62,11 @@ Item {
     readonly property int pageRepeatDelay: 500
     readonly property int pageRepeatInterval: 250
     // Buttons along the button group besides the page buttons: the settings,
-    // folder view and pin buttons and the exit button when it is shown.
-    readonly property int fixedButtonCount: controller.exitButtonVisible ? 4 : 3
-    readonly property int pageButtonCount: 2
+    // folder view, pin and strip mode buttons and the exit button when it is
+    // shown.
+    readonly property int fixedButtonCount: stripLayout.fixedButtonCount
+                                            + (controller.exitButtonVisible ? 1 : 0)
+    readonly property int pageButtonCount: stripLayout.pageButtonCount
 
     x: atRight ? parent.width - width : 0
     y: atBottom ? parent.height - height : 0
@@ -167,8 +171,8 @@ Item {
                 anchors.top: parent.top
 
                 // Near the strip end: exit, folder view, pin, then the page
-                // buttons (top to bottom or right to left); the settings
-                // button at the far end.
+                // buttons (top to bottom or right to left); the strip mode
+                // and settings buttons at the far end.
                 Grid {
                     flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
                     layoutDirection: panel.horizontal ? Qt.LeftToRight : Qt.RightToLeft
@@ -232,15 +236,29 @@ Item {
                     }
                 }
 
-                PanelButton {
-                    size: panel.buttonSize
-                    glyph: FluentIcons.Settings20
+                // The settings button ends the group, the strip mode button
+                // is next to it, towards the page buttons.
+                Grid {
+                    flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
+                    layoutDirection: panel.horizontal ? Qt.LeftToRight : Qt.RightToLeft
+                    columns: panel.horizontal ? 1 : 2
                     anchors.bottom: panel.horizontal ? parent.bottom : undefined
                     anchors.right: panel.horizontal ? parent.right : undefined
                     anchors.left: panel.horizontal ? undefined : parent.left
                     anchors.top: panel.horizontal ? undefined : parent.top
                     anchors.margins: panel.buttonInset
-                    onPressed: Actions.invoke("openSettings")
+
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.Masonry20
+                        active: panel.stripLayout.masonry
+                        onPressed: panel.controller.toggleMasonry()
+                    }
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.Settings20
+                        onPressed: Actions.invoke("openSettings")
+                    }
                 }
             }
         }
@@ -256,7 +274,8 @@ Item {
         required property int size
         property int glyphSize: Theme.standardIconSize
         property real glyphRotation: 0
-        // Checked look (the pinned state), not toggled by a press.
+        // Checked look (the pinned state, the masonry mode), not toggled by a
+        // press.
         property bool active: false
 
         implicitWidth: size

@@ -87,12 +87,18 @@ qt_add_qml_module(wynpix_ui
         folderview/masonrytilesmodel.h
         thumbnails/itemrows.cpp
         thumbnails/itemrows.h
+        thumbnails/stripmasonrycontroller.cpp
+        thumbnails/stripmasonrycontroller.h
+        thumbnails/stripmasonrylayout.cpp
+        thumbnails/stripmasonrylayout.h
         thumbnails/thumbnaillistmodel.cpp
         thumbnails/thumbnaillistmodel.h
         thumbnails/thumbnailpanelcontroller.cpp
         thumbnails/thumbnailpanelcontroller.h
         thumbnails/thumbnailstriplayout.cpp
         thumbnails/thumbnailstriplayout.h
+        thumbnails/tileaspect.h
+        thumbnails/tilerows.h
     QML_FILES
         AccentColorDialog.qml
         AdjustmentSliders.qml

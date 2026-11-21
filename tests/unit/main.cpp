@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
   status |= runUiMetricsTests(argc, argv);
   status |= runOverlayTests(argc, argv);
   status |= runThumbnailStripTests(argc, argv);
+  status |= runStripMasonryTests(argc, argv);
   status |= runThumbnailGeometryTests(argc, argv);
   status |= runFolderViewTests(argc, argv);
   status |= runContextMenuTests(argc, argv);

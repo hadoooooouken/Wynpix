@@ -57,6 +57,8 @@ struct PanelSettings {
   bool unloadThumbnails{};
   // Size of the cached thumbnails (thumbnailResolution).
   int thumbnailResolution{};
+  // The thumbnails are laid out by their proportions (panelMasonry).
+  bool masonry{};
 
   friend bool operator==(const PanelSettings &,
                          const PanelSettings &) = default;

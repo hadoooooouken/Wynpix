@@ -9,7 +9,7 @@
 #include <memory>
 
 #include "gui/quick/ui/folderview/foldergridlayout.h"
-#include "gui/quick/ui/thumbnails/itemrows.h"
+#include "gui/quick/ui/thumbnails/tilerows.h"
 
 // What the masonry layout depends on.
 struct MasonryLayoutInput {
@@ -34,7 +34,7 @@ struct MasonryLayoutInput {
 // so that the row ends exactly at the right margin. The last row keeps the
 // target height and is aligned to the left. Positions are in content
 // coordinates, in logical pixels. The layout never changes once created.
-class MasonryLayout final : public ItemRows {
+class MasonryLayout final : public TileRows {
 public:
     // Gap between the images, and the margin around them.
     static constexpr int kSpacing = 4;
@@ -44,12 +44,6 @@ public:
     // Height of the row relative to the icon size, targeted so that a 16:9
     // image matches the icon size in width without exceeding it.
     static constexpr double kTargetAspect = 9.0 / 16.0;
-    // Proportions (width / height) of an image of unknown size, and the
-    // limits the proportions of the others are held to; a thumbnail more
-    // extreme than that is fitted into its tile with empty space around.
-    static constexpr double kUnknownAspect = 4.0 / 3.0;
-    static constexpr double kMinimumAspect = 0.25;
-    static constexpr double kMaximumAspect = 4.0;
     // Thumbnails are made in a square box whose side is this many target
     // row heights, which fits the usual proportions up to 16:9, rounded up to
     // a step so that small size changes keep the same box.
@@ -62,9 +56,9 @@ public:
     // The box, in device pixels, the thumbnails of the images are made for.
     [[nodiscard]] static QSize thumbnailBoxFor(int targetRowHeight, qreal devicePixelRatio);
 
-    [[nodiscard]] int itemCount() const;
+    [[nodiscard]] int itemCount() const override;
     // Tile of the item (the cell of a folder); empty out of range.
-    [[nodiscard]] QRectF itemRect(int item) const;
+    [[nodiscard]] QRectF itemRect(int item) const override;
     // The item at point, -1 on a gap or outside the tiles.
     [[nodiscard]] int itemAt(QPointF point) const;
     // The items whose tile intersects area.

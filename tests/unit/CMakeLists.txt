@@ -23,6 +23,7 @@ qt_add_executable(wynpix_tests
     tst_uimetrics.cpp
     tst_overlays.cpp
     tst_thumbnailstrip.cpp
+    tst_stripmasonry.cpp
     tst_thumbnailgeometry.cpp
     tst_folderview.cpp
     tst_contextmenu.cpp

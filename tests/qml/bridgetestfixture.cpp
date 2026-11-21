@@ -687,6 +687,11 @@ void BridgeTestFixture::configureThumbnailPanel(bool pinned, int position,
   mLastPinRequest = -1;
 }
 
+void BridgeTestFixture::setPanelMasonry(bool enabled) {
+  mSettings.panel.masonry = enabled;
+  mThumbnailPanel.applySettings(mSettings);
+}
+
 void BridgeTestFixture::allowThumbnailPanelCreation() {
   mThumbnailPanel.allowCreation();
 }

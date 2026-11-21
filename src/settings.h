@@ -309,6 +309,9 @@ public:
   void setLanguage(QString lang);
   bool showSubfoldersInPanel();
   void setShowSubfoldersInPanel(bool mode);
+  // The thumbnail panel lays its thumbnails out by their proportions.
+  bool panelMasonry();
+  void setPanelMasonry(bool enabled);
 
   QString defaultZoomLevels();
   QString zoomLevels();
