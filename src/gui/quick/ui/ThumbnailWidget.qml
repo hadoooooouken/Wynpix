@@ -103,7 +103,7 @@ Item {
             radius: StyleConstants.surfaceRadius
             color: cell.hoverColor
             opacity: cell.hoverAmount
-            visible: !cell.selected && cell.hoverAmount > 0
+            visible: !cell.selectionOver && !cell.selected && cell.hoverAmount > 0
         }
 
         Rectangle {
