@@ -921,7 +921,7 @@ DirectoryPresenter::defaultFolderThumbnail(QSize targetSize,
                                            const QString &dirName)
 {
   return std::make_shared<Thumbnail>(
-      dirName, tr("Folder"), targetSize, defaultFolderPixmap(targetSize));
+      dirName, QString(), targetSize, defaultFolderPixmap(targetSize));
 }
 
 std::shared_ptr<QPixmap>
@@ -988,7 +988,7 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
       defaultFolderPixmap(targetSize);
   if (!defaultPixmap)
     return std::make_shared<Thumbnail>(
-        dirName, tr("Folder"), targetSize, std::shared_ptr<QPixmap>{});
+        dirName, QString(), targetSize, std::shared_ptr<QPixmap>{});
 
   const qreal devicePixelRatio =
       defaultPixmap->devicePixelRatioF() > 0
@@ -1042,7 +1042,7 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
     qWarning() << "Folder cover for" << dirName
                << "has no drawable size; showing the plain folder icon";
     return std::make_shared<Thumbnail>(
-        dirName, tr("Folder"), targetSize,
+        dirName, QString(), targetSize,
         std::make_shared<QPixmap>(*defaultPixmap));
   }
 
@@ -1073,7 +1073,7 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
 
   canvas.setDevicePixelRatio(devicePixelRatio);
   return std::make_shared<Thumbnail>(
-      dirName, tr("Folder"), targetSize,
+      dirName, QString(), targetSize,
       std::make_shared<QPixmap>(QPixmap::fromImage(std::move(canvas))));
 }
 

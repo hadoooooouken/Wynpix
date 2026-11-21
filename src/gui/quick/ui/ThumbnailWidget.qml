@@ -178,7 +178,7 @@ Item {
         y: cell.cellLayout.infoTop
         width: cell.cellLayout.labelWidth
         height: cell.cellLayout.textHeight
-        visible: cell.cellLayout.labels && cell.loaded
+        visible: cell.cellLayout.labels && cell.loaded && Boolean(cell.info)
         text: cell.info
         color: cell.labelColor
         opacity: StyleConstants.secondaryTextOpacity
