@@ -45,7 +45,7 @@ DEFAULT_DEPS = [
     {"name": "libjxl", "url": "https://github.com/libjxl/libjxl.git", "current": "v0.13.0", "patched": False},
     {"name": "jxrlib", "url": "https://github.com/4creators/jxrlib.git", "current": "v2019.10.9", "patched": True},
     {"name": "LibRaw", "url": "https://github.com/LibRaw/LibRaw.git", "current": "0.22.3", "patched": True},
-    {"name": "ffmpeg", "url": "https://git.ffmpeg.org/ffmpeg.git", "current": "n9.0.2", "patched": False},
+    {"name": "ffmpeg", "url": "https://git.ffmpeg.org/ffmpeg.git", "current": "n9.1", "patched": False},
     {"name": "openjpeg", "url": "https://github.com/uclouvain/openjpeg.git", "current": "v2.5.4", "patched": True},
     {"name": "OpenJPH", "url": "https://github.com/aous72/OpenJPH.git", "current": "0.33.0", "patched": False},
     {"name": "libdeflate", "url": "https://github.com/ebiggers/libdeflate.git", "current": "v1.26", "patched": False},

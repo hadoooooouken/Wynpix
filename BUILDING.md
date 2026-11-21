@@ -205,7 +205,7 @@ wynpix/
 
 | Library | Version | Upstream | Notes |
 |---------|---------|----------|-------|
-| FFmpeg | n9.0.2 | [FFmpeg](https://git.ffmpeg.org/ffmpeg.git) | HEVC decoder only; requires MSYS2 + Python |
+| FFmpeg | n9.1 | [FFmpeg](https://git.ffmpeg.org/ffmpeg.git) | HEVC decoder only; requires MSYS2 + Python |
 
 ### Prebuilt / Tools (no compilation needed)
 
