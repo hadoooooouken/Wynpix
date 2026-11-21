@@ -3,6 +3,8 @@
 #include <QSizeF>
 #include <QtGlobal>
 
+#include <algorithm>
+
 namespace Enums = SettingsEnums;
 
 namespace {
@@ -22,11 +24,21 @@ void applyMasonryGeometry(ThumbnailStripLayout &layout, Enums::PanelPosition pos
                             Layout::kPanelAllowance +
                             (position == Enums::PanelPosition::Bottom ? Layout::kBottomPanelStrip
                                                                       : 0);
-    // The buttons lie across the panel (a column, or a row in a vertical
-    // panel) and have to fit without the edge.
-    const int buttonsExtent =
+    // The button allowance scales between fixed buttons (at minimum preview
+    // size, keeping the panel compact) and full buttons (including page scroll
+    // chevrons at larger preview sizes).
+    static_assert(Layout::kMasonryFullButtonsSize > Layout::kMasonryMinButtonsSize,
+                  "kMasonryFullButtonsSize must exceed kMasonryMinButtonsSize");
+    const int fixedExtent =
+        Layout::kFixedButtonCount * Layout::kButtonSize + Layout::kButtonSpacing + edge;
+    const int fullExtent =
         (Layout::kFixedButtonCount + Layout::kPageButtonCount) * Layout::kButtonSize +
         Layout::kButtonSpacing + edge;
+    const qreal t = std::clamp<qreal>(
+        static_cast<qreal>(layout.thumbnailSize - Layout::kMasonryMinButtonsSize) /
+            (Layout::kMasonryFullButtonsSize - Layout::kMasonryMinButtonsSize),
+        qreal{0}, qreal{1});
+    const int buttonsExtent = qRound(fixedExtent + t * (fullExtent - fixedExtent));
     layout.panelExtent = qMax(tilesExtent, buttonsExtent);
     // The tiles are centred in the area of the strip.
     layout.laneOffset = (layout.panelExtent - edge - layout.laneExtent) / 2;

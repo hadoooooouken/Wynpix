@@ -5,6 +5,7 @@
 #include <QSize>
 #include <QtQml/qqmlregistration.h>
 
+#include "components/settingseditor/settingsscales.h"
 #include "gui/quick/bridges/settingsenums.h"
 
 // What the size of the thumbnail strip depends on.
@@ -28,8 +29,9 @@ struct ThumbnailStripLayoutInput {
 // cell minus its margins. In the masonry strip the tiles are as high (wide in
 // a vertical strip) as the lane, so that a 16:9 image is as wide as the
 // preview size; the panel is as thick as the tiles and the scroll bar need,
-// but never thinner than its buttons need. QML lays the strip and the cells
-// out from these values only.
+// but never thinner than its button allowance needs (which scales from fixed
+// buttons at minimum preview size to full buttons at larger sizes). QML lays
+// the strip and the cells out from these values only.
 struct ThumbnailStripLayout {
     Q_GADGET
     QML_VALUE_TYPE(thumbnailStripLayout)
@@ -95,6 +97,13 @@ public:
     static constexpr int kBorderWidth = 1;
     static constexpr int kFixedButtonCount = 4;
     static constexpr int kPageButtonCount = 2;
+    // Preview sizes where the masonry panel button allowance scales between
+    // fixed buttons (compact panel at minimum preview size) and full buttons
+    // (room for page scroll buttons at larger preview sizes).
+    static constexpr int kMasonryMinButtonsSize = SettingsScales::kMinPanelSizePixels;
+    static constexpr int kMasonryFullButtonsSize = 200;
+    static_assert(kMasonryFullButtonsSize > kMasonryMinButtonsSize,
+                  "Masonry button scaling full size must exceed min size");
 
     // The strip runs from left to right (top and bottom panel).
     bool horizontal = true;

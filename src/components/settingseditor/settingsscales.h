@@ -85,6 +85,8 @@ inline constexpr int kPanelSizeMinStep = 13;
 inline constexpr int kPanelSizeMaxStep = 32;
 inline constexpr int kPanelSizePageStep = 5;
 inline constexpr int kPanelSizePixelsPerStep = 8;
+inline constexpr int kMinPanelSizePixels = kPanelSizeMinStep * kPanelSizePixelsPerStep;
+inline constexpr int kMaxPanelSizePixels = kPanelSizeMaxStep * kPanelSizePixelsPerStep;
 
 inline constexpr int kMinSlideshowIntervalMs = 500;
 inline constexpr int kMaxSlideshowIntervalMs = 65'535;

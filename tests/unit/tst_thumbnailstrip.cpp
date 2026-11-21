@@ -163,7 +163,26 @@ private slots:
                                     ThumbnailStripLayout::kBottomPanelStrip);
     const ThumbnailStripLayout small = thumbnailStripLayoutFor(
         {.previewsSize = 20, .position = Enums::PanelPosition::Bottom, .masonry = true});
-    QCOMPARE(small.panelExtent, 187);
+    // Below minimum settings size, button allowance is clamped to fixed buttons (4 * 30 + 4 + 3 = 127).
+    QCOMPARE(small.panelExtent, 127);
+    const ThumbnailStripLayout minSettings = thumbnailStripLayoutFor(
+        {.previewsSize = ThumbnailStripLayout::kMasonryMinButtonsSize,
+         .position = Enums::PanelPosition::Bottom,
+         .masonry = true});
+    QCOMPARE(minSettings.panelExtent, 127);
+    // Midpoint interpolation between min (104 -> 127) and full (200 -> 187):
+    // previewsSize = 152 gives t = 0.5, buttonsExtent = 127 + 30 = 157.
+    // tilesExtent is 86 + 27 = 113, so buttonsExtent dominates.
+    const ThumbnailStripLayout midpoint = thumbnailStripLayoutFor(
+        {.previewsSize = 152, .position = Enums::PanelPosition::Bottom, .masonry = true});
+    QCOMPARE(midpoint.panelExtent, 157);
+    // Upper bound of button scaling: at previewsSize = 200, t = 1.0, buttonsExtent = 187.
+    // tilesExtent is 113 + 27 = 140, so buttonsExtent dominates.
+    const ThumbnailStripLayout fullButtons = thumbnailStripLayoutFor(
+        {.previewsSize = ThumbnailStripLayout::kMasonryFullButtonsSize,
+         .position = Enums::PanelPosition::Bottom,
+         .masonry = true});
+    QCOMPARE(fullButtons.panelExtent, 187);
   }
 
   void verticalMasonryStripHasTilesAsWideAsThePreviewSize() {
