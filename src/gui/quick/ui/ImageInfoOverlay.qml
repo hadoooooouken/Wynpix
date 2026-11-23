@@ -14,6 +14,12 @@ Item {
     required property OverlayState overlay
     required property ImageInfoModel entries
 
+    // The value field that holds the current text selection, or null. The
+    // fields never take keyboard focus (the viewer keeps it for its
+    // shortcuts), so Ctrl+C reaches the Actions and copies the image; while
+    // a selection exists the Shortcut below copies the selected text instead.
+    property TextEdit activeSelectionEdit: null
+
     readonly property int panelWidth: 280
     readonly property int edgeMargin: 20
     readonly property int nameWidth: 120
@@ -27,11 +33,39 @@ Item {
 
     visible: overlay.open
 
+    // Clears the selection unless it belongs to the field called except.
+    function releaseSelection(except: TextEdit): void {
+        if (activeSelectionEdit && activeSelectionEdit !== except)
+            activeSelectionEdit.deselect();
+    }
+
+    Shortcut {
+        sequence: StandardKey.Copy
+        enabled: root.visible && root.activeSelectionEdit !== null
+        onActivated: {
+            if (root.activeSelectionEdit)
+                root.activeSelectionEdit.copy();
+        }
+    }
+
+    // A press outside the selected field ends the selection, so Ctrl+C
+    // copies the image again.
+    PointHandler {
+        acceptedButtons: Qt.LeftButton
+        onActiveChanged: {
+            const edit = root.activeSelectionEdit;
+            if (active && edit && !edit.contains(edit.mapFromItem(null, point.scenePressPosition)))
+                edit.deselect();
+        }
+    }
+
     Connections {
         target: root.overlay
         function onOpenChanged() {
             if (root.overlay.open)
                 panel.resetPosition();
+            else
+                root.releaseSelection(null);
         }
     }
 
@@ -99,6 +133,8 @@ Item {
                     }
 
                     TextEdit {
+                        id: valueEdit
+
                         width: entry.stacked ? entryLayout.width : root.valueWidth
                         leftPadding: root.valuePadding
                         text: entry.value
@@ -111,6 +147,25 @@ Item {
                         selectionColor: Theme.tokens.accent
                         selectedTextColor: Theme.tokens.accentText
                         font: Theme.fonts.body
+
+                        onSelectedTextChanged: {
+                            if (selectedText.length > 0) {
+                                root.releaseSelection(valueEdit);
+                                root.activeSelectionEdit = valueEdit;
+                            } else if (root.activeSelectionEdit === valueEdit) {
+                                root.activeSelectionEdit = null;
+                            }
+                        }
+
+                        // A press in another field ends the selection of
+                        // the previous one even when it selects nothing.
+                        PointHandler {
+                            acceptedButtons: Qt.LeftButton
+                            onActiveChanged: {
+                                if (active)
+                                    root.releaseSelection(valueEdit);
+                            }
+                        }
                     }
                 }
             }
