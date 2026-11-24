@@ -53,7 +53,7 @@ DEFAULT_DEPS = [
     {"name": "libjpeg-turbo", "url": "https://github.com/libjpeg-turbo/libjpeg-turbo.git", "current": "3.2.1", "patched": False},
     {"name": "libspng", "url": "https://github.com/randy408/libspng.git", "current": "v0.7.4", "patched": False},
     {"name": "libtiff", "url": "https://gitlab.com/libtiff/libtiff.git", "current": "v4.7.2", "patched": False},
-    {"name": "zstd", "url": "https://github.com/facebook/zstd.git", "current": "v1.5.7", "patched": False},
+    {"name": "zstd", "url": "https://github.com/facebook/zstd.git", "current": "v1.6.0", "patched": False},
     {"name": "exiv2", "url": "https://github.com/Exiv2/exiv2.git", "current": "v0.28.9", "patched": False},
 ]
 

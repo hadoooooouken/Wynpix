@@ -172,7 +172,7 @@ wynpix/
 | libjxl | v0.13.0 | [libjxl/libjxl](https://github.com/libjxl/libjxl) | No | Static lib |
 | jxrlib | v2019.10.9 | [4creators/jxrlib](https://github.com/4creators/jxrlib) | Yes | Static lib |
 | libdeflate | 1.26 | [ebiggers/libdeflate](https://github.com/ebiggers/libdeflate) | Yes | Shared DLL (`deflate.dll`) |
-| zstd | 1.5.7 | [facebook/zstd](https://github.com/facebook/zstd) | No | Shared DLL (`zstd.dll`) |
+| zstd | 1.6.0 | [facebook/zstd](https://github.com/facebook/zstd) | No | Shared DLL (`zstd.dll`) |
 | LibRaw | 0.22.2 | [LibRaw/LibRaw](https://github.com/LibRaw/LibRaw) | Yes | Shared DLL (`libraw.dll`) |
 
 ### Built by `build_qtiff_jpeg.ps1` / `build_qpng_spng.ps1` / `build_qjpeg_jpeg.ps1`
