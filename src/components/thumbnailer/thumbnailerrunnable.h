@@ -70,13 +70,20 @@ public:
     generate(const ThumbnailRequest &request);
 
 private:
+    struct ThumbnailDecodeSpec {
+        std::optional<QSize> overrideDecodeBox;
+        QSize targetSize;
+        bool crop = false;
+        int baseResolution = 0;
+        bool autoResolution = false;
+        bool transposed = false;
+    };
+
     static QString generateIdString(QString path, int size, bool crop);
     static std::pair<QImage, QSize>
-    createThumbnail(QString path, const char *format, int size, bool crop,
+    createThumbnail(QString path, const char *format,
+                    const ThumbnailDecodeSpec &spec,
                     const DecodeContext &context);
-    // ThumbnailGeometry::noUpscaleScaledSize() for the square box the images
-    // are decoded into.
-    static QSize noUpscaleScaledSize(QSize originalSize, int size, Qt::AspectRatioMode mode);
     // Whether a cache hit's tone-map metadata (as recorded at generation
     // time) still matches the current HDR tone-mapping settings. Returns
     // true (stale) when the entry predates this metadata entirely.

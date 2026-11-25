@@ -43,13 +43,35 @@ SettingsPage {
             checked: root.editor.advanced.useThumbnailCache
             onToggled: root.editor.advanced.useThumbnailCache = checked
         }
-        SettingsSliderRow {
-            label: qsTranslate("SettingsDialog", "Thumbnail cache resolution:")
-            labelWidth: root.sliderLabelWidth
-            range: root.editor.ranges.thumbnailResolution
-            value: root.editor.advanced.thumbnailResolution
-            valueText: root.editor.thumbnailResolutionText(value)
-            onMoved: value => root.editor.advanced.thumbnailResolution = value
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: StyleConstants.dialogSpacing
+
+            SettingsSliderRow {
+                Layout.fillWidth: false
+                fillRow: false
+                label: qsTranslate("SettingsDialog", "Thumbnail cache resolution:")
+                labelWidth: root.sliderLabelWidth
+                range: root.editor.ranges.thumbnailResolution
+                value: root.editor.advanced.thumbnailResolution
+                valueText: root.editor.thumbnailResolutionText(value)
+                onMoved: value => root.editor.advanced.thumbnailResolution = value
+            }
+            CheckBox {
+                id: autoResolutionBox
+
+                text: qsTranslate("SettingsDialog", "Auto")
+                checked: root.editor.advanced.autoThumbnailResolution
+                onToggled: root.editor.advanced.autoThumbnailResolution = checked
+
+                ToolTip {
+                    text: qsTranslate("SettingsDialog", "Automatically match tile resolution (1:1) up to 2048 px, using the slider value as the minimum")
+                    visible: autoResolutionBox.hovered
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+            }
         }
         RowLayout {
             spacing: StyleConstants.dialogSpacing

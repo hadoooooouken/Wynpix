@@ -43,6 +43,7 @@ public:
   static constexpr int MaxThumbnailResolution = 2048;
   static constexpr int ThumbnailResolutionStep = 16;
   static constexpr int DefaultThumbnailResolution = 256;
+  static constexpr bool DefaultAutoThumbnailResolution = false;
   static constexpr double DefaultDevicePixelRatio = 1.0;
   static constexpr int DefaultPanelPreviewsSize = 256;
   static constexpr int DefaultFolderViewIconSize = 256;
@@ -124,6 +125,8 @@ public:
       double dpr = DefaultDevicePixelRatio);
   int thumbnailResolution();
   void setThumbnailResolution(int size);
+  bool autoThumbnailResolution();
+  void setAutoThumbnailResolution(bool enabled);
   int thumbnailerThreadCount();
   void setThumbnailerThreadCount(int count);
   int thumbnailCacheMaxSizeMB();
@@ -371,6 +374,8 @@ private:
   std::atomic<int> mCachedUpscaylLimitValue{200};
   std::atomic<int> mCachedMemoryAllocationLimit{2048};
   std::atomic<int> mCachedThumbnailResolution{DefaultThumbnailResolution};
+  std::atomic<bool> mCachedAutoThumbnailResolution{
+      DefaultAutoThumbnailResolution};
   std::atomic<int> mCachedThumbnailCacheMaxSizeMB{
       DefaultThumbnailCacheMaxSizeMB};
   std::atomic<qint64> mCachedThumbnailCacheMaxEntries{

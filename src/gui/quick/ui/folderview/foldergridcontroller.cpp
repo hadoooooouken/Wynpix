@@ -354,15 +354,21 @@ void FolderGridController::configureModel() {
                                        MasonryLayout::targetRowHeightFor(mIconSize),
                                        mDevicePixelRatio)
                                  : folderTarget;
+    const QList<QSize> itemTargets =
+        (masonry && mPanel.autoThumbnailResolution)
+            ? mMasonryLayout->targetSizesFor(mDevicePixelRatio)
+            : QList<QSize>();
     std::shared_ptr<const ItemRows> rows;
     if (masonry)
         rows = mMasonryLayout;
     mModel.configure({
         .targetSize = target,
         .folderTargetSize = folderTarget,
+        .itemTargetSizes = itemTargets,
         .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,
+        .autoCacheResolution = mPanel.autoThumbnailResolution,
     });
     mModel.setScrollConfig({
         .horizontal = false,

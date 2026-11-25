@@ -189,6 +189,7 @@ struct AdvancedSettings {
     Q_PROPERTY(bool usePreloader MEMBER usePreloader FINAL)
     Q_PROPERTY(int thumbnailerThreads MEMBER thumbnailerThreads FINAL)
     Q_PROPERTY(bool useThumbnailCache MEMBER useThumbnailCache FINAL)
+    Q_PROPERTY(bool autoThumbnailResolution MEMBER autoThumbnailResolution FINAL)
     Q_PROPERTY(int thumbnailResolution MEMBER thumbnailResolution FINAL)
     Q_PROPERTY(int thumbnailCacheMaxSizeMB MEMBER thumbnailCacheMaxSizeMB FINAL)
     Q_PROPERTY(QString excludedCachePaths MEMBER excludedCachePaths FINAL)
@@ -207,6 +208,7 @@ public:
     bool usePreloader = false;
     int thumbnailerThreads = 0;
     bool useThumbnailCache = false;
+    bool autoThumbnailResolution = false;
     int thumbnailResolution = 0; // px
     int thumbnailCacheMaxSizeMB = 0;
     QString excludedCachePaths;

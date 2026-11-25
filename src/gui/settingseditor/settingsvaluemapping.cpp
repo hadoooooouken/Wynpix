@@ -125,6 +125,7 @@ SettingsValues SettingsValueMapping::load() const {
     advanced.usePreloader = s.usePreloader();
     advanced.thumbnailerThreads = s.thumbnailerThreadCount();
     advanced.useThumbnailCache = s.useThumbnailCache();
+    advanced.autoThumbnailResolution = s.autoThumbnailResolution();
     advanced.thumbnailResolution = s.thumbnailResolution();
     advanced.thumbnailCacheMaxSizeMB = s.thumbnailCacheMaxSizeMB();
     advanced.excludedCachePaths = s.excludedCachePaths();
@@ -244,6 +245,7 @@ void SettingsValueMapping::storeAdvanced(const AdvancedSettings &advanced) {
     s.setUsePreloader(advanced.usePreloader);
     s.setThumbnailerThreadCount(advanced.thumbnailerThreads);
     s.setUseThumbnailCache(advanced.useThumbnailCache);
+    s.setAutoThumbnailResolution(advanced.autoThumbnailResolution);
     // Changing the resolution invalidates the thumbnail cache, so an
     // unchanged one is not written again.
     if (s.thumbnailResolution() != advanced.thumbnailResolution)

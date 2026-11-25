@@ -333,20 +333,26 @@ void ThumbnailPanelController::configureModel() {
     const bool masonry = mLayout.masonry && masonryLayout;
     QSize target = mLayout.imageTargetSize(mDevicePixelRatio);
     QSize folderTarget;
+    QList<QSize> itemTargets;
     std::shared_ptr<const ItemRows> rows;
     if (masonry) {
         target = StripMasonryLayout::thumbnailBoxFor(mLayout.horizontal, mLayout.laneExtent,
                                                       mDevicePixelRatio);
         folderTarget = StripMasonryLayout::folderThumbnailBoxFor(
             mLayout.horizontal, mLayout.laneExtent, mDevicePixelRatio);
+        itemTargets = mPanel.autoThumbnailResolution
+                          ? masonryLayout->targetSizesFor(mDevicePixelRatio)
+                          : QList<QSize>();
         rows = masonryLayout;
     }
     mModel.configure({
         .targetSize = target,
         .folderTargetSize = folderTarget,
+        .itemTargetSizes = itemTargets,
         .crop = false,
         .unloadOffscreen = mPanel.unloadThumbnails,
         .cacheResolution = mPanel.thumbnailResolution,
+        .autoCacheResolution = mPanel.autoThumbnailResolution,
     });
     mModel.setScrollConfig({
         .horizontal = mLayout.horizontal,

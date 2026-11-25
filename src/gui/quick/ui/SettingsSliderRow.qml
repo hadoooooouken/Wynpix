@@ -16,6 +16,7 @@ RowLayout {
     property string valueText
     // Width of the label column, so that the sliders of a group line up.
     property int labelWidth: 0
+    property bool fillRow: true
     readonly property alias pressed: slider.pressed
 
     readonly property int sliderWidth: 190
@@ -56,6 +57,7 @@ RowLayout {
     }
 
     Item {
-        Layout.fillWidth: true
+        visible: root.fillRow
+        Layout.fillWidth: root.fillRow
     }
 }

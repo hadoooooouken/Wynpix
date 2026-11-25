@@ -25,6 +25,9 @@ namespace {
 // This much on 16 GiB of RAM, scaled to the machine.
 constexpr qint64 FullDecodeBudgetAt16GiB = qint64{1024} * 1024 * 1024;
 constexpr qint64 MaxFullDecodeBudgetBytes = 4 * FullDecodeBudgetAt16GiB;
+static_assert(ThumbnailGeometry::kMaxAdaptiveCacheExtent ==
+                  Settings::MaxThumbnailResolution,
+              "Adaptive cache ceiling must match Settings::MaxThumbnailResolution");
 
 DecodeBudget &fullDecodeBudget() {
   static DecodeBudget budget(
@@ -98,6 +101,15 @@ qint64 fullDecodePeakBytes(QImageReader &reader) {
     return image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
   }
 }
+
+[[nodiscard]] QImage scalePreview(const QImage &fullSize, QSize box) {
+  const QSize scaledSize = ThumbnailGeometry::noUpscaleScaledSize(
+      fullSize.size(), box, Qt::KeepAspectRatio);
+  return (scaledSize == fullSize.size())
+             ? fullSize
+             : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
+                               Qt::SmoothTransformation);
+}
 } // namespace
 
 void ThumbnailTaskNotifier::reportCompletion(
@@ -145,7 +157,9 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
   const QString fileName = QFileInfo(path).fileName();
   const QSize targetSize = request.targetSize;
   const bool crop = request.crop;
-  QString thumbnailId = generateIdString(path, settings->thumbnailResolution(), false);
+  const int baseResolution = settings->thumbnailResolution();
+  const bool autoResolution = settings->autoThumbnailResolution();
+  QString thumbnailId = generateIdString(path, baseResolution, false);
   std::unique_ptr<QImage> image;
   std::optional<ThumbnailCacheCandidate> cacheCandidate;
   std::optional<ThumbnailCache::AccessTouch> accessTouch;
@@ -184,6 +198,28 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
   if (request.decodeContext.isCancellationRequested())
     return {};
 
+  std::optional<QSize> overrideDecodeBox;
+  if (image && autoResolution) {
+    const QSize storedOriginal(
+        image->text(QStringLiteral("originalWidth")).toInt(),
+        image->text(QStringLiteral("originalHeight")).toInt());
+    const QSize orientedOriginal =
+        (storedOriginal.isValid() && !storedOriginal.isEmpty())
+            ? ThumbnailGeometry::sizeInThumbnailOrientation(image->size(),
+                                                              storedOriginal)
+            : QSize();
+    const ThumbnailGeometry::CacheDecodePlan plan =
+        ThumbnailGeometry::planCacheDecode(image->size(), orientedOriginal,
+                                           targetSize, crop, baseResolution);
+    if (!plan.cacheSufficient) {
+      // Cached entry is smaller than this tile needs; re-decode at higher
+      // resolution and upgrade the single cache entry in-place.
+      image.reset();
+      accessTouch.reset();
+      overrideDecodeBox = plan.decodeBox;
+    }
+  }
+
   if (!image) {
     DocumentInfo imgInfo(path);
     if (imgInfo.type() == DocumentType::NONE) {
@@ -194,11 +230,24 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
     const QString format = imgInfo.format();
     isPdf = format == QLatin1String("pdf");
     const QByteArray formatName = format.toLatin1();
-    std::pair<QImage, QSize> pair;
-    pair = createThumbnail(imgInfo.filePath(),
-                           formatName.constData(),
-                           settings->thumbnailResolution(), false,
-                           request.decodeContext);
+    const int exifOrientation = imgInfo.exifOrientation();
+    const bool transposed =
+        ThumbnailGeometry::isExifOrientationTransposed(exifOrientation);
+    const ThumbnailDecodeSpec spec{
+        .overrideDecodeBox =
+            overrideDecodeBox.has_value()
+                ? std::optional<QSize>(ThumbnailGeometry::orientSize(
+                      *overrideDecodeBox, transposed))
+                : std::nullopt,
+        .targetSize = targetSize,
+        .crop = crop,
+        .baseResolution = baseResolution,
+        .autoResolution = autoResolution,
+        .transposed = transposed,
+    };
+    std::pair<QImage, QSize> pair = createThumbnail(
+        imgInfo.filePath(), formatName.constData(), spec,
+        request.decodeContext);
     if (request.decodeContext.isCancellationRequested())
       return {};
     image = std::make_unique<QImage>(pair.first);
@@ -214,7 +263,7 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
     }
 
     if (image) {
-      image = ImageLib::exifRotated(std::move(image), imgInfo.exifOrientation());
+      image = ImageLib::exifRotated(std::move(image), exifOrientation);
     }
 
     // Tone-map HDR images to SDR before thumbnailing, mirroring the
@@ -239,8 +288,8 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
 
       if (activeCache && sourceStamp &&
           !request.decodeContext.isCancellationRequested()) {
-        if (originalSize.width() > settings->thumbnailResolution() ||
-            originalSize.height() > settings->thumbnailResolution()) {
+        if (originalSize.width() > baseResolution ||
+            originalSize.height() > baseResolution) {
           // Always false at this point: the HDR branch above (sourceWasHdr)
           // unconditionally converts to Format_ARGB32/RGB32 before we get
           // here, so a linear float pixel format can never survive to this
@@ -296,8 +345,13 @@ ThumbnailerRunnable::generate(const ThumbnailRequest &request) {
     return {};
 
   // scale and crop to the requested target box; a cropped thumbnail is the
-  // square of the box's shorter side
-  const QSize outputBox = ThumbnailGeometry::outputBox(targetSize, crop);
+  // square of the box's shorter side. In manual mode, clamp to baseResolution.
+  const QSize effectiveTarget =
+      autoResolution
+          ? targetSize
+          : QSize(qMin(targetSize.width(), baseResolution),
+                  qMin(targetSize.height(), baseResolution));
+  const QSize outputBox = ThumbnailGeometry::outputBox(effectiveTarget, crop);
   Qt::AspectRatioMode ARMode = crop ? (Qt::KeepAspectRatioByExpanding) : (Qt::KeepAspectRatio);
   const QSize scaledSize =
       ThumbnailGeometry::noUpscaleScaledSize(image->size(), outputBox, ARMode);
@@ -376,26 +430,36 @@ bool ThumbnailerRunnable::isToneMapCacheStale(
          cacheResult.toneMapWhiteLevel != settings->hdrTargetWhiteLevel();
 }
 
-QSize ThumbnailerRunnable::noUpscaleScaledSize(QSize originalSize, int size,
-                                               Qt::AspectRatioMode mode) {
-  return ThumbnailGeometry::noUpscaleScaledSize(originalSize,
-                                                QSize(size, size), mode);
-}
-
 std::pair<QImage, QSize>
-ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
-                                     bool squared,
+ThumbnailerRunnable::createThumbnail(QString path, const char *format,
+                                     const ThumbnailDecodeSpec &spec,
                                      const DecodeContext &context) {
   if (context.isCancellationRequested())
     return std::make_pair(QImage(), QSize());
+
+  const auto resolveRawDecodeBox = [&spec](QSize rawOriginalSize) -> QSize {
+    if (spec.overrideDecodeBox.has_value())
+      return *spec.overrideDecodeBox;
+    if (!spec.autoResolution)
+      return QSize(spec.baseResolution, spec.baseResolution);
+    const QSize orientedOriginal =
+        ThumbnailGeometry::orientSize(rawOriginalSize, spec.transposed);
+    const ThumbnailGeometry::CacheDecodePlan plan =
+        ThumbnailGeometry::planCacheDecode(QSize(), orientedOriginal,
+                                           spec.targetSize, spec.crop,
+                                           spec.baseResolution);
+    return ThumbnailGeometry::orientSize(plan.decodeBox, spec.transposed);
+  };
 
   const bool isDjvu =
       format &&
       QString::compare(QString::fromLatin1(format), QStringLiteral("djvu"),
                        Qt::CaseInsensitive) == 0;
   if (isDjvu) {
+    const QSize targetBox = resolveRawDecodeBox(QSize());
+    const int maxEdge = qMax(targetBox.width(), targetBox.height());
     const int decodeEdge =
-        size <= std::numeric_limits<int>::max() / 2 ? size * 2 : size;
+        maxEdge <= std::numeric_limits<int>::max() / 2 ? maxEdge * 2 : maxEdge;
     const DjvuDecodeLimits limits = DjvuDecodeLimits::fromMemoryLimitMiB(
         settings->memoryAllocationLimit(), decodeEdge);
     DjvuRenderResult rendered =
@@ -403,23 +467,7 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
     if (rendered.image.isNull())
       return std::make_pair(QImage(), QSize());
 
-    QImage result = std::move(rendered.image);
-    if (squared) {
-      const Qt::AspectRatioMode mode = Qt::KeepAspectRatioByExpanding;
-      const QSize scaledSize = noUpscaleScaledSize(result.size(), size, mode);
-      if (scaledSize != result.size())
-        result = result.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                               Qt::SmoothTransformation);
-
-      QRect clip(0, 0, size, size);
-      QRect scaledRect(QPoint(0, 0), result.size());
-      clip.moveCenter(scaledRect.center());
-      QImage cropped = ImageLib::croppedRaw(&result, clip);
-      if (!cropped.isNull())
-        result = std::move(cropped);
-    }
-
-    return std::make_pair(std::move(result), rendered.originalSize);
+    return std::make_pair(std::move(rendered.image), rendered.originalSize);
   }
   const bool isBlend =
       format &&
@@ -430,29 +478,10 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
     if (fullSize.isNull())
       return std::make_pair(QImage(), QSize());
 
-    QSize originalSize = fullSize.size();
-    Qt::AspectRatioMode ARMode =
-        squared ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio;
-    QSize scaledSize = noUpscaleScaledSize(originalSize, size, ARMode);
-    QImage result;
-    if (squared) {
-      QRect clip(0, 0, size, size);
-      QRect scaledRect(QPoint(0, 0), scaledSize);
-      clip.moveCenter(scaledRect.center());
-      QImage scaled = (scaledSize == fullSize.size())
-                          ? fullSize
-                          : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                            Qt::SmoothTransformation);
-      result = ImageLib::croppedRaw(&scaled, clip);
-      if (result.isNull())
-        result = scaled;
-    } else {
-      result = (scaledSize == fullSize.size())
-                   ? fullSize
-                   : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                     Qt::SmoothTransformation);
-    }
-    return std::make_pair(result, originalSize);
+    const QSize originalSize = fullSize.size();
+    return std::make_pair(
+        scalePreview(fullSize, resolveRawDecodeBox(originalSize)),
+        originalSize);
   }
 
   const bool isFont =
@@ -465,62 +494,30 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
       return std::make_pair(QImage(), QSize());
 
     const QSize originalSize = fullSize.size();
-    const Qt::AspectRatioMode ARMode =
-        squared ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio;
-    const QSize scaledSize = noUpscaleScaledSize(originalSize, size, ARMode);
-    QImage result;
-    if (squared) {
-      QRect clip(0, 0, size, size);
-      QRect scaledRect(QPoint(0, 0), scaledSize);
-      clip.moveCenter(scaledRect.center());
-      QImage scaled = (scaledSize == fullSize.size())
-                          ? fullSize
-                          : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                            Qt::SmoothTransformation);
-      result = ImageLib::croppedRaw(&scaled, clip);
-      if (result.isNull())
-        result = scaled;
-    } else {
-      result = (scaledSize == fullSize.size())
-                   ? fullSize
-                   : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                     Qt::SmoothTransformation);
-    }
-    return std::make_pair(result, originalSize);
+    return std::make_pair(
+        scalePreview(fullSize, resolveRawDecodeBox(originalSize)),
+        originalSize);
   }
 
   bool isIco = (format && QString::compare(QString::fromLatin1(format), QStringLiteral("ico"), Qt::CaseInsensitive) == 0);
   if (isIco) {
     QImage fullSize = ImageLib::loadICO(path);
     if (!fullSize.isNull()) {
-      QSize originalSize = fullSize.size();
-      Qt::AspectRatioMode ARMode =
-          squared ? (Qt::KeepAspectRatioByExpanding) : (Qt::KeepAspectRatio);
-      QSize scaledSize = noUpscaleScaledSize(originalSize, size, ARMode);
-      QImage result;
-      if (squared) {
-        QRect clip(0, 0, size, size);
-        QRect scaledRect(QPoint(0, 0), scaledSize);
-        clip.moveCenter(scaledRect.center());
-        QImage scaled = (scaledSize == fullSize.size())
-                            ? fullSize
-                            : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                              Qt::SmoothTransformation);
-        result = ImageLib::croppedRaw(&scaled, clip);
-        if (result.isNull())
-          result = scaled; // source too small to fill the crop box - keep it uncropped rather than upscale
-      } else {
-        result = (scaledSize == fullSize.size())
-                     ? fullSize
-                     : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                       Qt::SmoothTransformation);
-      }
-      return std::make_pair(result, originalSize);
+      const QSize originalSize = fullSize.size();
+      return std::make_pair(
+          scalePreview(fullSize, resolveRawDecodeBox(originalSize)),
+          originalSize);
     }
   }
 
   auto reader = std::make_unique<QImageReader>(path, format);
   reader->setAllocationLimit(settings->memoryAllocationLimit());
+
+  const QSize readerSize = reader->supportsOption(QImageIOHandler::Size)
+                               ? reader->size()
+                               : QSize();
+  const QSize targetBox = resolveRawDecodeBox(readerSize);
+  const int maxEdge = qMax(targetBox.width(), targetBox.height());
 
   // Only multi-resolution formats should choose a frame by thumbnail size.
   // Multipage documents such as TIFF and CBZ must use page 0 as their cover.
@@ -537,7 +534,7 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
       if (reader->jumpToImage(i)) {
         QSize frameSize = reader->size();
         if (frameSize.isValid()) {
-          int diff = qAbs(frameSize.width() - size);
+          int diff = qAbs(frameSize.width() - maxEdge);
           if (diff < bestDiff) {
             bestDiff = diff;
             bestIndex = i;
@@ -548,8 +545,6 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
     reader->jumpToImage(bestIndex);
   }
 
-  Qt::AspectRatioMode ARMode =
-      squared ? (Qt::KeepAspectRatioByExpanding) : (Qt::KeepAspectRatio);
   QImage result;
   QSize originalSize;
   bool indexed = (reader->imageFormat() == QImage::Format_Indexed8);
@@ -565,15 +560,10 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
       !reserveFullDecode())
     return std::make_pair(QImage(), QSize());
   if (!manualResize) { // resize during read via QImageReader (faster)
-    QSize scaledSize = noUpscaleScaledSize(reader->size(), size, ARMode);
+    QSize scaledSize = ThumbnailGeometry::noUpscaleScaledSize(
+        reader->size(), targetBox, Qt::KeepAspectRatio);
     if (scaledSize != reader->size())
       reader->setScaledSize(scaledSize);
-    if (squared) {
-      QRect clip(0, 0, size, size);
-      QRect scaledRect(QPoint(0, 0), scaledSize);
-      clip.moveCenter(scaledRect.center());
-      reader->setScaledClipRect(clip);
-    }
     originalSize = reader->size();
     if (!reader->read(&result)) {
       // If read() returns false there's no guarantee that size conversion
@@ -604,24 +594,7 @@ ThumbnailerRunnable::createThumbnail(QString path, const char *format, int size,
       fullSize = tmp;
     }
     originalSize = fullSize.size();
-    QSize scaledSize = noUpscaleScaledSize(fullSize.size(), size, ARMode);
-    if (squared) {
-      QRect clip(0, 0, size, size);
-      QRect scaledRect(QPoint(0, 0), scaledSize);
-      clip.moveCenter(scaledRect.center());
-      QImage scaled = (scaledSize == fullSize.size())
-                          ? fullSize
-                          : QImage(fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                                    Qt::SmoothTransformation));
-      result = ImageLib::croppedRaw(&scaled, clip);
-      if (result.isNull())
-        result = scaled; // source too small to fill the crop box - keep it uncropped rather than upscale
-    } else {
-      result = (scaledSize == fullSize.size())
-                   ? fullSize
-                   : fullSize.scaled(scaledSize, Qt::IgnoreAspectRatio,
-                                     Qt::SmoothTransformation);
-    }
+    result = scalePreview(fullSize, resolveRawDecodeBox(originalSize));
   }
   // force reader to close file so it can be deleted later
   reader->setFileName("");

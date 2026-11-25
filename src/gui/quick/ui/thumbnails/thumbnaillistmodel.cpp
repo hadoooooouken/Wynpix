@@ -451,7 +451,8 @@ void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
         config.targetSizeFor(0, mDirCount) != mRequest.targetSizeFor(0, mDirCount);
     const bool itemTargetSizesChanged = config.itemTargetSizes != mRequest.itemTargetSizes;
     const bool unload = config.crop != mRequest.crop ||
-                        config.cacheResolution != mRequest.cacheResolution;
+                        config.cacheResolution != mRequest.cacheResolution ||
+                        config.autoCacheResolution != mRequest.autoCacheResolution;
     mRequest = config;
     if (unload) {
         unloadAllThumbnails();

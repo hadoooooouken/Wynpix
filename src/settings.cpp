@@ -113,6 +113,11 @@ void Settings::initCache() {
       std::clamp(effectiveThumbnailResolution, MinThumbnailResolution,
                  MaxThumbnailResolution),
       std::memory_order_relaxed);
+  mCachedAutoThumbnailResolution.store(
+      settingsConf
+          ->value("autoThumbnailResolution", DefaultAutoThumbnailResolution)
+          .toBool(),
+      std::memory_order_relaxed);
   mCachedThumbnailCacheMaxSizeMB.store(
       qMax(0, settingsConf
                   ->value("thumbnailCacheMaxSizeMB",
@@ -214,6 +219,15 @@ void Settings::setThumbnailResolution(int size) {
   size = std::clamp(size, MinThumbnailResolution, MaxThumbnailResolution);
   settings->settingsConf->setValue("thumbnailResolution", size);
   mCachedThumbnailResolution.store(size, std::memory_order_relaxed);
+}
+//------------------------------------------------------------------------------
+bool Settings::autoThumbnailResolution() {
+  return mCachedAutoThumbnailResolution.load(std::memory_order_relaxed);
+}
+
+void Settings::setAutoThumbnailResolution(bool enabled) {
+  settings->settingsConf->setValue("autoThumbnailResolution", enabled);
+  mCachedAutoThumbnailResolution.store(enabled, std::memory_order_relaxed);
 }
 //------------------------------------------------------------------------------
 // Maximum aggregate size of the thumbnail database, WAL and shared-memory

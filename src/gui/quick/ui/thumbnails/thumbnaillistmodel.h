@@ -44,8 +44,9 @@ struct ThumbnailRequestConfig {
     QList<QSize> itemTargetSizes;
     bool crop = false;
     bool unloadOffscreen = false;
-    // The thumbnailResolution setting (size of the cached thumbnails).
+    // The thumbnailResolution setting (size of the cached thumbnails) and Auto mode flag.
     int cacheResolution = 0;
+    bool autoCacheResolution = false;
 
     [[nodiscard]] QSize targetSizeFor(int pos, int dirCount) const {
         if (pos >= 0 && pos < dirCount && folderTargetSize.isValid() && !folderTargetSize.isEmpty())

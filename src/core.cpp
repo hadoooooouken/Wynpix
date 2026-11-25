@@ -218,6 +218,7 @@ Core::Core(const UiPorts &ports)
   lastHdrOp = settings->hdrToneMappingOperator();
   lastHdrWhite = settings->hdrTargetWhiteLevel();
   lastThumbnailResolution = settings->thumbnailResolution();
+  lastAutoThumbnailResolution = settings->autoThumbnailResolution();
   lastShowSubfoldersInPanel = settings->showSubfoldersInPanel();
   lastShowHiddenFiles = settings->showHiddenFiles();
   lastPanelPreviewsSize = settings->panelPreviewsSize();
@@ -407,6 +408,7 @@ void Core::onSettingsChanged() {
   }
 
   int newThumbnailResolution = settings->thumbnailResolution();
+  bool newAutoThumbnailResolution = settings->autoThumbnailResolution();
   bool newShowSubfoldersInPanel = settings->showSubfoldersInPanel();
   bool newShowHiddenFiles = settings->showHiddenFiles();
   int newPanelPreviewsSize = settings->panelPreviewsSize();
@@ -416,7 +418,10 @@ void Core::onSettingsChanged() {
 
   const bool thumbnailResolutionChanged =
       newThumbnailResolution != lastThumbnailResolution;
+  const bool autoThumbnailResolutionChanged =
+      newAutoThumbnailResolution != lastAutoThumbnailResolution;
   bool layoutChanged = thumbnailResolutionChanged ||
+                       autoThumbnailResolutionChanged ||
                        (newShowSubfoldersInPanel != lastShowSubfoldersInPanel) ||
                        (newShowHiddenFiles != lastShowHiddenFiles) ||
                        (newPanelPreviewsSize != lastPanelPreviewsSize) ||
@@ -434,6 +439,7 @@ void Core::onSettingsChanged() {
       bool folderSortingChanged = (newFolderIconSortingMode != lastFolderIconSortingMode);
 
       lastThumbnailResolution = newThumbnailResolution;
+      lastAutoThumbnailResolution = newAutoThumbnailResolution;
       lastShowSubfoldersInPanel = newShowSubfoldersInPanel;
       lastShowHiddenFiles = newShowHiddenFiles;
       lastPanelPreviewsSize = newPanelPreviewsSize;

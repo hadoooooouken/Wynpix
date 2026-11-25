@@ -55,8 +55,9 @@ struct PanelSettings {
   bool centerSelection{};
   // Drop thumbnails that scrolled far out of view (unloadThumbs).
   bool unloadThumbnails{};
-  // Size of the cached thumbnails (thumbnailResolution).
+  // Size of the cached thumbnails (thumbnailResolution) and adaptive 1:1 mode.
   int thumbnailResolution{};
+  bool autoThumbnailResolution{};
   // The thumbnails are laid out by their proportions (panelMasonry).
   bool masonry{};
 
