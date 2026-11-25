@@ -80,6 +80,7 @@ class BridgeTestFixture : public QObject {
   Q_PROPERTY(int requestedThumbnailCount READ requestedThumbnailCount FINAL)
   Q_PROPERTY(int lastActivatedThumbnail READ lastActivatedThumbnail FINAL)
   Q_PROPERTY(int lastPinRequest READ lastPinRequest FINAL)
+  Q_PROPERTY(int lastPreviewSizeRequest READ lastPreviewSizeRequest FINAL)
   Q_PROPERTY(ContextMenuModel *contextMenu READ contextMenu CONSTANT FINAL)
   Q_PROPERTY(CropController *crop READ crop CONSTANT FINAL)
   Q_PROPERTY(QString lastCropRequest READ lastCropRequest FINAL)
@@ -135,6 +136,8 @@ public:
   [[nodiscard]] int lastActivatedThumbnail() const;
   // The last pin button request: 1 pin, 0 unpin, -1 none.
   [[nodiscard]] int lastPinRequest() const;
+  // The last preview size button request in pixels, -1 for none.
+  [[nodiscard]] int lastPreviewSizeRequest() const;
   [[nodiscard]] ContextMenuModel *contextMenu();
   [[nodiscard]] CropController *crop();
   [[nodiscard]] FolderViewController *folderView();
@@ -197,6 +200,7 @@ public:
   Q_INVOKABLE void configureThumbnailPanel(bool pinned, int position, bool extended);
   // The masonry mode of the panel, kept by the following configurations.
   Q_INVOKABLE void setPanelMasonry(bool enabled);
+  Q_INVOKABLE void setPanelPreviewsSize(int size);
   Q_INVOKABLE void allowThumbnailPanelCreation();
   Q_INVOKABLE void setPanelWindowSize(int width, int height);
   // Populates the strip with count items and forgets the requests.
@@ -295,6 +299,7 @@ private:
   int mRequestedThumbnailCount = 0;
   int mLastActivatedThumbnail = -1;
   int mLastPinRequest = -1;
+  int mLastPreviewSizeRequest = -1;
   ContextMenuModel mContextMenu;
   CropController mCrop;
   QString mLastCropRequest;

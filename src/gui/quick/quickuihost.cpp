@@ -257,6 +257,8 @@ void QuickUiHost::connectThumbnailPanel() {
                    &mSettings, &Settings::setPanelPinned);
   QObject::connect(&mThumbnailPanel, &ThumbnailPanelController::masonryRequested,
                    &mSettings, &Settings::setPanelMasonry);
+  QObject::connect(&mThumbnailPanel, &ThumbnailPanelController::previewSizeRequested,
+                   &mSettings, &Settings::setPanelPreviewsSize);
   QObject::connect(
       &mViewport, &ImageViewportController::renderingSettled, &mThumbnailPanel,
       [this]() { mThumbnailPanel.allowCreation(); },

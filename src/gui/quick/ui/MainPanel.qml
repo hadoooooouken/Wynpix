@@ -7,8 +7,8 @@ import wynpix.style
 
 // Thumbnail panel of the document view (MainPanel and SlidePanel in the
 // widget UI): the thumbnail strip with the settings, strip mode, folder view,
-// pin, page and (fullscreen) exit buttons, at the side of the window the
-// settings name. It
+// pin, page, preview size and (fullscreen) exit buttons, at the side of the
+// window the settings name. It
 // slides in and out by the controller's slide distance while fading, or
 // appears at once, as the controller says; while it slides, no thumbnails
 // are requested. The content
@@ -67,6 +67,7 @@ Item {
     readonly property int fixedButtonCount: stripLayout.fixedButtonCount
                                             + (controller.exitButtonVisible ? 1 : 0)
     readonly property int pageButtonCount: stripLayout.pageButtonCount
+    readonly property int previewSizeButtonCount: 2
 
     x: atRight ? parent.width - width : 0
     y: atBottom ? parent.height - height : 0
@@ -156,10 +157,49 @@ Item {
         sourceComponent: Item {
             ThumbnailStrip {
                 controller: panel.controller
-                anchors.left: parent.left
+                anchors.left: panel.horizontal ? secondaryButtons.right : parent.left
                 anchors.top: panel.horizontal ? parent.top : buttons.bottom
                 anchors.right: panel.horizontal ? buttons.left : parent.right
+                anchors.bottom: panel.horizontal ? parent.bottom : secondaryButtons.top
+            }
+
+            // Button bar on the opposite end of the strip (left for a
+            // horizontal panel, bottom for a vertical one), with preview size
+            // +/- controls anchored at the bottom-left.
+            Item {
+                id: secondaryButtons
+
+                width: panel.horizontal ? panel.buttonSize + panel.buttonSpacing : parent.width
+                height: panel.horizontal ? parent.height : panel.buttonSize + panel.buttonSpacing
+                anchors.left: parent.left
                 anchors.bottom: parent.bottom
+
+                Grid {
+                    flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
+                    columns: panel.horizontal ? 1 : panel.previewSizeButtonCount
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    anchors.margins: panel.buttonInset
+
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.ZoomIn20
+                        enabled: panel.controller.canIncreasePreviewSize
+                        autoRepeat: true
+                        autoRepeatDelay: panel.pageRepeatDelay
+                        autoRepeatInterval: panel.pageRepeatInterval
+                        onPressed: panel.controller.increasePreviewSize()
+                    }
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.ZoomOut20
+                        enabled: panel.controller.canDecreasePreviewSize
+                        autoRepeat: true
+                        autoRepeatDelay: panel.pageRepeatDelay
+                        autoRepeatInterval: panel.pageRepeatInterval
+                        onPressed: panel.controller.decreasePreviewSize()
+                    }
+                }
             }
 
             Item {

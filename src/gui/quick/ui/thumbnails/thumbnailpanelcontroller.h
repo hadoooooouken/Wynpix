@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QtQml/qqmlregistration.h>
 
+#include "components/settingseditor/settingsscales.h"
 #include "gui/quick/bridges/uisettings.h"
 #include "gui/quick/ui/thumbnails/stripmasonrycontroller.h"
 #include "gui/quick/ui/thumbnails/thumbnaillistmodel.h"
@@ -32,9 +33,11 @@
 // - the pin button publishes the new pinned state to store; the strip mode
 //   button does the same for the masonry mode, in which the thumbnails keep
 //   the proportions of their images (StripMasonryController) and show no
-//   labels. The layout of the tiles and the anchoring of the view are the
-//   business of StripMasonryController; this controller only turns the mode
-//   on and gives the model what the mode changes: the rows, the target boxes.
+//   labels. The preview size +/- buttons step the preview size within the
+//   settings slider range and publish it to store. The layout of the tiles
+//   and the anchoring of the view are the business of StripMasonryController;
+//   this controller only turns the mode on and gives the model what the mode
+//   changes: the rows, the target boxes.
 // It also derives the strip layout from the settings and the label font, and
 // configures the thumbnail model with it (request size in device pixels,
 // crop, unloading, scrolling). While the panel slides, the model requests no
@@ -58,6 +61,9 @@ class ThumbnailPanelController final : public QObject {
     Q_PROPERTY(ThumbnailStripLayout layout READ layout NOTIFY layoutChanged FINAL)
     Q_PROPERTY(StripMasonryController *masonry READ masonry CONSTANT FINAL)
     Q_PROPERTY(bool exitButtonVisible READ isExitButtonVisible NOTIFY exitButtonVisibleChanged FINAL)
+    Q_PROPERTY(int previewSize READ previewSize NOTIFY previewSizeChanged FINAL)
+    Q_PROPERTY(bool canIncreasePreviewSize READ canIncreasePreviewSize NOTIFY previewSizeChanged FINAL)
+    Q_PROPERTY(bool canDecreasePreviewSize READ canDecreasePreviewSize NOTIFY previewSizeChanged FINAL)
     Q_PROPERTY(int slideDistance READ slideDistance CONSTANT FINAL)
     Q_PROPERTY(int animationInDuration READ animationInDuration CONSTANT FINAL)
     Q_PROPERTY(int animationOutDuration READ animationOutDuration CONSTANT FINAL)
@@ -73,6 +79,12 @@ public:
     static constexpr int kSlideDistancePx = 40;
     static constexpr int kAnimationInDurationMs = 250;
     static constexpr int kAnimationOutDurationMs = 200;
+    // Preview size step per +/- button click: 3 steps of the settings slider.
+    static constexpr int kPreviewSizeSliderSteps = 3;
+    static constexpr int kPreviewSizeStepPx =
+        kPreviewSizeSliderSteps * SettingsScales::kPanelSizePixelsPerStep;
+    static_assert(kPreviewSizeStepPx >= SettingsScales::kPanelSizePixelsPerStep,
+                  "Preview size step must cover at least one slider step");
     // model must outlive the controller; settings: the initial UI settings.
     ThumbnailPanelController(ThumbnailListModel &model, const UiSettingsSnapshot &settings,
                              QObject *parent = nullptr);
@@ -89,6 +101,9 @@ public:
     [[nodiscard]] ThumbnailStripLayout layout() const;
     [[nodiscard]] StripMasonryController *masonry();
     [[nodiscard]] bool isExitButtonVisible() const;
+    [[nodiscard]] int previewSize() const;
+    [[nodiscard]] bool canIncreasePreviewSize() const;
+    [[nodiscard]] bool canDecreasePreviewSize() const;
     [[nodiscard]] int slideDistance() const;
     [[nodiscard]] int animationInDuration() const;
     [[nodiscard]] int animationOutDuration() const;
@@ -120,6 +135,9 @@ public:
     Q_INVOKABLE void togglePinned();
     // Switches the strip between the uniform and the masonry mode.
     Q_INVOKABLE void toggleMasonry();
+    // Steps the preview size up or down within the settings range.
+    Q_INVOKABLE void increasePreviewSize();
+    Q_INVOKABLE void decreasePreviewSize();
     // The show or hide slide runs.
     Q_INVOKABLE void setAnimationRunning(bool running);
     // Black or white, whichever reads on background (unselected labels).
@@ -136,10 +154,13 @@ signals:
     // same (left and right panels have identical geometry).
     void positionChanged();
     void exitButtonVisibleChanged();
+    void previewSizeChanged();
     // The pin button changed the pinned state; to be stored.
     void pinRequested(bool pinned);
     // The strip mode button changed the masonry mode; to be stored.
     void masonryRequested(bool enabled);
+    // The preview size buttons changed the preview size; to be stored.
+    void previewSizeRequested(int size);
 
 private:
     enum class HideSource { None, PointerExit, WindowExit };
@@ -155,6 +176,7 @@ private:
     void updateExitButton();
     void updateLayout();
     void configureModel();
+    void stepPreviewSize(int delta);
     // The model follows the new layout of the masonry strip, then the view is
     // put back where it was.
     void onMasonryLayoutChanged(const StripScrollAnchor &anchor);

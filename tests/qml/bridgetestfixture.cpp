@@ -243,6 +243,8 @@ BridgeTestFixture::BridgeTestFixture(QObject *parent)
           [this](int index) { mLastActivatedThumbnail = index; });
   connect(&mThumbnailPanel, &ThumbnailPanelController::pinRequested, this,
           [this](bool pinned) { mLastPinRequest = pinned ? 1 : 0; });
+  connect(&mThumbnailPanel, &ThumbnailPanelController::previewSizeRequested, this,
+          [this](int size) { mLastPreviewSizeRequest = size; });
 
   connect(&mWindowShell, &MainWindowShell::urlsDropped, this,
           [this](const QList<QUrl> &urls) { mLastDroppedUrls = urls; });
@@ -358,6 +360,10 @@ int BridgeTestFixture::lastActivatedThumbnail() const {
 }
 
 int BridgeTestFixture::lastPinRequest() const { return mLastPinRequest; }
+
+int BridgeTestFixture::lastPreviewSizeRequest() const {
+  return mLastPreviewSizeRequest;
+}
 
 void BridgeTestFixture::setFolderViewActive(bool active) {
   mFolderView.setActive(active);
@@ -685,10 +691,16 @@ void BridgeTestFixture::configureThumbnailPanel(bool pinned, int position,
   mSettings.panel.hideDelayMs = kTestPanelHideDelayMs;
   mThumbnailPanel.applySettings(mSettings);
   mLastPinRequest = -1;
+  mLastPreviewSizeRequest = -1;
 }
 
 void BridgeTestFixture::setPanelMasonry(bool enabled) {
   mSettings.panel.masonry = enabled;
+  mThumbnailPanel.applySettings(mSettings);
+}
+
+void BridgeTestFixture::setPanelPreviewsSize(int size) {
+  mSettings.panel.previewsSize = size;
   mThumbnailPanel.applySettings(mSettings);
 }
 

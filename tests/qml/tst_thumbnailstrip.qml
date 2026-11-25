@@ -34,6 +34,11 @@ Item {
         // The preloaded range of kStripPreloadDistance on both sides, in cells
         // of the test layout (cell width 80 + 2 * (9 + 2) = 102 pixels).
         readonly property int requestLimit: 80
+        readonly property int visiblePanelButtonCount: 6
+        readonly property int previewSizeMin: 104
+        readonly property int previewSizeMax: 512
+        readonly property int previewSizeStep: 24
+        readonly property int previewSizeGridStep: 8
 
         name: "ThumbnailStrip"
         when: windowShown
@@ -67,6 +72,27 @@ Item {
                 const found = findNamed(item.children[i], objectName);
                 if (found)
                     return found;
+            }
+            return null;
+        }
+
+        function collectButtons(item) {
+            const result = [];
+            const visit = current => {
+                if (current.glyph !== undefined && current.active !== undefined && current.visible)
+                    result.push(current);
+                for (let i = 0; i < current.children.length; ++i)
+                    visit(current.children[i]);
+            };
+            visit(item);
+            return result;
+        }
+
+        function findButtonByGlyph(item, glyph) {
+            const buttons = collectButtons(item);
+            for (let i = 0; i < buttons.length; ++i) {
+                if (buttons[i].glyph === glyph)
+                    return buttons[i];
             }
             return null;
         }
@@ -346,15 +372,8 @@ Item {
             pinnedAt(SettingsEnums.PanelPosition.Bottom);
             list();
             // The panel buttons have a glyph and the checked look (active).
-            const buttons = [];
-            const collect = item => {
-                if (item.glyph !== undefined && item.active !== undefined && item.visible)
-                    buttons.push(item);
-                for (let i = 0; i < item.children.length; ++i)
-                    collect(item.children[i]);
-            };
-            collect(panel);
-            compare(buttons.length, 3);
+            const buttons = collectButtons(panel);
+            compare(buttons.length, visiblePanelButtonCount);
             let pinButton = null;
             for (let i = 0; i < buttons.length; ++i) {
                 if (buttons[i].active)
@@ -365,6 +384,66 @@ Item {
             compare(Fixture.lastPinRequest, 0);
             verify(!panel.controller.pinned);
             verify(!pinButton.active);
+        }
+
+        function test_previewSizeButtonsAdjustTheStrip() {
+            pinnedAt(SettingsEnums.PanelPosition.Bottom);
+            list();
+            const zoomIn = findButtonByGlyph(panel, FluentIcons.ZoomIn20);
+            const zoomOut = findButtonByGlyph(panel, FluentIcons.ZoomOut20);
+            verify(zoomIn !== null && zoomOut !== null, "preview size buttons are missing");
+
+            // In a horizontal panel the +/- buttons sit at the bottom-left.
+            const inPos = zoomIn.mapToItem(panel, 0, 0);
+            const outPos = zoomOut.mapToItem(panel, 0, 0);
+            verify(inPos.x < panel.width / 2 && outPos.x < panel.width / 2);
+            verify(outPos.y > inPos.y);
+            verify(zoomIn.enabled);
+            verify(!zoomOut.enabled);
+
+            // Stepping up crosses into the settings slider range and enables "-".
+            mouseClick(zoomIn);
+            compare(panel.controller.previewSize, previewSizeMin);
+            compare(Fixture.lastPreviewSizeRequest, previewSizeMin);
+            verify(!zoomOut.enabled);
+
+            const previousExtent = panel.extent;
+            mouseClick(zoomIn);
+            compare(panel.controller.previewSize, previewSizeMin + previewSizeStep);
+            compare(Fixture.lastPreviewSizeRequest, previewSizeMin + previewSizeStep);
+            verify(zoomOut.enabled);
+            verify(panel.extent > previousExtent);
+
+            mouseClick(zoomOut);
+            compare(panel.controller.previewSize, previewSizeMin);
+            compare(Fixture.lastPreviewSizeRequest, previewSizeMin);
+            verify(!zoomOut.enabled);
+
+            // Holding "+" triggers auto-repeat steps.
+            mousePress(zoomIn);
+            tryVerify(() => panel.controller.previewSize >= previewSizeMin + 2 * previewSizeStep,
+                      createTimeout, "holding + did not auto-repeat");
+            mouseRelease(zoomIn);
+
+            // Clamps at the upper bound and disables "+".
+            Fixture.setPanelPreviewsSize(previewSizeMax - previewSizeGridStep);
+            verify(zoomIn.enabled);
+            mouseClick(zoomIn);
+            compare(panel.controller.previewSize, previewSizeMax);
+            compare(Fixture.lastPreviewSizeRequest, previewSizeMax);
+            verify(!zoomIn.enabled);
+            verify(zoomOut.enabled);
+
+            // In a vertical panel the +/- buttons sit at the bottom of the panel.
+            pinnedAt(SettingsEnums.PanelPosition.Left);
+            const vInPos = zoomIn.mapToItem(panel, 0, 0);
+            const vOutPos = zoomOut.mapToItem(panel, 0, 0);
+            verify(vInPos.y > panel.height / 2 && vOutPos.y > panel.height / 2);
+            verify(vOutPos.x > vInPos.x);
+            const previousWidth = panel.width;
+            mouseClick(zoomIn);
+            compare(Fixture.lastPreviewSizeRequest, previewSizeMin);
+            verify(panel.width > previousWidth);
         }
 
         function test_floatingPanelSlidesIn() {

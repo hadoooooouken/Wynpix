@@ -1115,6 +1115,86 @@ private slots:
     QVERIFY(!model.requestConfig().folderTargetSize.isValid());
   }
 
+  void previewSizeButtonsStepClampAndPublish() {
+    constexpr int kBoundaryOffsetPx = SettingsScales::kPanelSizePixelsPerStep;
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(true, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    ThumbnailPanelController panel(model, settings);
+    QSignalSpy changed(&panel, &ThumbnailPanelController::previewSizeChanged);
+    QSignalSpy requested(&panel, &ThumbnailPanelController::previewSizeRequested);
+
+    QCOMPARE(panel.previewSize(), kDefaultPreviewSize);
+    QVERIFY(panel.canIncreasePreviewSize());
+    QVERIFY(panel.canDecreasePreviewSize());
+
+    panel.increasePreviewSize();
+    const int steppedUp = kDefaultPreviewSize + ThumbnailPanelController::kPreviewSizeStepPx;
+    QCOMPARE(panel.previewSize(), steppedUp);
+    QCOMPARE(panel.layout().thumbnailSize, steppedUp);
+    QCOMPARE(changed.count(), 1);
+    QCOMPARE(requested.count(), 1);
+    QCOMPARE(requested.first().at(0).toInt(), steppedUp);
+
+    panel.decreasePreviewSize();
+    QCOMPARE(panel.previewSize(), kDefaultPreviewSize);
+    QCOMPARE(panel.layout().thumbnailSize, kDefaultPreviewSize);
+    QCOMPARE(changed.count(), 2);
+    QCOMPARE(requested.count(), 2);
+    QCOMPARE(requested.last().at(0).toInt(), kDefaultPreviewSize);
+
+    // applySettings updates previewSizeChanged without emitting previewSizeRequested.
+    const int reqCountBeforeApply = requested.count();
+    settings.panel.previewsSize = SettingsScales::kMinPanelSizePixels + kBoundaryOffsetPx;
+    panel.applySettings(settings);
+    QCOMPARE(changed.count(), 3);
+    QCOMPARE(requested.count(), reqCountBeforeApply);
+    QVERIFY(panel.canDecreasePreviewSize());
+    panel.decreasePreviewSize();
+    QCOMPARE(panel.previewSize(), SettingsScales::kMinPanelSizePixels);
+    QVERIFY(!panel.canDecreasePreviewSize());
+    const int reqCountAtMin = requested.count();
+    panel.decreasePreviewSize();
+    QCOMPARE(requested.count(), reqCountAtMin);
+    QCOMPARE(panel.previewSize(), SettingsScales::kMinPanelSizePixels);
+
+    // Sub-minimum legacy values cannot decrease, and increase onto the step grid.
+    settings.panel.previewsSize = kThumbnailSize;
+    panel.applySettings(settings);
+    QVERIFY(!panel.canDecreasePreviewSize());
+    panel.decreasePreviewSize();
+    QCOMPARE(panel.previewSize(), kThumbnailSize);
+    panel.increasePreviewSize();
+    QCOMPARE(panel.previewSize(), SettingsScales::kMinPanelSizePixels);
+
+    // Clamps at the maximum and disables further increase.
+    settings.panel.previewsSize = SettingsScales::kMaxPanelSizePixels - kBoundaryOffsetPx;
+    panel.applySettings(settings);
+    QVERIFY(panel.canIncreasePreviewSize());
+    panel.increasePreviewSize();
+    QCOMPARE(panel.previewSize(), SettingsScales::kMaxPanelSizePixels);
+    QVERIFY(!panel.canIncreasePreviewSize());
+    const int reqCountAtMax = requested.count();
+    panel.increasePreviewSize();
+    QCOMPARE(requested.count(), reqCountAtMax);
+  }
+
+  void previewSizeButtonsUpdateMasonryLayout() {
+    ThumbnailListModel model;
+    ThumbnailPanelController panel(model, masonrySettings());
+    model.populate(2, 0, {kWideImage, kClassicImage});
+    const int initialExtent = panel.layout().panelExtent;
+    const QSize initialTarget = model.requestConfig().targetSize;
+    const int steppedUp = kDefaultPreviewSize + ThumbnailPanelController::kPreviewSizeStepPx;
+    panel.increasePreviewSize();
+    QCOMPARE(panel.previewSize(), steppedUp);
+    QVERIFY(panel.layout().panelExtent > initialExtent);
+    QVERIFY(panel.masonry()->layout() != nullptr);
+    QCOMPARE(model.scrollConfig().thumbnailSize, steppedUp);
+    QVERIFY(model.requestConfig().targetSize.width() > initialTarget.width());
+    QVERIFY(model.requestConfig().targetSize.height() > initialTarget.height());
+  }
+
   void masonryBoxFollowsTheDevicePixelRatio() {
     ThumbnailListModel model;
     ThumbnailPanelController panel(model, masonrySettings());

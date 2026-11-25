@@ -60,6 +60,18 @@ bool ThumbnailPanelController::isExitButtonVisible() const {
     return mExitButtonVisible;
 }
 
+int ThumbnailPanelController::previewSize() const {
+    return mPanel.previewsSize;
+}
+
+bool ThumbnailPanelController::canIncreasePreviewSize() const {
+    return mPanel.previewsSize < SettingsScales::kMaxPanelSizePixels;
+}
+
+bool ThumbnailPanelController::canDecreasePreviewSize() const {
+    return mPanel.previewsSize > SettingsScales::kMinPanelSizePixels;
+}
+
 int ThumbnailPanelController::slideDistance() const {
     return kSlideDistancePx;
 }
@@ -95,6 +107,7 @@ QRectF ThumbnailPanelController::panelRect() const {
 void ThumbnailPanelController::applySettings(const UiSettingsSnapshot &settings) {
     const bool wasEnabled = mPanel.enabled;
     const Enums::PanelPosition previousPosition = mPanel.position;
+    const int previousPreviewSize = mPanel.previewsSize;
     mPanel = settings.panel;
     mViewer = settings.viewer;
     if (wasEnabled != mPanel.enabled) {
@@ -107,6 +120,8 @@ void ThumbnailPanelController::applySettings(const UiSettingsSnapshot &settings)
     updateLayout();
     if (previousPosition != mPanel.position)
         emit positionChanged();
+    if (previousPreviewSize != mPanel.previewsSize)
+        emit previewSizeChanged();
     configureModel();
     updateExitButton();
     setPinned(mPanel.pinned);
@@ -221,6 +236,14 @@ void ThumbnailPanelController::toggleMasonry() {
     // The model follows through onMasonryLayoutChanged().
     updateLayout();
     emit masonryRequested(enabled);
+}
+
+void ThumbnailPanelController::increasePreviewSize() {
+    stepPreviewSize(kPreviewSizeStepPx);
+}
+
+void ThumbnailPanelController::decreasePreviewSize() {
+    stepPreviewSize(-kPreviewSizeStepPx);
 }
 
 void ThumbnailPanelController::setAnimationRunning(bool running) {
@@ -369,6 +392,21 @@ void ThumbnailPanelController::configureModel() {
 void ThumbnailPanelController::onMasonryLayoutChanged(const StripScrollAnchor &anchor) {
     configureModel();
     mMasonry.restoreAnchor(anchor);
+}
+
+void ThumbnailPanelController::stepPreviewSize(int delta) {
+    if ((delta > 0 && !canIncreasePreviewSize()) || (delta < 0 && !canDecreasePreviewSize()))
+        return;
+    const int snapped =
+        SettingsScales::snapped(mPanel.previewsSize + delta, SettingsScales::kPanelSizePixelsPerStep);
+    const int target = qBound(SettingsScales::kMinPanelSizePixels, snapped,
+                              SettingsScales::kMaxPanelSizePixels);
+    mPanel.previewsSize = target;
+    updateLayout();
+    // Uniform mode does not trigger onMasonryLayoutChanged(); masonry mode skips duplicate configure.
+    configureModel();
+    emit previewSizeChanged();
+    emit previewSizeRequested(target);
 }
 
 void ThumbnailPanelController::scheduleHide(HideSource source) {
