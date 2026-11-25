@@ -4,6 +4,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QSet>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QStringList>
@@ -15,7 +16,12 @@
 std::mutex ThumbnailCache::sDatabaseWriteMutex;
 
 ThumbnailCache::ThumbnailCache()
-    : databasePath(databaseFilePath()),
+    : ThumbnailCache(databaseFilePath())
+{
+}
+
+ThumbnailCache::ThumbnailCache(QString dbFilePath)
+    : databasePath(std::move(dbFilePath)),
       maintenance(databasePath),
       decodedCache(kDecodedCacheMaximumBytes)
 {
@@ -150,6 +156,8 @@ bool ThumbnailCache::initializeDatabaseSchema(QSqlDatabase &db)
                 "last_modified TEXT, "
                 "original_width INTEGER, "
                 "original_height INTEGER, "
+                "cached_width INTEGER NOT NULL DEFAULT 0, "
+                "cached_height INTEGER NOT NULL DEFAULT 0, "
                 "label TEXT, "
                 "data BLOB, "
                 "source_path TEXT, "
@@ -163,6 +171,36 @@ bool ThumbnailCache::initializeDatabaseSchema(QSqlDatabase &db)
                 "last_accessed INTEGER NOT NULL DEFAULT 0"
                 ");"),
             QStringLiteral("Failed to create thumbnail cache table"))) {
+        return failSchemaTransaction();
+    }
+
+    QSet<QString> existingColumns;
+    {
+        QSqlQuery infoQuery(db);
+        if (!infoQuery.exec(QStringLiteral("PRAGMA table_info(thumbnails);"))) {
+            qWarning() << "Failed to inspect thumbnail cache columns:"
+                       << infoQuery.lastError().text();
+            return failSchemaTransaction();
+        }
+        while (infoQuery.next())
+            existingColumns.insert(infoQuery.value(1).toString());
+    }
+    if (!existingColumns.contains(QStringLiteral("cached_width")) &&
+        !executeSchemaStatement(
+            db,
+            QStringLiteral(
+                "ALTER TABLE thumbnails "
+                "ADD COLUMN cached_width INTEGER NOT NULL DEFAULT 0;"),
+            QStringLiteral("Failed to add cached_width column"))) {
+        return failSchemaTransaction();
+    }
+    if (!existingColumns.contains(QStringLiteral("cached_height")) &&
+        !executeSchemaStatement(
+            db,
+            QStringLiteral(
+                "ALTER TABLE thumbnails "
+                "ADD COLUMN cached_height INTEGER NOT NULL DEFAULT 0;"),
+            QStringLiteral("Failed to add cached_height column"))) {
         return failSchemaTransaction();
     }
 
@@ -325,13 +363,15 @@ bool ThumbnailCache::saveThumbnails(const QList<WriteEntry> &entries)
     QSqlQuery query(db);
     if (!query.prepare(QStringLiteral(
             "INSERT INTO thumbnails "
-            "(id, last_modified, original_width, original_height, label, "
+            "(id, last_modified, original_width, original_height, "
+            " cached_width, cached_height, label, "
             " data, source_path, source_mtime, source_size, "
             " requires_linear_color_space, tone_map_dependent, "
             " tone_map_enabled, tone_map_operator, tone_map_white_level, "
             " last_accessed) "
             "VALUES "
             "(:id, :last_modified, :original_width, :original_height, "
+            " :cached_width, :cached_height, "
             " :label, :data, :source_path, :source_mtime, :source_size, "
             " :requires_linear_color_space, :tone_map_dependent, "
             " :tone_map_enabled, :tone_map_operator, :tone_map_white_level, "
@@ -340,6 +380,8 @@ bool ThumbnailCache::saveThumbnails(const QList<WriteEntry> &entries)
             "last_modified = excluded.last_modified, "
             "original_width = excluded.original_width, "
             "original_height = excluded.original_height, "
+            "cached_width = excluded.cached_width, "
+            "cached_height = excluded.cached_height, "
             "label = excluded.label, "
             "data = excluded.data, "
             "source_path = excluded.source_path, "
@@ -351,7 +393,18 @@ bool ThumbnailCache::saveThumbnails(const QList<WriteEntry> &entries)
             "tone_map_enabled = excluded.tone_map_enabled, "
             "tone_map_operator = excluded.tone_map_operator, "
             "tone_map_white_level = excluded.tone_map_white_level, "
-            "last_accessed = excluded.last_accessed;"))) {
+            "last_accessed = excluded.last_accessed "
+            "WHERE excluded.source_path IS NOT thumbnails.source_path COLLATE NOCASE "
+            "   OR excluded.source_mtime IS NOT thumbnails.source_mtime "
+            "   OR excluded.source_size IS NOT thumbnails.source_size "
+            "   OR excluded.tone_map_dependent IS NOT thumbnails.tone_map_dependent "
+            "   OR excluded.tone_map_enabled IS NOT thumbnails.tone_map_enabled "
+            "   OR excluded.tone_map_operator IS NOT thumbnails.tone_map_operator "
+            "   OR excluded.tone_map_white_level IS NOT thumbnails.tone_map_white_level "
+            "   OR thumbnails.cached_width <= 0 "
+            "   OR thumbnails.cached_height <= 0 "
+            "   OR (excluded.cached_width * excluded.cached_height) >= "
+            "      (thumbnails.cached_width * thumbnails.cached_height);"))) {
         qWarning() << "Failed to prepare thumbnail cache batch UPSERT:"
                    << query.lastError().text();
         return rollbackTransaction();
@@ -368,6 +421,10 @@ bool ThumbnailCache::saveThumbnails(const QList<WriteEntry> &entries)
                         entry->originalWidth);
         query.bindValue(QStringLiteral(":original_height"),
                         entry->originalHeight);
+        query.bindValue(QStringLiteral(":cached_width"),
+                        entry->cachedWidth);
+        query.bindValue(QStringLiteral(":cached_height"),
+                        entry->cachedHeight);
         query.bindValue(QStringLiteral(":label"), entry->label);
         query.bindValue(QStringLiteral(":data"), entry->encodedData);
         query.bindValue(QStringLiteral(":source_path"),
@@ -403,14 +460,17 @@ bool ThumbnailCache::saveThumbnails(const QList<WriteEntry> &entries)
                        << query.lastError().text();
             return rollbackTransaction();
         }
+        const bool rowWritten = query.numRowsAffected() > 0;
         query.finish();
 
-        const qint64 entryBytes = entry->encodedData.size();
-        if (entryBytes >
-            std::numeric_limits<qint64>::max() - encodedBatchBytes) {
-            encodedBatchBytes = std::numeric_limits<qint64>::max();
-        } else {
-            encodedBatchBytes += entryBytes;
+        if (rowWritten) {
+            const qint64 entryBytes = entry->encodedData.size();
+            if (entryBytes >
+                std::numeric_limits<qint64>::max() - encodedBatchBytes) {
+                encodedBatchBytes = std::numeric_limits<qint64>::max();
+            } else {
+                encodedBatchBytes += entryBytes;
+            }
         }
     }
 

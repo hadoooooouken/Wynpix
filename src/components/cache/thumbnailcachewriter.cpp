@@ -258,6 +258,8 @@ void ThumbnailCacheWriter::processBatch(
             candidate.image.text(QStringLiteral("originalWidth")).toInt();
         entry.originalHeight =
             candidate.image.text(QStringLiteral("originalHeight")).toInt();
+        entry.cachedWidth = candidate.image.width();
+        entry.cachedHeight = candidate.image.height();
         entry.label = candidate.image.text(QStringLiteral("label"));
         entry.encodedData = std::move(encodedThumbnail);
         entry.requiresLinearColorSpace =

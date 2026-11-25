@@ -63,8 +63,22 @@ void DecodedThumbnailCache::insert(
 
     std::lock_guard lock(mutex);
     auto existingEntry = entries.find(id);
-    if (existingEntry != entries.end())
+    if (existingEntry != entries.end()) {
+        const bool sameSourceAndToneMap =
+            stampsMatch(existingEntry->sourceStamp, sourceStamp) &&
+            existingEntry->toneMapDependent == toneMapDependent &&
+            existingEntry->toneMapEnabled == toneMapEnabled &&
+            existingEntry->toneMapOperator == toneMapOperator &&
+            existingEntry->toneMapWhiteLevel == toneMapWhiteLevel;
+        const qint64 existingArea =
+            static_cast<qint64>(existingEntry->image.width()) *
+            existingEntry->image.height();
+        const qint64 incomingArea =
+            static_cast<qint64>(image.width()) * image.height();
+        if (sameSourceAndToneMap && existingArea > incomingArea)
+            return;
         removeEntry(existingEntry);
+    }
 
     if (byteCost > maximumBytes)
         return;

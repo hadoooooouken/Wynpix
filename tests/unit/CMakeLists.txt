@@ -24,6 +24,7 @@ qt_add_executable(wynpix_tests
     tst_overlays.cpp
     tst_thumbnailstrip.cpp
     tst_stripmasonry.cpp
+    tst_thumbnailcache.cpp
     tst_thumbnailgeometry.cpp
     tst_folderview.cpp
     tst_contextmenu.cpp
@@ -56,6 +57,9 @@ qt_add_executable(wynpix_tests
     # The auto white balance of ImageLib and ImageRenderItem.
     "${WYNPIX_APP_SOURCE_DIR}/utils/autocoloradjustments.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/sourcecontainers/thumbnail.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/components/cache/decodedthumbnailcache.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/components/cache/thumbnailcache.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/components/cache/thumbnailcachemaintenance.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/components/thumbnailer/thumbnailgeometry.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/quick/adapters/directoryviewadapter.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/gui/quick/adapters/themesnapshotbuilder.cpp"
@@ -95,6 +99,7 @@ target_link_libraries(wynpix_tests PRIVATE
     Qt6::Gui
     # SingleInstanceChannel (QLocalServer / QLocalSocket).
     Qt6::Network
+    Qt6::Sql
     Qt6::Test
     Qt6::Quick
     # TileGrid, ImageFilterMode (moc data of RenderEnums), colour transform

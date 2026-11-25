@@ -25,6 +25,8 @@ public:
         ThumbnailSourceStamp sourceStamp;
         int originalWidth = 0;
         int originalHeight = 0;
+        int cachedWidth = 0;
+        int cachedHeight = 0;
         QString label;
         QByteArray encodedData;
         bool requiresLinearColorSpace = false;
@@ -57,6 +59,7 @@ public:
     };
 
     explicit ThumbnailCache();
+    explicit ThumbnailCache(QString dbFilePath);
     ~ThumbnailCache() override;
 
     [[nodiscard]] bool saveThumbnails(const QList<WriteEntry> &entries);
