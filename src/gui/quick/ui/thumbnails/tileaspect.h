@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSize>
+#include <QSizeF>
 #include <QtGlobal>
 
 // Proportions (width / height) of the tiles of the layouts that follow the
@@ -20,5 +21,12 @@ inline constexpr double kMaximum = 4.0;
         return kUnknown;
     const double aspect = static_cast<double>(size.width()) / size.height();
     return qBound(kMinimum, aspect, kMaximum);
+}
+
+// Converts a logical tile size to physical device pixels.
+[[nodiscard]] inline QSize deviceTileSize(const QSizeF &logicalSize, qreal devicePixelRatio) {
+    const qreal ratio = devicePixelRatio > 0.0 ? devicePixelRatio : 1.0;
+    return QSize(qMax(1, qRound(logicalSize.width() * ratio)),
+                 qMax(1, qRound(logicalSize.height() * ratio)));
 }
 } // namespace TileAspect

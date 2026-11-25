@@ -2,6 +2,7 @@
 
 target_sources(wynpix PRIVATE
     idirectoryview.h
+    thumbnailitemrequest.h
 
     controllers/coldstartwindowcontroller.cpp
 

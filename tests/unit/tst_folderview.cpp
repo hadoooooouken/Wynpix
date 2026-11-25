@@ -151,19 +151,19 @@ private slots:
     QCOMPARE(masonryRequest.targetSize,
              MasonryLayout::thumbnailBoxFor(
                  MasonryLayout::targetRowHeightFor(fixture.grid.iconSize()), 1.0));
-    QVERIFY(masonryRequest.targetSize != gridFolderTarget);
+    // Auto is off by default: masonry uses the shared box, not per-item targets.
+    QVERIFY(masonryRequest.itemTargetSizes.isEmpty());
 
     fixture.grid.setMasonryEnabled(false);
     QCOMPARE(fixture.model.requestConfig().folderTargetSize, gridFolderTarget);
     QCOMPARE(fixture.model.requestConfig().targetSize, gridFolderTarget);
+    QVERIFY(fixture.model.requestConfig().itemTargetSizes.isEmpty());
   }
 
   void togglingMasonryDoesNotReloadFolderThumbnails() {
     GridFixture fixture(6);
     fixture.model.setDirCount(2);
     const QSize folderTarget = fixture.grid.layout().cell.imageTargetSize(1.0);
-    const QSize masonryTarget = MasonryLayout::thumbnailBoxFor(
-        MasonryLayout::targetRowHeightFor(fixture.grid.iconSize()), 1.0);
 
     QImage folderImage(40, 30, QImage::Format_RGB32);
     folderImage.fill(Qt::gray);
@@ -189,17 +189,15 @@ private slots:
     bool sawImagesWithMasonryTarget = false;
     bool sawFolderWithFolderTarget = false;
     for (const QList<QVariant> &args : std::as_const(requests)) {
-      const QList<int> requestedIndices = args.at(0).value<QList<int>>();
-      const QSize requestedSize = args.at(1).toSize();
-      // Loaded folder 0 must never be re-requested.
-      QVERIFY(!requestedIndices.contains(0));
-      if (requestedIndices.contains(1)) {
-        QCOMPARE(requestedSize, folderTarget);
-        sawFolderWithFolderTarget = true;
-      }
-      for (int i = 2; i < 6; ++i) {
-        if (requestedIndices.contains(i)) {
-          QCOMPARE(requestedSize, masonryTarget);
+      const auto batch = args.at(0).value<QList<ThumbnailItemRequest>>();
+      for (const ThumbnailItemRequest &req : batch) {
+        // Loaded folder 0 must never be re-requested.
+        QVERIFY(req.index != 0);
+        if (req.index == 1) {
+          QCOMPARE(req.targetSize, folderTarget);
+          sawFolderWithFolderTarget = true;
+        } else if (req.index >= 2 && req.index < 6) {
+          QCOMPARE(req.targetSize, fixture.model.requestConfig().targetSizeFor(req.index, 2));
           sawImagesWithMasonryTarget = true;
         }
       }
@@ -215,12 +213,11 @@ private slots:
     QTRY_VERIFY(!requests.isEmpty());
     bool sawImagesWithGridTarget = false;
     for (const QList<QVariant> &args : std::as_const(requests)) {
-      const QList<int> requestedIndices = args.at(0).value<QList<int>>();
-      const QSize requestedSize = args.at(1).toSize();
-      QVERIFY(!requestedIndices.contains(0));
-      for (int i = 2; i < 6; ++i) {
-        if (requestedIndices.contains(i)) {
-          QCOMPARE(requestedSize, folderTarget);
+      const auto batch = args.at(0).value<QList<ThumbnailItemRequest>>();
+      for (const ThumbnailItemRequest &req : batch) {
+        QVERIFY(req.index != 0);
+        if (req.index >= 2 && req.index < 6) {
+          QCOMPARE(req.targetSize, folderTarget);
           sawImagesWithGridTarget = true;
         }
       }
@@ -243,23 +240,17 @@ private slots:
     QTRY_VERIFY(!requests.isEmpty());
 
     const QSize folderTarget = fixture.grid.layout().cell.imageTargetSize(1.0);
-    const QSize masonryTarget = MasonryLayout::thumbnailBoxFor(
-        MasonryLayout::targetRowHeightFor(fixture.grid.iconSize()), 1.0);
 
     bool sawFolders = false;
     bool sawImages = false;
     for (const QList<QVariant> &args : std::as_const(requests)) {
-      const QList<int> indices = args.at(0).value<QList<int>>();
-      const QSize targetSize = args.at(1).toSize();
-      for (int i = 0; i < dirCount; ++i) {
-        if (indices.contains(i)) {
-          QCOMPARE(targetSize, folderTarget);
+      const auto batch = args.at(0).value<QList<ThumbnailItemRequest>>();
+      for (const ThumbnailItemRequest &req : batch) {
+        if (req.index >= 0 && req.index < dirCount) {
+          QCOMPARE(req.targetSize, folderTarget);
           sawFolders = true;
-        }
-      }
-      for (int i = dirCount; i < totalCount; ++i) {
-        if (indices.contains(i)) {
-          QCOMPARE(targetSize, masonryTarget);
+        } else if (req.index >= dirCount && req.index < totalCount) {
+          QCOMPARE(req.targetSize, fixture.model.requestConfig().targetSizeFor(req.index, dirCount));
           sawImages = true;
         }
       }

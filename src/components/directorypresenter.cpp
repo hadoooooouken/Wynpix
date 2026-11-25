@@ -45,6 +45,9 @@ DirectoryPresenter::DirectoryPresenter(QObject *parent)
                << kFolderIconResource;
   }
 
+  qRegisterMetaType<ThumbnailItemRequest>();
+  qRegisterMetaType<QList<ThumbnailItemRequest>>();
+
   // Own instance by default so DirectoryPresenter keeps working
   // standalone; Core replaces it with a shared one via setThumbnailer()
   // so the thumbnail panel and folder view dedupe requests against each
@@ -120,8 +123,8 @@ void DirectoryPresenter::setView(std::shared_ptr<IDirectoryView> _view) {
   // then no thumbnail is ever requested: report it.
   const QMetaObject::Connection requestsConnection =
       connect(dynamic_cast<QObject *>(view.get()),
-              SIGNAL(thumbnailsRequested(QList<int>, QSize, bool, bool)), this,
-              SLOT(generateThumbnails(QList<int>, QSize, bool, bool)));
+              SIGNAL(thumbnailsRequested(QList<ThumbnailItemRequest>, bool, bool)), this,
+              SLOT(generateThumbnails(QList<ThumbnailItemRequest>, bool, bool)));
   if (!requestsConnection)
     qWarning() << "[DirectoryPresenter] The view's thumbnailsRequested signal"
                   " is not connected to generateThumbnails; no thumbnails will"
@@ -381,29 +384,44 @@ QList<QString> DirectoryPresenter::selectedPaths() const {
   return paths;
 }
 
-void DirectoryPresenter::generateThumbnails(QList<int> indexes,
-                                            QSize targetSize, bool crop,
-                                            bool force) {
-  if (!view || !model)
+void DirectoryPresenter::generateThumbnails(QList<ThumbnailItemRequest> requests,
+                                            bool crop, bool force) {
+  if (!view || !model) {
+    qWarning() << "[DirectoryPresenter] Cannot generate thumbnails without view and model";
     return;
-  lastThumbnailTargetSize = targetSize;
+  }
+  bool warnedOutOfRange = false;
   if (!mShowDirs) {
-    for (int i : indexes) {
-      if (i < 0 || i >= model->fileCount())
+    for (const ThumbnailItemRequest &req : requests) {
+      if (req.index < 0 || req.index >= model->fileCount()) {
+        if (!warnedOutOfRange) {
+          qWarning() << "[DirectoryPresenter] Ignoring out-of-range file thumbnail request:"
+                     << req.index;
+          warnedOutOfRange = true;
+        }
         continue;
+      }
       thumbnailer->getThumbnailAsync(
-          thumbnailSourceFromEntry(model->fileEntryAt(i)), targetSize, crop,
-          force);
+          thumbnailSourceFromEntry(model->fileEntryAt(req.index)), req.targetSize,
+          crop, force);
     }
     return;
   }
 
   const SortingMode folderIconSort = settings->folderIconSortingMode();
-  for (int i : indexes) {
-    if (i < 0 || i >= model->totalCount())
+  for (const ThumbnailItemRequest &req : requests) {
+    const int i = req.index;
+    const QSize targetSize = req.targetSize;
+    if (i < 0 || i >= model->totalCount()) {
+      if (!warnedOutOfRange) {
+        qWarning() << "[DirectoryPresenter] Ignoring out-of-range thumbnail request:" << i;
+        warnedOutOfRange = true;
+      }
       continue;
+    }
 
     if (i < model->dirCount()) {
+      lastThumbnailTargetSize = targetSize;
       const QString dirPath = model->dirPathAt(i);
 
       // The prepared default is published before cover discovery is queued,
@@ -424,8 +442,14 @@ void DirectoryPresenter::generateThumbnails(QList<int> indexes,
           });
     } else {
       const int fileIndex = i - model->dirCount();
-      if (fileIndex < 0 || fileIndex >= model->fileCount())
+      if (fileIndex < 0 || fileIndex >= model->fileCount()) {
+        if (!warnedOutOfRange) {
+          qWarning() << "[DirectoryPresenter] Ignoring out-of-range file thumbnail index:"
+                     << fileIndex;
+          warnedOutOfRange = true;
+        }
         continue;
+      }
       thumbnailer->getThumbnailAsync(
           thumbnailSourceFromEntry(model->fileEntryAt(fileIndex)), targetSize,
           crop, force);
@@ -1123,9 +1147,10 @@ void DirectoryPresenter::onSettingsChanged() {
   // Nothing was requested yet: the view requests the folders itself.
   if (lastThumbnailTargetSize.isEmpty())
     return;
-  QList<int> folderIndexes;
+  QList<ThumbnailItemRequest> folderRequests;
+  folderRequests.reserve(model->dirCount());
   for (int i = 0; i < model->dirCount(); ++i) {
-    folderIndexes.append(i);
+    folderRequests.append({i, lastThumbnailTargetSize});
   }
-  generateThumbnails(folderIndexes, lastThumbnailTargetSize, false, true);
+  generateThumbnails(folderRequests, false, true);
 }

@@ -10,16 +10,6 @@
 namespace {
 // Space held by a row on each side of its tile.
 constexpr int kHalfSpacing = StripMasonryLayout::kSpacing / 2;
-
-int deviceExtent(int logical, qreal devicePixelRatio) {
-    const qreal ratio = devicePixelRatio > 0.0 ? devicePixelRatio : 1.0;
-    return qMax(1, qRound(logical * ratio));
-}
-
-QSize deviceSize(QSize logical, qreal devicePixelRatio) {
-    return QSize(deviceExtent(logical.width(), devicePixelRatio),
-                 deviceExtent(logical.height(), devicePixelRatio));
-}
 } // namespace
 
 std::shared_ptr<const StripMasonryLayout> StripMasonryLayout::create(
@@ -45,12 +35,12 @@ QSize StripMasonryLayout::thumbnailBoxFor(bool horizontal, int laneExtent,
     const int lane = qMax(1, laneExtent);
     const QSize longest = horizontal ? tileSizeFor(true, lane, TileAspect::kMaximum)
                                      : tileSizeFor(false, lane, TileAspect::kMinimum);
-    return deviceSize(longest, devicePixelRatio);
+    return TileAspect::deviceTileSize(longest, devicePixelRatio);
 }
 
 QSize StripMasonryLayout::folderThumbnailBoxFor(bool horizontal, int laneExtent,
                                                 qreal devicePixelRatio) {
-    return deviceSize(folderTileSize(horizontal, laneExtent), devicePixelRatio);
+    return TileAspect::deviceTileSize(folderTileSize(horizontal, laneExtent), devicePixelRatio);
 }
 
 StripMasonryLayout::StripMasonryLayout(const StripMasonryLayoutInput &input)

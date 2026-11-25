@@ -46,7 +46,7 @@ public:
 signals:
     // IDirectoryView
     void itemActivated(int) override;
-    void thumbnailsRequested(QList<int>, QSize, bool, bool) override;
+    void thumbnailsRequested(QList<ThumbnailItemRequest>, bool, bool) override;
     void draggedOut() override;
     void draggedOver(int) override;
     void droppedInto(QList<QUrl>, QObject *, int, Qt::DropAction) override;

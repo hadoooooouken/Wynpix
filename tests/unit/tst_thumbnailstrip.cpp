@@ -42,6 +42,16 @@ ThumbnailEntry entryOf(int width, int height, QSize targetSize = kRequestSize) {
           .targetSize = targetSize};
 }
 
+// Extracts requested item indices from a thumbnailsNeeded signal emission.
+QList<int> requestedIndices(const QList<QVariant> &args) {
+  const auto requests = args.at(0).value<QList<ThumbnailItemRequest>>();
+  QList<int> indices;
+  indices.reserve(requests.size());
+  for (const ThumbnailItemRequest &req : requests)
+    indices.append(req.index);
+  return indices;
+}
+
 // A model of count items, configured with kRequestSize thumbnails and
 // kItemExtent cells, active over a view of kViewExtent at offset 0.
 void prepare(ThumbnailListModel &model, int count, bool active = true) {
@@ -227,18 +237,18 @@ private slots:
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 1000);
     QCOMPARE(requests.count(), 1);
-    const auto indices = requests.first().at(0).value<QList<int>>();
+    const auto batch = requests.first().at(0).value<QList<ThumbnailItemRequest>>();
     // 0 .. floor((500 + kStripPreloadDistance) / 100).
-    QCOMPARE(indices.first(), 0);
-    QCOMPARE(indices.last(), 35);
-    QCOMPARE(indices.count(), 36);
-    QCOMPARE(requests.first().at(1).toSize(), kRequestSize);
-    QCOMPARE(requests.first().at(3).toBool(), false);
+    QCOMPARE(batch.first().index, 0);
+    QCOMPARE(batch.last().index, 35);
+    QCOMPARE(batch.count(), 36);
+    QCOMPARE(batch.first().targetSize, kRequestSize);
+    QCOMPARE(requests.first().at(2).toBool(), false);
 
     // Requested items are not requested again.
     model.setViewport(kItemExtent, kViewExtent);
     QCOMPARE(requests.count(), 2);
-    QCOMPARE(requests.last().at(0).value<QList<int>>(), QList<int>{36});
+    QCOMPARE(requestedIndices(requests.last()), QList<int>{36});
   }
 
   void requestsNothingWhileInactiveOrBlocked() {
@@ -265,7 +275,7 @@ private slots:
     model.wheelScrolled({0, 10}, {0, 10});
     model.setActive(true);
     QCOMPARE(requests.count(), 1);
-    const auto indices = requests.first().at(0).value<QList<int>>();
+    const auto indices = requestedIndices(requests.first());
     QVERIFY(indices.first() > indices.last());
   }
 
@@ -374,7 +384,7 @@ private slots:
     // Shown, the view does not request what it already holds.
     model.setActive(true);
     QCOMPARE(requests.count(), 1);
-    QVERIFY(!requests.first().at(0).value<QList<int>>().contains(0));
+    QVERIFY(!requestedIndices(requests.first()).contains(0));
     // Hidden again, the thumbnails it holds follow its range.
     model.setActive(false);
     model.setViewport(50000.0, kViewExtent);
@@ -441,7 +451,7 @@ private slots:
     QCOMPARE(scrolls.first().at(0).toReal(), kSelectedOffset);
     QCOMPARE(scrolls.first().at(1).toInt(), 0);
     QTRY_COMPARE(requests.count(), 1);
-    QVERIFY(requests.first().at(0).value<QList<int>>().contains(kSelectedItem));
+    QVERIFY(requestedIndices(requests.first()).contains(kSelectedItem));
     // Shown again, it stays there.
     model.setActive(true);
     QCOMPARE(model.viewOffset(), kSelectedOffset);
@@ -487,7 +497,7 @@ private slots:
     // preload range.
     model.setViewport(0.0, kViewExtent);
     QTRY_COMPARE(requests.count(), 1);
-    QList<int> indices = requests.last().at(0).value<QList<int>>();
+    QList<int> indices = requestedIndices(requests.last());
     QCOMPARE(indices.first(), 0);
     QCOMPARE(indices.count(), kVisibleItems);
     // A population and the focus of the opened item request once, for the
@@ -498,13 +508,13 @@ private slots:
     QTRY_COMPARE(requests.count(), 2);
     QTest::qWait(kWaitMarginMs);
     QCOMPARE(requests.count(), 2);
-    indices = requests.last().at(0).value<QList<int>>();
+    indices = requestedIndices(requests.last());
     QCOMPARE(indices.first(), kFirstFocusedItem);
     QCOMPARE(indices.count(), kVisibleItems);
     // Shown, the view preloads the rest without requesting them again.
     model.setActive(true);
     QCOMPARE(requests.count(), 3);
-    QVERIFY(!requests.last().at(0).value<QList<int>>().contains(kFocusedItem));
+    QVERIFY(!requestedIndices(requests.last()).contains(kFocusedItem));
     // Without prefetch a hidden view requests nothing.
     model.setActive(false);
     model.setInactivePrefetch(false);
@@ -535,8 +545,8 @@ private slots:
     model.configure({.targetSize = kRequestSize, .crop = true});
     QVERIFY(!isLoaded(model, 0));
     QCOMPARE(requests.count(), 1);
-    QCOMPARE(requests.first().at(0).value<QList<int>>(), (QList<int>{0, 1}));
-    QCOMPARE(requests.first().at(2).toBool(), true);
+    QCOMPARE(requestedIndices(requests.first()), (QList<int>{0, 1}));
+    QCOMPARE(requests.first().at(1).toBool(), true);
   }
 
   void reloadForcesARequest() {
@@ -550,8 +560,8 @@ private slots:
     // not flicker.
     QVERIFY(isLoaded(model, 1));
     QCOMPARE(requests.count(), 1);
-    QCOMPARE(requests.first().at(0).value<QList<int>>(), QList<int>{1});
-    QCOMPARE(requests.first().at(3).toBool(), true);
+    QCOMPARE(requestedIndices(requests.first()), QList<int>{1});
+    QCOMPARE(requests.first().at(2).toBool(), true);
   }
 
   //--- scrolling --------------------------------------------------------------
@@ -817,7 +827,7 @@ private slots:
     constexpr int kPassedItem = 50;
     model.setViewport(kPassedItem * kItemExtent, kViewExtent);
     QCOMPARE(requests.count(), 1);
-    QVERIFY(requests.first().at(0).value<QList<int>>().contains(kPassedItem));
+    QVERIFY(requestedIndices(requests.first()).contains(kPassedItem));
     // A gesture selects nothing.
     model.release(6, Qt::RightButton, {100, 0});
     QCOMPARE(model.selection(), QList<int>{4});
@@ -852,7 +862,7 @@ private slots:
     model.setActive(true);
     QCOMPARE(requests.count(), 1);
     // Rows 0 .. floor((500 + 200 - 6) / 100) = 6, four items each.
-    const auto indices = requests.first().at(0).value<QList<int>>();
+    const auto indices = requestedIndices(requests.first());
     QCOMPARE(indices.size(), 7 * kColumns);
     QCOMPARE(indices.constFirst(), 0);
     QCOMPARE(indices.constLast(), 7 * kColumns - 1);
@@ -1034,7 +1044,7 @@ private slots:
     QCOMPARE(requests.count(), 0);
     panel.setFullscreen(true);
     QTRY_COMPARE(requests.count(), 1);
-    QCOMPARE(requests.first().at(0).value<QList<int>>().count(), kVisibleItems);
+    QCOMPARE(requestedIndices(requests.first()).count(), kVisibleItems);
   }
 
   void pinButtonPublishesThePinnedState() {
@@ -1307,8 +1317,9 @@ private slots:
     QVERIFY(isLoaded(model, 0));
     QCOMPARE(requests.count(), 1);
     QTRY_COMPARE(requests.count(), 2);
-    QCOMPARE(requests.last().at(1).toSize(), taller);
-    QVERIFY(requests.last().at(0).value<QList<int>>().contains(0));
+    const auto updatedBatch = requests.last().at(0).value<QList<ThumbnailItemRequest>>();
+    QCOMPARE(updatedBatch.first().targetSize, taller);
+    QVERIFY(requestedIndices(requests.last()).contains(0));
     // The answer to the old request arrives late and is ignored.
     model.setThumbnail(1, entryOf(100, 75));
     QVERIFY(!isLoaded(model, 1));

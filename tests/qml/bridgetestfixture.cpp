@@ -234,10 +234,10 @@ BridgeTestFixture::BridgeTestFixture(QObject *parent)
   connectFolderView();
   connectDialogs();
   connect(&mThumbnails, &ThumbnailListModel::thumbnailsNeeded, this,
-          [this](const QList<int> &indices) {
+          [this](const QList<ThumbnailItemRequest> &requests) {
             ++mThumbnailRequestCount;
-            mRequestedThumbnailCount += indices.count();
-            mUnansweredThumbnails.append(indices);
+            mRequestedThumbnailCount += requests.count();
+            mUnansweredThumbnails.append(requests);
           });
   connect(&mThumbnails, &ThumbnailListModel::activated, this,
           [this](int index) { mLastActivatedThumbnail = index; });
@@ -714,21 +714,20 @@ void BridgeTestFixture::selectThumbnail(int index) {
 }
 
 int BridgeTestFixture::deliverRequestedThumbnails() {
-  const QList<int> indices = std::exchange(mUnansweredThumbnails, {});
-  const QSize targetSize = mThumbnails.requestConfig().targetSize;
-  for (const int index : indices) {
+  const QList<ThumbnailItemRequest> requests = std::exchange(mUnansweredThumbnails, {});
+  for (const ThumbnailItemRequest &req : requests) {
     QImage image(kTestThumbnailWidth, kTestThumbnailHeight,
                  QImage::Format_ARGB32_Premultiplied);
-    image.fill(QColor::fromHsv((index * kHueStride) % kHueSteps, kThumbnailSaturation,
+    image.fill(QColor::fromHsv((req.index * kHueStride) % kHueSteps, kThumbnailSaturation,
                                    kThumbnailValue));
     mThumbnails.setThumbnail(
-        index,
+        req.index,
         ThumbnailEntry{.handle = {.image = image, .sourceSize = kTestSourceSize},
-                       .name = u"item %1"_s.arg(index),
+                       .name = u"item %1"_s.arg(req.index),
                        .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight),
-                       .targetSize = targetSize});
+                       .targetSize = req.targetSize});
   }
-  return static_cast<int>(indices.count());
+  return static_cast<int>(requests.count());
 }
 
 //------------------------------------------------------------------------------
@@ -739,9 +738,9 @@ int BridgeTestFixture::deliverRequestedThumbnails() {
 void BridgeTestFixture::connectFolderView() {
   mFolderGrid.setLabelFont(mThemeBridge.fonts().body);
   connect(&mFolderThumbnails, &ThumbnailListModel::thumbnailsNeeded, this,
-          [this](const QList<int> &indices) {
+          [this](const QList<ThumbnailItemRequest> &requests) {
             ++mFolderThumbnailRequestCount;
-            mUnansweredFolderThumbnails.append(indices);
+            mUnansweredFolderThumbnails.append(requests);
           });
   connect(&mFolderThumbnails, &ThumbnailListModel::activated, this,
           [this](int index) { mLastFolderRequest = u"activated:%1"_s.arg(index); });
@@ -801,20 +800,19 @@ void BridgeTestFixture::populateFolder(int count, int dirCount, const QString &p
 }
 
 int BridgeTestFixture::deliverFolderThumbnails() {
-  const QList<int> indices = std::exchange(mUnansweredFolderThumbnails, {});
-  const QSize targetSize = mFolderThumbnails.requestConfig().targetSize;
-  for (const int index : indices) {
+  const QList<ThumbnailItemRequest> requests = std::exchange(mUnansweredFolderThumbnails, {});
+  for (const ThumbnailItemRequest &req : requests) {
     QImage image(kTestThumbnailWidth, kTestThumbnailHeight, QImage::Format_ARGB32_Premultiplied);
-    image.fill(QColor::fromHsv((index * kHueStride) % kHueSteps, kThumbnailSaturation,
+    image.fill(QColor::fromHsv((req.index * kHueStride) % kHueSteps, kThumbnailSaturation,
                                kThumbnailValue));
     mFolderThumbnails.setThumbnail(
-        index,
+        req.index,
         ThumbnailEntry{.handle = {.image = image, .sourceSize = kTestSourceSize},
-                       .name = u"file %1"_s.arg(index),
+                       .name = u"file %1"_s.arg(req.index),
                        .info = u"%1 x %2"_s.arg(kTestThumbnailWidth).arg(kTestThumbnailHeight),
-                       .targetSize = targetSize});
+                       .targetSize = req.targetSize});
   }
-  return static_cast<int>(indices.count());
+  return static_cast<int>(requests.count());
 }
 
 void BridgeTestFixture::clearFolderRequest() {

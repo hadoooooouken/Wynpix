@@ -353,7 +353,7 @@ void ThumbnailListModel::reloadItem(int index) {
     mRequested.insert(index);
     if (!wasLoaded)
         emitRowChanged(index, kThumbnailRoles);
-    emit thumbnailsNeeded({index}, targetSizeFor(index), mRequest.crop, true);
+    emit thumbnailsNeeded({ThumbnailItemRequest{index, targetSizeFor(index)}}, mRequest.crop, true);
 }
 
 void ThumbnailListModel::setDragHover(int index) {
@@ -445,9 +445,11 @@ bool ThumbnailListModel::hasThumbnail(int pos) const {
 void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
     if (config == mRequest)
         return;
+    const ThumbnailRequestConfig previousRequest = mRequest;
     const bool targetSizeChanged = config.targetSize != mRequest.targetSize;
     const bool folderTargetSizeChanged =
         config.targetSizeFor(0, mDirCount) != mRequest.targetSizeFor(0, mDirCount);
+    const bool itemTargetSizesChanged = config.itemTargetSizes != mRequest.itemTargetSizes;
     const bool unload = config.crop != mRequest.crop ||
                         config.cacheResolution != mRequest.cacheResolution;
     mRequest = config;
@@ -456,7 +458,7 @@ void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
         loadVisibleThumbnails();
         return;
     }
-    if (targetSizeChanged || folderTargetSizeChanged) {
+    if (targetSizeChanged || folderTargetSizeChanged || itemTargetSizesChanged) {
         // Keep existing loaded thumbnails in mLoaded so they can be smoothly scaled
         // by ThumbnailItem on the GPU without visual blinking or showing placeholders.
         // In-flight requests for the obsolete target size are cleared selectively.
@@ -468,16 +470,12 @@ void ThumbnailListModel::configure(const ThumbnailRequestConfig &config) {
                     ++it;
             }
         };
-        if (targetSizeChanged && folderTargetSizeChanged) {
-            mRequested.clear();
-            mUnavailable.clear();
-        } else if (targetSizeChanged) {
-            removeMatching(mRequested, [this](int pos) { return pos >= mDirCount; });
-            removeMatching(mUnavailable, [this](int pos) { return pos >= mDirCount; });
-        } else {
-            removeMatching(mRequested, [this](int pos) { return pos < mDirCount; });
-            removeMatching(mUnavailable, [this](int pos) { return pos < mDirCount; });
-        }
+        const auto itemTargetChanged = [this, &previousRequest](int pos) {
+            return mRequest.targetSizeFor(pos, mDirCount) !=
+                   previousRequest.targetSizeFor(pos, mDirCount);
+        };
+        removeMatching(mRequested, itemTargetChanged);
+        removeMatching(mUnavailable, itemTargetChanged);
         if (mLoaded.isEmpty())
             loadVisibleThumbnails();
         else
@@ -873,61 +871,24 @@ void ThumbnailListModel::loadVisibleThumbnailsDelayed() {
 void ThumbnailListModel::requestMissingThumbnails(ItemRange range) {
     if (!range.isValid())
         return;
-    const bool splitTargets = mDirCount > 0 && targetSizeFor(0) != mRequest.targetSize;
-    if (!splitTargets) {
-        QList<int> loadList;
-        for (int index = range.first; index <= range.last; ++index) {
-            const auto it = mLoaded.constFind(index);
-            const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != mRequest.targetSize);
-            if ((it == mLoaded.cend() || needsTargetSize) && !mRequested.contains(index) &&
-                !mUnavailable.contains(index)) {
-                loadList.append(index);
-            }
-        }
-        if (loadList.isEmpty())
-            return;
-        if (mScrollDirection == ScrollDirection::Backwards)
-            std::reverse(loadList.begin(), loadList.end());
-        for (const int index : std::as_const(loadList))
-            mRequested.insert(index);
-        emit thumbnailsNeeded(loadList, mRequest.targetSize, mRequest.crop, false);
-        return;
-    }
-
-    QList<int> folderLoadList;
-    QList<int> imageLoadList;
+    QList<ThumbnailItemRequest> requests;
+    requests.reserve(range.last - range.first + 1);
     for (int index = range.first; index <= range.last; ++index) {
+        const QSize itemTarget = targetSizeFor(index);
         const auto it = mLoaded.constFind(index);
-        const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != targetSizeFor(index));
+        const bool needsTargetSize = (it != mLoaded.cend() && it->targetSize != itemTarget);
         if ((it == mLoaded.cend() || needsTargetSize) && !mRequested.contains(index) &&
             !mUnavailable.contains(index)) {
-            if (index < mDirCount)
-                folderLoadList.append(index);
-            else
-                imageLoadList.append(index);
+            requests.append({index, itemTarget});
         }
     }
-    if (folderLoadList.isEmpty() && imageLoadList.isEmpty())
+    if (requests.isEmpty())
         return;
-    if (mScrollDirection == ScrollDirection::Backwards) {
-        std::reverse(folderLoadList.begin(), folderLoadList.end());
-        std::reverse(imageLoadList.begin(), imageLoadList.end());
-    }
-    for (const int index : std::as_const(folderLoadList))
-        mRequested.insert(index);
-    for (const int index : std::as_const(imageLoadList))
-        mRequested.insert(index);
-    if (mScrollDirection == ScrollDirection::Backwards) {
-        if (!imageLoadList.isEmpty())
-            emit thumbnailsNeeded(imageLoadList, mRequest.targetSize, mRequest.crop, false);
-        if (!folderLoadList.isEmpty())
-            emit thumbnailsNeeded(folderLoadList, targetSizeFor(folderLoadList.first()), mRequest.crop, false);
-    } else {
-        if (!folderLoadList.isEmpty())
-            emit thumbnailsNeeded(folderLoadList, targetSizeFor(folderLoadList.first()), mRequest.crop, false);
-        if (!imageLoadList.isEmpty())
-            emit thumbnailsNeeded(imageLoadList, mRequest.targetSize, mRequest.crop, false);
-    }
+    if (mScrollDirection == ScrollDirection::Backwards)
+        std::reverse(requests.begin(), requests.end());
+    for (const ThumbnailItemRequest &req : std::as_const(requests))
+        mRequested.insert(req.index);
+    emit thumbnailsNeeded(requests, mRequest.crop, false);
 }
 
 // A view that was never laid out (the strip before its first creation) has

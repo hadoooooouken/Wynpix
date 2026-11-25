@@ -290,7 +290,7 @@ private:
   QString mLastFileRequest;
   ThumbnailListModel mThumbnails;
   ThumbnailPanelController mThumbnailPanel;
-  QList<int> mUnansweredThumbnails;
+  QList<ThumbnailItemRequest> mUnansweredThumbnails;
   int mThumbnailRequestCount = 0;
   int mRequestedThumbnailCount = 0;
   int mLastActivatedThumbnail = -1;
@@ -302,7 +302,7 @@ private:
   FolderGridController mFolderGrid;
   FolderViewController mFolderView;
   std::unique_ptr<QFileSystemModel> mFolderTree;
-  QList<int> mUnansweredFolderThumbnails;
+  QList<ThumbnailItemRequest> mUnansweredFolderThumbnails;
   int mFolderThumbnailRequestCount = 0;
   QString mLastFolderRequest;
   int mScriptSettingsRequests = 0;

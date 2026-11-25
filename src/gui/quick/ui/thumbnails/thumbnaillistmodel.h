@@ -17,6 +17,7 @@
 
 #include "gui/quick/render/thumbnailitem.h"
 #include "gui/quick/ui/thumbnails/itemrows.h"
+#include "gui/thumbnailitemrequest.h"
 
 // A thumbnail and its labels, as the thumbnailer made it.
 struct ThumbnailEntry {
@@ -39,6 +40,8 @@ struct ThumbnailRequestConfig {
     QSize targetSize;
     // Target box for directory items (pos < dirCount). If invalid or empty, targetSize is used.
     QSize folderTargetSize;
+    // Per-item target boxes in device pixels (used by masonry layouts); empty for uniform views.
+    QList<QSize> itemTargetSizes;
     bool crop = false;
     bool unloadOffscreen = false;
     // The thumbnailResolution setting (size of the cached thumbnails).
@@ -47,6 +50,11 @@ struct ThumbnailRequestConfig {
     [[nodiscard]] QSize targetSizeFor(int pos, int dirCount) const {
         if (pos >= 0 && pos < dirCount && folderTargetSize.isValid() && !folderTargetSize.isEmpty())
             return folderTargetSize;
+        if (pos >= 0 && pos < itemTargetSizes.size()) {
+            const QSize &itemSize = itemTargetSizes.at(pos);
+            if (itemSize.isValid() && !itemSize.isEmpty())
+                return itemSize;
+        }
         return targetSize;
     }
 
@@ -302,8 +310,8 @@ signals:
     void sourceSizesChanged();
     void imageSizesWantedChanged();
     void selectionChanged();
-    // Requests the thumbnails of indices for the target box (device pixels).
-    void thumbnailsNeeded(const QList<int> &indices, QSize targetSize, bool crop, bool force);
+    // Requests thumbnails for the listed items with per-item target boxes (device pixels).
+    void thumbnailsNeeded(const QList<ThumbnailItemRequest> &requests, bool crop, bool force);
     void activated(int index);
     void dragOutRequested();
     void backNavigationRequested();

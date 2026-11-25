@@ -8,6 +8,8 @@
 
 #include <QDropEvent>
 
+#include "gui/thumbnailitemrequest.h"
+
 class Thumbnail;
 class QString;
 
@@ -51,8 +53,8 @@ public:
 
 //signals
     virtual void itemActivated(int) = 0;
-    // Indices, target box in device pixels, crop, force.
-    virtual void thumbnailsRequested(QList<int>, QSize, bool, bool) = 0;
+    // Requested items with per-item target boxes in device pixels, crop, force.
+    virtual void thumbnailsRequested(QList<ThumbnailItemRequest>, bool, bool) = 0;
     virtual void draggedOut() = 0;
     virtual void draggedOver(int) = 0;
     virtual void droppedInto(QList<QUrl>, QObject*, int, Qt::DropAction) = 0;
