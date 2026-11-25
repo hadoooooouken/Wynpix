@@ -185,19 +185,19 @@ Item {
                         size: panel.buttonSize
                         glyph: FluentIcons.ZoomIn20
                         enabled: panel.controller.canIncreasePreviewSize
-                        autoRepeat: true
-                        autoRepeatDelay: panel.pageRepeatDelay
-                        autoRepeatInterval: panel.pageRepeatInterval
-                        onPressed: panel.controller.increasePreviewSize()
+                        repeatHold: true
+                        repeatDelay: panel.pageRepeatDelay
+                        repeatInterval: panel.pageRepeatInterval
+                        onTriggered: panel.controller.increasePreviewSize()
                     }
                     PanelButton {
                         size: panel.buttonSize
                         glyph: FluentIcons.ZoomOut20
                         enabled: panel.controller.canDecreasePreviewSize
-                        autoRepeat: true
-                        autoRepeatDelay: panel.pageRepeatDelay
-                        autoRepeatInterval: panel.pageRepeatInterval
-                        onPressed: panel.controller.decreasePreviewSize()
+                        repeatHold: true
+                        repeatDelay: panel.pageRepeatDelay
+                        repeatInterval: panel.pageRepeatInterval
+                        onTriggered: panel.controller.decreasePreviewSize()
                     }
                 }
             }
@@ -321,6 +321,15 @@ Item {
         // Checked look (the pinned state, the masonry mode), not toggled by a
         // press.
         property bool active: false
+        // Hold-to-repeat via triggered() after release or after repeatDelay,
+        // avoiding QQuickAbstractButton's stuck repeat when disabled on press.
+        property bool repeatHold: false
+        property int repeatDelay: 0
+        property int repeatInterval: 0
+        property bool holding: false
+        property bool repeated: false
+
+        signal triggered()
 
         implicitWidth: size
         implicitHeight: size
@@ -328,6 +337,33 @@ Item {
         hoverEnabled: true
 
         Accessible.role: Accessible.Button
+
+        onPressed: {
+            if (repeatHold) {
+                repeated = false;
+                holding = true;
+            }
+        }
+        onReleased: holding = false
+        onCanceled: holding = false
+        onEnabledChanged: {
+            if (!enabled)
+                holding = false;
+        }
+        onClicked: {
+            if (repeatHold && !repeated)
+                triggered();
+        }
+
+        Timer {
+            interval: button.repeated ? button.repeatInterval : button.repeatDelay
+            running: button.repeatHold && button.holding && button.down && button.enabled
+            repeat: true
+            onTriggered: {
+                button.repeated = true;
+                button.triggered();
+            }
+        }
 
         background: Rectangle {
             readonly property color surface: button.down ? Theme.tokens.fillPressed

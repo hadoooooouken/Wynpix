@@ -419,6 +419,29 @@ Item {
             compare(Fixture.lastPreviewSizeRequest, previewSizeMin);
             verify(!zoomOut.enabled);
 
+            // Increasing immediately after disabling "-" at minimum must not bounce back.
+            mouseClick(zoomIn);
+            compare(panel.controller.previewSize, previewSizeMin + previewSizeStep);
+            compare(Fixture.lastPreviewSizeRequest, previewSizeMin + previewSizeStep);
+            verify(zoomOut.enabled);
+            wait(panel.pageRepeatDelay + panel.pageRepeatInterval);
+            compare(panel.controller.previewSize, previewSizeMin + previewSizeStep);
+
+            // Holding "-" down to minimum and then clicking "+" also stays increased.
+            mousePress(zoomOut);
+            tryVerify(() => panel.controller.previewSize === previewSizeMin,
+                      createTimeout, "holding - did not reach minimum");
+            mouseRelease(zoomOut);
+            verify(!zoomOut.enabled);
+            mouseClick(zoomIn);
+            compare(panel.controller.previewSize, previewSizeMin + previewSizeStep);
+            wait(panel.pageRepeatDelay + panel.pageRepeatInterval);
+            compare(panel.controller.previewSize, previewSizeMin + previewSizeStep);
+
+            mouseClick(zoomOut);
+            compare(panel.controller.previewSize, previewSizeMin);
+            verify(!zoomOut.enabled);
+
             // Holding "+" triggers auto-repeat steps.
             mousePress(zoomIn);
             tryVerify(() => panel.controller.previewSize >= previewSizeMin + 2 * previewSizeStep,
