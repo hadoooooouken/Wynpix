@@ -1,4 +1,5 @@
 #include "directorypresenter.h"
+#include "components/thumbnailer/thumbnailgeometry.h"
 #include <QGuiApplication>
 #include <QDir>
 #include <QPainter>
@@ -1045,12 +1046,9 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
   // The cover's native size in the folder pixmap's device pixels.
   QSize coverSize(qRound(innerThumb.width() * devicePixelRatio / innerDpr),
                   qRound(innerThumb.height() * devicePixelRatio / innerDpr));
-  auto toEvenSize = [](QSize size) noexcept {
-    return QSize(size.width() > 1 ? (size.width() & ~1) : size.width(),
-                 size.height() > 1 ? (size.height() & ~1) : size.height());
-  };
 
-  const QSize windowSize = toEvenSize(windowRect.size().toSize());
+  const QSize windowSize =
+      ThumbnailGeometry::evenSize(windowRect.size().toSize());
 
   // Keep tiny source images at their native size. Scaling them up here would
   // bake the enlargement into the composed folder pixmap, so the no-upscale
@@ -1060,7 +1058,7 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
     coverSize.scale(windowSize, Qt::KeepAspectRatio);
     // Scaled covers are rounded to even dimensions to preserve symmetric
     // margins inside the folder icon without affecting tiny native icons.
-    coverSize = toEvenSize(coverSize);
+    coverSize = ThumbnailGeometry::evenSize(coverSize);
   }
   if (coverSize.isEmpty()) {
     qWarning() << "Folder cover for" << dirName

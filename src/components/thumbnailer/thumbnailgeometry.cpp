@@ -121,4 +121,9 @@ CacheDecodePlan planCacheDecode(QSize cachedSize, QSize orientedOriginalSize,
   };
 }
 
+QSize evenSize(QSize size) noexcept {
+  return QSize(size.width() > 1 ? (size.width() & ~1) : size.width(),
+               size.height() > 1 ? (size.height() & ~1) : size.height());
+}
+
 } // namespace ThumbnailGeometry

@@ -156,6 +156,13 @@ private slots:
     QCOMPARE(tinyHit.desiredOutput, tinySource);
     QVERIFY(tinyHit.cacheSufficient);
   }
+
+  void evenSizeRoundsDownToNearestEven() {
+    QCOMPARE(ThumbnailGeometry::evenSize({0, 0}), QSize(0, 0));
+    QCOMPARE(ThumbnailGeometry::evenSize({1, 1}), QSize(1, 1));
+    QCOMPARE(ThumbnailGeometry::evenSize({3, 5}), QSize(2, 4));
+    QCOMPARE(ThumbnailGeometry::evenSize({438, 278}), QSize(438, 278));
+  }
 };
 
 int runThumbnailGeometryTests(int argc, char **argv) {

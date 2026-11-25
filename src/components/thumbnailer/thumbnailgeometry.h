@@ -60,4 +60,7 @@ struct CacheDecodePlan {
                                               QSize targetBox, bool crop,
                                               int baseResolution);
 
+// Rounds dimensions down to the nearest even integer (keeping 0 or 1 untouched).
+[[nodiscard]] QSize evenSize(QSize size) noexcept;
+
 } // namespace ThumbnailGeometry
