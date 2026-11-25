@@ -61,6 +61,8 @@ struct ThumbnailStripLayout {
     Q_PROPERTY(int pageButtonCount READ pageButtonCount CONSTANT FINAL)
 
 public:
+    // Floor for direct layout inputs (e.g. test fixtures); user-facing settings
+    // and panel controls bound to SettingsScales::kMinPanelSizePixels.
     static constexpr int kMinimumPreviewSize = 20;
     static constexpr int kMaximumPreviewSize = SettingsScales::kMaxPanelSizePixels;
     // Padding between the cell surface and the thumbnail area.
