@@ -1102,6 +1102,62 @@ private slots:
     QCOMPARE(model.requestConfig().folderTargetSize, QSize(240, 180));
   }
 
+  void stripMasonryRequestsPerItemTileSizes() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    settings.panel.autoThumbnailResolution = true;
+    ThumbnailPanelController panel(model, settings);
+    panel.setDevicePixelRatio(1.5);
+    QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
+    model.populate(3, 1, {QSize(), QSize(1000, 1000), QSize(4000, 1000)});
+    model.setViewport(0.0, kViewExtent);
+    model.setActive(true);
+
+    QCOMPARE(requests.count(), 1);
+    const auto batch = requests.first().at(0).value<QList<ThumbnailItemRequest>>();
+    QCOMPARE(batch.size(), 3);
+    QCOMPARE(batch.at(0).targetSize, QSize(288, 216));
+    QCOMPARE(batch.at(1).targetSize, QSize(216, 216));
+    QCOMPARE(batch.at(2).targetSize, QSize(864, 216));
+  }
+
+  void stripMasonryUsesSharedBoxWhenAutoIsOff() {
+    ThumbnailListModel model;
+    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+    settings.panel.previewsSize = kDefaultPreviewSize;
+    settings.panel.masonry = true;
+    settings.panel.autoThumbnailResolution = false;
+    ThumbnailPanelController panel(model, settings);
+    panel.setDevicePixelRatio(1.5);
+    QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
+    model.populate(3, 1, {QSize(), QSize(1000, 1000), QSize(4000, 1000)});
+    QVERIFY(model.requestConfig().itemTargetSizes.isEmpty());
+    model.setViewport(0.0, kViewExtent);
+    model.setActive(true);
+
+    QCOMPARE(requests.count(), 1);
+    const auto batch = requests.first().at(0).value<QList<ThumbnailItemRequest>>();
+    QCOMPARE(batch.size(), 3);
+    QCOMPARE(batch.at(0).targetSize, QSize(288, 216));
+    QCOMPARE(batch.at(1).targetSize, QSize(864, 216));
+    QCOMPARE(batch.at(2).targetSize, QSize(864, 216));
+  }
+
+  void autoCacheResolutionToggleReloadsThumbnails() {
+    ThumbnailListModel model;
+    QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
+    prepare(model, 2);
+    model.setThumbnail(0, entryOf(100, 75));
+    QVERIFY(isLoaded(model, 0));
+    requests.clear();
+    model.configure({.targetSize = kRequestSize, .autoCacheResolution = true});
+    QVERIFY(!isLoaded(model, 0));
+    QCOMPARE(requests.count(), 1);
+    QCOMPARE(requestedIndices(requests.first()), (QList<int>{0, 1}));
+  }
+
   void masonryRowsFollowTheSizesOfTheImages() {
     ThumbnailListModel model;
     UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);

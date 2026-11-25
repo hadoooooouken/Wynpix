@@ -15,6 +15,7 @@
 #include "gui/quick/ui/folderview/folderviewcontroller.h"
 #include "gui/quick/ui/folderview/formatfiltermodel.h"
 #include "gui/quick/ui/thumbnails/thumbnaillistmodel.h"
+#include "gui/quick/ui/thumbnails/tileaspect.h"
 #include "testsuites.h"
 
 namespace {
@@ -154,6 +155,12 @@ private slots:
     // Auto is off by default: masonry uses the shared box, not per-item targets.
     QVERIFY(masonryRequest.itemTargetSizes.isEmpty());
 
+    UiSettingsSnapshot autoSettings = folderSettings();
+    autoSettings.folderView.masonry = true;
+    autoSettings.panel.autoThumbnailResolution = true;
+    fixture.grid.applySettings(autoSettings);
+    QCOMPARE(fixture.model.requestConfig().itemTargetSizes.size(), fixture.model.itemCount());
+
     fixture.grid.setMasonryEnabled(false);
     QCOMPARE(fixture.model.requestConfig().folderTargetSize, gridFolderTarget);
     QCOMPARE(fixture.model.requestConfig().targetSize, gridFolderTarget);
@@ -257,6 +264,32 @@ private slots:
     }
     QVERIFY(sawFolders);
     QVERIFY(sawImages);
+  }
+
+  void masonryRequestsPerItemTileSizesForWideAndTallImages() {
+    GridFixture fixture(0);
+    UiSettingsSnapshot settings = folderSettings();
+    settings.folderView.masonry = true;
+    settings.panel.autoThumbnailResolution = true;
+    fixture.grid.applySettings(settings);
+    fixture.grid.setDevicePixelRatio(1.5);
+
+    QSignalSpy requests(&fixture.model, &ThumbnailListModel::thumbnailsNeeded);
+    const QList<QSize> knownSizes{QSize(4000, 1000), QSize(1000, 4000)};
+    fixture.model.populate(2, 0, knownSizes);
+
+    QTRY_VERIFY(!requests.isEmpty());
+
+    const auto batch = requests.last().at(0).value<QList<ThumbnailItemRequest>>();
+    QCOMPARE(batch.size(), 2);
+    QVERIFY(batch.at(0).targetSize.width() > batch.at(0).targetSize.height() * 3);
+    QVERIFY(batch.at(1).targetSize.height() > batch.at(1).targetSize.width() * 3);
+    fixture.grid.tiles()->setViewport(0.0, kViewHeight);
+    const QVariant layout0 = fixture.grid.tiles()->data(
+        fixture.grid.tiles()->index(0, 0), MasonryTilesModel::CellLayoutRole);
+    const ThumbnailStripLayout cell0 = layout0.value<ThumbnailStripLayout>();
+    QCOMPARE(batch.at(0).targetSize,
+             TileAspect::deviceTileSize(QSizeF(cell0.cellWidth, cell0.cellHeight), 1.5));
   }
 
   void populateWithKnownSizesPopulatesSourceSizesImmediately() {

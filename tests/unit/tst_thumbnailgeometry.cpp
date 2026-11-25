@@ -106,6 +106,56 @@ private slots:
     }
     QCOMPARE(ThumbnailGeometry::outputBox({edge, edge}, true), QSize(edge, edge));
   }
+
+  void exifOrientationTranspositionMatchesRotationCases() {
+    for (int o = 0; o <= 3; ++o)
+      QVERIFY(!ThumbnailGeometry::isExifOrientationTransposed(o));
+    for (int o = 4; o <= 7; ++o)
+      QVERIFY(ThumbnailGeometry::isExifOrientationTransposed(o));
+    QCOMPARE(ThumbnailGeometry::orientSize({640, 160}, false), QSize(640, 160));
+    QCOMPARE(ThumbnailGeometry::orientSize({640, 160}, true), QSize(160, 640));
+  }
+
+  void cachePlanTriggersUpgradeAndToleratesOnePixelRounding() {
+    // 4:1 panorama, base resolution 256, tile asks for 576x144.
+    const QSize source(4000, 1000);
+    const auto upgradePlan = ThumbnailGeometry::planCacheDecode(
+        QSize(256, 64), source, QSize(576, 144), false, 256);
+    QCOMPARE(upgradePlan.desiredOutput, QSize(576, 144));
+    QVERIFY(!upgradePlan.cacheSufficient);
+    QCOMPARE(upgradePlan.decodeBox, QSize(576, 256));
+
+    // Once upgraded to 576x144, equal or smaller tiles hit cache.
+    QVERIFY(ThumbnailGeometry::planCacheDecode(
+                QSize(576, 144), source, QSize(576, 144), false, 256)
+                .cacheSufficient);
+    QVERIFY(ThumbnailGeometry::planCacheDecode(
+                QSize(576, 144), source, QSize(384, 96), false, 256)
+                .cacheSufficient);
+
+    // Non-round aspect (4000x1013): 576x145 cached satisfies 576x146 within 1 px.
+    const QSize dirtySource(4000, 1013);
+    const auto dirtyPlan = ThumbnailGeometry::planCacheDecode(
+        QSize(576, 145), dirtySource, QSize(576, 146), false, 256);
+    QCOMPARE(dirtyPlan.desiredOutput, QSize(576, 146));
+    QVERIFY(dirtyPlan.cacheSufficient);
+  }
+
+  void cachePlanDoesNotLoopAtCacheCeilingOrNativeSize() {
+    const QSize largeSource(8000, 2000);
+    const auto missPlan = ThumbnailGeometry::planCacheDecode(
+        QSize(), largeSource, QSize(2400, 600), false, 256);
+    QCOMPARE(missPlan.decodeBox, QSize(2048, 640));
+    const auto cappedHit = ThumbnailGeometry::planCacheDecode(
+        QSize(2048, 512), largeSource, QSize(2400, 600), false, 256);
+    QVERIFY(cappedHit.cacheSufficient);
+
+    const QSize tinySource(200, 50);
+    const auto tinyHit = ThumbnailGeometry::planCacheDecode(
+        tinySource, tinySource, QSize(600, 150), false, 256);
+    QCOMPARE(tinyHit.desiredOutput, tinySource);
+    QVERIFY(tinyHit.cacheSufficient);
+  }
 };
 
 int runThumbnailGeometryTests(int argc, char **argv) {
