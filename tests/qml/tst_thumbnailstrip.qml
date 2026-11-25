@@ -88,13 +88,19 @@ Item {
             return result;
         }
 
-        function findButtonByGlyph(item, glyph) {
+        function findButtonsByGlyph(item, glyph) {
+            const matches = [];
             const buttons = collectButtons(item);
             for (let i = 0; i < buttons.length; ++i) {
                 if (buttons[i].glyph === glyph)
-                    return buttons[i];
+                    matches.push(buttons[i]);
             }
-            return null;
+            return matches;
+        }
+
+        function findButtonByGlyph(item, glyph) {
+            const matches = findButtonsByGlyph(item, glyph);
+            return matches.length > 0 ? matches[0] : null;
         }
 
         // The strip's ListView once the asynchronous content exists.
@@ -467,6 +473,38 @@ Item {
             mouseClick(zoomIn);
             compare(Fixture.lastPreviewSizeRequest, previewSizeMin);
             verify(panel.width > previousWidth);
+        }
+
+        function test_pageButtonsLiveAtTopOfSecondaryBar() {
+            pinnedAt(SettingsEnums.PanelPosition.Bottom);
+            Fixture.setPanelPreviewsSize(previewSizeMin);
+            const view = list();
+            Fixture.populateThumbnails(50);
+
+            const pageButtons = findButtonsByGlyph(panel, FluentIcons.ChevronDown20);
+            compare(pageButtons.length, 2);
+            const backward = pageButtons[0];
+            const forward = pageButtons[1];
+            const bPos = backward.mapToItem(panel, 0, 0);
+            const fPos = forward.mapToItem(panel, 0, 0);
+            const inPos = findButtonByGlyph(panel, FluentIcons.ZoomIn20).mapToItem(panel, 0, 0);
+            // Left column (secondary bar), above the preview size buttons.
+            verify(bPos.x < panel.width / 2 && fPos.x < panel.width / 2);
+            verify(bPos.y < fPos.y && fPos.y < inPos.y);
+            verify(!backward.enabled);
+            verify(forward.enabled);
+
+            mouseClick(forward);
+            tryVerify(() => view.contentX > 0, createTimeout, "forward page button did not scroll");
+            verify(backward.enabled);
+
+            // In a vertical panel the page buttons sit at the bottom-right end.
+            pinnedAt(SettingsEnums.PanelPosition.Left);
+            const vbPos = backward.mapToItem(panel, 0, 0);
+            const vfPos = forward.mapToItem(panel, 0, 0);
+            const vOutPos = findButtonByGlyph(panel, FluentIcons.ZoomOut20).mapToItem(panel, 0, 0);
+            verify(vbPos.y > panel.height / 2 && vfPos.y > panel.height / 2);
+            verify(vbPos.x > vOutPos.x && vfPos.x > vbPos.x);
         }
 
         function test_floatingPanelSlidesIn() {

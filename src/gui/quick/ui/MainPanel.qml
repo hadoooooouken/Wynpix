@@ -61,11 +61,7 @@ Item {
     // enough for each page scroll to finish and be seen.
     readonly property int pageRepeatDelay: 500
     readonly property int pageRepeatInterval: 250
-    // Buttons along the button group besides the page buttons: the settings,
-    // folder view, pin and strip mode buttons and the exit button when it is
-    // shown.
-    readonly property int fixedButtonCount: stripLayout.fixedButtonCount
-                                            + (controller.exitButtonVisible ? 1 : 0)
+    // Buttons along the secondary bar: preview size +/- and page buttons.
     readonly property int pageButtonCount: stripLayout.pageButtonCount
     readonly property int previewSizeButtonCount: 2
 
@@ -164,8 +160,8 @@ Item {
             }
 
             // Button bar on the opposite end of the strip (left for a
-            // horizontal panel, bottom for a vertical one), with preview size
-            // +/- controls anchored at the bottom-left.
+            // horizontal panel, bottom for a vertical one): page buttons at the
+            // top/right end and preview size +/- controls at the bottom-left.
             Item {
                 id: secondaryButtons
 
@@ -173,6 +169,44 @@ Item {
                 height: panel.horizontal ? parent.height : panel.buttonSize + panel.buttonSpacing
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
+
+                // Page buttons, backward before forward: top to bottom beside a
+                // horizontal strip, left to right below a vertical one. Left
+                // out when the bar is too short for them alongside +/-.
+                Grid {
+                    flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
+                    columns: panel.horizontal ? 1 : panel.pageButtonCount
+                    anchors.left: panel.horizontal ? parent.left : undefined
+                    anchors.right: panel.horizontal ? undefined : parent.right
+                    anchors.top: panel.horizontal ? parent.top : undefined
+                    anchors.bottom: panel.horizontal ? undefined : parent.bottom
+                    anchors.margins: panel.buttonInset
+                    visible: (panel.previewSizeButtonCount + panel.pageButtonCount) * panel.buttonSize
+                             - panel.buttonSpacing
+                             <= (panel.horizontal ? secondaryButtons.height : secondaryButtons.width)
+
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.ChevronDown20
+                        glyphRotation: panel.horizontal ? StyleConstants.quarterTurn
+                                                        : 2 * StyleConstants.quarterTurn
+                        enabled: panel.controller.model.canScrollBackward
+                        repeatHold: true
+                        repeatDelay: panel.pageRepeatDelay
+                        repeatInterval: panel.pageRepeatInterval
+                        onTriggered: panel.controller.model.scrollPage(false)
+                    }
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.ChevronDown20
+                        glyphRotation: panel.horizontal ? -StyleConstants.quarterTurn : 0
+                        enabled: panel.controller.model.canScrollForward
+                        repeatHold: true
+                        repeatDelay: panel.pageRepeatDelay
+                        repeatInterval: panel.pageRepeatInterval
+                        onTriggered: panel.controller.model.scrollPage(true)
+                    }
+                }
 
                 Grid {
                     flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
@@ -210,13 +244,12 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
 
-                // Near the strip end: exit, folder view, pin, then the page
-                // buttons (top to bottom or right to left); the strip mode
+                // Near the strip end: exit, folder view, pin; the strip mode
                 // and settings buttons at the far end.
                 Grid {
                     flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
                     layoutDirection: panel.horizontal ? Qt.LeftToRight : Qt.RightToLeft
-                    columns: panel.horizontal ? 1 : 4
+                    columns: panel.horizontal ? 1 : 3
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.margins: panel.buttonInset
@@ -239,45 +272,10 @@ Item {
                         active: panel.controller.pinned
                         onPressed: panel.controller.togglePinned()
                     }
-
-                    // Page buttons, backward before forward: top to bottom
-                    // beside a horizontal strip, left to right above a
-                    // vertical one. They scroll the strip by a page and
-                    // press again while held. The chevrons point along the
-                    // strip. Left out when the panel is too short for them.
-                    Grid {
-                        flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
-                        columns: panel.horizontal ? 1 : panel.pageButtonCount
-                        visible: (panel.fixedButtonCount + panel.pageButtonCount) * panel.buttonSize
-                                 + 2 * panel.buttonInset
-                                 <= (panel.horizontal ? buttons.height : buttons.width)
-
-                        PanelButton {
-                            size: panel.buttonSize
-                            glyph: FluentIcons.ChevronDown20
-                            glyphRotation: panel.horizontal ? StyleConstants.quarterTurn
-                                                            : 2 * StyleConstants.quarterTurn
-                            enabled: panel.controller.model.canScrollBackward
-                            autoRepeat: true
-                            autoRepeatDelay: panel.pageRepeatDelay
-                            autoRepeatInterval: panel.pageRepeatInterval
-                            onPressed: panel.controller.model.scrollPage(false)
-                        }
-                        PanelButton {
-                            size: panel.buttonSize
-                            glyph: FluentIcons.ChevronDown20
-                            glyphRotation: panel.horizontal ? -StyleConstants.quarterTurn : 0
-                            enabled: panel.controller.model.canScrollForward
-                            autoRepeat: true
-                            autoRepeatDelay: panel.pageRepeatDelay
-                            autoRepeatInterval: panel.pageRepeatInterval
-                            onPressed: panel.controller.model.scrollPage(true)
-                        }
-                    }
                 }
 
                 // The settings button ends the group; the strip mode button
-                // is next to it, towards the page buttons.
+                // is next to it.
                 PanelButton {
                     id: settingsButton
 
