@@ -57,7 +57,6 @@ struct ThumbnailStripLayout {
     Q_PROPERTY(int buttonSize READ buttonSize CONSTANT FINAL)
     Q_PROPERTY(int buttonSpacing READ buttonSpacing CONSTANT FINAL)
     Q_PROPERTY(int borderWidth READ borderWidth CONSTANT FINAL)
-    Q_PROPERTY(int fixedButtonCount READ fixedButtonCount CONSTANT FINAL)
     Q_PROPERTY(int pageButtonCount READ pageButtonCount CONSTANT FINAL)
 
 public:
@@ -144,7 +143,6 @@ public:
     [[nodiscard]] int buttonSize() const { return kButtonSize; }
     [[nodiscard]] int buttonSpacing() const { return kButtonSpacing; }
     [[nodiscard]] int borderWidth() const { return kBorderWidth; }
-    [[nodiscard]] int fixedButtonCount() const { return kFixedButtonCount; }
     [[nodiscard]] int pageButtonCount() const { return kPageButtonCount; }
 
     // The box, in device pixels, thumbnails are made for: the image area
