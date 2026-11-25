@@ -492,7 +492,7 @@ int Settings::panelPreviewsSize() {
   int size = settings->settingsConf->value("panelPreviewsSize", DefaultPanelPreviewsSize).toInt(&ok);
   if (!ok)
     size = DefaultPanelPreviewsSize;
-  size = qBound(100, size, 256);
+  size = qBound(MinPanelPreviewsSize, size, MaxPanelPreviewsSize);
   return size;
 }
 

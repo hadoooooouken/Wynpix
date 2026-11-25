@@ -554,6 +554,10 @@ QString SettingsEditorModel::panelHideDelayText(int ms) {
     return SettingsScales::panelHideDelayText(ms);
 }
 
+QString SettingsEditorModel::panelSizeText(int step) {
+    return SettingsScales::panelSizeText(step);
+}
+
 QString SettingsEditorModel::expandLimitText(int limit) {
     return SettingsScales::expandLimitText(limit);
 }

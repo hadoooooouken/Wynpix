@@ -12,6 +12,7 @@ static_assert(SettingsScales::kPanelHideDelayStepMs == Settings::PanelHideDelayS
 static_assert(SettingsScales::kMinThumbnailResolution == Settings::MinThumbnailResolution);
 static_assert(SettingsScales::kMaxThumbnailResolution == Settings::MaxThumbnailResolution);
 static_assert(SettingsScales::kThumbnailResolutionStep == Settings::ThumbnailResolutionStep);
+static_assert(SettingsScales::kMaxPanelSizePixels == Settings::MaxPanelPreviewsSize);
 
 namespace {
 using namespace SettingsScales;

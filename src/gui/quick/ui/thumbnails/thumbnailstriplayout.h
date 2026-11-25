@@ -62,7 +62,7 @@ struct ThumbnailStripLayout {
 
 public:
     static constexpr int kMinimumPreviewSize = 20;
-    static constexpr int kMaximumPreviewSize = 300;
+    static constexpr int kMaximumPreviewSize = SettingsScales::kMaxPanelSizePixels;
     // Padding between the cell surface and the thumbnail area.
     static constexpr int kPadding = 9;
     // Cell margins of a horizontal strip (top / bottom panel) and a vertical

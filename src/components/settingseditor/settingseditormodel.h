@@ -192,6 +192,7 @@ public:
     // Texts next to the sliders (SettingsScales).
     Q_INVOKABLE static QString autoResizeLimitText(int step);
     Q_INVOKABLE static QString panelHideDelayText(int ms);
+    Q_INVOKABLE static QString panelSizeText(int step);
     Q_INVOKABLE static QString expandLimitText(int limit);
     Q_INVOKABLE static QString zoomStepText(int percent);
     Q_INVOKABLE static QString casValueText(int percent);

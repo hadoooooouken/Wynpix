@@ -1,5 +1,7 @@
-#include <QFont>
+#include <QColor>
+#include <QImage>
 #include <QSignalSpy>
+#include <QSize>
 #include <QTest>
 
 #include <memory>
@@ -27,10 +29,15 @@ constexpr int kTextHeight = 15;
 // A hide delay short enough to wait for.
 constexpr int kShortHideDelayMs = 10;
 constexpr int kWaitMarginMs = 100;
+constexpr int kTryTimeoutMs = 2000;
 // The default preview size: a 16:9 image is 256 wide in the masonry strip.
 constexpr int kDefaultPreviewSize = 256;
 constexpr QSize kLargeWindow(1200, 800);
 constexpr QSize kSmallWindow(600, 400);
+constexpr QSize kSampleImage(4, 3);
+constexpr QSize kWideImage(1920, 1080);
+constexpr QSize kClassicImage(1600, 1200);
+constexpr QSize kSquareImage(1000, 1000);
 
 // A width x height thumbnail, the answer to a request for targetSize.
 ThumbnailEntry entryOf(int width, int height, QSize targetSize = kRequestSize) {
@@ -40,6 +47,10 @@ ThumbnailEntry entryOf(int width, int height, QSize targetSize = kRequestSize) {
           .name = u"name"_s,
           .info = u"info"_s,
           .targetSize = targetSize};
+}
+
+ThumbnailEntry sampleEntry(QSize targetSize = kRequestSize) {
+  return entryOf(kSampleImage.width(), kSampleImage.height(), targetSize);
 }
 
 // Extracts requested item indices from a thumbnailsNeeded signal emission.
@@ -75,6 +86,13 @@ UiSettingsSnapshot panelSettings(bool pinned, Enums::PanelPosition position) {
   settings.panel.previewsSize = kThumbnailSize;
   settings.panel.hideDelayMs = kShortHideDelayMs;
   settings.viewer.mouseScrollingSpeed = 1.0;
+  return settings;
+}
+
+UiSettingsSnapshot masonrySettings() {
+  UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
+  settings.panel.previewsSize = kDefaultPreviewSize;
+  settings.panel.masonry = true;
   return settings;
 }
 
@@ -137,7 +155,9 @@ private slots:
   void layoutBoundsThePreviewSize() {
     QCOMPARE(thumbnailStripLayoutFor({.previewsSize = 5}).thumbnailSize,
              ThumbnailStripLayout::kMinimumPreviewSize);
-    QCOMPARE(thumbnailStripLayoutFor({.previewsSize = 500}).thumbnailSize,
+    QCOMPARE(thumbnailStripLayoutFor(
+                 {.previewsSize = ThumbnailStripLayout::kMaximumPreviewSize + 100})
+                 .thumbnailSize,
              ThumbnailStripLayout::kMaximumPreviewSize);
   }
 
@@ -233,22 +253,24 @@ private slots:
 
   //--- loading ----------------------------------------------------------------
   void requestsTheVisibleAndPreloadedItems() {
+    constexpr int kLastPreloaded =
+        static_cast<int>(kViewExtent + ThumbnailListModel::kStripPreloadDistance) / kItemExtent;
+    constexpr int kPreloadedCount = kLastPreloaded + 1;
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 1000);
     QCOMPARE(requests.count(), 1);
     const auto batch = requests.first().at(0).value<QList<ThumbnailItemRequest>>();
-    // 0 .. floor((500 + kStripPreloadDistance) / 100).
     QCOMPARE(batch.first().index, 0);
-    QCOMPARE(batch.last().index, 35);
-    QCOMPARE(batch.count(), 36);
+    QCOMPARE(batch.last().index, kLastPreloaded);
+    QCOMPARE(batch.count(), kPreloadedCount);
     QCOMPARE(batch.first().targetSize, kRequestSize);
     QCOMPARE(requests.first().at(2).toBool(), false);
 
     // Requested items are not requested again.
     model.setViewport(kItemExtent, kViewExtent);
     QCOMPARE(requests.count(), 2);
-    QCOMPARE(requestedIndices(requests.last()), QList<int>{36});
+    QCOMPARE(requestedIndices(requests.last()), QList<int>{kPreloadedCount});
   }
 
   void requestsNothingWhileInactiveOrBlocked() {
@@ -284,15 +306,15 @@ private slots:
     QSignalSpy ready(&model, &ThumbnailListModel::visibleThumbnailsReady);
     prepare(model, 3);
     QCOMPARE(ready.count(), 0);
-    model.setThumbnail(0, entryOf(4, 3));
+    model.setThumbnail(0, sampleEntry());
     model.setThumbnailUnavailable(1, kRequestSize);
     // Another target box is not the requested thumbnail.
-    model.setThumbnail(2, entryOf(4, 3, kRequestSize + QSize(1, 1)));
+    model.setThumbnail(2, sampleEntry(kRequestSize + QSize(1, 1)));
     QCOMPARE(ready.count(), 0);
     QVERIFY(!isLoaded(model, 2));
-    model.setThumbnail(2, entryOf(4, 3));
+    model.setThumbnail(2, sampleEntry());
     QCOMPARE(ready.count(), 1);
-    model.setThumbnail(2, entryOf(4, 3));
+    model.setThumbnail(2, sampleEntry());
     QCOMPARE(ready.count(), 1);
     QVERIFY(isLoaded(model, 0));
     QVERIFY(model.data(model.index(1), ThumbnailListModel::UnavailableRole).toBool());
@@ -306,7 +328,7 @@ private slots:
     QSignalSpy ready(&model, &ThumbnailListModel::visibleThumbnailsReady);
     prepare(model, 1);
     model.setThumbnailPending(0, true);
-    model.setThumbnail(0, entryOf(4, 3));
+    model.setThumbnail(0, sampleEntry());
     QCOMPARE(ready.count(), 0);
     QVERIFY(model.data(model.index(0), ThumbnailListModel::PendingRole).toBool());
     model.setThumbnailPending(0, false);
@@ -316,7 +338,7 @@ private slots:
   void insertAndRemoveShiftItems() {
     ThumbnailListModel model;
     prepare(model, 5);
-    model.setThumbnail(3, entryOf(4, 3));
+    model.setThumbnail(3, sampleEntry());
     model.select(3);
     model.insertItem(1);
     QCOMPARE(model.itemCount(), 6);
@@ -359,12 +381,12 @@ private slots:
     model.populate(1000);
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
-    model.setThumbnail(0, entryOf(4, 3));
+    model.setThumbnail(0, sampleEntry());
     QVERIFY(isLoaded(model, 0));
     model.setViewport(50000.0, kViewExtent);
     QVERIFY(!isLoaded(model, 0));
     // A thumbnail arriving out of range is not kept.
-    model.setThumbnail(1, entryOf(4, 3));
+    model.setThumbnail(1, sampleEntry());
     QVERIFY(!isLoaded(model, 1));
   }
 
@@ -376,8 +398,8 @@ private slots:
     model.populate(1000);
     model.setViewport(0.0, kViewExtent);
     // Results another view requested reach the hidden view.
-    model.setThumbnail(0, entryOf(4, 3));
-    model.setThumbnail(999, entryOf(4, 3));
+    model.setThumbnail(0, sampleEntry());
+    model.setThumbnail(999, sampleEntry());
     QVERIFY(isLoaded(model, 0));
     QVERIFY(!isLoaded(model, 999));
     QCOMPARE(requests.count(), 0);
@@ -432,7 +454,7 @@ private slots:
     model.setActive(true);
     model.select(kSelectedItem);
     model.focusOn(kSelectedItem);
-    model.setThumbnail(kSelectedItem, entryOf(4, 3));
+    model.setThumbnail(kSelectedItem, sampleEntry());
     // The right-button gesture to the end unloads the selected item.
     model.press(kSelectedItem, Qt::RightButton, Qt::NoModifier, {kPressX, 0});
     model.move({kPressX - ThumbnailListModel::kGestureThreshold - 1.0, 0}, Qt::RightButton);
@@ -465,7 +487,7 @@ private slots:
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
     // The folder grid requested the same path and size uncropped.
-    ThumbnailEntry uncropped = entryOf(4, 3);
+    ThumbnailEntry uncropped = sampleEntry();
     uncropped.cropped = false;
     model.setThumbnail(0, uncropped);
     QVERIFY(!isLoaded(model, 0));
@@ -475,7 +497,7 @@ private slots:
     model.setThumbnail(0, cropped);
     QVERIFY(isLoaded(model, 0));
     // A folder icon serves either crop.
-    model.setThumbnail(1, entryOf(4, 3));
+    model.setThumbnail(1, sampleEntry());
     QVERIFY(isLoaded(model, 1));
   }
 
@@ -484,6 +506,7 @@ private slots:
     // it is focused there (scrolled into view with half a row of margin).
     constexpr int kFocusedItem = 500;
     constexpr int kFirstFocusedItem = 496;
+    constexpr int kPrefetchWaitMs = ThumbnailListModel::kInactivePrefetchDelayMs + kWaitMarginMs;
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     model.configure({.targetSize = kRequestSize, .unloadOffscreen = true});
@@ -491,7 +514,7 @@ private slots:
     model.setInactivePrefetch(true);
     model.populate(1000);
     // Never laid out (the strip is not created yet): nothing to prefetch.
-    QTest::qWait(kWaitMarginMs);
+    QTest::qWait(kPrefetchWaitMs);
     QCOMPARE(requests.count(), 0);
     // Laid out, the hidden view requests its visible items, not the
     // preload range.
@@ -506,7 +529,7 @@ private slots:
     model.select(kFocusedItem);
     model.focusOn(kFocusedItem);
     QTRY_COMPARE(requests.count(), 2);
-    QTest::qWait(kWaitMarginMs);
+    QTest::qWait(kPrefetchWaitMs);
     QCOMPARE(requests.count(), 2);
     indices = requestedIndices(requests.last());
     QCOMPARE(indices.first(), kFirstFocusedItem);
@@ -520,7 +543,7 @@ private slots:
     model.setInactivePrefetch(false);
     model.select(0);
     model.focusOn(0);
-    QTest::qWait(kWaitMarginMs);
+    QTest::qWait(kPrefetchWaitMs);
     QCOMPARE(requests.count(), 3);
   }
 
@@ -530,7 +553,7 @@ private slots:
     prepare(model, 100, false);
     model.setLoadingBlocked(true);
     model.setInactivePrefetch(true);
-    QTest::qWait(kWaitMarginMs);
+    QTest::qWait(ThumbnailListModel::kInactivePrefetchDelayMs + kWaitMarginMs);
     QCOMPARE(requests.count(), 0);
     model.setLoadingBlocked(false);
     QTRY_COMPARE(requests.count(), 1);
@@ -540,7 +563,7 @@ private slots:
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 2);
-    model.setThumbnail(0, entryOf(4, 3));
+    model.setThumbnail(0, sampleEntry());
     requests.clear();
     model.configure({.targetSize = kRequestSize, .crop = true});
     QVERIFY(!isLoaded(model, 0));
@@ -553,7 +576,7 @@ private slots:
     ThumbnailListModel model;
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     prepare(model, 2);
-    model.setThumbnail(1, entryOf(4, 3));
+    model.setThumbnail(1, sampleEntry());
     requests.clear();
     model.reloadItem(1);
     // The loaded thumbnail stays until the new one arrives, so the item does
@@ -596,6 +619,7 @@ private slots:
   }
 
   void smoothWheelStepsAccumulate() {
+    constexpr qreal kWheelStep = 120 * ThumbnailListModel::kWheelScrollMultiplier;
     ThumbnailListModel model;
     prepare(model, 100);
     model.setScrollConfig({.itemExtent = kItemExtent,
@@ -607,7 +631,7 @@ private slots:
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     model.wheelScrolled({0, -120}, {});
     QCOMPARE(scrolls.count(), 1);
-    QCOMPARE(scrolls.first().at(0).toReal(), 1000.0 + 120 * ThumbnailListModel::kWheelScrollMultiplier);
+    QCOMPARE(scrolls.first().at(0).toReal(), 1000.0 + kWheelStep);
     QCOMPARE(scrolls.first().at(1).toInt(), ThumbnailListModel::kScrollDurationMs);
     // Nothing loads while the animation runs.
     requests.clear();
@@ -617,8 +641,7 @@ private slots:
     model.wheelScrolled({0, -120}, {});
     QCOMPARE(scrolls.count(), 2);
     QCOMPARE(scrolls.last().at(0).toReal(),
-             1300.0 + 120 * ThumbnailListModel::kWheelScrollMultiplier *
-                          ThumbnailListModel::kScrollAcceleration);
+             1000.0 + kWheelStep + kWheelStep * ThumbnailListModel::kScrollAcceleration);
     QVERIFY(scrolls.last().at(1).toInt() < ThumbnailListModel::kScrollDurationMs);
     // The view arrives; its end loads what came into range.
     model.setViewport(1720.0, kViewExtent);
@@ -649,6 +672,7 @@ private slots:
                            .smoothScroll = true,
                            .trackpadDetection = true});
     QSignalSpy scrolls(&model, &ThumbnailListModel::scrollRequested);
+    // Touchpad path picks the larger magnitude between angleDelta (-30) and pixelDelta (-12).
     model.wheelScrolled({0, -30}, {0, -12});
     QCOMPARE(scrolls.count(), 1);
     QCOMPARE(scrolls.first().at(0).toReal(), 30.0);
@@ -964,7 +988,7 @@ private slots:
     QVERIFY(!panel.isDocked());
     panel.pointerMoved(viewerPoint(), Qt::NoButton);
     QVERIFY(panel.isShown());
-    QTRY_VERIFY_WITH_TIMEOUT(!panel.isShown(), kShortHideDelayMs + kWaitMarginMs);
+    QTRY_VERIFY_WITH_TIMEOUT(!panel.isShown(), kTryTimeoutMs);
     QVERIFY(panel.isAnimated());
   }
 
@@ -1000,6 +1024,8 @@ private slots:
   }
 
   void leavingTheWindowHidesAfterTheGracePeriod() {
+    static_assert(kShortHideDelayMs + kWaitMarginMs <
+                  ThumbnailPanelController::kWindowExitMinimumHideDelayMs);
     ThumbnailListModel model;
     ThumbnailPanelController panel(model, panelSettings(false, Enums::PanelPosition::Bottom));
     panel.setWindowSize(kLargeWindow);
@@ -1007,9 +1033,7 @@ private slots:
     panel.pointerLeftWindow();
     QTest::qWait(kShortHideDelayMs + kWaitMarginMs);
     QVERIFY(panel.isShown());
-    QTRY_VERIFY_WITH_TIMEOUT(!panel.isShown(),
-                             ThumbnailPanelController::kWindowExitMinimumHideDelayMs +
-                                 kWaitMarginMs);
+    QTRY_VERIFY_WITH_TIMEOUT(!panel.isShown(), kTryTimeoutMs);
   }
 
   void fullscreenOnlyPanelShowsInFullscreen() {
@@ -1040,7 +1064,7 @@ private slots:
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
     // A fullscreen-only panel cannot appear in a window.
     panel.setWindowSize(kLargeWindow);
-    QTest::qWait(kWaitMarginMs);
+    QTest::qWait(ThumbnailListModel::kInactivePrefetchDelayMs + kWaitMarginMs);
     QCOMPARE(requests.count(), 0);
     panel.setFullscreen(true);
     QTRY_COMPARE(requests.count(), 1);
@@ -1093,10 +1117,7 @@ private slots:
 
   void masonryBoxFollowsTheDevicePixelRatio() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
+    ThumbnailPanelController panel(model, masonrySettings());
     panel.setDevicePixelRatio(1.25);
     QCOMPARE(model.requestConfig().targetSize, QSize(720, 180));
     QCOMPARE(model.requestConfig().folderTargetSize, QSize(240, 180));
@@ -1104,14 +1125,12 @@ private slots:
 
   void stripMasonryRequestsPerItemTileSizes() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
+    UiSettingsSnapshot settings = masonrySettings();
     settings.panel.autoThumbnailResolution = true;
     ThumbnailPanelController panel(model, settings);
     panel.setDevicePixelRatio(1.5);
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
-    model.populate(3, 1, {QSize(), QSize(1000, 1000), QSize(4000, 1000)});
+    model.populate(3, 1, {QSize(), kSquareImage, QSize(4000, 1000)});
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
 
@@ -1125,14 +1144,12 @@ private slots:
 
   void stripMasonryUsesSharedBoxWhenAutoIsOff() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
+    UiSettingsSnapshot settings = masonrySettings();
     settings.panel.autoThumbnailResolution = false;
     ThumbnailPanelController panel(model, settings);
     panel.setDevicePixelRatio(1.5);
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);
-    model.populate(3, 1, {QSize(), QSize(1000, 1000), QSize(4000, 1000)});
+    model.populate(3, 1, {QSize(), kSquareImage, QSize(4000, 1000)});
     QVERIFY(model.requestConfig().itemTargetSizes.isEmpty());
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
@@ -1160,11 +1177,8 @@ private slots:
 
   void masonryRowsFollowTheSizesOfTheImages() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
-    model.populate(3, 0, {QSize(1920, 1080), QSize(1600, 1200), QSize()});
+    ThumbnailPanelController panel(model, masonrySettings());
+    model.populate(3, 0, {kWideImage, kClassicImage, QSize()});
 
     auto layout = panel.masonry()->layout();
     QVERIFY(layout);
@@ -1179,20 +1193,19 @@ private slots:
 
     // A size that arrives later changes the layout in a step.
     model.setSourceSize(2, QSize(2000, 1000));
-    QTRY_COMPARE(panel.masonry()->layout()->itemRect(2).width(), qreal(288));
-    QCOMPARE(static_cast<const ItemRows *>(panel.masonry()->layout().get()),
-             model.scrollConfig().rows.get());
+    QTRY_VERIFY(panel.masonry()->layout() &&
+                panel.masonry()->layout()->itemRect(2).width() == qreal(288));
+    const auto updated = panel.masonry()->layout();
+    QVERIFY(updated);
+    QCOMPARE(static_cast<const ItemRows *>(updated.get()), model.scrollConfig().rows.get());
   }
 
   void masonryStripKeepsTheSelectedImageInPlaceWhenSizesArrive() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
+    ThumbnailPanelController panel(model, masonrySettings());
     constexpr int kCount = 40;
     constexpr int kSelected = 20;
-    QList<QSize> sizes(kCount, QSize(1600, 1200));
+    QList<QSize> sizes(kCount, kClassicImage);
     model.populate(kCount, 0, sizes);
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
@@ -1200,15 +1213,17 @@ private slots:
     model.focusOnSelection();
     QVERIFY(model.viewOffset() > 0.0);
     const auto before = panel.masonry()->layout();
+    QVERIFY(before);
     const qreal startBefore = before->rowStart(kSelected) - model.viewOffset();
 
     // The images in front of the selection turn out to be wider.
     QList<QPair<int, QSize>> wider;
     for (int item = 0; item < kSelected; ++item)
-      wider.append({item, QSize(1920, 1080)});
+      wider.append({item, kWideImage});
     model.setSourceSizes(wider);
     QTRY_VERIFY(panel.masonry()->layout() != before);
     const auto after = panel.masonry()->layout();
+    QVERIFY(after);
     QVERIFY(after->rowStart(kSelected) > before->rowStart(kSelected));
     // The selected image stays where it was in the view.
     QVERIFY(qAbs((after->rowStart(kSelected) - model.viewOffset()) - startBefore) <=
@@ -1217,25 +1232,21 @@ private slots:
 
   void masonryItemAtFindsTheTileUnderThePointer() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
-    model.populate(2, 0, {QSize(1920, 1080), QSize(1000, 1000)});
-    const QRectF second = panel.masonry()->layout()->itemRect(1);
+    ThumbnailPanelController panel(model, masonrySettings());
+    model.populate(2, 0, {kWideImage, kSquareImage});
+    const auto layout = panel.masonry()->layout();
+    QVERIFY(layout);
+    const QRectF second = layout->itemRect(1);
     QCOMPARE(panel.masonry()->itemAt(second.center().x(), second.center().y()), 1);
     QCOMPARE(panel.masonry()->itemAt(-10.0, second.center().y()), -1);
   }
 
   void masonryViewStaysInsideTheContentWhenItShrinks() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
+    ThumbnailPanelController panel(model, masonrySettings());
     constexpr int kCount = 40;
     constexpr int kRemoved = 20;
-    model.populate(kCount, 0, QList<QSize>(kCount, QSize(1600, 1200)));
+    model.populate(kCount, 0, QList<QSize>(kCount, kClassicImage));
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
     // The view is at the end of the strip.
@@ -1260,7 +1271,7 @@ private slots:
     ThumbnailPanelController panel(model, settings);
     constexpr int kCount = 60;
     constexpr int kSelected = 40;
-    model.populate(kCount, 0, QList<QSize>(kCount, QSize(1920, 1080)));
+    model.populate(kCount, 0, QList<QSize>(kCount, kWideImage));
     model.setViewport(0.0, kViewExtent);
     model.setActive(true);
     model.select(kSelected);
@@ -1285,13 +1296,10 @@ private slots:
 
   void populatingMakesTheLayoutOnce() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
+    ThumbnailPanelController panel(model, masonrySettings());
     QSignalSpy layouts(panel.masonry(), &StripMasonryController::layoutChanged);
     // The reset, the count and the folders of a population are one layout.
-    model.populate(30, 2, QList<QSize>(30, QSize(1920, 1080)));
+    model.populate(30, 2, QList<QSize>(30, kWideImage));
     QCOMPARE(layouts.count(), 1);
     // Items that come or go are another.
     model.removeItem(29);
@@ -1301,7 +1309,7 @@ private slots:
   void masonryModeIsOffWithoutTheSetting() {
     ThumbnailListModel model;
     ThumbnailPanelController panel(model, panelSettings(false, Enums::PanelPosition::Bottom));
-    model.populate(2, 0, {QSize(1920, 1080), QSize(1000, 1000)});
+    model.populate(2, 0, {kWideImage, kSquareImage});
     QVERIFY(!panel.masonry()->isEnabled());
     QVERIFY(!panel.masonry()->layout());
     QVERIFY(panel.masonry()->isReady());
@@ -1309,29 +1317,22 @@ private slots:
 
   void masonryWaitsForTheSizesAroundTheSelectionBeforeItIsReady() {
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
+    ThumbnailPanelController panel(model, masonrySettings());
     QSignalSpy ready(panel.masonry(), &StripMasonryController::readyChanged);
     model.populate(4, 0, {});
     QVERIFY(!panel.masonry()->isReady());
-    model.setSourceSizes({{0, QSize(1920, 1080)}, {1, QSize(1920, 1080)}, {2, QSize(1920, 1080)},
-                          {3, QSize(1920, 1080)}});
+    model.setSourceSizes({{0, kWideImage}, {1, kWideImage}, {2, kWideImage}, {3, kWideImage}});
     QVERIFY(panel.masonry()->isReady());
     QVERIFY(ready.count() >= 2);
   }
 
   void masonryGivesUpWaitingForSizesAfterTheGracePeriod() {
+    static_assert(kTryTimeoutMs > StripMasonryController::kGracePeriodMs);
     ThumbnailListModel model;
-    UiSettingsSnapshot settings = panelSettings(false, Enums::PanelPosition::Bottom);
-    settings.panel.previewsSize = kDefaultPreviewSize;
-    settings.panel.masonry = true;
-    ThumbnailPanelController panel(model, settings);
+    ThumbnailPanelController panel(model, masonrySettings());
     model.populate(4, 0, {});
     QVERIFY(!panel.masonry()->isReady());
-    QTRY_VERIFY_WITH_TIMEOUT(panel.masonry()->isReady(),
-                             StripMasonryController::kGracePeriodMs + kWaitMarginMs);
+    QTRY_VERIFY_WITH_TIMEOUT(panel.masonry()->isReady(), kTryTimeoutMs);
   }
 
   void matchesThumbnailsByTheTargetBoxNotByTheirPixels() {
@@ -1399,7 +1400,11 @@ private slots:
     QVERIFY(!model.scrollConfig().horizontal);
     QCOMPARE(model.scrollConfig().itemExtent, panel.layout().cellHeight);
     QVERIFY(model.scrollConfig().centerSelection);
-    // The slide blocks the requests.
+  }
+
+  void slideAnimationBlocksThumbnailRequests() {
+    ThumbnailListModel model;
+    ThumbnailPanelController panel(model, panelSettings(false, Enums::PanelPosition::Left));
     prepare(model, 3, false);
     model.configure({.targetSize = kRequestSize});
     QSignalSpy requests(&model, &ThumbnailListModel::thumbnailsNeeded);

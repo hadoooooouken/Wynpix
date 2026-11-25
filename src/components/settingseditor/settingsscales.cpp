@@ -17,6 +17,10 @@ constexpr int kFactorDecimals = 2;
 
 constexpr int kFastPngCompression = 3;
 constexpr int kBalancedPngCompression = 6;
+
+QString pixelsText(int pixels) {
+    return QString::number(pixels) + u" px"_s;
+}
 } // namespace
 
 namespace SettingsScales {
@@ -135,6 +139,10 @@ QString panelHideDelayText(int ms) {
     return QCoreApplication::translate(kContext, QT_TRANSLATE_NOOP("SettingsDialog", "%1 ms")).arg(ms);
 }
 
+QString panelSizeText(int step) {
+    return pixelsText(panelSizePixels(step));
+}
+
 QString expandLimitText(int limit) {
     if (limit == 0)
         return u"-"_s;
@@ -158,7 +166,7 @@ QString mouseScrollingSpeedText(int step) {
 }
 
 QString thumbnailResolutionText(int pixels) {
-    return QString::number(pixels) + u" px"_s;
+    return pixelsText(pixels);
 }
 
 QString pngCompressionText(int level) {

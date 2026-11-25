@@ -220,6 +220,7 @@ SettingsPage {
                 labelWidth: root.sliderLabelWidth
                 range: root.editor.ranges.panelSize
                 value: root.editor.view.panelSizeStep
+                valueText: root.editor.panelSizeText(value)
                 onMoved: value => root.editor.view.panelSizeStep = value
             }
             RowLayout {

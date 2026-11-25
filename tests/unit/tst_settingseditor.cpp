@@ -135,6 +135,8 @@ private slots:
         QCOMPARE(thumbnailResolutionText(256), u"256 px"_s);
         QCOMPARE(casValueText(5), u"0.05"_s);
         QCOMPARE(panelHideDelayText(600), u"600 ms"_s);
+        QCOMPARE(panelSizeText(32), u"256 px"_s);
+        QCOMPARE(panelSizeText(64), u"512 px"_s);
         QCOMPARE(pngCompressionText(0), u"Level 0 (None (Uncompressed))"_s);
         QCOMPARE(pngCompressionText(3), u"Level 3 (Fast)"_s);
         QCOMPARE(pngCompressionText(6), u"Level 6 (Balanced)"_s);
@@ -202,6 +204,7 @@ private slots:
         EditorFixture f;
         f.values.stored.advanced.thumbnailResolution = 250;
         f.values.stored.view.panelHideDelayMs = 2600;
+        f.values.stored.view.panelSizeStep = 100;
         f.values.stored.upscale.limitPercent = 402;
         f.values.stored.view.zoomStepPercent = 0;
         f.values.stored.advanced.memoryLimitMB = 100;
@@ -209,6 +212,8 @@ private slots:
         editor.load();
         QCOMPARE(editor.advanced().thumbnailResolution, 256);
         QCOMPARE(editor.view().panelHideDelayMs, SettingsScales::kMaxPanelHideDelayMs);
+        QCOMPARE(editor.view().panelSizeStep, SettingsScales::kPanelSizeMaxStep);
+        QCOMPARE(SettingsScales::panelSizePixels(editor.view().panelSizeStep), 512);
         QCOMPARE(editor.upscale().limitPercent, SettingsScales::kMaxUpscaylLimitPercent);
         QCOMPARE(editor.view().zoomStepPercent, SettingsScales::kMinZoomStepPercent);
         QCOMPARE(editor.advanced().memoryLimitMB, SettingsScales::kMinMemoryLimitMB);

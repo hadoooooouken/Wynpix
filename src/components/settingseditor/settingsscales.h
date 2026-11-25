@@ -82,7 +82,7 @@ inline constexpr int kMaxPanelHideDelayMs = 2'000;
 inline constexpr int kPanelHideDelayStepMs = 100;
 
 inline constexpr int kPanelSizeMinStep = 13;
-inline constexpr int kPanelSizeMaxStep = 32;
+inline constexpr int kPanelSizeMaxStep = 64;
 inline constexpr int kPanelSizePageStep = 5;
 inline constexpr int kPanelSizePixelsPerStep = 8;
 inline constexpr int kMinPanelSizePixels = kPanelSizeMinStep * kPanelSizePixelsPerStep;
@@ -152,6 +152,7 @@ inline constexpr int kUpscaylLimitPageStep = 25;
 // Texts next to the sliders.
 [[nodiscard]] QString autoResizeLimitText(int step);
 [[nodiscard]] QString panelHideDelayText(int ms);
+[[nodiscard]] QString panelSizeText(int step);
 [[nodiscard]] QString expandLimitText(int limit);
 [[nodiscard]] QString zoomStepText(int percent);
 [[nodiscard]] QString casValueText(int percent);
