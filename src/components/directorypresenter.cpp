@@ -549,7 +549,7 @@ void DirectoryPresenter::onThumbnailReady(std::shared_ptr<Thumbnail> thumb,
             directoryIndex,
             composeFolderThumbnail(
                 task.targetSize, model->dirNameAt(directoryIndex),
-                *innerPixmap));
+                *innerPixmap, thumb->sourceSize()));
       }
       view->setThumbnailPending(directoryIndex, false);
     }
@@ -1008,7 +1008,8 @@ DirectoryPresenter::defaultFolderPixmap(QSize targetSize)
 std::shared_ptr<Thumbnail>
 DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
                                            const QString &dirName,
-                                           const QPixmap &innerThumb) {
+                                           const QPixmap &innerThumb,
+                                           QSize coverSourceSize) {
   const std::shared_ptr<QPixmap> defaultPixmap =
       defaultFolderPixmap(targetSize);
   if (!defaultPixmap)
@@ -1050,16 +1051,10 @@ DirectoryPresenter::composeFolderThumbnail(QSize targetSize,
   const QSize windowSize =
       ThumbnailGeometry::evenSize(windowRect.size().toSize());
 
-  // Keep tiny source images at their native size. Scaling them up here would
-  // bake the enlargement into the composed folder pixmap, so the no-upscale
-  // logic in ThumbnailItem could no longer recover the original dimensions.
-  if (coverSize.width() > windowSize.width() ||
-      coverSize.height() > windowSize.height()) {
-    coverSize.scale(windowSize, Qt::KeepAspectRatio);
-    // Scaled covers are rounded to even dimensions to preserve symmetric
-    // margins inside the folder icon without affecting tiny native icons.
-    coverSize = ThumbnailGeometry::evenSize(coverSize);
-  }
+  // Keep tiny native sources unscaled here: once enlargement is baked into
+  // the folder pixmap, ThumbnailItem can no longer recover original dimensions.
+  coverSize =
+      ThumbnailGeometry::folderCoverSize(coverSize, coverSourceSize, windowSize);
   if (coverSize.isEmpty()) {
     qWarning() << "Folder cover for" << dirName
                << "has no drawable size; showing the plain folder icon";

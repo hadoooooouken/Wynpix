@@ -126,4 +126,27 @@ QSize evenSize(QSize size) noexcept {
                size.height() > 1 ? (size.height() & ~1) : size.height());
 }
 
+QSize folderCoverSize(QSize coverSize, QSize sourceSize, QSize windowSize) {
+  if (coverSize.isEmpty() || windowSize.isEmpty())
+    return {};
+
+  const bool hasKnownSource = !sourceSize.isEmpty();
+  const QSize maxBox =
+      hasKnownSource
+          ? minBounds(windowSize,
+                      sizeInThumbnailOrientation(coverSize, sourceSize))
+          : windowSize;
+  if (!hasKnownSource && coverSize.width() <= maxBox.width() &&
+      coverSize.height() <= maxBox.height()) {
+    return coverSize;
+  }
+
+  const QSize fitted = coverSize.scaled(maxBox, Qt::KeepAspectRatio);
+  if (fitted == coverSize)
+    return coverSize;
+  // Scaled covers are rounded to even dimensions to keep margins inside the
+  // folder icon symmetric without clipping tiny native sources.
+  return evenSize(fitted);
+}
+
 } // namespace ThumbnailGeometry

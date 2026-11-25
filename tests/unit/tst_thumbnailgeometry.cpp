@@ -163,6 +163,42 @@ private slots:
     QCOMPARE(ThumbnailGeometry::evenSize({3, 5}), QSize(2, 4));
     QCOMPARE(ThumbnailGeometry::evenSize({438, 278}), QSize(438, 278));
   }
+
+  void folderCoverFillsWindowForCacheCappedLargeSourcesOnly() {
+    const QSize window(438, 278);
+
+    // Empty inputs produce an empty size.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({}, {4000, 3000}, window), QSize());
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({256, 192}, {4000, 3000}, {}), QSize());
+
+    // Cache-capped 256px thumbnail for a 4000x3000 image scales up to fill window.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({256, 192}, {4000, 3000}, window),
+             QSize(370, 278));
+    // Panorama from a large source fills window width cleanly with even height.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({256, 100}, {5120, 2000}, window),
+             QSize(438, 170));
+    // Portrait cover with EXIF-transposed raw source smaller than window (200x300 oriented).
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({192, 256}, {300, 200}, window),
+             QSize(200, 266));
+    // Source larger than cached cover yet smaller than window caps enlargement cleanly.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({256, 171}, {300, 200}, window),
+             QSize(298, 200));
+    // Oversized cover still shrinks to fit window.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({512, 384}, {4000, 3000}, window),
+             QSize(370, 278));
+
+    // Tiny native sources keep their original dimensions without enlarging.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({64, 64}, {64, 64}, window),
+             QSize(64, 64));
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({65, 65}, {65, 65}, window),
+             QSize(65, 65));
+
+    // Without known source dimensions, never upscale small covers.
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({256, 192}, {}, window),
+             QSize(256, 192));
+    QCOMPARE(ThumbnailGeometry::folderCoverSize({512, 384}, {}, window),
+             QSize(370, 278));
+  }
 };
 
 int runThumbnailGeometryTests(int argc, char **argv) {

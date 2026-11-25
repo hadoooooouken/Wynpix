@@ -172,7 +172,8 @@ private:
     std::shared_ptr<Thumbnail>
     defaultFolderThumbnail(QSize targetSize, const QString &dirName);
     std::shared_ptr<Thumbnail> composeFolderThumbnail(
-        QSize targetSize, const QString &dirName, const QPixmap &innerThumb);
+        QSize targetSize, const QString &dirName, const QPixmap &innerThumb,
+        QSize coverSourceSize);
     static QString thumbnailPathKey(const QString &path);
     int directoryIndexForPath(const QString &path) const;
     void invalidateFolderThumbnailRequests();

@@ -63,4 +63,10 @@ struct CacheDecodePlan {
 // Rounds dimensions down to the nearest even integer (keeping 0 or 1 untouched).
 [[nodiscard]] QSize evenSize(QSize size) noexcept;
 
+// Computes the pixel size of a folder's embedded cover inside windowSize.
+// Allows a cache-capped cover (e.g. 256 px when Auto is off) to fill a larger
+// folder icon up to sourceSize, while keeping tiny native sources unscaled.
+[[nodiscard]] QSize folderCoverSize(QSize coverSize, QSize sourceSize,
+                                    QSize windowSize);
+
 } // namespace ThumbnailGeometry
