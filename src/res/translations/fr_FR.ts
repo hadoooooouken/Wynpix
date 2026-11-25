@@ -1033,8 +1033,8 @@
         <translation>Qualité (1 - la plus basse, 100 - la plus haute)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="730"/>
         <location filename="../../components/batchconverter/batchjobrules.cpp" line="488"/>
+        <location filename="../../gui/quick/ui/BatchConverterDialog.qml" line="730"/>
         <source>Stopping...</source>
         <translation>Arrêt en cours...</translation>
     </message>
@@ -1467,211 +1467,211 @@ Total des fichiers : %3</translation>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../core.cpp" line="774"/>
+        <location filename="../../core.cpp" line="780"/>
         <source>Updated: </source>
         <translation>Mise à jour : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="781"/>
+        <location filename="../../core.cpp" line="787"/>
         <source>Welcome to </source>
         <translation>Bienvenue dans </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="782"/>
+        <location filename="../../core.cpp" line="788"/>
         <source> version </source>
         <translation> version </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="800"/>
+        <location filename="../../core.cpp" line="806"/>
         <source>Shuffle mode: OFF</source>
         <translation>Mode aléatoire : DÉSACTIVÉ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="803"/>
+        <location filename="../../core.cpp" line="809"/>
         <source>Shuffle mode: ON</source>
         <translation>Mode aléatoire : ACTIVÉ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="812"/>
+        <location filename="../../core.cpp" line="818"/>
         <source>Slideshow: OFF</source>
         <translation>Diaporama : DÉSACTIVÉ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="816"/>
+        <location filename="../../core.cpp" line="822"/>
         <source>Slideshow: ON</source>
         <translation>Diaporama : ACTIVÉ</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1024"/>
+        <location filename="../../core.cpp" line="1030"/>
         <source>Delete </source>
         <translation>Effacer </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1033"/>
         <source> folders permanently?</source>
         <translation> dossiers définitivement?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1030"/>
+        <location filename="../../core.cpp" line="1036"/>
         <source> files permanently?</source>
         <translation> fichiers définitivement?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1033"/>
+        <location filename="../../core.cpp" line="1039"/>
         <source> items permanently?</source>
         <translation> les éléments de façon définitive ?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1042"/>
+        <location filename="../../core.cpp" line="1048"/>
         <source>Delete permanently</source>
         <translation>Supprimer définitivement</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1065"/>
+        <location filename="../../core.cpp" line="1071"/>
         <source>File removed</source>
         <translation>Élément supprimé</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1070"/>
+        <location filename="../../core.cpp" line="1076"/>
         <source>Removed: </source>
         <translation>Supprimé : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1075"/>
+        <location filename="../../core.cpp" line="1081"/>
         <source> files</source>
         <translation> fichiers</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1024"/>
+        <location filename="../../core.cpp" line="1030"/>
         <source>Move </source>
         <translation>Déplacer </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1033"/>
+        <location filename="../../core.cpp" line="1039"/>
         <source> items to trash?</source>
         <translation> éléments vers la corbeille ?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1042"/>
+        <location filename="../../core.cpp" line="1048"/>
         <source>Move to trash</source>
         <translation>Déplacer vers la corbeille</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1061"/>
+        <location filename="../../core.cpp" line="1067"/>
         <source>Folder moved to trash</source>
         <translation>Dossier déplacé vers la corbeille</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1064"/>
+        <location filename="../../core.cpp" line="1070"/>
         <source>Moved to trash</source>
         <translation>Déplacé vers la corbeille</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1070"/>
+        <location filename="../../core.cpp" line="1076"/>
         <source>Moved to trash: </source>
         <translation>Déplacé(s) vers la corbeille : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1165"/>
+        <location filename="../../core.cpp" line="1171"/>
         <source>File copied</source>
         <translation>Fichier copié</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1172"/>
+        <location filename="../../core.cpp" line="1178"/>
         <source>Path copied</source>
         <translation>Chemin copié</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1287"/>
-        <location filename="../../core.cpp" line="1471"/>
-        <location filename="../../core.cpp" line="1494"/>
+        <location filename="../../core.cpp" line="1293"/>
+        <location filename="../../core.cpp" line="1477"/>
+        <location filename="../../core.cpp" line="1500"/>
         <source>File exists</source>
         <translation>Le fichier existe</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1287"/>
+        <location filename="../../core.cpp" line="1293"/>
         <source>Overwrite file?</source>
         <translation>Écraser le fichier ?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1379"/>
+        <location filename="../../core.cpp" line="1385"/>
         <source>Add folder</source>
         <translation>Ajouter un dossier</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1379"/>
+        <location filename="../../core.cpp" line="1385"/>
         <source>Folder name:</source>
         <translation>Nom du dossier :</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1386"/>
+        <location filename="../../core.cpp" line="1392"/>
         <source>Folder already exists</source>
         <translation>Le dossier existe déjà</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1395"/>
+        <location filename="../../core.cpp" line="1401"/>
         <source>Failed to create folder</source>
         <translation>Impossible de créer le dossier</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1469"/>
+        <location filename="../../core.cpp" line="1475"/>
         <source>File moved.</source>
         <translation>Fichier déplacé.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1472"/>
-        <location filename="../../core.cpp" line="1495"/>
+        <location filename="../../core.cpp" line="1478"/>
+        <location filename="../../core.cpp" line="1501"/>
         <source>Destination file exists. Overwrite?</source>
         <translation>Le fichier de destination existe déjà. L&apos;écraser ?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1492"/>
+        <location filename="../../core.cpp" line="1498"/>
         <source>File copied.</source>
         <translation>Fichier copié.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1660"/>
+        <location filename="../../core.cpp" line="1666"/>
         <source>Perform action &quot;</source>
         <translation>Exécuter action &quot;</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1661"/>
+        <location filename="../../core.cpp" line="1667"/>
         <source>Changes will be saved immediately.</source>
         <translation>Les modifications seront immédiatement enregistrées.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1726"/>
+        <location filename="../../core.cpp" line="1732"/>
         <source>Flip horizontal</source>
         <translation>Renversement horizontal</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1731"/>
+        <location filename="../../core.cpp" line="1737"/>
         <source>Flip vertical</source>
         <translation>Renversement vertical</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1736"/>
+        <location filename="../../core.cpp" line="1742"/>
         <source>Rotate</source>
         <translation>Tourner</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1717"/>
+        <location filename="../../core.cpp" line="1723"/>
         <source>Resize</source>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1867"/>
+        <location filename="../../core.cpp" line="1873"/>
         <source>AI resize finished, but the image has changed.</source>
         <translation>Redimensionnement par l&apos;IA terminé, mais l&apos;image a changé.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1888"/>
-        <location filename="../../core.cpp" line="1899"/>
+        <location filename="../../core.cpp" line="1894"/>
+        <location filename="../../core.cpp" line="1905"/>
         <source>Crop</source>
         <translation>Recadrer</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1989"/>
+        <location filename="../../core.cpp" line="1995"/>
         <source>File saved</source>
         <translation>Fichier enregistré</translation>
     </message>
@@ -1691,24 +1691,24 @@ Total des fichiers : %3</translation>
         <translation>Impossible d&apos;enregistrer le fichier : la récupération automatique a échoué (erreur Windows %1)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2078"/>
         <location filename="../../core.cpp" line="2084"/>
+        <location filename="../../core.cpp" line="2090"/>
         <source>Set wallpaper: file not supported</source>
         <translation>Définir le fond d&apos;écran : fichier non pris en charge</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2108"/>
-        <location filename="../../core.cpp" line="2117"/>
+        <location filename="../../core.cpp" line="2114"/>
+        <location filename="../../core.cpp" line="2123"/>
         <source>Could not open image</source>
         <translation>Impossible d&apos;ouvrir l&apos;image</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2112"/>
+        <location filename="../../core.cpp" line="2118"/>
         <source>Can only print static images</source>
         <translation>Ne peut imprimer que des images statiques</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="314"/>
+        <location filename="../../core.cpp" line="315"/>
         <source>AI Upscaling...</source>
         <translation>Mise à l&apos;échelle IA...</translation>
     </message>
@@ -1859,78 +1859,78 @@ Copie intermédiaire :
         <translation>Impossible de préparer le transfert de l&apos;image</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="281"/>
+        <location filename="../../core.cpp" line="282"/>
         <source>Failed to clean up temporary image-transfer data: %1</source>
         <translation>Impossible de nettoyer les données temporaires du transfert d&apos;image : %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="309"/>
+        <location filename="../../core.cpp" line="310"/>
         <source>Set wallpaper: failed to clean up wallpaper file: %1</source>
         <translation>Définir le fond d&apos;écran : échec du nettoyage du fichier du fond d&apos;écran : %1</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="428"/>
-        <location filename="../../core.cpp" line="1436"/>
+        <location filename="../../core.cpp" line="433"/>
+        <location filename="../../core.cpp" line="1442"/>
         <source>Failed to clear thumbnail cache</source>
         <translation>Impossible de vider le cache des miniatures</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1038"/>
+        <location filename="../../core.cpp" line="1044"/>
         <source>Delete folder permanently?</source>
         <translation>Supprimer le dossier définitivement?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1040"/>
+        <location filename="../../core.cpp" line="1046"/>
         <source>Delete file permanently?</source>
         <translation>Supprimer le fichier définitivement?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1062"/>
+        <location filename="../../core.cpp" line="1068"/>
         <source>Folder removed</source>
         <translation>Dossier supprimé</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1073"/>
+        <location filename="../../core.cpp" line="1079"/>
         <source> folders</source>
         <translation> dossiers</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1077"/>
+        <location filename="../../core.cpp" line="1083"/>
         <source> items</source>
         <translation> éléments</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1027"/>
+        <location filename="../../core.cpp" line="1033"/>
         <source> folders to trash?</source>
         <translation> dossiers vers la corbeille?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1030"/>
+        <location filename="../../core.cpp" line="1036"/>
         <source> files to trash?</source>
         <translation> fichiers vers la corbeille?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1037"/>
+        <location filename="../../core.cpp" line="1043"/>
         <source>Move folder to trash?</source>
         <translation>Déplacer le dossier vers la corbeille?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1040"/>
+        <location filename="../../core.cpp" line="1046"/>
         <source>Move file to trash?</source>
         <translation>Déplacer le fichier vers la corbeille?</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1418"/>
+        <location filename="../../core.cpp" line="1424"/>
         <source>Moving: %1 (%2)</source>
         <translation>Déplacement : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1419"/>
+        <location filename="../../core.cpp" line="1425"/>
         <source>Copying: %1 (%2)</source>
         <translation>Copie : %1 (%2)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1428"/>
+        <location filename="../../core.cpp" line="1434"/>
         <source>Moved %n file(s)</source>
         <translation>
             <numerusform>%n fichier déplacé</numerusform>
@@ -1938,7 +1938,7 @@ Copie intermédiaire :
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../core.cpp" line="1429"/>
+        <location filename="../../core.cpp" line="1435"/>
         <source>Copied %n file(s)</source>
         <translation>
             <numerusform>%n fichier copié</numerusform>
@@ -1946,107 +1946,107 @@ Copie intermédiaire :
         </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1674"/>
-        <location filename="../../core.cpp" line="1802"/>
+        <location filename="../../core.cpp" line="1680"/>
+        <location filename="../../core.cpp" line="1808"/>
         <source>%1 failed: the image could not be edited.</source>
         <translation>Échec de %1 : impossible de modifier l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1751"/>
-        <location filename="../../core.cpp" line="1776"/>
+        <location filename="../../core.cpp" line="1757"/>
+        <location filename="../../core.cpp" line="1782"/>
         <source>AI resize is already running.</source>
         <translation>Le redimensionnement IA est déjà en cours.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1760"/>
+        <location filename="../../core.cpp" line="1766"/>
         <source>AI resize supports one image at a time.</source>
         <translation>Le redimensionnement IA ne supporte qu&apos;une seule image à la fois.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1782"/>
         <location filename="../../core.cpp" line="1788"/>
+        <location filename="../../core.cpp" line="1794"/>
         <source>Could not resize image.</source>
         <translation>Impossible de redimensionner l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1823"/>
+        <location filename="../../core.cpp" line="1829"/>
         <source>AI resizing...</source>
         <translation>Redimensionnement par l&apos;IA...</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1854"/>
+        <location filename="../../core.cpp" line="1860"/>
         <source>AI resize failed.</source>
         <translation>Le redimensionnement par l&apos;IA a échoué.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1859"/>
+        <location filename="../../core.cpp" line="1865"/>
         <source>AI resize finished, but the image is no longer in the list.</source>
         <translation>Redimensionnement par l&apos;IA terminé, mais l&apos;image n&apos;est plus dans la liste.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1877"/>
+        <location filename="../../core.cpp" line="1883"/>
         <source>AI resize finished.</source>
         <translation>Redimensionnement par l&apos;IA terminé.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1879"/>
+        <location filename="../../core.cpp" line="1885"/>
         <source>AI resize finished for %1.</source>
         <translation>Redimensionnement par l&apos;IA terminé pour %1.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="1925"/>
+        <location filename="../../core.cpp" line="1931"/>
         <source>Could not adjust the image colors.</source>
         <translation>Impossible d&apos;ajuster les couleurs de l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2090"/>
+        <location filename="../../core.cpp" line="2096"/>
         <source>Set wallpaper: failed to get image</source>
         <translation>Définir le fond d&apos;écran : échec de récupération de l&apos;image</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="297"/>
+        <location filename="../../core.cpp" line="298"/>
         <source>Wallpaper set</source>
         <translation>Fond d&apos;écran défini</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2201"/>
+        <location filename="../../core.cpp" line="2207"/>
         <source>Could not open path: </source>
         <translation>Impossible d&apos;ouvrir le chemin : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2268"/>
+        <location filename="../../core.cpp" line="2274"/>
         <source>Could not load folder: </source>
         <translation>Impossible de charger le dossier : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2363"/>
-        <location filename="../../core.cpp" line="2389"/>
+        <location filename="../../core.cpp" line="2369"/>
+        <location filename="../../core.cpp" line="2395"/>
         <source>Could not enumerate sibling folders: </source>
         <translation>Impossible d&apos;énumérer les dossiers voisins : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2518"/>
+        <location filename="../../core.cpp" line="2524"/>
         <source>End of directory.</source>
         <translation>Fin du répertoire.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2552"/>
+        <location filename="../../core.cpp" line="2558"/>
         <source>Load failed: </source>
         <translation>Échec du chargement : </translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2633"/>
-        <location filename="../../core.cpp" line="2640"/>
+        <location filename="../../core.cpp" line="2639"/>
+        <location filename="../../core.cpp" line="2646"/>
         <source>Error: could not load image.</source>
         <translation>Erreur : impossible de charger l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2657"/>
+        <location filename="../../core.cpp" line="2663"/>
         <source>HDR Profile</source>
         <translation>Profil HDR</translation>
     </message>
     <message>
-        <location filename="../../core.cpp" line="2663"/>
+        <location filename="../../core.cpp" line="2669"/>
         <source>MaxCLL / MaxFALL</source>
         <translation>MaxCLL / MaxFALL</translation>
     </message>
@@ -2157,22 +2157,14 @@ Copie intermédiaire :
 <context>
     <name>DirectoryPresenter</name>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="713"/>
+        <location filename="../../components/directorypresenter.cpp" line="738"/>
         <source>Directory expansion failed: %1</source>
         <translation>Échec du parcours du dossier : %1</translation>
     </message>
     <message>
-        <location filename="../../components/directorypresenter.cpp" line="757"/>
+        <location filename="../../components/directorypresenter.cpp" line="782"/>
         <source>Directory expansion stopped because the selection contains more than %1 supported files. Narrow the selection and try again.</source>
         <translation>Le parcours des dossiers a été arrêté, car la sélection contient plus de %1 fichiers pris en charge. Réduisez la sélection et réessayez.</translation>
-    </message>
-    <message>
-        <location filename="../../components/directorypresenter.cpp" line="924"/>
-        <location filename="../../components/directorypresenter.cpp" line="991"/>
-        <location filename="../../components/directorypresenter.cpp" line="1045"/>
-        <location filename="../../components/directorypresenter.cpp" line="1076"/>
-        <source>Folder</source>
-        <translation>Dossier</translation>
     </message>
 </context>
 <context>
@@ -2479,12 +2471,12 @@ Copie intermédiaire :
 <context>
     <name>ImageInfoOverlay</name>
     <message>
-        <location filename="../../gui/quick/ui/ImageInfoOverlay.qml" line="42"/>
+        <location filename="../../gui/quick/ui/ImageInfoOverlay.qml" line="76"/>
         <source>Image info</source>
         <translation>Informations sur l&apos;image</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/ImageInfoOverlay.qml" line="59"/>
+        <location filename="../../gui/quick/ui/ImageInfoOverlay.qml" line="93"/>
         <source>&lt;no metadata found&gt;</source>
         <translation>&lt;aucune métadonnée trouvée&gt;</translation>
     </message>
@@ -3365,6 +3357,7 @@ Copie intermédiaire :
     </message>
     <message>
         <location filename="../../components/settingseditor/settingsoptions.cpp" line="59"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="63"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
@@ -3399,8 +3392,8 @@ Copie intermédiaire :
         <translation>Aucun modèle d&apos;IA trouvé dans le dossier models/.</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="71"/>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="72"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="93"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="94"/>
         <source>Unlimited</source>
         <translation>Illimité</translation>
     </message>
@@ -3455,7 +3448,7 @@ Copie intermédiaire :
         <translation>Style d&apos;affichage :</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsscales.cpp" line="135"/>
+        <location filename="../../components/settingseditor/settingsscales.cpp" line="139"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
@@ -3480,7 +3473,7 @@ Copie intermédiaire :
         <translation>Taille de l&apos;aperçu :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="230"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="231"/>
         <source>Position:</source>
         <translation>Position :</translation>
     </message>
@@ -3586,7 +3579,7 @@ Copie intermédiaire :
         <translation>Adapter à la hauteur</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="59"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="81"/>
         <source>Thumbnail cache size limit:</source>
         <translation>Limite de taille du cache des miniatures</translation>
     </message>
@@ -3794,12 +3787,12 @@ Signalez les problèmes / proposez des fonctionnalités [ici](https://github.com
         <translation>Disposition en mosaïque</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="242"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="243"/>
         <source>Scaling quality</source>
         <translation>Qualité de mise à l&apos;échelle</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="248"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="249"/>
         <source>Scaling filter:</source>
         <translation>Filtre de mise à l&apos;échelle :</translation>
     </message>
@@ -3965,8 +3958,8 @@ Signalez les problèmes / proposez des fonctionnalités [ici](https://github.com
         <translation>Molette vers le bas</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="21"/>
         <location filename="../../components/settingseditor/actionshortcutmodel.cpp" line="38"/>
+        <location filename="../../gui/quick/ui/SettingsScriptsPage.qml" line="21"/>
         <source>Scripts</source>
         <translation>Scripts</translation>
     </message>
@@ -4001,7 +3994,7 @@ Signalez les problèmes / proposez des fonctionnalités [ici](https://github.com
         <translation>Chargement d&apos;images « voisines » en arrière-plan</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="47"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="53"/>
         <source>Thumbnail cache resolution:</source>
         <translation>Résolution du cache des miniatures:</translation>
     </message>
@@ -4017,58 +4010,63 @@ Results in a much faster image switching (at the expense of wasting more RAM).</
         <translation>Utiliser le cache des vignettes (recommandé)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="105"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="68"/>
+        <source>Automatically match tile resolution (1:1) up to 2048 px, using the slider value as the minimum</source>
+        <translation>Adapter automatiquement la résolution de la tuile (1:1) jusqu&apos;à 2048 px, en utilisant la valeur du curseur comme minimum</translation>
+    </message>
+    <message>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="127"/>
         <source>Paths to folders that should not be cached, separated by &apos;;&apos;.
 Example: %1</source>
         <translation>Chemins des dossiers à ne pas mettre en cache, séparés par &apos;;&apos;. Exemple : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="111"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="133"/>
         <source>Unload off-screen thumbnails</source>
         <translation>« Décharger » les vignettes hors écran</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="116"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="138"/>
         <source>Dynamically unload items to save memory</source>
         <translation>« Décharger » dynamiquement les éléments pour économiser de la mémoire</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="121"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
         <source>Saving</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="124"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="146"/>
         <source>Show save overlay when editing images</source>
         <translation>Afficher la fenêtre d&apos;enregistrement lors de l&apos;édition d&apos;images</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="129"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="151"/>
         <source>Skip save overlay for rotate/flip only</source>
         <translation>Ignorer la fenêtre d&apos;enregistrement uniquement pour pivoter/retourner</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="135"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="157"/>
         <source>JPEG save quality:</source>
         <translation>Qualité d&apos;enregistrement JPEG :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="162"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="184"/>
         <source>Confirm moving to trash</source>
         <translation>Confirmer le déplacement vers la corbeille</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="167"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="189"/>
         <source>Confirm file delete (!)</source>
         <translation>Confirmer la suppression du fichier (!)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="172"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="194"/>
         <source>Allow multiple instances</source>
         <translation>Autoriser plusieurs instances</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="180"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="202"/>
         <source>Memory allocation limit per image, MB:</source>
         <translation>Limite d&apos;allocation de mémoire par image, en MB :</translation>
     </message>
@@ -4140,37 +4138,37 @@ Example: %1</source>
         <translation>FidelityFX-CAS (GPU)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="262"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="263"/>
         <source>Sharpness:</source>
         <translation>Netteté :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="269"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="270"/>
         <source>Contrast:</source>
         <translation>Contraste :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="143"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="165"/>
         <source>Modern formats quality (WebP, JXL, AVIF):</source>
         <translation>Qualité des formats modernes (WebP, JXL, AVIF) :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="151"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="173"/>
         <source>PNG compression level:</source>
         <translation>Niveau de compression PNG :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="279"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="280"/>
         <source>Color Management</source>
         <translation>Gestion des couleurs</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="282"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="283"/>
         <source>Enable color management</source>
         <translation>Activer la gestion des couleurs</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="291"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="292"/>
         <source>Monitor profile:</source>
         <translation>Profil du moniteur :</translation>
     </message>
@@ -4220,12 +4218,12 @@ Example: %1</source>
         <translation>Profil personnalisé (.icc/.icm)...</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="305"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="306"/>
         <source>Profile file:</source>
         <translation>Fichier de profil :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="313"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="314"/>
         <source>Browse...</source>
         <translation>Parcourir...</translation>
     </message>
@@ -4240,17 +4238,17 @@ Example: %1</source>
         <translation>Profils de couleur (*.icc *.icm)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="320"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="321"/>
         <source>HDR Tone-Mapping</source>
         <translation>HDR Tone-Mapping</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="323"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="324"/>
         <source>Enable HDR Tone-Mapping</source>
         <translation>Activer le Tone-Mapping HDR</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="333"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="334"/>
         <source>Tone-mapping operator:</source>
         <translation>Opérateur de mappage tonal :</translation>
     </message>
@@ -4275,7 +4273,7 @@ Example: %1</source>
         <translation>Hable (Uncharted 2)</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="341"/>
+        <location filename="../../gui/quick/ui/SettingsViewPage.qml" line="342"/>
         <source>Target white level:</source>
         <translation>Niveau de blanc cible :</translation>
     </message>
@@ -4305,37 +4303,37 @@ Example: %1</source>
         <translation>Modifier raccourci</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsscales.cpp" line="167"/>
+        <location filename="../../components/settingseditor/settingsscales.cpp" line="175"/>
         <source>None (Uncompressed)</source>
         <translation>Aucune (Non compressé)</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsscales.cpp" line="169"/>
+        <location filename="../../components/settingseditor/settingsscales.cpp" line="177"/>
         <source>Fast</source>
         <translation>Rapide</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsscales.cpp" line="171"/>
+        <location filename="../../components/settingseditor/settingsscales.cpp" line="179"/>
         <source>Balanced</source>
         <translation>Équilibré</translation>
     </message>
     <message>
-        <location filename="../../components/settingseditor/settingsscales.cpp" line="173"/>
+        <location filename="../../components/settingseditor/settingsscales.cpp" line="181"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="82"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="104"/>
         <source>Current cache size:</source>
         <translation>Taille actuelle du cache :</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="88"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="110"/>
         <source>Clear</source>
         <translation>Vider</translation>
     </message>
     <message>
-        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="93"/>
+        <location filename="../../gui/quick/ui/SettingsAdvancedPage.qml" line="115"/>
         <source>Exclude paths from caching (separated by semicolon &apos;;&apos;):</source>
         <translation>Exclure des chemins du cache (séparés par un point-virgule &apos;;&apos;) :</translation>
     </message>
@@ -4348,8 +4346,8 @@ Example: %1</source>
 <context>
     <name>ShortcutCreatorDialog</name>
     <message>
-        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
         <location filename="../../components/settingseditor/shortcuteditormodel.cpp" line="52"/>
+        <location filename="../../gui/quick/ui/SettingsControlsPage.qml" line="291"/>
         <source>Add shortcut</source>
         <translation>Ajouter un raccourci</translation>
     </message>
