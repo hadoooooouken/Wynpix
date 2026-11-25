@@ -43,7 +43,7 @@ public:
   static constexpr int MaxThumbnailResolution = 2048;
   static constexpr int ThumbnailResolutionStep = 16;
   static constexpr int DefaultThumbnailResolution = 256;
-  static constexpr bool DefaultAutoThumbnailResolution = false;
+  static constexpr bool DefaultAutoThumbnailResolution = true;
   static constexpr double DefaultDevicePixelRatio = 1.0;
   static constexpr int DefaultPanelPreviewsSize = 256;
   static constexpr int DefaultFolderViewIconSize = 256;
