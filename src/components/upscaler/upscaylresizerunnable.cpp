@@ -31,7 +31,8 @@ void UpscaylResizeRunnable::run() {
 
     if (upscaled.size() != m_request.targetSize) {
         std::shared_ptr<const QImage> upscaledPtr = std::make_shared<const QImage>(upscaled);
-        upscaled = ImageLib::scaled(upscaledPtr, m_request.targetSize, m_request.filter);
+        upscaled = ImageLib::scaled(upscaledPtr, m_request.targetSize, m_request.filter,
+                                    ResolutionLimitMode::Upscayl);
     }
 
     if (upscaled.isNull()) {

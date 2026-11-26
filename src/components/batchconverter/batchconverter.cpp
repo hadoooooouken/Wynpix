@@ -69,36 +69,6 @@ QString destinationReservationKey(const QString &path) {
     return normalizedPath.toCaseFolded();
 }
 
-// Resolves the final per-file output size for a given bounding box, honoring
-// the selected AspectFitMode. Computed individually for every source image,
-// since files in a batch can have different aspect ratios.
-QSize computeAspectFitSize(const QSize &srcSize, const QSize &boundingSize,
-                           bool keepAspectRatio, AspectFitMode mode) {
-    if (!keepAspectRatio) {
-        return boundingSize;
-    }
-
-    switch (mode) {
-    case AspectFitMode::Width: {
-        if (srcSize.width() <= 0) {
-            return boundingSize;
-        }
-        const double scale = static_cast<double>(boundingSize.width()) / srcSize.width();
-        return QSize(boundingSize.width(), qRound(srcSize.height() * scale));
-    }
-    case AspectFitMode::Height: {
-        if (srcSize.height() <= 0) {
-            return boundingSize;
-        }
-        const double scale = static_cast<double>(boundingSize.height()) / srcSize.height();
-        return QSize(qRound(srcSize.width() * scale), boundingSize.height());
-    }
-    case AspectFitMode::Auto:
-    default:
-        return srcSize.scaled(boundingSize, Qt::KeepAspectRatio);
-    }
-}
-
 } // namespace
 
 class BatchConverterRunnable : public QRunnable {
@@ -146,29 +116,23 @@ public:
 
         QImage processedImg = srcImg;
 
-        QSize targetSize = m_job.targetSize;
-        if (m_job.resizeMode == ResizeMode::ByPercent) {
-            double scale = m_job.resizePercent / 100.0;
-            targetSize = QSize(qRound(srcImg.width() * scale), qRound(srcImg.height() * scale));
-        } else if (m_job.resizeMode == ResizeMode::ByMegapixels) {
-            targetSize = BatchJobRules::megapixelTarget(srcImg.size(), m_job.targetMegapixels,
-                                                        m_job.useBinaryMegapixel);
-        }
-        const bool exactTargetSize = m_job.resizeMode == ResizeMode::ByMegapixels;
-
         // "Upscayl" only makes sense when the target is actually larger
         // than this source image. A stale/persisted checkbox state must not
         // force every file in a downscale batch through the (much slower,
         // single-threaded) AI path - fall through to the regular resize
         // below instead.
-        QSize finalTarget = exactTargetSize
-                                ? targetSize
-                                : computeAspectFitSize(srcImg.size(), targetSize,
-                                                       m_job.keepAspectRatio,
-                                                       m_job.aspectFitMode);
-        bool wantsUpscayl = m_job.useUpscayl &&
-                             (finalTarget.width() > srcImg.width() ||
-                              finalTarget.height() > srcImg.height());
+        const BatchJobRules::FileResizePlan resizePlan =
+            BatchJobRules::resolveFileResizePlan(srcImg.size(), m_job);
+        const QSize finalTarget = resizePlan.finalTarget;
+        const bool wantsUpscayl = resizePlan.wantsUpscayl;
+        if (m_job.doResize) {
+            const QString limitError =
+                BatchJobRules::fileResolutionLimitError(finalTarget, wantsUpscayl);
+            if (!limitError.isEmpty()) {
+                notifyFinished(BatchItemState::Failed, limitError);
+                return;
+            }
+        }
 
         // Colour correction cost is proportional to the pixel count, so it runs
         // on the smaller image: before Upscayl / an upscale (the source is
@@ -237,14 +201,12 @@ public:
                 return;
             }
             processedImg = upscaled;
-            if (m_job.doResize && processedImg.size() != targetSize) {
+            if (m_job.doResize && processedImg.size() != finalTarget) {
                 if (m_cancelFlag->load()) {
                     notifyStopped();
                     return;
                 }
-                QImage resized = applyResize(processedImg, targetSize,
-                                             exactTargetSize ? false : m_job.keepAspectRatio,
-                                             m_job.aspectFitMode, m_job.scalingFilter);
+                QImage resized = applyResize(processedImg, resizePlan, m_job);
                 if (resized.isNull()) {
                     if (m_cancelFlag->load()) {
                         notifyStopped();
@@ -261,9 +223,7 @@ public:
                 notifyStopped();
                 return;
             }
-            QImage resized = applyResize(processedImg, targetSize,
-                                         exactTargetSize ? false : m_job.keepAspectRatio,
-                                         m_job.aspectFitMode, m_job.scalingFilter);
+            QImage resized = applyResize(processedImg, resizePlan, m_job);
             if (resized.isNull()) {
                 if (m_cancelFlag->load()) {
                     notifyStopped();
@@ -403,12 +363,20 @@ public:
     }
 
 private:
-    QImage applyResize(const QImage &img, const QSize &targetSize, bool keepAspect,
-                       AspectFitMode fitMode, int filter) {
-        if (img.isNull()) return QImage();
-        QSize finalSize = computeAspectFitSize(img.size(), targetSize, keepAspect, fitMode);
+    QImage applyResize(const QImage &img, const BatchJobRules::FileResizePlan &plan,
+                       const BatchJob &job) {
+        if (img.isNull())
+            return QImage();
+        const bool keepAspect = plan.exactTargetSize ? false : job.keepAspectRatio;
+        const QSize finalSize = BatchJobRules::computeAspectFitSize(
+            img.size(), plan.targetSize, keepAspect, job.aspectFitMode);
+        const ResolutionLimitMode limitMode = plan.wantsUpscayl
+                                                  ? ResolutionLimitMode::Upscayl
+                                                  : ResolutionLimitMode::Standard;
         std::shared_ptr<const QImage> imgPtr = std::make_shared<const QImage>(img);
-        return ImageLib::scaledForBatch(imgPtr, finalSize, static_cast<ScalingFilter>(filter));
+        return ImageLib::scaledForBatch(imgPtr, finalSize,
+                                        static_cast<ScalingFilter>(job.scalingFilter),
+                                        limitMode);
     }
 
     BatchConverter *m_converter;

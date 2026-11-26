@@ -20,11 +20,6 @@ constexpr QSize kFallbackOriginalSize(2560, 1440);
 constexpr double kPercentPerUnit = 100.0;
 constexpr double kIdentityScalePercent = 100.0;
 
-constexpr ResolutionLimits kResolutionLimits{.maximumSide = 12288, .maximumPixels = 100'000'000};
-// Upscayl output is larger than what the regular resize path is allowed to
-// produce.
-constexpr ResolutionLimits kUpscaylResolutionLimits{.maximumSide = 16384,
-                                                    .maximumPixels = 268'435'456};
 constexpr double kPixelsPerMegapixel = 1'000'000.0;
 
 constexpr qint64 kBytesPerKilobyte = 1024;
@@ -194,17 +189,76 @@ int defaultScalingFilterIndex() {
 }
 
 ResolutionLimits resolutionLimitsFor(bool useUpscayl) {
-    return useUpscayl ? kUpscaylResolutionLimits : kResolutionLimits;
+    return ScaleLimits::limitsFor(
+        useUpscayl ? ResolutionLimitMode::Upscayl : ResolutionLimitMode::Standard);
 }
 
 bool exceedsResolutionLimits(QSize target, bool useUpscayl) {
-    const ResolutionLimits limits = resolutionLimitsFor(useUpscayl);
-    return target.width() > limits.maximumSide || target.height() > limits.maximumSide ||
-           static_cast<qint64>(target.width()) * target.height() > limits.maximumPixels;
+    return ScaleLimits::exceedsLimits(
+        target, useUpscayl ? ResolutionLimitMode::Upscayl : ResolutionLimitMode::Standard);
 }
 
 bool upscaylApplies(ResizeMode mode, double resizePercent) {
     return !(mode == ResizeMode::ByPercent && resizePercent <= kIdentityScalePercent);
+}
+
+QSize computeAspectFitSize(QSize srcSize, QSize boundingSize, bool keepAspectRatio,
+                           AspectFitMode mode) {
+    if (!keepAspectRatio)
+        return boundingSize;
+
+    switch (mode) {
+    case AspectFitMode::Width: {
+        if (srcSize.width() <= 0)
+            return boundingSize;
+        const double scale = static_cast<double>(boundingSize.width()) / srcSize.width();
+        return QSize(boundingSize.width(), qRound(srcSize.height() * scale));
+    }
+    case AspectFitMode::Height: {
+        if (srcSize.height() <= 0)
+            return boundingSize;
+        const double scale = static_cast<double>(boundingSize.height()) / srcSize.height();
+        return QSize(qRound(srcSize.width() * scale), boundingSize.height());
+    }
+    case AspectFitMode::Auto:
+    default:
+        return srcSize.scaled(boundingSize, Qt::KeepAspectRatio);
+    }
+}
+
+FileResizePlan resolveFileResizePlan(QSize srcSize, const BatchJob &job) {
+    QSize targetSize = job.targetSize;
+    if (job.resizeMode == ResizeMode::ByPercent) {
+        const double scale = job.resizePercent / kPercentPerUnit;
+        targetSize = QSize(qRound(srcSize.width() * scale), qRound(srcSize.height() * scale));
+    } else if (job.resizeMode == ResizeMode::ByMegapixels) {
+        targetSize = megapixelTarget(srcSize, job.targetMegapixels, job.useBinaryMegapixel);
+    }
+    const bool exactTargetSize = job.resizeMode == ResizeMode::ByMegapixels;
+    const QSize finalTarget = exactTargetSize
+                                  ? targetSize
+                                  : computeAspectFitSize(srcSize, targetSize,
+                                                         job.keepAspectRatio, job.aspectFitMode);
+    const bool wantsUpscayl = job.doResize && job.useUpscayl &&
+                              (finalTarget.width() > srcSize.width() ||
+                               finalTarget.height() > srcSize.height());
+    return {.targetSize = targetSize,
+            .finalTarget = finalTarget,
+            .exactTargetSize = exactTargetSize,
+            .wantsUpscayl = wantsUpscayl};
+}
+
+QString fileResolutionLimitError(QSize finalTarget, bool useUpscayl) {
+    if (!exceedsResolutionLimits(finalTarget, useUpscayl))
+        return {};
+    const ResolutionLimits limits = resolutionLimitsFor(useUpscayl);
+    return QCoreApplication::translate(
+               "BatchConverter",
+               "Resolution Limit Exceeded (%1x%2, max %3 px / %4 MP)")
+        .arg(finalTarget.width())
+        .arg(finalTarget.height())
+        .arg(limits.maximumSide)
+        .arg(static_cast<double>(limits.maximumPixels) / kPixelsPerMegapixel, 0, 'f', 0);
 }
 
 //--- transform ---------------------------------------------------------------

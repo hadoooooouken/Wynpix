@@ -561,6 +561,33 @@ private slots:
         upscaleDialog.reject();
     }
 
+    void batchMixedFileResizeLimitsFollowPerFileUpscayl() {
+        BatchJob job;
+        job.doResize = true;
+        job.resizeMode = ResizeMode::ByAbsoluteSize;
+        job.targetSize = QSize(14000, 10500);
+        job.keepAspectRatio = true;
+        job.aspectFitMode = AspectFitMode::Auto;
+        job.useUpscayl = true;
+
+        // Smaller file in the batch upscales via Upscayl and stays within the
+        // 16384 px limit.
+        const FileResizePlan smallPlan = resolveFileResizePlan(QSize(8000, 6000), job);
+        QCOMPARE(smallPlan.finalTarget, QSize(14000, 10500));
+        QVERIFY(smallPlan.wantsUpscayl);
+        QVERIFY(fileResolutionLimitError(smallPlan.finalTarget, smallPlan.wantsUpscayl).isEmpty());
+
+        // Larger file in the same batch is downscaled on the regular path, so
+        // the 12288 px Standard limit rejects it with a clear message instead
+        // of falling through to a generic "Resize Error".
+        const FileResizePlan largePlan = resolveFileResizePlan(QSize(20000, 15000), job);
+        QCOMPARE(largePlan.finalTarget, QSize(14000, 10500));
+        QVERIFY(!largePlan.wantsUpscayl);
+        const QString error = fileResolutionLimitError(largePlan.finalTarget, largePlan.wantsUpscayl);
+        QVERIFY(error.contains(u"Resolution Limit Exceeded"_s));
+        QVERIFY(error.contains(u"12288 px"_s));
+    }
+
     void batchColorValuesAreClampedAndReset() {
         BatchConverterDialogModel dialog;
         FakeBatchConversionService service;

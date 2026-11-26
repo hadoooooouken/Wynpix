@@ -12,6 +12,7 @@
 
 #include "batchjob.h"
 #include "settings_types.h"
+#include "utils/scalelimits.h"
 
 // Rules of the batch converter dialog, shared by the widget dialog and the
 // Qt Quick view-model: the offered output formats and their quality scales,
@@ -105,17 +106,32 @@ struct ScalingFilterOption {
 // Magic Kernel Sharp 2021.
 [[nodiscard]] int defaultScalingFilterIndex();
 
-// Largest target the converter accepts.
-struct ResolutionLimits {
-    int maximumSide = 0;
-    qint64 maximumPixels = 0;
-};
+// Largest target the converter accepts (defined in utils/scalelimits.h).
+using ::ResolutionLimits;
 
 [[nodiscard]] ResolutionLimits resolutionLimitsFor(bool useUpscayl);
 [[nodiscard]] bool exceedsResolutionLimits(QSize target, bool useUpscayl);
 // Whether Upscayl can run for these resize settings: false only in percent
 // mode at or below 100%, where every file is downscaled or left at 1:1.
 [[nodiscard]] bool upscaylApplies(ResizeMode mode, double resizePercent);
+
+// Resolves the target size for one source image honoring keepAspectRatio and
+// aspectFitMode.
+[[nodiscard]] QSize computeAspectFitSize(QSize srcSize, QSize boundingSize,
+                                         bool keepAspectRatio, AspectFitMode mode);
+
+// Per-file resize plan resolved by BatchConverterRunnable.
+struct FileResizePlan {
+    QSize targetSize;
+    QSize finalTarget;
+    bool exactTargetSize = false;
+    bool wantsUpscayl = false;
+};
+
+[[nodiscard]] FileResizePlan resolveFileResizePlan(QSize srcSize, const BatchJob &job);
+// Returns a user-facing error string when finalTarget exceeds the limits for
+// this file's path (Upscayl or regular), or an empty string when within limits.
+[[nodiscard]] QString fileResolutionLimitError(QSize finalTarget, bool useUpscayl);
 
 //--- transform ---------------------------------------------------------------
 // The rotation choices in the order of their radio buttons.

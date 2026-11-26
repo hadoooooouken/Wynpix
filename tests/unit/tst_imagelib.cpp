@@ -320,6 +320,37 @@ private slots:
       QCOMPARE(measured.bias[channel], expected.bias[channel]);
     }
   }
+
+  void scaledEnforcesResolutionLimitModes() {
+    const auto source = std::make_shared<const QImage>(flatImage(QSize(1, 1)));
+    const ResolutionLimits standardLimits = ImageLib::limitsFor(ResolutionLimitMode::Standard);
+    const ResolutionLimits upscaylLimits = ImageLib::limitsFor(ResolutionLimitMode::Upscayl);
+
+    // Thin 1-px-high targets test the side limits without allocating gigabytes.
+    QCOMPARE(ImageLib::scaled(source, QSize(standardLimits.maximumSide, 1), QI_FILTER_NEAREST)
+                 .size(),
+             QSize(standardLimits.maximumSide, 1));
+    QVERIFY(ImageLib::scaled(source, QSize(standardLimits.maximumSide + 1, 1), QI_FILTER_NEAREST)
+                .isNull());
+    // Pixel-count limit is checked before allocating the destination image.
+    QVERIFY(ImageLib::scaled(source, QSize(10001, 10000), QI_FILTER_NEAREST).isNull());
+
+    QCOMPARE(ImageLib::scaled(source, QSize(upscaylLimits.maximumSide, 1), QI_FILTER_NEAREST,
+                              ResolutionLimitMode::Upscayl)
+                 .size(),
+             QSize(upscaylLimits.maximumSide, 1));
+    QVERIFY(ImageLib::scaled(source, QSize(upscaylLimits.maximumSide + 1, 1), QI_FILTER_NEAREST,
+                             ResolutionLimitMode::Upscayl)
+                .isNull());
+
+    QVERIFY(ImageLib::scaledForBatch(source, QSize(standardLimits.maximumSide + 1, 1),
+                                     QI_FILTER_NEAREST)
+                .isNull());
+    QCOMPARE(ImageLib::scaledForBatch(source, QSize(upscaylLimits.maximumSide, 1),
+                                      QI_FILTER_NEAREST, ResolutionLimitMode::Upscayl)
+                 .size(),
+             QSize(upscaylLimits.maximumSide, 1));
+  }
 };
 
 int runImageLibTests(int argc, char **argv) {

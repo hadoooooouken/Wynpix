@@ -1,5 +1,4 @@
 #include "imagelib.h"
-#include "settings.h"
 #include "utils/autocoloradjustments.h"
 #include "utils/batchresourcepolicy.h"
 #include <array>
@@ -583,26 +582,21 @@ std::unique_ptr<QImage> ImageLib::exifRotated(std::unique_ptr<QImage> src,
 }
 
 QImage ImageLib::scaled(std::shared_ptr<const QImage> source, QSize destSize,
-                        ScalingFilter filter) {
-  return scaledWithMode(std::move(source), destSize, filter, ExecutionMode::Interactive);
+                        ScalingFilter filter, ResolutionLimitMode limitMode) {
+  return scaledWithMode(std::move(source), destSize, filter, ExecutionMode::Interactive,
+                        limitMode);
 }
 
 QImage ImageLib::scaledForBatch(std::shared_ptr<const QImage> source, QSize destSize,
-                                ScalingFilter filter) {
-  return scaledWithMode(std::move(source), destSize, filter, ExecutionMode::Batch);
+                                ScalingFilter filter, ResolutionLimitMode limitMode) {
+  return scaledWithMode(std::move(source), destSize, filter, ExecutionMode::Batch,
+                        limitMode);
 }
 
 QImage ImageLib::scaledWithMode(std::shared_ptr<const QImage> source, QSize destSize,
-                                ScalingFilter filter, ExecutionMode executionMode) {
-  int maxDim = 12288;
-  qint64 maxPixels = 100000000;
-  if (settings->useUpscayl() || settings->resizeUseUpscayl()) {
-    maxDim = 16384;         // Cap to GPU max texture size / GDI memory safety limit (16384)
-    maxPixels = 268435456;  // Cap to 256 Megapixels (~1.07 GB RAM) to prevent drawing allocations crashes
-  }
-
-  if (!source || destSize.width() > maxDim || destSize.height() > maxDim ||
-      (qint64)destSize.width() * destSize.height() > maxPixels)
+                                ScalingFilter filter, ExecutionMode executionMode,
+                                ResolutionLimitMode limitMode) {
+  if (!source || ScaleLimits::exceedsLimits(destSize, limitMode))
     return QImage();
   auto scaleTarget = source;
   if (source->format() == QImage::Format_Indexed8) {

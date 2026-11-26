@@ -29,6 +29,7 @@ target_sources(wynpix PRIVATE
     inputmap.cpp
     keyboardrepeat.cpp
     randomizer.cpp
+    scalelimits.h
     script.cpp
     startuptiming.cpp
     startuptiming.h

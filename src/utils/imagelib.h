@@ -11,6 +11,7 @@
 #include "settings_types.h"
 #include "utils/coloradjustments.h"
 #include "utils/autocoloradjustments.h"
+#include "utils/scalelimits.h"
 
 
 class ImageLib {
@@ -27,7 +28,6 @@ class ImageLib {
 
         static QImage croppedRaw(const QImage *src, QRect newRect);
         static QImage cropped(std::shared_ptr<const QImage> src, QRect newRect);
-        // Using global ScalingFilter from settings.h
 
         static QImage flippedHRaw(const QImage *src);
         static QImage flippedH(std::shared_ptr<const QImage> src);
@@ -35,9 +35,17 @@ class ImageLib {
         static QImage flippedVRaw(const QImage *src);
         static QImage flippedV(std::shared_ptr<const QImage> src);
 
-        static QImage scaled(std::shared_ptr<const QImage> source, QSize destSize, ScalingFilter filter);
-        static QImage scaledForBatch(std::shared_ptr<const QImage> source, QSize destSize,
-                                     ScalingFilter filter);
+        [[nodiscard]] static constexpr ResolutionLimits limitsFor(
+            ResolutionLimitMode mode) noexcept {
+            return ScaleLimits::limitsFor(mode);
+        }
+
+        static QImage scaled(std::shared_ptr<const QImage> source, QSize destSize,
+                             ScalingFilter filter,
+                             ResolutionLimitMode limitMode = ResolutionLimitMode::Standard);
+        static QImage scaledForBatch(
+            std::shared_ptr<const QImage> source, QSize destSize, ScalingFilter filter,
+            ResolutionLimitMode limitMode = ResolutionLimitMode::Standard);
 
         static QImage scaled_Qt(std::shared_ptr<const QImage> source, QSize destSize, bool smooth);
 
@@ -65,7 +73,8 @@ class ImageLib {
 
     private:
         static QImage scaledWithMode(std::shared_ptr<const QImage> source, QSize destSize,
-                                     ScalingFilter filter, ExecutionMode executionMode);
+                                     ScalingFilter filter, ExecutionMode executionMode,
+                                     ResolutionLimitMode limitMode);
         static QImage scaled_SmartWithMode(std::shared_ptr<const QImage> source, QSize destSize,
                                            ExecutionMode executionMode);
         static QImage scaled_MKS2021WithMode(std::shared_ptr<const QImage> source, QSize destSize,
