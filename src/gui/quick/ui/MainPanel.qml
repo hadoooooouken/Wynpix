@@ -176,11 +176,8 @@ Item {
                 Grid {
                     flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
                     columns: panel.horizontal ? 1 : panel.pageButtonCount
-                    anchors.left: panel.horizontal ? parent.left : undefined
-                    anchors.right: panel.horizontal ? undefined : parent.right
-                    anchors.top: panel.horizontal ? parent.top : undefined
-                    anchors.bottom: panel.horizontal ? undefined : parent.bottom
-                    anchors.margins: panel.buttonInset
+                    x: panel.horizontal ? panel.buttonInset : parent.width - width - panel.buttonInset
+                    y: panel.horizontal ? panel.buttonInset : parent.height - height - panel.buttonInset
                     visible: (panel.previewSizeButtonCount + panel.pageButtonCount) * panel.buttonSize
                              - panel.buttonSpacing
                              <= (panel.horizontal ? secondaryButtons.height : secondaryButtons.width)
@@ -276,31 +273,24 @@ Item {
 
                 // The settings button ends the group; the strip mode button
                 // is next to it.
-                PanelButton {
-                    id: settingsButton
+                Grid {
+                    flow: panel.horizontal ? Grid.TopToBottom : Grid.LeftToRight
+                    layoutDirection: panel.horizontal ? Qt.LeftToRight : Qt.RightToLeft
+                    columns: panel.horizontal ? 1 : 2
+                    x: panel.horizontal ? parent.width - width - panel.buttonInset : panel.buttonInset
+                    y: panel.horizontal ? parent.height - height - panel.buttonInset : panel.buttonInset
 
-                    size: panel.buttonSize
-                    glyph: FluentIcons.Settings20
-                    anchors.bottom: panel.horizontal ? parent.bottom : undefined
-                    anchors.right: panel.horizontal ? parent.right : undefined
-                    anchors.left: panel.horizontal ? undefined : parent.left
-                    anchors.top: panel.horizontal ? undefined : parent.top
-                    anchors.margins: panel.buttonInset
-                    onPressed: Actions.invoke("openSettings")
-                }
-                PanelButton {
-                    size: panel.buttonSize
-                    glyph: FluentIcons.Masonry20
-                    active: panel.stripLayout.masonry
-                    anchors.bottom: panel.horizontal ? settingsButton.top : undefined
-                    anchors.right: panel.horizontal ? parent.right : undefined
-                    anchors.left: panel.horizontal ? undefined : settingsButton.right
-                    anchors.top: panel.horizontal ? undefined : parent.top
-                    // Margins only on the outer edges: the two buttons touch,
-                    // as the buttons of the group above do.
-                    anchors.rightMargin: panel.buttonInset
-                    anchors.topMargin: panel.buttonInset
-                    onPressed: panel.controller.toggleMasonry()
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.Masonry20
+                        active: panel.stripLayout.masonry
+                        onPressed: panel.controller.toggleMasonry()
+                    }
+                    PanelButton {
+                        size: panel.buttonSize
+                        glyph: FluentIcons.Settings20
+                        onPressed: Actions.invoke("openSettings")
+                    }
                 }
             }
         }

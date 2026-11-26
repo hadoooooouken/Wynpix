@@ -507,6 +507,54 @@ Item {
             verify(vbPos.x > vOutPos.x && vfPos.x > vbPos.x);
         }
 
+        function test_panelButtonsKeepTheirGeometryWhenThePanelTurns() {
+            pinnedAt(SettingsEnums.PanelPosition.Bottom);
+            Fixture.setPanelPreviewsSize(previewSizeMin);
+            list();
+
+            const sides = [
+                { position: SettingsEnums.PanelPosition.Right, horizontal: false },
+                { position: SettingsEnums.PanelPosition.Bottom, horizontal: true },
+                { position: SettingsEnums.PanelPosition.Left, horizontal: false },
+                { position: SettingsEnums.PanelPosition.Top, horizontal: true },
+                { position: SettingsEnums.PanelPosition.Bottom, horizontal: true }
+            ];
+            for (const side of sides) {
+                pinnedAt(side.position);
+                compare(panel.horizontal, side.horizontal);
+
+                const masonry = findButtonByGlyph(panel, FluentIcons.Masonry20);
+                const settings = findButtonByGlyph(panel, FluentIcons.Settings20);
+                const pageButtons = findButtonsByGlyph(panel, FluentIcons.ChevronDown20);
+                verify(masonry !== null && settings !== null);
+                compare(pageButtons.length, 2);
+
+                for (const button of [masonry, settings, pageButtons[0], pageButtons[1]]) {
+                    compare(button.width, panel.buttonSize);
+                    compare(button.height, panel.buttonSize);
+                    const pos = button.mapToItem(panel, 0, 0);
+                    verify(pos.x >= 0 && pos.x + button.width <= panel.width);
+                    verify(pos.y >= 0 && pos.y + button.height <= panel.height);
+                }
+
+                const mPos = masonry.mapToItem(panel, 0, 0);
+                const sPos = settings.mapToItem(panel, 0, 0);
+                const bPos = pageButtons[0].mapToItem(panel, 0, 0);
+                const fPos = pageButtons[1].mapToItem(panel, 0, 0);
+                if (side.horizontal) {
+                    compare(mPos.x, sPos.x);
+                    compare(mPos.y + masonry.height, sPos.y);
+                    compare(bPos.x, fPos.x);
+                    compare(bPos.y + pageButtons[0].height, fPos.y);
+                } else {
+                    compare(sPos.y, mPos.y);
+                    compare(sPos.x + settings.width, mPos.x);
+                    compare(bPos.y, fPos.y);
+                    compare(bPos.x + pageButtons[0].width, fPos.x);
+                }
+            }
+        }
+
         function test_floatingPanelSlidesIn() {
             Fixture.configureThumbnailPanel(false, SettingsEnums.PanelPosition.Bottom, false);
             Fixture.setPanelWindowSize(root.width, root.height);
