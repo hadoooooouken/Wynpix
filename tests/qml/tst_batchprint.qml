@@ -197,6 +197,44 @@ TestCase {
         tryCompare(window, "visible", false);
     }
 
+    function test_batchUpscaylDisablesForPercentAtOrBelow100() {
+        verify(Fixture.requestBatchConversion(sources(), ["modelA", "modelB"], true));
+        const window = openedWindow(batchIndex);
+        const dialog = Fixture.dialogs.batchConverter;
+        dialog.setResizeEnabled(true);
+
+        const upscaylBox = findNamed(window.contentItem, "batchUpscaylBox");
+        const modelControls = findNamed(window.contentItem, "batchUpscaylModelControls");
+        verify(upscaylBox !== null);
+        verify(modelControls !== null);
+
+        compare(upscaylBox.checked, true);
+        compare(upscaylBox.enabled, true);
+        compare(modelControls.enabled, true);
+
+        dialog.setByPercent(true);
+        compare(dialog.percent, 100.0);
+        compare(upscaylBox.checked, true);
+        compare(upscaylBox.enabled, false);
+        compare(modelControls.enabled, false);
+
+        dialog.setPercent(50.0);
+        compare(upscaylBox.checked, true);
+        compare(upscaylBox.enabled, false);
+        compare(modelControls.enabled, false);
+
+        dialog.setPercent(150.0);
+        compare(upscaylBox.enabled, true);
+        compare(modelControls.enabled, true);
+
+        dialog.setByMegapixels(true);
+        compare(upscaylBox.enabled, true);
+        compare(modelControls.enabled, true);
+
+        Fixture.sendKey(window, Qt.Key_Escape);
+        tryCompare(window, "visible", false);
+    }
+
     function test_batchColorSliderDoubleClickResets() {
         verify(Fixture.requestBatchConversion(sources()));
         const window = openedWindow(batchIndex);

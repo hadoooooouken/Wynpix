@@ -590,7 +590,9 @@ bool BridgeTestFixture::requestText(const QString &title, const QString &label,
       {.title = title, .label = label, .initialText = initialText});
 }
 
-bool BridgeTestFixture::requestBatchConversion(const QStringList &paths) {
+bool BridgeTestFixture::requestBatchConversion(const QStringList &paths,
+                                               const QStringList &upscaylModels,
+                                               bool useUpscayl) {
   constexpr QSize kOriginalSize(1000, 500);
   constexpr int kQuality = 90;
   QList<BatchListEntry> files;
@@ -601,8 +603,8 @@ bool BridgeTestFixture::requestBatchConversion(const QStringList &paths) {
        .defaultOutputDirectory = {},
        .originalSize = kOriginalSize,
        .saveQualities = {.jpeg = kQuality, .png = 3, .modern = kQuality},
-       .upscaylModels = {},
-       .useUpscayl = false,
+       .upscaylModels = upscaylModels,
+       .useUpscayl = useUpscayl,
        .upscaylModel = {},
        .devicePixelRatio = 1.0},
       mBatchService);

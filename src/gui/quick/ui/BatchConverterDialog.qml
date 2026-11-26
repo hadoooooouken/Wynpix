@@ -507,8 +507,10 @@ Window {
                                     CheckBox {
                                         id: upscaylBox
 
+                                        objectName: "batchUpscaylBox"
                                         text: qsTr("Upscayl")
                                         enabled: root.dialog.upscaylAvailable
+                                                 && root.dialog.upscaylApplies
                                         checked: root.dialog.useUpscayl
                                         onToggled: root.dialog.setUseUpscayl(checked)
                                     }
@@ -518,8 +520,11 @@ Window {
                                     }
 
                                     ToolTip {
-                                        text: root.dialog.upscaylAvailable
-                                              ? "" : qsTr("No AI models found in models/ directory.")
+                                        text: !root.dialog.upscaylAvailable
+                                              ? qsTr("No AI models found in models/ directory.")
+                                              : !root.dialog.upscaylApplies
+                                                ? qsTr("Upscayl only applies when scaling above 100%; it has no effect at this percentage and will be skipped.")
+                                                : ""
                                         visible: upscaylHover.hovered && text.length > 0
                                     }
                                 }
@@ -543,8 +548,11 @@ Window {
                                 }
 
                                 ColumnLayout {
+                                    objectName: "batchUpscaylModelControls"
                                     Layout.fillWidth: true
-                                    enabled: root.dialog.upscaylAvailable && root.dialog.useUpscayl
+                                    enabled: root.dialog.upscaylAvailable
+                                             && root.dialog.upscaylApplies
+                                             && root.dialog.useUpscayl
 
                                     Label {
                                         text: qsTr("Model:")

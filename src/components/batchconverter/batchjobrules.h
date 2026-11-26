@@ -113,6 +113,9 @@ struct ResolutionLimits {
 
 [[nodiscard]] ResolutionLimits resolutionLimitsFor(bool useUpscayl);
 [[nodiscard]] bool exceedsResolutionLimits(QSize target, bool useUpscayl);
+// Whether Upscayl can run for these resize settings: false only in percent
+// mode at or below 100%, where every file is downscaled or left at 1:1.
+[[nodiscard]] bool upscaylApplies(ResizeMode mode, double resizePercent);
 
 //--- transform ---------------------------------------------------------------
 // The rotation choices in the order of their radio buttons.

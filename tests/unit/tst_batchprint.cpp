@@ -232,6 +232,21 @@ private slots:
         QVERIFY(job.useUpscayl);
         QCOMPARE(job.colorAdjustments.contrast, 1.5f);
         QCOMPARE(job.colorAdjustments.saturation, 1.0f);
+
+        // Percent mode at or below 100% never triggers Upscayl.
+        QVERIFY(upscaylApplies(ResizeMode::ByAbsoluteSize, 50.0));
+        QVERIFY(upscaylApplies(ResizeMode::ByMegapixels, 50.0));
+        QVERIFY(!upscaylApplies(ResizeMode::ByPercent, 50.0));
+        QVERIFY(!upscaylApplies(ResizeMode::ByPercent, 100.0));
+        QVERIFY(upscaylApplies(ResizeMode::ByPercent, 100.1));
+
+        draft.job.resizeMode = ResizeMode::ByPercent;
+        draft.job.resizePercent = 100.0;
+        QVERIFY(!finalJob(draft).useUpscayl);
+        draft.job.resizePercent = 50.0;
+        QVERIFY(!finalJob(draft).useUpscayl);
+        draft.job.resizePercent = 150.0;
+        QVERIFY(finalJob(draft).useUpscayl);
     }
 
     void outputFolderPrefersAnExistingFolder() {
@@ -454,6 +469,96 @@ private slots:
         QVERIFY(!dialog.byMegapixels());
         QVERIFY(!dialog.byAbsoluteSize());
         dialog.reject();
+    }
+
+    void batchUpscaylAppliesFollowsPercentScale() {
+        BatchConverterDialogModel dialog;
+        FakeBatchConversionService service;
+        QVERIFY(dialog.start(batchInput({u"C:/a.png"_s}), service));
+        dialog.setResizeEnabled(true);
+        QVERIFY(dialog.useUpscayl());
+        // Starts in ByAbsoluteSize where Upscayl applies regardless of size.
+        QVERIFY(dialog.upscaylApplies());
+        QVERIFY(dialog.job().useUpscayl);
+
+        // Switching to ByPercent defaults to 100%, where Upscayl does not apply,
+        // while keeping the stored preference intact.
+        dialog.setByPercent(true);
+        QCOMPARE(dialog.percent(), 100.0);
+        QVERIFY(!dialog.upscaylApplies());
+        QVERIFY(dialog.useUpscayl());
+        QVERIFY(!dialog.job().useUpscayl);
+
+        dialog.setPercent(kHalf);
+        QVERIFY(!dialog.upscaylApplies());
+        QVERIFY(dialog.useUpscayl());
+        QVERIFY(!dialog.job().useUpscayl);
+
+        dialog.setPercent(150.0);
+        QVERIFY(dialog.upscaylApplies());
+        QVERIFY(dialog.job().useUpscayl);
+
+        dialog.resetSize();
+        QCOMPARE(dialog.percent(), 100.0);
+        QVERIFY(!dialog.upscaylApplies());
+        QVERIFY(!dialog.job().useUpscayl);
+
+        dialog.setByMegapixels(true);
+        QVERIFY(dialog.upscaylApplies());
+        QVERIFY(dialog.job().useUpscayl);
+
+        dialog.reject();
+        QVERIFY(dialog.preferencesToStore().useUpscayl);
+    }
+
+    void batchConvertUsesRegularResolutionLimitsWhenUpscaylSkipped() {
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+
+        BatchConverterDialogModel downscaleDialog;
+        FakeBatchConversionService service;
+        BatchConverterDialogInput downscaleInput = batchInput({dir.filePath(u"a.png"_s)});
+        downscaleInput.defaultOutputDirectory = dir.path();
+        downscaleInput.originalSize = QSize(28000, 2000);
+        QVERIFY(downscaleDialog.start(downscaleInput, service));
+        downscaleDialog.setResizeEnabled(true);
+        downscaleDialog.setByPercent(true);
+
+        // 50% of 28000x2000 -> 14000x1000 exceeds regular 12288 px limit; since
+        // Upscayl cannot run here, start must be blocked rather than using the
+        // 16384 px Upscayl limit.
+        downscaleDialog.setPercent(kHalf);
+        downscaleDialog.convert();
+        QVERIFY(downscaleDialog.messageOpen());
+        QVERIFY(downscaleDialog.messageIsWarning());
+        QCOMPARE(downscaleDialog.messageTitle(), u"Resolution Limit Exceeded"_s);
+        QVERIFY(downscaleDialog.messageText().contains(u"12288 px"_s));
+        QCOMPARE(service.startCount, 0);
+
+        // Boundary at 100%: Upscayl is still skipped and regular limits apply.
+        downscaleDialog.dismissMessage();
+        downscaleDialog.setPercent(100.0);
+        downscaleDialog.convert();
+        QVERIFY(downscaleDialog.messageOpen());
+        QCOMPARE(downscaleDialog.messageTitle(), u"Resolution Limit Exceeded"_s);
+        QVERIFY(downscaleDialog.messageText().contains(u"12288 px"_s));
+        QCOMPARE(service.startCount, 0);
+        downscaleDialog.reject();
+
+        // 150% of 9000x1000 -> 13500x1500 runs Upscayl and uses the 16384 px limit.
+        BatchConverterDialogModel upscaleDialog;
+        BatchConverterDialogInput upscaleInput = batchInput({dir.filePath(u"a.png"_s)});
+        upscaleInput.defaultOutputDirectory = dir.path();
+        upscaleInput.originalSize = QSize(9000, 1000);
+        QVERIFY(upscaleDialog.start(upscaleInput, service));
+        upscaleDialog.setResizeEnabled(true);
+        upscaleDialog.setByPercent(true);
+        upscaleDialog.setPercent(150.0);
+        upscaleDialog.convert();
+        QVERIFY(!upscaleDialog.messageOpen());
+        QCOMPARE(service.startCount, 1);
+        QVERIFY(service.startedJob.useUpscayl);
+        upscaleDialog.reject();
     }
 
     void batchColorValuesAreClampedAndReset() {

@@ -245,7 +245,9 @@ public:
                                const QString &initialText);
   // Batch converter over paths, converting through the fixture's fake
   // service; the counts and reports drive that service.
-  Q_INVOKABLE bool requestBatchConversion(const QStringList &paths);
+  Q_INVOKABLE bool requestBatchConversion(const QStringList &paths,
+                                          const QStringList &upscaylModels = {},
+                                          bool useUpscayl = false);
   Q_INVOKABLE int batchStartCount() const;
   Q_INVOKABLE int batchCancelCount() const;
   // state: a BatchQueueModel.ItemState value.

@@ -223,6 +223,10 @@ bool BatchConverterDialogModel::upscaylAvailable() const {
     return !mInput.upscaylModels.isEmpty();
 }
 
+bool BatchConverterDialogModel::upscaylApplies() const {
+    return BatchJobRules::upscaylApplies(mDraft.job.resizeMode, mDraft.job.resizePercent);
+}
+
 bool BatchConverterDialogModel::useUpscayl() const {
     return mDraft.job.useUpscayl;
 }
@@ -743,7 +747,7 @@ void BatchConverterDialogModel::convert() {
                            .pattern = mDraft.job.pattern,
                            .selectedCount = mQueue.selectedCount(),
                            .resize = mDraft.job.doResize,
-                           .useUpscayl = mDraft.job.useUpscayl,
+                           .useUpscayl = mDraft.job.useUpscayl && upscaylApplies(),
                            .targetSize = mDraft.job.resizeMode == ResizeMode::ByMegapixels
                                              ? megapixelTarget(mOriginalSize,
                                                                mDraft.job.targetMegapixels,

@@ -117,6 +117,7 @@ class BatchConverterDialogModel final : public DialogSession {
     Q_PROPERTY(int commonSizeIndex READ commonSizeIndex NOTIFY settingsChanged FINAL)
     Q_PROPERTY(int filterIndex READ filterIndex NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool upscaylAvailable READ upscaylAvailable NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(bool upscaylApplies READ upscaylApplies NOTIFY settingsChanged FINAL)
     Q_PROPERTY(bool useUpscayl READ useUpscayl NOTIFY settingsChanged FINAL)
     Q_PROPERTY(QStringList upscaylModels READ upscaylModels NOTIFY settingsChanged FINAL)
     Q_PROPERTY(int upscaylModelIndex READ upscaylModelIndex NOTIFY settingsChanged FINAL)
@@ -195,6 +196,8 @@ public:
     [[nodiscard]] int commonSizeIndex() const;
     [[nodiscard]] int filterIndex() const;
     [[nodiscard]] bool upscaylAvailable() const;
+    // False in percent mode at or below 100%, where every file is downscaled or left at 1:1.
+    [[nodiscard]] bool upscaylApplies() const;
     [[nodiscard]] bool useUpscayl() const;
     [[nodiscard]] QStringList upscaylModels() const;
     [[nodiscard]] int upscaylModelIndex() const;

@@ -18,6 +18,7 @@ constexpr int kMaximumQuality = 100;
 
 constexpr QSize kFallbackOriginalSize(2560, 1440);
 constexpr double kPercentPerUnit = 100.0;
+constexpr double kIdentityScalePercent = 100.0;
 
 constexpr ResolutionLimits kResolutionLimits{.maximumSide = 12288, .maximumPixels = 100'000'000};
 // Upscayl output is larger than what the regular resize path is allowed to
@@ -200,6 +201,10 @@ bool exceedsResolutionLimits(QSize target, bool useUpscayl) {
     const ResolutionLimits limits = resolutionLimitsFor(useUpscayl);
     return target.width() > limits.maximumSide || target.height() > limits.maximumSide ||
            static_cast<qint64>(target.width()) * target.height() > limits.maximumPixels;
+}
+
+bool upscaylApplies(ResizeMode mode, double resizePercent) {
+    return !(mode == ResizeMode::ByPercent && resizePercent <= kIdentityScalePercent);
 }
 
 //--- transform ---------------------------------------------------------------
@@ -392,7 +397,8 @@ int commonSizeIndexFor(QSize size) {
 
 BatchJob finalJob(const BatchJobDraft &draft) {
     BatchJob job = draft.job;
-    job.useUpscayl = job.doResize && job.useUpscayl;
+    job.useUpscayl =
+        job.doResize && upscaylApplies(job.resizeMode, job.resizePercent) && job.useUpscayl;
     job.colorAdjustments = draft.colorEnabled ? colorAdjustmentsFor(draft.colorValues)
                                               : ColorAdjustments{};
     job.outputDir = job.outputDir.trimmed();

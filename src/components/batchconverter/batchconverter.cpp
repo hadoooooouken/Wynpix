@@ -458,7 +458,7 @@ void BatchConverter::start(const QStringList &allPaths, const QList<int> &select
     // never trigger there - keep full parallelism in that case instead of
     // serializing the whole batch because of a stale checkbox state.
     bool upscaylMayRun = job.useUpscayl && job.doResize &&
-                          !(job.resizeMode == ResizeMode::ByPercent && job.resizePercent <= 100.0);
+                          BatchJobRules::upscaylApplies(job.resizeMode, job.resizePercent);
     BatchResourcePolicy::beginBatch();
     m_batchPolicyActive.store(true, std::memory_order_release);
     const int effectiveBatchThreads = BatchResourcePolicy::fileLimit();
