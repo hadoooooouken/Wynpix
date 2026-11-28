@@ -39,6 +39,8 @@ void UpscalerRunnable::run() {
         QString errorMsg;
         if (inferenceResult.error == UpscaylInferenceError::ModelLoadFailed) {
             errorMsg = QCoreApplication::translate("Upscaler", "AI Model failed to load");
+        } else if (inferenceResult.error == UpscaylInferenceError::DeviceLost) {
+            errorMsg = QCoreApplication::translate("Upscaler", "AI Upscaling paused: GPU device was reset");
         } else {
             errorMsg = QCoreApplication::translate("Upscaler", "AI Upscaling processing failed");
         }

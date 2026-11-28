@@ -189,6 +189,15 @@ public:
                                QCoreApplication::translate("BatchConverter", "AI Model Error"));
                 return;
             }
+            if (inferenceResult.error == UpscaylInferenceError::DeviceLost) {
+                if (m_cancelFlag->load()) {
+                    notifyStopped();
+                    return;
+                }
+                notifyFinished(BatchItemState::Failed,
+                               QCoreApplication::translate("BatchConverter", "GPU Device Reset"));
+                return;
+            }
 
             QImage upscaled = inferenceResult.image;
             if (upscaled.isNull()) {

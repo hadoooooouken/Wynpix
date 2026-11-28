@@ -623,6 +623,11 @@
         <translation>AIモデルエラー</translation>
     </message>
     <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="198"/>
+        <source>GPU Device Reset</source>
+        <translation>GPUデバイスのリセット</translation>
+    </message>
+    <message>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>AI拡大に失敗しました</translation>
@@ -4398,6 +4403,11 @@ Example: %1</source>
         <translation>AIモデルを読み込めませんでした</translation>
     </message>
     <message>
+        <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
+        <source>AI Upscaling paused: GPU device was reset</source>
+        <translation>AIアップスケーリングを一時停止しました：GPUデバイスがリセットされました</translation>
+    </message>
+    <message>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="20"/>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
         <source>AI Upscaling processing failed</source>
@@ -4415,6 +4425,11 @@ Example: %1</source>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="22"/>
         <source>Could not initialize AI model.</source>
         <translation>AIモデルを初期化できませんでした。</translation>
+    </message>
+    <message>
+        <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="27"/>
+        <source>AI resize failed: GPU device was reset.</source>
+        <translation>AIリサイズに失敗しました：GPUデバイスがリセットされました。</translation>
     </message>
     <message>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="28"/>

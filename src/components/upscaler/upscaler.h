@@ -7,12 +7,14 @@
 #include <QSize>
 #include <QTimer>
 #include <QMutex>
+#include <QElapsedTimer>
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <atomic>
 #include <QThreadPool>
 #include "sourcecontainers/image.h"
+#include "components/upscaler/devicelosspolicy.h"
 #include "realesrgan.h"
 
 class UpscalerPreloadState;
@@ -44,10 +46,10 @@ enum class UpscaylInferenceError {
     Aborted,
     ModelLoadFailed,
     ProcessingFailed,
-    // The Vulkan device was lost (e.g. after a Windows TDR driver reset)
-    // and a single rebuild-and-retry recovery cycle also failed. Distinct
-    // from ProcessingFailed for logging/diagnostics; existing callers that
-    // only check succeeded() are unaffected.
+    // The Vulkan device was lost (e.g. after a Windows TDR driver reset):
+    // either the recovery attempt failed, or the device-loss cooldown is
+    // currently active to avoid exceeding Windows' TDR limit. Distinct from
+    // ProcessingFailed for logging/diagnostics and user-facing error reporting.
     DeviceLost
 };
 
@@ -89,12 +91,17 @@ private:
     // requestedModelName matches the already-loaded model. Used to recover
     // after a Vulkan device-loss error, since there is no partial "reset
     // just the device" API and a full object rebuild is the only way to
-    // get a live Vulkan device/pipeline again.
-    bool initLocked(const QString &appDir, const QString &requestedModelName, bool forceReinit = false);
+    // get a live Vulkan device/pipeline again. tileSizeOverride, when set,
+    // caps the tile size to reduce per-submission GPU duration on retry.
+    bool initLocked(const QString &appDir, const QString &requestedModelName,
+                    bool forceReinit = false,
+                    std::optional<int> tileSizeOverride = std::nullopt);
     ProcessingOutcome upscaleLocked(const QImage &inputImage, const std::atomic<bool> *abortFlag);
 
     std::unique_ptr<RealESRGAN> realesrgan;
     QString loadedModel;
+    DeviceLossPolicy deviceLossPolicy;
+    QElapsedTimer deviceLossClock;
     QMutex mutex;
 };
 

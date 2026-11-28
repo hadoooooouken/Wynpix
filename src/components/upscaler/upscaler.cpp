@@ -201,9 +201,14 @@ estimateUpscaleMemory(const QImage &inputImage, quint64 outputWidth,
 } // namespace
 
 
-UpscaylScaler::UpscaylScaler() : realesrgan(nullptr) {}
+UpscaylScaler::UpscaylScaler() : realesrgan(nullptr) {
+    deviceLossClock.start();
+}
 
-bool UpscaylScaler::initLocked(const QString &appDir, const QString &requestedModelName, bool forceReinit) {
+bool UpscaylScaler::initLocked(const QString &appDir,
+                               const QString &requestedModelName,
+                               bool forceReinit,
+                               std::optional<int> tileSizeOverride) {
     const QString modelName = requestedModelName.trimmed();
     if (!forceReinit && realesrgan && loadedModel == modelName) {
         return true;
@@ -230,6 +235,14 @@ bool UpscaylScaler::initLocked(const QString &appDir, const QString &requestedMo
 
     {
         int autoTile = realesrgan->autoTilesize();
+        // When recovery succeeds with a reduced tile size, keep it for the
+        // loaded model until model change or destroy() to avoid re-triggering
+        // TDR on subsequent inferences with the original larger tile size.
+        if (tileSizeOverride) {
+            autoTile = (std::min)(
+                autoTile,
+                (std::max)(*tileSizeOverride, DeviceLossPolicy::kMinimumRetryTileSize));
+        }
         realesrgan->tilesize = autoTile;
     }
 
@@ -251,32 +264,56 @@ UpscaylInferenceResult UpscaylScaler::upscale(const UpscaylInferenceRequest &req
         return {QImage(), UpscaylInferenceError::Aborted};
     }
 
-    if (!initLocked(request.appDir, request.modelName)) {
+    if (!deviceLossPolicy.beginAttempt(deviceLossClock.elapsed())) {
+        qWarning() << "[Upscayl] Skipping inference while GPU device-loss cooldown is active";
+        return {QImage(), UpscaylInferenceError::DeviceLost};
+    }
+
+    if (!initLocked(request.appDir, request.modelName, /*forceReinit=*/false,
+                    deviceLossPolicy.tileSizeCap())) {
         return {QImage(), UpscaylInferenceError::ModelLoadFailed};
     }
 
     ProcessingOutcome outcome = upscaleLocked(request.inputImage, request.abortFlag);
 
     // A dead Vulkan device (e.g. after a Windows TDR driver reset) fails
-    // every subsequent attempt identically until something rebuilds
-    // realesrgan; nothing previously did. Detect that specific failure
-    // class and, once, force a full rebuild and retry. There is no partial
-    // "reset just the device" API, so this reuses the same
-    // destroy-and-reconstruct path initLocked() already takes on a model
-    // change. No retry loop or backoff timer: if the driver has not
-    // finished recovering yet, this attempt fails normally and the next
-    // user-triggered upscale calls initLocked() fresh and self-heals
-    // whenever the driver is actually ready.
+    // every subsequent attempt identically until realesrgan is rebuilt.
+    // Destroy the dead instance immediately, step down tile size to reduce
+    // per-submission GPU duration, and allow at most one recovery retry
+    // before entering a cooldown that keeps Windows from hitting TdrLimitCount
+    // and blocking the whole process from graphics hardware.
     if (outcome.image.isNull() &&
         !isAbortRequested(request.abortFlag) &&
         RealESRGAN::isDeviceLossError(outcome.rawErrorCode)) {
+        const int previousTileSize = realesrgan ? realesrgan->tilesize : 0;
+        realesrgan.reset();
+        loadedModel.clear();
+        const DeviceLossPolicy::RecoveryAction action =
+            deviceLossPolicy.recordFailure(deviceLossClock.elapsed(), previousTileSize);
         qWarning() << "[Upscayl] Vulkan device loss detected (error code:"
-                   << outcome.rawErrorCode << "), attempting one recovery cycle";
+                   << outcome.rawErrorCode
+                   << ", consecutive count:" << deviceLossPolicy.consecutiveFailures() << ")";
 
-        if (initLocked(request.appDir, request.modelName, /*forceReinit=*/true)) {
-            outcome = upscaleLocked(request.inputImage, request.abortFlag);
-        } else {
-            qWarning() << "[Upscayl] Device-loss recovery failed to reinitialize the model";
+        if (action.shouldRetry) {
+            if (initLocked(request.appDir, request.modelName, /*forceReinit=*/true,
+                           action.retryTileSize)) {
+                outcome = upscaleLocked(request.inputImage, request.abortFlag);
+                if (outcome.image.isNull() &&
+                    !isAbortRequested(request.abortFlag) &&
+                    RealESRGAN::isDeviceLossError(outcome.rawErrorCode)) {
+                    realesrgan.reset();
+                    loadedModel.clear();
+                    const int retryTile = action.retryTileSize.value_or(previousTileSize);
+                    (void)deviceLossPolicy.recordFailure(deviceLossClock.elapsed(), retryTile);
+                }
+            } else {
+                qWarning() << "[Upscayl] Device-loss recovery failed to reinitialize the model";
+            }
+        }
+
+        if (deviceLossPolicy.inCooldown()) {
+            qWarning() << "[Upscayl] Entering" << DeviceLossPolicy::kCooldownMs
+                       << "ms cooldown after repeated Vulkan device losses";
         }
     }
 
@@ -291,6 +328,7 @@ UpscaylInferenceResult UpscaylScaler::upscale(const UpscaylInferenceRequest &req
         return {QImage(), error};
     }
 
+    deviceLossPolicy.recordSuccess();
     return {outcome.image, UpscaylInferenceError::None};
 }
 

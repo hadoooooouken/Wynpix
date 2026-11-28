@@ -623,6 +623,11 @@
         <translation>KI-Modell-Fehler</translation>
     </message>
     <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="198"/>
+        <source>GPU Device Reset</source>
+        <translation>GPU-Gerät zurückgesetzt</translation>
+    </message>
+    <message>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>KI-Skalierung fehlgeschlagen</translation>
@@ -4399,6 +4404,11 @@ Example: %1</source>
         <translation>KI-Modell konnte nicht geladen werden</translation>
     </message>
     <message>
+        <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
+        <source>AI Upscaling paused: GPU device was reset</source>
+        <translation>KI-Skalierung pausiert: GPU-Gerät wurde zurückgesetzt</translation>
+    </message>
+    <message>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="20"/>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
         <source>AI Upscaling processing failed</source>
@@ -4416,6 +4426,11 @@ Example: %1</source>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="22"/>
         <source>Could not initialize AI model.</source>
         <translation>KI-Modell konnte nicht initialisiert werden.</translation>
+    </message>
+    <message>
+        <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="27"/>
+        <source>AI resize failed: GPU device was reset.</source>
+        <translation>KI-Größenänderung fehlgeschlagen: GPU-Gerät wurde zurückgesetzt.</translation>
     </message>
     <message>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="28"/>

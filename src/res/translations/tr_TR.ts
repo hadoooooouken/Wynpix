@@ -623,6 +623,11 @@
         <translation>Yapay Zekâ modeli hatası</translation>
     </message>
     <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="198"/>
+        <source>GPU Device Reset</source>
+        <translation>GPU aygıtı sıfırlandı</translation>
+    </message>
+    <message>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>Yapay Zekâ ölçekleme başarısız</translation>
@@ -4398,6 +4403,11 @@ Example: %1</source>
         <translation>Yapay Zekâ modeli yüklenemedi</translation>
     </message>
     <message>
+        <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
+        <source>AI Upscaling paused: GPU device was reset</source>
+        <translation>Yapay Zekâ ölçekleme duraklatıldı: GPU aygıtı sıfırlandı</translation>
+    </message>
+    <message>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="20"/>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
         <source>AI Upscaling processing failed</source>
@@ -4415,6 +4425,11 @@ Example: %1</source>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="22"/>
         <source>Could not initialize AI model.</source>
         <translation>Yapay Zekâ modeli başlatılamadı.</translation>
+    </message>
+    <message>
+        <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="27"/>
+        <source>AI resize failed: GPU device was reset.</source>
+        <translation>Yapay Zekâ ile boyutlandırma başarısız: GPU aygıtı sıfırlandı.</translation>
     </message>
     <message>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="28"/>

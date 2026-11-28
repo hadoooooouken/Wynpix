@@ -60,6 +60,8 @@ target_sources(wynpix PRIVATE
 
 # UPSCAYL SUPPORT
 target_sources(wynpix PRIVATE
+    upscaler/devicelosspolicy.cpp
+    upscaler/devicelosspolicy.h
     upscaler/upscaledecision.cpp
     upscaler/upscaler.cpp
     upscaler/upscalerrunnable.cpp

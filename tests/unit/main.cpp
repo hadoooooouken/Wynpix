@@ -63,6 +63,7 @@ int main(int argc, char **argv) {
   status |= runDecodedPixelsTests(argc, argv);
   status |= runDecodeBudgetTests(argc, argv);
   status |= runUpscaleDecisionTests(argc, argv);
+  status |= runDeviceLossPolicyTests(argc, argv);
   status |= runUiMetricsTests(argc, argv);
   status |= runOverlayTests(argc, argv);
   status |= runThumbnailStripTests(argc, argv);

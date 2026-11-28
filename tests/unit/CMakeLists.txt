@@ -19,6 +19,7 @@ qt_add_executable(wynpix_tests
     tst_singleinstance.cpp
     tst_windowstate.cpp
     tst_upscaledecision.cpp
+    tst_devicelosspolicy.cpp
     tst_windowtitle.cpp
     tst_uimetrics.cpp
     tst_overlays.cpp
@@ -48,6 +49,7 @@ qt_add_executable(wynpix_tests
     "${WYNPIX_APP_SOURCE_DIR}/components/shellinfo/windowtitle.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/components/singleinstance/singleinstancechannel.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/components/upscaler/upscaledecision.cpp"
+    "${WYNPIX_APP_SOURCE_DIR}/components/upscaler/devicelosspolicy.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/components/windowstate/windowstatecontroller.cpp"
     "${WYNPIX_APP_SOURCE_DIR}/sourcecontainers/decodedpixels.cpp"
     # HdrToneMapper::toSdr, the SDR conversion DecodedPixels is given.

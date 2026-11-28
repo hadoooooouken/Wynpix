@@ -623,6 +623,11 @@
         <translation>Помилка моделі ШІ</translation>
     </message>
     <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="198"/>
+        <source>GPU Device Reset</source>
+        <translation>Скидання GPU-пристрою</translation>
+    </message>
+    <message>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>Помилка масштабування ШІ</translation>
@@ -4402,6 +4407,11 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
         <translation>Не вдалося завантажити модель ШІ</translation>
     </message>
     <message>
+        <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
+        <source>AI Upscaling paused: GPU device was reset</source>
+        <translation>Масштабування ШІ призупинено: GPU-пристрій було скинуто</translation>
+    </message>
+    <message>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="20"/>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
         <source>AI Upscaling processing failed</source>
@@ -4419,6 +4429,11 @@ Wynpix розповсюджується за ліцензією [GNU GPL вер�
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="22"/>
         <source>Could not initialize AI model.</source>
         <translation>Не вдалося ініціалізувати модель ШІ.</translation>
+    </message>
+    <message>
+        <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="27"/>
+        <source>AI resize failed: GPU device was reset.</source>
+        <translation>Помилка масштабування ШІ: GPU-пристрій було скинуто.</translation>
     </message>
     <message>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="28"/>

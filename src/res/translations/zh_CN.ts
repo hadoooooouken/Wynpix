@@ -623,6 +623,11 @@
         <translation>AI模型错误</translation>
     </message>
     <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="198"/>
+        <source>GPU Device Reset</source>
+        <translation>GPU 设备已重置</translation>
+    </message>
+    <message>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>AI超分辨率失败</translation>
@@ -4399,6 +4404,11 @@ Wynpix 采用 [GNU GPL 第 3 版](https://www.gnu.org/licenses/gpl-3.0.en.html) 
         <translation>AI模型加载失败</translation>
     </message>
     <message>
+        <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
+        <source>AI Upscaling paused: GPU device was reset</source>
+        <translation>AI 放大已暂停：GPU 设备已重置</translation>
+    </message>
+    <message>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="20"/>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
         <source>AI Upscaling processing failed</source>
@@ -4416,6 +4426,11 @@ Wynpix 采用 [GNU GPL 第 3 版](https://www.gnu.org/licenses/gpl-3.0.en.html) 
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="22"/>
         <source>Could not initialize AI model.</source>
         <translation>无法初始化 AI 模型。</translation>
+    </message>
+    <message>
+        <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="27"/>
+        <source>AI resize failed: GPU device was reset.</source>
+        <translation>AI缩放失败：GPU 设备已重置。</translation>
     </message>
     <message>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="28"/>

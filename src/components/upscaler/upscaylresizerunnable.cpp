@@ -22,6 +22,11 @@ void UpscaylResizeRunnable::run() {
                       tr("Could not initialize AI model."));
         return;
     }
+    if (inferenceResult.error == UpscaylInferenceError::DeviceLost) {
+        emit finished(m_request.generation, m_request.path, QImage(), false,
+                      tr("AI resize failed: GPU device was reset."));
+        return;
+    }
 
     QImage upscaled = inferenceResult.image;
     if (upscaled.isNull()) {

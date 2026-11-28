@@ -623,6 +623,11 @@
         <translation>Erreur du modèle d&apos;IA</translation>
     </message>
     <message>
+        <location filename="../../components/batchconverter/batchconverter.cpp" line="198"/>
+        <source>GPU Device Reset</source>
+        <translation>Réinitialisation du périphérique GPU</translation>
+    </message>
+    <message>
         <location filename="../../components/batchconverter/batchconverter.cpp" line="236"/>
         <source>AI Upscaling Failed</source>
         <translation>Échec de la mise à l&apos;échelle par IA</translation>
@@ -4398,6 +4403,11 @@ Example: %1</source>
         <translation>Échec du chargement du modèle d&apos;IA</translation>
     </message>
     <message>
+        <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
+        <source>AI Upscaling paused: GPU device was reset</source>
+        <translation>Mise à l&apos;échelle par IA en pause : le périphérique GPU a été réinitialisé</translation>
+    </message>
+    <message>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="20"/>
         <location filename="../../components/upscaler/upscalerrunnable.cpp" line="43"/>
         <source>AI Upscaling processing failed</source>
@@ -4415,6 +4425,11 @@ Example: %1</source>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="22"/>
         <source>Could not initialize AI model.</source>
         <translation>Impossible d&apos;initialiser le modèle d&apos;IA.</translation>
+    </message>
+    <message>
+        <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="27"/>
+        <source>AI resize failed: GPU device was reset.</source>
+        <translation>Le redimensionnement par l&apos;IA a échoué : le périphérique GPU a été réinitialisé.</translation>
     </message>
     <message>
         <location filename="../../components/upscaler/upscaylresizerunnable.cpp" line="28"/>
